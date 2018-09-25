@@ -116,7 +116,6 @@ class ChangePassword extends Component {
                         onChange={this._onChangeFields.bind(this, "confirmPwd")}
                         value={fields["confirmPwd"]}
                     />
-
                     <Button type="primary" onClick={this._changePassword}> Change </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
