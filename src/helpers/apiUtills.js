@@ -1,11 +1,11 @@
 //const API_URL = "http://18.188.71.98:9000"; //Live URL
-const API_URL = "http://192.168.0.22:1337"; //Local URL
+const API_URL = "http://18.191.87.133:8084"; //Local URL
 
 const ApiUtils = {
     //super admin sign in api
     adminSignIn: function (form) {
         try {
-            return fetch(API_URL + "/login", {
+            return fetch(API_URL + "/admin/login", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -43,6 +43,23 @@ const ApiUtils = {
                     Authorisation: 'Bearer ' + token,
                 },
                 body: form,
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit profile api
+    editProfile: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);

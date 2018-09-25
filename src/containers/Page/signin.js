@@ -48,8 +48,7 @@ class SignIn extends Component {
     if (this.validator.allValid()) {
       let formData = {
         email: fields["email"],
-        password: fields["password"],
-        phone_number: "+919876543210"
+        password: fields["password"]
       };
 
       ApiUtils.adminSignIn(formData)
@@ -66,7 +65,7 @@ class SignIn extends Component {
           }
         })
         .catch(err => {
-          console.log('>>>>', err)
+          console.log('err', err)
           _this.setState({ loader: false, errMsg: true, errMessage: 'Something went wrong!!' });
         });
     } else {

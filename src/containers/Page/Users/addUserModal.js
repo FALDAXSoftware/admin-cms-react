@@ -86,8 +86,8 @@ class AddUserModal extends Component {
 
             ApiUtils.addUser(token, formData)
                 .then((res) => res.json())
-                .then(() => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false });
+                .then((res) => {
+                    this.setState({ errMsg: true, errMessage: res.message, loader: false });
                     this._closeAddUserModal();
                     getAllUsers();
                     this._resetForm();
@@ -160,8 +160,5 @@ class AddUserModal extends Component {
 
 export default connect(
     state => ({
-        user: state.Auth.get('user'),
         token: state.Auth.get('token')
-    }),
-    { loginnotify },
-)(AddUserModal);
+    }))(AddUserModal);

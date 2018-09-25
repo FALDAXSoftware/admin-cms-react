@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import { connect } from 'react-redux';
 import App from './containers/App/App';
@@ -75,5 +75,3 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
 export default connect(state => ({
   isLoggedIn: state.Auth.get('token') ? true : false,
 }))(PublicRoutes);
-
-//export default PublicRoutes;

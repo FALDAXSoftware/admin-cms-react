@@ -107,11 +107,11 @@ class Users extends Component {
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddUserModal}>Add User</Button>
-                                        <AddUserModal
+                                        {/* <AddUserModal
                                             showAddUserModal={showAddUserModal}
                                             closeAddModal={this._closeAddUserModal}
                                             getAllUsers={this._getAllUsers.bind(this, 0)}
-                                        />
+                                        /> */}
                                         <Search
                                             placeholder="Search users"
                                             onSearch={(value) => this._searchUser(value)}
@@ -120,11 +120,11 @@ class Users extends Component {
                                         />
                                     </div>
                                     <div>
-                                        <ViewUserModal
+                                        {/* <ViewUserModal
                                             userDetails={userDetails}
                                             showViewUserModal={showViewUserModal}
                                             closeViewUserModal={this._closeViewUserModal}
-                                        />
+                                        /> */}
                                         {/* <EditBeerModal
                                             fields={editBeerDetails}
                                             showEditBeerModal={showEditBeerModal}
@@ -171,7 +171,7 @@ class Users extends Component {
 
 export default connect(
     state => ({
-        user: state.Auth.get('user'),
+        // user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }))(Users);
 

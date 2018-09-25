@@ -15,10 +15,10 @@ class Auth0Helper {
   login(handleLogin) {
     this.lock = this.isValid
       ? new Auth0Lock(
-          Auth0Config.clientID,
-          Auth0Config.domain,
-          Auth0Config.options
-        )
+        Auth0Config.clientID,
+        Auth0Config.domain,
+        Auth0Config.options
+      )
       : null;
     if (!this.lock) {
       return;
@@ -26,7 +26,7 @@ class Auth0Helper {
     this.lock.on('authenticated', authResult => {
       if (authResult && authResult.accessToken) {
         if (window) {
-          localStorage.setItem('id_token', authResult.accessToken);
+          localStorage.setItem('token', authResult.accessToken);
         }
         handleLogin();
       } else {
@@ -36,7 +36,7 @@ class Auth0Helper {
     this.lock.show();
   }
   handleAuthentication(props) {
-    localStorage.setItem('id_token', 'secret token');
+    localStorage.setItem('token', 'secret token');
     history.replace('/dashboard');
   }
   setSession(authResult) {
@@ -45,7 +45,7 @@ class Auth0Helper {
       authResult.expiresIn * 1000 + new Date().getTime()
     );
     localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('token', authResult.token);
     localStorage.setItem('expires_at', expiresAt);
     // navigate to the home route
     history.replace('/');
@@ -54,7 +54,7 @@ class Auth0Helper {
   logout() {
     // Clear access token and ID token from local storage
     localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
+    localStorage.removeItem('token');
     localStorage.removeItem('expires_at');
     // navigate to the home route
     history.replace('/');

@@ -1,29 +1,117 @@
 import React, { Component } from 'react';
-import { Button, Input } from 'antd';
-import ForgotPasswordStyleWrapper from './forgotPassword.style';
+import { Button, Input, Spin, Icon, notification } from 'antd';
+import { connect } from 'react-redux';
+import SimpleReactValidator from 'simple-react-validator';
+import ApiUtils from '../../helpers/apiUtills';
+import authAction from '../../redux/auth/actions';
+
+const { login } = authAction;
+const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class EditProfile extends Component {
-    render() {
-        return (
-            <ForgotPasswordStyleWrapper className="isoForgotPassPage">
-                <div className="isoFormContentWrapper">
-                    <div className="isoFormContent">
-                        <div className="isoForgotPassForm">
-                            <div className="isoInputWrapper">
-                                <Input size="large" placeholder="Password" />
-                            </div>
+    constructor(props) {
+        super(props)
+        this.state = {
+            fields: {},
+            errors: {},
+            loader: false,
+        }
+        this.validator = new SimpleReactValidator();
+    }
 
-                            <div className="isoInputWrapper">
-                                <Button type="primary">
-                                    Edit Profile
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
+    componentDidMount = () => {
+        let fields = this.state.fields;
+        const { name, image, email } = this.props.user;
+        fields["name"] = name;
+        fields["email"] = email;
+        this.setState({ fields });
+    }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: 'Error',
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
+    _onChangeFields(field, e) {
+        let fields = this.state.fields;
+        fields[field] = e.target.value;
+        this.setState({ fields });
+    }
+
+    _editProfile = () => {
+        const { token, login } = this.props;
+        let fields = this.state.fields;
+        let _this = this;
+
+        if (this.validator.allValid()) {
+            _this.setState({ loader: true });
+
+            const formData = new FormData();
+            formData.append('name', fields['name']);
+
+            ApiUtils.editProfile(token, formData)
+                .then((response) => response.json())
+                .then(function (res) {
+                    if (res) {
+                        login({ user: res.data });
+                        _this.setState({ errMsg: true, errMessage: 'Profile edited successfully', loader: false });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+                    }
+                })
+                .catch(err => {
+                    console.log('error occured', err);
+                    _this.setState({ loader: false });
+                });
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
+    }
+
+    render() {
+        const { loader, fields, errMsg } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError('error');
+        }
+
+        return (
+            <div style={{ "paddingLeft": "50px", "paddingTop": "50px" }}>
+                <h2>
+                    <b> Edit Profile </b>
+                </h2>
+
+                <div style={{ "marginTop": "10px" }}>
+                    <span>
+                        <b>Name</b>
+                    </span>
+                    <Input placeholder="Name" style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }} onChange={this._onChangeFields.bind(this, "name")} value={fields["name"]} />
+                    <span className="field-error">
+                        {this.validator.message('Name', fields['name'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Email</b>
+                    </span>
+                    <Input disabled style={{ "marginBottom": "15px", "width": "25%", "display": "inherit", "readonly": "readonly" }} value={fields["email"]} />
+
+                    <Button type="primary" onClick={this._editProfile}> Edit </Button>
+
                 </div>
-            </ForgotPasswordStyleWrapper>
+                {loader && <Spin indicator={loaderIcon} />}
+            </div>
         );
     }
 }
 
-export default EditProfile;
+export default connect(
+    state => ({
+        token: state.Auth.get('token'),
+        user: state.Auth.get('user'),
+    }),
+    { login }
+)(EditProfile);

@@ -14,9 +14,9 @@ const actions = {
     data
   }),
 
-  login: data => ({
+  login: user => ({
     type: actions.LOGIN_SUCCESS,
-    data
+    user
   }),
 
   storeToken: token => ({
