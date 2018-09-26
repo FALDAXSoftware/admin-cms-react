@@ -3,7 +3,7 @@ import Tabs, { TabPane } from '../../../components/uielements/tabs';
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper.js';
 import TableDemoStyle from './demo.style';
 import fakeData from '../fakeData';
-import { tableinfos } from './configs';
+import { tableinfos } from './usersConfig';
 import { coinTableInfos } from './coinsConfig';
 import { staticPagesInfos } from './staticPagesConfig';
 import * as TableViews from './tableViews/';

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Input, Pagination, Modal } from 'antd';
+import { Tabs, Input, Pagination, Modal } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
-import AddUserModal from './addUserModal';
+import EditUserModal from './editUserModal';
 import ViewUserModal from './viewUserModal';
 import { connect } from 'react-redux';
 
@@ -17,44 +17,52 @@ class Users extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allUsers: [{
-                firstName: 'Jon',
-                lastName: 'Snow',
-                city: 'Night watch',
-                email: 'jon@snow.com'
-            }, {
-                firstName: 'Cersi',
-                lastName: 'Lannister',
-                city: 'Citadel',
-                email: 'cersi@lannister.com'
-            }],
-            allUserCount: 2,
+            allUsers: [],
+            allUserCount: 0,
             searchUser: '',
-            showAddUserModal: false,
+            showEditUserModal: false,
             showViewUserModal: false,
             showDeleteUser: false,
-            userDetails: []
+            userDetails: [],
+            page: 0,
+            limit: 5
         }
+        Users.view = Users.view.bind(this);
+        Users.edit = Users.edit.bind(this);
+    }
+
+    static view(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob) {
+        let userDetails = {
+            value, first_name, last_name, email, city_town, street_address, phone_number, country, dob
+        }
+        this.setState({ userDetails, showViewUserModal: true });
+    }
+
+    static edit(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob) {
+        let userDetails = {
+            value, first_name, last_name, email, city_town, street_address, phone_number, country, dob
+        }
+        this.setState({ userDetails, showEditUserModal: true });
     }
 
     componentDidMount = () => {
-        // this._getAllUsers();
+        this._getAllUsers(this.state.page);
     }
 
     _getAllUsers = (page) => {
         const { token, user } = this.props;
-        const { searchUser } = this.state;
+        const { searchUser, limit } = this.state;
         var _this = this;
 
         let formData = {
             name: searchUser
         };
 
-        ApiUtils.getAllUsers(page, token, user.id, formData)
+        ApiUtils.getAllUsers(page, limit, token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status === "SUCCESS") {
-                    _this.setState({ allUsers: res.data, allUserCount: res.totalElements });
+                if (res) {
+                    _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
@@ -70,20 +78,16 @@ class Users extends Component {
         });
     }
 
-    _deleteUser = () => {
-        //call api for delete user
-    }
-
     _handleUserPagination = (page) => {
         //this._getAllUsers(page - 1);
     }
 
-    _showAddUserModal = () => {
-        this.setState({ showAddUserModal: true });
+    _showEditUserModal = () => {
+        this.setState({ showEditUserModal: true });
     }
 
-    _closeAddUserModal = () => {
-        this.setState({ showAddUserModal: false, searchUser: '' });
+    _closeEditUserModal = () => {
+        this.setState({ showEditUserModal: false, searchUser: '' });
     }
 
     _closeViewUserModal = () => {
@@ -95,7 +99,7 @@ class Users extends Component {
     }
 
     render() {
-        const { allUsers, allUserCount, showAddUserModal, showViewUserModal,
+        const { allUsers, allUserCount, showEditUserModal, showViewUserModal,
             userDetails, showDeleteUser } = this.state;
 
         return (
@@ -106,12 +110,6 @@ class Users extends Component {
                             {tableinfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
-                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddUserModal}>Add User</Button>
-                                        {/* <AddUserModal
-                                            showAddUserModal={showAddUserModal}
-                                            closeAddModal={this._closeAddUserModal}
-                                            getAllUsers={this._getAllUsers.bind(this, 0)}
-                                        /> */}
                                         <Search
                                             placeholder="Search users"
                                             onSearch={(value) => this._searchUser(value)}
@@ -120,17 +118,17 @@ class Users extends Component {
                                         />
                                     </div>
                                     <div>
-                                        {/* <ViewUserModal
+                                        <ViewUserModal
                                             userDetails={userDetails}
                                             showViewUserModal={showViewUserModal}
                                             closeViewUserModal={this._closeViewUserModal}
-                                        /> */}
-                                        {/* <EditBeerModal
-                                            fields={editBeerDetails}
-                                            showEditBeerModal={showEditBeerModal}
-                                            closeEditBeerModal={this._closeEditBeerModal}
-                                            getAllBeers={this._getAllUsers.bind(this, 0)}
-                                        />  */}
+                                        />
+                                        <EditUserModal
+                                            fields={userDetails}
+                                            showEditUserModal={showEditUserModal}
+                                            closeEditUserModal={this._closeEditUserModal}
+                                            getAllUsers={this._getAllUsers.bind(this, 0)}
+                                        />
                                         <TableWrapper
                                             {...this.state}
                                             columns={tableInfo.columns}

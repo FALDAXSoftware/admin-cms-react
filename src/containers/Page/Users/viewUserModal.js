@@ -37,19 +37,44 @@ class ViewUserModal extends Component {
                 <img style={{ width: '20%', height: '30%' }} src={userDetails.image} />
                 <br />
 
-                <span> <b>User Name:</b> </span>
+                <span> <b>First Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.name}
+                    {userDetails.first_name}
                 </p>
 
-                <span> <b>Price:</b> </span>
+                <span> <b>Last Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.price}
+                    {userDetails.last_name}
                 </p>
 
-                <span> <b>Description:</b> </span>
+                <span> <b>Email:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.description}
+                    {userDetails.email}
+                </p>
+
+                <span> <b>Street Address:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.street_address}
+                </p>
+
+                <span> <b>City:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.city_town}
+                </p>
+
+                <span> <b>Country:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.country}
+                </p>
+
+                <span> <b>Date Of Birth:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.dob}
+                </p>
+
+                <span> <b>Phone Number:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.phone_number}
                 </p>
             </Modal>
         );

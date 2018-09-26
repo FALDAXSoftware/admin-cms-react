@@ -5,6 +5,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
+import { connect } from 'react-redux';
 
 const TabPane = Tabs.TabPane;
 
@@ -21,14 +22,13 @@ class StaticPages extends Component {
     }
 
     _getAllStaticPages = () => {
-        const { isLoggedIn } = this.props;
+        const { token } = this.props;
 
-        ApiUtils.getStaticPages(isLoggedIn)
+        ApiUtils.getStaticPages(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status === "SUCCESS") {
-                    const { allCoins, allReferralCount } = res.data;
-                    this.setState({ allCoins, allReferralCount });
+                if (res) {
+                    this.setState({ allStaticPages: res.data });
                 } else {
                     this.setState({ errMsg: true, message: res.message });
                 }
@@ -63,4 +63,8 @@ class StaticPages extends Component {
     }
 }
 
-export default StaticPages;
+export default connect(
+    state => ({
+        user: state.Auth.get('user'),
+        token: state.Auth.get('token')
+    }))(StaticPages);

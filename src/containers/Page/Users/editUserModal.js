@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import authAction from '../../../redux/auth/actions';
 import { Modal, Input, notification, Icon, Spin } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
-const { loginnotify } = authAction;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
-class AddUserModal extends Component {
+class EditUserModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showAddUserModal: this.props.showAddUserModal,
+            showEditUserModal: this.props.showEditUserModal,
             loader: false,
-            fields: {},
+            fields: this.props.fields,
             errMsg: false,
             errMessage: '',
         }
@@ -22,9 +20,10 @@ class AddUserModal extends Component {
     }
 
     static getDerivedStateFromProps = (nextProps, prevState) => {
-        if (nextProps.showAddUserModal !== prevState.showAddUserModal) {
+        if (nextProps !== prevState) {
             return {
-                showAddUserModal: nextProps.showAddUserModal
+                showEditUserModal: nextProps.showEditUserModal,
+                fields: nextProps.fields
             }
         }
         return null;
@@ -37,11 +36,6 @@ class AddUserModal extends Component {
         });
         this.setState({ errMsg: false });
     };
-
-    _closeAddUserModal = () => {
-        this.setState({ showAddUserModal: false })
-        this.props.closeAddModal();
-    }
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
@@ -59,19 +53,20 @@ class AddUserModal extends Component {
     _resetForm = () => {
         const { fields } = this.state;
 
-        fields['name'] = '';
+        fields['first_name'] = '';
+        fields['last_name'] = '';
         fields['email'] = '';
-        fields['password'] = '';
+
         fields['phone_number'] = '';
         this.setState({ fields });
     }
 
-    _closeAddUserModal = () => {
-        this.setState({ showAddUserModal: false })
-        this.props.closeAddModal();
+    _closeEditUserModal = () => {
+        this.setState({ showEditUserModal: false })
+        this.props.closeEditUserModal();
     }
 
-    _addUser = () => {
+    _editUser = () => {
         const { token, getAllUsers } = this.props;
         const { fields } = this.state;
 
@@ -79,16 +74,17 @@ class AddUserModal extends Component {
             this.setState({ loader: true });
 
             let formData = new FormData();
+            formData.append('first_name', fields['first_name']);
+            formData.append('last_name', fields['last_name']);
+            formData.append('city_town', fields['city_town']);
             formData.append('email', fields['email']);
-            formData.append('phone_number', fields['phone']);
-            formData.append('password', fields['password']);
-            // formData.append('name', fields['name']);
+            formData.append('phone_number', fields['phone_number']);
 
-            ApiUtils.addUser(token, formData)
+            ApiUtils.editUser(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
                     this.setState({ errMsg: true, errMessage: res.message, loader: false });
-                    this._closeAddUserModal();
+                    this._closeEditUserModal();
                     getAllUsers();
                     this._resetForm();
                 })
@@ -103,7 +99,7 @@ class AddUserModal extends Component {
     }
 
     render() {
-        const { loader, showAddUserModal, fields, errMsg } = this.state;
+        const { loader, showEditUserModal, fields, errMsg } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError('error');
@@ -112,26 +108,34 @@ class AddUserModal extends Component {
         return (
             <div>
                 <Modal
-                    title="Add User"
-                    visible={showAddUserModal}
-                    onOk={this._addUser}
-                    onCancel={this._closeAddUserModal}
+                    title="Edit User"
+                    visible={showEditUserModal}
+                    onOk={this._editUser}
+                    onCancel={this._closeEditUserModal}
                     confirmLoading={loader}
-                    okText="Add"
+                    okText="Edit"
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Full Name:</span>
-                        <Input placeholder="Full Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
+                        <span>First Name:</span>
+                        <Input placeholder="First Name" onChange={this._handleChange.bind(this, "first_name")} value={fields["first_name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                            {this.validator.message('first name', fields["first_name"], 'required', 'text-danger')}
+                        </span>
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Last Name:</span>
+                        <Input placeholder="Last Name" onChange={this._handleChange.bind(this, "last_name")} value={fields["last_name"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('last name', fields["last_name"], 'required', 'text-danger')}
                         </span>
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Phone Number:</span>
-                        <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone")} value={fields["phone"]} />
+                        <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone_number")} value={fields["phone_number"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('phone number', fields["phone"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('phone number', fields["phone_number"], 'required|numeric', 'text-danger')}
                         </span>
                     </div>
 
@@ -140,14 +144,6 @@ class AddUserModal extends Component {
                         <Input placeholder="Email" onChange={this._handleChange.bind(this, "email")} value={fields["email"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('email', fields["email"], 'required|email', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Password:</span>
-                        <Input type="password" placeholder="Password" onChange={this._handleChange.bind(this, "password")} value={fields["password"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('password', fields["password"], 'required', 'text-danger')}
                         </span>
                     </div>
 
@@ -161,4 +157,4 @@ class AddUserModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(AddUserModal);
+    }))(EditUserModal);

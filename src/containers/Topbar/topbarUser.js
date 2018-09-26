@@ -27,13 +27,23 @@ class TopbarUser extends Component {
     this.setState({ visible: !this.state.visible });
   }
 
+  _gotToProfile = () => {
+    this.setState({ visible: !this.state.visible });
+    this.props.history.push('/dashboard/edit-profile');
+  }
+
+  _goToChangePassword = () => {
+    this.setState({ visible: !this.state.visible });
+    this.props.history.push('/dashboard/change-password');
+  }
+
   render() {
     const content = (
       <TopbarDropdownWrapper className="isoUserDropdown">
-        <a className="isoDropdownLink" onClick={() => { this.props.history.push('/dashboard/edit-profile'); }} >
+        <a className="isoDropdownLink" onClick={this._gotToProfile} >
           <IntlMessages id="themeSwitcher.profile" />
         </a>
-        <a className="isoDropdownLink" onClick={() => { this.props.history.push('/dashboard/change-password'); }}>
+        <a className="isoDropdownLink" onClick={this._goToChangePassword}>
           <IntlMessages id="sidebar.changePassword" />
         </a>
         <a className="isoDropdownLink" onClick={this.props.logout}>

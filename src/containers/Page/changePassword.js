@@ -11,16 +11,27 @@ class ChangePassword extends Component {
         super(props)
         this.state = {
             fields: {},
+            errors: {},
             loader: false,
             errMsg: false,
-            errMessage: ''
+            errMessage: '',
+            errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            matchPassword: {
+                message: "Confirm Password doesn't match",
+                rule: function (val, options) {
+                    if (val)
+                        return true;
+                }
+            }
+        });
     }
 
     openNotificationWithIconError = (type) => {
         notification[type]({
-            message: 'Error',
+            message: this.state.errType,
             description: this.state.errMessage
         });
         this.setState({ errMsg: false });
@@ -34,28 +45,36 @@ class ChangePassword extends Component {
 
     _changePassword = () => {
         const { token, user } = this.props;
-        let { fields } = this.state;
+        let { fields, errors } = this.state;
         let _this = this;
 
         if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
             _this.setState({ loader: true });
 
             let formData = {
-                old: fields["oldPwd"],
-                new: fields["newPwd"],
+                email: user.email,
+                current_password: fields["oldPwd"],
+                new_password: fields["newPwd"],
+                confirm_password: fields["confirmPwd"]
             };
 
-            ApiUtils.changePassword(token, user.id, formData)
+            ApiUtils.changePassword(token, formData)
                 .then((response) => response.json())
-                .then(function (res) {
+                .then((res) => {
                     if (res) {
                         let fields = _this.state.fields;
                         fields["oldPwd"] = "";
                         fields["newPwd"] = "";
                         fields["confirmPwd"] = "";
-                        _this.setState({ fields, loader: false });
+                        _this.setState({
+                            fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
+                            errMessage: res.err ? res.err : res.message
+                        });
                     } else {
-                        _this.setState({ loader: false, errMsg: true, errMessage: res.message, });
+                        _this.setState({
+                            loader: false, errMsg: true, errType: 'Error',
+                            errMessage: res.message
+                        });
                     }
                 })
                 .catch(err => {
@@ -64,7 +83,8 @@ class ChangePassword extends Component {
                 });
         } else {
             if (fields["newPwd"] !== fields["confirmPwd"]) {
-                this.setState({ loader: false })
+                this.state.errors["main"] = "Confirm Password doesn't match";
+                this.setState({ errors, loader: false })
             }
             this.validator.showMessages();
             this.forceUpdate();
@@ -72,7 +92,12 @@ class ChangePassword extends Component {
     }
 
     render() {
-        const { fields, loader } = this.state;
+        const { fields, loader, errors, errMsg, errType } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
+
         return (
             <div style={{ "paddingLeft": "50px", "paddingTop": "50px" }}>
                 <h2> <b> Change Password </b> </h2>
@@ -116,6 +141,10 @@ class ChangePassword extends Component {
                         onChange={this._onChangeFields.bind(this, "confirmPwd")}
                         value={fields["confirmPwd"]}
                     />
+                    <span style={{ "color": "red" }}>
+                        {errors["main"]}
+                    </span>
+                    <br />
                     <Button type="primary" onClick={this._changePassword}> Change </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}

@@ -1,5 +1,5 @@
-//const API_URL = "http://18.188.71.98:9000"; //Live URL
-const API_URL = "http://18.191.87.133:8084"; //Local URL
+const API_URL = "http://192.168.2.224:1337"; //Live URL
+//const API_URL = "http://18.191.87.133:8084"; //Local URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -35,14 +35,45 @@ const ApiUtils = {
     },
 
     //get all users api
-    getAllUsers: function (page, token, userId, form) {
+    getAllUsers: function (page, limit, token) {
         try {
-            return fetch(API_URL + "/rest/count", {
+            return fetch(API_URL + "/admin/getUsers?page=" + page + "&limit=" + limit, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all coins api
+    getAllCoins: function (page, limit, token) {
+        try {
+            return fetch(API_URL + "/admin/getCoins?page=" + page + "&limit=" + limit, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //add coin api
+    addCoin: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/coins/create", {
                 method: 'POST',
                 headers: {
-                    Authorisation: 'Bearer ' + token,
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
                 },
-                body: form,
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);
@@ -60,6 +91,38 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit coin api
+    editCoin: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/coins/update", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete coin api
+    deleteCoin: function (coinId, token) {
+        try {
+            return fetch(API_URL + "/admin/coins/delete?id=" + coinId, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);
@@ -105,7 +168,7 @@ const ApiUtils = {
                 method: 'POST',
                 mode: "cors",
                 headers: {
-                    Authorisation: isLoggedIn,
+                    Authorization: isLoggedIn,
                 }
             });
         } catch (error) {
@@ -119,7 +182,7 @@ const ApiUtils = {
             return fetch(API_URL + "/rest/editprofile-admin", {
                 method: 'POST',
                 headers: {
-                    Authorisation: isLoggedIn,
+                    Authorization: isLoggedIn,
                     adminId,
                 },
                 body: form,
@@ -130,21 +193,14 @@ const ApiUtils = {
     },
 
     //change admin password api
-    changePassword: function (isLoggedIn, adminId, form) {
-        const myHeaders = new Headers();
-
-        myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append('Authorisation', isLoggedIn);
-        if (adminId === 1) {
-            myHeaders.append('adminId', adminId);
-        } else {
-            myHeaders.append('barOwnerId', adminId);
-        }
-
+    changePassword: function (token, form) {
         try {
-            return fetch(API_URL + "/rest/change-password-admin", {
+            return fetch(API_URL + "/admin/changePassword", {
                 method: 'POST',
-                headers: myHeaders,
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    // userId,
+                },
                 body: JSON.stringify(form),
             });
         } catch (error) {
@@ -158,7 +214,7 @@ const ApiUtils = {
             return fetch(API_URL + "/rest/editprofile-customer", {
                 method: 'POST',
                 headers: {
-                    Authorisation: isLoggedIn,
+                    Authorization: isLoggedIn,
                     customerId
                 },
                 body: form,
