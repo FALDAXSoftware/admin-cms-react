@@ -17,7 +17,7 @@ const options = [
   {
     key: "static-pages",
     label: "sidebar.staticPages",
-    leftIcon: "ion-document"
+    leftIcon: "ion-document",
   },
   {
     key: "email-templates",
@@ -25,9 +25,9 @@ const options = [
     leftIcon: "ion-android-mail"
   },
   {
-    key: "referral",
-    label: "sidebar.referral",
-    leftIcon: "ion-document"
+    key: "countries",
+    label: "sidebar.globalMap",
+    leftIcon: "ion-map"
   },
   {
     key: "charts",

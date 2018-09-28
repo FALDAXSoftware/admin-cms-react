@@ -25,7 +25,7 @@ class ReferralUsers extends Component {
     }
 
     static getDerivedStateFromProps = (nextProps, prevState) => {
-        if (nextProps !== prevState) {
+        if (nextProps !== this.props) {
             return {
                 showReferralModal: nextProps.showReferralModal,
                 userId: nextProps.userId
@@ -69,7 +69,7 @@ class ReferralUsers extends Component {
             <Modal
                 title="View User"
                 visible={showReferralModal}
-                onCancel={this._closeViewUserModal}
+                onCancel={this._closeReferalModal}
                 onOk={this._closeReferralModal}
             >
                 <LayoutWrapper>
@@ -77,22 +77,20 @@ class ReferralUsers extends Component {
                         <Tabs className="isoTableDisplayTab">
                             {referralInfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                    <div>
-                                        <TableWrapper
-                                            {...this.state}
-                                            columns={tableInfo.columns}
-                                            pagination={false}
-                                            dataSource={allReferral}
-                                            className="isoCustomizedTable"
-                                        />
-                                        <Pagination
-                                            className="ant-users-pagination"
-                                            onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={5}
-                                            defaultCurrent={1}
-                                            total={allReferralCount}
-                                        />
-                                    </div>
+                                    <TableWrapper
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allReferral}
+                                        className="isoCustomizedTable"
+                                    />
+                                    <Pagination
+                                        className="ant-users-pagination"
+                                        onChange={this._handleReferralPagination.bind(this)}
+                                        pageSize={5}
+                                        defaultCurrent={1}
+                                        total={allReferralCount}
+                                    />
                                 </TabPane>
                             ))}
                         </Tabs>

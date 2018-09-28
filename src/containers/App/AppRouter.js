@@ -35,6 +35,10 @@ const routes = [
     {
         path: "static-pages",
         component: asyncComponent(() => import("../Page/StaticPages/staticPages"))
+    },
+    {
+        path: "countries",
+        component: asyncComponent(() => import("../Page/Country/countries"))
     }
 ];
 

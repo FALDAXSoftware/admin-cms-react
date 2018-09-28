@@ -100,15 +100,29 @@ const ApiUtils = {
     },
 
     //edit user api
-    editUser: function (isLoggedIn, customerId, form) {
+    editUser: function (token, form) {
         try {
             return fetch(API_URL + "/rest/editprofile-customer", {
                 method: 'POST',
                 headers: {
-                    Authorization: isLoggedIn,
-                    customerId
+                    Authorization: 'Bearer ' + token
                 },
                 body: form,
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //activate user api
+    activateUser: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/userActivate", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);
@@ -213,7 +227,7 @@ const ApiUtils = {
         }
     },
 
-    //add static pages api
+    //edit static pages api
     editPage: function (token, form) {
         try {
             return fetch(API_URL + "/admin/static/update", {
@@ -264,7 +278,7 @@ const ApiUtils = {
     resetPassword: function (form) {
         try {
             return fetch(API_URL + "/admin/resetPassword", {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -286,6 +300,102 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all email templates api
+    getEmailTemplates: function (token) {
+        try {
+            return fetch(API_URL + "/admin/email-template/getEmailTemplate", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //add email template api
+    addTemplate: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/email-template/create", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit email template api
+    editTemplate: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/email-template/update", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete email template api
+    deleteTemplate: function (token, templateId) {
+        try {
+            return fetch(API_URL + "/admin/email-template/delete?id=" + templateId, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all counties api
+    getAllCountries: function (page, limit, token, search) {
+        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit;
+        if (search) {
+            url += '&data=' + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //Activate-deactivate country api 
+    activateCountry: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/countryActivate", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);

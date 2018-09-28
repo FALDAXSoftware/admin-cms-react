@@ -50,7 +50,6 @@ class EditCoinModal extends Component {
         const { fields } = this.state;
 
         fields['coin_name'] = '';
-        fields['coin_code'] = '';
         fields['limit'] = '';
         fields['wallet_address'] = '';
         this.setState({ fields });
@@ -76,7 +75,6 @@ class EditCoinModal extends Component {
             let formData = {
                 coin_id: fields["value"],
                 coin_name: fields["coin_name"],
-                coin_code: fields["coin_code"],
                 limit: fields["limit"],
                 wallet_address: fields["wallet_address"],
                 is_active: isActive
@@ -122,14 +120,6 @@ class EditCoinModal extends Component {
                         <Input placeholder="First Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('coin name', fields["coin_name"], 'required', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Coin Code:</span>
-                        <Input placeholder="Coin code" onChange={this._handleChange.bind(this, "coin_code")} value={fields["coin_code"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('coin code', fields["coin_code"], 'required', 'text-danger')}
                         </span>
                     </div>
 

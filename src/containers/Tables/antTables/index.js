@@ -7,6 +7,8 @@ import { tableinfos } from './usersConfig';
 import { coinTableInfos } from './coinsConfig';
 import { staticPagesInfos } from './staticPagesConfig';
 import { referralInfos } from './referralConfig';
+import { emailTemplatesInfos } from './emailTemplatesConfig';
+import { countryTableInfos } from './countriesConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -52,4 +54,4 @@ export default class AntTable extends Component {
   }
 }
 
-export { TableViews, tableinfos, dataList, coinTableInfos, staticPagesInfos, referralInfos };
+export { TableViews, tableinfos, dataList, coinTableInfos, staticPagesInfos, referralInfos, emailTemplatesInfos, countryTableInfos };

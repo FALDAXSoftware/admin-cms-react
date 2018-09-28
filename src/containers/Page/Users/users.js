@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination, Modal } from 'antd';
+import { Tabs, Input, Pagination } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
-import EditUserModal from './editUserModal';
 import ViewUserModal from './viewUserModal';
 import ReferralUsers from './referralUsersModal';
 import { connect } from 'react-redux';
@@ -21,7 +20,6 @@ class Users extends Component {
             allUsers: [],
             allUserCount: 0,
             searchUser: '',
-            showEditUserModal: false,
             showViewUserModal: false,
             showReferralModal: false,
             userDetails: [],
@@ -29,31 +27,44 @@ class Users extends Component {
             limit: 5
         }
         Users.view = Users.view.bind(this);
-        Users.edit = Users.edit.bind(this);
         Users.showReferrals = Users.showReferrals.bind(this);
+        Users.changeStatus = Users.changeStatus.bind(this);
     }
 
-    static view(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob) {
+    static view(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
         let userDetails = {
-            value, first_name, last_name, email, city_town, street_address, phone_number, country, dob
+            value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active
         }
         this.setState({ userDetails, showViewUserModal: true });
     }
 
-    static edit(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob) {
-        let userDetails = {
-            value, first_name, last_name, email, city_town, street_address, phone_number, country, dob
-        }
-        this.setState({ userDetails, showEditUserModal: true });
-    }
-
     static showReferrals(value) {
-        console.log(value)
         this.setState({ userId: value, showReferralModal: true });
     }
 
+    static changeStatus(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
+        const { token } = this.props;
+        let _this = this;
+
+        let formData = {
+            user_id: value,
+            email: email,
+            activate: !is_active
+        };
+
+        ApiUtils.activateUser(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                _this._getAllUsers(0);
+            })
+            .catch(error => {
+                console.error(error);
+                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            });
+    }
+
     componentDidMount = () => {
-        this._getAllUsers(this.state.page);
+        this._getAllUsers(0);
     }
 
     _getAllUsers = (page) => {
@@ -82,15 +93,7 @@ class Users extends Component {
     }
 
     _handleUserPagination = (page) => {
-        //this._getAllUsers(page - 1);
-    }
-
-    _showEditUserModal = () => {
-        this.setState({ showEditUserModal: true });
-    }
-
-    _closeEditUserModal = () => {
-        this.setState({ showEditUserModal: false, searchUser: '' });
+        this._getAllUsers(page - 1);
     }
 
     _closeViewUserModal = () => {
@@ -102,7 +105,7 @@ class Users extends Component {
     }
 
     render() {
-        const { allUsers, allUserCount, showEditUserModal, showViewUserModal,
+        const { allUsers, allUserCount, showViewUserModal,
             userDetails, showReferralModal, userId } = this.state;
 
         return (
@@ -125,12 +128,6 @@ class Users extends Component {
                                             userDetails={userDetails}
                                             showViewUserModal={showViewUserModal}
                                             closeViewUserModal={this._closeViewUserModal}
-                                        />
-                                        <EditUserModal
-                                            fields={userDetails}
-                                            showEditUserModal={showEditUserModal}
-                                            closeEditUserModal={this._closeEditUserModal}
-                                            getAllUsers={this._getAllUsers.bind(this, 0)}
                                         />
                                         <TableWrapper
                                             {...this.state}

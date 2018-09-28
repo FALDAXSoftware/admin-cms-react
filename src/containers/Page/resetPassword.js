@@ -23,14 +23,15 @@ export default class extends Component {
     this.setState({ fields });
   }
 
-  _forgotPassword = () => {
+  _resetPassword = () => {
     const { fields, errors } = this.state;
     this.setState({ loader: true });
     let _this = this;
 
     if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
+      let URLParam = this.props.location.pathname.split('/');
       let formData = {
-        reset_token: this.state.fields['reset_token'],
+        reset_token: URLParam[2],
         password: this.state.fields['confirmPwd']
       }
 
@@ -49,7 +50,10 @@ export default class extends Component {
           _this.setState({ loader: false });
         });
     } else {
-      this.setState({ loader: false });
+      if (fields["newPwd"] !== fields["confirmPwd"]) {
+        this.state.errors["main"] = "Confirm Password doesn't match";
+        this.setState({ errors, loader: false })
+      }
       this.validator.showMessages();
       this.forceUpdate();
     }
@@ -105,9 +109,15 @@ export default class extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Button type="primary">
+                <Button type="primary" onClick={this._resetPassword}>
                   <IntlMessages id="page.resetPassSave" />
                 </Button>
+              </div>
+
+              <div className="isoCenterComponent isoHelperWrapper">
+                <Link to="/signin" className="isoForgotPass">
+                  <IntlMessages id="page.signInButton" />
+                </Link>
               </div>
             </div>
           </div>

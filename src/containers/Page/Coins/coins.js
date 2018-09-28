@@ -53,15 +53,13 @@ class Coins extends Component {
 
     static changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
         const { token } = this.props;
-        //console.log('--------->', value, coin_name, coin_code, limit, wallet_address, created_at, is_active)
 
         let formData = {
             coin_id: value,
             coin_name: coin_name,
-            coin_code: coin_code,
             limit: limit,
             wallet_address: wallet_address,
-            is_active
+            is_active: !is_active
         };
 
         ApiUtils.editCoin(token, formData)

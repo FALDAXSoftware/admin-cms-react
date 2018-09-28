@@ -7,10 +7,11 @@ import {
     TextCell,
     ActionCell,
     DateCell,
-    ButtonCell
+    ButtonCell,
+    UserSwitchCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, fname = null, lname = null, emailID = null, city = null, street = null, phone = null, countryName = null, bdate = null) => {
+const renderCell = (object, type, key, fname = null, lname = null, emailID = null, city = null, street = null, phone = null, countryName = null, bdate = null, status = null) => {
     const value = object[key];
     const first_name = object[fname];
     const last_name = object[lname];
@@ -20,6 +21,7 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
     const phone_number = object[phone];
     const country = object[countryName];
     const dob = object[bdate];
+    const is_active = object[status];
 
     switch (type) {
         case 'ImageCell':
@@ -30,8 +32,10 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
             return LinkCell(value);
         case 'ButtonCell':
             return ButtonCell(value);
+        case 'UserSwitchCell':
+            return UserSwitchCell(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active);
         case 'ActionCell':
-            return ActionCell(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob);
+            return ActionCell(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active);
         default:
             return TextCell(value);
     }
@@ -97,14 +101,20 @@ const columns = [
         title: <IntlMessages id="antTable.title.referrals" />,
         key: 'button',
         width: 200,
-        render: object => renderCell(object, 'ButtonCell', 'button')
+        render: object => renderCell(object, 'ButtonCell', 'id')
+    },
+    {
+        title: <IntlMessages id="coinTable.title.status" />,
+        key: 'is_active',
+        width: 200,
+        render: object => renderCell(object, 'UserSwitchCell', 'id', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'phone_number', 'country', 'dob', 'is_active')
     },
     {
         title: <IntlMessages id="antTable.title.Actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'ActionCell', 'id', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'phone_number', 'country', 'dob')
+            'ActionCell', 'id', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'phone_number', 'country', 'dob', 'is_active')
     }
 ];
 
