@@ -25,10 +25,6 @@ const routes = [
         component: asyncComponent(() => import("../Page/editProfile"))
     },
     {
-        path: "referral",
-        component: asyncComponent(() => import("../Page/referral"))
-    },
-    {
         path: "email-templates",
         component: asyncComponent(() => import("../Page/EmailTemplates/emailTemplates"))
     },

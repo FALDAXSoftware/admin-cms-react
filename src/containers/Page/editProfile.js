@@ -21,7 +21,7 @@ class EditProfile extends Component {
 
     componentDidMount = () => {
         let fields = this.state.fields;
-        const { name, image, email } = this.props.user;
+        const { name, email } = this.props.user;
         fields["name"] = name;
         fields["email"] = email;
         this.setState({ fields });

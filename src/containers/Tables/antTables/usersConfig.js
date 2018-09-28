@@ -6,7 +6,8 @@ import {
     LinkCell,
     TextCell,
     ActionCell,
-    DateCell
+    DateCell,
+    ButtonCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailID = null, city = null, street = null, phone = null, countryName = null, bdate = null) => {
@@ -27,6 +28,8 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
             return DateCell(value);
         case 'LinkCell':
             return LinkCell(value);
+        case 'ButtonCell':
+            return ButtonCell(value);
         case 'ActionCell':
             return ActionCell(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob);
         default:
@@ -89,6 +92,12 @@ const columns = [
         key: 'dob',
         width: 200,
         render: object => renderCell(object, 'DateCell', 'dob')
+    },
+    {
+        title: <IntlMessages id="antTable.title.referrals" />,
+        key: 'button',
+        width: 200,
+        render: object => renderCell(object, 'ButtonCell', 'button')
     },
     {
         title: <IntlMessages id="antTable.title.Actions" />,

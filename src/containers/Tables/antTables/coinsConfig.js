@@ -16,7 +16,7 @@ const renderCell = (object, type, key, name = null, code = null, Limit = null, w
         case 'DateCell':
             return DateCell(value);
         case 'SwitchCell':
-            return SwitchCell(is_active);
+            return SwitchCell(value, coin_name, coin_code, limit, wallet_address, created_at, is_active);
         case 'CoinActionCell':
             return CoinActionCell(value, coin_name, coin_code, limit, wallet_address, created_at, is_active);
         default:
@@ -65,7 +65,7 @@ const columns = [
         title: <IntlMessages id="coinTable.title.status" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'SwitchCell', 'is_active')
+        render: object => renderCell(object, 'SwitchCell', 'id', 'coin_name', 'coin_code', 'limit', 'wallet_address', 'created_at', 'is_active')
     },
     {
         title: <IntlMessages id="coinTable.title.Actions" />,

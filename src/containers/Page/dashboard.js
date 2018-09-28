@@ -1,44 +1,50 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, notification } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
-import { dataList } from "../Tables/antTables";
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import StickerWidget from "../Widgets/sticker/sticker-widget";
 import IsoWidgetsWrapper from "../Widgets/widgets-wrapper";
 import basicStyle from "../../settings/basicStyle";
 import ApiUtils from '../../helpers/apiUtills';
-import clone from "clone";
-
-const tableDataList = clone(dataList);
-tableDataList.size = 5;
+import { connect } from 'react-redux';
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allUsers: [],
-            allUserCount: 0,
-            coinsCount: 0,
+            userCount: 0,
+            coinCount: 0,
             pagesCount: 0,
-            referralCount: 0
+            referralCount: 0,
+            errMsg: false,
+            errMessage: ''
         }
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: 'Error',
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     componentDidMount() {
-        //  this._getAllCount();
+        this._getAllCount();
     }
 
     _getAllCount = () => {
-        const { isLoggedIn } = this.props;
+        const { token } = this.props;
+        let _this = this;
 
-        ApiUtils.getAllCount(isLoggedIn)
+        ApiUtils.getAllCount(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status === "SUCCESS") {
-                    const { allUserCount, coinsCount, pagesCount, referralCount } = res.data;
-                    this.setState({ allUserCount, coinsCount, pagesCount, referralCount });
+                if (res) {
+                    const { userCount, coinCount } = res;
+                    _this.setState({ userCount, coinCount });
                 } else {
-                    this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message });
                 }
             })
             .catch(err => {
@@ -48,7 +54,7 @@ class Dashboard extends Component {
 
     render() {
         const { rowStyle, colStyle } = basicStyle;
-        const { allUserCount } = this.state;
+        const { userCount, coinCount } = this.state;
 
         return (
             <LayoutWrapper>
@@ -56,7 +62,7 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
-                                number={allUserCount}
+                                number={userCount}
                                 text={<IntlMessages id="widget.stickerwidget1.user" />}
                                 icon="ion-person"
                                 fontColor="#ffffff"
@@ -68,7 +74,7 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
+                                number={coinCount}
                                 text={<IntlMessages id="widget.stickerwidget2.coins" />}
                                 icon="ion-android-camera"
                                 fontColor="#ffffff"
@@ -77,7 +83,7 @@ class Dashboard extends Component {
                         </IsoWidgetsWrapper>
                     </Col>
 
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    {/* <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={<IntlMessages id="widget.stickerwidget1.number" />}
@@ -111,11 +117,14 @@ class Dashboard extends Component {
                                 bgColor="#F75D81"
                             />
                         </IsoWidgetsWrapper>
-                    </Col>
+                    </Col> */}
                 </Row>
             </LayoutWrapper>
         );
     }
 }
 
-export default Dashboard;
+export default connect(
+    state => ({
+        token: state.Auth.get('token')
+    }))(Dashboard);

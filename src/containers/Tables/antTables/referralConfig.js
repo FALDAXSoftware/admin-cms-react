@@ -48,12 +48,12 @@ const columns = [{
         'PageActionCell', 'id', 'name', 'title', 'content', 'is_active')
 }];
 
-const staticPagesInfos = [
+const referralInfos = [
     {
-        title: 'Static Pages',
-        value: 'StaticPagesTable',
+        title: 'Referrals',
+        value: 'ReferralsTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, staticPagesInfos };
+export { columns, referralInfos };

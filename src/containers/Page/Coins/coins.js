@@ -51,8 +51,28 @@ class Coins extends Component {
         this.setState({ coinDetails, showEditCoinModal: true });
     }
 
-    static changeStatus(is_active) {
-        // this.setState({ coinDetails, showEditCoinModal: true });
+    static changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+        const { token } = this.props;
+        //console.log('--------->', value, coin_name, coin_code, limit, wallet_address, created_at, is_active)
+
+        let formData = {
+            coin_id: value,
+            coin_name: coin_name,
+            coin_code: coin_code,
+            limit: limit,
+            wallet_address: wallet_address,
+            is_active
+        };
+
+        ApiUtils.editCoin(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                this._getAllCoins(0);
+            })
+            .catch(error => {
+                console.error(error);
+                this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            });
     }
 
     static deleteCoin(value) {
@@ -73,16 +93,16 @@ class Coins extends Component {
 
     _getAllCoins = (page) => {
         const { token } = this.props;
-        const { limit } = this.state;
+        const { limit, searchCoin } = this.state;
         let _this = this;
 
-        ApiUtils.getAllCoins(page, limit, token)
+        ApiUtils.getAllCoins(page, limit, token, searchCoin)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount });
+                    _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount, searchCoin: '' });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message, searchCoin: '' });
                 }
             })
             .catch(err => {

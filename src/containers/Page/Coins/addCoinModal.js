@@ -23,7 +23,7 @@ class AddCoinModal extends Component {
     }
 
     _closeAddCoinModal = () => {
-        this.setState({ showAddCoinModal: false, barLocation: '' })
+        this.setState({ showAddCoinModal: false })
         this.props.closeAddModal();
     }
 
