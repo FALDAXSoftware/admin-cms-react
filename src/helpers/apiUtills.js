@@ -22,7 +22,7 @@ const ApiUtils = {
     editProfile: function (token, form) {
         try {
             return fetch(API_URL + "/admin/update", {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Accept': 'application/json',
@@ -401,6 +401,22 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    //Announce to users api 
+    announceUser: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/email-send", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 
 };
 

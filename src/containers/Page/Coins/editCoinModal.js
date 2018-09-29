@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Switch } from 'antd';
+import { Modal, Input, notification, Icon, Spin } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -15,7 +15,6 @@ class EditCoinModal extends Component {
             fields: this.props.fields,
             errMsg: false,
             errMessage: '',
-            isActive: this.props.fields['is_active'],
             errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
@@ -26,7 +25,6 @@ class EditCoinModal extends Component {
             return {
                 showEditCoinModal: nextProps.showEditCoinModal,
                 fields: nextProps.fields,
-                //isActive: nextProps.fields['is_active']
             }
         }
         return null;
@@ -60,13 +58,9 @@ class EditCoinModal extends Component {
         this.props.closeEditCoinModal();
     }
 
-    _changeStatus = (checked) => {
-        this.setState({ isActive: checked });
-    }
-
     _editCoin = () => {
         const { token, getAllCoins } = this.props;
-        const { fields, isActive } = this.state;
+        const { fields } = this.state;
 
 
         if (this.validator.allValid()) {
@@ -76,8 +70,7 @@ class EditCoinModal extends Component {
                 coin_id: fields["value"],
                 coin_name: fields["coin_name"],
                 limit: fields["limit"],
-                wallet_address: fields["wallet_address"],
-                is_active: isActive
+                wallet_address: fields["wallet_address"]
             };
 
             ApiUtils.editCoin(token, formData)
@@ -99,8 +92,7 @@ class EditCoinModal extends Component {
     }
 
     render() {
-        const { loader, showEditCoinModal, fields, errMsg, isActive, errType } = this.state;
-        console.log('>>>>', isActive)
+        const { loader, showEditCoinModal, fields, errMsg, errType } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -108,7 +100,7 @@ class EditCoinModal extends Component {
         return (
             <div>
                 <Modal
-                    title="Edit User"
+                    title="Edit Coin"
                     visible={showEditCoinModal}
                     onOk={this._editCoin}
                     onCancel={this._closeEditCoinModal}
@@ -140,11 +132,6 @@ class EditCoinModal extends Component {
                     </div>
 
                     {loader && <Spin indicator={loaderIcon} />}
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Status:</span>
-                        <Switch defaultChecked={isActive} onChange={this._changeStatus} />
-                    </div>
                 </Modal>
             </div>
         );

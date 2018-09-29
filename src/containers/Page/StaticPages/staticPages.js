@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddPageModal from './addPageModal';
 import EditPageModal from './editPageModal';
+import ViewPageModal from './viewPageModal';
 
 const TabPane = Tabs.TabPane;
 
@@ -19,6 +20,7 @@ class StaticPages extends Component {
             showAddPageModal: false,
             showEditPageModal: false,
             showDeletePageModal: false,
+            showViewPageModal: false,
             staticPagesDetails: [],
             deletePageId: ''
         }
@@ -28,7 +30,10 @@ class StaticPages extends Component {
     }
 
     static view(value, name, title, content, is_active) {
-        console.log(value, name, title, content, is_active)
+        let staticPagesDetails = {
+            value, name, title, content, is_active
+        }
+        this.setState({ staticPagesDetails, showViewPageModal: true })
     }
 
     static edit(value, name, title, content, is_active) {
@@ -101,9 +106,13 @@ class StaticPages extends Component {
         this.setState({ showDeletePageModal: false });
     }
 
+    _closeViewPageModal = () => {
+        this.setState({ showViewPageModal: false });
+    }
+
     render() {
         const { allStaticPages, showAddPageModal, staticPagesDetails,
-            showEditPageModal, showDeletePageModal
+            showEditPageModal, showDeletePageModal, showViewPageModal
         } = this.state;
 
         return (
@@ -120,7 +129,11 @@ class StaticPages extends Component {
                                         getAllStaticPages={this._getAllStaticPages.bind(this, 0)}
                                     />
                                 </div>
-
+                                <ViewPageModal
+                                    staticPagesDetails={staticPagesDetails}
+                                    showViewPageModal={showViewPageModal}
+                                    closeViewModal={this._closeViewPageModal}
+                                />
                                 <TableWrapper
                                     {...this.state}
                                     columns={tableInfo.columns}

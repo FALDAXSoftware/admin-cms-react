@@ -23,6 +23,8 @@ class Users extends Component {
             showViewUserModal: false,
             showReferralModal: false,
             userDetails: [],
+            allReferral: [],
+            allReferralCount: 0,
             page: 0,
             limit: 5
         }
@@ -39,7 +41,7 @@ class Users extends Component {
     }
 
     static showReferrals(value) {
-        this.setState({ userId: value, showReferralModal: true });
+        this._getAllReferredUsers(value, 0)
     }
 
     static changeStatus(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
@@ -86,6 +88,27 @@ class Users extends Component {
             });
     }
 
+    _getAllReferredUsers = (id, page) => {
+        const { token } = this.props;
+        let _this = this;
+
+        ApiUtils.getAllReferrals(token, id)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        allReferral: res.data, allReferralCount: res.usersDataCount,
+                        showReferralModal: true, userId: id
+                    });
+                } else {
+                    _this.setState({ errMsg: true, message: res.message });
+                }
+            })
+            .catch(err => {
+                console.log('error occured', err);
+            });
+    }
+
     _searchUser = (val) => {
         this.setState({ searchUser: val }, () => {
             this._getAllUsers(0);
@@ -105,8 +128,8 @@ class Users extends Component {
     }
 
     render() {
-        const { allUsers, allUserCount, showViewUserModal,
-            userDetails, showReferralModal, userId } = this.state;
+        const { allUsers, allUserCount, showViewUserModal, allReferral,
+            userDetails, showReferralModal, allReferralCount, userId } = this.state;
 
         return (
             <LayoutWrapper>
@@ -145,10 +168,11 @@ class Users extends Component {
                                         />
                                         {showReferralModal &&
                                             <ReferralUsers
-                                                userId={userId}
                                                 showReferralModal={showReferralModal}
+                                                allReferral={allReferral}
+                                                allReferralCount={allReferralCount}
                                                 closeReferalModal={this._closeReferralModal}
-                                                getAllUsers={this._getAllUsers.bind(this, 0)}
+                                                getAllReferredUsers={this._getAllReferredUsers.bind(this, userId)}
                                             />
                                         }
                                     </div>
@@ -164,7 +188,6 @@ class Users extends Component {
 
 export default connect(
     state => ({
-        // user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }))(Users);
 

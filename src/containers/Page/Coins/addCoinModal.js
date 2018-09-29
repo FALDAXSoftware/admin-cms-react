@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Switch } from 'antd';
+import { Modal, Input, Switch, Icon, Spin } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+
+const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class AddCoinModal extends Component {
     constructor(props) {
@@ -125,6 +127,8 @@ class AddCoinModal extends Component {
                     <span>Status:</span>
                     <Switch onChange={this._changeStatus} />
                 </div>
+
+                {loader && <Spin indicator={loaderIcon} />}
             </Modal>
         );
     }

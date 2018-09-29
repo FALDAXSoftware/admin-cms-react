@@ -63,6 +63,10 @@ const deleteTemplate = (value) => {
   EmailTemplates.delete(value);
 }
 
+const sendAnnouncement = (value) => {
+  EmailTemplates.announce(value);
+}
+
 const countryStatus = (value, name, country_code, is_active) => {
   Countries.countryStatus(value, name, country_code, is_active);
 }
@@ -70,16 +74,17 @@ const countryStatus = (value, name, country_code, is_active) => {
 const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
 const ImageCell = src => <ImageCellView src={src} />;
 const LinkCell = (link, href) => <a href={href ? href : '#'}>{link}</a>;
-const TextCell = text => <p>{text}</p>;
+const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
 const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Show Referrals </Button>;
-const SwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch defaultChecked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
-const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch defaultChecked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
-const UserSwitchCell = (value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <Switch defaultChecked={is_active} onChange={() => { userStatus(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) }} />
-const CountrySwitchCell = (value, name, country_code, is_active) => <Switch defaultChecked={is_active} onChange={() => { countryStatus(value, name, country_code, is_active) }} />
+const SwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
+const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
+const UserSwitchCell = (value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <Switch checked={is_active} onChange={() => { userStatus(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) }} />
+const CountrySwitchCell = (value, name, country_code, is_active) => <Switch checked={is_active} onChange={() => { countryStatus(value, name, country_code, is_active) }} />
 const ActionCell = (value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <div><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active)} /></div>;
 const CoinActionCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <div><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, limit, wallet_address, created_at, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, limit, wallet_address, created_at, is_active)} /></div>;
 const PageActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deletePage(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPage(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPage(value, name, title, content, is_active)} /></div>;
 const TemplateActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deleteTemplate(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewTemplate(value, name, title, content, is_active)} /></div>;
+const TemplateAnnouncementCell = (value) => <Button type="primary" onClick={() => sendAnnouncement(value)} > Announce </Button>;
 
 export {
   DateCell,
@@ -97,5 +102,6 @@ export {
   ButtonCell,
   UserSwitchCell,
   TemplateActionCell,
-  CountrySwitchCell
+  CountrySwitchCell,
+  TemplateAnnouncementCell
 };

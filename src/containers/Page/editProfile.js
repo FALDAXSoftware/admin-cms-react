@@ -15,11 +15,13 @@ class EditProfile extends Component {
             fields: {},
             errors: {},
             loader: false,
+            errType: 'success'
         }
         this.validator = new SimpleReactValidator();
     }
 
     componentDidMount = () => {
+
         let fields = this.state.fields;
         const { name, email } = this.props.user;
         fields["name"] = name;
@@ -29,7 +31,7 @@ class EditProfile extends Component {
 
     openNotificationWithIconError = (type) => {
         notification[type]({
-            message: 'Error',
+            message: this.state.errType,
             description: this.state.errMessage
         });
         this.setState({ errMsg: false });
@@ -42,24 +44,29 @@ class EditProfile extends Component {
     }
 
     _editProfile = () => {
-        const { token, login } = this.props;
+        const { token, login, user } = this.props;
         let fields = this.state.fields;
         let _this = this;
 
         if (this.validator.allValid()) {
             _this.setState({ loader: true });
 
-            const formData = new FormData();
-            formData.append('name', fields['name']);
+            const formData = {
+                name: fields['name'],
+                email: user.email
+            }
 
             ApiUtils.editProfile(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
                     if (res) {
-                        login({ user: res.data });
-                        _this.setState({ errMsg: true, errMessage: 'Profile edited successfully', loader: false });
+                        login({ user: res.data[0] });
+                        _this.setState({
+                            errMsg: true, errMessage: 'Profile edited successfully',
+                            loader: false, errType: 'success'
+                        });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
                 })
                 .catch(err => {
@@ -73,10 +80,10 @@ class EditProfile extends Component {
     }
 
     render() {
-        const { loader, fields, errMsg } = this.state;
+        const { loader, fields, errMsg, errType } = this.state;
 
         if (errMsg) {
-            this.openNotificationWithIconError('error');
+            this.openNotificationWithIconError(errType);
         }
 
         return (
@@ -100,7 +107,6 @@ class EditProfile extends Component {
                     <Input disabled style={{ "marginBottom": "15px", "width": "25%", "display": "inherit", "readonly": "readonly" }} value={fields["email"]} />
 
                     <Button type="primary" onClick={this._editProfile}> Edit </Button>
-
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </div>

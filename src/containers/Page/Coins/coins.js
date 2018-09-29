@@ -240,7 +240,6 @@ class Coins extends Component {
 
 export default connect(
     state => ({
-        user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }))(Coins);
 

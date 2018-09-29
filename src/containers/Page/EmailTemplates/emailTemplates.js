@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Modal } from 'antd';
+import { Tabs, Button, Modal, notification } from 'antd';
 import { emailTemplatesInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddTemplateModal from './addEmailTempModal';
 import EditTemplateModal from './editTemplateModal';
+import ViewEmailTempModal from './viewEmailTempModal';
 
 const TabPane = Tabs.TabPane;
 
@@ -19,16 +20,23 @@ class EmailTemplates extends Component {
             showAddTempModal: false,
             showEditTempModal: false,
             showDeleteTempModal: false,
+            showViewTempModal: false,
             templateDetails: [],
-            deleteEmailId: ''
+            deleteEmailId: '',
+            notifyMsg: '',
+            errType: 'success'
         }
         EmailTemplates.view = EmailTemplates.view.bind(this);
         EmailTemplates.edit = EmailTemplates.edit.bind(this);
         EmailTemplates.delete = EmailTemplates.delete.bind(this);
+        EmailTemplates.announce = EmailTemplates.announce.bind(this);
     }
 
     static view(value, name, title, content, is_active) {
-        console.log(value, name, title, content, is_active)
+        let templateDetails = {
+            value, name, title, content, is_active
+        }
+        this.setState({ templateDetails, showViewTempModal: true })
     }
 
     static edit(value, name, title, content, is_active) {
@@ -42,9 +50,39 @@ class EmailTemplates extends Component {
         this.setState({ showDeleteTempModal: true, deleteEmailId: value })
     }
 
+    static announce(value) {
+        const { token } = this.props;
+        let _this = this;
+
+        let formData = {
+            id: value
+        }
+
+        ApiUtils.announceUser(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({ notifyMsg: res.message, notify: true });
+                } else {
+                    _this.setState({ notify: true, notifyMsg: 'Something went wrong!' });
+                }
+            })
+            .catch(err => {
+                console.log('error occured', err);
+            });
+    }
+
     componentDidMount = () => {
         this._getEmailTemplates();
     }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.notifyMsg
+        });
+        this.setState({ notify: false });
+    };
 
     _getEmailTemplates = () => {
         const { token } = this.props;
@@ -56,7 +94,7 @@ class EmailTemplates extends Component {
                 if (res) {
                     _this.setState({ allTemplates: res.data });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ notify: true, notifyMsg: res.message });
                 }
             })
             .catch(err => {
@@ -73,10 +111,13 @@ class EmailTemplates extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ showDeleteTempModal: false, deleteEmailId: '' });
+                    _this.setState({
+                        showDeleteTempModal: false, deleteEmailId: '',
+                        notifyMsg: 'Template removed successfully', notify: true
+                    });
                     _this._getEmailTemplates(0);
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ notifyMsg: 'Something went wrong!', notify: true });
                 }
             })
             .catch(err => {
@@ -100,10 +141,18 @@ class EmailTemplates extends Component {
         this.setState({ showDeleteTempModal: false });
     }
 
+    _closeViewTempModal = () => {
+        this.setState({ showViewTempModal: false });
+    }
+
     render() {
-        const { allTemplates, showAddTempModal, templateDetails,
-            showEditTempModal, showDeleteTempModal
+        const { allTemplates, showAddTempModal, templateDetails, showViewTempModal,
+            showEditTempModal, showDeleteTempModal, notify, errType
         } = this.state;
+
+        if (notify) {
+            this.openNotificationWithIconError(errType);
+        }
 
         return (
             <LayoutWrapper>
@@ -119,7 +168,11 @@ class EmailTemplates extends Component {
                                         getEmailTemplates={this._getEmailTemplates.bind(this, 0)}
                                     />
                                 </div>
-
+                                <ViewEmailTempModal
+                                    templateDetails={templateDetails}
+                                    showViewTempModal={showViewTempModal}
+                                    closeViewModal={this._closeViewTempModal}
+                                />
                                 <TableWrapper
                                     {...this.state}
                                     columns={tableInfo.columns}

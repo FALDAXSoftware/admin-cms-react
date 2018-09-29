@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification } from 'antd';
+import { Modal, Input, notification, Spin, Icon } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+
+const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class AddPageModal extends Component {
     constructor(props) {
@@ -154,7 +156,7 @@ class AddPageModal extends Component {
                         <ReactQuill {...options} />
                     </QuillEditor>
                 </div>
-
+                {loader && <Spin indicator={loaderIcon} />}
             </Modal>
         );
     }

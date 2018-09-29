@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Input, Icon, Spin } from 'antd';
+import { Button, Input } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import ResetPasswordStyleWrapper from './resetPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
@@ -60,7 +60,7 @@ export default class extends Component {
   }
 
   render() {
-    const { loader, fields, errors } = this.state;
+    const { fields, errors } = this.state;
 
     return (
       <ResetPasswordStyleWrapper className="isoResetPassPage">

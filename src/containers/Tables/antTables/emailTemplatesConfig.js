@@ -1,7 +1,9 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, TemplateActionCell, StaticSwitchCell } from '../../../components/tables/helperCells';
+import {
+    TextCell, TemplateActionCell, StaticSwitchCell, TemplateAnnouncementCell
+} from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, page_name = null, page_title = null, desc = null, active = null) => {
     const value = object[key];
@@ -15,6 +17,8 @@ const renderCell = (object, type, key, page_name = null, page_title = null, desc
             return StaticSwitchCell(value, name, title, content, is_active);
         case 'TemplateActionCell':
             return TemplateActionCell(value, name, title, content, is_active);
+        case 'TemplateAnnouncementCell':
+            return TemplateAnnouncementCell(value);
         default:
             return TextCell(value);
     }
@@ -46,6 +50,12 @@ const columns = [{
     width: 200,
     render: object => renderCell(object,
         'TemplateActionCell', 'id', 'name', 'title', 'content', 'is_active')
+}, {
+    title: <IntlMessages id="staticPageTable.title.Announcements" />,
+    key: 'announcement',
+    width: 200,
+    render: object => renderCell(object,
+        'TemplateAnnouncementCell', 'id')
 }];
 
 const emailTemplatesInfos = [

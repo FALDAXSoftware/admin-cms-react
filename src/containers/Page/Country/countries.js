@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Button, Modal, notification } from 'antd';
+import { Input, Tabs, Pagination, notification, Icon, Spin } from 'antd';
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class Countries extends Component {
     constructor(props) {
@@ -20,7 +21,8 @@ class Countries extends Component {
             limit: 5,
             errMessage: '',
             errMsg: false,
-            errType: 'Success'
+            errType: 'Success',
+            loader: false
         }
         Countries.countryStatus = Countries.countryStatus.bind(this);
     }
@@ -28,6 +30,7 @@ class Countries extends Component {
     static countryStatus(value, name, country_code, is_active) {
         const { token } = this.props;
 
+        this.setState({ loader: true })
         let formData = {
             id: value,
             code: country_code,
@@ -38,6 +41,7 @@ class Countries extends Component {
         ApiUtils.activateCountry(token, formData)
             .then((res) => res.json())
             .then((res) => {
+                this.setState({ loader: false })
                 this._getAllCountries(0);
             })
             .catch(error => {
@@ -67,7 +71,7 @@ class Countries extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allCountries: res.data, allCountryCount: res.CountryCount, searchCountry: '' });
+                    _this.setState({ allCountries: res.data, allCountryCount: res.CountryCount });
                 } else {
                     _this.setState({ errMsg: true, message: res.message, searchCountry: '' });
                 }
@@ -88,7 +92,7 @@ class Countries extends Component {
     }
 
     render() {
-        const { allCountries, allCountryCount, errType, errMsg } = this.state;
+        const { allCountries, allCountryCount, errType, errMsg, loader } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -123,6 +127,7 @@ class Countries extends Component {
                                         defaultCurrent={1}
                                         total={allCountryCount}
                                     />
+                                    {loader && <Spin indicator={loaderIcon} />}
                                 </div>
                             </TabPane>
                         ))}
@@ -135,7 +140,6 @@ class Countries extends Component {
 
 export default connect(
     state => ({
-        user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }))(Countries);
 

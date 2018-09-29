@@ -28,38 +28,7 @@ const options = [
     key: "countries",
     label: "sidebar.globalMap",
     leftIcon: "ion-map"
-  },
-  {
-    key: "charts",
-    label: "sidebar.charts",
-    leftIcon: "ion-arrow-graph-up-right",
-    children: [
-      {
-        key: "googleChart",
-        label: "sidebar.googleCharts"
-      },
-      {
-        key: "reecharts",
-        label: "sidebar.recharts"
-      },
-      {
-        key: "reactVis",
-        label: "sidebar.reactVis"
-      },
-      {
-        key: "reactChart2",
-        label: "sidebar.reactChart2"
-      },
-      {
-        key: "reactTrend",
-        label: "sidebar.reactTrend"
-      },
-      {
-        key: "frappeChart",
-        label: "sidebar.frappeChart"
-      }
-    ]
-  },
+  }
 ];
 
 export default options;

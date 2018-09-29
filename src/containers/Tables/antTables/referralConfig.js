@@ -1,21 +1,13 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, PageActionCell, StaticSwitchCell } from '../../../components/tables/helperCells';
+import { TextCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, page_name = null, page_title = null, desc = null, active = null) => {
+const renderCell = (object, type, key) => {
     const value = object[key];
-    const name = object[page_name];
-    const title = object[page_title];
-    const content = object[desc];
-    const is_active = object[active];
 
     switch (type) {
-        case 'StaticSwitchCell':
-            return StaticSwitchCell(value, name, title, content, is_active);
-        case 'PageActionCell':
-            return PageActionCell(value, name, title, content, is_active);
-        default:
+        case 'TextCell':
             return TextCell(value);
     }
 };
@@ -26,31 +18,43 @@ const columns = [{
     width: 100,
     render: object => renderCell(object, 'TextCell', 'id')
 }, {
-    title: <IntlMessages id="staticPageTable.title.slug" />,
-    key: 'name',
+    title: <IntlMessages id="antTable.title.firstName" />,
+    key: 'first_name',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'name')
+    render: object => renderCell(object, 'TextCell', 'first_name')
 }, {
-    title: <IntlMessages id="staticPageTable.title.title" />,
-    key: 'title',
+    title: <IntlMessages id="antTable.title.lastName" />,
+    key: 'last_name',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'title')
+    render: object => renderCell(object, 'TextCell', 'last_name')
 }, {
-    title: <IntlMessages id="staticPageTable.title.content" />,
-    key: 'updatedOn',
+    title: <IntlMessages id="antTable.title.email" />,
+    key: 'email',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'content')
-}, {
-    title: <IntlMessages id="staticPageTable.title.Actions" />,
-    key: 'action',
+    render: object => renderCell(object, 'TextCell', 'email')
+},
+{
+    title: <IntlMessages id="antTable.title.street" />,
+    key: 'street',
     width: 200,
-    render: object => renderCell(object,
-        'PageActionCell', 'id', 'name', 'title', 'content', 'is_active')
+    render: object => renderCell(object, 'TextCell', 'street_address')
+},
+{
+    title: <IntlMessages id="antTable.title.city" />,
+    key: 'city',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'city_town')
+},
+{
+    title: <IntlMessages id="antTable.title.country" />,
+    key: 'country',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'country')
 }];
 
 const referralInfos = [
     {
-        title: 'Referrals',
+        title: 'Referral Users',
         value: 'ReferralsTable',
         columns: clone(columns)
     }
