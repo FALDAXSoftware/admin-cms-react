@@ -314,7 +314,7 @@
   "page500.description": "Something went wrong. Please try again later.",
   "page500.backButton": "BACK HOME",
   "page.forgetPassSubTitle": "Forgot Password?",
-  "page.forgetPassDescription": "Enter your email and we send you a reset link.",
+  "page.forgetPassDescription": "Enter your email address",
   "page.sendRequest": "Send request",
   "page.resetPassSubTitle": "Reset Password",
   "page.resetPassDescription": "Enter new password and confirm it.",
