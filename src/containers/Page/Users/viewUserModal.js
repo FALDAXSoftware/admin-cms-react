@@ -26,6 +26,7 @@ class ViewUserModal extends Component {
     render() {
         const { userDetails } = this.props;
         const { showViewUserModal } = this.state;
+        let IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/";
 
         return (
             <Modal
@@ -34,7 +35,7 @@ class ViewUserModal extends Component {
                 onCancel={this._closeViewUserModal}
                 onOk={this._closeViewUserModal}
             >
-                <img alt="user" style={{ width: '20%', height: '30%' }} src={userDetails.image} />
+                <img alt="user" style={{ width: '20%', height: '30%' }} src={IMAGE_URL + userDetails.profile_pic} />
                 <br />
 
                 <span> <b>First Name:</b> </span>

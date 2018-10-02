@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+var self;
 
 class Countries extends Component {
     constructor(props) {
@@ -22,15 +23,17 @@ class Countries extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            loader: false
+            loader: false,
+            page: 1
         }
+        self = this;
         Countries.countryStatus = Countries.countryStatus.bind(this);
     }
 
     static countryStatus(value, name, country_code, is_active) {
         const { token } = this.props;
 
-        this.setState({ loader: true })
+        self.setState({ loader: true })
         let formData = {
             id: value,
             code: country_code,
@@ -40,13 +43,12 @@ class Countries extends Component {
 
         ApiUtils.activateCountry(token, formData)
             .then((res) => res.json())
-            .then((res) => {
-                this.setState({ loader: false })
-                this._getAllCountries(0);
+            .then(() => {
+                self.setState({ loader: false, page: 1 })
+                self._getAllCountries(0);
             })
             .catch(error => {
-                console.error(error);
-                this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 
@@ -82,17 +84,18 @@ class Countries extends Component {
     }
 
     _searchCountry = (val) => {
-        this.setState({ searchCountry: val }, () => {
+        this.setState({ searchCountry: val, page: 1 }, () => {
             this._getAllCountries(0);
         });
     }
 
     _handleCoinPagination = (page) => {
         this._getAllCountries(page - 1);
+        this.setState({ page })
     }
 
     render() {
-        const { allCountries, allCountryCount, errType, errMsg, loader } = this.state;
+        const { allCountries, allCountryCount, errType, errMsg, loader, page } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -124,7 +127,7 @@ class Countries extends Component {
                                         className="ant-users-pagination"
                                         onChange={this._handleCoinPagination.bind(this)}
                                         pageSize={5}
-                                        defaultCurrent={1}
+                                        current={page}
                                         total={allCountryCount}
                                     />
                                     {loader && <Spin indicator={loaderIcon} />}

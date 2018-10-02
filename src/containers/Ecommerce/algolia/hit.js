@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Highlight, Snippet } from 'react-instantsearch/dom';
-import Rate from '../../../components/uielements/rate';
 import Button from '../../../components/uielements/button';
 import { GridListViewWrapper } from '../../../components/algolia/algoliaComponent.style';
 import ecommerceActions from '../../../redux/ecommerce/actions';
@@ -49,14 +48,14 @@ class Hit extends Component {
               Add to cart
             </Button>
           ) : (
-            <Button
-              onClick={() => this.props.changeViewTopbarCart(true)}
-              type="primary"
-              className="isoAlAddToCart"
-            >
-              View Cart
+              <Button
+                onClick={() => this.props.changeViewTopbarCart(true)}
+                type="primary"
+                className="isoAlAddToCart"
+              >
+                View Cart
             </Button>
-          )}
+            )}
         </div>
         <div className="isoAlGridContents">
           <div className="isoAlGridName">
@@ -65,10 +64,6 @@ class Hit extends Component {
 
           <div className="isoAlGridPriceRating">
             <span className="isoAlGridPrice">${hit.price}</span>
-
-            <div className="isoAlGridRating">
-              <Rate disabled count={6} defaultValue={hit.rating} />
-            </div>
           </div>
 
           <div className="isoAlGridDescription">

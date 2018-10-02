@@ -56,8 +56,8 @@ export default class extends Component {
             <Footer />
           </InstantSearch>
         ) : (
-          <EmptyComponent value="Please include algolia appId" />
-        )}
+            <EmptyComponent value="Please include algolia appId" />
+          )}
       </AlgoliaSearchPageWrapper>
     );
   }

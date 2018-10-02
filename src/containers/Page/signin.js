@@ -54,13 +54,13 @@ class SignIn extends Component {
       ApiUtils.adminSignIn(formData)
         .then((response) => response.json())
         .then(function (res) {
-          if (res) {
+          if (res.user) {
             _this.setState({ loader: false, redirect: true });
             login({ user: res.user });
             storeToken({ token: res.token });
             _this.props.history.push('/dashboard');
           } else {
-            _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+            _this.setState({ errMsg: true, errMessage: res.err, loader: false });
             login({ user: null });
           }
         })

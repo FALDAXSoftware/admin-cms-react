@@ -35,7 +35,7 @@ export default class extends Component {
 
       ApiUtils.forgotPassword(formData)
         .then((response) => response.json())
-        .then(function (res) {
+        .then((res) => {
           if (res) {
             _this.setState({ errMsg: true, errMessage: 'email sent successfully', loader: false });
             _this.props.history.push('/signin');

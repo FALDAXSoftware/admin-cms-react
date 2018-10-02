@@ -12,7 +12,7 @@ const options = [
   {
     key: "coins",
     label: "sidebar.coins",
-    leftIcon: "ion-logo-usd"
+    leftIcon: "ion-ios-logo-bitcoin"
   },
   {
     key: "static-pages",
@@ -27,7 +27,7 @@ const options = [
   {
     key: "countries",
     label: "sidebar.globalMap",
-    leftIcon: "ion-map"
+    leftIcon: "ion-navigate"
   }
 ];
 

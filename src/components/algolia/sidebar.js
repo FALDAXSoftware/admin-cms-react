@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   RefinementList,
-  StarRating,
   Toggle,
   HierarchicalMenu,
   SearchBox,
@@ -55,10 +54,6 @@ export default ({ setVoice }) => (
           'hierarchicalCategories.lvl2'
         ]}
       />
-    </div>
-    <div className="isoAlgoliaSidebarItem">
-      <h3 className="isoAlgoliaSidebarTitle">Rating</h3>
-      <StarRating attributeName="rating" style={{ background: '#ff0000' }} />
     </div>
     <div className="isoAlgoliaSidebarItem isoInline">
       <h3 className="isoAlgoliaSidebarTitle">Toggle</h3>

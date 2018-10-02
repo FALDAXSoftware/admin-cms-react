@@ -12,6 +12,7 @@ import EditCoinModal from './editCoinModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+var self;
 
 class Coins extends Component {
     constructor(props) {
@@ -29,8 +30,10 @@ class Coins extends Component {
             deleteCoinId: '',
             errMessage: '',
             errMsg: false,
-            errType: 'Success'
+            errType: 'Success',
+            page: 1
         }
+        self = this;
         Coins.view = Coins.view.bind(this);
         Coins.edit = Coins.edit.bind(this);
         Coins.deleteCoin = Coins.deleteCoin.bind(this);
@@ -41,14 +44,14 @@ class Coins extends Component {
         let coinDetails = {
             value, coin_name, coin_code, limit, wallet_address, created_at, is_active
         }
-        this.setState({ coinDetails, showViewCoinModal: true });
+        self.setState({ coinDetails, showViewCoinModal: true, page: 1 });
     }
 
     static edit(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
         let coinDetails = {
             value, coin_name, coin_code, limit, wallet_address, created_at, is_active
         }
-        this.setState({ coinDetails, showEditCoinModal: true });
+        self.setState({ coinDetails, showEditCoinModal: true, page: 1 });
     }
 
     static changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
@@ -64,12 +67,12 @@ class Coins extends Component {
 
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
-            .then((res) => {
-                this._getAllCoins(0);
+            .then(() => {
+                self._getAllCoins(0);
+                self.setState({ page: 1 })
             })
             .catch(error => {
-                console.error(error);
-                this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 
@@ -98,7 +101,9 @@ class Coins extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount, searchCoin: '' });
+                    _this.setState({
+                        allCoins: res.data, allCoinCount: res.CoinsCount, searchCoin: ''
+                    });
                 } else {
                     _this.setState({ errMsg: true, message: res.message, searchCoin: '' });
                 }
@@ -116,6 +121,7 @@ class Coins extends Component {
 
     _handleCoinPagination = (page) => {
         this._getAllCoins(page - 1);
+        this.setState({ page })
     }
 
     _showAddCoinModal = () => {
@@ -153,7 +159,6 @@ class Coins extends Component {
                 }
             })
             .catch(err => {
-                console.log('error occured', err);
                 _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
             });
     }
@@ -164,7 +169,7 @@ class Coins extends Component {
 
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType,
-            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg
+            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page
         } = this.state;
 
         if (errMsg) {
@@ -225,7 +230,7 @@ class Coins extends Component {
                                         className="ant-users-pagination"
                                         onChange={this._handleCoinPagination.bind(this)}
                                         pageSize={5}
-                                        defaultCurrent={1}
+                                        current={page}
                                         total={allCoinCount}
                                     />
                                 </div>

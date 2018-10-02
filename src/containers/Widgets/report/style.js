@@ -17,20 +17,6 @@ const ReportWidgetWrapper = styled.div`
     margin: 0 0 25px;
   }
 
-  .isoReportsWidgetBar {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 25px;
-
-    .isoSingleProgressBar {
-      margin-bottom: 10px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
   .isoDescription {
     font-size: 13px;
     color: ${palette('text', 2)};

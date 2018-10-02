@@ -279,10 +279,7 @@ Customized Content
 Shows a loading indicator while the contents of the card is being fetched.
 Europe Street beat
 www.instagram.com
-Carousal
-Vertical Carousel
 Vertical pagination. use   vertical=true
-Basic Carousel
 Basic usage
 Fade In Transition
 Slides use fade for transition.   effect=fade

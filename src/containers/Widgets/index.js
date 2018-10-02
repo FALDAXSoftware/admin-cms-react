@@ -6,8 +6,6 @@ import basicStyle from "../../settings/basicStyle";
 import IsoWidgetsWrapper from "./widgets-wrapper";
 import IsoWidgetBox from "./widget-box";
 import CardWidget from "./card/card-widgets";
-import ProgressWidget from "./progress/progress-widget";
-import SingleProgressWidget from "./progress/progress-single";
 import ReportsWidget from "./report/report-widget";
 import StickerWidget from "./sticker/sticker-widget";
 import SaleWidget from "./sale/sale-widget";
@@ -50,53 +48,6 @@ export default class extends Component {
       <LayoutWrapper>
         <div style={wisgetPageStyle}>
           <Row style={rowStyle} gutter={0} justify="start">
-            <Col md={8} sm={24} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper>
-                {/* Report Widget */}
-                <ReportsWidget
-                  label={<IntlMessages id="widget.reportswidget.label" />}
-                  details={<IntlMessages id="widget.reportswidget.details" />}
-                >
-                  <SingleProgressWidget
-                    label={
-                      <IntlMessages id="widget.singleprogresswidget1.label" />
-                    }
-                    percent={70}
-                    barHeight={7}
-                    status="active"
-                    info={true} // Boolean: true, false
-                  />
-                  <SingleProgressWidget
-                    label={
-                      <IntlMessages id="widget.singleprogresswidget2.label" />
-                    }
-                    percent={80}
-                    barHeight={7}
-                    status="active"
-                    info={true} // Boolean: true, false
-                  />
-                  <SingleProgressWidget
-                    label={
-                      <IntlMessages id="widget.singleprogresswidget3.label" />
-                    }
-                    percent={40}
-                    barHeight={7}
-                    status="active"
-                    info={true} // Boolean: true, false
-                  />
-                  <SingleProgressWidget
-                    label={
-                      <IntlMessages id="widget.singleprogresswidget4.label" />
-                    }
-                    percent={60}
-                    barHeight={7}
-                    status="active"
-                    info={true} // Boolean: true, false
-                  />
-                </ReportsWidget>
-              </IsoWidgetsWrapper>
-            </Col>
-
             <Col md={16} sm={24} xs={24} style={colStyle}>
               <IsoWidgetsWrapper>
                 <IsoWidgetBox>
@@ -243,47 +194,6 @@ export default class extends Component {
                   iconcolor="#FEAC01"
                   number={<IntlMessages id="widget.cardwidget3.number" />}
                   text={<IntlMessages id="widget.cardwidget3.text" />}
-                />
-              </IsoWidgetsWrapper>
-            </Col>
-
-            <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper gutterBottom={20}>
-                {/* Progress Widget */}
-                <ProgressWidget
-                  label={<IntlMessages id="widget.progresswidget1.label" />}
-                  details={<IntlMessages id="widget.progresswidget1.details" />}
-                  icon="ion-archive"
-                  iconcolor="#4482FF"
-                  percent={50}
-                  barHeight={7}
-                  status="active"
-                />
-              </IsoWidgetsWrapper>
-
-              <IsoWidgetsWrapper gutterBottom={20}>
-                {/* Progress Widget */}
-                <ProgressWidget
-                  label={<IntlMessages id="widget.progresswidget2.label" />}
-                  details={<IntlMessages id="widget.progresswidget2.details" />}
-                  icon="ion-pie-graph"
-                  iconcolor="#F75D81"
-                  percent={80}
-                  barHeight={7}
-                  status="active"
-                />
-              </IsoWidgetsWrapper>
-
-              <IsoWidgetsWrapper>
-                {/* Progress Widget */}
-                <ProgressWidget
-                  label={<IntlMessages id="widget.progresswidget3.label" />}
-                  details={<IntlMessages id="widget.progresswidget3.details" />}
-                  icon="ion-android-download"
-                  iconcolor="#494982"
-                  percent={65}
-                  barHeight={7}
-                  status="active"
                 />
               </IsoWidgetsWrapper>
             </Col>

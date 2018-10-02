@@ -11,6 +11,7 @@ import EditTemplateModal from './editTemplateModal';
 import ViewEmailTempModal from './viewEmailTempModal';
 
 const TabPane = Tabs.TabPane;
+var self;
 
 class EmailTemplates extends Component {
     constructor(props) {
@@ -26,6 +27,7 @@ class EmailTemplates extends Component {
             notifyMsg: '',
             errType: 'success'
         }
+        self = this;
         EmailTemplates.view = EmailTemplates.view.bind(this);
         EmailTemplates.edit = EmailTemplates.edit.bind(this);
         EmailTemplates.delete = EmailTemplates.delete.bind(this);
@@ -36,23 +38,23 @@ class EmailTemplates extends Component {
         let templateDetails = {
             value, name, title, content, is_active
         }
-        this.setState({ templateDetails, showViewTempModal: true })
+        self.setState({ templateDetails, showViewTempModal: true })
     }
 
     static edit(value, name, title, content, is_active) {
         let templateDetails = {
             value, name, title, content, is_active
         }
-        this.setState({ templateDetails, showEditTempModal: true })
+        self.setState({ templateDetails, showEditTempModal: true })
     }
 
     static delete(value) {
-        this.setState({ showDeleteTempModal: true, deleteEmailId: value })
+        self.setState({ showDeleteTempModal: true, deleteEmailId: value })
     }
 
     static announce(value) {
         const { token } = this.props;
-        let _this = this;
+        this.setState({ loader: true })
 
         let formData = {
             id: value
@@ -62,9 +64,9 @@ class EmailTemplates extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ notifyMsg: res.message, notify: true });
+                    self.setState({ notifyMsg: res.message, notify: true, loader: false });
                 } else {
-                    _this.setState({ notify: true, notifyMsg: 'Something went wrong!' });
+                    self.setState({ notify: true, notifyMsg: 'Something went wrong!', loader: false });
                 }
             })
             .catch(err => {

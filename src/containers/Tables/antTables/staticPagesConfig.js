@@ -1,7 +1,9 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, PageActionCell, StaticSwitchCell } from '../../../components/tables/helperCells';
+import {
+    TextCell, PageActionCell, StaticSwitchCell, ContentCell
+} from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, page_name = null, page_title = null, desc = null, active = null) => {
     const value = object[key];
@@ -13,6 +15,8 @@ const renderCell = (object, type, key, page_name = null, page_title = null, desc
     switch (type) {
         case 'StaticSwitchCell':
             return StaticSwitchCell(value, name, title, content, is_active);
+        case 'ContentCell':
+            return ContentCell(value, name, title, content, is_active);
         case 'PageActionCell':
             return PageActionCell(value, name, title, content, is_active);
         default:
@@ -38,8 +42,8 @@ const columns = [{
 }, {
     title: <IntlMessages id="staticPageTable.title.content" />,
     key: 'updatedOn',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'content')
+    width: 50,
+    render: object => renderCell(object, 'ContentCell', 'content')
 }, {
     title: <IntlMessages id="staticPageTable.title.Actions" />,
     key: 'action',

@@ -21,11 +21,11 @@ const articles = [
     desc: <IntlMessages id="shuffle.descriptionTwo" />,
     img: Img2,
   },
-  { 
-    id: 'c', 
-    timestamp: 1156564800000, 
-    desc: <IntlMessages id="shuffle.descriptionThree" />, 
-    img: Img3 
+  {
+    id: 'c',
+    timestamp: 1156564800000,
+    desc: <IntlMessages id="shuffle.descriptionThree" />,
+    img: Img3
   },
   {
     id: 'd',

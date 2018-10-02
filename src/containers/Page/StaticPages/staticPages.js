@@ -11,6 +11,7 @@ import EditPageModal from './editPageModal';
 import ViewPageModal from './viewPageModal';
 
 const TabPane = Tabs.TabPane;
+var self;
 
 class StaticPages extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class StaticPages extends Component {
             staticPagesDetails: [],
             deletePageId: ''
         }
+        self = this;
         StaticPages.view = StaticPages.view.bind(this);
         StaticPages.edit = StaticPages.edit.bind(this);
         StaticPages.delete = StaticPages.delete.bind(this);
@@ -33,19 +35,18 @@ class StaticPages extends Component {
         let staticPagesDetails = {
             value, name, title, content, is_active
         }
-        this.setState({ staticPagesDetails, showViewPageModal: true })
+        self.setState({ staticPagesDetails, showViewPageModal: true })
     }
 
     static edit(value, name, title, content, is_active) {
         let staticPagesDetails = {
             value, name, title, content, is_active
         }
-        this.setState({ staticPagesDetails, showEditPageModal: true })
+        self.setState({ staticPagesDetails, showEditPageModal: true })
     }
 
     static delete(value) {
-        console.log(value)
-        this.setState({ showDeletePageModal: true, deletePageId: value })
+        self.setState({ showDeletePageModal: true, deletePageId: value })
     }
 
     componentDidMount = () => {
@@ -112,8 +113,7 @@ class StaticPages extends Component {
 
     render() {
         const { allStaticPages, showAddPageModal, staticPagesDetails,
-            showEditPageModal, showDeletePageModal, showViewPageModal
-        } = this.state;
+            showEditPageModal, showDeletePageModal, showViewPageModal } = this.state;
 
         return (
             <LayoutWrapper>

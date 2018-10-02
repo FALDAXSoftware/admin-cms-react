@@ -46,7 +46,6 @@ export default class extends Component {
           }
         })
         .catch(err => {
-          console.log('error occured', err);
           _this.setState({ loader: false });
         });
     } else {

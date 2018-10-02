@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination } from 'antd';
+import { Tabs, Input, Pagination, Spin, Icon } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -12,6 +12,8 @@ import { connect } from 'react-redux';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+var self;
 
 class Users extends Component {
     constructor(props) {
@@ -25,28 +27,28 @@ class Users extends Component {
             userDetails: [],
             allReferral: [],
             allReferralCount: 0,
-            page: 0,
+            page: 1,
             limit: 5
         }
+        self = this;
         Users.view = Users.view.bind(this);
         Users.showReferrals = Users.showReferrals.bind(this);
         Users.changeStatus = Users.changeStatus.bind(this);
     }
 
-    static view(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
+    static view(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
         let userDetails = {
-            value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active
+            value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active
         }
-        this.setState({ userDetails, showViewUserModal: true });
+        self.setState({ userDetails, showViewUserModal: true });
     }
 
     static showReferrals(value) {
-        this._getAllReferredUsers(value, 0)
+        self._getAllReferredUsers(value, 0)
     }
 
-    static changeStatus(value, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
+    static changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
         const { token } = this.props;
-        let _this = this;
 
         let formData = {
             user_id: value,
@@ -56,12 +58,12 @@ class Users extends Component {
 
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
-            .then((res) => {
-                _this._getAllUsers(0);
+            .then(() => {
+                self._getAllUsers(0);
+                self.setState({ page: 1 })
             })
-            .catch(error => {
-                console.error(error);
-                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            .catch(() => {
+                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 
@@ -110,13 +112,14 @@ class Users extends Component {
     }
 
     _searchUser = (val) => {
-        this.setState({ searchUser: val }, () => {
+        this.setState({ searchUser: val, page: 1 }, () => {
             this._getAllUsers(0);
         });
     }
 
     _handleUserPagination = (page) => {
         this._getAllUsers(page - 1);
+        this.setState({ page });
     }
 
     _closeViewUserModal = () => {
@@ -124,12 +127,12 @@ class Users extends Component {
     }
 
     _closeReferralModal = () => {
-        this.setState({ showReferralModal: false });
+        self.setState({ showReferralModal: false });
     }
 
     render() {
-        const { allUsers, allUserCount, showViewUserModal, allReferral,
-            userDetails, showReferralModal, allReferralCount, userId } = this.state;
+        const { allUsers, allUserCount, showViewUserModal, allReferral, page,
+            userDetails, showReferralModal, allReferralCount, userId, loader } = this.state;
 
         return (
             <LayoutWrapper>
@@ -163,7 +166,7 @@ class Users extends Component {
                                             className="ant-users-pagination"
                                             onChange={this._handleUserPagination.bind(this)}
                                             pageSize={5}
-                                            defaultCurrent={1}
+                                            current={page}
                                             total={allUserCount}
                                         />
                                         {showReferralModal &&
@@ -175,6 +178,7 @@ class Users extends Component {
                                                 getAllReferredUsers={this._getAllReferredUsers.bind(this, userId)}
                                             />
                                         }
+                                        {loader && <Spin indicator={loaderIcon} />}
                                     </div>
                                 </TabPane>
                             ))}

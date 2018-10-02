@@ -47,13 +47,13 @@ export default class ComposeMail extends Component {
     };
     const ComposeAutoCompleteTO = {
       allMails: this.props.allMails,
-      updateData: () => {},
+      updateData: () => { },
       placeholder: 'To',
       autofocus: true
     };
     const ComposeAutoCompleteCC = {
       allMails: this.props.allMails,
-      updateData: () => {},
+      updateData: () => { },
       placeholder: 'CC'
     };
     const editorOption = {
@@ -85,8 +85,8 @@ export default class ComposeMail extends Component {
               <IntlMessages id="email.cancel" />
             </Button>
           ) : (
-            ''
-          )}
+              ''
+            )}
 
           <Button
             type="primary"
