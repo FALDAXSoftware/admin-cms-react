@@ -5,6 +5,7 @@ import IntlMessages from '../../components/utility/intlMessages';
 import ForgotPasswordStyleWrapper from './forgotPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
+import logo from '../../image/Footer_logo.png';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -63,7 +64,7 @@ export default class extends Component {
           <div className="isoFormContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.forgetPassTitle" />
+                <img src={logo} />
               </Link>
             </div>
 

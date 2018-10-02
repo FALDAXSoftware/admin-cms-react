@@ -32,20 +32,7 @@ const columns = [{
     key: 'email',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'email')
-},
-{
-    title: <IntlMessages id="antTable.title.street" />,
-    key: 'street',
-    width: 200,
-    render: object => renderCell(object, 'TextCell', 'street_address')
-},
-{
-    title: <IntlMessages id="antTable.title.city" />,
-    key: 'city',
-    width: 200,
-    render: object => renderCell(object, 'TextCell', 'city_town')
-},
-{
+}, {
     title: <IntlMessages id="antTable.title.country" />,
     key: 'country',
     width: 200,

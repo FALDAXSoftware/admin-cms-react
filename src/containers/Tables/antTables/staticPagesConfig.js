@@ -25,11 +25,6 @@ const renderCell = (object, type, key, page_name = null, page_title = null, desc
 };
 
 const columns = [{
-    title: <IntlMessages id="staticPageTable.title.srNo" />,
-    key: 'id',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'id')
-}, {
     title: <IntlMessages id="staticPageTable.title.slug" />,
     key: 'name',
     width: 100,

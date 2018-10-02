@@ -53,7 +53,7 @@ class Users extends Component {
         let formData = {
             user_id: value,
             email: email,
-            activate: !is_active
+            is_active: !is_active
         };
 
         ApiUtils.activateUser(token, formData)
@@ -100,7 +100,7 @@ class Users extends Component {
                 if (res) {
                     _this.setState({
                         allReferral: res.data, allReferralCount: res.usersDataCount,
-                        showReferralModal: true, userId: id
+                        showReferralModal: res.usersDataCount > 0 ? true : false, userId: id
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });

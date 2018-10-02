@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
+import { Link } from 'react-router-dom';
 
 class ViewUserModal extends Component {
     constructor(props) {
@@ -77,6 +78,10 @@ class ViewUserModal extends Component {
                 <p style={{ "marginBottom": "15px" }}>
                     {userDetails.phone_number}
                 </p>
+
+                {/* <Link to={`/dashboard/users/history/${userDetails.value}`} >
+                    Login History
+                 </Link> */}
             </Modal>
         );
     }

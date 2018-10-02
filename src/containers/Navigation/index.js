@@ -3,7 +3,6 @@ import IsoBreadCrumb from '../Uielements/Breadcrumb/breadcrumb';
 import IsoBackToTop from './backToTop';
 import IsoDropDown from '../Uielements/Dropdown/dropdown';
 import IsoMenu from './menu';
-import IsoPagination from '../Uielements/Pagination/pagination';
 
 export {
   IsoAffix,
@@ -11,5 +10,4 @@ export {
   IsoBackToTop,
   IsoDropDown,
   IsoMenu,
-  IsoPagination,
 };

@@ -5,6 +5,7 @@ import IntlMessages from '../../components/utility/intlMessages';
 import ResetPasswordStyleWrapper from './resetPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
+import logo from '../../image/Footer_logo.png';
 
 export default class extends Component {
   constructor(props) {
@@ -67,7 +68,7 @@ export default class extends Component {
           <div className="isoFormContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.resetPassTitle" />
+                <img src={logo} />
               </Link>
             </div>
 

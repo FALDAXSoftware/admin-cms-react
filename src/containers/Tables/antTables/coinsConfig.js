@@ -1,7 +1,9 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, CoinActionCell, SwitchCell } from '../../../components/tables/helperCells';
+import {
+    TextCell, DateCell, CoinActionCell, SwitchCell
+} from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, name = null, code = null, Limit = null, wallet = null, cratedAt = null, status = null) => {
     const value = object[key];
@@ -25,12 +27,6 @@ const renderCell = (object, type, key, name = null, code = null, Limit = null, w
 };
 
 const columns = [
-    {
-        title: <IntlMessages id="coinTable.title.srNo" />,
-        key: 'srNo',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'id')
-    },
     {
         title: <IntlMessages id="coinTable.title.coin" />,
         key: 'coin_name',
@@ -56,13 +52,7 @@ const columns = [
         render: object => renderCell(object, 'LinkCell', 'wallet_address')
     },
     {
-        title: <IntlMessages id="coinTable.title.createdOn" />,
-        key: 'createdOn',
-        width: 200,
-        render: object => renderCell(object, 'DateCell', 'created_at')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.status" />,
+        title: <IntlMessages id="coinTable.title.active" />,
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'SwitchCell', 'id', 'coin_name', 'coin_code', 'limit', 'wallet_address', 'created_at', 'is_active')

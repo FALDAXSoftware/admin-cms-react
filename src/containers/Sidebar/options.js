@@ -26,7 +26,7 @@ const options = [
   },
   {
     key: "countries",
-    label: "sidebar.globalMap",
+    label: "sidebar.country",
     leftIcon: "ion-navigate"
   }
 ];

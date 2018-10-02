@@ -125,7 +125,7 @@ class AddCoinModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Status:</span>
-                    <Switch onChange={this._changeStatus} />
+                    <Switch style={{ marginLeft: '17px' }} onChange={this._changeStatus} />
                 </div>
 
                 {loader && <Spin indicator={loaderIcon} />}

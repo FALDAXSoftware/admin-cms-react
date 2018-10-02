@@ -7,6 +7,7 @@ import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
+import logo from '../../image/Footer_logo.png';
 
 const { login, storeToken } = authAction;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -93,7 +94,7 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.signInTitle" />
+                <img src={logo} />
               </Link>
             </div>
 

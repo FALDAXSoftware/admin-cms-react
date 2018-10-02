@@ -69,18 +69,6 @@ const columns = [
         render: object => renderCell(object, 'LinkCell', 'email')
     },
     {
-        title: <IntlMessages id="antTable.title.street" />,
-        key: 'street',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'street_address')
-    },
-    {
-        title: <IntlMessages id="antTable.title.city" />,
-        key: 'city',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'city_town')
-    },
-    {
         title: <IntlMessages id="antTable.title.country" />,
         key: 'country',
         width: 200,
@@ -93,25 +81,19 @@ const columns = [
         render: object => renderCell(object, 'TextCell', 'phone_number')
     },
     {
-        title: <IntlMessages id="antTable.title.dob" />,
-        key: 'dob',
-        width: 200,
-        render: object => renderCell(object, 'DateCell', 'dob')
-    },
-    {
         title: <IntlMessages id="antTable.title.referrals" />,
         key: 'button',
         width: 200,
         render: object => renderCell(object, 'ButtonCell', 'id')
     },
     {
-        title: <IntlMessages id="coinTable.title.status" />,
+        title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'phone_number', 'country', 'dob', 'is_active')
     },
     {
-        title: <IntlMessages id="antTable.title.Actions" />,
+        title: <IntlMessages id="antTable.title.details" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input } from 'antd';
+import { Modal, Input, notification } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -15,7 +15,10 @@ class EditTemplateModal extends Component {
             showEditTempModal: this.props.showEditTempModal,
             loader: false,
             fields: {},
-            editorContent: ''
+            editorContent: '',
+            errMsg: false,
+            errMessage: '',
+            errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
 
@@ -46,6 +49,14 @@ class EditTemplateModal extends Component {
             })
         }
     }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
 
     _onChangeContent = (val) => {
         this.setState({ editorContent: val })
@@ -83,13 +94,14 @@ class EditTemplateModal extends Component {
 
             ApiUtils.editTemplate(token, formData)
                 .then((res) => res.json())
-                .then(() => {
+                .then((res) => {
                     this._closeEditTempModal();
                     getEmailTemplates();
                     this._resetAddForm();
+                    this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' })
                 })
                 .catch(error => {
-                    console.error(error);
+                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
                     this._resetAddForm();
                 });
         } else {
@@ -99,7 +111,9 @@ class EditTemplateModal extends Component {
     }
 
     render() {
-        const { loader, showEditTempModal, editorContent, fields } = this.state;
+        const {
+            loader, showEditTempModal, editorContent, fields, errMsg, errType
+        } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -107,6 +121,10 @@ class EditTemplateModal extends Component {
             onChange: this._onChangeContent,
             modules: this.quillModules,
         };
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <Modal

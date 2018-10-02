@@ -21,12 +21,6 @@ const renderCell = (object, type, key, c_name = null, code = null, status = null
 
 const columns = [
     {
-        title: <IntlMessages id="coinTable.title.srNo" />,
-        key: 'srNo',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'id')
-    },
-    {
         title: <IntlMessages id="countryTable.title.name" />,
         key: 'name',
         width: 100,

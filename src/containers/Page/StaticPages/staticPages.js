@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Modal } from 'antd';
+import { Tabs, Button, Modal, notification } from 'antd';
 import { staticPagesInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -23,7 +23,10 @@ class StaticPages extends Component {
             showDeletePageModal: false,
             showViewPageModal: false,
             staticPagesDetails: [],
-            deletePageId: ''
+            deletePageId: '',
+            notifyMsg: '',
+            notify: false,
+            errType: ''
         }
         self = this;
         StaticPages.view = StaticPages.view.bind(this);
@@ -71,6 +74,14 @@ class StaticPages extends Component {
             });
     }
 
+    openNotificationWithIcon = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.notifyMsg
+        });
+        this.setState({ notify: false });
+    };
+
     _deletePage = () => {
         const { token } = this.props;
         const { deletePageId } = this.state;
@@ -80,7 +91,10 @@ class StaticPages extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ showDeletePageModal: false, deletePageId: '' });
+                    _this.setState({
+                        showDeletePageModal: false, deletePageId: '', errType: 'success',
+                        notify: true, notifyMsg: 'Page removed successfully'
+                    });
                     _this._getAllStaticPages(0);
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -112,8 +126,12 @@ class StaticPages extends Component {
     }
 
     render() {
-        const { allStaticPages, showAddPageModal, staticPagesDetails,
+        const { allStaticPages, showAddPageModal, staticPagesDetails, notify, errType,
             showEditPageModal, showDeletePageModal, showViewPageModal } = this.state;
+
+        if (notify) {
+            this.openNotificationWithIcon(errType.toLowerCase());
+        }
 
         return (
             <LayoutWrapper>
