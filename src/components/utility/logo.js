@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../../settings';
-import logo from '../../image/Footer_logo.png';
+import logo from '../../image/sidebar.png';
 
 export default ({ collapsed }) => {
   return (
@@ -16,7 +16,7 @@ export default ({ collapsed }) => {
         </div>
       ) : (
           <h3>
-            <Link to="/dashboard"><img src={logo} /></Link>
+            <Link to="/dashboard"><img style={{ width: '150px' }} src={logo} /></Link>
           </h3>
         )}
     </div>

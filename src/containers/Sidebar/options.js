@@ -12,7 +12,7 @@ const options = [
   {
     key: "coins",
     label: "sidebar.coins",
-    leftIcon: "ion-ios-logo-bitcoin"
+    leftIcon: "ion-android-apps"
   },
   {
     key: "static-pages",

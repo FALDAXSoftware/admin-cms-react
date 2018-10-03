@@ -105,5 +105,5 @@ export {
   TemplateActionCell,
   CountrySwitchCell,
   TemplateAnnouncementCell,
-  ContentCell
+  ContentCell,
 };

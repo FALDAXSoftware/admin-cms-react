@@ -12,7 +12,6 @@ import SaleWidget from "./sale/sale-widget";
 import VCardWidget from "./vCard/vCard-widget";
 import SocialWidget from "./social-widget/social-widget";
 import SocialProfile from "./social-widget/social-profile-icon";
-import userpic from "../../image/user1.png";
 import { TableViews, tableinfos, dataList } from "../Tables/antTables";
 import * as rechartConfigs from "../Charts/recharts/config";
 import { StackedAreaChart } from "../Charts/recharts/charts/";
@@ -252,7 +251,7 @@ export default class extends Component {
                 {/* VCard Widget */}
                 <VCardWidget
                   style={{ height: "450px" }}
-                  src={userpic}
+                  src={''}
                   alt="Jhon"
                   name={<IntlMessages id="widget.vcardwidget.name" />}
                   title={<IntlMessages id="widget.vcardwidget.title" />}

@@ -13,20 +13,10 @@ const renderCell = (object, type, key) => {
 };
 
 const columns = [{
-    title: <IntlMessages id="staticPageTable.title.srNo" />,
-    key: 'id',
+    title: <IntlMessages id="antTable.title.Name" />,
+    key: 'full_name',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'id')
-}, {
-    title: <IntlMessages id="antTable.title.firstName" />,
-    key: 'first_name',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'first_name')
-}, {
-    title: <IntlMessages id="antTable.title.lastName" />,
-    key: 'last_name',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'last_name')
+    render: object => renderCell(object, 'TextCell', 'full_name')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
     key: 'email',

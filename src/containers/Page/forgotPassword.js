@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Input, Icon, Spin } from 'antd';
+import { Button, Input, Icon, Spin, notification } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import ForgotPasswordStyleWrapper from './forgotPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
@@ -14,7 +14,8 @@ export default class extends Component {
     super(props);
     this.state = {
       loader: false,
-      fields: {}
+      fields: {},
+      errType: 'success'
     };
     this.validator = new SimpleReactValidator();
   }
@@ -24,6 +25,14 @@ export default class extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
+
+  openNotificationWithIconError = (type) => {
+    notification[type]({
+      message: this.state.errType,
+      description: this.state.errMessage
+    });
+    this.setState({ errMsg: false });
+  };
 
   _forgotPassword = () => {
     this.setState({ loader: true });
@@ -37,11 +46,14 @@ export default class extends Component {
       ApiUtils.forgotPassword(formData)
         .then((response) => response.json())
         .then((res) => {
-          if (res) {
-            _this.setState({ errMsg: true, errMessage: 'email sent successfully', loader: false });
+          if (!res.err) {
+            console.log(res);
+            _this.setState({
+              errMsg: true, errMessage: res.message, loader: false, errType: 'success'
+            });
             _this.props.history.push('/signin');
           } else {
-            _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+            _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
           }
         })
         .catch(err => {
@@ -56,7 +68,11 @@ export default class extends Component {
   }
 
   render() {
-    const { loader } = this.state;
+    const { loader, errMsg, errType } = this.state;
+
+    if (errMsg) {
+      this.openNotificationWithIconError(errType);
+    }
 
     return (
       <ForgotPasswordStyleWrapper className="isoForgotPassPage">
