@@ -330,7 +330,6 @@
   "widget.stickerwidget3.number": "3024",
   "widget.stickerwidget3.staticPages": "Static Pages",
   "widget.stickerwidget4.number": "54",
-  "widget.stickerwidget4.emailTemplates": "Email Templates",
   "widget.stickerwidget5.number": "24",
   "widget.stickerwidget5.referral": "Referrals",
   "widget.salewidget1.label": "Income",
@@ -375,6 +374,7 @@
   "coinTable.title.createdOn": "Created On",
   "coinTable.title.active": "Active",
   "coinTable.title.limit": "Limit",
+  "coinTable.title.description": "Description",
   "coinTable.title.walletAddress": "Wallet Address",
   "coinTable.title.Actions": "Actions",
   "staticPageTable.title.srNo": "#",
@@ -401,6 +401,11 @@
   "countryTable.title.name": "Country Name",
   "countryTable.title.code": "Country Code",
   "countryTable.title.status": "Status",
+  "announce.title.slug": "Slug (Page URL)",
+  "roleTable.title.name": "Name",
+  "roleTable.title.roles": "Roles",
+  "roleTable.title.active": "Active",
+  "roleTable.title.actions": "Actions",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
@@ -421,6 +426,7 @@
   "sidebar.coins": "Coins",
   "sidebar.staticPages": "Static Pages",
   "sidebar.referral": "Referrals",
-  "sidebar.emailTemplates": "Email Templates",
-  "topbar.logout": "Logout"
+  "sidebar.announce": "Announce",
+  "topbar.logout": "Logout",
+  "sidebar.roles": "Roles"
 }

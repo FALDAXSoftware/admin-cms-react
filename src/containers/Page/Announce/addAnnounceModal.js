@@ -8,17 +8,16 @@ import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 
-class EditTemplateModal extends Component {
+class AddAnnounceModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showEditTempModal: this.props.showEditTempModal,
+            showAddEmailModal: this.props.showAddEmailModal,
             loader: false,
             fields: {},
             editorContent: '',
-            errMsg: false,
-            errMessage: '',
-            errType: 'Success'
+            notifyMsg: '',
+            notify: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -41,37 +40,22 @@ class EditTemplateModal extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps !== this.props) {
-            this.setState({
-                showEditTempModal: nextProps.showEditTempModal,
-                fields: nextProps.templateDetails,
-                editorContent: nextProps.templateDetails.content
-            })
+        if (nextProps.showAddEmailModal !== this.props.showAddEmailModal) {
+            this.setState({ showAddEmailModal: nextProps.showAddEmailModal })
         }
     }
 
-    openNotificationWithIconError = (type) => {
+    openNotificationWithIcon = (type) => {
         notification[type]({
             message: this.state.errType,
-            description: this.state.errMessage
+            description: this.state.notifyMsg
         });
-        this.setState({ errMsg: false });
+        this.setState({ notify: false });
     };
 
-    _onChangeContent = (val) => {
-        this.setState({ editorContent: val })
-    }
-
-    _closeEditTempModal = () => {
-        this.setState({ showEditTempModal: false })
-        this.props.closeEditModal();
-    }
-
-    _resetAddForm = () => {
-        const { fields } = this.state;
-
-        fields['coin_name'] = '';
-        this.setState({ fields });
+    _closeAddPageModal = () => {
+        this.setState({ showAddEmailModal: false })
+        this.props.closeAddModal();
     }
 
     _handleChange = (field, e) => {
@@ -80,29 +64,39 @@ class EditTemplateModal extends Component {
         this.setState({ fields });
     }
 
-    _editTemplate = () => {
-        const { token, getEmailTemplates } = this.props;
-        let { fields, editorContent } = this.state;
+    _resetAddForm = () => {
+        const { fields } = this.state;
+
+        fields['name'] = '';
+        fields['title'] = '';
+        this.setState({ fields, editorContent: '' });
+    }
+
+    _addPage = () => {
+        const { token, getAnnouncements } = this.props;
+        let { editorContent, fields } = this.state;
 
         if (this.validator.allValid()) {
             let formData = {
-                id: fields["value"],
-                title: fields["title"],
                 name: fields["name"],
+                title: fields["title"],
                 content: editorContent
             };
 
-            ApiUtils.editTemplate(token, formData)
+            ApiUtils.addTemplate(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this._closeEditTempModal();
-                    getEmailTemplates();
+                    this._closeAddPageModal();
+                    getAnnouncements();
                     this._resetAddForm();
-                    this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' })
+                    this.setState({
+                        errType: 'success', notifyMsg: res.error ? res.error : res.message, notify: true
+                    });
                 })
                 .catch(error => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                    console.error(error);
                     this._resetAddForm();
+                    error && this.setState({ errType: 'error', notifyMsg: 'Something went wrong!!', notify: true });
                 });
         } else {
             this.validator.showMessages();
@@ -110,10 +104,12 @@ class EditTemplateModal extends Component {
         }
     }
 
+    _onChangeContent = (val) => {
+        this.setState({ editorContent: val })
+    }
+
     render() {
-        const {
-            loader, showEditTempModal, editorContent, fields, errMsg, errType
-        } = this.state;
+        const { loader, showAddEmailModal, editorContent, fields, notify, errType } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -122,39 +118,42 @@ class EditTemplateModal extends Component {
             modules: this.quillModules,
         };
 
-        if (errMsg) {
-            this.openNotificationWithIconError(errType.toLowerCase());
+        if (notify) {
+            this.openNotificationWithIcon(errType.toLowerCase());
         }
 
         return (
             <Modal
-                title="Edit Template"
-                visible={showEditTempModal}
-                onOk={this._editTemplate}
-                onCancel={this._closeEditTempModal}
+                title="Add New Email"
+                visible={showAddEmailModal}
+                onOk={this._addPage}
+                onCancel={this._closeAddPageModal}
                 confirmLoading={loader}
-                okText="Edit"
+                okText="Add"
             >
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Template Name:</span>
-                    <Input placeholder="Template Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
+                    <span>Name:</span>
+                    <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('template name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('name', fields["name"], 'required', 'text-danger')}
                     </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Title:</span>
-                    <Input placeholder="title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
+                    <Input placeholder="Title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('title', fields["title"], 'required', 'text-danger')}
                     </span>
                 </div>
 
-                <QuillEditor>
-                    <ReactQuill {...options} />
-                </QuillEditor>
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Content:</span>
+                    <QuillEditor>
+                        <ReactQuill {...options} />
+                    </QuillEditor>
+                </div>
 
             </Modal>
         );
@@ -164,4 +163,4 @@ class EditTemplateModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditTemplateModal);
+    }))(AddAnnounceModal);

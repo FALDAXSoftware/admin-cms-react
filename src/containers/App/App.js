@@ -71,7 +71,7 @@ export class App extends Component {
                         borderTop: "1px solid #ededed"
                       }}
                     >
-                      {siteConfig.footerText}
+                      <span>&copy; 2018 FALDAX. All Rights Reserved.</span>
                     </Footer>
                   </Layout>
                 </Layout>

@@ -5,9 +5,8 @@ import { Modal, Input, notification, Icon, Spin } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
-const { TextArea } = Input;
 
-class EditCoinModal extends Component {
+class EditRoleModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -50,7 +49,6 @@ class EditCoinModal extends Component {
 
         fields['coin_name'] = '';
         fields['limit'] = '';
-        fields['description'] = '';
         fields['wallet_address'] = '';
         this.setState({ fields });
     }
@@ -72,7 +70,6 @@ class EditCoinModal extends Component {
                 coin_id: fields["value"],
                 coin_name: fields["coin_name"],
                 limit: fields["limit"],
-                description: fields["description"],
                 wallet_address: fields["wallet_address"]
             };
 
@@ -127,14 +124,6 @@ class EditCoinModal extends Component {
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Description:</span>
-                        <TextArea placeholder="Description" rows={4} onChange={this._handleChange.bind(this, "description")} value={fields["description"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('description', fields["description"], 'required', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
                         <span>Wallet Address:</span>
                         <Input placeholder="Email" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                         <span style={{ "color": "red" }}>
@@ -152,4 +141,4 @@ class EditCoinModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditCoinModal);
+    }))(EditRoleModal);

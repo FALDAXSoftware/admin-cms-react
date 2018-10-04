@@ -1,55 +1,55 @@
 import React, { Component } from 'react';
 import { Tabs, Button, Modal, notification } from 'antd';
-import { emailTemplatesInfos } from "../../Tables/antTables";
+import { AnnounceInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
-import AddTemplateModal from './addEmailTempModal';
-import EditTemplateModal from './editTemplateModal';
-import ViewEmailTempModal from './viewEmailTempModal';
+import AddAnnounceModal from './addAnnounceModal';
+import EditAnnounceModal from './editAnnounceModal';
+import ViewAnnounceEmail from './viewAnnounceModal';
 
 const TabPane = Tabs.TabPane;
 var self;
 
-class EmailTemplates extends Component {
+class Announce extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allTemplates: [],
-            showAddTempModal: false,
-            showEditTempModal: false,
-            showDeleteTempModal: false,
-            showViewTempModal: false,
-            templateDetails: [],
+            allAnnounces: [],
+            showAddEmailModal: false,
+            showEditAnnounceModal: false,
+            showDeleteAnnounceModal: false,
+            showViewAnnounceModal: false,
+            emailDetails: [],
             deleteEmailId: '',
             notifyMsg: '',
             errType: 'success'
         }
         self = this;
-        EmailTemplates.view = EmailTemplates.view.bind(this);
-        EmailTemplates.edit = EmailTemplates.edit.bind(this);
-        EmailTemplates.delete = EmailTemplates.delete.bind(this);
-        EmailTemplates.announce = EmailTemplates.announce.bind(this);
+        Announce.view = Announce.view.bind(this);
+        Announce.edit = Announce.edit.bind(this);
+        Announce.delete = Announce.delete.bind(this);
+        Announce.announce = Announce.announce.bind(this);
     }
 
     static view(value, name, title, content, is_active) {
-        let templateDetails = {
+        let emailDetails = {
             value, name, title, content, is_active
         }
-        self.setState({ templateDetails, showViewTempModal: true })
+        self.setState({ emailDetails, showViewAnnounceModal: true })
     }
 
     static edit(value, name, title, content, is_active) {
-        let templateDetails = {
+        let emailDetails = {
             value, name, title, content, is_active
         }
-        self.setState({ templateDetails, showEditTempModal: true })
+        self.setState({ emailDetails, showEditAnnounceModal: true })
     }
 
     static delete(value) {
-        self.setState({ showDeleteTempModal: true, deleteEmailId: value })
+        self.setState({ showDeleteAnnounceModal: true, deleteEmailId: value })
     }
 
     static announce(value) {
@@ -75,7 +75,7 @@ class EmailTemplates extends Component {
     }
 
     componentDidMount = () => {
-        this._getEmailTemplates();
+        this._getAnnounceEmails();
     }
 
     openNotificationWithIconError = (type) => {
@@ -86,7 +86,7 @@ class EmailTemplates extends Component {
         this.setState({ notify: false });
     };
 
-    _getEmailTemplates = () => {
+    _getAnnounceEmails = () => {
         const { token } = this.props;
         let _this = this;
 
@@ -94,7 +94,7 @@ class EmailTemplates extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allTemplates: res.data });
+                    _this.setState({ allAnnounces: res.data });
                 } else {
                     _this.setState({ notify: true, notifyMsg: res.message });
                 }
@@ -104,7 +104,7 @@ class EmailTemplates extends Component {
             });
     }
 
-    _deleteTemplate = () => {
+    _deleteAnnounce = () => {
         const { token } = this.props;
         const { deleteEmailId } = this.state;
         let _this = this;
@@ -114,10 +114,10 @@ class EmailTemplates extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        showDeleteTempModal: false, deleteEmailId: '',
-                        notifyMsg: 'Template removed successfully', notify: true
+                        showDeleteAnnounceModal: false, deleteEmailId: '',
+                        notifyMsg: 'Email removed successfully', notify: true
                     });
-                    _this._getEmailTemplates(0);
+                    _this._getAnnounceEmails(0);
                 } else {
                     _this.setState({ notifyMsg: 'Something went wrong!', notify: true });
                 }
@@ -127,29 +127,29 @@ class EmailTemplates extends Component {
             });
     }
 
-    _showAddTemplateModal = () => {
-        this.setState({ showAddTempModal: true });
+    _showAddAnnounceModal = () => {
+        this.setState({ showAddEmailModal: true });
     }
 
-    _closeAddTempModal = () => {
-        this.setState({ showAddTempModal: false });
+    _closeAddAnnounceModal = () => {
+        this.setState({ showAddEmailModal: false });
     }
 
-    _closeEditTempModal = () => {
-        this.setState({ showEditTempModal: false });
+    _closeEditAnnounceModal = () => {
+        this.setState({ showEditAnnounceModal: false });
     }
 
-    _closeDeleteTempModal = () => {
-        this.setState({ showDeleteTempModal: false });
+    _closeDeleteAnnounceModal = () => {
+        this.setState({ showDeleteAnnounceModal: false });
     }
 
-    _closeViewTempModal = () => {
-        this.setState({ showViewTempModal: false });
+    _closeViewAnnounceModal = () => {
+        this.setState({ showViewAnnounceModal: false });
     }
 
     render() {
-        const { allTemplates, showAddTempModal, templateDetails, showViewTempModal,
-            showEditTempModal, showDeleteTempModal, notify, errType
+        const { allAnnounces, showAddEmailModal, emailDetails, showViewAnnounceModal,
+            showEditAnnounceModal, showDeleteAnnounceModal, notify, errType
         } = this.state;
 
         if (notify) {
@@ -160,43 +160,43 @@ class EmailTemplates extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {emailTemplatesInfos.map(tableInfo => (
+                        {AnnounceInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddTemplateModal}>Add Template</Button>
-                                    <AddTemplateModal
-                                        showAddTempModal={showAddTempModal}
-                                        closeAddModal={this._closeAddTempModal}
-                                        getEmailTemplates={this._getEmailTemplates.bind(this, 0)}
+                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAnnounceModal}>New Email</Button>
+                                    <AddAnnounceModal
+                                        showAddEmailModal={showAddEmailModal}
+                                        closeAddModal={this._closeAddAnnounceModal}
+                                        getAnnouncements={this._getAnnounceEmails.bind(this, 0)}
                                     />
                                 </div>
-                                <ViewEmailTempModal
-                                    templateDetails={templateDetails}
-                                    showViewTempModal={showViewTempModal}
-                                    closeViewModal={this._closeViewTempModal}
+                                <ViewAnnounceEmail
+                                    emailDetails={emailDetails}
+                                    showViewAnnounceModal={showViewAnnounceModal}
+                                    closeViewModal={this._closeViewAnnounceModal}
                                 />
                                 <TableWrapper
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}
-                                    dataSource={allTemplates}
+                                    dataSource={allAnnounces}
                                     className="isoCustomizedTable"
                                 />
-                                <EditTemplateModal
-                                    templateDetails={templateDetails}
-                                    showEditTempModal={showEditTempModal}
-                                    closeEditModal={this._closeEditTempModal}
-                                    getEmailTemplates={this._getEmailTemplates.bind(this, 0)}
+                                <EditAnnounceModal
+                                    emailDetails={emailDetails}
+                                    showEditAnnounceModal={showEditAnnounceModal}
+                                    closeEditModal={this._closeEditAnnounceModal}
+                                    getAnnouncements={this._getAnnounceEmails.bind(this, 0)}
                                 />
                                 {
-                                    showDeleteTempModal &&
+                                    showDeleteAnnounceModal &&
                                     <Modal
-                                        title="Delete Template"
-                                        visible={showDeleteTempModal}
-                                        onCancel={this._closeDeleteTempModal}
-                                        onOk={this._deleteTemplate}
+                                        title="Delete Email"
+                                        visible={showDeleteAnnounceModal}
+                                        onCancel={this._closeDeleteAnnounceModal}
+                                        onOk={this._deleteAnnounce}
                                     >
-                                        Are you sure you want to delete this template ?
+                                        Are you sure you want to delete this email ?
                                     </Modal>
                                 }
                             </TabPane>
@@ -212,6 +212,6 @@ export default connect(
     state => ({
         user: state.Auth.get('user'),
         token: state.Auth.get('token')
-    }))(EmailTemplates);
+    }))(Announce);
 
-export { EmailTemplates }
+export { Announce }

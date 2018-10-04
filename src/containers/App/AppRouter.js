@@ -25,8 +25,8 @@ const routes = [
         component: asyncComponent(() => import("../Page/editProfile"))
     },
     {
-        path: "email-templates",
-        component: asyncComponent(() => import("../Page/EmailTemplates/emailTemplates"))
+        path: "announce",
+        component: asyncComponent(() => import("../Page/Announce/announce"))
     },
     {
         path: "coins",
@@ -39,6 +39,10 @@ const routes = [
     {
         path: "countries",
         component: asyncComponent(() => import("../Page/Country/countries"))
+    },
+    {
+        path: "roles",
+        component: asyncComponent(() => import("../Page/Roles/roles"))
     },
     {
         path: "users/history/:id",

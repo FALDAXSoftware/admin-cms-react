@@ -4,7 +4,6 @@ export default {
 const siteConfig = {
   siteName: 'FALDAX',
   siteIcon: 'ion-flash',
-  footerText: '@2013-2018 FALDAX. All Rights Reserved.'
 };
 
 const themeConfig = {

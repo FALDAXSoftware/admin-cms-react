@@ -36,7 +36,7 @@ class ViewUserModal extends Component {
                 onCancel={this._closeViewUserModal}
                 onOk={this._closeViewUserModal}
             >
-                <img alt="user" style={{ width: '20%', height: '30%' }} src={IMAGE_URL + userDetails.profile_pic} />
+                <img alt="user" style={{ width: '40px', height: '40px' }} src={IMAGE_URL + userDetails.profile_pic} />
                 <br />
 
                 <span> <b>First Name:</b> </span>

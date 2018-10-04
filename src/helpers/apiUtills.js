@@ -1,5 +1,5 @@
-// const API_URL = "http://192.168.0.148:1337"; // Local URL
-const API_URL = "http://18.191.87.133:8084"; //Live URL
+const API_URL = "http://192.168.2.32:1337"; // Local URL
+//const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -77,37 +77,6 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //add user api
-    addUser: function (token, form) {
-        try {
-            return fetch(API_URL + "/users/create", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Accept': 'application/json',
-                },
-                body: form,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit user api
-    editUser: function (token, form) {
-        try {
-            return fetch(API_URL + "/rest/editprofile-customer", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token
-                },
-                body: form,
             });
         } catch (error) {
             console.error(error);
@@ -306,10 +275,10 @@ const ApiUtils = {
         }
     },
 
-    //get all email templates api
+    //get all announcement emails api
     getEmailTemplates: function (token) {
         try {
-            return fetch(API_URL + "/admin/email-template/getEmailTemplate", {
+            return fetch(API_URL + "/admin/announcement/getAnnouncementTemplate", {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -321,10 +290,10 @@ const ApiUtils = {
         }
     },
 
-    //add email template api
+    //add announcement email api
     addTemplate: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/email-template/create", {
+            return fetch(API_URL + "/admin/announcement/create", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -337,10 +306,10 @@ const ApiUtils = {
         }
     },
 
-    //edit email template api
+    //edit announcement email api
     editTemplate: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/email-template/update", {
+            return fetch(API_URL + "/admin/announcement/update", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -353,10 +322,10 @@ const ApiUtils = {
         }
     },
 
-    //delete email template api
+    //delete announcement  email api
     deleteTemplate: function (token, templateId) {
         try {
-            return fetch(API_URL + "/admin/email-template/delete?id=" + templateId, {
+            return fetch(API_URL + "/admin/announcement/delete?id=" + templateId, {
                 method: 'DELETE',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -417,7 +386,20 @@ const ApiUtils = {
         }
     },
 
-
+    //get all roles api
+    getAllRoles: function (token) {
+        try {
+            return fetch(API_URL + "/admin/role/get", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;

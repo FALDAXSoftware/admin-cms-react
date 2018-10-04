@@ -28,7 +28,7 @@ class Users extends Component {
             allReferral: [],
             allReferralCount: 0,
             page: 1,
-            limit: 5
+            limit: 50
         }
         self = this;
         Users.view = Users.view.bind(this);
@@ -85,8 +85,8 @@ class Users extends Component {
                     _this.setState({ errMsg: true, message: res.message });
                 }
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 
@@ -100,7 +100,7 @@ class Users extends Component {
                 if (res) {
                     _this.setState({
                         allReferral: res.data, allReferralCount: res.usersDataCount,
-                        showReferralModal: res.usersDataCount > 0 ? true : false, userId: id
+                        showReferralModal: true, userId: id
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -163,9 +163,10 @@ class Users extends Component {
                                             className="isoCustomizedTable"
                                         />
                                         <Pagination
+                                            style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleUserPagination.bind(this)}
-                                            pageSize={5}
+                                            pageSize={50}
                                             current={page}
                                             total={allUserCount}
                                         />

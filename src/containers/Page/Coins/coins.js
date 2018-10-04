@@ -25,7 +25,7 @@ class Coins extends Component {
             showViewCoinModal: false,
             showDeleteCoinModal: false,
             searchCoin: '',
-            limit: 5,
+            limit: 50,
             coinDetails: [],
             deleteCoinId: '',
             errMessage: '',
@@ -40,21 +40,21 @@ class Coins extends Component {
         Coins.changeStatus = Coins.changeStatus.bind(this);
     }
 
-    static view(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+    static view(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) {
         let coinDetails = {
-            value, coin_name, coin_code, limit, wallet_address, created_at, is_active
+            value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active
         }
         self.setState({ coinDetails, showViewCoinModal: true, page: 1 });
     }
 
-    static edit(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+    static edit(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) {
         let coinDetails = {
-            value, coin_name, coin_code, limit, wallet_address, created_at, is_active
+            value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active
         }
         self.setState({ coinDetails, showEditCoinModal: true, page: 1 });
     }
 
-    static changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+    static changeStatus(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) {
         const { token } = this.props;
 
         let formData = {
@@ -105,11 +105,15 @@ class Coins extends Component {
                         allCoins: res.data, allCoinCount: res.CoinsCount, searchCoin: ''
                     });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message, searchCoin: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
                 }
             })
             .catch(err => {
                 console.log('error occured', err);
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchCoin: '', errType: 'error',
+                });
             });
     }
 
@@ -227,9 +231,10 @@ class Coins extends Component {
                                         className="isoCustomizedTable"
                                     />
                                     <Pagination
+                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleCoinPagination.bind(this)}
-                                        pageSize={5}
+                                        pageSize={50}
                                         current={page}
                                         total={allCoinCount}
                                     />

@@ -20,15 +20,20 @@ const options = [
     leftIcon: "ion-document",
   },
   {
-    key: "email-templates",
-    label: "sidebar.emailTemplates",
-    leftIcon: "ion-android-mail"
+    key: "announce",
+    label: "sidebar.announce",
+    leftIcon: "ion-android-notifications"
   },
   {
     key: "countries",
     label: "sidebar.country",
     leftIcon: "ion-navigate"
-  }
+  },
+  // {
+  //   key: "roles",
+  //   label: "sidebar.roles",
+  //   leftIcon: "ion-person-add"
+  // }
 ];
 
 export default options;

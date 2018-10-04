@@ -19,7 +19,7 @@ class Countries extends Component {
             allCountries: [],
             allCountryCount: 0,
             searchCountry: '',
-            limit: 5,
+            limit: 50,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -124,9 +124,10 @@ class Countries extends Component {
                                         className="isoCustomizedTable"
                                     />
                                     <Pagination
+                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleCoinPagination.bind(this)}
-                                        pageSize={5}
+                                        pageSize={50}
                                         current={page}
                                         total={allCountryCount}
                                     />

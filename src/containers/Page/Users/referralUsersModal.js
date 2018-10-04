@@ -48,28 +48,33 @@ class ReferralUsers extends Component {
                 onCancel={this._closeReferalModal}
                 onOk={this._closeReferralModal}
             >
-                <Tabs className="isoTableDisplayTab">
-                    {referralInfos.map(tableInfo => (
-                        <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                            <TableWrapper
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allReferral}
-                                className="isoCustomizedTable"
-                            />
-                            {allReferralCount > 0 &&
-                                <Pagination
-                                    className="ant-users-pagination"
-                                    onChange={this._handleReferralPagination.bind(this)}
-                                    pageSize={5}
-                                    defaultCurrent={1}
-                                    total={allReferralCount}
-                                />
+                {
+                    allReferralCount > 0 ?
+                        <Tabs className="isoTableDisplayTab">
+                            {
+                                referralInfos.map(tableInfo => (
+                                    <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                        <TableWrapper
+                                            {...this.state}
+                                            columns={tableInfo.columns}
+                                            pagination={false}
+                                            dataSource={allReferral}
+                                            className="isoCustomizedTable"
+                                        />
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleReferralPagination.bind(this)}
+                                            pageSize={5}
+                                            defaultCurrent={1}
+                                            total={allReferralCount}
+                                        />
+                                    </TabPane>
+                                ))
                             }
-                        </TabPane>
-                    ))}
-                </Tabs>
+                        </Tabs>
+                        : 'No Data'
+                }
             </Modal>
         );
     }

@@ -99,18 +99,6 @@ class Dashboard extends Component {
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={<IntlMessages id="widget.stickerwidget1.number" />}
-                                text={<IntlMessages id="widget.stickerwidget4.emailTemplates" />}
-                                icon="ion-android-mail"
-                                fontColor="#ffffff"
-                                bgColor="#F75D81"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
                                 text={<IntlMessages id="widget.stickerwidget5.referral" />}
                                 icon="ion-android-fastforward"
                                 fontColor="#ffffff"

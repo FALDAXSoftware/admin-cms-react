@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Switch, Icon, Spin } from 'antd';
+import { Modal, Input, Icon, Spin } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const { TextArea } = Input;
 
 class AddCoinModal extends Component {
     constructor(props) {
@@ -13,7 +14,6 @@ class AddCoinModal extends Component {
             showAddCoinModal: this.props.showAddCoinModal,
             loader: false,
             fields: {},
-            isActive: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -40,26 +40,23 @@ class AddCoinModal extends Component {
 
         fields['coin_name'] = '';
         fields['coin_code'] = '';
+        fields['description'] = '';
         fields['limit'] = '';
         fields['wallet_address'] = '';
-        this.setState({ fields, isActive: false });
-    }
-
-    _changeStatus = (checked) => {
-        this.setState({ isActive: checked });
+        this.setState({ fields });
     }
 
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
-        let { fields, isActive } = this.state;
+        let { fields } = this.state;
 
         if (this.validator.allValid()) {
             let formData = {
                 coin_name: fields["coin_name"],
                 coin_code: fields["coin_code"],
+                description: fields["description"],
                 limit: fields["limit"],
                 wallet_address: fields["wallet_address"],
-                is_active: isActive
             };
 
             ApiUtils.addCoin(token, formData)
@@ -108,6 +105,14 @@ class AddCoinModal extends Component {
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
+                    <span>Description:</span>
+                    <TextArea placeholder="Description" rows={4} onChange={this._handleChange.bind(this, "description")} value={fields["description"]} />
+                    <span style={{ "color": "red" }}>
+                        {this.validator.message('description', fields["description"], 'required', 'text-danger')}
+                    </span>
+                </div>
+
+                <div style={{ "marginBottom": "15px" }}>
                     <span>Limit:</span>
                     <Input placeholder="Limit" onChange={this._handleChange.bind(this, "limit")} disabled={this.state.disabled} value={fields["limit"]} />
                     <span style={{ "color": "red" }}>
@@ -121,11 +126,6 @@ class AddCoinModal extends Component {
                     <span style={{ "color": "red" }}>
                         {this.validator.message('wallet address', fields["wallet_address"], 'required', 'text-danger')}
                     </span>
-                </div>
-
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Status:</span>
-                    <Switch style={{ marginLeft: '17px' }} onChange={this._changeStatus} />
                 </div>
 
                 {loader && <Spin indicator={loaderIcon} />}
