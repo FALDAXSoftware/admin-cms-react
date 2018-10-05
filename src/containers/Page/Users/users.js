@@ -28,7 +28,9 @@ class Users extends Component {
             allReferral: [],
             allReferralCount: 0,
             page: 1,
-            limit: 50
+            limit: 50,
+            referPage: 0,
+            referLimit: 10
         }
         self = this;
         Users.view = Users.view.bind(this);
@@ -92,9 +94,11 @@ class Users extends Component {
 
     _getAllReferredUsers = (id, page) => {
         const { token } = this.props;
+        const { referLimit } = this.state;
+
         let _this = this;
 
-        ApiUtils.getAllReferrals(token, id)
+        ApiUtils.getAllReferrals(page, referLimit, token, id)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -108,6 +112,7 @@ class Users extends Component {
             })
             .catch(err => {
                 console.log('error occured', err);
+                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 

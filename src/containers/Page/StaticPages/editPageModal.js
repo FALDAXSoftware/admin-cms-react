@@ -59,8 +59,9 @@ class EditPageModal extends Component {
     _resetAddForm = () => {
         const { fields } = this.state;
 
-        fields['coin_name'] = '';
-        this.setState({ fields });
+        fields['name'] = '';
+        fields['title'] = '';
+        this.setState({ fields, editorContent: this.props.staticPagesDetails.content });
     }
 
     _handleChange = (field, e) => {
@@ -117,7 +118,6 @@ class EditPageModal extends Component {
                 confirmLoading={loader}
                 okText="Edit"
             >
-
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Page Name:</span>
                     <Input placeholder="Page Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
@@ -134,9 +134,12 @@ class EditPageModal extends Component {
                     </span>
                 </div>
 
-                <QuillEditor>
-                    <ReactQuill {...options} />
-                </QuillEditor>
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Content:</span>
+                    <QuillEditor>
+                        <ReactQuill {...options} />
+                    </QuillEditor>
+                </div>
 
             </Modal>
         );

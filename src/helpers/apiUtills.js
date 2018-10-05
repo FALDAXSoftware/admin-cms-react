@@ -260,8 +260,8 @@ const ApiUtils = {
     },
 
     //get all referrals api
-    getAllReferrals: function (token, userId) {
-        let url = "/admin/referredUsers?id=" + userId;
+    getAllReferrals: function (page, limit, token, userId) {
+        let url = "/admin/referredUsers?id=" + userId + "&page=" + page + "&limit=" + limit;
         try {
             return fetch(API_URL + url, {
                 method: 'GET',

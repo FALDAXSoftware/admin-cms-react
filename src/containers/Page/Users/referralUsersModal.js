@@ -45,7 +45,7 @@ class ReferralUsers extends Component {
             <Modal
                 title="View Referred Users"
                 visible={showReferralModal}
-                onCancel={this._closeReferalModal}
+                onCancel={this._closeReferralModal}
                 onOk={this._closeReferralModal}
             >
                 {
@@ -65,7 +65,7 @@ class ReferralUsers extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={5}
+                                            pageSize={10}
                                             defaultCurrent={1}
                                             total={allReferralCount}
                                         />

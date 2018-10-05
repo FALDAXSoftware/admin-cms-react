@@ -16,6 +16,7 @@ class Dashboard extends Component {
             coinCount: 0,
             pagesCount: 0,
             referralCount: 0,
+            AccountCreated24Hr: 0,
             errMsg: false,
             errMessage: ''
         }
@@ -41,8 +42,8 @@ class Dashboard extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    const { userCount, coinCount } = res;
-                    _this.setState({ userCount, coinCount });
+                    const { userCount, coinCount, AccountCreated24Hr } = res;
+                    _this.setState({ userCount, coinCount, AccountCreated24Hr });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
@@ -54,7 +55,7 @@ class Dashboard extends Component {
 
     render() {
         const { rowStyle, colStyle } = basicStyle;
-        const { userCount, coinCount } = this.state;
+        const { userCount, coinCount, AccountCreated24Hr } = this.state;
 
         return (
             <LayoutWrapper>
@@ -86,7 +87,7 @@ class Dashboard extends Component {
                     {/* <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
+                                number={AccountCreated24Hr}
                                 text={<IntlMessages id="widget.stickerwidget3.staticPages" />}
                                 icon="ion-document"
                                 fontColor="#ffffff"

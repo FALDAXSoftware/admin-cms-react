@@ -378,7 +378,7 @@
   "coinTable.title.walletAddress": "Wallet Address",
   "coinTable.title.Actions": "Actions",
   "staticPageTable.title.srNo": "#",
-  "staticPageTable.title.slug": "Slug",
+  "staticPageTable.title.name": "Name",
   "staticPageTable.title.title": "Title",
   "staticPageTable.title.content": "Content",
   "staticPageTable.title.updatedOn": "Updated On",

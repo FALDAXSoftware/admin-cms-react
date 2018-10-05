@@ -25,7 +25,7 @@ const renderCell = (object, type, key, page_name = null, page_title = null, desc
 };
 
 const columns = [{
-    title: <IntlMessages id="staticPageTable.title.slug" />,
+    title: <IntlMessages id="staticPageTable.title.name" />,
     key: 'name',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'name')
@@ -34,11 +34,6 @@ const columns = [{
     key: 'title',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'title')
-}, {
-    title: <IntlMessages id="staticPageTable.title.content" />,
-    key: 'updatedOn',
-    width: 50,
-    render: object => renderCell(object, 'ContentCell', 'content')
 }, {
     title: <IntlMessages id="staticPageTable.title.Actions" />,
     key: 'action',
