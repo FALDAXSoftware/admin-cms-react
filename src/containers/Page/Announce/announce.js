@@ -163,7 +163,7 @@ class Announce extends Component {
                         {AnnounceInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAnnounceModal}>New Email</Button>
+                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAnnounceModal}>Add Announcement</Button>
                                     <AddAnnounceModal
                                         showAddEmailModal={showAddEmailModal}
                                         closeAddModal={this._closeAddAnnounceModal}
@@ -191,12 +191,12 @@ class Announce extends Component {
                                 {
                                     showDeleteAnnounceModal &&
                                     <Modal
-                                        title="Delete Email"
+                                        title="Delete Announcement"
                                         visible={showDeleteAnnounceModal}
                                         onCancel={this._closeDeleteAnnounceModal}
                                         onOk={this._deleteAnnounce}
                                     >
-                                        Are you sure you want to delete this email ?
+                                        Are you sure you want to delete this announcement ?
                                     </Modal>
                                 }
                             </TabPane>

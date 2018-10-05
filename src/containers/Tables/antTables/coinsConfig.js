@@ -49,12 +49,6 @@ const columns = [
         render: object => renderCell(object, 'LinkCell', 'limit')
     },
     {
-        title: <IntlMessages id="coinTable.title.description" />,
-        key: 'description',
-        width: 200,
-        render: object => renderCell(object, 'ContentCell', 'description')
-    },
-    {
         title: <IntlMessages id="coinTable.title.walletAddress" />,
         key: 'wallet_address',
         width: 200,

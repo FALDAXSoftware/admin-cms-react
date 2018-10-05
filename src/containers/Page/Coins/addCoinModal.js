@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, Icon, Spin } from 'antd';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.core.css';
+import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
-const { TextArea } = Input;
 
 class AddCoinModal extends Component {
     constructor(props) {
@@ -14,14 +17,36 @@ class AddCoinModal extends Component {
             showAddCoinModal: this.props.showAddCoinModal,
             loader: false,
             fields: {},
+            editorContent: '',
         }
         this.validator = new SimpleReactValidator();
+
+        this.quillModules = {
+            toolbar: {
+                container: [
+                    [{ header: [1, 2, false] }, { font: [] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [
+                        { list: 'ordered' },
+                        { list: 'bullet' },
+                        { indent: '-1' },
+                        { indent: '+1' },
+                    ],
+                    ['link', 'image', 'video'],
+                    ['clean'],
+                ],
+            },
+        };
     }
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.showAddCoinModal !== this.props.showAddCoinModal) {
             this.setState({ showAddCoinModal: nextProps.showAddCoinModal })
         }
+    }
+
+    _onChangeContent = (val) => {
+        this.setState({ editorContent: val })
     }
 
     _closeAddCoinModal = () => {
@@ -48,13 +73,13 @@ class AddCoinModal extends Component {
 
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
-        let { fields } = this.state;
+        let { fields, editorContent } = this.state;
 
         if (this.validator.allValid()) {
             let formData = {
                 coin_name: fields["coin_name"],
                 coin_code: fields["coin_code"],
-                description: fields["description"],
+                description: editorContent,
                 limit: fields["limit"],
                 wallet_address: fields["wallet_address"],
             };
@@ -65,6 +90,7 @@ class AddCoinModal extends Component {
                     this._closeAddCoinModal();
                     getAllCoins();
                     this._resetAddForm();
+                    this.setState({ editorContent: '' })
                 })
                 .catch(error => {
                     console.error(error);
@@ -77,7 +103,15 @@ class AddCoinModal extends Component {
     }
 
     render() {
-        const { loader, showAddCoinModal, fields } = this.state;
+        const { loader, showAddCoinModal, fields, editorContent } = this.state;
+
+        const options = {
+            theme: 'snow',
+            placeholder: 'Write Something',
+            value: editorContent,
+            onChange: this._onChangeContent,
+            modules: this.quillModules,
+        };
 
         return (
             <Modal
@@ -106,10 +140,9 @@ class AddCoinModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Description:</span>
-                    <TextArea placeholder="Description" rows={4} onChange={this._handleChange.bind(this, "description")} value={fields["description"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('description', fields["description"], 'required', 'text-danger')}
-                    </span>
+                    <QuillEditor>
+                        <ReactQuill {...options} />
+                    </QuillEditor>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

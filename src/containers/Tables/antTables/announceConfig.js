@@ -27,7 +27,7 @@ const renderCell = (object, type, key, page_name = null, page_title = null, desc
 };
 
 const columns = [{
-    title: <IntlMessages id="announce.title.slug" />,
+    title: <IntlMessages id="announce.title.name" />,
     key: 'name',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'name')

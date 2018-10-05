@@ -50,6 +50,10 @@ class ViewCoinModal extends Component {
                     {coinDetails.limit}
                 </p>
 
+                <span> <b>Description:</b> </span>
+                <p style={{ "marginBottom": "15px" }}
+                    dangerouslySetInnerHTML={{ __html: coinDetails.description }} />
+
                 <span> <b>Wallet Address:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinDetails.wallet_address}

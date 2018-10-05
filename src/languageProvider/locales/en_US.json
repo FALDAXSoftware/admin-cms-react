@@ -324,7 +324,7 @@
   "page.signInForgotPass": "Forgot password",
   "widget.reportswidget.label": "Income",
   "widget.stickerwidget1.number": "210",
-  "widget.stickerwidget1.user": "Total Users",
+  "widget.stickerwidget1.user": "Total Active Users",
   "widget.stickerwidget2.number": "1749",
   "widget.stickerwidget2.coins": "Total Coins",
   "widget.stickerwidget3.number": "3024",
@@ -401,7 +401,7 @@
   "countryTable.title.name": "Country Name",
   "countryTable.title.code": "Country Code",
   "countryTable.title.status": "Status",
-  "announce.title.slug": "Slug (Page URL)",
+  "announce.title.name": "Name",
   "roleTable.title.name": "Name",
   "roleTable.title.roles": "Roles",
   "roleTable.title.active": "Active",
@@ -426,7 +426,7 @@
   "sidebar.coins": "Coins",
   "sidebar.staticPages": "Static Pages",
   "sidebar.referral": "Referrals",
-  "sidebar.announce": "Announce",
+  "sidebar.announce": "Announcement",
   "topbar.logout": "Logout",
   "sidebar.roles": "Roles"
 }

@@ -29,7 +29,7 @@ class ViewAnnounceEmail extends Component {
 
         return (
             <Modal
-                title="View Email"
+                title="View Announcement"
                 visible={showViewAnnounceModal}
                 onCancel={this._closeViewAnnounceModal}
                 onOk={this._closeViewAnnounceModal}

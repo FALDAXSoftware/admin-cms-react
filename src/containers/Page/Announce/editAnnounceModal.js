@@ -128,7 +128,7 @@ class EditAnnounceModal extends Component {
 
         return (
             <Modal
-                title="Edit Email"
+                title="Edit Announcement"
                 visible={showEditAnnounceModal}
                 onOk={this._editAnnounce}
                 onCancel={this._closeEditAnnounce}

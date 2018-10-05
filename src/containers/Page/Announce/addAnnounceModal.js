@@ -124,7 +124,7 @@ class AddAnnounceModal extends Component {
 
         return (
             <Modal
-                title="Add New Email"
+                title="Add New Announcement"
                 visible={showAddEmailModal}
                 onOk={this._addPage}
                 onCancel={this._closeAddPageModal}

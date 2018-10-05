@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification, Icon, Spin } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.core.css';
+import QuillEditor from '../../../components/uielements/styles/editor.style';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
-const { TextArea } = Input;
 
 class EditCoinModal extends Component {
     constructor(props) {
@@ -16,19 +19,37 @@ class EditCoinModal extends Component {
             fields: this.props.fields,
             errMsg: false,
             errMessage: '',
-            errType: 'Success'
+            errType: 'Success',
+            editorContent: ''
         }
         this.validator = new SimpleReactValidator();
+
+        this.quillModules = {
+            toolbar: {
+                container: [
+                    [{ header: [1, 2, false] }, { font: [] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [
+                        { list: 'ordered' },
+                        { list: 'bullet' },
+                        { indent: '-1' },
+                        { indent: '+1' },
+                    ],
+                    ['link', 'image', 'video'],
+                    ['clean'],
+                ],
+            },
+        };
     }
 
-    static getDerivedStateFromProps = (nextProps, prevState) => {
-        if (nextProps !== prevState) {
-            return {
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps !== this.props) {
+            this.setState({
                 showEditCoinModal: nextProps.showEditCoinModal,
                 fields: nextProps.fields,
-            }
+                editorContent: nextProps.fields.description
+            })
         }
-        return null;
     }
 
     openNotificationWithIconError = (type) => {
@@ -38,6 +59,10 @@ class EditCoinModal extends Component {
         });
         this.setState({ errMsg: false });
     };
+
+    _onChangeContent = (val) => {
+        this.setState({ editorContent: val })
+    }
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
@@ -50,9 +75,8 @@ class EditCoinModal extends Component {
 
         fields['coin_name'] = '';
         fields['limit'] = '';
-        fields['description'] = '';
         fields['wallet_address'] = '';
-        this.setState({ fields });
+        this.setState({ fields, editorContent: this.props.fields.description });
     }
 
     _closeEditCoinModal = () => {
@@ -62,7 +86,7 @@ class EditCoinModal extends Component {
 
     _editCoin = () => {
         const { token, getAllCoins } = this.props;
-        const { fields } = this.state;
+        const { fields, editorContent } = this.state;
 
 
         if (this.validator.allValid()) {
@@ -72,20 +96,21 @@ class EditCoinModal extends Component {
                 coin_id: fields["value"],
                 coin_name: fields["coin_name"],
                 limit: fields["limit"],
-                description: fields["description"],
+                description: editorContent,
                 wallet_address: fields["wallet_address"]
             };
 
             ApiUtils.editCoin(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'Success' });
+                    this.setState({
+                        errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                    });
                     this._closeEditCoinModal();
                     getAllCoins();
                     this._resetForm();
                 })
-                .catch(error => {
-                    console.error(error);
+                .catch(() => {
                     this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
                 });
         } else {
@@ -95,10 +120,18 @@ class EditCoinModal extends Component {
     }
 
     render() {
-        const { loader, showEditCoinModal, fields, errMsg, errType } = this.state;
+        const { loader, showEditCoinModal, fields, errMsg, errType, editorContent } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
+
+        const options = {
+            theme: 'snow',
+            placeholder: 'Write Something',
+            value: editorContent,
+            onChange: this._onChangeContent,
+            modules: this.quillModules,
+        };
 
         return (
             <div>
@@ -128,10 +161,9 @@ class EditCoinModal extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Description:</span>
-                        <TextArea placeholder="Description" rows={4} onChange={this._handleChange.bind(this, "description")} value={fields["description"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('description', fields["description"], 'required', 'text-danger')}
-                        </span>
+                        <QuillEditor>
+                            <ReactQuill {...options} />
+                        </QuillEditor>
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
