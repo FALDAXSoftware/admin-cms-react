@@ -91,12 +91,16 @@ const showStates = (value) => {
   Countries.showStates(value);
 }
 
-const deleteRole = (value, name, roles) => {
-  Roles.deleteRole(value, name, roles);
+const deleteRole = (value) => {
+  Roles.deleteRole(value);
 }
 
-const editRole = (value, name, roles) => {
-  Roles.editRole(value, name, roles);
+const editRole = (value, name, roles, is_active) => {
+  Roles.editRole(value, name, roles, is_active);
+}
+
+const roleStatus = (value, name, roles, is_active) => {
+  Roles.roleStatus(value, name, roles, is_active);
 }
 
 const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
@@ -117,10 +121,11 @@ const CoinActionCell = (value, coin_name, coin_code, limit, description, wallet_
 const PageActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deletePage(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPage(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPage(value, name, title, content, is_active)} /></div>;
 const AnnounceActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deleteTemplate(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewTemplate(value, name, title, content, is_active)} /></div>;
 const AnnounceAnnouncementCell = (value) => <Button type="primary" onClick={() => sendAnnouncement(value)} > Announce </Button>;
-const RolesActionCell = (value, name, roles) => <div><Icon type="delete" onClick={() => deleteRole(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editRole(value, name, roles)} /></div>;
+const RolesActionCell = (value, name, roles, is_active) => <div><Icon type="delete" onClick={() => deleteRole(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editRole(value, name, roles, is_active)} /></div>;
 const CountryActionCell = (value, name, legality, color, is_active) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCountry(value, name, legality, color, is_active)} /></div>;
 const StateActionCell = (value, name, legality, color, is_active) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editState(value, name, legality, color, is_active)} /></div>;
 const CountryButtonCell = (value) => <Button type="primary" onClick={() => showStates(value)} >Show States </Button>;
+const RoleSwitchCell = (value, name, roles, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, roles, is_active) }} />
 
 export {
   DateCell,
@@ -147,5 +152,6 @@ export {
   CountryButtonCell,
   LegalityCell,
   StateActionCell,
-  StateSwitchCell
+  StateSwitchCell,
+  RoleSwitchCell
 };

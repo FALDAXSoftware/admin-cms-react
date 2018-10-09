@@ -13,20 +13,33 @@ class AddRoleModal extends Component {
         this.state = {
             showAddRoleModal: this.props.showAddRoleModal,
             loader: false,
-            fields: {}
+            fields: {},
+            coin: false,
+            user: false,
+            staticPage: false,
+            role: false,
+            announcement: false,
+            country: false,
+            employee: false
         }
         this.validator = new SimpleReactValidator();
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps.showAddRoleModal !== this.props.showAddRoleModal) {
-            this.setState({ showAddRoleModal: nextProps.showAddRoleModal })
+        if (nextProps !== this.props) {
+            this.setState({
+                showAddRoleModal: nextProps.showAddRoleModal
+            })
         }
     }
 
     _closeAddRoleModal = () => {
-        this.setState({ showAddRoleModal: false })
-        this.props.closeAddModal();
+        this.setState({
+            showAddRoleModal: false, user: false, coin: false, staticPage: false, role: false,
+            country: false, employee: false, employee: false
+        }, () => {
+            this.props.closeAddModal();
+        })
     }
 
     _handleChange = (field, e) => {
@@ -39,19 +52,29 @@ class AddRoleModal extends Component {
         const { fields } = this.state;
 
         fields['name'] = '';
-        this.setState({ fields });
+        this.setState({
+            fields, user: false, coin: false, staticPage: false, role: false,
+            country: false, employee: false, employee: false
+        });
     }
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
-        let { fields } = this.state;
+        let { fields, user, coin, role, staticPage, announcement, country, employee } = this.state;
 
         if (this.validator.allValid()) {
             let formData = {
                 name: fields["name"],
+                role,
+                user,
+                coin,
+                staticPage,
+                announcement,
+                country,
+                employee
             };
 
-            ApiUtils.addCoin(token, formData)
+            ApiUtils.addRole(token, formData)
                 .then((res) => res.json())
                 .then(() => {
                     this._closeAddRoleModal();
@@ -69,11 +92,21 @@ class AddRoleModal extends Component {
     }
 
     _onChangeRole = (val) => {
-        console.log('_onChangeRole', val);
-        if (val == 'All') {
-            console.log('>>>if', val);
+        if (val.includes('All')) {
+            this.setState({
+                user: true, coin: true, staticPage: true, role: true,
+                announcement: true, country: true, employee: true
+            })
         } else {
-            console.log('>>>else', val);
+            let value = val.slice(-1)[0];
+            if (val.length >= 1) {
+                this.setState({ [value]: this.state[value] === false ? true : false })
+            } else {
+                this.setState({
+                    user: false, coin: false, staticPage: false, role: false,
+                    announcement: false, country: false, employee: false
+                })
+            }
         }
     }
 
@@ -81,12 +114,13 @@ class AddRoleModal extends Component {
         const { loader, showAddRoleModal, fields } = this.state;
         const options = [
             { label: 'ALL', value: 'All' },
-            { label: 'Coins Module', value: 'Coins' },
-            { label: 'Users Modules', value: 'Users' },
+            { label: 'Coins Module', value: 'coin' },
+            { label: 'Users Modules', value: 'user' },
             { label: 'Country Module', value: 'Country' },
-            { label: 'Roles Module', value: 'Roles' },
-            { label: 'Static Pages Module', value: 'Static Pages' },
-            { label: 'Announcement Modules', value: 'Announcement' },
+            { label: 'Roles Module', value: 'role' },
+            { label: 'Static Pages Module', value: 'staticPage' },
+            { label: 'Announcement Modules', value: 'announcement' },
+            { label: 'Employee Modules', value: 'employee' },
         ];
 
         return (
@@ -99,8 +133,8 @@ class AddRoleModal extends Component {
                 okText="Add"
             >
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Name:</span>
-                    <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
+                    <span>Role Name:</span>
+                    <Input placeholder="Role Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('name', fields["name"], 'required', 'text-danger')}
                     </span>
@@ -108,7 +142,7 @@ class AddRoleModal extends Component {
 
                 <div>
                     <span>Roles:</span>
-                    <CheckboxGroup options={options} onChange={this._onChangeRole} />
+                    <CheckboxGroup options={options} defaultValue={[]} onChange={this._onChangeRole} />
                 </div>
 
                 {loader && <Spin indicator={loaderIcon} />}

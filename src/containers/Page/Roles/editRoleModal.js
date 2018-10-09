@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Checkbox } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const CheckboxGroup = Checkbox.Group;
 
 class EditRoleModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showEditCoinModal: this.props.showEditCoinModal,
+            showEditRoleModal: this.props.showEditRoleModal,
             loader: false,
             fields: this.props.fields,
             errMsg: false,
@@ -23,7 +24,7 @@ class EditRoleModal extends Component {
     static getDerivedStateFromProps = (nextProps, prevState) => {
         if (nextProps !== prevState) {
             return {
-                showEditCoinModal: nextProps.showEditCoinModal,
+                showEditRoleModal: nextProps.showEditRoleModal,
                 fields: nextProps.fields,
             }
         }
@@ -47,19 +48,17 @@ class EditRoleModal extends Component {
     _resetForm = () => {
         const { fields } = this.state;
 
-        fields['coin_name'] = '';
-        fields['limit'] = '';
-        fields['wallet_address'] = '';
+        fields['name'] = '';
         this.setState({ fields });
     }
 
-    _closeEditCoinModal = () => {
-        this.setState({ showEditCoinModal: false })
-        this.props.closeEditCoinModal();
+    _closeEditRoleModal = () => {
+        this.setState({ showEditRoleModal: false })
+        this.props.closeEditRoleModal();
     }
 
     _editCoin = () => {
-        const { token, getAllCoins } = this.props;
+        const { token, getAllRoles } = this.props;
         const { fields } = this.state;
 
 
@@ -67,18 +66,16 @@ class EditRoleModal extends Component {
             this.setState({ loader: true });
 
             let formData = {
-                coin_id: fields["value"],
-                coin_name: fields["coin_name"],
-                limit: fields["limit"],
-                wallet_address: fields["wallet_address"]
+                id: fields["value"],
+                name: fields["name"],
             };
 
             ApiUtils.editCoin(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
                     this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'Success' });
-                    this._closeEditCoinModal();
-                    getAllCoins();
+                    this._closeEditRoleModal();
+                    getAllRoles();
                     this._resetForm();
                 })
                 .catch(error => {
@@ -91,44 +88,52 @@ class EditRoleModal extends Component {
         }
     }
 
+    _onChangeRole = (val) => {
+        console.log('_onChangeRole', val);
+        if (val == 'All') {
+            console.log('>>>if', val);
+        } else {
+            console.log('>>>else', val);
+        }
+    }
+
     render() {
-        const { loader, showEditCoinModal, fields, errMsg, errType } = this.state;
+        const { loader, showEditRoleModal, fields, errMsg, errType } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
+        const options = [
+            { label: 'ALL', value: 'All' },
+            { label: 'Coins Module', value: 'Coins' },
+            { label: 'Users Modules', value: 'Users' },
+            { label: 'Country Module', value: 'Country' },
+            { label: 'Roles Module', value: 'Roles' },
+            { label: 'Static Pages Module', value: 'Static Pages' },
+            { label: 'Announcement Modules', value: 'Announcement' },
+        ];
+
         return (
             <div>
                 <Modal
-                    title="Edit Coin"
-                    visible={showEditCoinModal}
-                    onOk={this._editCoin}
-                    onCancel={this._closeEditCoinModal}
+                    title="Edit Role"
+                    visible={showEditRoleModal}
+                    onOk={this._editRole}
+                    onCancel={this._closeEditRoleModal}
                     confirmLoading={loader}
                     okText="Edit"
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Coin Name:</span>
-                        <Input placeholder="First Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
+                        <span>Role Name:</span>
+                        <Input placeholder="First Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('coin name', fields["coin_name"], 'required', 'text-danger')}
+                            {this.validator.message('name', fields["name"], 'required', 'text-danger')}
                         </span>
                     </div>
 
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Limit:</span>
-                        <Input placeholder="Limit" onChange={this._handleChange.bind(this, "limit")} value={fields["limit"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('limit', fields["limit"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Wallet Address:</span>
-                        <Input placeholder="Email" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('wallet address', fields["wallet_address"], 'required', 'text-danger')}
-                        </span>
+                    <div>
+                        <span>Roles:</span>
+                        <CheckboxGroup options={options} onChange={this._onChangeRole} />
                     </div>
 
                     {loader && <Spin indicator={loaderIcon} />}

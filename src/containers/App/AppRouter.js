@@ -51,7 +51,11 @@ const routes = [
     {
         path: "country/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
-    }
+    },
+    {
+        path: "employee",
+        component: asyncComponent(() => import("../Page/Employee/employee"))
+    },
 ];
 
 class AppRouter extends Component {

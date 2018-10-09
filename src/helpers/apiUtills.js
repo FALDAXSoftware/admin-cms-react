@@ -465,6 +465,36 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    //add role api call
+    addRole: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/role/create", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    deleteRole: function (token, roleId) {
+        try {
+            return fetch(API_URL + "/admin/role/delete", {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: roleId })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;

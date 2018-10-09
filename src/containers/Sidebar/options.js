@@ -29,11 +29,16 @@ const options = [
     label: "sidebar.country",
     leftIcon: "ion-navigate"
   },
-  // {
-  //   key: "roles",
-  //   label: "sidebar.roles",
-  //   leftIcon: "ion-person-add"
-  // }
+  {
+    key: "roles",
+    label: "sidebar.roles",
+    leftIcon: "ion-person-add"
+  },
+  {
+    key: "employee",
+    label: "sidebar.employee",
+    leftIcon: "ion-person-add"
+  }
 ];
 
 export default options;

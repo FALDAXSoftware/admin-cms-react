@@ -410,6 +410,7 @@
   "roleTable.title.roles": "Roles",
   "roleTable.title.active": "Active",
   "roleTable.title.actions": "Actions",
+  "roleTable.title.status": "Status",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
@@ -432,5 +433,6 @@
   "sidebar.referral": "Referrals",
   "sidebar.announce": "Announcement",
   "topbar.logout": "Logout",
-  "sidebar.roles": "Roles"
+  "sidebar.roles": "Roles",
+  "sidebar.employee": "Employee"
 }

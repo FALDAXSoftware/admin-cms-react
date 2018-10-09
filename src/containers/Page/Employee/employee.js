@@ -6,14 +6,14 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
-import AddRoleModal from './addRoleModal';
-import EditRoleModal from './editRoleModal';
+// import AddRoleModal from './addRoleModal';
+// import EditRoleModal from './editRoleModal';
 
 const TabPane = Tabs.TabPane;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
-class Roles extends Component {
+class Employees extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,9 +29,9 @@ class Roles extends Component {
             deleteRoleId: ''
         }
         self = this;
-        Roles.roleStatus = Roles.roleStatus.bind(this);
-        Roles.editRole = Roles.editRole.bind(this);
-        Roles.deleteRole = Roles.deleteRole.bind(this);
+        Employees.roleStatus = Employees.roleStatus.bind(this);
+        Employees.editRole = Employees.editRole.bind(this);
+        Employees.deleteRole = Employees.deleteRole.bind(this);
     }
 
     static roleStatus(value, name, roles, is_active) {
@@ -153,11 +153,11 @@ class Roles extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
-                                    <AddRoleModal
+                                    {/* <AddRoleModal
                                         showAddRoleModal={showAddRoleModal}
                                         closeAddModal={this._closeAddRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
-                                    />
+                                    /> */}
                                 </div>
                                 <div>
                                     <TableWrapper
@@ -167,15 +167,15 @@ class Roles extends Component {
                                         dataSource={allRoles}
                                         className="isoCustomizedTable"
                                     />
-                                    <EditRoleModal
+                                    {/* <EditRoleModal
                                         fields={roleDetails}
                                         showEditRoleModal={showEditRoleModal}
                                         closeEditRoleModal={this._closeEditRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this)}
-                                    />
+                                    /> */}
                                     {showDeleteRoleModal &&
                                         <Modal
-                                            title="Delete Role"
+                                            title="Delete Employee"
                                             visible={showDeleteRoleModal}
                                             onCancel={this._closeDeleteRoleModal}
                                             onOk={this._deleteRole}
@@ -197,7 +197,7 @@ class Roles extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Roles);
+    }))(Employees);
 
-export { Roles, rolesTableInfos };
+export { Employees, rolesTableInfos };
 
