@@ -2,27 +2,25 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, CountrySwitchCell, CountryActionCell, ColorCell, CountryButtonCell, LegalityCell
+    TextCell, StateSwitchCell, StateActionCell, ColorCell, LegalityCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, c_name = null, legal = null, colorCode = null, status = null) => {
+const renderCell = (object, type, key, s_name = null, legal = null, colorCode = null, status = null) => {
     const value = object[key];
-    const name = object[c_name];
+    const name = object[s_name];
     const legality = object[legal];
     const color = object[colorCode];
     const is_active = object[status];
 
     switch (type) {
-        case 'CountryButtonCell':
-            return CountryButtonCell(value);
         case 'ColorCell':
             return ColorCell(value, name, legality, color, is_active);
         case 'LegalityCell':
             return LegalityCell(value, name, legality, color, is_active);
-        case 'CountrySwitchCell':
-            return CountrySwitchCell(value, name, legality, color, is_active);
-        case 'CountryActionCell':
-            return CountryActionCell(value, name, legality, color, is_active);
+        case 'StateSwitchCell':
+            return StateSwitchCell(value, name, legality, color, is_active);
+        case 'StateActionCell':
+            return StateActionCell(value, name, legality, color, is_active);
         default:
             return TextCell(value);
     }
@@ -30,7 +28,7 @@ const renderCell = (object, type, key, c_name = null, legal = null, colorCode = 
 
 const columns = [
     {
-        title: <IntlMessages id="countryTable.title.name" />,
+        title: <IntlMessages id="stateTable.title.name" />,
         key: 'name',
         width: 100,
         render: object => renderCell(object, 'TextCell', 'name')
@@ -51,28 +49,22 @@ const columns = [
         title: <IntlMessages id="countryTable.title.status" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
-    },
-    {
-        title: <IntlMessages id="countryTable.title.State" />,
-        key: 'button',
-        width: 200,
-        render: object => renderCell(object, 'CountryButtonCell', 'id')
+        render: object => renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
     },
     {
         title: <IntlMessages id="countryTable.title.actions" />,
         key: 'action',
         width: 200,
-        render: object => renderCell(object, 'CountryActionCell', 'id', 'name', 'legality', 'color', 'is_active')
+        render: object => renderCell(object, 'StateActionCell', 'id', 'name', 'legality', 'color', 'is_active')
     },
 ];
 
-const countryTableInfos = [
+const stateTableInfos = [
     {
-        title: 'Countries',
-        value: 'CountryTable',
+        title: 'States',
+        value: 'StatesTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, countryTableInfos };
+export { columns, stateTableInfos };

@@ -10,6 +10,7 @@ import { referralInfos } from './referralConfig';
 import { AnnounceInfos } from './announceConfig';
 import { countryTableInfos } from './countriesConfig';
 import { rolesTableInfos } from './rolesConfig';
+import { stateTableInfos } from './stateConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -57,5 +58,5 @@ export default class AntTable extends Component {
 
 export {
   TableViews, tableinfos, dataList, coinTableInfos, staticPagesInfos, referralInfos,
-  AnnounceInfos, countryTableInfos, rolesTableInfos
+  AnnounceInfos, countryTableInfos, rolesTableInfos, stateTableInfos
 };

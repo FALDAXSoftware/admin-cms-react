@@ -8,6 +8,7 @@ import { Coins } from '../../containers/Page/Coins/coins';
 import { StaticPages } from '../../containers/Page/StaticPages/staticPages';
 import { Announce } from '../../containers/Page/Announce/announce';
 import { Countries } from '../../containers/Page/Country/countries';
+import { StateList } from '../../containers/Page/Country/StateList';
 import { Roles } from '../../containers/Page/Roles/roles';
 import { Icon, Switch, Button } from 'antd';
 import moment from 'moment';
@@ -70,8 +71,24 @@ const sendAnnouncement = (value) => {
   Announce.announce(value);
 }
 
-const countryStatus = (value, name, country_code, is_active) => {
-  Countries.countryStatus(value, name, country_code, is_active);
+const countryStatus = (value, name, legality, color, is_active) => {
+  Countries.countryStatus(value, name, legality, color, is_active);
+}
+
+const editCountry = (value, name, legality, color, is_active) => {
+  Countries.editCountry(value, name, legality, color, is_active);
+}
+
+const editState = (value, name, legality, color, is_active) => {
+  StateList.editState(value, name, legality, color, is_active);
+}
+
+const stateStatus = (value, name, legality, color, is_active) => {
+  StateList.stateStatus(value, name, legality, color, is_active);
+}
+
+const showStates = (value) => {
+  Countries.showStates(value);
 }
 
 const deleteRole = (value, name, roles) => {
@@ -85,19 +102,25 @@ const editRole = (value, name, roles) => {
 const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
 const LinkCell = (link, href) => <a href={href ? href : '#'}>{link}</a>;
+const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : 'Neutral'}</p>;
 const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Show Referrals </Button>;
 const SwitchCell = (value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) }} />
 const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
 const UserSwitchCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <Switch checked={is_active} onChange={() => { userStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) }} />
-const CountrySwitchCell = (value, name, country_code, is_active) => <Switch checked={is_active} onChange={() => { countryStatus(value, name, country_code, is_active) }} />
+const CountrySwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { countryStatus(value, name, legality, color, is_active) }} />
+const StateSwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { stateStatus(value, name, legality, color, is_active) }} />
 const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <div><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active)} /></div>;
 const CoinActionCell = (value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) => <div><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active)} /></div>;
 const PageActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deletePage(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPage(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPage(value, name, title, content, is_active)} /></div>;
 const AnnounceActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deleteTemplate(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewTemplate(value, name, title, content, is_active)} /></div>;
 const AnnounceAnnouncementCell = (value) => <Button type="primary" onClick={() => sendAnnouncement(value)} > Announce </Button>;
 const RolesActionCell = (value, name, roles) => <div><Icon type="delete" onClick={() => deleteRole(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editRole(value, name, roles)} /></div>;
+const CountryActionCell = (value, name, legality, color, is_active) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCountry(value, name, legality, color, is_active)} /></div>;
+const StateActionCell = (value, name, legality, color, is_active) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editState(value, name, legality, color, is_active)} /></div>;
+const CountryButtonCell = (value) => <Button type="primary" onClick={() => showStates(value)} >Show States </Button>;
 
 export {
   DateCell,
@@ -118,5 +141,11 @@ export {
   CountrySwitchCell,
   AnnounceAnnouncementCell,
   ContentCell,
-  RolesActionCell
+  RolesActionCell,
+  CountryActionCell,
+  ColorCell,
+  CountryButtonCell,
+  LegalityCell,
+  StateActionCell,
+  StateSwitchCell
 };

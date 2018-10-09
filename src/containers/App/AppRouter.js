@@ -47,6 +47,10 @@ const routes = [
     {
         path: "users/history/:id",
         component: asyncComponent(() => import("../Page/Users/loginHistory"))
+    },
+    {
+        path: "country/:id/states",
+        component: asyncComponent(() => import("../Page/Country/StateList"))
     }
 ];
 

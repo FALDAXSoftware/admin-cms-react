@@ -1,41 +1,37 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Icon, Spin } from 'antd';
-import { countryTableInfos } from "../../Tables/antTables";
+import { Input, Tabs, notification, Icon, Spin } from 'antd';
+import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
-import EditCountryModal from './editCountryModal';
+import EditStateModal from './editStateModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
-class Countries extends Component {
+class StateList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allCountries: [],
-            allCountryCount: 0,
-            searchCountry: '',
-            limit: 50,
+            allStates: [],
+            searchState: '',
             errMessage: '',
             errMsg: false,
             errType: 'Success',
             loader: false,
-            page: 1,
-            showEditCountryModal: false,
-            countryDetails: []
+            showEditStateModal: false,
+            stateDetails: []
         }
         self = this;
-        Countries.countryStatus = Countries.countryStatus.bind(this);
-        Countries.editCountry = Countries.editCountry.bind(this);
-        Countries.showStates = Countries.showStates.bind(this);
+        StateList.stateStatus = StateList.stateStatus.bind(this);
+        StateList.editState = StateList.editState.bind(this);
     }
 
-    static countryStatus(value, name, legality, color, is_active) {
+    static stateStatus(value, name, legality, color, is_active) {
         const { token } = this.props;
 
         self.setState({ loader: true })
@@ -47,28 +43,24 @@ class Countries extends Component {
             is_active: !is_active
         };
 
-        ApiUtils.activateCountry(token, formData)
+        ApiUtils.activateState(token, formData)
             .then((res) => res.json())
             .then(() => {
-                self.setState({ loader: false, page: 1 })
-                self._getAllCountries(0);
+                self.setState({ loader: false })
+                self._getAllStates();
             })
             .catch(error => {
                 self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 
-    static editCountry(value, name, legality, color, is_active) {
-        let countryDetails = { value, name, legality, color, is_active };
-        self.setState({ showEditCountryModal: true, countryDetails, page: 1 })
-    }
-
-    static showStates(value) {
-        this.props.history.push('/dashboard/country/' + value + '/states');
+    static editState(value, name, legality, color, is_active) {
+        let stateDetails = { value, name, legality, color, is_active };
+        self.setState({ showEditStateModal: true, stateDetails })
     }
 
     componentDidMount = () => {
-        this._getAllCountries(0);
+        this._getAllStates();
     }
 
     openNotificationWithIconError = (type) => {
@@ -79,18 +71,21 @@ class Countries extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllCountries = (page) => {
+    _getAllStates = () => {
         const { token } = this.props;
-        const { limit, searchCountry } = this.state;
+        const { searchState } = this.state;
         let _this = this;
+        let countryId = '';
+        let path = this.props.location.pathname.split('/');
+        countryId = path[3];
 
-        ApiUtils.getAllCountries(page, limit, token, searchCountry)
+        ApiUtils.getAllStates(token, countryId, searchState)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allCountries: res.data, allCountryCount: res.CountryCount });
+                    _this.setState({ allStates: res.data });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message, searchCountry: '' });
+                    _this.setState({ errMsg: true, message: res.message, searchState: '' });
                 }
             })
             .catch(err => {
@@ -98,25 +93,18 @@ class Countries extends Component {
             });
     }
 
-    _closeEditCountryModal = () => {
-        this.setState({ showEditCountryModal: false })
+    _closeEditStateModal = () => {
+        this.setState({ showEditStateModal: false })
     }
 
-    _searchCountry = (val) => {
-        this.setState({ searchCountry: val, page: 1 }, () => {
-            this._getAllCountries(0);
+    _searchState = (val) => {
+        this.setState({ searchState: val }, () => {
+            this._getAllStates();
         });
     }
 
-    _handleCoinPagination = (page) => {
-        this._getAllCountries(page - 1);
-        this.setState({ page })
-    }
-
     render() {
-        const { allCountries, allCountryCount, errType, errMsg, loader,
-            page, showEditCountryModal, countryDetails } = this.state;
-
+        const { allStates, errType, errMsg, loader, showEditStateModal, stateDetails } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -125,12 +113,12 @@ class Countries extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {countryTableInfos.map(tableInfo => (
+                        {stateTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Search
-                                        placeholder="Search countries"
-                                        onSearch={(value) => this._searchCountry(value)}
+                                        placeholder="Search states"
+                                        onSearch={(value) => this._searchState(value)}
                                         style={{ "float": "right", "width": "250px" }}
                                         enterButton
                                     />
@@ -140,22 +128,14 @@ class Countries extends Component {
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
-                                        dataSource={allCountries}
+                                        dataSource={allStates}
                                         className="isoCustomizedTable"
                                     />
-                                    <EditCountryModal
-                                        fields={countryDetails}
-                                        showEditCountryModal={showEditCountryModal}
-                                        closeEditCountryModal={this._closeEditCountryModal}
-                                        getAllCountry={this._getAllCountries.bind(this, 0)}
-                                    />
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleCoinPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allCountryCount}
+                                    <EditStateModal
+                                        fields={stateDetails}
+                                        showEditStateModal={showEditStateModal}
+                                        closeEditStateModal={this._closeEditStateModal}
+                                        getAllStates={this._getAllStates.bind(this, 0)}
                                     />
                                     {loader && <Spin indicator={loaderIcon} />}
                                 </div>
@@ -171,6 +151,6 @@ class Countries extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Countries);
+    }))(StateList);
 
-export { Countries, countryTableInfos };
+export { StateList, stateTableInfos };

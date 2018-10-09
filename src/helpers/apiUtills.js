@@ -401,6 +401,70 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    //edit country api call
+    editCountry: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/countryUpdate", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all states api
+    getAllStates: function (token, countryId, search) {
+        let url = "/admin/getStateData?country_id=" + countryId;
+        if (search) {
+            url += "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //Activate-deactivate state api 
+    activateState: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/stateActivate", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit state api call
+    editState: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/stateUpdate", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;
