@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Button, Tabs, notification, Icon, Spin, Modal } from 'antd';
-import { rolesTableInfos } from "../../Tables/antTables";
+import { employeeTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
-// import AddRoleModal from './addRoleModal';
-// import EditRoleModal from './editRoleModal';
+import AddEmployeeModal from './addEmployeeModal';
+import EditEmployeeModal from './editEmployeeModal';
 
 const TabPane = Tabs.TabPane;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -17,61 +17,58 @@ class Employees extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allRoles: [],
+            allEmployee: [],
             errMessage: '',
             errMsg: false,
             errType: 'Success',
             loader: false,
-            showAddRoleModal: false,
-            showEditRoleModal: false,
-            showDeleteRoleModal: false,
-            roleDetails: [],
-            deleteRoleId: ''
+            showAddEmpModal: false,
+            showEditEmpModal: false,
+            showDeleteEmpModal: false,
+            empDetails: [],
+            deleteEmpId: ''
         }
         self = this;
-        Employees.roleStatus = Employees.roleStatus.bind(this);
-        Employees.editRole = Employees.editRole.bind(this);
-        Employees.deleteRole = Employees.deleteRole.bind(this);
+        Employees.employeeStatus = Employees.employeeStatus.bind(this);
+        Employees.editEmployee = Employees.editEmployee.bind(this);
+        Employees.deleteEmployee = Employees.deleteEmployee.bind(this);
     }
 
-    static roleStatus(value, name, roles, is_active) {
-        console.log('>>>', value, name, roles, is_active)
+    static employeeStatus(value, name, email, role, is_active) {
         const { token } = self.props;
 
         let formData = {
             id: value,
-            name: value,
+            name,
+            email,
+            roles: role,
             is_active: !is_active
         };
 
-        ApiUtils.updateRole(token, formData)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    self.setState({});
-                    self._getAllRoles();
-                } else {
-                    self.setState({ errMsg: true, errMessage: res.message });
-                }
+        ApiUtils.editEmployee(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'Success' });
+                this._getAllEmployees();
             })
-            .catch(() => {
-                self.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+            .catch(error => {
+                this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
             });
     }
 
-    static editRole(value, name, roles, is_active) {
-        let roleDetails = {
-            value, name, roles, is_active
+    static editEmployee(value, name, email, role, is_active) {
+        let empDetails = {
+            value, name, email, role, is_active
         }
-        self.setState({ showEditRoleModal: true, roleDetails });
+        self.setState({ showEditEmpModal: true, empDetails });
     }
 
-    static deleteRole(value) {
-        self.setState({ showDeleteRoleModal: true, deleteRoleId: value });
+    static deleteEmployee(value) {
+        self.setState({ showDeleteEmpModal: true, deleteEmpId: value });
     }
 
     componentDidMount = () => {
-        this._getAllRoles();
+        this._getAllEmployees();
     }
 
     openNotificationWithIconError = (type) => {
@@ -82,15 +79,15 @@ class Employees extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllRoles = () => {
+    _getAllEmployees = () => {
         const { token } = this.props;
         let _this = this;
 
-        ApiUtils.getAllRoles(token)
+        ApiUtils.getAllEmployee(token)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allRoles: res.roles });
+                    _this.setState({ allEmployee: res.data });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -100,18 +97,18 @@ class Employees extends Component {
             });
     }
 
-    _deleteRole = () => {
+    _deleteEmployee = () => {
         const { token } = this.props;
-        const { deleteRoleId } = this.state;
+        const { deleteEmpId } = this.state;
         let _this = this;
 
-        ApiUtils.deleteRole(token, deleteRoleId)
+        ApiUtils.deleteEmployee(token, deleteEmpId)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ deleteRoleId: '' });
-                    _this._closeDeleteRoleModal();
-                    _this._getAllRoles();
+                    _this.setState({ deleteEmpId: '' });
+                    _this._closeDeleteEmpModal();
+                    _this._getAllEmployees();
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -121,25 +118,25 @@ class Employees extends Component {
             });
     }
 
-    _showAddRoleModal = () => {
-        this.setState({ showAddRoleModal: true });
+    _showAddEmpModal = () => {
+        this.setState({ showAddEmpModal: true });
     }
 
-    _closeAddRoleModal = () => {
-        this.setState({ showAddRoleModal: false });
+    _closeAddEmpModal = () => {
+        this.setState({ showAddEmpModal: false });
     }
 
-    _closeEditRoleModal = () => {
-        this.setState({ showEditRoleModal: false });
+    _closeEditEmpModal = () => {
+        this.setState({ showEditEmpModal: false });
     }
 
-    _closeDeleteRoleModal = () => {
-        this.setState({ showDeleteRoleModal: false });
+    _closeDeleteEmpModal = () => {
+        this.setState({ showDeleteEmpModal: false });
     }
 
     render() {
-        const { allRoles, errType, errMsg, loader, showAddRoleModal,
-            showEditRoleModal, roleDetails, showDeleteRoleModal } = this.state;
+        const { allEmployee, errType, errMsg, loader, showAddEmpModal,
+            showEditEmpModal, empDetails, showDeleteEmpModal } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -149,38 +146,38 @@ class Employees extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {rolesTableInfos.map(tableInfo => (
+                        {employeeTableinfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
-                                    {/* <AddRoleModal
-                                        showAddRoleModal={showAddRoleModal}
-                                        closeAddModal={this._closeAddRoleModal}
-                                        getAllRoles={this._getAllRoles.bind(this, 0)}
-                                    /> */}
+                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddEmpModal}>Add Employee</Button>
+                                    <AddEmployeeModal
+                                        showAddEmpModal={showAddEmpModal}
+                                        closeAddModal={this._closeAddEmpModal}
+                                        getAllEmployee={this._getAllEmployees.bind(this, 0)}
+                                    />
                                 </div>
                                 <div>
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
-                                        dataSource={allRoles}
+                                        dataSource={allEmployee}
                                         className="isoCustomizedTable"
                                     />
-                                    {/* <EditRoleModal
-                                        fields={roleDetails}
-                                        showEditRoleModal={showEditRoleModal}
-                                        closeEditRoleModal={this._closeEditRoleModal}
-                                        getAllRoles={this._getAllRoles.bind(this)}
-                                    /> */}
-                                    {showDeleteRoleModal &&
+                                    <EditEmployeeModal
+                                        fields={empDetails}
+                                        showEditEmpModal={showEditEmpModal}
+                                        closeEditEmpModal={this._closeEditEmpModal}
+                                        getAllEmployee={this._getAllEmployees.bind(this)}
+                                    />
+                                    {showDeleteEmpModal &&
                                         <Modal
                                             title="Delete Employee"
-                                            visible={showDeleteRoleModal}
-                                            onCancel={this._closeDeleteRoleModal}
-                                            onOk={this._deleteRole}
+                                            visible={showDeleteEmpModal}
+                                            onCancel={this._closeDeleteEmpModal}
+                                            onOk={this._deleteEmployee}
                                         >
-                                            Are you sure you want to delete this role ?
+                                            Are you sure you want to delete this employee ?
                                     </Modal>
                                     }
                                     {loader && <Spin indicator={loaderIcon} />}
@@ -199,5 +196,5 @@ export default connect(
         token: state.Auth.get('token')
     }))(Employees);
 
-export { Employees, rolesTableInfos };
+export { Employees, employeeTableinfos };
 

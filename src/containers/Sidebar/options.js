@@ -38,6 +38,11 @@ const options = [
     key: "employee",
     label: "sidebar.employee",
     leftIcon: "ion-person-add"
+  },
+  {
+    key: "blogs",
+    label: "sidebar.blogs",
+    leftIcon: "ion-filing"
   }
 ];
 

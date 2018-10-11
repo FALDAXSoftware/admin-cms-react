@@ -386,6 +386,8 @@
   "staticPageTable.title.Announcements": "Announcements",
   "antTable.title.image": "Image",
   "antTable.title.firstName": "First Name",
+  "antTable.title.name": "Name",
+  "antTable.title.role": "Role",
   "antTable.title.Name": "Name",
   "antTable.title.lastName": "Last Name",
   "antTable.title.city": "City",
@@ -411,6 +413,12 @@
   "roleTable.title.active": "Active",
   "roleTable.title.actions": "Actions",
   "roleTable.title.status": "Status",
+  "roleTable.title.role": "Role",
+  "blogTable.title.title": "Title",
+  "blogTable.title.author": "Author",
+  "blogTable.title.tags": "Tags",
+  "blogTable.title.created_at": "Created On",
+  "blogTable.title.Actions": "Actions",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
@@ -434,5 +442,6 @@
   "sidebar.announce": "Announcement",
   "topbar.logout": "Logout",
   "sidebar.roles": "Roles",
-  "sidebar.employee": "Employee"
+  "sidebar.employee": "Employee",
+  "sidebar.blogs": "Blogs"
 }

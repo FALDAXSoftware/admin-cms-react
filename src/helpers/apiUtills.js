@@ -1,5 +1,5 @@
-const API_URL = "http://192.168.0.148:1337"; // Local (Kalpit) URL
-//const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.0.148:1337"; // Local (Kalpit) URL
+const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
@@ -481,6 +481,21 @@ const ApiUtils = {
         }
     },
 
+    //edit role api call
+    updateRole: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/role/update", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     deleteRole: function (token, roleId) {
         try {
             return fetch(API_URL + "/admin/role/delete", {
@@ -490,6 +505,98 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ id: roleId })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all employee api
+    getAllEmployee: function (token) {
+        try {
+            return fetch(API_URL + "/admin/get-employees", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //add employee api call
+    addEmployee: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-employee", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete employee api call
+    deleteEmployee: function (token, roleId) {
+        try {
+            return fetch(API_URL + "/admin/delete-employee", {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: roleId })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit employee api call
+    editEmployee: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-employee", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all blogs api
+    getAllBlogs: function (token) {
+        try {
+            return fetch(API_URL + "/admin/all-blogs?page=1&limit=50", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete blog api call
+    deleteBlog: function (token, blogId) {
+        try {
+            return fetch(API_URL + "/admin/delete-blog", {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: blogId })
             });
         } catch (error) {
             console.error(error);

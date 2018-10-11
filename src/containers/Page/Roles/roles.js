@@ -34,13 +34,19 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, roles, is_active) {
-        console.log('>>>', value, name, roles, is_active)
+    static roleStatus(value, name, coin, user, country, announcement, employee, role, staticPage, is_active) {
         const { token } = self.props;
 
         let formData = {
             id: value,
-            name: value,
+            role,
+            user,
+            coin,
+            staticPage,
+            announcement,
+            country,
+            employee,
+            name: name,
             is_active: !is_active
         };
 
@@ -48,7 +54,6 @@ class Roles extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    self.setState({});
                     self._getAllRoles();
                 } else {
                     self.setState({ errMsg: true, errMessage: res.message });
@@ -59,9 +64,9 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, roles, is_active) {
+    static editRole(value, name, coin, user, country, announcement, employee, role, staticPage, is_active) {
         let roleDetails = {
-            value, name, roles, is_active
+            value, name, coin, user, country, announcement, employee, role, staticPage, is_active
         }
         self.setState({ showEditRoleModal: true, roleDetails });
     }

@@ -56,6 +56,10 @@ const routes = [
         path: "employee",
         component: asyncComponent(() => import("../Page/Employee/employee"))
     },
+    {
+        path: "blogs",
+        component: asyncComponent(() => import("../Page/Blogs/blogs"))
+    },
 ];
 
 class AppRouter extends Component {

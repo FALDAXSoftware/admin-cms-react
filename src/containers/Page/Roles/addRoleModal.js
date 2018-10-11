@@ -5,7 +5,6 @@ import { Modal, Input, Icon, Spin, Checkbox } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
-const CheckboxGroup = Checkbox.Group;
 
 class AddRoleModal extends Component {
     constructor(props) {
@@ -91,21 +90,21 @@ class AddRoleModal extends Component {
         }
     }
 
-    _onChangeRole = (val) => {
-        if (val.includes('All')) {
+    onChange = (field, e, val) => {
+        const { all } = this.state;
+        if (all == false && field == 'all') {
             this.setState({
-                user: true, coin: true, staticPage: true, role: true,
-                announcement: true, country: true, employee: true
+                all: true, coin: true, user: true, staticPage: true, announcement: true,
+                country: true, role: true, employee: true
             })
         } else {
-            let value = val.slice(-1)[0];
-            if (val.length >= 1) {
-                this.setState({ [value]: this.state[value] === false ? true : false })
-            } else {
+            if (field == 'all' && e.target.checked === false) {
                 this.setState({
-                    user: false, coin: false, staticPage: false, role: false,
-                    announcement: false, country: false, employee: false
+                    all: false, coin: false, user: false, staticPage: false, announcement: false,
+                    country: false, role: false, employee: false
                 })
+            } else {
+                this.setState({ [field]: e.target.checked })
             }
         }
     }
@@ -141,8 +140,15 @@ class AddRoleModal extends Component {
                 </div>
 
                 <div>
-                    <span>Roles:</span>
-                    <CheckboxGroup options={options} defaultValue={[]} onChange={this._onChangeRole} />
+                    <span>Roles:</span><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'user')}>Users Module</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'coin')}>Coins Module</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'country')}>Country Module</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'role')}>Roles Module</Checkbox><br />
+                    <Checkbox onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />
                 </div>
 
                 {loader && <Spin indicator={loaderIcon} />}
