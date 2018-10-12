@@ -28,7 +28,9 @@ class Blogs extends Component {
             showDeleteBlogModal: false,
             showViewBlogModal: false,
             blogDetails: [],
-            deleteBlogId: ''
+            deleteBlogId: '',
+            tags: [],
+            allAdmins: []
         }
         self = this;
         Blogs.viewBlog = Blogs.viewBlog.bind(this);
@@ -36,16 +38,17 @@ class Blogs extends Component {
         Blogs.deleteBlog = Blogs.deleteBlog.bind(this);
     }
 
-    static editBlog(value, title, tags, created_at, description) {
+    static editBlog(value, title, admin_id, tags, created_at, description) {
         let blogDetails = {
-            value, title, tags, created_at, description
+            value, title, admin_id, tags, created_at, description
         }
-        self.setState({ showEditBlogModal: true, blogDetails });
+        let tagsArray = tags.split(",");
+        self.setState({ showEditBlogModal: true, blogDetails, tags: tagsArray });
     }
 
-    static viewBlog(value, title, tags, created_at, description) {
+    static viewBlog(value, title, admin_id, tags, created_at, description) {
         let blogDetails = {
-            value, title, tags, created_at, description
+            value, title, admin_id, tags, created_at, description
         }
         self.setState({ showViewBlogModal: true, blogDetails });
     }
@@ -72,9 +75,9 @@ class Blogs extends Component {
 
         ApiUtils.getAllBlogs(token)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res) {
-                    _this.setState({ allBlogs: res.data });
+                    _this.setState({ allBlogs: res.data, allAdmins: res.allAdmins });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -84,23 +87,25 @@ class Blogs extends Component {
             });
     }
 
-    deleteBlog = () => {
+    _deleteBlog = () => {
         const { token } = this.props;
         const { deleteBlogId } = this.state;
         let _this = this;
 
-        ApiUtils.deleteRole(token, deleteBlogId)
+        ApiUtils.deleteBlog(token, deleteBlogId)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res) {
-                    _this.setState({ deleteBlogId: '' });
+                    _this.setState({
+                        deleteBlogId: '', errType: 'success', errMsg: true, errMessage: res.message
+                    });
                     _this._closeDeleteBlogModal();
                     _this._getAllBlogs();
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
             });
     }
@@ -126,8 +131,8 @@ class Blogs extends Component {
     }
 
     render() {
-        const { allBlogs, errType, errMsg, loader, showAddBlogModal, blogDetails,
-            showEditBlogModal, showDeleteBlogModal, showViewBlogModal } = this.state;
+        const { allBlogs, errType, errMsg, loader, showAddBlogModal, blogDetails, allAdmins,
+            showEditBlogModal, showDeleteBlogModal, showViewBlogModal, tags } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -142,6 +147,7 @@ class Blogs extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddBlogModal}>Add Blog</Button>
                                     <AddBlogModal
+                                        allAdmins={allAdmins}
                                         showAddBlogModal={showAddBlogModal}
                                         closeAddModal={this._closeAddBlogModal}
                                         getAllBlogs={this._getAllBlogs.bind(this, 0)}
@@ -156,10 +162,12 @@ class Blogs extends Component {
                                         className="isoCustomizedTable"
                                     />
                                     <EditBlogModal
+                                        allAdmins={allAdmins}
                                         fields={blogDetails}
                                         showEditBlogModal={showEditBlogModal}
                                         closeEditBlogModal={this._closeEditBlogModal}
                                         getAllBlogs={this._getAllBlogs.bind(this)}
+                                        tags={tags}
                                     />
                                     <ViewBlogModal
                                         fields={blogDetails}

@@ -419,6 +419,14 @@
   "blogTable.title.tags": "Tags",
   "blogTable.title.created_at": "Created On",
   "blogTable.title.Actions": "Actions",
+  "historyTable.title.ip": "IP Address",
+  "historyTable.title.created_at": "Date",
+  "feeTable.title.name": "Name",
+  "feeTable.title.maker_fee": "Maker Fee",
+  "feeTable.title.taker_fee": "Taker Fee",
+  "feeTable.title.created_at": "Created On",
+  "feeTable.title.status": "Status",
+  "feeTable.title.Actions": "Actions",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
@@ -443,5 +451,6 @@
   "topbar.logout": "Logout",
   "sidebar.roles": "Roles",
   "sidebar.employee": "Employee",
-  "sidebar.blogs": "Blogs"
+  "sidebar.blogs": "Blogs",
+  "sidebar.fees": "Fees"
 }

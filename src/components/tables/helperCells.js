@@ -12,6 +12,7 @@ import { StateList } from '../../containers/Page/Country/StateList';
 import { Roles } from '../../containers/Page/Roles/roles';
 import { Employees } from '../../containers/Page/Employee/employee';
 import { Blogs } from '../../containers/Page/Blogs/blogs';
+import { Fees } from '../../containers/Page/Fees/fees';
 import { Icon, Switch, Button } from 'antd';
 import moment from 'moment';
 
@@ -117,19 +118,32 @@ const deleteEmployee = (value) => {
   Employees.deleteEmployee(value);
 }
 
-const editBlog = (value, title, tags, created_at, description) => {
-  Blogs.editBlog(value, title, tags, created_at, description);
+const editBlog = (value, title, admin_id, tags, created_at, description) => {
+  Blogs.editBlog(value, title, admin_id, tags, created_at, description);
 }
 
 const deleteBlog = (value) => {
   Blogs.deleteBlog(value);
 }
 
-const viewBlog = (value, title, tags, created_at, description) => {
-  Blogs.viewBlog(value, title, tags, created_at, description);
+const viewBlog = (value, title, admin_id, tags, created_at, description) => {
+  Blogs.viewBlog(value, title, admin_id, tags, created_at, description);
+}
+
+const feeStatus = (value, name, maker_fee, taker_fee, created_at, is_active) => {
+  Fees.feeStatus(value, name, maker_fee, taker_fee, created_at, is_active);
+}
+
+const editFees = (value, name, maker_fee, taker_fee, created_at, is_active) => {
+  Fees.editFees(value, name, maker_fee, taker_fee, created_at, is_active);
+}
+
+const deleteFee = (value, name, maker_fee, taker_fee, created_at, is_active) => {
+  Fees.deleteFee(value, name, maker_fee, taker_fee, created_at, is_active);
 }
 
 const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
+const DateTimeCell = data => <p>{(moment(data).format("DD MMM YYYY HH:MM")) ? moment(data).format("DD MMM, YYYY HH:MM") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
 const LinkCell = (link, href) => <a href={href ? href : '#'}>{link}</a>;
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
@@ -154,7 +168,9 @@ const CountryButtonCell = (value) => <Button type="primary" onClick={() => showS
 const RoleSwitchCell = (value, name, coin, user, country, announcement, employee, role, staticPage, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, coin, user, country, announcement, employee, role, staticPage, is_active) }} />
 const EmployeeSwitchCell = (value, name, email, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, name, email, role, is_active) }} />
 const EmployeeActionCell = (value, name, email, role, is_active) => <div><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, name, email, role, is_active)} /></div>;
-const BlogActionCell = (value, title, tags, created_at, description) => <div><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, tags, created_at, description)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, tags, created_at, description)} /></div>;
+const BlogActionCell = (value, title, admin_id, tags, created_at, description) => <div><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_id, tags, created_at, description)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_id, tags, created_at, description)} /></div>;
+const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { feeStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
+const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Icon type="delete" onClick={() => deleteFee(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editFees(value, name, maker_fee, taker_fee, created_at, is_active)} /></div>;
 
 export {
   DateCell,
@@ -185,5 +201,8 @@ export {
   RoleSwitchCell,
   EmployeeSwitchCell,
   EmployeeActionCell,
-  BlogActionCell
+  BlogActionCell,
+  FeeSwitchCell,
+  DateTimeCell,
+  FeeActionCell
 };

@@ -43,6 +43,11 @@ const options = [
     key: "blogs",
     label: "sidebar.blogs",
     leftIcon: "ion-filing"
+  },
+  {
+    key: "fees",
+    label: "sidebar.fees",
+    leftIcon: "ion-filing"
   }
 ];
 

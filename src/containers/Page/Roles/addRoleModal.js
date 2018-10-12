@@ -111,16 +111,6 @@ class AddRoleModal extends Component {
 
     render() {
         const { loader, showAddRoleModal, fields } = this.state;
-        const options = [
-            { label: 'ALL', value: 'All' },
-            { label: 'Coins Module', value: 'coin' },
-            { label: 'Users Modules', value: 'user' },
-            { label: 'Country Module', value: 'Country' },
-            { label: 'Roles Module', value: 'role' },
-            { label: 'Static Pages Module', value: 'staticPage' },
-            { label: 'Announcement Modules', value: 'announcement' },
-            { label: 'Employee Modules', value: 'employee' },
-        ];
 
         return (
             <Modal

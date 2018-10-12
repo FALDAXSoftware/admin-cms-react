@@ -587,6 +587,36 @@ const ApiUtils = {
         }
     },
 
+    //add blog api call
+    addBlog: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/create-blog", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit blog api call
+    editBlog: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-blog", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     //delete blog api call
     deleteBlog: function (token, blogId) {
         try {
@@ -597,6 +627,21 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ id: blogId })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getUserHistory: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/getUserloginHistory", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id: parseInt(user_id) })
             });
         } catch (error) {
             console.error(error);

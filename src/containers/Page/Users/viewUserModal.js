@@ -79,9 +79,9 @@ class ViewUserModal extends Component {
                     {userDetails.phone_number}
                 </p>
 
-                {/* <Link to={`/dashboard/users/history/${userDetails.value}`} >
+                <Link to={`/dashboard/users/history/${userDetails.value}`}>
                     Login History
-                 </Link> */}
+                </Link>
             </Modal>
         );
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
+import moment from 'moment';
 
 class ViewBlogModal extends Component {
     constructor(props) {
@@ -38,12 +39,12 @@ class ViewBlogModal extends Component {
 
                 <span> <b>Author:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {fields.author}
+                    {fields.admin_id}
                 </p>
 
                 <span> <b>Created On:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {fields.created_at}
+                    {moment(fields.created_at).format("DD MMM, YYYY")}
                 </p>
 
                 <span> <b>Tags:</b> </span>
