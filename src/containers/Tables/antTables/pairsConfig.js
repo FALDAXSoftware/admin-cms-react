@@ -49,7 +49,7 @@ const columns = [{
     title: <IntlMessages id="feeTable.title.status" />,
     key: 'is_active',
     width: 100,
-    render: object => renderCell(object, 'FeeSwitchCell', 'is_active')
+    render: object => renderCell(object, 'FeeSwitchCell', 'id', 'name', 'maker_fee', 'taker_fee', 'created_at', 'is_active')
 }, {
     title: <IntlMessages id="feeTable.title.Actions" />,
     key: 'action',
@@ -58,12 +58,12 @@ const columns = [{
         'FeeActionCell', 'id', 'name', 'maker_fee', 'taker_fee', 'created_at', 'is_active')
 }];
 
-const feesTableInfos = [
+const pairsTableInfos = [
     {
-        title: 'Fees & Pricing',
-        value: 'feesTable',
+        title: 'Fees & Pairs',
+        value: 'pairsTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, feesTableInfos };
+export { columns, pairsTableInfos };

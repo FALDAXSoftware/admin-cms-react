@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Icon, Spin, Modal } from 'antd';
+import { Button, Tabs, notification, Icon, Spin, Modal, Pagination } from 'antd';
 import { blogsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -30,7 +30,10 @@ class Blogs extends Component {
             blogDetails: [],
             deleteBlogId: '',
             tags: [],
-            allAdmins: []
+            allAdmins: [],
+            page: 0,
+            limit: 50,
+            BlogCount: 0
         }
         self = this;
         Blogs.viewBlog = Blogs.viewBlog.bind(this);
@@ -71,13 +74,15 @@ class Blogs extends Component {
 
     _getAllBlogs = () => {
         const { token } = this.props;
+        const { page, limit } = this.state;
         let _this = this;
 
-        ApiUtils.getAllBlogs(token)
+        ApiUtils.getAllBlogs(page, token, token)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allBlogs: res.data, allAdmins: res.allAdmins });
+                    const { data, allAdmins, BlogCount } = res;
+                    _this.setState({ allBlogs: data, allAdmins, BlogCount });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -97,7 +102,8 @@ class Blogs extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        deleteBlogId: '', errType: 'success', errMsg: true, errMessage: res.message
+                        deleteBlogId: '', errType: 'success', errMsg: true,
+                        errMessage: res.message, page: 0
                     });
                     _this._closeDeleteBlogModal();
                     _this._getAllBlogs();
@@ -130,9 +136,17 @@ class Blogs extends Component {
         this.setState({ showViewBlogModal: false });
     }
 
+    _handleBlogPagination = (page) => {
+        this.setState({ page: page - 1 }, () => {
+            this._getAllBlogs();
+        });
+    }
+
     render() {
         const { allBlogs, errType, errMsg, loader, showAddBlogModal, blogDetails, allAdmins,
-            showEditBlogModal, showDeleteBlogModal, showViewBlogModal, tags } = this.state;
+            showEditBlogModal, showDeleteBlogModal, showViewBlogModal, tags, page
+            , BlogCount
+        } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -173,6 +187,14 @@ class Blogs extends Component {
                                         fields={blogDetails}
                                         showViewBlogModal={showViewBlogModal}
                                         closeViewBlogModal={this._closeViewBlogModal}
+                                    />
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleBlogPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={BlogCount}
                                     />
                                     {showDeleteBlogModal &&
                                         <Modal

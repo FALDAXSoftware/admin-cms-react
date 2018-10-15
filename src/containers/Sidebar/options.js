@@ -45,8 +45,13 @@ const options = [
     leftIcon: "ion-filing"
   },
   {
-    key: "fees",
+    key: "pairs",
     label: "sidebar.fees",
+    leftIcon: "ion-filing"
+  },
+  {
+    key: "send-coin-fee",
+    label: "sidebar.sendCoinFees",
     leftIcon: "ion-filing"
   }
 ];

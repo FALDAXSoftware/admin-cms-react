@@ -647,6 +647,51 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getAllPairs: function (page, limit, token) {
+        try {
+            return fetch(API_URL + "/admin/all-pairs?page=" + page + "&limit=" + limit, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //add fees api call
+    addPair: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-pair", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit pair api call
+    updatePair: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-pair", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;

@@ -61,8 +61,12 @@ const routes = [
         component: asyncComponent(() => import("../Page/Blogs/blogs"))
     },
     {
-        path: "fees",
-        component: asyncComponent(() => import("../Page/Fees/fees"))
+        path: "pairs",
+        component: asyncComponent(() => import("../Page/Pairs/pairs"))
+    },
+    {
+        path: "send-coin-fee",
+        component: asyncComponent(() => import("../Page/CoinFee/sendCoinFee"))
     },
 ];
 
