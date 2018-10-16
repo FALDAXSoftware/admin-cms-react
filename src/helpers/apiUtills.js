@@ -692,6 +692,55 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getAllLimit: function (token) {
+        try {
+            return fetch(API_URL + "/admin/all-limits", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit limit api call
+    updateLimit: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-limit", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllTransaction: function (page, limit, token, search) {
+        let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
+        if (search) {
+            url += "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 export default ApiUtils;

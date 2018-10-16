@@ -13,6 +13,7 @@ import { Roles } from '../../containers/Page/Roles/roles';
 import { Employees } from '../../containers/Page/Employee/employee';
 import { Blogs } from '../../containers/Page/Blogs/blogs';
 import { Pairs } from '../../containers/Page/Pairs/pairs';
+import { LimitManagement } from '../../containers/Page/LimitManagement/limitManagement';
 import { Icon, Switch, Button } from 'antd';
 import moment from 'moment';
 
@@ -138,6 +139,10 @@ const editPair = (value, name, maker_fee, taker_fee, created_at, is_active) => {
   Pairs.editPair(value, name, maker_fee, taker_fee, created_at, is_active);
 }
 
+const editLimit = (value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat) => {
+  LimitManagement.editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat);
+}
+
 const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
 const DateTimeCell = data => <p>{(moment(data).format("DD MMM YYYY HH:MM")) ? moment(data).format("DD MMM, YYYY HH:MM") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
@@ -167,6 +172,7 @@ const EmployeeActionCell = (value, name, email, role, is_active) => <div><Icon t
 const BlogActionCell = (value, title, admin_id, tags, created_at, description) => <div><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_id, tags, created_at, description)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_id, tags, created_at, description)} /></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></div>;
+const LimitActionCell = (value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat)} /></div>;
 
 export {
   DateCell,
@@ -200,5 +206,6 @@ export {
   BlogActionCell,
   FeeSwitchCell,
   DateTimeCell,
-  FeeActionCell
+  FeeActionCell,
+  LimitActionCell
 };

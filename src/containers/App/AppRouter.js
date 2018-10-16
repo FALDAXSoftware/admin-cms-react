@@ -68,6 +68,14 @@ const routes = [
         path: "send-coin-fee",
         component: asyncComponent(() => import("../Page/CoinFee/sendCoinFee"))
     },
+    {
+        path: "limit-management",
+        component: asyncComponent(() => import("../Page/LimitManagement/limitManagement"))
+    },
+    {
+        path: "transaction-history",
+        component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistory"))
+    },
 ];
 
 class AppRouter extends Component {

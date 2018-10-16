@@ -49,11 +49,21 @@ const options = [
     label: "sidebar.fees",
     leftIcon: "ion-filing"
   },
+  // {
+  //   key: "send-coin-fee",
+  //   label: "sidebar.sendCoinFees",
+  //   leftIcon: "ion-filing"
+  // }
   {
-    key: "send-coin-fee",
-    label: "sidebar.sendCoinFees",
+    key: "limit-management",
+    label: "sidebar.limit",
     leftIcon: "ion-filing"
-  }
+  },
+  {
+    key: "transaction-history",
+    label: "sidebar.transactionHistory",
+    leftIcon: "ion-filing"
+  },
 ];
 
 export default options;
