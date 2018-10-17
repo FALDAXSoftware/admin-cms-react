@@ -64,6 +64,16 @@ const options = [
     label: "sidebar.transactionHistory",
     leftIcon: "ion-filing"
   },
+  {
+    key: "trade-history",
+    label: "sidebar.tradeHistory",
+    leftIcon: "ion-filing"
+  },
+  {
+    key: "withdraw-requests",
+    label: "sidebar.withdrawRequests",
+    leftIcon: "ion-filing"
+  },
 ];
 
 export default options;

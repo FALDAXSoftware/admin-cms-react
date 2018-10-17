@@ -76,6 +76,14 @@ const routes = [
         path: "transaction-history",
         component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistory"))
     },
+    {
+        path: "trade-history",
+        component: asyncComponent(() => import("../Page/Trade/tradeHistory"))
+    },
+    {
+        path: "withdraw-requests",
+        component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest"))
+    },
 ];
 
 class AppRouter extends Component {
