@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Input, Tabs, Pagination, notification } from 'antd';
-import { tradeTableInfos } from "../../Tables/antTables";
+import { buyOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
@@ -10,13 +10,13 @@ import { connect } from 'react-redux';
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 
-class TradeHistory extends Component {
+class BuyOrders extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allTrades: [],
-            allTradeCount: 0,
-            searchTrade: '',
+            allOrders: [],
+            allOrderCount: 0,
+            searchOrder: '',
             limit: 50,
             errMessage: '',
             errMsg: false,
@@ -26,31 +26,7 @@ class TradeHistory extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllTrades(0);
-    }
-
-    _getAllTrades = () => {
-        const { token } = this.props;
-        const { searchTrade, page, limit } = this.state;
-        let _this = this;
-
-        ApiUtils.getAllTrades(page, limit, token, searchTrade)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allTrades: res.data, allTradeCount: res.transactionCount, searchTrade: ''
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchTrade: '' });
-                }
-            })
-            .catch(err => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTrade: '', errType: 'error',
-                });
-            });
+        this._getAllOrders(0);
     }
 
     openNotificationWithIconError = (type) => {
@@ -61,20 +37,46 @@ class TradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
-    _searchTrade = (val) => {
-        this.setState({ searchTrade: val }, () => {
-            this._getAllTrades(0);
+    _getAllOrders = () => {
+        const { token } = this.props;
+        const { searchOrder, page, limit } = this.state;
+        let _this = this;
+        let path = this.props.location.pathname.split('/');
+        let user_id = path[path.length - 1]
+
+        ApiUtils.getAllBuyOrders(page, limit, token, searchOrder, user_id)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        allOrders: res.data, allOrderCount: res.transactionCount, searchOrder: ''
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '' });
+                }
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchOrder: '', errType: 'error',
+                });
+            });
+    }
+
+    _searchOrder = (val) => {
+        this.setState({ searchOrder: val }, () => {
+            this._getAllOrders(0);
         });
     }
 
-    _handleTradePagination = (page) => {
+    _handleOrderPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllTrades(page - 1);
+            this._getAllOrders(page - 1);
         })
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -84,12 +86,12 @@ class TradeHistory extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {tradeTableInfos.map(tableInfo => (
+                        {buyOrderTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Search
-                                        placeholder="Search trades"
-                                        onSearch={(value) => this._searchTrade(value)}
+                                        placeholder="Search Orders"
+                                        onSearch={(value) => this._searchOrder(value)}
                                         style={{ "float": "right", "width": "250px" }}
                                         enterButton
                                     />
@@ -98,16 +100,16 @@ class TradeHistory extends Component {
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}
-                                    dataSource={allTrades}
+                                    dataSource={allOrders}
                                     className="isoCustomizedTable"
                                 />
                                 <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
+                                    onChange={this._handleOrderPagination.bind(this)}
                                     pageSize={50}
                                     current={page}
-                                    total={allTradeCount}
+                                    total={allOrderCount}
                                 />
                             </TabPane>
                         ))}
@@ -121,6 +123,6 @@ class TradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(TradeHistory);
+    }))(BuyOrders);
 
-export { TradeHistory, tradeTableInfos };
+export { BuyOrders, buyOrderTableInfos };

@@ -77,7 +77,7 @@ class Blogs extends Component {
         const { page, limit } = this.state;
         let _this = this;
 
-        ApiUtils.getAllBlogs(page, token, token)
+        ApiUtils.getAllBlogs(page, limit, token)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {

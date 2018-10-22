@@ -34,6 +34,7 @@ class Sidebar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.onOpenChange = this.onOpenChange.bind(this);
   }
+
   handleClick(e) {
     this.props.changeCurrent([e.key]);
     if (this.props.app.view === 'MobileView') {
@@ -43,6 +44,7 @@ class Sidebar extends Component {
       }, 100);
     }
   }
+
   onOpenChange(newOpenKeys) {
     const { app, changeOpenKeys } = this.props;
     const latestOpenKey = newOpenKeys.find(
@@ -60,6 +62,7 @@ class Sidebar extends Component {
     }
     changeOpenKeys(nextOpenKeys);
   }
+
   getAncestorKeys = key => {
     const map = {
       sub3: ['sub2'],
@@ -114,22 +117,26 @@ class Sidebar extends Component {
   };
 
   render() {
+    //console.log('>>>', this.props);
     const { app, toggleOpenDrawer, customizedTheme, height } = this.props;
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
     const mode = collapsed === true ? 'vertical' : 'inline';
+
     const onMouseEnter = event => {
       if (openDrawer === false) {
         toggleOpenDrawer();
       }
       return;
     };
+
     const onMouseLeave = () => {
       if (openDrawer === true) {
         toggleOpenDrawer();
       }
       return;
     };
+
     const styling = {
       backgroundColor: customizedTheme.backgroundColor,
     };
@@ -140,6 +147,7 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor,
     };
+
     return (
       <SidebarWrapper>
         <Sider
@@ -164,7 +172,9 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
             >
               {options.map(singleOption =>
+                //console.log(singleOption)
                 this.getMenuItem({ submenuStyle, submenuColor, singleOption })
+                //}
               )}
             </Menu>
           </Scrollbars>
@@ -179,6 +189,7 @@ export default connect(
     app: state.App.toJS(),
     customizedTheme: state.ThemeSwitcher.toJS().sidebarTheme,
     height: state.App.toJS().height,
+    roles: state.Auth.get('roles'),
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
 )(Sidebar);

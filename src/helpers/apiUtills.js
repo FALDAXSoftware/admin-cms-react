@@ -573,9 +573,9 @@ const ApiUtils = {
     },
 
     //get all blogs api
-    getAllBlogs: function (token) {
+    getAllBlogs: function (page, limit, token) {
         try {
-            return fetch(API_URL + "/admin/all-blogs?page=1&limit=50", {
+            return fetch(API_URL + "/admin/all-blogs?page=" + page + "&limit=" + limit, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -741,11 +741,14 @@ const ApiUtils = {
         }
     },
 
-    getAllTrades: function (page, limit, token, search) {
+    getAllTrades: function (page, limit, token, search, user_id) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search) {
             url += "&data=" + search;
+        } else if (user_id) {
+            url += "&user_id=" + user_id;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -771,6 +774,44 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllSellOrders: function (page, limit, token, search, userId) {
+        let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
+        if (search) {
+            url += "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllBuyOrders: function (page, limit, token, search, userId) {
+        let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
+        if (search) {
+            url += "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
             });
         } catch (error) {
             console.error(error);

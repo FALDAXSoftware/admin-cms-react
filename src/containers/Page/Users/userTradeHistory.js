@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 
-class TradeHistory extends Component {
+class UserTradeHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,15 +26,25 @@ class TradeHistory extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllTrades(0);
+        this._getUserAllTrades(0);
     }
 
-    _getAllTrades = () => {
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
+    _getUserAllTrades = () => {
         const { token } = this.props;
         const { searchTrade, page, limit } = this.state;
+        let path = this.props.location.pathname.split('/');
+        let user_id = path[path.length - 1]
         let _this = this;
 
-        ApiUtils.getAllTrades(page, limit, token, searchTrade)
+        ApiUtils.getAllTrades(page, limit, token, searchTrade, user_id)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -53,23 +63,15 @@ class TradeHistory extends Component {
             });
     }
 
-    openNotificationWithIconError = (type) => {
-        notification[type]({
-            message: this.state.errType,
-            description: this.state.errMessage
-        });
-        this.setState({ errMsg: false });
-    };
-
     _searchTrade = (val) => {
         this.setState({ searchTrade: val }, () => {
-            this._getAllTrades(0);
+            this._getUserAllTrades(0);
         });
     }
 
     _handleTradePagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllTrades(page - 1);
+            this._getUserAllTrades(page - 1);
         })
     }
 
@@ -121,6 +123,6 @@ class TradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(TradeHistory);
+    }))(UserTradeHistory);
 
-export { TradeHistory, tradeTableInfos };
+export { UserTradeHistory, tradeTableInfos };

@@ -81,8 +81,16 @@ const routes = [
         component: asyncComponent(() => import("../Page/Trade/tradeHistory"))
     },
     {
-        path: "withdraw-requests",
-        component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest"))
+        path: "users/sell-orders/:id",
+        component: asyncComponent(() => import("../Page/Orders/sellOrders"))
+    },
+    {
+        path: "users/buy-orders/:id",
+        component: asyncComponent(() => import("../Page/Orders/buyOrders"))
+    },
+    {
+        path: "users/trade-history/:id",
+        component: asyncComponent(() => import("../Page/Users/userTradeHistory"))
     },
 ];
 

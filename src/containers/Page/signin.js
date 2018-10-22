@@ -9,7 +9,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import logo from '../../image/Footer_logo.png';
 
-const { login, storeToken } = authAction;
+const { login, storeToken, checkRoles } = authAction;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class SignIn extends Component {
@@ -40,7 +40,7 @@ class SignIn extends Component {
   }
 
   _handleLogin = () => {
-    const { login, storeToken } = this.props;
+    const { login, storeToken, checkRoles } = this.props;
     const { fields } = this.state;
     let _this = this;
 
@@ -59,6 +59,7 @@ class SignIn extends Component {
             _this.setState({ loader: false, redirect: true });
             login({ user: res.user });
             storeToken({ token: res.token });
+            checkRoles({ roles: res.user.roles })
             _this.props.history.push('/dashboard');
           } else {
             _this.setState({ errMsg: true, errMessage: res.err, loader: false });
@@ -66,7 +67,6 @@ class SignIn extends Component {
           }
         })
         .catch(err => {
-          console.log('err', err)
           _this.setState({ loader: false, errMsg: true, errMessage: 'Something went wrong!!' });
         });
     } else {
@@ -142,5 +142,5 @@ export default connect(
     isLoggedIn: state.Auth.get('token') !== null ? true : false,
     user: state.Auth.get('user'),
   }),
-  { login, storeToken }
+  { login, storeToken, checkRoles }
 )(SignIn);

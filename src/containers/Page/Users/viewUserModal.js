@@ -80,8 +80,20 @@ class ViewUserModal extends Component {
                 </p>
 
                 <Link to={`/dashboard/users/history/${userDetails.value}`}>
-                    Login History
-                </Link>
+                    View Login History
+                </Link><br />
+
+                <Link to={`/dashboard/users/sell-orders/${userDetails.value}`}>
+                    View Sell Orders
+                </Link><br />
+
+                <Link to={`/dashboard/users/buy-orders/${userDetails.value}`}>
+                    View Buy Orders
+                </Link><br />
+
+                <Link to={`/dashboard/users/trade-history/${userDetails.value}`}>
+                    View Trade History
+                </Link><br />
             </Modal>
         );
     }
