@@ -142,7 +142,7 @@ class EditStateModal extends Component {
                         >
                             {legailityValues.map((state) => {
                                 return (
-                                    <Option value={state.key}>{state.value}</Option>
+                                    <Option key={state.key} value={state.key}>{state.value}</Option>
                                 )
                             }
                             )}

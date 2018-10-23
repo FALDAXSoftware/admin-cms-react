@@ -39,7 +39,7 @@ class WithdrawRequest extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allRequests: res.data, allReqCount: res.transactionCount, searchReq: ''
+                        allRequests: res.data, allReqCount: res.withdrawReqCount, searchReq: ''
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchReq: '' });

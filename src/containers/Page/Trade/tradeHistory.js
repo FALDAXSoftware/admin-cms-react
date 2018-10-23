@@ -39,7 +39,7 @@ class TradeHistory extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTrades: res.data, allTradeCount: res.transactionCount, searchTrade: ''
+                        allTrades: res.data, allTradeCount: res.tradeCount, searchTrade: ''
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchTrade: '' });

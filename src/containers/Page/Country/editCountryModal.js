@@ -142,7 +142,7 @@ class EditCountryModal extends Component {
                         >
                             {legailityValues.map((country) => {
                                 return (
-                                    <Option value={country.key}>{country.value}</Option>
+                                    <Option key={country.key} value={country.key}>{country.value}</Option>
                                 )
                             }
                             )}

@@ -117,8 +117,13 @@ class Sidebar extends Component {
   };
 
   render() {
-    //console.log('>>>', this.props);
-    const { app, toggleOpenDrawer, customizedTheme, height } = this.props;
+    const { app, toggleOpenDrawer, customizedTheme, height, roles } = this.props;
+    let that = this;
+    let rolesArray = [];
+    for (let key in roles.roles) {
+      rolesArray.push({ module: key, value: roles.roles[key] });
+    }
+
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
     const mode = collapsed === true ? 'vertical' : 'inline';
@@ -171,11 +176,19 @@ class Sidebar extends Component {
               selectedKeys={app.current}
               onOpenChange={this.onOpenChange}
             >
-              {options.map(singleOption =>
-                //console.log(singleOption)
-                this.getMenuItem({ submenuStyle, submenuColor, singleOption })
-                //}
-              )}
+              {
+                rolesArray.map((role) => {
+                  return (
+                    options.map(singleOption => {
+                      if ((singleOption.module == role.module) && role.value == true) {
+                        return (
+                          that.getMenuItem({ submenuStyle, submenuColor, singleOption })
+                        )
+                      }
+                    }
+                    ))
+                }
+                )}
             </Menu>
           </Scrollbars>
         </Sider>
