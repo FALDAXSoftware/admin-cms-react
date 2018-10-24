@@ -40,18 +40,21 @@ export default class extends Component {
         .then((response) => response.json())
         .then(function (res) {
           if (res) {
-            _this.setState({ errMsg: true, errMessage: 'password reset successfully', loader: false });
-            _this.props.history.push('/signin');
+            _this.setState({
+              errMsg: true, errMessage: 'password reset successfully', loader: false
+            }, () => {
+              _this.props.history.push('/signin');
+            });
           } else {
             _this.setState({ errMsg: true, errMessage: res.message, loader: false });
           }
         })
-        .catch(err => {
+        .catch(() => {
           _this.setState({ loader: false });
         });
     } else {
       if (fields["newPwd"] !== fields["confirmPwd"]) {
-        this.state.errors["main"] = "Confirm Password doesn't match";
+        this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
         this.setState({ errors, loader: false })
       }
       this.validator.showMessages();

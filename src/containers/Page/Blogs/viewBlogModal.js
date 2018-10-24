@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 import moment from 'moment';
 
 class ViewBlogModal extends Component {
@@ -29,8 +29,9 @@ class ViewBlogModal extends Component {
             <Modal
                 title="View Blog"
                 visible={showViewBlogModal}
-                onCancel={this._closeViewBlogModal}
-                onOk={this._closeViewBlogModal}
+                footer={[
+                    <Button onClick={this._closeViewBlogModal}>OK</Button>,
+                ]}
             >
                 <span> <b>Title:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>

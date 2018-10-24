@@ -62,7 +62,7 @@ class EditProfile extends Component {
                     if (res) {
                         login({ user: res.data[0] });
                         _this.setState({
-                            errMsg: true, errMessage: 'Profile edited successfully',
+                            errMsg: true, errMessage: 'Profile updated successfully.',
                             loader: false, errType: 'success'
                         });
                     } else {

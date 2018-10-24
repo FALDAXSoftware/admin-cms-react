@@ -19,16 +19,16 @@ import moment from 'moment';
 
 const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 
-const viewUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => {
-  Users.view(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active);
+const viewUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) => {
+  Users.view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active);
 }
 
 const showReferrals = (value) => {
   Users.showReferrals(value);
 }
 
-const userStatus = (value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => {
-  Users.changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active);
+const userStatus = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) => {
+  Users.changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active);
 }
 
 const viewCoin = (value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) => {
@@ -143,21 +143,22 @@ const editLimit = (value, user, monthlyDepositCrypto, monthlyDepositFiat, monthl
   LimitManagement.editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat);
 }
 
-const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
-const DateTimeCell = data => <p>{(moment(data).format("DD MMM YYYY HH:MM")) ? moment(data).format("DD MMM, YYYY HH:MM") : ''}</p>;
+const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}sdafsf</p>;
+const DateTimeCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
 const LinkCell = (link, href) => <a href={href ? href : '#'}>{link}</a>;
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const IPCell = text => <p>http{text.split('f')[4]}</p>;
 const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : 'Neutral'}</p>;
 const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Show Referrals </Button>;
 const SwitchCell = (value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) }} />
 const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
-const UserSwitchCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <Switch checked={is_active} onChange={() => { userStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) }} />
+const UserSwitchCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) => <Switch checked={is_active} onChange={() => { userStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) }} />
 const CountrySwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { countryStatus(value, name, legality, color, is_active) }} />
 const StateSwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { stateStatus(value, name, legality, color, is_active) }} />
-const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) => <div><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active)} /></div>;
+const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) => <div><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active)} /></div>;
 const CoinActionCell = (value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) => <div><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active)} /></div>;
 const PageActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deletePage(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPage(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPage(value, name, title, content, is_active)} /></div>;
 const AnnounceActionCell = (value, name, title, content, is_active) => <div><Icon type="delete" onClick={() => deleteTemplate(value)} style={{ "cursor": "pointer" }} /><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, title, content, is_active)} /><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewTemplate(value, name, title, content, is_active)} /></div>;
@@ -175,6 +176,7 @@ const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active)
 const LimitActionCell = (value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat) => <div><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat)} /></div>;
 
 export {
+  IPCell,
   DateCell,
   ImageCell,
   LinkCell,

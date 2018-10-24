@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 
 class ViewAnnounceEmail extends Component {
     constructor(props) {
@@ -31,8 +31,9 @@ class ViewAnnounceEmail extends Component {
             <Modal
                 title="View Announcement"
                 visible={showViewAnnounceModal}
-                onCancel={this._closeViewAnnounceModal}
-                onOk={this._closeViewAnnounceModal}
+                footer={[
+                    <Button onClick={this._closeViewAnnounceModal}>OK</Button>,
+                ]}
             >
                 <span> <b>Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>

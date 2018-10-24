@@ -26,7 +26,7 @@ class Roles extends Component {
             showEditRoleModal: false,
             showDeleteRoleModal: false,
             roleDetails: [],
-            deleteRoleId: ''
+            deleteRoleId: '',
         }
         self = this;
         Roles.roleStatus = Roles.roleStatus.bind(this);
@@ -50,6 +50,7 @@ class Roles extends Component {
             is_active: !is_active
         };
 
+        self.setState({ loader: true })
         ApiUtils.updateRole(token, formData)
             .then((response) => response.json())
             .then(function (res) {
@@ -58,9 +59,12 @@ class Roles extends Component {
                 } else {
                     self.setState({ errMsg: true, errMessage: res.message });
                 }
+                self.setState({ loader: false })
             })
             .catch(() => {
-                self.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                self.setState({
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -100,7 +104,7 @@ class Roles extends Component {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
             });
     }
@@ -110,19 +114,25 @@ class Roles extends Component {
         const { deleteRoleId } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.deleteRole(token, deleteRoleId)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ deleteRoleId: '' });
+                    _this.setState({
+                        deleteRoleId: '', errType: 'success', errMsg: true, errMessage: res.message
+                    });
                     _this._closeDeleteRoleModal();
                     _this._getAllRoles();
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false });
             })
-            .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+            .catch(() => {
+                _this.setState({
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -164,6 +174,9 @@ class Roles extends Component {
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -182,13 +195,14 @@ class Roles extends Component {
                                         <Modal
                                             title="Delete Role"
                                             visible={showDeleteRoleModal}
-                                            onCancel={this._closeDeleteRoleModal}
-                                            onOk={this._deleteRole}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteRoleModal}>No</Button>,
+                                                <Button onClick={this._deleteRole}>Yes</Button>,
+                                            ]}
                                         >
                                             Are you sure you want to delete this role ?
                                     </Modal>
                                     }
-                                    {loader && <Spin indicator={loaderIcon} />}
                                 </div>
                             </TabPane>
                         ))}

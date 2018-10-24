@@ -11,7 +11,7 @@ import {
     UserSwitchCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, image = null, fname = null, lname = null, emailID = null, city = null, street = null, phone = null, countryName = null, bdate = null, status = null) => {
+const renderCell = (object, type, key, image = null, fname = null, lname = null, emailID = null, city = null, street = null, street_1 = null, phone = null, countryName = null, bdate = null, status = null) => {
     const value = object[key];
     const profile_pic = object[image];
     const first_name = object[fname];
@@ -19,6 +19,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const email = object[emailID];
     const city_town = object[city];
     const street_address = object[street];
+    const street_address_2 = object[street_1];
     const phone_number = object[phone];
     const country = object[countryName];
     const dob = object[bdate];
@@ -34,9 +35,9 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'ButtonCell':
             return ButtonCell(value);
         case 'UserSwitchCell':
-            return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active);
+            return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active);
         case 'ActionCell':
-            return ActionCell(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active);
+            return ActionCell(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active);
         default:
             return TextCell(value);
     }
@@ -66,7 +67,7 @@ const columns = [
         title: <IntlMessages id="antTable.title.email" />,
         key: 'email',
         width: 200,
-        render: object => renderCell(object, 'LinkCell', 'email')
+        render: object => renderCell(object, 'TextCell', 'email')
     },
     {
         title: <IntlMessages id="antTable.title.country" />,
@@ -74,12 +75,12 @@ const columns = [
         width: 200,
         render: object => renderCell(object, 'TextCell', 'country')
     },
-    {
-        title: <IntlMessages id="antTable.title.phone" />,
-        key: 'phone',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'phone_number')
-    },
+    // {
+    //     title: <IntlMessages id="antTable.title.phone" />,
+    //     key: 'phone',
+    //     width: 200,
+    //     render: object => renderCell(object, 'TextCell', 'phone_number')
+    // },
     {
         title: <IntlMessages id="antTable.title.referrals" />,
         key: 'button',
@@ -97,7 +98,7 @@ const columns = [
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'phone_number', 'country', 'dob', 'is_active')
+            'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active')
     }
 ];
 

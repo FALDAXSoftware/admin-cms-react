@@ -200,8 +200,10 @@ class Blogs extends Component {
                                         <Modal
                                             title="Delete Blog"
                                             visible={showDeleteBlogModal}
-                                            onCancel={this._closeDeleteBlogModal}
-                                            onOk={this._deleteBlog}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteBlogModal}>No</Button>,
+                                                <Button onClick={this._deleteBlog}>Yes</Button>,
+                                            ]}
                                         >
                                             Are you sure you want to delete this blog ?
                                     </Modal>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Modal, notification } from 'antd';
+import { Tabs, Button, Modal, notification, Spin } from 'antd';
 import { staticPagesInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -26,7 +26,8 @@ class StaticPages extends Component {
             deletePageId: '',
             notifyMsg: '',
             notify: false,
-            errType: ''
+            errType: '',
+            loader: false
         }
         self = this;
         StaticPages.view = StaticPages.view.bind(this);
@@ -87,6 +88,7 @@ class StaticPages extends Component {
         const { deletePageId } = this.state;
         let _this = this;
 
+        this.setState({ loader: true })
         ApiUtils.deleteStaticPage(token, deletePageId)
             .then((response) => response.json())
             .then(function (res) {
@@ -99,9 +101,13 @@ class StaticPages extends Component {
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
+                _this.setState({ loader: false })
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                this.setState({
+                    loader: false, errType: 'error',
+                    notify: true, notifyMsg: 'Something went wrong!!'
+                })
             });
     }
 
@@ -127,7 +133,7 @@ class StaticPages extends Component {
 
     render() {
         const { allStaticPages, showAddPageModal, staticPagesDetails, notify, errType,
-            showEditPageModal, showDeletePageModal, showViewPageModal } = this.state;
+            showEditPageModal, showDeletePageModal, showViewPageModal, loader } = this.state;
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -147,6 +153,9 @@ class StaticPages extends Component {
                                         getAllStaticPages={this._getAllStaticPages.bind(this, 0)}
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <ViewPageModal
                                     staticPagesDetails={staticPagesDetails}
                                     showViewPageModal={showViewPageModal}
@@ -170,8 +179,10 @@ class StaticPages extends Component {
                                     <Modal
                                         title="Delete Page"
                                         visible={showDeletePageModal}
-                                        onCancel={this._closeDeletePageModal}
-                                        onOk={this._deletePage}
+                                        footer={[
+                                            <Button onClick={this._closeDeletePageModal}>No</Button>,
+                                            <Button onClick={this._deletePage}>Yes</Button>,
+                                        ]}
                                     >
                                         Are you sure you want to delete this page ?
                                     </Modal>

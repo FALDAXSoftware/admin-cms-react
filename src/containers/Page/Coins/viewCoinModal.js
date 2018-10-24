@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 
 class ViewCoinModal extends Component {
     constructor(props) {
@@ -31,8 +31,9 @@ class ViewCoinModal extends Component {
             <Modal
                 title="View Coin"
                 visible={showViewCoinModal}
-                onCancel={this._closeViewCoinModal}
-                onOk={this._closeViewCoinModal}
+                footer={[
+                    <Button onClick={this._closeViewCoinModal}>OK</Button>,
+                ]}
             >
 
                 <span> <b>Coin Name:</b> </span>
@@ -59,10 +60,6 @@ class ViewCoinModal extends Component {
                     {coinDetails.wallet_address}
                 </p>
 
-                <span> <b>Status:</b> </span>
-                <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.is_active ? 'Active' : 'De-active'}
-                </p>
             </Modal>
         );
     }

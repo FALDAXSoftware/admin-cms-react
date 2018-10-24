@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, notification, Icon, Spin } from 'antd';
+import { Input, Tabs, notification, Spin } from 'antd';
 import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,6 @@ import EditStateModal from './editStateModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class StateList extends Component {
@@ -45,12 +44,15 @@ class StateList extends Component {
 
         ApiUtils.activateState(token, formData)
             .then((res) => res.json())
-            .then(() => {
-                self.setState({ loader: false })
+            .then((res) => {
+                self.setState({ loader: false, errMsg: true, errMessage: res.message, errType: 'success' })
                 self._getAllStates();
             })
-            .catch(error => {
-                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 
@@ -87,9 +89,13 @@ class StateList extends Component {
                 } else {
                     _this.setState({ errMsg: true, message: res.message, searchState: '' });
                 }
+                _this.setState({ loader: false })
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({
+                    loader: false, errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error',
+                })
             });
     }
 
@@ -98,7 +104,7 @@ class StateList extends Component {
     }
 
     _searchState = (val) => {
-        this.setState({ searchState: val }, () => {
+        this.setState({ searchState: val, loader: true }, () => {
             this._getAllStates();
         });
     }
@@ -123,6 +129,9 @@ class StateList extends Component {
                                         enterButton
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -137,7 +146,6 @@ class StateList extends Component {
                                         closeEditStateModal={this._closeEditStateModal}
                                         getAllStates={this._getAllStates.bind(this, 0)}
                                     />
-                                    {loader && <Spin indicator={loaderIcon} />}
                                 </div>
                             </TabPane>
                         ))}

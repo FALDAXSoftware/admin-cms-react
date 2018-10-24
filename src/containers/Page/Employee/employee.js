@@ -45,6 +45,7 @@ class Employees extends Component {
             is_active: !is_active
         };
 
+        self.setState({ loader: true })
         ApiUtils.editEmployee(token, formData)
             .then((res) => res.json())
             .then((res) => {
@@ -91,9 +92,13 @@ class Employees extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                    loader: false
+                });
             });
     }
 
@@ -102,19 +107,26 @@ class Employees extends Component {
         const { deleteEmpId } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true })
         ApiUtils.deleteEmployee(token, deleteEmpId)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ deleteEmpId: '' });
+                    _this.setState({
+                        deleteEmpId: '', errMsg: true, errMessage: res.message, errType: 'success'
+                    });
                     _this._closeDeleteEmpModal();
                     _this._getAllEmployees();
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
+                _this.setState({ loader: false })
             })
-            .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+            .catch(() => {
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -156,6 +168,9 @@ class Employees extends Component {
                                         getAllEmployee={this._getAllEmployees.bind(this, 0)}
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -174,8 +189,10 @@ class Employees extends Component {
                                         <Modal
                                             title="Delete Employee"
                                             visible={showDeleteEmpModal}
-                                            onCancel={this._closeDeleteEmpModal}
-                                            onOk={this._deleteEmployee}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteEmpModal}>No</Button>,
+                                                <Button onClick={this._deleteEmployee}>Yes</Button>,
+                                            ]}
                                         >
                                             Are you sure you want to delete this employee ?
                                     </Modal>

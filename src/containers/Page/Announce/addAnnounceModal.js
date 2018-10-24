@@ -94,7 +94,6 @@ class AddAnnounceModal extends Component {
                     });
                 })
                 .catch(error => {
-                    console.error(error);
                     this._resetAddForm();
                     error && this.setState({ errType: 'error', notifyMsg: 'Something went wrong!!', notify: true });
                 });

@@ -115,7 +115,7 @@ class Announce extends Component {
                 if (res) {
                     _this.setState({
                         showDeleteAnnounceModal: false, deleteEmailId: '',
-                        notifyMsg: 'Email removed successfully', notify: true
+                        notifyMsg: res.message, notify: true
                     });
                     _this._getAnnounceEmails(0);
                 } else {
@@ -193,8 +193,10 @@ class Announce extends Component {
                                     <Modal
                                         title="Delete Announcement"
                                         visible={showDeleteAnnounceModal}
-                                        onCancel={this._closeDeleteAnnounceModal}
-                                        onOk={this._deleteAnnounce}
+                                        footer={[
+                                            <Button onClick={this._closeDeleteAnnounceModal}>No</Button>,
+                                            <Button onClick={this._deleteAnnounce}>Yes</Button>,
+                                        ]}
                                     >
                                         Are you sure you want to delete this announcement ?
                                     </Modal>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Select } from 'antd';
+import { Modal, Input, Icon, Spin, Select, notification } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -46,9 +46,18 @@ class AddEmployeeModal extends Component {
         }
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     _closeAddEmpModal = () => {
         this.setState({ showAddEmpModal: false })
         this.props.closeAddModal();
+        this._resetAddForm();
     }
 
     _handleChange = (field, e) => {
@@ -76,16 +85,23 @@ class AddEmployeeModal extends Component {
                 roles: selectedRole,
             };
 
+            this.setState({ loader: true })
             ApiUtils.addEmployee(token, formData)
                 .then((res) => res.json())
-                .then(() => {
+                .then((res) => {
                     this._closeAddEmpModal();
                     getAllEmployee();
                     this._resetAddForm();
+                    this.setState({
+                        errMsg: true, errMessage: res.message,
+                        errType: 'success', loader: false
+                    })
                 })
-                .catch(error => {
-                    console.error(error);
-                    this._resetAddForm();
+                .catch(() => {
+                    this.setState({
+                        errType: 'error', errMsg: true,
+                        errMessage: 'Something went wrong', loader: false
+                    });
                 });
         } else {
             this.validator.showMessages();
@@ -98,13 +114,17 @@ class AddEmployeeModal extends Component {
     }
 
     render() {
-        const { loader, showAddEmpModal, fields, allRoles } = this.state;
+        const { loader, showAddEmpModal, fields, allRoles, errType, errMsg } = this.state;
 
         let options = allRoles.map((role) => {
             return (
                 <Option value={role.key}>{role.value}</Option>
             )
-        })
+        });
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <Modal

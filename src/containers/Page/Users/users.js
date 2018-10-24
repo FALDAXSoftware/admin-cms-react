@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination, Spin, Icon } from 'antd';
+import { Tabs, Input, Pagination, Spin, notification } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class Users extends Component {
@@ -30,7 +29,11 @@ class Users extends Component {
             page: 1,
             limit: 50,
             referPage: 0,
-            referLimit: 10
+            referLimit: 10,
+            errMessage: '',
+            errMsg: false,
+            errType: 'Success',
+            loader: false
         }
         self = this;
         Users.view = Users.view.bind(this);
@@ -38,9 +41,9 @@ class Users extends Component {
         Users.changeStatus = Users.changeStatus.bind(this);
     }
 
-    static view(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
+    static view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) {
         let userDetails = {
-            value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active
+            value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active
         }
         self.setState({ userDetails, showViewUserModal: true });
     }
@@ -49,7 +52,7 @@ class Users extends Component {
         self._getAllReferredUsers(value, 0)
     }
 
-    static changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, phone_number, country, dob, is_active) {
+    static changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) {
         const { token } = this.props;
 
         let formData = {
@@ -58,14 +61,20 @@ class Users extends Component {
             is_active: !is_active
         };
 
+        self.setState({ loader: true })
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
-            .then(() => {
+            .then((res) => {
                 self._getAllUsers(0);
-                self.setState({ page: 1 })
+                self.setState({
+                    page: 1, errMsg: true, errMessage: res.message, errType: 'success', loader: false
+                })
             })
             .catch(() => {
-                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 
@@ -98,6 +107,7 @@ class Users extends Component {
 
         let _this = this;
 
+        this.setState({ loader: true })
         ApiUtils.getAllReferrals(page, referLimit, token, id)
             .then((response) => response.json())
             .then(function (res) {
@@ -109,10 +119,13 @@ class Users extends Component {
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
+                _this.setState({ loader: false })
             })
-            .catch(err => {
-                console.log('error occured', err);
-                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 
@@ -135,9 +148,23 @@ class Users extends Component {
         self.setState({ showReferralModal: false });
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     render() {
         const { allUsers, allUserCount, showViewUserModal, allReferral, page,
-            userDetails, showReferralModal, allReferralCount, userId, loader } = this.state;
+            userDetails, showReferralModal, allReferralCount, userId, loader,
+            errMsg, errType
+        } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <LayoutWrapper>
@@ -154,6 +181,9 @@ class Users extends Component {
                                             enterButton
                                         />
                                     </div>
+                                    {loader && <span className="loader-class">
+                                        <Spin />
+                                    </span>}
                                     <div>
                                         <ViewUserModal
                                             userDetails={userDetails}
@@ -184,7 +214,6 @@ class Users extends Component {
                                                 getAllReferredUsers={this._getAllReferredUsers.bind(this, userId)}
                                             />
                                         }
-                                        {loader && <Spin indicator={loaderIcon} />}
                                     </div>
                                 </TabPane>
                             ))}

@@ -135,7 +135,7 @@ class EditEmployeeModal extends Component {
                     onOk={this._editEmployee}
                     onCancel={this._closeEditEmpModal}
                     confirmLoading={loader}
-                    okText="Edit"
+                    okText="Update"
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Name:</span>

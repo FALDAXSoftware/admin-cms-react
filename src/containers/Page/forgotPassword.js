@@ -47,7 +47,6 @@ export default class extends Component {
         .then((response) => response.json())
         .then((res) => {
           if (!res.err) {
-            console.log(res);
             _this.setState({
               errMsg: true, errMessage: res.message, loader: false, errType: 'success'
             });
@@ -56,8 +55,7 @@ export default class extends Component {
             _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
           }
         })
-        .catch(err => {
-          console.log('error occured', err);
+        .catch(() => {
           _this.setState({ loader: false });
         });
     } else {

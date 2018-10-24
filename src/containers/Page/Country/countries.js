@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Icon, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin } from 'antd';
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,6 @@ import EditCountryModal from './editCountryModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class Countries extends Component {
@@ -49,11 +48,14 @@ class Countries extends Component {
 
         ApiUtils.activateCountry(token, formData)
             .then((res) => res.json())
-            .then(() => {
-                self.setState({ loader: false, page: 1 })
+            .then((res) => {
+                self.setState({
+                    errMsg: true, errMessage: res.message, errType: 'success',
+                    loader: false, page: 1
+                })
                 self._getAllCountries(0);
             })
-            .catch(error => {
+            .catch(() => {
                 self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
@@ -92,9 +94,13 @@ class Countries extends Component {
                 } else {
                     _this.setState({ errMsg: true, message: res.message, searchCountry: '' });
                 }
+                _this.setState({ loader: false })
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, message: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 
@@ -103,7 +109,7 @@ class Countries extends Component {
     }
 
     _searchCountry = (val) => {
-        this.setState({ searchCountry: val, page: 1 }, () => {
+        this.setState({ searchCountry: val, page: 1, loader: true }, () => {
             this._getAllCountries(0);
         });
     }
@@ -135,6 +141,9 @@ class Countries extends Component {
                                         enterButton
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -157,7 +166,6 @@ class Countries extends Component {
                                         current={page}
                                         total={allCountryCount}
                                     />
-                                    {loader && <Spin indicator={loaderIcon} />}
                                 </div>
                             </TabPane>
                         ))}

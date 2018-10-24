@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 class ViewUserModal extends Component {
@@ -33,8 +33,9 @@ class ViewUserModal extends Component {
             <Modal
                 title="View User"
                 visible={showViewUserModal}
-                onCancel={this._closeViewUserModal}
-                onOk={this._closeViewUserModal}
+                footer={[
+                    <Button onClick={this._closeViewUserModal}>OK</Button>,
+                ]}
             >
                 <img alt="user" style={{ width: '40px', height: '40px' }} src={IMAGE_URL + userDetails.profile_pic} />
                 <br />
@@ -54,9 +55,14 @@ class ViewUserModal extends Component {
                     {userDetails.email}
                 </p>
 
-                <span> <b>Street Address:</b> </span>
+                <span> <b>Street Address 1:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {userDetails.street_address}
+                </p>
+
+                <span> <b>Street Address 2:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.street_address_2}
                 </p>
 
                 <span> <b>City:</b> </span>
@@ -74,10 +80,10 @@ class ViewUserModal extends Component {
                     {userDetails.dob}
                 </p>
 
-                <span> <b>Phone Number:</b> </span>
+                {/* <span> <b>Phone Number:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {userDetails.phone_number}
-                </p>
+                </p> */}
 
                 <Link to={`/dashboard/users/history/${userDetails.value}`}>
                     View Login History

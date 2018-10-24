@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Button, Modal, notification } from 'antd';
+import { Input, Tabs, Pagination, Button, Modal, notification, Spin } from 'antd';
 import { coinTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -31,7 +31,8 @@ class Coins extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 1
+            page: 1,
+            loader: false
         }
         self = this;
         Coins.view = Coins.view.bind(this);
@@ -65,14 +66,20 @@ class Coins extends Component {
             is_active: !is_active
         };
 
+        self.setState({ loader: true })
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
-            .then(() => {
+            .then((res) => {
                 self._getAllCoins(0);
-                self.setState({ page: 1 })
+                self.setState({
+                    page: 1, errMsg: true, errMessage: res.message,
+                    errType: 'success', loader: false
+                })
             })
-            .catch(error => {
-                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
             });
     }
 
@@ -108,8 +115,7 @@ class Coins extends Component {
                     _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
                 }
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
                     searchCoin: '', errType: 'error',
@@ -149,6 +155,7 @@ class Coins extends Component {
         const { deleteCoinId } = this.state;
         let _this = this;
 
+        this.setState({ loader: true })
         ApiUtils.deleteCoin(deleteCoinId, token)
             .then((response) => response.json())
             .then(function (res) {
@@ -161,9 +168,10 @@ class Coins extends Component {
                 } else {
                     _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
                 }
+                this.setState({ loader: false })
             })
-            .catch(err => {
-                _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
+            .catch(() => {
+                _this.setState({ deleteCoinId: '', showDeleteCoinModal: false, loader: false });
             });
     }
 
@@ -172,7 +180,7 @@ class Coins extends Component {
     }
 
     render() {
-        const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType,
+        const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
             showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page
         } = this.state;
 
@@ -184,6 +192,7 @@ class Coins extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
+
                         {coinTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
@@ -200,6 +209,9 @@ class Coins extends Component {
                                         enterButton
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <ViewCoinModal
                                         coinDetails={coinDetails}
@@ -217,8 +229,10 @@ class Coins extends Component {
                                         <Modal
                                             title="Delete Coin"
                                             visible={showDeleteCoinModal}
-                                            onCancel={this._closeDeleteCoinModal}
-                                            onOk={this._deleteCoin}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteCoinModal}>No</Button>,
+                                                <Button onClick={this._deleteCoin}>Yes</Button>,
+                                            ]}
                                         >
                                             Are you sure you want to delete this coin ?
                                     </Modal>

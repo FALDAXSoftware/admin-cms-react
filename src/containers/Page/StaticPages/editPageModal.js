@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input } from 'antd';
+import { Modal, Input, notification, Icon, Spin } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+
+const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class EditPageModal extends Component {
     constructor(props) {
@@ -15,7 +17,10 @@ class EditPageModal extends Component {
             showEditPageModal: this.props.showEditPageModal,
             loader: false,
             fields: {},
-            editorContent: ''
+            editorContent: '',
+            message: '',
+            errMsg: false,
+            errType: 'success'
         }
         this.validator = new SimpleReactValidator();
 
@@ -47,6 +52,14 @@ class EditPageModal extends Component {
         }
     }
 
+    openNotificationWithIcon = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.message
+        });
+        this.setState({ errMsg: false });
+    };
+
     _onChangeContent = (val) => {
         this.setState({ editorContent: val })
     }
@@ -74,6 +87,7 @@ class EditPageModal extends Component {
         const { token, getAllStaticPages } = this.props;
         let { fields, editorContent } = this.state;
 
+        this.setState({ loader: true })
         if (this.validator.allValid()) {
             let formData = {
                 id: fields["value"],
@@ -84,13 +98,17 @@ class EditPageModal extends Component {
 
             ApiUtils.editPage(token, formData)
                 .then((res) => res.json())
-                .then(() => {
+                .then((res) => {
                     this._closeEditPageModal();
                     getAllStaticPages();
                     this._resetAddForm();
+                    this.setState({ loader: false, errMsg: true, message: res.message, errType: 'success' })
                 })
-                .catch(error => {
-                    console.error(error);
+                .catch(() => {
+                    this.setState({
+                        loader: false, errMsg: true,
+                        message: 'Something went wrong!!', errType: 'error'
+                    })
                     this._resetAddForm();
                 });
         } else {
@@ -100,7 +118,7 @@ class EditPageModal extends Component {
     }
 
     render() {
-        const { loader, showEditPageModal, editorContent, fields } = this.state;
+        const { loader, showEditPageModal, editorContent, fields, errType, errMsg } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -109,6 +127,10 @@ class EditPageModal extends Component {
             modules: this.quillModules,
         };
 
+        if (errMsg) {
+            this.openNotificationWithIcon(errType.toLowerCase());
+        }
+
         return (
             <Modal
                 title="Edit Page"
@@ -116,7 +138,7 @@ class EditPageModal extends Component {
                 onOk={this._editPage}
                 onCancel={this._closeEditPageModal}
                 confirmLoading={loader}
-                okText="Edit"
+                okText="Update"
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Page Name:</span>
@@ -140,7 +162,7 @@ class EditPageModal extends Component {
                         <ReactQuill {...options} />
                     </QuillEditor>
                 </div>
-
+                {loader && <Spin indicator={loaderIcon} />}
             </Modal>
         );
     }

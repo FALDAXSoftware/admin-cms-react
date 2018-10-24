@@ -100,7 +100,7 @@ class EditAnnounceModal extends Component {
                     this._resetAddForm();
                     this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' })
                 })
-                .catch(error => {
+                .catch(() => {
                     this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
                     this._resetAddForm();
                 });
@@ -152,10 +152,12 @@ class EditAnnounceModal extends Component {
                     </span>
                 </div>
 
-                <QuillEditor>
-                    <ReactQuill {...options} />
-                </QuillEditor>
-
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Content:</span>
+                    <QuillEditor>
+                        <ReactQuill {...options} />
+                    </QuillEditor>
+                </div>
             </Modal>
         );
     }

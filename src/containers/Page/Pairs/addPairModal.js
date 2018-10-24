@@ -153,7 +153,7 @@ class AddPairModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Maker Fee:</span>
-                    <Input placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
+                    <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('maker fee', fields["maker_fee"], 'required|decimal', 'text-danger')}
                     </span>
@@ -161,7 +161,7 @@ class AddPairModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Taker Fee:</span>
-                    <Input placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
+                    <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('taker fee', fields["taker_fee"], 'required|decimal', 'text-danger')}
                     </span>

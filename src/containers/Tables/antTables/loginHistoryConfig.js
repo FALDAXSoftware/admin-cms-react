@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell, IPCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, created_date = null) => {
     const value = object[key];
@@ -9,7 +9,9 @@ const renderCell = (object, type, key, created_date = null) => {
 
     switch (type) {
         case 'DateTimeCell':
-            return DateTimeCell(created_at);
+            return DateTimeCell(value, created_at);
+        case 'IPCell':
+            return IPCell(value);
         default:
             return TextCell(value);
     }
@@ -19,7 +21,7 @@ const columns = [{
     title: <IntlMessages id="historyTable.title.ip" />,
     key: 'ip',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'ip')
+    render: object => renderCell(object, 'IPCell', 'ip')
 }, {
     title: <IntlMessages id="historyTable.title.created_at" />,
     key: 'created_at',

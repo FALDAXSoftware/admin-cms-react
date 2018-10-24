@@ -145,17 +145,9 @@ class EditCoinModal extends Component {
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Coin Name:</span>
-                        <Input placeholder="First Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
+                        <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('coin name', fields["coin_name"], 'required', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Limit:</span>
-                        <Input placeholder="Limit" onChange={this._handleChange.bind(this, "limit")} value={fields["limit"]} />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('limit', fields["limit"], 'required|numeric', 'text-danger')}
                         </span>
                     </div>
 
@@ -167,8 +159,16 @@ class EditCoinModal extends Component {
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
+                        <span>Limit:</span>
+                        <Input placeholder="Limit" onChange={this._handleChange.bind(this, "limit")} value={fields["limit"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('limit', fields["limit"], 'required|numeric', 'text-danger')}
+                        </span>
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
                         <span>Wallet Address:</span>
-                        <Input placeholder="Email" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
+                        <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('wallet address', fields["wallet_address"], 'required', 'text-danger')}
                         </span>

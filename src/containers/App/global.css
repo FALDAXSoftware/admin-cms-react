@@ -196,3 +196,19 @@ html[dir='rtl'] .ant-notification-notice-with-icon {
 html[dir='rtl'] .dz-hidden-input {
   display: none;
 }
+
+.loader-class{
+  background: none repeat scroll 0 0 black;
+  position: fixed;
+  display: block;
+  opacity: 0.5;
+  z-index: 1000001; 
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.loader-class .ant-spin{
+  margin: 25% 20% 0 50%;
+}

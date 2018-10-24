@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin } from 'antd';
+import { Modal, Input, Icon, Spin, notification } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -18,6 +18,9 @@ class AddCoinModal extends Component {
             loader: false,
             fields: {},
             editorContent: '',
+            errMsg: false,
+            errMessage: '',
+            errType: 'Success',
         }
         this.validator = new SimpleReactValidator();
 
@@ -44,6 +47,14 @@ class AddCoinModal extends Component {
             this.setState({ showAddCoinModal: nextProps.showAddCoinModal })
         }
     }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
 
     _onChangeContent = (val) => {
         this.setState({ editorContent: val })
@@ -76,6 +87,7 @@ class AddCoinModal extends Component {
         let { fields, editorContent } = this.state;
 
         if (this.validator.allValid()) {
+            this.setState({ loader: true });
             let formData = {
                 coin_name: fields["coin_name"],
                 coin_code: fields["coin_code"],
@@ -86,15 +98,21 @@ class AddCoinModal extends Component {
 
             ApiUtils.addCoin(token, formData)
                 .then((res) => res.json())
-                .then(() => {
+                .then((res) => {
                     this._closeAddCoinModal();
                     getAllCoins();
                     this._resetAddForm();
-                    this.setState({ editorContent: '' })
+                    this.setState({
+                        editorContent: '', errMsg: true, errMessage: res.message,
+                        loader: false, errType: 'Success'
+                    })
                 })
-                .catch(error => {
-                    console.error(error);
+                .catch(() => {
                     this._resetAddForm();
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!',
+                        loader: false, errType: 'error'
+                    });
                 });
         } else {
             this.validator.showMessages();
@@ -103,7 +121,9 @@ class AddCoinModal extends Component {
     }
 
     render() {
-        const { loader, showAddCoinModal, fields, editorContent } = this.state;
+        const { loader, showAddCoinModal, fields, editorContent, errMsg,
+            errType
+        } = this.state;
 
         const options = {
             theme: 'snow',
@@ -112,6 +132,10 @@ class AddCoinModal extends Component {
             onChange: this._onChangeContent,
             modules: this.quillModules,
         };
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <Modal

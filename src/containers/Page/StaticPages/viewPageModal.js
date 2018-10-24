@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 
 class ViewPageModal extends Component {
     constructor(props) {
@@ -31,8 +31,9 @@ class ViewPageModal extends Component {
             <Modal
                 title="View Page"
                 visible={showViewPageModal}
-                onCancel={this._closeViewPageModal}
-                onOk={this._closeViewPageModal}
+                footer={[
+                    <Button onClick={this._closeViewPageModal}>OK</Button>,
+                ]}
             >
 
                 <span> <b>Page Name:</b> </span>

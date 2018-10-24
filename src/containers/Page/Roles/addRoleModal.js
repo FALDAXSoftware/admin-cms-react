@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Checkbox } from 'antd';
+import { Modal, Input, Icon, Spin, Checkbox, notification } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -19,7 +19,11 @@ class AddRoleModal extends Component {
             role: false,
             announcement: false,
             country: false,
-            employee: false
+            employee: false,
+            all: false,
+            errMessage: '',
+            errMsg: false,
+            errType: 'Success',
         }
         this.validator = new SimpleReactValidator();
     }
@@ -31,6 +35,14 @@ class AddRoleModal extends Component {
             })
         }
     }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
 
     _closeAddRoleModal = () => {
         this.setState({
@@ -75,13 +87,14 @@ class AddRoleModal extends Component {
 
             ApiUtils.addRole(token, formData)
                 .then((res) => res.json())
-                .then(() => {
+                .then((res) => {
                     this._closeAddRoleModal();
                     getAllRoles();
                     this._resetAddForm();
+                    this.setState({ errType: 'success', errMsg: true, errMessage: res.message });
                 })
-                .catch(error => {
-                    console.error(error);
+                .catch(() => {
+                    this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
                     this._resetAddForm();
                 });
         } else {
@@ -92,6 +105,7 @@ class AddRoleModal extends Component {
 
     onChange = (field, e, val) => {
         const { all } = this.state;
+
         if (all == false && field == 'all') {
             this.setState({
                 all: true, coin: true, user: true, staticPage: true, announcement: true,
@@ -110,7 +124,13 @@ class AddRoleModal extends Component {
     }
 
     render() {
-        const { loader, showAddRoleModal, fields } = this.state;
+        const { loader, showAddRoleModal, fields, all, user, staticPage, announcement,
+            coin, country, role, employee, errMsg, errType
+        } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <Modal
@@ -131,14 +151,14 @@ class AddRoleModal extends Component {
 
                 <div>
                     <span>Roles:</span><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'user')}>Users Module</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'coin')}>Coins Module</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'country')}>Country Module</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'role')}>Roles Module</Checkbox><br />
-                    <Checkbox onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />
+                    <Checkbox checked={all} onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
+                    <Checkbox checked={user} onChange={this.onChange.bind(this, 'user')}>Users Module</Checkbox><br />
+                    <Checkbox checked={coin} onChange={this.onChange.bind(this, 'coin')}>Coins Module</Checkbox><br />
+                    <Checkbox checked={staticPage} onChange={this.onChange.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
+                    <Checkbox checked={announcement} onChange={this.onChange.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
+                    <Checkbox checked={country} onChange={this.onChange.bind(this, 'country')}>Country Module</Checkbox><br />
+                    <Checkbox checked={role} onChange={this.onChange.bind(this, 'role')}>Roles Module</Checkbox><br />
+                    <Checkbox checked={employee} onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />
                 </div>
 
                 {loader && <Spin indicator={loaderIcon} />}

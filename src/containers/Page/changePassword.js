@@ -20,7 +20,7 @@ class ChangePassword extends Component {
         this.validator = new SimpleReactValidator();
         this.validator = new SimpleReactValidator({
             matchPassword: {
-                message: "Confirm Password doesn't match",
+                message: "New Password and Confirm Password doesn't match.",
                 rule: function (val, options) {
                     if (val)
                         return true;
@@ -79,7 +79,6 @@ class ChangePassword extends Component {
                 })
                 .catch(err => {
                     _this.setState({ loader: false, errMsg: true });
-                    console.log('error occured', err);
                 });
         } else {
             if (fields["newPwd"] !== fields["confirmPwd"]) {
@@ -104,17 +103,17 @@ class ChangePassword extends Component {
 
                 <div style={{ "marginTop": "10px" }}>
                     <span>
-                        <b>Old Password</b>
+                        <b>Current Password</b>
                     </span>
                     <Input
                         type="password"
-                        placeholder="Old Password"
+                        placeholder="Current Password"
                         style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "oldPwd")}
                         value={fields["oldPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('Old password', fields["oldPwd"], 'required', 'text-danger')}
+                        {this.validator.message('Current Password', fields["oldPwd"], 'required', 'text-danger')}
                     </span>
 
                     <span>

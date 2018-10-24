@@ -19,7 +19,8 @@ class AddPageModal extends Component {
             fields: {},
             editorContent: '',
             notifyMsg: '',
-            notify: false
+            notify: false,
+            errType: 'success'
         }
         this.validator = new SimpleReactValidator();
 
@@ -58,6 +59,7 @@ class AddPageModal extends Component {
     _closeAddPageModal = () => {
         this.setState({ showAddPageModal: false })
         this.props.closeAddModal();
+        this._resetAddForm();
     }
 
     _handleChange = (field, e) => {
@@ -78,6 +80,7 @@ class AddPageModal extends Component {
         const { token, getAllStaticPages } = this.props;
         let { editorContent, fields } = this.state;
 
+        this.setState({ loader: true })
         if (this.validator.allValid()) {
             let formData = {
                 name: fields["name"],
@@ -92,13 +95,16 @@ class AddPageModal extends Component {
                     getAllStaticPages();
                     this._resetAddForm();
                     this.setState({
-                        errType: 'success', notifyMsg: res.error ? res.error : res.message, notify: true
+                        errType: 'success', notifyMsg: res.error ? res.error : res.message,
+                        notify: true, loader: false
                     });
                 })
                 .catch(error => {
-                    console.error(error);
                     this._resetAddForm();
-                    error && this.setState({ errType: 'error', notifyMsg: 'Something went wrong!!', notify: true });
+                    error && this.setState({
+                        errType: 'error', notifyMsg: 'Something went wrong!!',
+                        notify: true, loader: false
+                    });
                 });
         } else {
             this.validator.showMessages();
