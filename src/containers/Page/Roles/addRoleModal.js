@@ -91,7 +91,7 @@ class AddRoleModal extends Component {
                     this._closeAddRoleModal();
                     getAllRoles();
                     this._resetAddForm();
-                    this.setState({ errType: 'success', errMsg: true, errMessage: res.message });
+                    this.setState({ errType: 'Success', errMsg: true, errMessage: res.message });
                 })
                 .catch(() => {
                     this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });

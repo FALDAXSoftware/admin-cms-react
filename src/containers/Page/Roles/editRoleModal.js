@@ -165,7 +165,7 @@ class EditRoleModal extends Component {
                     onOk={this._editRole}
                     onCancel={this._closeEditRoleModal}
                     confirmLoading={loader}
-                    okText="Edit"
+                    okText="Update"
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Role Name:</span>

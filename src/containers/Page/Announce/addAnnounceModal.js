@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+import striptags from 'striptags';
 
 class AddAnnounceModal extends Component {
     constructor(props) {
@@ -17,7 +18,8 @@ class AddAnnounceModal extends Component {
             fields: {},
             editorContent: '',
             notifyMsg: '',
-            notify: false
+            notify: false,
+            showError: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -40,9 +42,10 @@ class AddAnnounceModal extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps.showAddEmailModal !== this.props.showAddEmailModal) {
+        if (nextProps !== this.props) {
             this.setState({ showAddEmailModal: nextProps.showAddEmailModal })
         }
+        this.validator = new SimpleReactValidator();
     }
 
     openNotificationWithIcon = (type) => {
@@ -56,6 +59,7 @@ class AddAnnounceModal extends Component {
     _closeAddPageModal = () => {
         this.setState({ showAddEmailModal: false })
         this.props.closeAddModal();
+        this._resetAddForm();
     }
 
     _handleChange = (field, e) => {
@@ -72,11 +76,12 @@ class AddAnnounceModal extends Component {
         this.setState({ fields, editorContent: '' });
     }
 
-    _addPage = () => {
+    _addAnnouncement = () => {
         const { token, getAnnouncements } = this.props;
         let { editorContent, fields } = this.state;
+        let pageContent = striptags(editorContent);
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && pageContent.length > 0) {
             let formData = {
                 name: fields["name"],
                 title: fields["title"],
@@ -90,15 +95,20 @@ class AddAnnounceModal extends Component {
                     getAnnouncements();
                     this._resetAddForm();
                     this.setState({
-                        errType: 'success', notifyMsg: res.error ? res.error : res.message, notify: true
+                        errType: 'Success', notifyMsg: res.error ? res.error : res.message,
+                        notify: true, showError: false
                     });
                 })
                 .catch(error => {
                     this._resetAddForm();
-                    error && this.setState({ errType: 'error', notifyMsg: 'Something went wrong!!', notify: true });
+                    error && this.setState({
+                        showError: false, errType: 'error',
+                        notifyMsg: 'Something went wrong!!', notify: true
+                    });
                 });
         } else {
             this.validator.showMessages();
+            this.setState({ showError: pageContent.length > 0 ? false : true })
             this.forceUpdate();
         }
     }
@@ -108,7 +118,8 @@ class AddAnnounceModal extends Component {
     }
 
     render() {
-        const { loader, showAddEmailModal, editorContent, fields, notify, errType } = this.state;
+        const { loader, showAddEmailModal, editorContent, fields, notify,
+            errType, showError } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -125,17 +136,16 @@ class AddAnnounceModal extends Component {
             <Modal
                 title="Add New Announcement"
                 visible={showAddEmailModal}
-                onOk={this._addPage}
+                onOk={this._addAnnouncement}
                 onCancel={this._closeAddPageModal}
                 confirmLoading={loader}
                 okText="Add"
             >
-
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Name:</span>
                     <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('name', fields["name"], 'required|max:50', 'text-danger')}
                     </span>
                 </div>
 
@@ -143,7 +153,7 @@ class AddAnnounceModal extends Component {
                     <span>Title:</span>
                     <Input placeholder="Title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('title', fields["title"], 'required', 'text-danger')}
+                        {this.validator.message('title', fields["title"], 'required|max:50', 'text-danger')}
                     </span>
                 </div>
 
@@ -152,6 +162,9 @@ class AddAnnounceModal extends Component {
                     <QuillEditor>
                         <ReactQuill {...options} />
                     </QuillEditor>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The content field is required.'}
+                    </span>}
                 </div>
 
             </Modal>

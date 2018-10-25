@@ -25,7 +25,7 @@ class Announce extends Component {
             emailDetails: [],
             deleteEmailId: '',
             notifyMsg: '',
-            errType: 'success'
+            errType: 'Success'
         }
         self = this;
         Announce.view = Announce.view.bind(this);

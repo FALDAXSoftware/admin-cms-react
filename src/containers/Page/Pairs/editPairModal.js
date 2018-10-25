@@ -33,7 +33,8 @@ class EditPairModal extends Component {
             this.setState({
                 showEditPairModal: nextProps.showEditPairModal,
                 fields: nextProps.fields
-            })
+            });
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -77,7 +78,7 @@ class EditPairModal extends Component {
                     this._closeEditPairModal();
                     getAllPairs();
                     this._resetEditForm();
-                    this.setState({ errType: 'success', errMsg: true, errMessage: res.message })
+                    this.setState({ errType: 'Success', errMsg: true, errMessage: res.message })
                 })
                 .catch(() => {
                     this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });

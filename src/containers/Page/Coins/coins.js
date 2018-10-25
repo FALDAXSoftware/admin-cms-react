@@ -73,7 +73,7 @@ class Coins extends Component {
                 self._getAllCoins(0);
                 self.setState({
                     page: 1, errMsg: true, errMessage: res.message,
-                    errType: 'success', loader: false
+                    errType: 'Success', loader: false
                 })
             })
             .catch(() => {
@@ -162,7 +162,7 @@ class Coins extends Component {
                 if (res) {
                     _this.setState({
                         deleteCoinId: '', showDeleteCoinModal: false,
-                        errMessage: 'Coin deleted successfully', errMsg: true
+                        errMessage: res.message, errMsg: true
                     });
                     _this._getAllCoins(0);
                 } else {

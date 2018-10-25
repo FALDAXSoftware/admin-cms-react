@@ -120,7 +120,7 @@ class Roles extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        deleteRoleId: '', errType: 'success', errMsg: true, errMessage: res.message
+                        deleteRoleId: '', errType: 'Success', errMsg: true, errMessage: res.message
                     });
                     _this._closeDeleteRoleModal();
                     _this._getAllRoles();

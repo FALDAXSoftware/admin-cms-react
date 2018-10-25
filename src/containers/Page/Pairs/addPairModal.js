@@ -81,7 +81,7 @@ class AddPairModal extends Component {
                     this._closeAddPairsModal();
                     getAllPairs();
                     this._resetAddForm();
-                    this.setState({ errType: 'success', errMsg: true, errMessage: res.message })
+                    this.setState({ errType: 'Success', errMsg: true, errMessage: res.message })
                 })
                 .catch(() => {
                     this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
@@ -97,6 +97,7 @@ class AddPairModal extends Component {
         if (field === 'coin_id1') {
             this.setState({ selectedCoin1: value, name: value })
         } else {
+            console.log('>>>', this.state.name + '-' + value)
             this.setState({ selectedCoin2: value, name: this.state.name + '-' + value })
         }
     }

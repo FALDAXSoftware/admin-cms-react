@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -20,7 +21,8 @@ class AddPageModal extends Component {
             editorContent: '',
             notifyMsg: '',
             notify: false,
-            errType: 'success'
+            errType: 'Success',
+            showError: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -43,8 +45,9 @@ class AddPageModal extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps.showAddPageModal !== this.props.showAddPageModal) {
-            this.setState({ showAddPageModal: nextProps.showAddPageModal })
+        if (nextProps !== this.props) {
+            this.setState({ showAddPageModal: nextProps.showAddPageModal });
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -79,9 +82,10 @@ class AddPageModal extends Component {
     _addPage = () => {
         const { token, getAllStaticPages } = this.props;
         let { editorContent, fields } = this.state;
+        let pageContent = striptags(editorContent);
 
-        this.setState({ loader: true })
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && pageContent.length > 0) {
+            this.setState({ loader: true })
             let formData = {
                 name: fields["name"],
                 title: fields["title"],
@@ -96,19 +100,20 @@ class AddPageModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errType: 'success', notifyMsg: res.error ? res.error : res.message,
-                        notify: true, loader: false
+                        notify: true, loader: false, showError: false
                     });
                 })
                 .catch(error => {
                     this._resetAddForm();
                     error && this.setState({
                         errType: 'error', notifyMsg: 'Something went wrong!!',
-                        notify: true, loader: false
+                        notify: true, loader: false, showError: false
                     });
                 });
         } else {
             this.validator.showMessages();
             this.forceUpdate();
+            this.setState({ showError: pageContent.length > 0 ? false : true })
         }
     }
 
@@ -117,7 +122,8 @@ class AddPageModal extends Component {
     }
 
     render() {
-        const { loader, showAddPageModal, editorContent, fields, notify, errType } = this.state;
+        const { loader, showAddPageModal, editorContent, fields, notify,
+            errType, showError } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -161,6 +167,9 @@ class AddPageModal extends Component {
                     <QuillEditor>
                         <ReactQuill {...options} />
                     </QuillEditor>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The content field is required.'}
+                    </span>}
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </Modal>

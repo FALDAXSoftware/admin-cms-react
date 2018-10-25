@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+import striptags from 'striptags';
 
 class EditAnnounceModal extends Component {
     constructor(props) {
@@ -47,6 +48,7 @@ class EditAnnounceModal extends Component {
                 fields: nextProps.emailDetails,
                 editorContent: nextProps.emailDetails.content
             })
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -71,7 +73,7 @@ class EditAnnounceModal extends Component {
         const { fields } = this.state;
 
         fields['coin_name'] = '';
-        this.setState({ fields });
+        this.setState({ fields, showError: false });
     }
 
     _handleChange = (field, e) => {
@@ -83,8 +85,9 @@ class EditAnnounceModal extends Component {
     _editAnnounce = () => {
         const { token, getAnnouncements } = this.props;
         let { fields, editorContent } = this.state;
+        let pageContent = striptags(editorContent);
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && pageContent.length > 0) {
             let formData = {
                 id: fields["value"],
                 title: fields["title"],
@@ -98,21 +101,29 @@ class EditAnnounceModal extends Component {
                     this._closeEditAnnounce();
                     getAnnouncements();
                     this._resetAddForm();
-                    this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' })
+                    this.setState({
+                        errMsg: true, errMessage: res.message,
+                        errType: 'Success', showError: false
+                    })
                 })
                 .catch(() => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!',
+                        loader: false, errType: 'error', showError: false
+                    });
                     this._resetAddForm();
                 });
         } else {
             this.validator.showMessages();
             this.forceUpdate();
+            this.setState({ showError: pageContent.length > 0 ? false : true })
         }
     }
 
     render() {
         const {
-            loader, showEditAnnounceModal, editorContent, fields, errMsg, errType
+            loader, showEditAnnounceModal, editorContent, fields, errMsg, errType,
+            showError
         } = this.state;
         const options = {
             theme: 'snow',
@@ -133,14 +144,13 @@ class EditAnnounceModal extends Component {
                 onOk={this._editAnnounce}
                 onCancel={this._closeEditAnnounce}
                 confirmLoading={loader}
-                okText="Edit"
+                okText="Update"
             >
-
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Name:</span>
                     <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('name', fields["name"], 'required|max:50', 'text-danger')}
                     </span>
                 </div>
 
@@ -148,7 +158,7 @@ class EditAnnounceModal extends Component {
                     <span>Title:</span>
                     <Input placeholder="title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('title', fields["title"], 'required', 'text-danger')}
+                        {this.validator.message('title', fields["title"], 'required|max:50', 'text-danger')}
                     </span>
                 </div>
 
@@ -157,6 +167,9 @@ class EditAnnounceModal extends Component {
                     <QuillEditor>
                         <ReactQuill {...options} />
                     </QuillEditor>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The content field is required.'}
+                    </span>}
                 </div>
             </Modal>
         );

@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -20,7 +21,7 @@ class EditPageModal extends Component {
             editorContent: '',
             message: '',
             errMsg: false,
-            errType: 'success'
+            errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
 
@@ -49,6 +50,7 @@ class EditPageModal extends Component {
                 fields: nextProps.staticPagesDetails,
                 editorContent: nextProps.staticPagesDetails.content
             })
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -67,6 +69,7 @@ class EditPageModal extends Component {
     _closeEditPageModal = () => {
         this.setState({ showEditPageModal: false })
         this.props.closeEditModal();
+        this._resetAddForm();
     }
 
     _resetAddForm = () => {
@@ -86,9 +89,10 @@ class EditPageModal extends Component {
     _editPage = () => {
         const { token, getAllStaticPages } = this.props;
         let { fields, editorContent } = this.state;
+        let pageContent = striptags(editorContent);
 
-        this.setState({ loader: true })
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && pageContent.length > 0) {
+            this.setState({ loader: true })
             let formData = {
                 id: fields["value"],
                 title: fields["title"],
@@ -102,11 +106,14 @@ class EditPageModal extends Component {
                     this._closeEditPageModal();
                     getAllStaticPages();
                     this._resetAddForm();
-                    this.setState({ loader: false, errMsg: true, message: res.message, errType: 'success' })
+                    this.setState({
+                        loader: false, errMsg: true, message: res.message,
+                        errType: 'Success', showError: false
+                    })
                 })
                 .catch(() => {
                     this.setState({
-                        loader: false, errMsg: true,
+                        loader: false, errMsg: true, showError: false,
                         message: 'Something went wrong!!', errType: 'error'
                     })
                     this._resetAddForm();
@@ -114,11 +121,13 @@ class EditPageModal extends Component {
         } else {
             this.validator.showMessages();
             this.forceUpdate();
+            this.setState({ showError: pageContent.length > 0 ? false : true })
         }
     }
 
     render() {
-        const { loader, showEditPageModal, editorContent, fields, errType, errMsg } = this.state;
+        const { loader, showEditPageModal, editorContent, fields, errType,
+            errMsg, showError } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -161,6 +170,9 @@ class EditPageModal extends Component {
                     <QuillEditor>
                         <ReactQuill {...options} />
                     </QuillEditor>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The description field is required.'}
+                    </span>}
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </Modal>

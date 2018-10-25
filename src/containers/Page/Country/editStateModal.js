@@ -130,10 +130,10 @@ class EditStateModal extends Component {
                     onOk={this._editState}
                     onCancel={this._closeEditStateModal}
                     confirmLoading={loader}
-                    okText="Edit"
+                    okText="Update"
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>State Legality:</span>
+                        <span>State Legality:</span><br />
                         <Select
                             style={{ width: 200 }}
                             placeholder="Select Legality"

@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -21,6 +22,7 @@ class AddCoinModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
+            showError: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -43,8 +45,9 @@ class AddCoinModal extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps.showAddCoinModal !== this.props.showAddCoinModal) {
-            this.setState({ showAddCoinModal: nextProps.showAddCoinModal })
+        if (nextProps !== this.props) {
+            this.setState({ showAddCoinModal: nextProps.showAddCoinModal });
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -63,6 +66,7 @@ class AddCoinModal extends Component {
     _closeAddCoinModal = () => {
         this.setState({ showAddCoinModal: false })
         this.props.closeAddModal();
+        this._resetAddForm()
     }
 
     _handleChange = (field, e) => {
@@ -79,14 +83,15 @@ class AddCoinModal extends Component {
         fields['description'] = '';
         fields['limit'] = '';
         fields['wallet_address'] = '';
-        this.setState({ fields });
+        this.setState({ fields, editorContent: '' });
     }
 
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
         let { fields, editorContent } = this.state;
+        let coinContent = striptags(editorContent);
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && coinContent.length > 0) {
             this.setState({ loader: true });
             let formData = {
                 coin_name: fields["coin_name"],
@@ -104,25 +109,26 @@ class AddCoinModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         editorContent: '', errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success'
+                        loader: false, errType: 'Success', showError: false
                     })
                 })
                 .catch(() => {
                     this._resetAddForm();
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
-                        loader: false, errType: 'error'
+                        loader: false, errType: 'error', showError: false
                     });
                 });
         } else {
             this.validator.showMessages();
             this.forceUpdate();
+            this.setState({ showError: coinContent.length > 0 ? false : true })
         }
     }
 
     render() {
         const { loader, showAddCoinModal, fields, editorContent, errMsg,
-            errType
+            errType, showError
         } = this.state;
 
         const options = {
@@ -150,7 +156,7 @@ class AddCoinModal extends Component {
                     <span>Coin Name:</span>
                     <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('coin name', fields["coin_name"], 'required', 'text-danger')}
+                        {this.validator.message('coin name', fields["coin_name"], 'required|max:30', 'text-danger')}
                     </span>
                 </div>
 
@@ -158,7 +164,7 @@ class AddCoinModal extends Component {
                     <span>Coin Code:</span>
                     <Input placeholder="Coin Code" onChange={this._handleChange.bind(this, "coin_code")} value={fields["coin_code"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('coin code', fields["coin_code"], 'required', 'text-danger')}
+                        {this.validator.message('coin code', fields["coin_code"], 'required|max:10', 'text-danger')}
                     </span>
                 </div>
 
@@ -167,6 +173,9 @@ class AddCoinModal extends Component {
                     <QuillEditor>
                         <ReactQuill {...options} />
                     </QuillEditor>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The description field is required.'}
+                    </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
@@ -181,7 +190,7 @@ class AddCoinModal extends Component {
                     <span>Wallet Address:</span>
                     <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('wallet address', fields["wallet_address"], 'required', 'text-danger')}
+                        {this.validator.message('wallet address', fields["wallet_address"], 'required|max:45', 'text-danger')}
                     </span>
                 </div>
 

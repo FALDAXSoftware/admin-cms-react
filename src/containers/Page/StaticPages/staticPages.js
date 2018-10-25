@@ -94,8 +94,8 @@ class StaticPages extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        showDeletePageModal: false, deletePageId: '', errType: 'success',
-                        notify: true, notifyMsg: 'Page removed successfully'
+                        showDeletePageModal: false, deletePageId: '', errType: 'Success',
+                        notify: true, notifyMsg: res.message
                     });
                     _this._getAllStaticPages(0);
                 } else {

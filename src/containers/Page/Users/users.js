@@ -67,7 +67,7 @@ class Users extends Component {
             .then((res) => {
                 self._getAllUsers(0);
                 self.setState({
-                    page: 1, errMsg: true, errMessage: res.message, errType: 'success', loader: false
+                    page: 1, errMsg: true, errMessage: res.message, errType: 'Success', loader: false
                 })
             })
             .catch(() => {

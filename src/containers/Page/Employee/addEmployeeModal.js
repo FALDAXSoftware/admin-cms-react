@@ -94,7 +94,7 @@ class AddEmployeeModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errMsg: true, errMessage: res.message,
-                        errType: 'success', loader: false
+                        errType: 'Success', loader: false
                     })
                 })
                 .catch(() => {

@@ -7,6 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
+import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -20,7 +21,8 @@ class EditCoinModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            editorContent: ''
+            editorContent: '',
+            showError: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -76,7 +78,9 @@ class EditCoinModal extends Component {
         fields['coin_name'] = '';
         fields['limit'] = '';
         fields['wallet_address'] = '';
-        this.setState({ fields, editorContent: this.props.fields.description });
+        this.setState({
+            fields, editorContent: this.props.fields.description, showError: false
+        });
     }
 
     _closeEditCoinModal = () => {
@@ -87,9 +91,9 @@ class EditCoinModal extends Component {
     _editCoin = () => {
         const { token, getAllCoins } = this.props;
         const { fields, editorContent } = this.state;
+        let coinContent = striptags(editorContent);
 
-
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && coinContent.length > 0) {
             this.setState({ loader: true });
 
             let formData = {
@@ -104,23 +108,30 @@ class EditCoinModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     this.setState({
-                        errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        errMsg: true, errMessage: res.message, loader: false,
+                        errType: 'Success', showError: false
                     });
                     this._closeEditCoinModal();
                     getAllCoins();
                     this._resetForm();
                 })
                 .catch(() => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!',
+                        loader: false, errType: 'error', showError: false
+                    });
                 });
         } else {
             this.validator.showMessages();
             this.forceUpdate();
+            this.setState({ showError: coinContent.length > 0 ? false : true })
         }
     }
 
     render() {
-        const { loader, showEditCoinModal, fields, errMsg, errType, editorContent } = this.state;
+        const { loader, showEditCoinModal, fields, errMsg, errType, editorContent,
+            showError
+        } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -141,13 +152,13 @@ class EditCoinModal extends Component {
                     onOk={this._editCoin}
                     onCancel={this._closeEditCoinModal}
                     confirmLoading={loader}
-                    okText="Edit"
+                    okText="Update"
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Coin Name:</span>
                         <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('coin name', fields["coin_name"], 'required', 'text-danger')}
+                            {this.validator.message('coin name', fields["coin_name"], 'required|max:30', 'text-danger')}
                         </span>
                     </div>
 
@@ -156,6 +167,9 @@ class EditCoinModal extends Component {
                         <QuillEditor>
                             <ReactQuill {...options} />
                         </QuillEditor>
+                        {showError && <span style={{ "color": "red" }}>
+                            {'The description field is required.'}
+                        </span>}
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
@@ -170,7 +184,7 @@ class EditCoinModal extends Component {
                         <span>Wallet Address:</span>
                         <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('wallet address', fields["wallet_address"], 'required', 'text-danger')}
+                            {this.validator.message('wallet address', fields["wallet_address"], 'required|max:45', 'text-danger')}
                         </span>
                     </div>
 

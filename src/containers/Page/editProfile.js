@@ -15,13 +15,12 @@ class EditProfile extends Component {
             fields: {},
             errors: {},
             loader: false,
-            errType: 'success'
+            errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
     }
 
     componentDidMount = () => {
-
         let fields = this.state.fields;
         const { name, email } = this.props.user;
         fields["name"] = name;
@@ -62,15 +61,14 @@ class EditProfile extends Component {
                     if (res) {
                         login({ user: res.data[0] });
                         _this.setState({
-                            errMsg: true, errMessage: 'Profile updated successfully.',
-                            loader: false, errType: 'success'
+                            errMsg: true, errMessage: 'Profile updated Successfully.',
+                            loader: false, errType: 'Success'
                         });
                     } else {
                         _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
                 })
-                .catch(err => {
-                    console.log('error occured', err);
+                .catch(() => {
                     _this.setState({ loader: false });
                 });
         } else {
@@ -105,8 +103,7 @@ class EditProfile extends Component {
                         <b>Email</b>
                     </span>
                     <Input disabled style={{ "marginBottom": "15px", "width": "25%", "display": "inherit", "readonly": "readonly" }} value={fields["email"]} />
-
-                    <Button type="primary" onClick={this._editProfile}> Edit </Button>
+                    <Button type="primary" onClick={this._editProfile}> Update </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </div>

@@ -15,7 +15,7 @@ export default class extends Component {
     this.state = {
       loader: false,
       fields: {},
-      errType: 'success'
+      errType: 'Success'
     };
     this.validator = new SimpleReactValidator();
   }
@@ -48,7 +48,7 @@ export default class extends Component {
         .then((res) => {
           if (!res.err) {
             _this.setState({
-              errMsg: true, errMessage: res.message, loader: false, errType: 'success'
+              errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
             });
             _this.props.history.push('/signin');
           } else {

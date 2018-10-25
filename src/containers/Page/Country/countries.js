@@ -50,7 +50,7 @@ class Countries extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self.setState({
-                    errMsg: true, errMessage: res.message, errType: 'success',
+                    errMsg: true, errMessage: res.message, errType: 'Success',
                     loader: false, page: 1
                 })
                 self._getAllCountries(0);

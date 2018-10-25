@@ -41,7 +41,7 @@ export default class extends Component {
         .then(function (res) {
           if (res) {
             _this.setState({
-              errMsg: true, errMessage: 'password reset successfully', loader: false
+              errMsg: true, errMessage: 'Password reset Successfully', loader: false
             }, () => {
               _this.props.history.push('/signin');
             });

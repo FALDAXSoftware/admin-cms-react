@@ -113,7 +113,7 @@ class Employees extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        deleteEmpId: '', errMsg: true, errMessage: res.message, errType: 'success'
+                        deleteEmpId: '', errMsg: true, errMessage: res.message, errType: 'Success'
                     });
                     _this._closeDeleteEmpModal();
                     _this._getAllEmployees();

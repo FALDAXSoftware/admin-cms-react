@@ -130,10 +130,10 @@ class EditCountryModal extends Component {
                     onOk={this._editCountry}
                     onCancel={this._closeEditCountryModal}
                     confirmLoading={loader}
-                    okText="Edit"
+                    okText="Update"
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Country Legality:</span>
+                        <span>Country Legality:</span><br />
                         <Select
                             style={{ width: 200 }}
                             placeholder="Select Legality"

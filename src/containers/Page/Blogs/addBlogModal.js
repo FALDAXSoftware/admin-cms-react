@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
+import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
@@ -27,6 +28,7 @@ class AddBlogModal extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
+            showError: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -61,7 +63,8 @@ class AddBlogModal extends Component {
             this.setState({
                 showAddBlogModal: nextProps.showAddBlogModal,
                 allAdmins: nextProps.allAdmins
-            })
+            });
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -72,6 +75,7 @@ class AddBlogModal extends Component {
     _closeAddBlogModal = () => {
         this.setState({ showAddBlogModal: false })
         this.props.closeAddModal();
+        this._resetAddForm();
     }
 
     _handleChange = (field, e) => {
@@ -90,8 +94,9 @@ class AddBlogModal extends Component {
     _addBlog = () => {
         const { token, getAllBlogs } = this.props;
         let { fields, blogDesc, tags, selectedAuthor } = this.state;
+        let blogDescription = striptags(blogDesc);
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && blogDescription.length > 0) {
             let formData = {
                 title: fields["title"],
                 author: selectedAuthor,
@@ -105,15 +110,22 @@ class AddBlogModal extends Component {
                     this._closeAddBlogModal();
                     getAllBlogs();
                     this._resetAddForm();
-                    this.setState({ blogDesc: '', errType: 'success', errMsg: true, errMessage: res.message })
+                    this.setState({
+                        blogDesc: '', errType: 'Success', errMsg: true,
+                        errMessage: res.message, showError: false
+                    })
                 })
                 .catch(() => {
-                    this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                    this.setState({
+                        errType: 'error', errMsg: true,
+                        errMessage: 'Something went wrong', showError: false
+                    });
                     this._resetAddForm();
                 });
         } else {
             this.validator.showMessages();
             this.forceUpdate();
+            this.setState({ showError: blogDescription.length > 0 ? false : true })
         }
     }
 
@@ -148,7 +160,7 @@ class AddBlogModal extends Component {
 
     render() {
         const { loader, showAddBlogModal, fields, blogDesc, tags, inputVisible,
-            inputTagVal, allAdmins, errType, errMsg, } = this.state;
+            inputTagVal, allAdmins, errType, errMsg, showError } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -231,6 +243,9 @@ class AddBlogModal extends Component {
                     <QuillEditor>
                         <ReactQuill {...options} />
                     </QuillEditor>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The description field is required.'}
+                    </span>}
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </Modal>

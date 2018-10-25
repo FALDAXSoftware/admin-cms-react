@@ -45,7 +45,9 @@ class StateList extends Component {
         ApiUtils.activateState(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self.setState({ loader: false, errMsg: true, errMessage: res.message, errType: 'success' })
+                self.setState({
+                    loader: false, errMsg: true, errMessage: res.message, errType: 'Success'
+                })
                 self._getAllStates();
             })
             .catch(() => {
