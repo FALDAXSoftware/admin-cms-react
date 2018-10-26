@@ -115,15 +115,15 @@ class Announce extends Component {
                 if (res) {
                     _this.setState({
                         showDeleteAnnounceModal: false, deleteEmailId: '',
-                        notifyMsg: res.message, notify: true
+                        notifyMsg: res.message, notify: true, errType: 'Success'
                     });
                     _this._getAnnounceEmails(0);
                 } else {
-                    _this.setState({ notifyMsg: 'Something went wrong!', notify: true });
+                    _this.setState({ notifyMsg: 'Something went wrong!', notify: true, errType: 'error' });
                 }
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({ notifyMsg: 'Something went wrong!', notify: true, errType: 'error' });
             });
     }
 
@@ -153,7 +153,7 @@ class Announce extends Component {
         } = this.state;
 
         if (notify) {
-            this.openNotificationWithIconError(errType);
+            this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (

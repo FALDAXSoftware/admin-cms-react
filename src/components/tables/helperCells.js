@@ -119,16 +119,16 @@ const deleteEmployee = (value) => {
   Employees.deleteEmployee(value);
 }
 
-const editBlog = (value, title, admin_id, tags, created_at, description) => {
-  Blogs.editBlog(value, title, admin_id, tags, created_at, description);
+const editBlog = (value, title, admin_name, tags, created_at, description) => {
+  Blogs.editBlog(value, title, admin_name, tags, created_at, description);
 }
 
 const deleteBlog = (value) => {
   Blogs.deleteBlog(value);
 }
 
-const viewBlog = (value, title, admin_id, tags, created_at, description) => {
-  Blogs.viewBlog(value, title, admin_id, tags, created_at, description);
+const viewBlog = (value, title, admin_name, tags, created_at, description) => {
+  Blogs.viewBlog(value, title, admin_name, tags, created_at, description);
 }
 
 const pairStatus = (value, name, maker_fee, taker_fee, created_at, is_active) => {
@@ -143,7 +143,7 @@ const editLimit = (value, user, monthlyDepositCrypto, monthlyDepositFiat, monthl
   LimitManagement.editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat);
 }
 
-const DateCell = data => <p>{(moment(data).format("DD MMM YYYY")) ? moment(data).format("DD MMM, YYYY") : ''}</p>;
+const DateCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : ''}</p>;
 const DateTimeCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
 const LinkCell = (link, href) => <a href={href ? href : '#'}>{link}</a>;
@@ -170,7 +170,7 @@ const CountryButtonCell = (value) => <Button type="primary" onClick={() => showS
 const RoleSwitchCell = (value, name, coin, user, country, announcement, employee, role, staticPage, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, coin, user, country, announcement, employee, role, staticPage, is_active) }} />
 const EmployeeSwitchCell = (value, name, email, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, name, email, role, is_active) }} />
 const EmployeeActionCell = (value, name, email, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, name, email, role, is_active)} /></Tooltip></div>;
-const BlogActionCell = (value, title, admin_id, tags, created_at, description) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_id, tags, created_at, description)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_id, tags, created_at, description)} /></Tooltip></div>;
+const BlogActionCell = (value, title, admin_name, tags, created_at, description) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_name, tags, created_at, description)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_name, tags, created_at, description)} /></Tooltip></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;
 const LimitActionCell = (value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat)} /></Tooltip></div>;

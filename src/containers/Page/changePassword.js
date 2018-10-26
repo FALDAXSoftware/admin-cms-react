@@ -18,15 +18,15 @@ class ChangePassword extends Component {
             errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
-        this.validator = new SimpleReactValidator({
-            matchPassword: {
-                message: "New Password and Confirm Password doesn't match.",
-                rule: function (val, options) {
-                    if (val)
-                        return true;
-                }
-            }
-        });
+        // this.validator = new SimpleReactValidator({
+        //     matchPassword: {
+        //         message: "New Password and Confirm Password doesn't match.",
+        //         rule: function (val, options) {
+        //             if (val)
+        //                 return true;
+        //         }
+        //     }
+        // });
     }
 
     openNotificationWithIconError = (type) => {
@@ -48,6 +48,7 @@ class ChangePassword extends Component {
         let { fields, errors } = this.state;
         let _this = this;
 
+        console.log('in ', fields)
         if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
             _this.setState({ loader: true });
 
@@ -81,7 +82,9 @@ class ChangePassword extends Component {
                     _this.setState({ loader: false, errMsg: true });
                 });
         } else {
-            if (fields["newPwd"] !== fields["confirmPwd"]) {
+            console.log('in else', fields)
+            if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
+                console.log('in if')
                 this.state.errors["main"] = "Confirm Password doesn't match";
                 this.setState({ errors, loader: false })
             }
@@ -141,6 +144,7 @@ class ChangePassword extends Component {
                         value={fields["confirmPwd"]}
                     />
                     <span style={{ "color": "red" }}>
+                        {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
                         {errors["main"]}
                     </span>
                     <br />

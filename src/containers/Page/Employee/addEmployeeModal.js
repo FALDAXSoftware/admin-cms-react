@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Select, notification } from 'antd';
+import { Modal, Input, Icon, Spin, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -15,7 +15,8 @@ class AddEmployeeModal extends Component {
             loader: false,
             fields: {},
             allRoles: [],
-            selectedRole: ''
+            selectedRole: '',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -85,7 +86,7 @@ class AddEmployeeModal extends Component {
                 roles: selectedRole,
             };
 
-            this.setState({ loader: true })
+            this.setState({ loader: true, isDisabled: true })
             ApiUtils.addEmployee(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
@@ -94,12 +95,12 @@ class AddEmployeeModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errMsg: true, errMessage: res.message,
-                        errType: 'Success', loader: false
+                        errType: 'Success', loader: false, isDisabled: false
                     })
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true,
+                        errType: 'error', errMsg: true, isDisabled: false,
                         errMessage: 'Something went wrong', loader: false
                     });
                 });
@@ -114,7 +115,7 @@ class AddEmployeeModal extends Component {
     }
 
     render() {
-        const { loader, showAddEmpModal, fields, allRoles, errType, errMsg } = this.state;
+        const { loader, showAddEmpModal, fields, allRoles, errType, errMsg, isDisabled } = this.state;
 
         let options = allRoles.map((role) => {
             return (
@@ -130,10 +131,11 @@ class AddEmployeeModal extends Component {
             <Modal
                 title="Add Employee"
                 visible={showAddEmpModal}
-                onOk={this._addEmployee}
-                onCancel={this._closeAddEmpModal}
                 confirmLoading={loader}
-                okText="Add"
+                footer={[
+                    <Button onClick={this._closeAddEmpModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._addEmployee}>Add</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Name:</span>

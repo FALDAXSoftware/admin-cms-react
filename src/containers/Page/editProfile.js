@@ -81,7 +81,7 @@ class EditProfile extends Component {
         const { loader, fields, errMsg, errType } = this.state;
 
         if (errMsg) {
-            this.openNotificationWithIconError(errType);
+            this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
@@ -96,7 +96,7 @@ class EditProfile extends Component {
                     </span>
                     <Input placeholder="Name" style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }} onChange={this._onChangeFields.bind(this, "name")} value={fields["name"]} />
                     <span className="field-error">
-                        {this.validator.message('Name', fields['name'], 'required')}
+                        {this.validator.message('Name', fields['name'], 'required|max:30')}
                     </span>
 
                     <span>

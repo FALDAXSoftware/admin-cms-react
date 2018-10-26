@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Tag, Tooltip, Select, notification } from 'antd';
+import { Modal, Input, Icon, Spin, Tag, Tooltip, Select, notification, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -28,7 +28,8 @@ class AddBlogModal extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            showError: false
+            showError: false,
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -97,6 +98,7 @@ class AddBlogModal extends Component {
         let blogDescription = striptags(blogDesc);
 
         if (this.validator.allValid() && blogDescription.length > 0) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 title: fields["title"],
                 author: selectedAuthor,
@@ -112,12 +114,12 @@ class AddBlogModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         blogDesc: '', errType: 'Success', errMsg: true,
-                        errMessage: res.message, showError: false
+                        errMessage: res.message, showError: false, isDisabled: false
                     })
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true,
+                        errType: 'error', errMsg: true, isDisabled: false,
                         errMessage: 'Something went wrong', showError: false
                     });
                     this._resetAddForm();
@@ -160,7 +162,7 @@ class AddBlogModal extends Component {
 
     render() {
         const { loader, showAddBlogModal, fields, blogDesc, tags, inputVisible,
-            inputTagVal, allAdmins, errType, errMsg, showError } = this.state;
+            inputTagVal, allAdmins, errType, errMsg, showError, isDisabled } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -183,10 +185,11 @@ class AddBlogModal extends Component {
             <Modal
                 title="Add Blog"
                 visible={showAddBlogModal}
-                onOk={this._addBlog}
-                onCancel={this._closeAddBlogModal}
                 confirmLoading={loader}
-                okText="Add"
+                footer={[
+                    <Button onClick={this._closeAddBlogModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._addBlog}>Add</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Title:</span>

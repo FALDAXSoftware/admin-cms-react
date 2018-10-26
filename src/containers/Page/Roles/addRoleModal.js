@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Checkbox, notification } from 'antd';
+import { Modal, Input, Icon, Spin, Checkbox, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -24,6 +24,7 @@ class AddRoleModal extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -74,6 +75,7 @@ class AddRoleModal extends Component {
         let { fields, user, coin, role, staticPage, announcement, country, employee } = this.state;
 
         if (this.validator.allValid()) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 name: fields["name"],
                 role,
@@ -91,10 +93,14 @@ class AddRoleModal extends Component {
                     this._closeAddRoleModal();
                     getAllRoles();
                     this._resetAddForm();
-                    this.setState({ errType: 'Success', errMsg: true, errMessage: res.message });
+                    this.setState({
+                        errType: 'Success', errMsg: true, errMessage: res.message, isDisabled: false
+                    });
                 })
                 .catch(() => {
-                    this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                    this.setState({
+                        errType: 'error', errMsg: true, errMessage: 'Something went wrong', isDisabled: false
+                    });
                     this._resetAddForm();
                 });
         } else {
@@ -125,7 +131,7 @@ class AddRoleModal extends Component {
 
     render() {
         const { loader, showAddRoleModal, fields, all, user, staticPage, announcement,
-            coin, country, role, employee, errMsg, errType
+            coin, country, role, employee, errMsg, errType, isDisabled
         } = this.state;
 
         if (errMsg) {
@@ -136,10 +142,11 @@ class AddRoleModal extends Component {
             <Modal
                 title="Add Role"
                 visible={showAddRoleModal}
-                onOk={this._addRole}
-                onCancel={this._closeAddRoleModal}
                 confirmLoading={loader}
-                okText="Add"
+                footer={[
+                    <Button onClick={this._closeAddRoleModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._addRole}>Add</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Role Name:</span>

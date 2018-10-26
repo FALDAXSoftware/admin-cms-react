@@ -52,7 +52,9 @@ export default class extends Component {
             });
             _this.props.history.push('/signin');
           } else {
-            _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
+            _this.setState({
+              errMsg: true, errMessage: res.err, loader: false, errType: 'error'
+            });
           }
         })
         .catch(() => {
@@ -69,7 +71,7 @@ export default class extends Component {
     const { loader, errMsg, errType } = this.state;
 
     if (errMsg) {
-      this.openNotificationWithIconError(errType);
+      this.openNotificationWithIconError(errType.toLowerCase());
     }
 
     return (

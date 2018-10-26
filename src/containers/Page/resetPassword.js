@@ -39,22 +39,20 @@ export default class extends Component {
       ApiUtils.resetPassword(formData)
         .then((response) => response.json())
         .then(function (res) {
-          if (res) {
-            _this.setState({
-              errMsg: true, errMessage: 'Password reset Successfully', loader: false
-            }, () => {
-              _this.props.history.push('/signin');
-            });
-          } else {
-            _this.setState({ errMsg: true, errMessage: res.message, loader: false });
-          }
+          console.log('res', res)
+          _this.setState({
+            errMsg: true, errMessage: 'Password reset Successfully', loader: false
+          }, () => {
+            // _this.props.history.push('/signin');
+          });
         })
-        .catch(() => {
-          _this.setState({ loader: false });
+        .catch((err) => {
+          console.log('>>>', err)
+          _this.setState({ errMsg: true, errMessage: err.message, loader: false });
         });
     } else {
       if (fields["newPwd"] !== fields["confirmPwd"]) {
-        this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
+        this.state.errors["main"] = "Confirm Password doesn't match.";
         this.setState({ errors, loader: false })
       }
       this.validator.showMessages();
@@ -107,6 +105,7 @@ export default class extends Component {
                   value={fields["confirmPwd"]}
                 />
                 <span style={{ "color": "red" }}>
+                  {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
                   {errors["main"]}
                 </span>
               </div>

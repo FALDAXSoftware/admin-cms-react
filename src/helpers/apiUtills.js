@@ -256,6 +256,7 @@ const ApiUtils = {
                 body: JSON.stringify(form),
             });
         } catch (error) {
+            console.log('>>>>>>>>>>>>>>>>>>>>>>', error)
             console.error(error);
         }
     },

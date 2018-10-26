@@ -8,16 +8,16 @@ import {
 const renderCell = (object, type, key, blog_title = null, authorName = null, tag = null, created = null, desc = null) => {
     const value = object[key];
     const title = object[blog_title];
-    const admin_id = object[authorName];
+    const admin_name = object[authorName];
     const tags = object[tag];
     const created_at = object[created];
     const description = object[desc];
 
     switch (type) {
         case 'DateCell':
-            return DateCell(created_at);
+            return DateCell(value, created_at);
         case 'BlogActionCell':
-            return BlogActionCell(value, title, admin_id, tags, created_at, description);
+            return BlogActionCell(value, title, admin_name, tags, created_at, description);
         default:
             return TextCell(value);
     }
@@ -30,9 +30,9 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'title')
 }, {
     title: <IntlMessages id="blogTable.title.author" />,
-    key: 'admin_id',
+    key: 'admin_name',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'admin_id')
+    render: object => renderCell(object, 'TextCell', 'admin_name')
 }, {
     title: <IntlMessages id="blogTable.title.tags" />,
     key: 'tags',
@@ -48,7 +48,7 @@ const columns = [{
     key: 'action',
     width: 200,
     render: object => renderCell(object,
-        'BlogActionCell', 'id', 'title', 'admin_id', 'tags', 'created_at', 'description')
+        'BlogActionCell', 'id', 'title', 'admin_name', 'tags', 'created_at', 'description')
 }];
 
 const blogsTableInfos = [

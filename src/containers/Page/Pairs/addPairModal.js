@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Select, notification } from 'antd';
+import { Modal, Input, Icon, Spin, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -20,7 +20,8 @@ class AddPairModal extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            name: ''
+            name: '',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -67,6 +68,7 @@ class AddPairModal extends Component {
         let { fields, selectedCoin1, selectedCoin2, name } = this.state;
 
         if (this.validator.allValid()) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 name: name,
                 coin_code1: selectedCoin1,
@@ -81,10 +83,16 @@ class AddPairModal extends Component {
                     this._closeAddPairsModal();
                     getAllPairs();
                     this._resetAddForm();
-                    this.setState({ errType: 'Success', errMsg: true, errMessage: res.message })
+                    this.setState({
+                        errType: 'Success', errMsg: true, errMessage: res.message,
+                        isDisabled: false, loader: false
+                    })
                 })
                 .catch(() => {
-                    this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                    this.setState({
+                        errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                        isDisabled: false, loader: false
+                    });
                     this._resetAddForm();
                 });
         } else {
@@ -97,14 +105,14 @@ class AddPairModal extends Component {
         if (field === 'coin_id1') {
             this.setState({ selectedCoin1: value, name: value })
         } else {
-            console.log('>>>', this.state.name + '-' + value)
+            //console.log('>>>', this.state.name + '-' + value)
             this.setState({ selectedCoin2: value, name: this.state.name + '-' + value })
         }
     }
 
     render() {
         const { loader, showAddPairsModal, fields, name,
-            allCoins, errType, errMsg, } = this.state;
+            allCoins, errType, errMsg, isDisabled } = this.state;
 
         let coinOptions = allCoins.map((coin) => {
             return (
@@ -120,10 +128,11 @@ class AddPairModal extends Component {
             <Modal
                 title="Add Pair"
                 visible={showAddPairsModal}
-                onOk={this._addPairs}
-                onCancel={this._closeAddPairsModal}
                 confirmLoading={loader}
-                okText="Add"
+                footer={[
+                    <Button onClick={this._closeAddPairsModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._addPairs}>Add</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Pair Name:</span>

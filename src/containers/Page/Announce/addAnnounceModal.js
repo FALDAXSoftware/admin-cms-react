@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -19,7 +19,8 @@ class AddAnnounceModal extends Component {
             editorContent: '',
             notifyMsg: '',
             notify: false,
-            showError: false
+            showError: false,
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -82,6 +83,7 @@ class AddAnnounceModal extends Component {
         let pageContent = striptags(editorContent);
 
         if (this.validator.allValid() && pageContent.length > 0) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 name: fields["name"],
                 title: fields["title"],
@@ -96,13 +98,13 @@ class AddAnnounceModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errType: 'Success', notifyMsg: res.error ? res.error : res.message,
-                        notify: true, showError: false
+                        notify: true, showError: false, isDisabled: false
                     });
                 })
                 .catch(error => {
                     this._resetAddForm();
                     error && this.setState({
-                        showError: false, errType: 'error',
+                        showError: false, errType: 'error', isDisabled: false,
                         notifyMsg: 'Something went wrong!!', notify: true
                     });
                 });
@@ -119,7 +121,7 @@ class AddAnnounceModal extends Component {
 
     render() {
         const { loader, showAddEmailModal, editorContent, fields, notify,
-            errType, showError } = this.state;
+            errType, showError, isDisabled } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -136,10 +138,11 @@ class AddAnnounceModal extends Component {
             <Modal
                 title="Add New Announcement"
                 visible={showAddEmailModal}
-                onOk={this._addAnnouncement}
-                onCancel={this._closeAddPageModal}
                 confirmLoading={loader}
-                okText="Add"
+                footer={[
+                    <Button onClick={this._closeAddPageModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._addAnnouncement}>Add</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Name:</span>

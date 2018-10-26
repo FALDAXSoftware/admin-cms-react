@@ -40,7 +40,7 @@ class ViewBlogModal extends Component {
 
                 <span> <b>Author:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {fields.admin_id}
+                    {fields.admin_name}
                 </p>
 
                 <span> <b>Created On:</b> </span>

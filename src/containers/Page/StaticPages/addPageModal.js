@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Spin, Icon } from 'antd';
+import { Modal, Input, notification, Spin, Icon, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -22,7 +22,8 @@ class AddPageModal extends Component {
             notifyMsg: '',
             notify: false,
             errType: 'Success',
-            showError: false
+            showError: false,
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -85,7 +86,7 @@ class AddPageModal extends Component {
         let pageContent = striptags(editorContent);
 
         if (this.validator.allValid() && pageContent.length > 0) {
-            this.setState({ loader: true })
+            this.setState({ loader: true, isDisabled: true })
             let formData = {
                 name: fields["name"],
                 title: fields["title"],
@@ -100,14 +101,14 @@ class AddPageModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errType: 'success', notifyMsg: res.error ? res.error : res.message,
-                        notify: true, loader: false, showError: false
+                        notify: true, loader: false, showError: false, isDisabled: false
                     });
                 })
                 .catch(error => {
                     this._resetAddForm();
                     error && this.setState({
                         errType: 'error', notifyMsg: 'Something went wrong!!',
-                        notify: true, loader: false, showError: false
+                        notify: true, loader: false, showError: false, isDisabled: false
                     });
                 });
         } else {
@@ -123,7 +124,7 @@ class AddPageModal extends Component {
 
     render() {
         const { loader, showAddPageModal, editorContent, fields, notify,
-            errType, showError } = this.state;
+            errType, showError, isDisabled } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -140,10 +141,11 @@ class AddPageModal extends Component {
             <Modal
                 title="Add Page"
                 visible={showAddPageModal}
-                onOk={this._addPage}
-                onCancel={this._closeAddPageModal}
                 confirmLoading={loader}
-                okText="Add"
+                footer={[
+                    <Button onClick={this._closeAddPageModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._addPage}>Add</Button>,
+                ]}
             >
 
                 <div style={{ "marginBottom": "15px" }}>
