@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -21,7 +21,8 @@ class EditPageModal extends Component {
             editorContent: '',
             message: '',
             errMsg: false,
-            errType: 'Success'
+            errType: 'Success',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -92,7 +93,7 @@ class EditPageModal extends Component {
         let pageContent = striptags(editorContent);
 
         if (this.validator.allValid() && pageContent.length > 0) {
-            this.setState({ loader: true })
+            this.setState({ loader: true, isDisabled: true })
             let formData = {
                 id: fields["value"],
                 title: fields["title"],
@@ -108,13 +109,13 @@ class EditPageModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         loader: false, errMsg: true, message: res.message,
-                        errType: 'Success', showError: false
+                        errType: 'Success', showError: false, isDisabled: false
                     })
                 })
                 .catch(() => {
                     this.setState({
                         loader: false, errMsg: true, showError: false,
-                        message: 'Something went wrong!!', errType: 'error'
+                        message: 'Something went wrong!!', errType: 'error', isDisabled: false
                     })
                     this._resetAddForm();
                 });
@@ -127,7 +128,7 @@ class EditPageModal extends Component {
 
     render() {
         const { loader, showEditPageModal, editorContent, fields, errType,
-            errMsg, showError } = this.state;
+            errMsg, showError, isDisabled } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -144,10 +145,12 @@ class EditPageModal extends Component {
             <Modal
                 title="Edit Page"
                 visible={showEditPageModal}
-                onOk={this._editPage}
                 onCancel={this._closeEditPageModal}
                 confirmLoading={loader}
-                okText="Update"
+                footer={[
+                    <Button onClick={this._closeEditPageModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._editPage}>Update</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Page Name:</span>

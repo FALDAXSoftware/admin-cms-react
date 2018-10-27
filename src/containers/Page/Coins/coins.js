@@ -88,7 +88,7 @@ class Coins extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllCoins(0);
+        this._getAllCoins(1);
     }
 
     openNotificationWithIconError = (type) => {
@@ -125,7 +125,7 @@ class Coins extends Component {
 
     _searchCoin = (val) => {
         this.setState({ searchCoin: val }, () => {
-            this._getAllCoins(0);
+            this._getAllCoins(1);
         });
     }
 

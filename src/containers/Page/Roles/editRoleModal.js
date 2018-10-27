@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Checkbox } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Checkbox, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -23,7 +23,8 @@ class EditRoleModal extends Component {
             announcement: false,
             country: false,
             employee: false,
-            all: true
+            all: true,
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -80,7 +81,7 @@ class EditRoleModal extends Component {
         } = this.state;
 
         if (this.validator.allValid()) {
-            this.setState({ loader: true });
+            this.setState({ loader: true, isDisabled: true });
 
             let formData = {
                 id: fields["value"],
@@ -97,13 +98,19 @@ class EditRoleModal extends Component {
             ApiUtils.updateRole(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'Success' });
+                    this.setState({
+                        errMsg: true, errMessage: res.message, loader: false, errType: 'Success',
+                        isDisabled: false
+                    });
                     this._closeEditRoleModal();
                     getAllRoles();
                     this._resetForm();
                 })
-                .catch(error => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                .catch(() => {
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!', loader: false,
+                        errType: 'error', isDisabled: false
+                    });
                 });
         } else {
             this.validator.showMessages();
@@ -151,7 +158,7 @@ class EditRoleModal extends Component {
 
     render() {
         const { loader, showEditRoleModal, fields, errMsg, errType, coin, user,
-            staticPage, announcement, country, role, employee, all
+            staticPage, announcement, country, role, employee, all, isDisabled
         } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -162,16 +169,18 @@ class EditRoleModal extends Component {
                 <Modal
                     title="Edit Role"
                     visible={showEditRoleModal}
-                    onOk={this._editRole}
                     onCancel={this._closeEditRoleModal}
                     confirmLoading={loader}
-                    okText="Update"
+                    footer={[
+                        <Button onClick={this._closeEditRoleModal}>Cancel</Button>,
+                        <Button disabled={isDisabled} onClick={this._editRole}>Update</Button>,
+                    ]}
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Role Name:</span>
                         <Input placeholder="Role Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                            {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
                         </span>
                     </div>
 
@@ -186,7 +195,6 @@ class EditRoleModal extends Component {
                         <Checkbox checked={role} onChange={this.onChange.bind(this, 'role')}>Roles Module</Checkbox><br />
                         <Checkbox checked={employee} onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />
                     </div>
-
                     {loader && <Spin indicator={loaderIcon} />}
                 </Modal>
             </div>

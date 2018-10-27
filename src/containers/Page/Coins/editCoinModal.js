@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -22,7 +22,8 @@ class EditCoinModal extends Component {
             errMessage: '',
             errType: 'Success',
             editorContent: '',
-            showError: false
+            showError: false,
+            isDisabled: false,
         }
         this.validator = new SimpleReactValidator();
 
@@ -94,7 +95,7 @@ class EditCoinModal extends Component {
         let coinContent = striptags(editorContent);
 
         if (this.validator.allValid() && coinContent.length > 0) {
-            this.setState({ loader: true });
+            this.setState({ loader: true, isDisabled: true });
 
             let formData = {
                 coin_id: fields["value"],
@@ -109,7 +110,7 @@ class EditCoinModal extends Component {
                 .then((res) => {
                     this.setState({
                         errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', showError: false
+                        errType: 'Success', showError: false, isDisabled: false
                     });
                     this._closeEditCoinModal();
                     getAllCoins();
@@ -118,7 +119,7 @@ class EditCoinModal extends Component {
                 .catch(() => {
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
-                        loader: false, errType: 'error', showError: false
+                        loader: false, errType: 'error', showError: false, isDisabled: false
                     });
                 });
         } else {
@@ -130,7 +131,7 @@ class EditCoinModal extends Component {
 
     render() {
         const { loader, showEditCoinModal, fields, errMsg, errType, editorContent,
-            showError
+            showError, isDisabled
         } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -149,10 +150,12 @@ class EditCoinModal extends Component {
                 <Modal
                     title="Edit Coin"
                     visible={showEditCoinModal}
-                    onOk={this._editCoin}
                     onCancel={this._closeEditCoinModal}
                     confirmLoading={loader}
-                    okText="Update"
+                    footer={[
+                        <Button onClick={this._closeEditCoinModal}>Cancel</Button>,
+                        <Button disabled={isDisabled} onClick={this._editCoin}>Update</Button>,
+                    ]}
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Coin Name:</span>

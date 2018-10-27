@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Select } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -17,7 +17,8 @@ class EditStateModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            selectedLegality: ''
+            selectedLegality: '',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -64,7 +65,7 @@ class EditStateModal extends Component {
 
 
         if (this.validator.allValid()) {
-            this.setState({ loader: true });
+            this.setState({ loader: true, isDisabled: true });
 
             let formData = {
                 id: fields['value'],
@@ -78,14 +79,18 @@ class EditStateModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     this.setState({
-                        errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        errMsg: true, errMessage: res.message, loader: false,
+                        errType: 'Success', isDisabled: false
                     });
                     this._closeEditStateModal();
                     getAllStates();
                     this._resetForm();
                 })
                 .catch(() => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!',
+                        loader: false, errType: 'error', isDisabled: false
+                    });
                 });
         } else {
             this.validator.showMessages();
@@ -111,7 +116,7 @@ class EditStateModal extends Component {
     }
 
     render() {
-        const { loader, showEditStateModal, fields, errMsg, errType } = this.state;
+        const { loader, showEditStateModal, fields, errMsg, errType, isDisabled } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -127,10 +132,12 @@ class EditStateModal extends Component {
                 <Modal
                     title="Edit State"
                     visible={showEditStateModal}
-                    onOk={this._editState}
                     onCancel={this._closeEditStateModal}
                     confirmLoading={loader}
-                    okText="Update"
+                    footer={[
+                        <Button onClick={this._closeEditStateModal}>Cancel</Button>,
+                        <Button disabled={isDisabled} onClick={this._editState}>Update</Button>,
+                    ]}
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>State Legality:</span><br />
@@ -153,7 +160,7 @@ class EditStateModal extends Component {
                         <span>Color Code:</span>
                         <Input placeholder="Color Code" onChange={this._handleChange.bind(this, "color")} value={fields["color"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('color', fields["color"], 'required', 'text-danger')}
+                            {this.validator.message('color', fields["color"], 'required|max:7', 'text-danger')}
                         </span>
                     </div>
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Select } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -18,7 +18,8 @@ class EditEmployeeModal extends Component {
             errMessage: '',
             errType: 'Success',
             selectedRole: '',
-            allRoles: []
+            allRoles: [],
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -85,7 +86,7 @@ class EditEmployeeModal extends Component {
 
 
         if (this.validator.allValid()) {
-            this.setState({ loader: true });
+            this.setState({ loader: true, isDisabled: true });
 
             let formData = {
                 id: fields["value"],
@@ -96,13 +97,19 @@ class EditEmployeeModal extends Component {
             ApiUtils.editEmployee(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'Success' });
+                    this.setState({
+                        errMsg: true, errMessage: res.message, loader: false,
+                        errType: 'Success', isDisabled: false
+                    });
                     this._closeEditEmpModal();
                     getAllEmployee();
                     this._resetForm();
                 })
-                .catch(error => {
-                    this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                .catch(() => {
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!',
+                        loader: false, errType: 'error', isDisabled: false
+                    });
                 });
         } else {
             this.validator.showMessages();
@@ -116,7 +123,7 @@ class EditEmployeeModal extends Component {
 
     render() {
         const { loader, showEditEmpModal, fields, errMsg, errType,
-            allRoles, selectedRole } = this.state;
+            allRoles, selectedRole, isDisabled } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -132,16 +139,18 @@ class EditEmployeeModal extends Component {
                 <Modal
                     title="Edit Employee"
                     visible={showEditEmpModal}
-                    onOk={this._editEmployee}
                     onCancel={this._closeEditEmpModal}
                     confirmLoading={loader}
-                    okText="Update"
+                    footer={[
+                        <Button onClick={this._closeEditEmpModal}>Cancel</Button>,
+                        <Button disabled={isDisabled} onClick={this._editEmployee}>Update</Button>,
+                    ]}
                 >
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Name:</span>
                         <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                            {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
                         </span>
                     </div>
 

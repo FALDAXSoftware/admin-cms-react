@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -19,7 +19,8 @@ class EditAnnounceModal extends Component {
             editorContent: '',
             errMsg: false,
             errMessage: '',
-            errType: 'Success'
+            errType: 'Success',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -88,6 +89,7 @@ class EditAnnounceModal extends Component {
         let pageContent = striptags(editorContent);
 
         if (this.validator.allValid() && pageContent.length > 0) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 id: fields["value"],
                 title: fields["title"],
@@ -102,14 +104,14 @@ class EditAnnounceModal extends Component {
                     getAnnouncements();
                     this._resetAddForm();
                     this.setState({
-                        errMsg: true, errMessage: res.message,
-                        errType: 'Success', showError: false
+                        errMsg: true, errMessage: res.message, loader: false,
+                        errType: 'Success', showError: false, isDisabled: false
                     })
                 })
                 .catch(() => {
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
-                        loader: false, errType: 'error', showError: false
+                        loader: false, errType: 'error', showError: false, isDisabled: false
                     });
                     this._resetAddForm();
                 });
@@ -123,7 +125,7 @@ class EditAnnounceModal extends Component {
     render() {
         const {
             loader, showEditAnnounceModal, editorContent, fields, errMsg, errType,
-            showError
+            showError, isDisabled
         } = this.state;
         const options = {
             theme: 'snow',
@@ -141,10 +143,12 @@ class EditAnnounceModal extends Component {
             <Modal
                 title="Edit Announcement"
                 visible={showEditAnnounceModal}
-                onOk={this._editAnnounce}
                 onCancel={this._closeEditAnnounce}
                 confirmLoading={loader}
-                okText="Update"
+                footer={[
+                    <Button onClick={this._closeEditAnnounce}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._editAnnounce}>Update</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Name:</span>

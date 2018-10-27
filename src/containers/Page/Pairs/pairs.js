@@ -23,7 +23,7 @@ class Pairs extends Component {
             errType: 'Success',
             pairDetails: [],
             pairsCount: 0,
-            page: 0,
+            page: 1,
             limit: 50,
             allCoins: [],
             showAddPairsModal: false,
@@ -56,7 +56,7 @@ class Pairs extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self._getAllPairs();
-                self.setState({ errType: 'Success', errMsg: true, errMessage: res.message, page: 0 })
+                self.setState({ errType: 'Success', errMsg: true, errMessage: res.message, page: 1 })
             })
             .catch(() => {
                 self.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
@@ -97,7 +97,7 @@ class Pairs extends Component {
     }
 
     _handleFeesPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getAllPairs();
         });
     }

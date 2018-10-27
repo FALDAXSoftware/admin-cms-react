@@ -142,6 +142,7 @@ class AddRoleModal extends Component {
             <Modal
                 title="Add Role"
                 visible={showAddRoleModal}
+                onCancel={this._closeAddRoleModal}
                 confirmLoading={loader}
                 footer={[
                     <Button onClick={this._closeAddRoleModal}>Cancel</Button>,
@@ -152,7 +153,7 @@ class AddRoleModal extends Component {
                     <span>Role Name:</span>
                     <Input placeholder="Role Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
                     </span>
                 </div>
 

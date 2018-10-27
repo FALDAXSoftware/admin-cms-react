@@ -65,7 +65,7 @@ class Users extends Component {
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllUsers(0);
+                self._getAllUsers(1);
                 self.setState({
                     page: 1, errMsg: true, errMessage: res.message, errType: 'Success', loader: false
                 })
@@ -79,7 +79,7 @@ class Users extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllUsers(0);
+        this._getAllUsers(1);
     }
 
     _getAllUsers = (page) => {
@@ -136,7 +136,7 @@ class Users extends Component {
     }
 
     _handleUserPagination = (page) => {
-        this._getAllUsers(page - 1);
+        this._getAllUsers(page);
         this.setState({ page });
     }
 

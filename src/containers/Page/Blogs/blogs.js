@@ -31,7 +31,7 @@ class Blogs extends Component {
             deleteBlogId: '',
             tags: [],
             allAdmins: [],
-            page: 0,
+            page: 1,
             limit: 50,
             BlogCount: 0
         }
@@ -103,7 +103,7 @@ class Blogs extends Component {
                 if (res) {
                     _this.setState({
                         deleteBlogId: '', errType: 'success', errMsg: true,
-                        errMessage: res.message, page: 0
+                        errMessage: res.message, page: 1
                     });
                     _this._closeDeleteBlogModal();
                     _this._getAllBlogs();
@@ -137,7 +137,7 @@ class Blogs extends Component {
     }
 
     _handleBlogPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getAllBlogs();
         });
     }

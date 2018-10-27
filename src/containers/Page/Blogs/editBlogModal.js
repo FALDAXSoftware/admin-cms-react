@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Tag, Tooltip, Select, notification } from 'antd';
+import { Modal, Input, Icon, Spin, Tag, Tooltip, Select, notification, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -27,6 +27,8 @@ class EditBlogModal extends Component {
             notify: false,
             showError: false,
             notifyType: 'Success',
+            showAuthorErr: false,
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -99,7 +101,8 @@ class EditBlogModal extends Component {
         this.setState({ loader: true })
         let blogDescription = striptags(blogDesc);
 
-        if (this.validator.allValid() && blogDescription.length > 0) {
+        if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 id: fields["value"],
                 title: fields["title"],
@@ -116,18 +119,23 @@ class EditBlogModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         blogDesc: '', loader: false, notify: true, notifyType: 'Success',
-                        notifyMsg: res.message, showError: false
+                        notifyMsg: res.message, showError: false, showAuthorErr: false,
+                        isDisabled: false
                     })
                 })
                 .catch(() => {
                     this.setState({
-                        loader: false, notify: true, notifyType: 'error',
-                        notifyMsg: 'Something went wrong!', showError: false
+                        loader: false, notify: true, notifyType: 'error', isDisabled: false,
+                        notifyMsg: 'Something went wrong!', showError: false, showAuthorErr: false
                     })
                     this._resetAddForm();
                 });
         } else {
-            this.setState({ loader: false, showError: blogDescription.length > 0 ? false : true })
+            this.setState({
+                loader: false,
+                showError: blogDescription.length > 0 ? false : true,
+                showAuthorErr: selectedAuthor.length > 0 ? false : true,
+            })
             this.validator.showMessages();
             this.forceUpdate();
         }
@@ -164,7 +172,9 @@ class EditBlogModal extends Component {
 
     render() {
         const { loader, showEditBlogModal, fields, blogDesc, tags, inputVisible,
-            inputTagVal, notify, notifyType, selectedAuthor, allAdmins, showError } = this.state;
+            inputTagVal, notify, notifyType, selectedAuthor, allAdmins, showError,
+            showAuthorErr, isDisabled
+        } = this.state;
 
         const options = {
             theme: 'snow',
@@ -188,10 +198,12 @@ class EditBlogModal extends Component {
             <Modal
                 title="Edit Blog"
                 visible={showEditBlogModal}
-                onOk={this._editBlog}
                 onCancel={this._closeEditBlogModal}
                 confirmLoading={loader}
-                okText="Update"
+                footer={[
+                    <Button onClick={this._closeEditBlogModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._editBlog}>Update</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Title:</span>
@@ -210,7 +222,10 @@ class EditBlogModal extends Component {
                         defaultValue={selectedAuthor}
                     >
                         {authorOptions}
-                    </Select>
+                    </Select><br />
+                    {showAuthorErr && <span style={{ "color": "red" }}>
+                        {'The author field is required.'}
+                    </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

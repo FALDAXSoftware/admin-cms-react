@@ -16,7 +16,8 @@ class AddEmployeeModal extends Component {
             fields: {},
             allRoles: [],
             selectedRole: '',
-            isDisabled: false
+            isDisabled: false,
+            showRoleErr: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -79,7 +80,7 @@ class AddEmployeeModal extends Component {
         const { token, getAllEmployee } = this.props;
         let { fields, selectedRole } = this.state;
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && selectedRole) {
             let formData = {
                 name: fields["name"],
                 email: fields["email"],
@@ -94,7 +95,7 @@ class AddEmployeeModal extends Component {
                     getAllEmployee();
                     this._resetAddForm();
                     this.setState({
-                        errMsg: true, errMessage: res.message,
+                        errMsg: true, errMessage: res.message, showRoleErr: false,
                         errType: 'Success', loader: false, isDisabled: false
                     })
                 })
@@ -105,17 +106,21 @@ class AddEmployeeModal extends Component {
                     });
                 });
         } else {
+            this.setState({ showRoleErr: selectedRole ? false : true })
             this.validator.showMessages();
             this.forceUpdate();
         }
     }
 
     _changeRole = (value) => {
-        this.setState({ selectedRole: value })
+        this.setState({ selectedRole: value }, () => {
+            this.setState({ showRoleErr: this.state.selectedRole ? false : true });
+        })
     }
 
     render() {
-        const { loader, showAddEmpModal, fields, allRoles, errType, errMsg, isDisabled } = this.state;
+        const { loader, showAddEmpModal, fields, allRoles, errType, errMsg,
+            isDisabled, showRoleErr } = this.state;
 
         let options = allRoles.map((role) => {
             return (
@@ -132,6 +137,7 @@ class AddEmployeeModal extends Component {
                 title="Add Employee"
                 visible={showAddEmpModal}
                 confirmLoading={loader}
+                onCancel={this._closeAddEmpModal}
                 footer={[
                     <Button onClick={this._closeAddEmpModal}>Cancel</Button>,
                     <Button disabled={isDisabled} onClick={this._addEmployee}>Add</Button>,
@@ -141,7 +147,7 @@ class AddEmployeeModal extends Component {
                     <span>Name:</span>
                     <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
                     </span>
                 </div>
 
@@ -161,7 +167,10 @@ class AddEmployeeModal extends Component {
                         onChange={this._changeRole}
                     >
                         {options}
-                    </Select>
+                    </Select><br />
+                    {showRoleErr && <span style={{ "color": "red" }}>
+                        {'The role field is required.'}
+                    </span>}
                 </div>
 
                 {loader && <Spin indicator={loaderIcon} />}

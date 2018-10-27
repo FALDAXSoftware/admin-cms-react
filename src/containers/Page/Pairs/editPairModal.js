@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification } from 'antd';
+import { Modal, Input, Icon, Spin, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -16,6 +16,7 @@ class EditPairModal extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
+            isDisabled: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -63,6 +64,7 @@ class EditPairModal extends Component {
         let { fields } = this.state;
 
         if (this.validator.allValid()) {
+            this.setState({ loader: true, isDisabled: true });
             let formData = {
                 id: fields["value"],
                 name: fields["name"],
@@ -78,10 +80,16 @@ class EditPairModal extends Component {
                     this._closeEditPairModal();
                     getAllPairs();
                     this._resetEditForm();
-                    this.setState({ errType: 'Success', errMsg: true, errMessage: res.message })
+                    this.setState({
+                        errType: 'Success', errMsg: true, errMessage: res.message,
+                        isDisabled: false, loader: false
+                    })
                 })
                 .catch(() => {
-                    this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                    this.setState({
+                        errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                        isDisabled: false, loader: false
+                    });
                     this._resetEditForm();
                 });
         } else {
@@ -91,7 +99,7 @@ class EditPairModal extends Component {
     }
 
     render() {
-        const { loader, showEditPairModal, fields, errType, errMsg, } = this.state;
+        const { loader, showEditPairModal, fields, errType, errMsg, isDisabled } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -101,10 +109,12 @@ class EditPairModal extends Component {
             <Modal
                 title="Edit Pair"
                 visible={showEditPairModal}
-                onOk={this._editPair}
                 onCancel={this._closeEditPairModal}
                 confirmLoading={loader}
-                okText="Update"
+                footer={[
+                    <Button onClick={this._closeEditPairModal}>Cancel</Button>,
+                    <Button disabled={isDisabled} onClick={this._editPair}>Update</Button>,
+                ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Pair Name:</span>

@@ -21,7 +21,10 @@ class AddPairModal extends Component {
             errMsg: false,
             errType: 'Success',
             name: '',
-            isDisabled: false
+            isDisabled: false,
+            showCoin1Err: false,
+            showCoin2Err: false,
+            showError: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -67,7 +70,7 @@ class AddPairModal extends Component {
         const { token, getAllPairs } = this.props;
         let { fields, selectedCoin1, selectedCoin2, name } = this.state;
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && selectedCoin1 && selectedCoin2 && selectedCoin1 !== selectedCoin2) {
             this.setState({ loader: true, isDisabled: true });
             let formData = {
                 name: name,
@@ -96,6 +99,11 @@ class AddPairModal extends Component {
                     this._resetAddForm();
                 });
         } else {
+            this.setState({
+                showCoin1Err: selectedCoin1.length > 0 ? false : true,
+                showCoin2Err: selectedCoin2.length > 0 ? false : true,
+                showError: selectedCoin1 == selectedCoin2 ? true : false
+            })
             this.validator.showMessages();
             this.forceUpdate();
         }
@@ -103,16 +111,20 @@ class AddPairModal extends Component {
 
     _changeCoin = (field, value) => {
         if (field === 'coin_id1') {
-            this.setState({ selectedCoin1: value, name: value })
+            this.setState({ selectedCoin1: value, name: value }, () => {
+                this.setState({ showCoin1Err: this.state.selectedCoin1 ? false : true });
+            })
         } else {
             //console.log('>>>', this.state.name + '-' + value)
-            this.setState({ selectedCoin2: value, name: this.state.name + '-' + value })
+            this.setState({ selectedCoin2: value, name: this.state.name + '-' + value }, () => {
+                this.setState({ showCoin2Err: this.state.selectedCoin2 ? false : true });
+            })
         }
     }
 
     render() {
-        const { loader, showAddPairsModal, fields, name,
-            allCoins, errType, errMsg, isDisabled } = this.state;
+        const { loader, showAddPairsModal, fields, name, showError,
+            allCoins, errType, errMsg, isDisabled, showCoin1Err, showCoin2Err } = this.state;
 
         let coinOptions = allCoins.map((coin) => {
             return (
@@ -129,6 +141,7 @@ class AddPairModal extends Component {
                 title="Add Pair"
                 visible={showAddPairsModal}
                 confirmLoading={loader}
+                onCancel={this._closeAddPairsModal}
                 footer={[
                     <Button onClick={this._closeAddPairsModal}>Cancel</Button>,
                     <Button disabled={isDisabled} onClick={this._addPairs}>Add</Button>,
@@ -147,7 +160,10 @@ class AddPairModal extends Component {
                         onChange={this._changeCoin.bind(this, 'coin_id1')}
                     >
                         {coinOptions}
-                    </Select>
+                    </Select><br />
+                    {showCoin1Err && <span style={{ "color": "red" }}>
+                        {'The coin 1 field is required.'}
+                    </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
@@ -158,8 +174,14 @@ class AddPairModal extends Component {
                         onChange={this._changeCoin.bind(this, 'coin_id2')}
                     >
                         {coinOptions}
-                    </Select>
+                    </Select><br />
+                    {showCoin2Err && <span style={{ "color": "red" }}>
+                        {'The coin 2 field is required.'}
+                    </span>}
                 </div>
+                {showError && <span style={{ "color": "red" }}>
+                    {'The coin 1 & coin 2 field can not be same.'}
+                </span>}
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Maker Fee:</span>

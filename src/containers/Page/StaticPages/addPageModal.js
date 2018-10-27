@@ -142,6 +142,7 @@ class AddPageModal extends Component {
                 title="Add Page"
                 visible={showAddPageModal}
                 confirmLoading={loader}
+                onCancel={this._closeAddPageModal}
                 footer={[
                     <Button onClick={this._closeAddPageModal}>Cancel</Button>,
                     <Button disabled={isDisabled} onClick={this._addPage}>Add</Button>,

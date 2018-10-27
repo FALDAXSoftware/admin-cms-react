@@ -146,7 +146,7 @@ class StateList extends Component {
                                         fields={stateDetails}
                                         showEditStateModal={showEditStateModal}
                                         closeEditStateModal={this._closeEditStateModal}
-                                        getAllStates={this._getAllStates.bind(this, 0)}
+                                        getAllStates={this._getAllStates.bind(this, 1)}
                                     />
                                 </div>
                             </TabPane>

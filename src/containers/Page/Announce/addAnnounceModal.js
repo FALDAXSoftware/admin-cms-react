@@ -139,6 +139,7 @@ class AddAnnounceModal extends Component {
                 title="Add New Announcement"
                 visible={showAddEmailModal}
                 confirmLoading={loader}
+                onCancel={this._closeAddPageModal}
                 footer={[
                     <Button onClick={this._closeAddPageModal}>Cancel</Button>,
                     <Button disabled={isDisabled} onClick={this._addAnnouncement}>Add</Button>,

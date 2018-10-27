@@ -29,7 +29,8 @@ class AddBlogModal extends Component {
             errMsg: false,
             errType: 'Success',
             showError: false,
-            isDisabled: false
+            isDisabled: false,
+            showAuthorErr: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -97,7 +98,7 @@ class AddBlogModal extends Component {
         let { fields, blogDesc, tags, selectedAuthor } = this.state;
         let blogDescription = striptags(blogDesc);
 
-        if (this.validator.allValid() && blogDescription.length > 0) {
+        if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor) {
             this.setState({ loader: true, isDisabled: true });
             let formData = {
                 title: fields["title"],
@@ -113,21 +114,24 @@ class AddBlogModal extends Component {
                     getAllBlogs();
                     this._resetAddForm();
                     this.setState({
-                        blogDesc: '', errType: 'Success', errMsg: true,
-                        errMessage: res.message, showError: false, isDisabled: false
+                        blogDesc: '', errType: 'Success', errMsg: true, loader: false,
+                        errMessage: res.message, showError: false, isDisabled: false,
                     })
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true, isDisabled: false,
-                        errMessage: 'Something went wrong', showError: false
+                        errType: 'error', errMsg: true, isDisabled: false, loader: false,
+                        errMessage: 'Something went wrong', showError: false,
                     });
                     this._resetAddForm();
                 });
         } else {
             this.validator.showMessages();
             this.forceUpdate();
-            this.setState({ showError: blogDescription.length > 0 ? false : true })
+            this.setState({
+                showError: blogDescription.length > 0 ? false : true,
+                showAuthorErr: selectedAuthor.length > 0 ? false : true,
+            })
         }
     }
 
@@ -157,12 +161,16 @@ class AddBlogModal extends Component {
     saveInputRef = input => this.input = input;
 
     _changeAuthor = (value) => {
-        this.setState({ selectedAuthor: value })
+        this.setState({ selectedAuthor: value }, () => {
+            this.setState({ showAuthorErr: this.state.selectedAuthor ? false : true });
+        })
     }
 
     render() {
         const { loader, showAddBlogModal, fields, blogDesc, tags, inputVisible,
-            inputTagVal, allAdmins, errType, errMsg, showError, isDisabled } = this.state;
+            inputTagVal, allAdmins, errType, errMsg, showError, isDisabled,
+            showAuthorErr
+        } = this.state;
         const options = {
             theme: 'snow',
             placeholder: 'Write Something',
@@ -186,6 +194,7 @@ class AddBlogModal extends Component {
                 title="Add Blog"
                 visible={showAddBlogModal}
                 confirmLoading={loader}
+                onCancel={this._closeAddBlogModal}
                 footer={[
                     <Button onClick={this._closeAddBlogModal}>Cancel</Button>,
                     <Button disabled={isDisabled} onClick={this._addBlog}>Add</Button>,
@@ -207,7 +216,10 @@ class AddBlogModal extends Component {
                         onChange={this._changeAuthor}
                     >
                         {authorOptions}
-                    </Select>
+                    </Select> <br />
+                    {showAuthorErr && <span style={{ "color": "red" }}>
+                        {'The author field is required.'}
+                    </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

@@ -53,7 +53,7 @@ class Countries extends Component {
                     errMsg: true, errMessage: res.message, errType: 'Success',
                     loader: false, page: 1
                 })
-                self._getAllCountries(0);
+                self._getAllCountries(1);
             })
             .catch(() => {
                 self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
@@ -70,7 +70,7 @@ class Countries extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllCountries(0);
+        this._getAllCountries(1);
     }
 
     openNotificationWithIconError = (type) => {
@@ -110,12 +110,12 @@ class Countries extends Component {
 
     _searchCountry = (val) => {
         this.setState({ searchCountry: val, page: 1, loader: true }, () => {
-            this._getAllCountries(0);
+            this._getAllCountries(1);
         });
     }
 
     _handleCoinPagination = (page) => {
-        this._getAllCountries(page - 1);
+        this._getAllCountries(page);
         this.setState({ page })
     }
 
@@ -156,7 +156,7 @@ class Countries extends Component {
                                         fields={countryDetails}
                                         showEditCountryModal={showEditCountryModal}
                                         closeEditCountryModal={this._closeEditCountryModal}
-                                        getAllCountry={this._getAllCountries.bind(this, 0)}
+                                        getAllCountry={this._getAllCountries.bind(this, 1)}
                                     />
                                     <Pagination
                                         style={{ marginTop: '15px' }}

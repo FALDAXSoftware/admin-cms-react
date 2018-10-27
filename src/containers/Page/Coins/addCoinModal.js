@@ -149,6 +149,7 @@ class AddCoinModal extends Component {
                 title="Add Coin"
                 visible={showAddCoinModal}
                 confirmLoading={loader}
+                onCancel={this._closeAddCoinModal}
                 footer={[
                     <Button onClick={this._closeAddCoinModal}>Cancel</Button>,
                     <Button disabled={isDisabled} onClick={this._addCoin}>Add</Button>,
