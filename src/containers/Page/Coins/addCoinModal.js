@@ -84,7 +84,7 @@ class AddCoinModal extends Component {
         fields['description'] = '';
         fields['limit'] = '';
         fields['wallet_address'] = '';
-        this.setState({ fields, editorContent: '' });
+        this.setState({ fields, editorContent: '', showError: false });
     }
 
     _addCoin = () => {

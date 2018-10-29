@@ -77,7 +77,7 @@ class AddPageModal extends Component {
 
         fields['name'] = '';
         fields['title'] = '';
-        this.setState({ fields, editorContent: '' });
+        this.setState({ fields, editorContent: '', showError: false });
     }
 
     _addPage = () => {
@@ -148,7 +148,6 @@ class AddPageModal extends Component {
                     <Button disabled={isDisabled} onClick={this._addPage}>Add</Button>,
                 ]}
             >
-
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Page Name:</span>
                     <Input placeholder="Page Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
@@ -161,7 +160,7 @@ class AddPageModal extends Component {
                     <span>Title:</span>
                     <Input placeholder="Title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('title', fields["title"], 'required', 'text-danger')}
+                        {this.validator.message('title', fields["title"], 'required|max:30', 'text-danger')}
                     </span>
                 </div>
 

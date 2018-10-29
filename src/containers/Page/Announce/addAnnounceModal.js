@@ -74,7 +74,7 @@ class AddAnnounceModal extends Component {
 
         fields['name'] = '';
         fields['title'] = '';
-        this.setState({ fields, editorContent: '' });
+        this.setState({ fields, editorContent: '', showError: false });
     }
 
     _addAnnouncement = () => {

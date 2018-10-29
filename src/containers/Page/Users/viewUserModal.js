@@ -33,6 +33,7 @@ class ViewUserModal extends Component {
             <Modal
                 title="View User"
                 visible={showViewUserModal}
+                onCancel={this._closeViewUserModal}
                 footer={[
                     <Button onClick={this._closeViewUserModal}>OK</Button>,
                 ]}
@@ -42,42 +43,42 @@ class ViewUserModal extends Component {
 
                 <span> <b>First Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.first_name}
+                    {userDetails.first_name ? userDetails.first_name : 'NA'}
                 </p>
 
                 <span> <b>Last Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.last_name}
+                    {userDetails.last_name ? userDetails.last_name : 'NA'}
                 </p>
 
                 <span> <b>Email:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.email}
+                    {userDetails.email ? userDetails.email : 'NA'}
                 </p>
 
                 <span> <b>Street Address 1:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.street_address}
+                    {userDetails.street_address ? userDetails.street_address : 'NA'}
                 </p>
 
                 <span> <b>Street Address 2:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.street_address_2}
+                    {userDetails.street_address_2 ? userDetails.street_address_2 : 'NA'}
                 </p>
 
                 <span> <b>City:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.city_town}
+                    {userDetails.city_town ? userDetails.city_town : 'NA'}
                 </p>
 
                 <span> <b>Country:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.country}
+                    {userDetails.country ? userDetails.country : 'NA'}
                 </p>
 
                 <span> <b>Date Of Birth:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.dob}
+                    {userDetails.dob ? userDetails.dob : 'NA'}
                 </p>
 
                 {/* <span> <b>Phone Number:</b> </span>

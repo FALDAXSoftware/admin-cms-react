@@ -70,7 +70,7 @@ class Coins extends Component {
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllCoins(0);
+                self._getAllCoins(1);
                 self.setState({
                     page: 1, errMsg: true, errMessage: res.message,
                     errType: 'Success', loader: false
@@ -84,7 +84,7 @@ class Coins extends Component {
     }
 
     static deleteCoin(value) {
-        this.setState({ showDeleteCoinModal: true, deleteCoinId: value });
+        self.setState({ showDeleteCoinModal: true, deleteCoinId: value });
     }
 
     componentDidMount = () => {
@@ -164,7 +164,7 @@ class Coins extends Component {
                         deleteCoinId: '', showDeleteCoinModal: false,
                         errMessage: res.message, errMsg: true
                     });
-                    _this._getAllCoins(0);
+                    _this._getAllCoins(1);
                 } else {
                     _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
                 }
@@ -200,7 +200,7 @@ class Coins extends Component {
                                     <AddCoinModal
                                         showAddCoinModal={showAddCoinModal}
                                         closeAddModal={this._closeAddCoinModal}
-                                        getAllCoins={this._getAllCoins.bind(this, 0)}
+                                        getAllCoins={this._getAllCoins.bind(this, 1)}
                                     />
                                     <Search
                                         placeholder="Search coins"
@@ -222,13 +222,14 @@ class Coins extends Component {
                                         fields={coinDetails}
                                         showEditCoinModal={showEditCoinModal}
                                         closeEditCoinModal={this._closeEditCoinModal}
-                                        getAllCoins={this._getAllCoins.bind(this, 0)}
+                                        getAllCoins={this._getAllCoins.bind(this, 1)}
                                     />
                                     {
                                         showDeleteCoinModal &&
                                         <Modal
                                             title="Delete Coin"
                                             visible={showDeleteCoinModal}
+                                            onCancel={this._closeDeleteCoinModal}
                                             footer={[
                                                 <Button onClick={this._closeDeleteCoinModal}>No</Button>,
                                                 <Button onClick={this._deleteCoin}>Yes</Button>,

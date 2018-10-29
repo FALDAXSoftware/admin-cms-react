@@ -83,7 +83,7 @@
     "rich-marker": "^0.0.1",
     "simple-react-validator": "0.0.8",
     "smooth-scrollbar": "^8.2.5",
-    "striptags": "^3.1.1",
+    "striptags": "2.2.1",
     "styled-components": "^2.2.1",
     "styled-theme": "^0.3.3",
     "uppy": "0.18.0"

@@ -131,7 +131,7 @@ class Users extends Component {
 
     _searchUser = (val) => {
         this.setState({ searchUser: val, page: 1 }, () => {
-            this._getAllUsers(0);
+            this._getAllUsers(1);
         });
     }
 

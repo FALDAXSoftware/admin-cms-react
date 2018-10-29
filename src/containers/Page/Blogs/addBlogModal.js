@@ -90,7 +90,10 @@ class AddBlogModal extends Component {
         const { fields } = this.state;
 
         fields['title'] = '';
-        this.setState({ fields, selectedAuthor: '', blogDesc: '' });
+        this.setState({
+            fields, selectedAuthor: '', blogDesc: '', showError: false,
+            showAuthorErr: false
+        });
     }
 
     _addBlog = () => {

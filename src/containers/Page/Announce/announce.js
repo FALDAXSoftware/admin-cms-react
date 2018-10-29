@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Modal, notification } from 'antd';
+import { Tabs, Button, Modal, notification, Spin } from 'antd';
 import { AnnounceInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -64,13 +64,20 @@ class Announce extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    self.setState({ notifyMsg: res.message, notify: true, loader: false });
+                    self.setState({
+                        notifyMsg: res.message, notify: true, loader: false, errType: 'Success'
+                    });
                 } else {
-                    self.setState({ notify: true, notifyMsg: 'Something went wrong!', loader: false });
+                    self.setState({
+                        notify: true, notifyMsg: 'Something went wrong!', loader: false,
+                        errType: 'Success'
+                    });
                 }
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                self.setState({
+                    notifyMsg: 'Something went wrong!', notify: true, errType: 'error', loader: false
+                });
             });
     }
 
@@ -149,7 +156,7 @@ class Announce extends Component {
 
     render() {
         const { allAnnounces, showAddEmailModal, emailDetails, showViewAnnounceModal,
-            showEditAnnounceModal, showDeleteAnnounceModal, notify, errType
+            showEditAnnounceModal, showDeleteAnnounceModal, notify, errType, loader
         } = this.state;
 
         if (notify) {
@@ -193,6 +200,7 @@ class Announce extends Component {
                                     <Modal
                                         title="Delete Announcement"
                                         visible={showDeleteAnnounceModal}
+                                        onCancel={this._closeDeleteAnnounceModal}
                                         footer={[
                                             <Button onClick={this._closeDeleteAnnounceModal}>No</Button>,
                                             <Button onClick={this._deleteAnnounce}>Yes</Button>,
@@ -201,6 +209,9 @@ class Announce extends Component {
                                         Are you sure you want to delete this announcement ?
                                     </Modal>
                                 }
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                             </TabPane>
                         ))}
                     </Tabs>

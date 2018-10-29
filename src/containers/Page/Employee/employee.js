@@ -188,6 +188,7 @@ class Employees extends Component {
                                     {showDeleteEmpModal &&
                                         <Modal
                                             title="Delete Employee"
+                                            onCancel={this._closeDeleteEmpModal}
                                             visible={showDeleteEmpModal}
                                             footer={[
                                                 <Button onClick={this._closeDeleteEmpModal}>No</Button>,

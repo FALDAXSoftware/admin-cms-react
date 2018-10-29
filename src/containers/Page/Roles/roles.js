@@ -195,6 +195,7 @@ class Roles extends Component {
                                         <Modal
                                             title="Delete Role"
                                             visible={showDeleteRoleModal}
+                                            onCancel={this._closeDeleteRoleModal}
                                             footer={[
                                                 <Button onClick={this._closeDeleteRoleModal}>No</Button>,
                                                 <Button onClick={this._deleteRole}>Yes</Button>,

@@ -61,6 +61,7 @@ class Countries extends Component {
     }
 
     static editCountry(value, name, legality, color, is_active) {
+        console.log('value, name, legality, color, is_active', value, name, legality, color, is_active)
         let countryDetails = { value, name, legality, color, is_active };
         self.setState({ showEditCountryModal: true, countryDetails, page: 1 })
     }
@@ -105,7 +106,8 @@ class Countries extends Component {
     }
 
     _closeEditCountryModal = () => {
-        this.setState({ showEditCountryModal: false })
+        this.setState({ showEditCountryModal: false, countryDetails: [] })
+
     }
 
     _searchCountry = (val) => {
@@ -152,12 +154,14 @@ class Countries extends Component {
                                         dataSource={allCountries}
                                         className="isoCustomizedTable"
                                     />
-                                    <EditCountryModal
-                                        fields={countryDetails}
-                                        showEditCountryModal={showEditCountryModal}
-                                        closeEditCountryModal={this._closeEditCountryModal}
-                                        getAllCountry={this._getAllCountries.bind(this, 1)}
-                                    />
+                                    {showEditCountryModal &&
+                                        <EditCountryModal
+                                            fields={countryDetails}
+                                            showEditCountryModal={showEditCountryModal}
+                                            closeEditCountryModal={this._closeEditCountryModal}
+                                            getAllCountry={this._getAllCountries.bind(this, 1)}
+                                        />
+                                    }
                                     <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"

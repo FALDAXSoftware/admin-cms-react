@@ -41,17 +41,18 @@ class Blogs extends Component {
         Blogs.deleteBlog = Blogs.deleteBlog.bind(this);
     }
 
-    static editBlog(value, title, admin_name, tags, created_at, description) {
+    static editBlog(value, title, admin_name, tags, created_at, description, admin_id) {
         let blogDetails = {
-            value, title, admin_name, tags, created_at, description
+            value, title, admin_name, tags, created_at, description, admin_id
         }
+        console.log('????????????', blogDetails)
         let tagsArray = tags.split(",");
         self.setState({ showEditBlogModal: true, blogDetails, tags: tagsArray });
     }
 
-    static viewBlog(value, title, admin_name, tags, created_at, description) {
+    static viewBlog(value, title, admin_name, tags, created_at, description, admin_id) {
         let blogDetails = {
-            value, title, admin_name, tags, created_at, description
+            value, title, admin_name, tags, created_at, description, admin_id
         }
         self.setState({ showViewBlogModal: true, blogDetails });
     }
@@ -175,14 +176,16 @@ class Blogs extends Component {
                                         dataSource={allBlogs}
                                         className="isoCustomizedTable"
                                     />
-                                    <EditBlogModal
-                                        allAdmins={allAdmins}
-                                        fields={blogDetails}
-                                        showEditBlogModal={showEditBlogModal}
-                                        closeEditBlogModal={this._closeEditBlogModal}
-                                        getAllBlogs={this._getAllBlogs.bind(this)}
-                                        tags={tags}
-                                    />
+                                    {showEditBlogModal &&
+                                        <EditBlogModal
+                                            allAdmins={allAdmins}
+                                            fields={blogDetails}
+                                            showEditBlogModal={showEditBlogModal}
+                                            closeEditBlogModal={this._closeEditBlogModal}
+                                            getAllBlogs={this._getAllBlogs.bind(this)}
+                                            tags={tags}
+                                        />
+                                    }
                                     <ViewBlogModal
                                         fields={blogDetails}
                                         showViewBlogModal={showViewBlogModal}
@@ -200,6 +203,7 @@ class Blogs extends Component {
                                         <Modal
                                             title="Delete Blog"
                                             visible={showDeleteBlogModal}
+                                            onCancel={this._closeDeleteBlogModal}
                                             footer={[
                                                 <Button onClick={this._closeDeleteBlogModal}>No</Button>,
                                                 <Button onClick={this._deleteBlog}>Yes</Button>,

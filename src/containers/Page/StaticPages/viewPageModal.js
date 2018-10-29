@@ -31,24 +31,27 @@ class ViewPageModal extends Component {
             <Modal
                 title="View Page"
                 visible={showViewPageModal}
+                onCancel={this._closeViewPageModal}
                 footer={[
                     <Button onClick={this._closeViewPageModal}>OK</Button>,
                 ]}
             >
-
                 <span> <b>Page Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {staticPagesDetails.name}
+                    {staticPagesDetails.name ? staticPagesDetails.name : 'NA'}
                 </p>
 
                 <span> <b>Title:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {staticPagesDetails.title}
+                    {staticPagesDetails.title ? staticPagesDetails.title : 'Na'}
                 </p>
 
                 <span> <b>Content:</b> </span>
                 <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: staticPagesDetails.content }} />
+                    dangerouslySetInnerHTML={{
+                        __html:
+                            staticPagesDetails.content ? staticPagesDetails.content : 'NA'
+                    }} />
             </Modal >
         );
     }

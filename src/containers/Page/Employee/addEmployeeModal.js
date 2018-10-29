@@ -45,6 +45,7 @@ class AddEmployeeModal extends Component {
         if (nextProps !== this.props) {
             this.setState({ showAddEmpModal: nextProps.showAddEmpModal });
             this._getAllRoles();
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -73,7 +74,7 @@ class AddEmployeeModal extends Component {
 
         fields['name'] = '';
         fields['email'] = '';
-        this.setState({ fields, selectedRole: '' });
+        this.setState({ fields, selectedRole: '', showRoleErr: false });
     }
 
     _addEmployee = () => {

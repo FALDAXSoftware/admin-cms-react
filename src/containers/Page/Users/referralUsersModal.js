@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Modal } from 'antd';
+import { Tabs, Pagination, Modal, Button } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
@@ -46,7 +46,9 @@ class ReferralUsers extends Component {
                 title="View Referred Users"
                 visible={showReferralModal}
                 onCancel={this._closeReferralModal}
-                onOk={this._closeReferralModal}
+                footer={[
+                    <Button onClick={this._closeReferralModal}>OK</Button>,
+                ]}
             >
                 {
                     allReferralCount > 0 ?

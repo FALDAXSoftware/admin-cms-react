@@ -164,7 +164,7 @@ class EditPageModal extends Component {
                     <span>Title:</span>
                     <Input placeholder="title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('title', fields["title"], 'required', 'text-danger')}
+                        {this.validator.message('title', fields["title"], 'required|max:30', 'text-danger')}
                     </span>
                 </div>
 

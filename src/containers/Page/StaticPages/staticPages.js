@@ -179,6 +179,7 @@ class StaticPages extends Component {
                                     <Modal
                                         title="Delete Page"
                                         visible={showDeletePageModal}
+                                        onCancel={this._closeDeletePageModal}
                                         footer={[
                                             <Button onClick={this._closeDeletePageModal}>No</Button>,
                                             <Button onClick={this._deletePage}>Yes</Button>,

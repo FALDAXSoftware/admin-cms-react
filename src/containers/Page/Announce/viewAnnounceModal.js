@@ -31,23 +31,24 @@ class ViewAnnounceEmail extends Component {
             <Modal
                 title="View Announcement"
                 visible={showViewAnnounceModal}
+                onCancel={this._closeViewAnnounceModal}
                 footer={[
                     <Button onClick={this._closeViewAnnounceModal}>OK</Button>,
                 ]}
             >
                 <span> <b>Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {emailDetails.name}
+                    {emailDetails.name ? emailDetails.name : 'NA'}
                 </p>
 
                 <span> <b>Title:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {emailDetails.title}
+                    {emailDetails.title ? emailDetails.title : 'NA'}
                 </p>
 
                 <span> <b>Content:</b> </span>
                 <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: emailDetails.content }} />
+                    dangerouslySetInnerHTML={{ __html: emailDetails.content ? emailDetails.content : 'NA' }} />
             </Modal >
         );
     }

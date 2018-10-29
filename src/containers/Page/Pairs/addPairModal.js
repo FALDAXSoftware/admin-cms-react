@@ -43,12 +43,14 @@ class AddPairModal extends Component {
                 showAddPairsModal: nextProps.showAddPairsModal,
                 allCoins: nextProps.allCoins
             })
+            this.validator = new SimpleReactValidator();
         }
     }
 
     _closeAddPairsModal = () => {
         this.setState({ showAddPairsModal: false })
         this.props.closeAddModal();
+        this._resetAddForm();
     }
 
     _handleChange = (field, e) => {
@@ -63,7 +65,10 @@ class AddPairModal extends Component {
         fields['name'] = '';
         fields['maker_fee'] = '';
         fields['taker_fee'] = '';
-        this.setState({ fields, selectedCoin1: '', selectedCoin2: '' });
+        this.setState({
+            fields, selectedCoin1: '', selectedCoin2: '',
+            showCoin2Err: false, showCoin1Err: false, showError: false
+        });
     }
 
     _addPairs = () => {

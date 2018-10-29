@@ -91,7 +91,7 @@ const columns = [
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'phone_number', 'country', 'dob', 'is_active')
+        render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active')
     },
     {
         title: <IntlMessages id="antTable.title.details" />,

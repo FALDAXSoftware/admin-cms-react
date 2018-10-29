@@ -17,7 +17,7 @@ class EditCountryModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            selectedLegality: '',
+            selectedLegality: this.props.fields['legality'],
             isDisabled: false
         }
         this.validator = new SimpleReactValidator();
@@ -51,18 +51,18 @@ class EditCountryModal extends Component {
         const { fields } = this.state;
 
         fields['color'] = '';
-        this.setState({ fields });
+        this.setState({ fields, selectedLegality: '' });
     }
 
     _closeEditCountryModal = () => {
         this.setState({ showEditCountryModal: false })
         this.props.closeEditCountryModal();
+        this._resetForm();
     }
 
     _editCountry = () => {
         const { token, getAllCountry } = this.props;
         const { fields, selectedLegality } = this.state;
-
 
         if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
@@ -116,7 +116,9 @@ class EditCountryModal extends Component {
     }
 
     render() {
-        const { loader, showEditCountryModal, fields, errMsg, errType, isDisabled } = this.state;
+        const { loader, showEditCountryModal, fields, errMsg, errType, isDisabled,
+            selectedLegality
+        } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -145,7 +147,7 @@ class EditCountryModal extends Component {
                             style={{ width: 200 }}
                             placeholder="Select Legality"
                             onChange={this._changeLegality}
-                            defaultValue={fields['legality']}
+                            defaultValue={selectedLegality}
                         >
                             {legailityValues.map((country) => {
                                 return (

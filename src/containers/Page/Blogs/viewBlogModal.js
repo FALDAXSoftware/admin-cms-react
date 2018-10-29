@@ -29,33 +29,34 @@ class ViewBlogModal extends Component {
             <Modal
                 title="View Blog"
                 visible={showViewBlogModal}
+                onCancel={this._closeViewBlogModal}
                 footer={[
                     <Button onClick={this._closeViewBlogModal}>OK</Button>,
                 ]}
             >
                 <span> <b>Title:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {fields.title}
+                    {fields.title ? fields.title : 'NA'}
                 </p>
 
                 <span> <b>Author:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {fields.admin_name}
+                    {fields.admin_name ? fields.admin_name : 'NA'}
                 </p>
 
                 <span> <b>Created On:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {moment(fields.created_at).format("DD MMM, YYYY")}
+                    {fields.created_at ? moment(fields.created_at).format("DD MMM, YYYY") : 'NA'}
                 </p>
 
                 <span> <b>Tags:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {fields.tags}
+                    {fields.tags ? fields.tags : 'NA'}
                 </p>
 
                 <span> <b>Description:</b> </span>
                 <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: fields.description }} />
+                    dangerouslySetInnerHTML={{ __html: fields.description ? fields.description : 'NA' }} />
 
             </Modal>
         );
