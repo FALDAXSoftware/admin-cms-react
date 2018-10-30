@@ -51,13 +51,15 @@ class Roles extends Component {
         };
 
         self.setState({ loader: true })
+        let message = is_active ? 'Role has been de-activated successfully.' : 'Role has been activated successfully.'
         ApiUtils.updateRole(token, formData)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     self._getAllRoles();
+                    self.setState({ errMsg: true, errMessage: message, errType: 'Success' });
                 } else {
-                    self.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: message });
                 }
                 self.setState({ loader: false })
             })

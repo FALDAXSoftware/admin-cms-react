@@ -212,3 +212,10 @@ html[dir='rtl'] .dz-hidden-input {
 .loader-class .ant-spin{
   margin: 25% 20% 0 50%;
 }
+.descriptionContainer{
+  overflow: hidden;
+}
+.descriptionContainer img{
+  height: auto;
+  max-width: 100%;
+}

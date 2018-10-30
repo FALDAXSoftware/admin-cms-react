@@ -67,12 +67,13 @@ class Coins extends Component {
         };
 
         self.setState({ loader: true })
+        let message = is_active ? 'Coin has been de-activated successfully.' : 'Coin has been activated successfully.'
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
             .then((res) => {
                 self._getAllCoins(1);
                 self.setState({
-                    page: 1, errMsg: true, errMessage: res.message,
+                    page: 1, errMsg: true, errMessage: message,
                     errType: 'Success', loader: false
                 })
             })

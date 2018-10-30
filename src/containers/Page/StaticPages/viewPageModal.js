@@ -47,7 +47,7 @@ class ViewPageModal extends Component {
                 </p>
 
                 <span> <b>Content:</b> </span>
-                <p style={{ "marginBottom": "15px" }}
+                <p style={{ "marginBottom": "15px" }} className="descriptionContainer"
                     dangerouslySetInnerHTML={{
                         __html:
                             staticPagesDetails.content ? staticPagesDetails.content : 'NA'

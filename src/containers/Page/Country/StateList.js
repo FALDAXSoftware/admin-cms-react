@@ -34,6 +34,7 @@ class StateList extends Component {
         const { token } = this.props;
 
         self.setState({ loader: true })
+        let message = is_active ? 'State has been de-activated successfully.' : 'State has been activated successfully.'
         let formData = {
             id: value,
             legality,
@@ -46,7 +47,7 @@ class StateList extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self.setState({
-                    loader: false, errMsg: true, errMessage: res.message, errType: 'Success'
+                    loader: false, errMsg: true, errMessage: message, errType: 'Success'
                 })
                 self._getAllStates();
             })

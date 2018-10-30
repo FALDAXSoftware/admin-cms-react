@@ -44,6 +44,7 @@ class Pairs extends Component {
     static pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) {
         const { token } = this.props;
 
+        let message = is_active ? 'Pair has been de-activated successfully.' : 'Pair has been activated successfully.'
         let formData = {
             id: value,
             name: name,
@@ -56,7 +57,7 @@ class Pairs extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self._getAllPairs();
-                self.setState({ errType: 'Success', errMsg: true, errMessage: res.message, page: 1 })
+                self.setState({ errType: 'Success', errMsg: true, errMessage: message, page: 1 })
             })
             .catch(() => {
                 self.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });

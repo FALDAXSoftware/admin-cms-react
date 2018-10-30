@@ -29,6 +29,7 @@
     "polished": "^1.7.0",
     "postcss-inline-rtl": "^0.9.8",
     "prop-types": "^15.5.10",
+    "rc-color-picker": "^1.2.6",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.5.2",
     "react-big-calendar": "^0.17.0",

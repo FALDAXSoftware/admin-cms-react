@@ -37,6 +37,7 @@ class Employees extends Component {
     static employeeStatus(value, name, email, role, is_active) {
         const { token } = self.props;
 
+        let message = is_active ? 'Employee has been de-activated successfully.' : 'Employee has been activated successfully.'
         let formData = {
             id: value,
             name,
@@ -49,7 +50,7 @@ class Employees extends Component {
         ApiUtils.editEmployee(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'Success' });
+                this.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
                 this._getAllEmployees();
             })
             .catch(error => {

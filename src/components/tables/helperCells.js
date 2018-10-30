@@ -152,7 +152,7 @@ const ContentCell = text => <p style={{ display: 'block', width: '290px', overfl
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
 const IPCell = text => <p>http{text.split('f')[4]}</p>;
 const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : 'Neutral'}</p>;
-const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Show Referrals </Button>;
+const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Referred Users</Button>;
 const SwitchCell = (value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active) }} />
 const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
 const UserSwitchCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) => <Switch checked={is_active} onChange={() => { userStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) }} />

@@ -38,6 +38,7 @@ class Countries extends Component {
         const { token } = this.props;
 
         self.setState({ loader: true })
+        let message = is_active ? 'Country has been de-activated successfully.' : 'Country has been activated successfully.'
         let formData = {
             id: value,
             legality,
@@ -50,7 +51,7 @@ class Countries extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self.setState({
-                    errMsg: true, errMessage: res.message, errType: 'Success',
+                    errMsg: true, errMessage: message, errType: 'Success',
                     loader: false, page: 1
                 })
                 self._getAllCountries(1);
@@ -61,7 +62,6 @@ class Countries extends Component {
     }
 
     static editCountry(value, name, legality, color, is_active) {
-        console.log('value, name, legality, color, is_active', value, name, legality, color, is_active)
         let countryDetails = { value, name, legality, color, is_active };
         self.setState({ showEditCountryModal: true, countryDetails, page: 1 })
     }

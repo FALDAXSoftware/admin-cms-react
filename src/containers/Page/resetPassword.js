@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Input } from 'antd';
+import { Button, Input, notification } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import ResetPasswordStyleWrapper from './resetPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
@@ -13,7 +13,10 @@ export default class extends Component {
     this.state = {
       loader: false,
       fields: {},
-      errors: {}
+      errors: {},
+      errMessage: '',
+      errMsg: false,
+      errType: 'Success',
     };
     this.validator = new SimpleReactValidator();
   }
@@ -23,6 +26,14 @@ export default class extends Component {
     fields[field] = e.target.value;
     this.setState({ fields });
   }
+
+  openNotificationWithIconError = (type) => {
+    notification[type]({
+      message: this.state.errType,
+      description: this.state.errMessage
+    });
+    this.setState({ errMsg: false });
+  };
 
   _resetPassword = () => {
     const { fields, errors } = this.state;
@@ -39,16 +50,21 @@ export default class extends Component {
       ApiUtils.resetPassword(formData)
         .then((response) => response.json())
         .then(function (res) {
-          console.log('res', res)
-          _this.setState({
-            errMsg: true, errMessage: 'Password reset Successfully', loader: false
-          }, () => {
-            // _this.props.history.push('/signin');
-          });
+          if (res.status == 200) {
+            console.log('res', res)
+            _this.setState({
+              errMsg: true, errMessage: res.message, loader: false
+            }, () => {
+              // _this.props.history.push('/signin');
+            });
+          } else {
+            console.log('>>> else')
+            _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
+          }
         })
         .catch((err) => {
           console.log('>>>', err)
-          _this.setState({ errMsg: true, errMessage: err.message, loader: false });
+          _this.setState({ errMsg: true, errMessage: err.err, loader: false });
         });
     } else {
       if (fields["newPwd"] !== fields["confirmPwd"]) {
@@ -61,7 +77,11 @@ export default class extends Component {
   }
 
   render() {
-    const { fields, errors } = this.state;
+    const { fields, errors, errMsg, errType } = this.state;
+
+    if (errMsg) {
+      this.openNotificationWithIconError(errType.toLowerCase());
+    }
 
     return (
       <ResetPasswordStyleWrapper className="isoResetPassPage">

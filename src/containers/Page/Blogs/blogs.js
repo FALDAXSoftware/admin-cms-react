@@ -45,7 +45,6 @@ class Blogs extends Component {
         let blogDetails = {
             value, title, admin_name, tags, created_at, description, admin_id
         }
-        console.log('????????????', blogDetails)
         let tagsArray = tags.split(",");
         self.setState({ showEditBlogModal: true, blogDetails, tags: tagsArray });
     }

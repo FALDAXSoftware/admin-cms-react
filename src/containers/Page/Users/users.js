@@ -61,13 +61,15 @@ class Users extends Component {
             is_active: !is_active
         };
 
-        self.setState({ loader: true })
+        self.setState({ loader: true });
+        let message = is_active ? 'User has been de-activated successfully.' : 'User has been activated successfully.'
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
             .then((res) => {
                 self._getAllUsers(1);
                 self.setState({
-                    page: 1, errMsg: true, errMessage: res.message, errType: 'Success', loader: false
+                    page: 1, errMsg: true, errMessage: message, errType: 'Success',
+                    loader: false
                 })
             })
             .catch(() => {
