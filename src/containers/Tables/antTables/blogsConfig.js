@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, BlogActionCell, DateCell
+    TextCell, BlogActionCell, DateCell, TagsCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, blog_title = null, authorName = null, tag = null, created = null, desc = null, id = null) => {
@@ -17,6 +17,8 @@ const renderCell = (object, type, key, blog_title = null, authorName = null, tag
     switch (type) {
         case 'DateCell':
             return DateCell(value, created_at);
+        case 'TagsCell':
+            return TagsCell(value, title, admin_name, tags, created_at, description, admin_id);
         case 'BlogActionCell':
             return BlogActionCell(value, title, admin_name, tags, created_at, description, admin_id);
         default:
@@ -38,7 +40,7 @@ const columns = [{
     title: <IntlMessages id="blogTable.title.tags" />,
     key: 'tags',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'tags')
+    render: object => renderCell(object, 'TagsCell', 'tags')
 }, {
     title: <IntlMessages id="blogTable.title.created_at" />,
     key: 'created_at',

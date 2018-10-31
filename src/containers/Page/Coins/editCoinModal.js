@@ -87,6 +87,7 @@ class EditCoinModal extends Component {
     _closeEditCoinModal = () => {
         this.setState({ showEditCoinModal: false })
         this.props.closeEditCoinModal();
+        this._resetForm();
     }
 
     _editCoin = () => {

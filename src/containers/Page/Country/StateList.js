@@ -34,7 +34,7 @@ class StateList extends Component {
         const { token } = this.props;
 
         self.setState({ loader: true })
-        let message = is_active ? 'State has been de-activated successfully.' : 'State has been activated successfully.'
+        let message = is_active ? 'State has been inactivated successfully.' : 'State has been activated successfully.'
         let formData = {
             id: value,
             legality,
@@ -84,6 +84,7 @@ class StateList extends Component {
         let path = this.props.location.pathname.split('/');
         countryId = path[3];
 
+        _this.setState({ loader: true })
         ApiUtils.getAllStates(token, countryId, searchState)
             .then((response) => response.json())
             .then(function (res) {
@@ -143,14 +144,12 @@ class StateList extends Component {
                                         dataSource={allStates}
                                         className="isoCustomizedTable"
                                     />
-                                    {showEditStateModal &&
-                                        <EditStateModal
-                                            fields={stateDetails}
-                                            showEditStateModal={showEditStateModal}
-                                            closeEditStateModal={this._closeEditStateModal}
-                                            getAllStates={this._getAllStates.bind(this, 1)}
-                                        />
-                                    }
+                                    <EditStateModal
+                                        fields={stateDetails}
+                                        showEditStateModal={showEditStateModal}
+                                        closeEditStateModal={this._closeEditStateModal}
+                                        getAllStates={this._getAllStates.bind(this, 1)}
+                                    />
                                 </div>
                             </TabPane>
                         ))}

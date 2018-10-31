@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Icon, Spin, Modal } from 'antd';
+import { Button, Tabs, notification, Spin, Modal } from 'antd';
 import { employeeTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,6 @@ import AddEmployeeModal from './addEmployeeModal';
 import EditEmployeeModal from './editEmployeeModal';
 
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class Employees extends Component {
@@ -37,7 +36,7 @@ class Employees extends Component {
     static employeeStatus(value, name, email, role, is_active) {
         const { token } = self.props;
 
-        let message = is_active ? 'Employee has been de-activated successfully.' : 'Employee has been activated successfully.'
+        let message = is_active ? 'Employee has been inactivated successfully.' : 'Employee has been activated successfully.'
         let formData = {
             id: value,
             name,
@@ -85,6 +84,7 @@ class Employees extends Component {
         const { token } = this.props;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllEmployee(token)
             .then((response) => response.json())
             .then(function (res) {
@@ -199,7 +199,6 @@ class Employees extends Component {
                                             Are you sure you want to delete this employee ?
                                     </Modal>
                                     }
-                                    {loader && <Spin indicator={loaderIcon} />}
                                 </div>
                             </TabPane>
                         ))}

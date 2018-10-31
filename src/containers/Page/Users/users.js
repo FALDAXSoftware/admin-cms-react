@@ -62,7 +62,7 @@ class Users extends Component {
         };
 
         self.setState({ loader: true });
-        let message = is_active ? 'User has been de-activated successfully.' : 'User has been activated successfully.'
+        let message = is_active ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
             .then((res) => {
@@ -89,6 +89,7 @@ class Users extends Component {
         const { searchUser, limit } = this.state;
         var _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllUsers(page, limit, token, searchUser)
             .then((response) => response.json())
             .then(function (res) {
@@ -97,9 +98,13 @@ class Users extends Component {
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(() => {
-                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 

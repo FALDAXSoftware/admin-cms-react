@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Icon, Spin, Pagination, Button } from 'antd';
+import { Tabs, notification, Spin, Pagination, Button } from 'antd';
 import { pairsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -10,7 +10,6 @@ import AddPairModal from './addPairModal';
 import EditPairModal from './editPairModal';
 
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class Pairs extends Component {
@@ -44,7 +43,7 @@ class Pairs extends Component {
     static pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) {
         const { token } = this.props;
 
-        let message = is_active ? 'Pair has been de-activated successfully.' : 'Pair has been activated successfully.'
+        let message = is_active ? 'Pair has been inactivated successfully.' : 'Pair has been activated successfully.'
         let formData = {
             id: value,
             name: name,
@@ -82,6 +81,7 @@ class Pairs extends Component {
         const { page, limit } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true })
         ApiUtils.getAllPairs(page, limit, token)
             .then((response) => response.json())
             .then(function (res) {
@@ -91,9 +91,13 @@ class Pairs extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false })
             })
             .catch(() => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -138,6 +142,9 @@ class Pairs extends Component {
                                         getAllPairs={this._getAllPairs}
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <EditPairModal
                                         allCoins={allCoins}
@@ -162,8 +169,6 @@ class Pairs extends Component {
                                         total={pairsCount}
                                     />
                                 </div>
-
-                                {loader && <Spin indicator={loaderIcon} />}
                             </TabPane>
                         ))}
                     </Tabs>

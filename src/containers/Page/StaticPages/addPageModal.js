@@ -100,7 +100,7 @@ class AddPageModal extends Component {
                     getAllStaticPages();
                     this._resetAddForm();
                     this.setState({
-                        errType: 'success', notifyMsg: res.error ? res.error : res.message,
+                        errType: 'Success', notifyMsg: res.error ? res.error : res.message,
                         notify: true, loader: false, showError: false, isDisabled: false
                     });
                 })
@@ -152,7 +152,7 @@ class AddPageModal extends Component {
                     <span>Page Name:</span>
                     <Input placeholder="Page Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('page name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('page name', fields["name"], 'required|max:20', 'text-danger')}
                     </span>
                 </div>
 

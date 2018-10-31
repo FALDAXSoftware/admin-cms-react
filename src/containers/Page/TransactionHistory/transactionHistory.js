@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination } from 'antd';
+import { Input, Tabs, Pagination, Spin } from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -21,7 +21,8 @@ class Transactions extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0
+            page: 0,
+            loader: false
         }
     }
 
@@ -34,6 +35,7 @@ class Transactions extends Component {
         const { searchTransaction, page, limit } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true })
         ApiUtils.getAllTransaction(page, limit, token, searchTransaction)
             .then((response) => response.json())
             .then(function (res) {
@@ -44,11 +46,12 @@ class Transactions extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchTransaction: '' });
                 }
+                _this.setState({ loader: false })
             })
             .catch(err => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTransaction: '', errType: 'error',
+                    searchTransaction: '', errType: 'error', loader: false
                 });
             });
     }
@@ -66,7 +69,9 @@ class Transactions extends Component {
     }
 
     render() {
-        const { allTransactions, allTransactionCount, errType, errMsg, page } = this.state;
+        const { allTransactions, allTransactionCount, errType, errMsg, page,
+            loader
+        } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -86,6 +91,9 @@ class Transactions extends Component {
                                         enterButton
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <TableWrapper
                                     {...this.state}
                                     columns={tableInfo.columns}

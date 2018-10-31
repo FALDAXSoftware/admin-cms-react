@@ -6,7 +6,7 @@ import { TextCell, DateCell } from '../../../components/tables/helperCells';
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, approve = null, createdOn = null) => {
     const value = object[key];
-    const email = object[m_email];
+    const maker_email = object[m_email];
     const source_address = object[source];
     const destination_address = object[destination];
     const amount = object[coinAmt];
@@ -15,7 +15,7 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address, amount, is_approve, created_at);
+            return DateCell(value, maker_email, source_address, destination_address, amount, is_approve, created_at);
         default:
             return TextCell(value);
     }
@@ -24,9 +24,9 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 const columns = [
     {
         title: <IntlMessages id="withdrawTable.title.email" />,
-        key: 'email',
+        key: 'maker_email',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'email')
+        render: object => renderCell(object, 'TextCell', 'maker_email')
     },
     {
         title: <IntlMessages id="withdrawTable.title.source_address" />,
@@ -48,15 +48,15 @@ const columns = [
     },
     {
         title: <IntlMessages id="withdrawTable.title.approve" />,
-        key: 'approve',
+        key: 'is_approve',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'approve')
+        render: object => renderCell(object, 'TextCell', 'is_approve')
     },
     {
         title: <IntlMessages id="withdrawTable.title.created_at" />,
         key: 'created_at',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'created_at')
+        render: object => renderCell(object, 'DateCell', 'created_at')
     },
 ];
 

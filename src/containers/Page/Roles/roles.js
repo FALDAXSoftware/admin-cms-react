@@ -51,7 +51,7 @@ class Roles extends Component {
         };
 
         self.setState({ loader: true })
-        let message = is_active ? 'Role has been de-activated successfully.' : 'Role has been activated successfully.'
+        let message = is_active ? 'Role has been inactivated successfully.' : 'Role has been activated successfully.'
         ApiUtils.updateRole(token, formData)
             .then((response) => response.json())
             .then(function (res) {
@@ -97,6 +97,7 @@ class Roles extends Component {
         const { token } = this.props;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllRoles(token)
             .then((response) => response.json())
             .then(function (res) {
@@ -105,9 +106,13 @@ class Roles extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(() => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 

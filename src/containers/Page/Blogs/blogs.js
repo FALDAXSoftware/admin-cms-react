@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Icon, Spin, Modal, Pagination } from 'antd';
+import { Button, Tabs, notification, Spin, Modal, Pagination } from 'antd';
 import { blogsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,7 +11,6 @@ import EditBlogModal from './editBlogModal';
 import ViewBlogModal from './viewBlogModal';
 
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class Blogs extends Component {
@@ -77,6 +76,7 @@ class Blogs extends Component {
         const { page, limit } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllBlogs(page, limit, token)
             .then((response) => response.json())
             .then(function (res) {
@@ -86,9 +86,13 @@ class Blogs extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(() => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -102,7 +106,7 @@ class Blogs extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        deleteBlogId: '', errType: 'success', errMsg: true,
+                        deleteBlogId: '', errType: 'Success', errMsg: true,
                         errMessage: res.message, page: 1
                     });
                     _this._closeDeleteBlogModal();
@@ -167,6 +171,9 @@ class Blogs extends Component {
                                         getAllBlogs={this._getAllBlogs.bind(this, 0)}
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -211,7 +218,6 @@ class Blogs extends Component {
                                             Are you sure you want to delete this blog ?
                                     </Modal>
                                     }
-                                    {loader && <Spin indicator={loaderIcon} />}
                                 </div>
                             </TabPane>
                         ))}

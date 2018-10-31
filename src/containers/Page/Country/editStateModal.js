@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification, Icon, Spin, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import ColorPicker from 'rc-color-picker';
+import 'rc-color-picker/assets/index.css';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
@@ -18,7 +20,9 @@ class EditStateModal extends Component {
             errMessage: '',
             errType: 'Success',
             selectedLegality: '',
-            isDisabled: false
+            isDisabled: false,
+            code: this.props.fields['color'],
+            color: { color: this.props.fields['color'] }
         }
         this.validator = new SimpleReactValidator();
     }
@@ -28,7 +32,9 @@ class EditStateModal extends Component {
             this.setState({
                 showEditStateModal: nextProps.showEditStateModal,
                 fields: nextProps.fields,
-                selectedLegality: nextProps.fields['legality']
+                selectedLegality: nextProps.fields['legality'],
+                color: { color: nextProps.fields['color'] },
+                code: nextProps.fields['color'],
             })
         }
     }
@@ -49,9 +55,12 @@ class EditStateModal extends Component {
 
     _resetForm = () => {
         const { fields } = this.state;
-
         fields['color'] = '';
-        this.setState({ fields });
+        this.setState({ fields, color: [] });
+    }
+
+    _changeColor = (value) => {
+        this.setState({ color: value, code: value.color })
     }
 
     _closeEditStateModal = () => {
@@ -61,7 +70,7 @@ class EditStateModal extends Component {
 
     _editState = () => {
         const { token, getAllStates } = this.props;
-        const { fields, selectedLegality } = this.state;
+        const { fields, selectedLegality, color } = this.state;
 
 
         if (this.validator.allValid()) {
@@ -72,7 +81,7 @@ class EditStateModal extends Component {
                 name: fields['name'],
                 is_active: fields['is_active'],
                 legality: selectedLegality,
-                color: fields["color"],
+                color: color.color,
             };
 
             ApiUtils.editState(token, formData)
@@ -112,11 +121,16 @@ class EditStateModal extends Component {
         })
 
         fields['color'] = temp[0].colorCode;
-        this.setState({ fields, selectedLegality: legal })
+        this.setState({
+            fields, selectedLegality: legal,
+            code: temp[0].colorCode, color: { color: temp[0].colorCode }
+        })
     }
 
     render() {
-        const { loader, showEditStateModal, fields, errMsg, errType, isDisabled } = this.state;
+        const { loader, showEditStateModal, fields, errMsg, errType, isDisabled,
+            code, color
+        } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -158,7 +172,10 @@ class EditStateModal extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Color Code:</span>
-                        <Input placeholder="Color Code" onChange={this._handleChange.bind(this, "color")} value={fields["color"]} />
+                        <ColorPicker defaultColor={code} color={code} onChange={this._changeColor} />
+                        <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
+                            {color.color}
+                        </div>
                         <span style={{ "color": "red" }}>
                             {this.validator.message('color', fields["color"], 'required|max:7', 'text-danger')}
                         </span>

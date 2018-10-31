@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Icon } from 'antd';
+import { Tabs, Spin } from 'antd';
 import { limitTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import EditLimitModal from './editLimitModal';
 
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class LimitManagement extends Component {
@@ -18,7 +17,8 @@ class LimitManagement extends Component {
         this.state = {
             allLimitData: [],
             limitDetails: [],
-            showEditLimitModal: false
+            showEditLimitModal: false,
+            loader: false
         }
         self = this;
         LimitManagement.editLimit = LimitManagement.editLimit.bind(this);
@@ -43,6 +43,7 @@ class LimitManagement extends Component {
         const { token } = this.props;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllLimit(token)
             .then((response) => response.json())
             .then(function (res) {
@@ -51,9 +52,13 @@ class LimitManagement extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(() => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -62,7 +67,9 @@ class LimitManagement extends Component {
     }
 
     render() {
-        const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal } = this.state;
+        const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal,
+            loader
+        } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -81,6 +88,9 @@ class LimitManagement extends Component {
                                         closeEditModal={this._closeEditLimitModal}
                                         getAllLimits={this._getAllLimits}
                                     />
+                                    {loader && <span className="loader-class">
+                                        <Spin />
+                                    </span>}
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}

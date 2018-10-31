@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Select, Button } from 'antd';
+import { Modal, notification, Icon, Spin, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ColorPicker from 'rc-color-picker';
 import 'rc-color-picker/assets/index.css';
@@ -21,8 +21,8 @@ class EditCountryModal extends Component {
             errType: 'Success',
             selectedLegality: this.props.fields['legality'],
             isDisabled: false,
-            code: '',
-            color: []
+            code: this.props.fields['color'],
+            color: { color: this.props.fields['color'] }
         }
         this.validator = new SimpleReactValidator();
     }
@@ -32,7 +32,9 @@ class EditCountryModal extends Component {
             this.setState({
                 showEditCountryModal: nextProps.showEditCountryModal,
                 fields: nextProps.fields,
-                selectedLegality: nextProps.fields['legality']
+                selectedLegality: nextProps.fields['legality'],
+                color: { color: nextProps.fields['color'] },
+                code: nextProps.fields['color'],
             })
         }
     }
@@ -55,11 +57,11 @@ class EditCountryModal extends Component {
         const { fields } = this.state;
 
         fields['color'] = '';
-        this.setState({ fields, selectedLegality: '' });
+        this.setState({ fields, selectedLegality: '', color: [] });
     }
 
-    changeHandler = (color) => {
-        this.setState({ color })
+    _changeColor = (value) => {
+        this.setState({ color: value, code: value.color })
     }
 
     _closeEditCountryModal = () => {
@@ -120,12 +122,15 @@ class EditCountryModal extends Component {
         })
 
         fields['color'] = temp[0].colorCode;
-        this.setState({ fields, selectedLegality: legal })
+        this.setState({
+            fields, selectedLegality: legal,
+            code: temp[0].colorCode, color: { color: temp[0].colorCode }
+        })
     }
 
     render() {
         const { loader, showEditCountryModal, fields, errMsg, errType, isDisabled,
-            selectedLegality
+            selectedLegality, code, color
         } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -168,9 +173,9 @@ class EditCountryModal extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Color Code:</span>
-                        <ColorPicker color={this.state.code} onChange={this.changeHandler} />
-                        <div style={{ background: this.state.color.color, width: 100, height: 50, color: 'white' }}>
-                            {this.state.color.color}
+                        <ColorPicker defaultColor={code} color={code} onChange={this._changeColor} />
+                        <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
+                            {color.color}
                         </div>
                         <span style={{ "color": "red" }}>
                             {this.validator.message('color', fields["color"], 'required|max:7', 'text-danger')}

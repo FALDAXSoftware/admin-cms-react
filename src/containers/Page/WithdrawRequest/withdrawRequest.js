@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination } from 'antd';
+import { Input, Tabs, Pagination, Spin } from 'antd';
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -21,7 +21,8 @@ class WithdrawRequest extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0
+            page: 0,
+            loader: false
         }
     }
 
@@ -34,6 +35,7 @@ class WithdrawRequest extends Component {
         const { searchReq, page, limit } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq)
             .then((response) => response.json())
             .then(function (res) {
@@ -44,11 +46,12 @@ class WithdrawRequest extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchReq: '' });
                 }
+                _this.setState({ loader: false });
             })
-            .catch(err => {
+            .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchReq: '', errType: 'error',
+                    searchReq: '', errType: 'error', loader: false
                 });
             });
     }
@@ -66,7 +69,7 @@ class WithdrawRequest extends Component {
     }
 
     render() {
-        const { allRequests, allReqCount, errType, errMsg, page } = this.state;
+        const { allRequests, allReqCount, errType, errMsg, page, loader } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -86,6 +89,9 @@ class WithdrawRequest extends Component {
                                         enterButton
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <TableWrapper
                                     {...this.state}
                                     columns={tableInfo.columns}

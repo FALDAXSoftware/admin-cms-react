@@ -97,6 +97,7 @@ class Announce extends Component {
         const { token } = this.props;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getEmailTemplates(token)
             .then((response) => response.json())
             .then(function (res) {
@@ -105,9 +106,13 @@ class Announce extends Component {
                 } else {
                     _this.setState({ notify: true, notifyMsg: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(err => {
-                console.log('error occured', err);
+                _this.setState({
+                    notify: true, notifyMsg: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 

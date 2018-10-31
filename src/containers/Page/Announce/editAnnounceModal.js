@@ -68,6 +68,7 @@ class EditAnnounceModal extends Component {
     _closeEditAnnounce = () => {
         this.setState({ showEditAnnounceModal: false })
         this.props.closeEditModal();
+        this._resetAddForm();
     }
 
     _resetAddForm = () => {

@@ -60,7 +60,6 @@ class EditBlogModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            console.log('nextProps', nextProps)
             this.setState({
                 showEditBlogModal: nextProps.showEditBlogModal,
                 fields: nextProps.fields,
@@ -80,7 +79,7 @@ class EditBlogModal extends Component {
     _closeEditBlogModal = () => {
         this.setState({ showEditBlogModal: false })
         this.props.closeEditBlogModal();
-        this._resetAddForm
+        this._resetAddForm();
     }
 
     _handleChange = (field, e) => {
@@ -93,13 +92,12 @@ class EditBlogModal extends Component {
         const { fields } = this.state;
 
         fields['title'] = '';
-        this.setState({ fields, showError: false });
+        this.setState({ fields, showError: false, showAuthorErr: false });
     }
 
     _editBlog = () => {
         const { token, getAllBlogs } = this.props;
         let { fields, blogDesc, tags, selectedAuthor } = this.state;
-        console.log(selectedAuthor)
         this.setState({ loader: true })
         let blogDescription = striptags(blogDesc);
 

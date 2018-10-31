@@ -38,7 +38,7 @@ class Countries extends Component {
         const { token } = this.props;
 
         self.setState({ loader: true })
-        let message = is_active ? 'Country has been de-activated successfully.' : 'Country has been activated successfully.'
+        let message = is_active ? 'Country has been inactivated successfully.' : 'Country has been activated successfully.'
         let formData = {
             id: value,
             legality,
@@ -87,6 +87,7 @@ class Countries extends Component {
         const { limit, searchCountry } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllCountries(page, limit, token, searchCountry)
             .then((response) => response.json())
             .then(function (res) {

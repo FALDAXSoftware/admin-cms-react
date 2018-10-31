@@ -156,7 +156,7 @@ class EditPageModal extends Component {
                     <span>Page Name:</span>
                     <Input placeholder="Page Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('page name', fields["name"], 'required', 'text-danger')}
+                        {this.validator.message('page name', fields["name"], 'required|max:20', 'text-danger')}
                     </span>
                 </div>
 

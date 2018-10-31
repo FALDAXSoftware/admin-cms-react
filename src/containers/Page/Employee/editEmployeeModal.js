@@ -165,7 +165,6 @@ class EditEmployeeModal extends Component {
                             {options}
                         </Select>
                     </div>
-
                     {loader && <Spin indicator={loaderIcon} />}
                 </Modal>
             </div>

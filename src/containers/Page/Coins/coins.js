@@ -67,7 +67,7 @@ class Coins extends Component {
         };
 
         self.setState({ loader: true })
-        let message = is_active ? 'Coin has been de-activated successfully.' : 'Coin has been activated successfully.'
+        let message = is_active ? 'Coin has been inactivated successfully.' : 'Coin has been activated successfully.'
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
             .then((res) => {
@@ -105,6 +105,7 @@ class Coins extends Component {
         const { limit, searchCoin } = this.state;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getAllCoins(page, limit, token, searchCoin)
             .then((response) => response.json())
             .then(function (res) {
@@ -115,11 +116,12 @@ class Coins extends Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
                 }
+                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchCoin: '', errType: 'error',
+                    searchCoin: '', errType: 'error', loader: false
                 });
             });
     }

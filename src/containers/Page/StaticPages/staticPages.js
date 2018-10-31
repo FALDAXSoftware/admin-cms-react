@@ -61,6 +61,7 @@ class StaticPages extends Component {
         const { token } = this.props;
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getStaticPages(token)
             .then((response) => response.json())
             .then(function (res) {
@@ -69,9 +70,13 @@ class StaticPages extends Component {
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
+                _this.setState({ loader: false });
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 
