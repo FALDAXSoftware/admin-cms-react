@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Icon, Spin, Modal } from 'antd';
+import { Button, Tabs, notification, Spin, Modal } from 'antd';
 import { rolesTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,6 @@ import AddRoleModal from './addRoleModal';
 import EditRoleModal from './editRoleModal';
 
 const TabPane = Tabs.TabPane;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 var self;
 
 class Roles extends Component {
@@ -34,17 +33,17 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, coin, user, country, announcement, employee, role, staticPage, is_active) {
+    static roleStatus(value, name, users, coins, announcement, staticPage, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active) {
         const { token } = self.props;
 
         let formData = {
             id: value,
-            role,
-            user,
-            coin,
+            roles,
+            users,
+            coins,
             staticPage,
             announcement,
-            country,
+            countries,
             employee,
             name: name,
             is_active: !is_active
@@ -70,9 +69,9 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, coin, user, country, announcement, employee, role, staticPage, is_active) {
+    static editRole(value, name, users, coins, announcement, staticPage, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active) {
         let roleDetails = {
-            value, name, coin, user, country, announcement, employee, role, staticPage, is_active
+            value, name, users, coins, announcement, staticPage, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active
         }
         self.setState({ showEditRoleModal: true, roleDetails });
     }
@@ -192,12 +191,14 @@ class Roles extends Component {
                                         dataSource={allRoles}
                                         className="isoCustomizedTable"
                                     />
+                                    {/* {showEditRoleModal && */}
                                     <EditRoleModal
                                         fields={roleDetails}
                                         showEditRoleModal={showEditRoleModal}
                                         closeEditRoleModal={this._closeEditRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this)}
                                     />
+                                    {/* } */}
                                     {showDeleteRoleModal &&
                                         <Modal
                                             title="Delete Role"

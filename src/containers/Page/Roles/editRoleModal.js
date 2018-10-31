@@ -16,15 +16,20 @@ class EditRoleModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            coin: this.props.fields['coin'],
-            user: false,
-            staticPage: false,
-            role: false,
-            announcement: false,
-            country: false,
-            employee: false,
-            all: true,
-            isDisabled: false
+            coins: this.props.fields['coins'],
+            users: this.props.fields['users'],
+            staticPage: this.props.fields['staticPage'],
+            roles: this.props.fields['roles'],
+            announcement: this.props.fields['announcement'],
+            countries: this.props.fields['countries'],
+            employee: this.props.fields['employee'],
+            pairs: this.props.fields['pairs'],
+            blogs: this.props.fields['blogs'],
+            all: this.props.fields['employee'] && this.props.fields['coins'] && this.props.fields['users'] &&
+                this.props.fields['staticPage'] && this.props.fields['roles'] && this.props.fields['announcement'] &&
+                this.props.fields['countries'] && this.props.fields['pairs'] && this.props.fields['blogs'],
+            isDisabled: false,
+            showError: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -34,18 +39,21 @@ class EditRoleModal extends Component {
             this.setState({
                 showEditRoleModal: nextProps.showEditRoleModal,
                 fields: nextProps.fields,
-                coin: nextProps.fields['coin'],
-                user: nextProps.fields['user'],
+                coins: nextProps.fields['coins'],
+                users: nextProps.fields['users'],
                 staticPage: nextProps.fields['staticPage'],
-                role: nextProps.fields['role'],
+                roles: nextProps.fields['roles'],
                 announcement: nextProps.fields['announcement'],
                 employee: nextProps.fields['employee'],
-                country: nextProps.fields['country'],
-                all: nextProps.fields['coin'] && nextProps.fields['user'] && nextProps.fields['staticPage'] &&
-                    nextProps.fields['role'] && nextProps.fields['announcement'] && nextProps.fields['employee']
-                    && nextProps.fields['country']
+                countries: nextProps.fields['countries'],
+                pairs: nextProps.fields['pairs'],
+                blogs: nextProps.fields['blogs'],
+                all: nextProps.fields['coins'] && nextProps.fields['users'] && nextProps.fields['staticPage'] &&
+                    nextProps.fields['roles'] && nextProps.fields['announcement'] && nextProps.fields['employee']
+                    && nextProps.fields['countries'] && this.props.fields['pairs'] && this.props.fields['blogs']
                     ? true : false
-            })
+            });
+            this.validator = new SimpleReactValidator();
         }
     }
 
@@ -67,40 +75,50 @@ class EditRoleModal extends Component {
         const { fields } = this.state;
 
         fields['name'] = '';
-        this.setState({ fields });
+        this.setState({ fields, showError: false });
     }
 
     _closeEditRoleModal = () => {
         this.setState({ showEditRoleModal: false })
         this.props.closeEditRoleModal();
+        this._resetForm();
     }
 
     _editRole = () => {
         const { token, getAllRoles } = this.props;
-        const { fields, role, user, coin, staticPage, announcement, country, employee
+        const { fields, roles, users, coins, staticPage, announcement, countries,
+            employee, pairs, blogs, showError
         } = this.state;
+        // if (users || coins | roles || staticPage || announcement || countries ||
+        //     employee || pairs || blogs) {
+        //     this.setState({ showError: false })
+        // } else {
+        //     this.setState({ showError: true })
+        // }
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && !showError) {
             this.setState({ loader: true, isDisabled: true });
 
             let formData = {
                 id: fields["value"],
                 name: fields["name"],
-                role,
-                user,
-                coin,
+                roles,
+                users,
+                coins,
                 staticPage,
                 announcement,
-                country,
-                employee
+                countries,
+                employee,
+                pairs,
+                blogs
             };
 
             ApiUtils.updateRole(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
                     this.setState({
-                        errMsg: true, errMessage: res.message, loader: false, errType: 'Success',
-                        isDisabled: false
+                        errMsg: true, errMessage: res.message, loader: false,
+                        errType: 'Success', isDisabled: false
                     });
                     this._closeEditRoleModal();
                     getAllRoles();
@@ -118,37 +136,18 @@ class EditRoleModal extends Component {
         }
     }
 
-    _onChangeRole = (val) => {
-        if (val.includes('All')) {
-            this.setState({
-                user: true, coin: true, staticPage: true, role: true,
-                announcement: true, country: true, employee: true
-            })
-        } else {
-            let value = val.slice(-1)[0];
-            if (val.length >= 1) {
-                this.setState({ [value]: this.state[value] === false ? true : false })
-            } else {
-                this.setState({
-                    user: false, coin: false, staticPage: false, role: false,
-                    announcement: false, country: false, employee: false
-                })
-            }
-        }
-    }
-
-    onChange = (field, e, val) => {
+    _onChangeRole = (field, e, val) => {
         const { all } = this.state;
         if (all == false && field == 'all') {
             this.setState({
-                all: true, coin: true, user: true, staticPage: true, announcement: true,
-                country: true, role: true, employee: true
+                all: true, coins: true, users: true, staticPage: true, announcement: true,
+                countries: true, roles: true, employee: true, pairs: true, blogs: true
             })
         } else {
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
-                    all: false, coin: false, user: false, staticPage: false, announcement: false,
-                    country: false, role: false, employee: false
+                    all: false, coins: false, users: false, staticPage: false, announcement: false,
+                    countries: false, roles: false, employee: false, pairs: false, blogs: false
                 })
             } else {
                 this.setState({ [field]: e.target.checked })
@@ -157,9 +156,11 @@ class EditRoleModal extends Component {
     }
 
     render() {
-        const { loader, showEditRoleModal, fields, errMsg, errType, coin, user,
-            staticPage, announcement, country, role, employee, all, isDisabled
+        const { loader, showEditRoleModal, fields, errMsg, errType, coins, users,
+            staticPage, announcement, countries, roles, employee, all, isDisabled,
+            pairs, blogs, showError
         } = this.state;
+
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -186,15 +187,21 @@ class EditRoleModal extends Component {
 
                     <div>
                         <span>Modules:</span><br />
-                        <Checkbox checked={all} onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
-                        <Checkbox checked={user} onChange={this.onChange.bind(this, 'user')}>Users Module</Checkbox><br />
-                        <Checkbox checked={coin} onChange={this.onChange.bind(this, 'coin')}>Coins Module</Checkbox><br />
-                        <Checkbox checked={staticPage} onChange={this.onChange.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
-                        <Checkbox checked={announcement} onChange={this.onChange.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
-                        <Checkbox checked={country} onChange={this.onChange.bind(this, 'country')}>Country Module</Checkbox><br />
-                        <Checkbox checked={role} onChange={this.onChange.bind(this, 'role')}>Roles Module</Checkbox><br />
-                        <Checkbox checked={employee} onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />
+                        <Checkbox checked={all} onChange={this._onChangeRole.bind(this, 'all')}>All</Checkbox><br />
+                        <Checkbox checked={users} onChange={this._onChangeRole.bind(this, 'users')}>Users Module</Checkbox><br />
+                        <Checkbox checked={coins} onChange={this._onChangeRole.bind(this, 'coins')}>Coins Module</Checkbox><br />
+                        <Checkbox checked={staticPage} onChange={this._onChangeRole.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
+                        <Checkbox checked={announcement} onChange={this._onChangeRole.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
+                        <Checkbox checked={countries} onChange={this._onChangeRole.bind(this, 'countries')}>Country Module</Checkbox><br />
+                        <Checkbox checked={roles} onChange={this._onChangeRole.bind(this, 'roles')}>Roles Module</Checkbox><br />
+                        <Checkbox checked={employee} onChange={this._onChangeRole.bind(this, 'employee')}>Employee Module</Checkbox><br />
+                        <Checkbox checked={pairs} onChange={this._onChangeRole.bind(this, 'pairs')}>Pairs Module</Checkbox><br />
+                        <Checkbox checked={blogs} onChange={this._onChangeRole.bind(this, 'blogs')}>Blogs Module</Checkbox><br />
                     </div>
+                    {showError && <span style={{ "color": "red" }}>
+                        {'The module field is required.'}
+                    </span>
+                    }
                     {loader && <Spin indicator={loaderIcon} />}
                 </Modal>
             </div>

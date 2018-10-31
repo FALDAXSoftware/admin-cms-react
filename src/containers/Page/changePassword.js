@@ -18,15 +18,15 @@ class ChangePassword extends Component {
             errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
-        // this.validator = new SimpleReactValidator({
-        //     matchPassword: {
-        //         message: "New Password and Confirm Password doesn't match.",
-        //         rule: function (val, options) {
-        //             if (val)
-        //                 return true;
-        //         }
-        //     }
-        // });
+        this.validator = new SimpleReactValidator({
+            matchPassword: {
+                message: "New Password and Confirm Password doesn't match.",
+                rule: function (val, options) {
+                    if (val)
+                        return true;
+                }
+            }
+        });
     }
 
     openNotificationWithIconError = (type) => {
@@ -85,7 +85,7 @@ class ChangePassword extends Component {
             console.log('in else', fields)
             if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
                 console.log('in if')
-                this.state.errors["main"] = "Confirm Password doesn't match";
+                this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
                 this.setState({ errors, loader: false })
             }
             this.validator.showMessages();

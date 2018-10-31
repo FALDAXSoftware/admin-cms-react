@@ -51,24 +51,26 @@ export default class extends Component {
         .then((response) => response.json())
         .then(function (res) {
           if (res.status == 200) {
-            console.log('res', res)
             _this.setState({
               errMsg: true, errMessage: res.message, loader: false
             }, () => {
-              // _this.props.history.push('/signin');
+              _this.props.history.push('/signin');
             });
           } else {
-            console.log('>>> else')
-            _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
+            _this.setState({
+              errMsg: true, errMessage: res.message,
+              loader: false, errType: 'error'
+            }, () => {
+              _this.props.history.push('/signin');
+            });
           }
         })
         .catch((err) => {
-          console.log('>>>', err)
           _this.setState({ errMsg: true, errMessage: err.err, loader: false });
         });
     } else {
       if (fields["newPwd"] !== fields["confirmPwd"]) {
-        this.state.errors["main"] = "Confirm Password doesn't match.";
+        this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
         this.setState({ errors, loader: false })
       }
       this.validator.showMessages();

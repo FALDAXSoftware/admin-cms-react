@@ -21,7 +21,7 @@ const options = [
     key: "static-pages",
     label: "sidebar.staticPages",
     leftIcon: "ion-document",
-    module: "static_pages"
+    module: "staticPage"
   },
   {
     key: "announcement",

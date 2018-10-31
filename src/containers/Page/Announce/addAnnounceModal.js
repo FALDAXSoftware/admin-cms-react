@@ -93,15 +93,17 @@ class AddAnnounceModal extends Component {
             ApiUtils.addTemplate(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
+                    console.log('res', res)
                     this._closeAddPageModal();
                     getAnnouncements();
                     this._resetAddForm();
                     this.setState({
-                        errType: 'Success', notifyMsg: res.error ? res.error : res.message,
+                        errType: res.err ? 'error' : 'Success', notifyMsg: res.err ? res.err : res.message,
                         notify: true, showError: false, isDisabled: false
                     });
                 })
                 .catch(error => {
+                    console.log('error', error)
                     this._resetAddForm();
                     error && this.setState({
                         showError: false, errType: 'error', isDisabled: false,

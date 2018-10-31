@@ -22,7 +22,7 @@ const routes = [
     {
         path: "static-pages",
         component: asyncComponent(() => import("../Page/StaticPages/staticPages")),
-        module: "static_pages"
+        module: "staticPage"
     },
     {
         path: "countries",
