@@ -135,12 +135,14 @@ class Pairs extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddPairModal}>Add Pair</Button>
-                                    <AddPairModal
-                                        allCoins={allCoins}
-                                        showAddPairsModal={showAddPairsModal}
-                                        closeAddModal={this._closeAddFeesModal}
-                                        getAllPairs={this._getAllPairs}
-                                    />
+                                    {showAddPairsModal &&
+                                        <AddPairModal
+                                            allCoins={allCoins}
+                                            showAddPairsModal={showAddPairsModal}
+                                            closeAddModal={this._closeAddFeesModal}
+                                            getAllPairs={this._getAllPairs}
+                                        />
+                                    }
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />

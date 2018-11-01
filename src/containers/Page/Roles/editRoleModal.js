@@ -89,50 +89,50 @@ class EditRoleModal extends Component {
         const { fields, roles, users, coins, staticPage, announcement, countries,
             employee, pairs, blogs, showError
         } = this.state;
-        // if (users || coins | roles || staticPage || announcement || countries ||
-        //     employee || pairs || blogs) {
-        //     this.setState({ showError: false })
-        // } else {
-        //     this.setState({ showError: true })
-        // }
+        if (users || coins | roles || staticPage || announcement || countries ||
+            employee || pairs || blogs) {
 
-        if (this.validator.allValid() && !showError) {
-            this.setState({ loader: true, isDisabled: true });
+            if (this.validator.allValid() && !showError) {
+                this.setState({ loader: true, isDisabled: true });
 
-            let formData = {
-                id: fields["value"],
-                name: fields["name"],
-                roles,
-                users,
-                coins,
-                staticPage,
-                announcement,
-                countries,
-                employee,
-                pairs,
-                blogs
-            };
+                let formData = {
+                    id: fields["value"],
+                    name: fields["name"],
+                    roles,
+                    users,
+                    coins,
+                    staticPage,
+                    announcement,
+                    countries,
+                    employee,
+                    pairs,
+                    blogs
+                };
 
-            ApiUtils.updateRole(token, formData)
-                .then((res) => res.json())
-                .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', isDisabled: false
+                ApiUtils.updateRole(token, formData)
+                    .then((res) => res.json())
+                    .then((res) => {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', isDisabled: false
+                        });
+                        this._closeEditRoleModal();
+                        getAllRoles();
+                        this._resetForm();
+                    })
+                    .catch(() => {
+                        this.setState({
+                            errMsg: true, errMessage: 'Something went wrong!!', loader: false,
+                            errType: 'error', isDisabled: false
+                        });
                     });
-                    this._closeEditRoleModal();
-                    getAllRoles();
-                    this._resetForm();
-                })
-                .catch(() => {
-                    this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', loader: false,
-                        errType: 'error', isDisabled: false
-                    });
-                });
+            } else {
+                this.validator.showMessages();
+                this.forceUpdate();
+            }
+            this.setState({ showError: false })
         } else {
-            this.validator.showMessages();
-            this.forceUpdate();
+            this.setState({ showError: true })
         }
     }
 

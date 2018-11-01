@@ -66,7 +66,7 @@ class AddPairModal extends Component {
         fields['maker_fee'] = '';
         fields['taker_fee'] = '';
         this.setState({
-            fields, selectedCoin1: '', selectedCoin2: '',
+            fields, selectedCoin1: '', selectedCoin2: '', name: '',
             showCoin2Err: false, showCoin1Err: false, showError: false
         });
     }
@@ -76,7 +76,7 @@ class AddPairModal extends Component {
         let { fields, selectedCoin1, selectedCoin2, name } = this.state;
 
         if (this.validator.allValid() && selectedCoin1 && selectedCoin2 && selectedCoin1 !== selectedCoin2) {
-            this.setState({ loader: true, isDisabled: true });
+            this.setState({ loader: true, isDisabled: true, showError: false });
             let formData = {
                 name: name,
                 coin_code1: selectedCoin1,
@@ -116,14 +116,27 @@ class AddPairModal extends Component {
 
     _changeCoin = (field, value) => {
         if (field === 'coin_id1') {
-            this.setState({ selectedCoin1: value, name: value }, () => {
-                this.setState({ showCoin1Err: this.state.selectedCoin1 ? false : true });
-            })
+            if (this.state.name.indexOf('-')) {
+                let temp = this.state.name.split('-');
+                this.setState({ selectedCoin1: value, name: value + '-' + temp[1] }, () => {
+                    this.setState({ showCoin1Err: this.state.selectedCoin1 ? false : true });
+                })
+            } else {
+                this.setState({ selectedCoin1: value, name: value }, () => {
+                    this.setState({ showCoin1Err: this.state.selectedCoin1 ? false : true });
+                })
+            }
         } else {
-            //console.log('>>>', this.state.name + '-' + value)
-            this.setState({ selectedCoin2: value, name: this.state.name + '-' + value }, () => {
-                this.setState({ showCoin2Err: this.state.selectedCoin2 ? false : true });
-            })
+            if (this.state.name.indexOf('-')) {
+                let temp = this.state.name.split('-');
+                this.setState({ selectedCoin2: value, name: temp[0] + '-' + value }, () => {
+                    this.setState({ showCoin2Err: this.state.selectedCoin2 ? false : true });
+                })
+            } else {
+                this.setState({ selectedCoin2: value, name: this.state.name + '-' + value }, () => {
+                    this.setState({ showCoin2Err: this.state.selectedCoin2 ? false : true });
+                })
+            }
         }
     }
 

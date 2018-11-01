@@ -43,6 +43,16 @@ class AddCoinModal extends Component {
                 ],
             },
         };
+        this.validator = new SimpleReactValidator({
+            space: {
+                message: 'The :attribute must be a valid IP address.',
+                rule: function (val, options) {
+                    if (val) {
+                        return val;
+                    }
+                }
+            }
+        });
     }
 
     componentWillReceiveProps = (nextProps) => {

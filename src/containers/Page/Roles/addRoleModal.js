@@ -49,7 +49,9 @@ class AddRoleModal extends Component {
 
     _closeAddRoleModal = () => {
         this.setState({
-            showAddRoleModal: false
+            showAddRoleModal: false, users: false, coins: false, staticPage: false,
+            roles: false, countries: false, employee: false, pairs: false,
+            blogs: false, showError: false
         }, () => {
             this.props.closeAddModal();
             this._resetAddForm();
@@ -79,56 +81,60 @@ class AddRoleModal extends Component {
             employee, pairs, blogs, showError } = this.state;
         if (users || coins | roles || staticPage || announcement || countries ||
             employee || pairs || blogs) {
+            if (this.validator.allValid() && !showError) {
+                this.setState({ loader: true, isDisabled: true });
+                let formData = {
+                    name: fields["name"],
+                    roles,
+                    users,
+                    coins,
+                    staticPage,
+                    announcement,
+                    countries,
+                    employee,
+                    pairs,
+                    blogs
+                };
+
+                ApiUtils.addRole(token, formData)
+                    .then((res) => res.json())
+                    .then((res) => {
+                        this._closeAddRoleModal();
+                        getAllRoles();
+                        this._resetAddForm();
+                        this.setState({
+                            errType: 'Success', errMsg: true, errMessage: res.message, isDisabled: false
+                        });
+                    })
+                    .catch(() => {
+                        this.setState({
+                            errType: 'error', errMsg: true, errMessage: 'Something went wrong', isDisabled: false
+                        });
+                        this._resetAddForm();
+                    });
+            } else {
+                this.validator.showMessages();
+                this.forceUpdate();
+            }
             this.setState({ showError: false })
         } else {
             this.setState({ showError: true })
         }
-
-        if (this.validator.allValid() && !showError) {
-            this.setState({ loader: true, isDisabled: true });
-            let formData = {
-                name: fields["name"],
-                roles,
-                users,
-                coins,
-                staticPage,
-                announcement,
-                countries,
-                employee,
-                pairs,
-                blogs
-            };
-
-            ApiUtils.addRole(token, formData)
-                .then((res) => res.json())
-                .then((res) => {
-                    this._closeAddRoleModal();
-                    getAllRoles();
-                    this._resetAddForm();
-                    this.setState({
-                        errType: 'Success', errMsg: true, errMessage: res.message, isDisabled: false
-                    });
-                })
-                .catch(() => {
-                    this.setState({
-                        errType: 'error', errMsg: true, errMessage: 'Something went wrong', isDisabled: false
-                    });
-                    this._resetAddForm();
-                });
-        } else {
-            this.validator.showMessages();
-            this.forceUpdate();
-        }
     }
 
     onChange = (field, e, val) => {
-        const { all } = this.state;
+        let { all, users, coins, roles, staticPage, announcement, countries,
+            employee, pairs, blogs } = this.state;
 
         if (all == false && field == 'all') {
             this.setState({
                 all: true, coins: true, users: true, staticPage: true, announcement: true,
-                countries: true, roles: true, employee: true, pairs: false, blogs: false
+                countries: true, roles: true, employee: true, pairs: true, blogs: true
             })
+        } else if (!users || !coins | !roles || !staticPage || !announcement || !countries ||
+            !employee || !pairs || !blogs) {
+            this.setState({ all: false, [field]: e.target.checked })
+
         } else {
             if (field == 'all' && e.target.checked === false) {
                 this.setState({

@@ -144,12 +144,14 @@ class StateList extends Component {
                                         dataSource={allStates}
                                         className="isoCustomizedTable"
                                     />
-                                    <EditStateModal
-                                        fields={stateDetails}
-                                        showEditStateModal={showEditStateModal}
-                                        closeEditStateModal={this._closeEditStateModal}
-                                        getAllStates={this._getAllStates.bind(this, 1)}
-                                    />
+                                    {showEditStateModal &&
+                                        <EditStateModal
+                                            fields={stateDetails}
+                                            showEditStateModal={showEditStateModal}
+                                            closeEditStateModal={this._closeEditStateModal}
+                                            getAllStates={this._getAllStates.bind(this, 1)}
+                                        />
+                                    }
                                 </div>
                             </TabPane>
                         ))}

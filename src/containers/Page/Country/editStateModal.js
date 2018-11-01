@@ -19,7 +19,7 @@ class EditStateModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            selectedLegality: '',
+            selectedLegality: this.props.fields['legality'],
             isDisabled: false,
             code: this.props.fields['color'],
             color: { color: this.props.fields['color'] }
