@@ -24,6 +24,9 @@ export default class extends Component {
   _onChangeFields(field, e) {
     let fields = this.state.fields;
     fields[field] = e.target.value;
+    if (field == "confirmPwd" && (e.target.value.trim() == "" || e.target.value == undefined)) {
+      this.setState({ errors: {} });
+    }
     this.setState({ fields });
   }
 
@@ -69,7 +72,9 @@ export default class extends Component {
           _this.setState({ errMsg: true, errMessage: err.err, loader: false });
         });
     } else {
-      if (fields["newPwd"] !== fields["confirmPwd"]) {
+      console.log(fields["confirmPwd"]);
+
+      if (fields["newPwd"] !== fields["confirmPwd"] && fields["confirmPwd"] != "" && fields["confirmPwd"] != undefined) {
         this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
         this.setState({ errors, loader: false })
       }
