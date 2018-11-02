@@ -69,7 +69,7 @@ export default class extends Component {
           _this.setState({ errMsg: true, errMessage: err.err, loader: false });
         });
     } else {
-      if (fields["newPwd"] !== fields["confirmPwd"]) {
+      if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
         this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
         this.setState({ errors, loader: false })
       }

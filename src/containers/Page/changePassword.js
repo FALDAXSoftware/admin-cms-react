@@ -15,18 +15,10 @@ class ChangePassword extends Component {
             loader: false,
             errMsg: false,
             errMessage: '',
-            errType: 'Success'
+            errType: 'Success',
+            showErr: false
         }
         this.validator = new SimpleReactValidator();
-        this.validator = new SimpleReactValidator({
-            matchPassword: {
-                message: "New Password and Confirm Password doesn't match.",
-                rule: function (val, options) {
-                    if (val)
-                        return true;
-                }
-            }
-        });
     }
 
     openNotificationWithIconError = (type) => {
@@ -48,7 +40,6 @@ class ChangePassword extends Component {
         let { fields, errors } = this.state;
         let _this = this;
 
-        console.log('in ', fields)
         if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
             _this.setState({ loader: true });
 
@@ -67,6 +58,7 @@ class ChangePassword extends Component {
                         fields["oldPwd"] = "";
                         fields["newPwd"] = "";
                         fields["confirmPwd"] = "";
+                        _this.validator = new SimpleReactValidator();
                         _this.setState({
                             fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
                             errMessage: res.err ? res.err : res.message
@@ -82,9 +74,7 @@ class ChangePassword extends Component {
                     _this.setState({ loader: false, errMsg: true });
                 });
         } else {
-            console.log('in else', fields)
             if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
-                console.log('in if')
                 this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
                 this.setState({ errors, loader: false })
             }

@@ -165,8 +165,8 @@ class AddAnnounceModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Content:</span>
-                    <QuillEditor>
-                        <ReactQuill {...options} />
+                    <QuillEditor >
+                        <ReactQuill  {...options} />
                     </QuillEditor>
                     {showError && <span style={{ "color": "red" }}>
                         {'The content field is required.'}
