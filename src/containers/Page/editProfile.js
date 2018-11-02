@@ -38,7 +38,11 @@ class EditProfile extends Component {
 
     _onChangeFields(field, e) {
         let fields = this.state.fields;
-        fields[field] = e.target.value;
+        if (e.target.value.trim() == "") {
+            fields[field] = "";
+        } else {
+            fields[field] = e.target.value;
+        }
         this.setState({ fields });
     }
 

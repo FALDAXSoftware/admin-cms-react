@@ -23,7 +23,11 @@ export default class extends Component {
 
   _onChangeFields(field, e) {
     let fields = this.state.fields;
-    fields[field] = e.target.value;
+    if (e.target.value.trim() == "") {
+      fields[field] = "";
+    } else {
+      fields[field] = e.target.value;
+    }
     if (field == "confirmPwd" && (e.target.value.trim() == "" || e.target.value == undefined)) {
       this.setState({ errors: {} });
     }
