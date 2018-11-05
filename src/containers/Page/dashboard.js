@@ -65,7 +65,7 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={userCount}
                                 text={<IntlMessages id="widget.stickerwidget1.user" />}
-                                icon="ion-person"
+                                icon="fa fa-users"
                                 fontColor="#ffffff"
                                 bgColor="#7266BA"
                             />
@@ -77,7 +77,7 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={coinCount}
                                 text={<IntlMessages id="widget.stickerwidget2.coins" />}
-                                icon="ion-android-camera"
+                                icon="fa fa-coins"
                                 fontColor="#ffffff"
                                 bgColor="#42A5F6"
                             />

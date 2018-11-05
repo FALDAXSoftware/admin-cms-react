@@ -2,63 +2,64 @@ const options = [
   {
     key: "dashboard",
     label: "sidebar.dashboard",
-    leftIcon: "ion-android-apps",
+    leftIcon: "fas fa-tachometer-alt",
     module: "dashboard"
   },
   {
     key: "users",
     label: "sidebar.users",
-    leftIcon: "ion-android-people",
+    leftIcon: "fas fa-users",
     module: "users"
   },
   {
     key: "coins",
     label: "sidebar.coins",
-    leftIcon: "ion-android-apps",
+    leftIcon: "fas fa-coins",
     module: "coins"
   },
   {
-    key: "static-pages",
-    label: "sidebar.staticPages",
-    leftIcon: "ion-document",
-    module: "staticPage"
-  },
-  {
-    key: "announcement",
-    label: "sidebar.announce",
-    leftIcon: "ion-android-notifications",
-    module: "announcement"
+    key: "pairs",
+    label: "sidebar.fees",
+    leftIcon: "fas fa-coins",
+    module: "pairs"
   },
   {
     key: "countries",
     label: "sidebar.country",
-    leftIcon: "ion-navigate",
+    leftIcon: "far fa-flag",
     module: "countries"
+  },
+  {
+    key: "announcement",
+    label: "sidebar.announce",
+    leftIcon: "fas fa-bullhorn",
+    module: "announcement"
+  },
+  {
+    key: "static-pages",
+    label: "sidebar.staticPages",
+    leftIcon: "fas fa-file",
+    module: "staticPage"
+  },
+  {
+    key: "blogs",
+    label: "sidebar.blogs",
+    leftIcon: "far fa-file-alt",
+    module: "blogs"
   },
   {
     key: "roles",
     label: "sidebar.roles",
-    leftIcon: "ion-person-add",
+    leftIcon: "fas fa-tasks",
     module: "roles"
   },
   {
     key: "employee",
     label: "sidebar.employee",
-    leftIcon: "ion-person-add",
+    leftIcon: "fas fa-user-tie",
     module: "employee"
   },
-  {
-    key: "blogs",
-    label: "sidebar.blogs",
-    leftIcon: "ion-filing",
-    module: "blogs"
-  },
-  {
-    key: "pairs",
-    label: "sidebar.fees",
-    leftIcon: "ion-filing",
-    module: "pairs"
-  },
+
   // {
   //   key: "send-coin-fee",
   //   label: "sidebar.sendCoinFees",
@@ -67,25 +68,25 @@ const options = [
   {
     key: "limit-management",
     label: "sidebar.limit",
-    leftIcon: "ion-filing",
+    leftIcon: "fas fa-sliders-h",
     module: "limit_management"
   },
   {
     key: "transaction-history",
     label: "sidebar.transactionHistory",
-    leftIcon: "ion-filing",
+    leftIcon: "fas fa-exchange-alt",
     module: "transaction_history"
   },
   {
     key: "trade-history",
     label: "sidebar.tradeHistory",
-    leftIcon: "ion-filing",
+    leftIcon: "fas fa-history",
     module: "trade_history"
   },
   {
     key: "withdraw-requests",
     label: "sidebar.withdrawRequests",
-    leftIcon: "ion-filing",
+    leftIcon: "fas fa-hand-holding-usd",
     module: "withdraw_requests"
   },
 ];
