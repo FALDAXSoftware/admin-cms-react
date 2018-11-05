@@ -95,7 +95,7 @@ class EditEmployeeModal extends Component {
             let formData = {
                 id: fields["value"],
                 name: fields["name"],
-                roles: selectedRole
+                role_id: selectedRole
             };
 
             ApiUtils.editEmployee(token, formData)

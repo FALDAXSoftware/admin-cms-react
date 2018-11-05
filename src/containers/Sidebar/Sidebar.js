@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import clone from 'clone';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Layout } from 'antd';
 import options from './options';
 import Scrollbars from '../../components/utility/customScrollBar.js';
@@ -103,7 +103,7 @@ class Sidebar extends Component {
       );
     }
     return (
-      <Menu.Item key={key}>
+      <Menu.Item key={`${url}/${key}`}>
         <Link to={`${url}/${key}`}>
           <span className="isoMenuHolder" style={submenuColor}>
             <i className={leftIcon} />
@@ -117,7 +117,9 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { app, toggleOpenDrawer, customizedTheme, height, roles } = this.props;
+
+    const { app, toggleOpenDrawer, customizedTheme, height, roles, location } = this.props;
+
     let that = this;
     let rolesArray = [];
     for (let key in roles.roles) {
@@ -173,7 +175,7 @@ class Sidebar extends Component {
               className="isoDashboardMenu"
               mode={mode}
               openKeys={collapsed ? [] : app.openKeys}
-              selectedKeys={app.current}
+              selectedKeys={[location.pathname]}
               onOpenChange={this.onOpenChange}
             >
               {
@@ -205,4 +207,4 @@ export default connect(
     roles: state.Auth.get('roles'),
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
-)(Sidebar);
+)(withRouter(Sidebar));

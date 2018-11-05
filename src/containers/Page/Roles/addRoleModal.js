@@ -140,13 +140,19 @@ class AddRoleModal extends Component {
             this.setState({ all: false, [field]: e.target.checked })
 
         } else {
+
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
                     all: false, coins: false, users: false, staticPage: false, announcement: false,
                     countries: false, roles: false, employee: false, pairs: false, blogs: false
                 })
             } else {
-                this.setState({ [field]: e.target.checked })
+                if (e.target.checked === false) {
+                    this.setState({ [field]: e.target.checked, all: false })
+                } else {
+                    this.setState({ [field]: e.target.checked })
+                }
+
             }
         }
     }

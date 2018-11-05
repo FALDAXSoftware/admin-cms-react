@@ -219,3 +219,6 @@ html[dir='rtl'] .dz-hidden-input {
   height: auto;
   max-width: 100%;
 }
+.descriptionContainer ul{
+  list-style: circle inside;
+}
