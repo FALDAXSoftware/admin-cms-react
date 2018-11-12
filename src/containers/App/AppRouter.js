@@ -74,6 +74,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest")),
         module: "withdraw_requests"
     },
+    {
+        path: "coin-requests",
+        component: asyncComponent(() => import("../Page/Coins/coinRequests")),
+        module: "coin_requests"
+    },
 ];
 
 const mandatoryRoutes = [

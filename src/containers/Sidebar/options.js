@@ -89,6 +89,12 @@ const options = [
     leftIcon: "fas fa-hand-holding-usd",
     module: "withdraw_requests"
   },
+  {
+    key: "coin-requests",
+    label: "sidebar.coinRequests",
+    leftIcon: "fas fa-coins",
+    module: "coin_requests"
+  },
 ];
 
 export default options;

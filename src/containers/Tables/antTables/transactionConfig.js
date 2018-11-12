@@ -10,14 +10,15 @@ const renderCell = (object, type, key, user = null, source = null, destination =
     const source_address = object[source];
     const destination_address = object[destination];
     const amount = object[amt];
-    const transactionType = object[tras_type];
+    const transaction_type = object[tras_type];
     const created_at = object[createdOn];
-    const transactionId = object[transactionID];
+    const transaction_id = object[transactionID];
     const coin_id = object[coin];
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address, amount, transactionType, created_at, transactionId, coin_id);
+            return DateCell(value, email, source_address, destination_address,
+                amount, transaction_type, created_at, transaction_id, coin_id);
         default:
             return TextCell(value);
     }
@@ -26,9 +27,9 @@ const renderCell = (object, type, key, user = null, source = null, destination =
 const columns = [
     {
         title: <IntlMessages id="transactionTable.title.transactionId" />,
-        key: 'transactionId',
+        key: 'transaction_id',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'transactionId')
+        render: object => renderCell(object, 'TextCell', 'transaction_id')
     },
     {
         title: <IntlMessages id="transactionTable.title.email" />,
@@ -56,9 +57,9 @@ const columns = [
     },
     {
         title: <IntlMessages id="transactionTable.title.transactionType" />,
-        key: 'transactionType',
+        key: 'transaction_type',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'transactionType')
+        render: object => renderCell(object, 'TextCell', 'transaction_type')
     },
     {
         title: <IntlMessages id="transactionTable.title.created_at" />,

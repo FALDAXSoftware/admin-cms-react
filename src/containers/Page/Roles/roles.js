@@ -33,7 +33,7 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, coins, announcement, staticPage, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active) {
+    static roleStatus(value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -41,7 +41,7 @@ class Roles extends Component {
             roles,
             users,
             coins,
-            staticPage,
+            static_page,
             announcement,
             countries,
             employee,
@@ -69,9 +69,9 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, coins, announcement, staticPage, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active) {
+    static editRole(value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active) {
         let roleDetails = {
-            value, name, users, coins, announcement, staticPage, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active
+            value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, is_active
         }
         self.setState({ showEditRoleModal: true, roleDetails });
     }

@@ -21,6 +21,7 @@ import { tradeTableInfos } from './tradeConfig';
 import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
 import { buyOrderTableInfos } from './buyOrderConfig';
+import { coinReqTableInfos } from './coinRequestConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -70,5 +71,6 @@ export {
   TableViews, tableinfos, dataList, coinTableInfos, staticPagesInfos, referralInfos,
   AnnounceInfos, countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
   blogsTableInfos, historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
-  tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos
+  tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
+  coinReqTableInfos
 };

@@ -9,24 +9,24 @@ const renderCell = (object, type, key, isUser = null, MonDepCrypto = null, MonDe
 ) => {
     const value = object[key];
     const user = object[isUser];
-    const monthlyDepositCrypto = object[MonDepCrypto];
-    const monthlyDepositFiat = object[MonDepFiat];
-    const monthlyWithdrawCrypto = object[MonWithCrypto];
-    const monthlyWithdrawFiat = object[MonWithFiat];
-    const dailyDepositCrypto = object[dailyDepCrypto];
-    const dailyDepositFiat = object[dailyDepFiat];
-    const dailyWithdrawCrypto = object[dailyWithCrypto];
-    const dailyWithdrawFiat = object[dailyWithFiat];
-    const minWithdrawlCrypto = object[minWithCrypto];
-    const minWithdrawlFiat = object[minWithFiat];
+    const monthly_deposit_crypto = object[MonDepCrypto];
+    const monthly_deposit_fiat = object[MonDepFiat];
+    const monthly_withdraw_crypto = object[MonWithCrypto];
+    const monthly_withdraw_fiat = object[MonWithFiat];
+    const daily_deposit_crypto = object[dailyDepCrypto];
+    const daily_deposit_fiat = object[dailyDepFiat];
+    const daily_withdraw_crypto = object[dailyWithCrypto];
+    const daily_withdraw_fiat = object[dailyWithFiat];
+    const min_withdrawl_crypto = object[minWithCrypto];
+    const min_withdrawl_fiat = object[minWithFiat];
 
     switch (type) {
         case 'DateCell':
             return DateCell(value);
         case 'LimitActionCell':
-            return LimitActionCell(value, user, monthlyDepositCrypto, monthlyDepositFiat,
-                monthlyWithdrawCrypto, monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat,
-                dailyWithdrawCrypto, dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat
+            return LimitActionCell(value, user, monthly_deposit_crypto, monthly_deposit_fiat,
+                monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat,
+                daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat
             );
         default:
             return TextCell(value);
@@ -42,72 +42,72 @@ const columns = [
     },
     {
         title: <IntlMessages id="limitTable.title.monthlyDepositCrypto" />,
-        key: 'monthlyDepositCrypto',
+        key: 'monthly_deposit_crypto',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'monthlyDepositCrypto')
+        render: object => renderCell(object, 'TextCell', 'monthly_deposit_crypto')
     },
     {
         title: <IntlMessages id="limitTable.title.monthlyDepositFiat" />,
-        key: 'monthlyDepositFiat',
+        key: 'monthly_deposit_fiat',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'monthlyDepositFiat')
+        render: object => renderCell(object, 'TextCell', 'monthly_deposit_fiat')
     },
     {
         title: <IntlMessages id="limitTable.title.monthlyWithdrawCrypto" />,
-        key: 'monthlyWithdrawCrypto',
+        key: 'monthly_withdraw_crypto',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'monthlyWithdrawCrypto')
+        render: object => renderCell(object, 'TextCell', 'monthly_withdraw_crypto')
     },
     {
         title: <IntlMessages id="limitTable.title.monthlyWithdrawFiat" />,
-        key: 'monthlyWithdrawFiat',
+        key: 'monthly_withdraw_fiat',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'monthlyWithdrawFiat')
+        render: object => renderCell(object, 'TextCell', 'monthly_withdraw_fiat')
     },
     {
         title: <IntlMessages id="limitTable.title.dailyDepositCrypto" />,
-        key: 'dailyDepositCrypto',
+        key: 'daily_deposit_crypto',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'dailyDepositCrypto')
+        render: object => renderCell(object, 'TextCell', 'daily_deposit_crypto')
     },
     {
         title: <IntlMessages id="limitTable.title.dailyDepositFiat" />,
-        key: 'dailyDepositFiat',
+        key: 'daily_deposit_fiat',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'dailyDepositFiat')
+        render: object => renderCell(object, 'TextCell', 'daily_deposit_fiat')
     },
     {
         title: <IntlMessages id="limitTable.title.dailyWithdrawCrypto" />,
-        key: 'dailyWithdrawCrypto',
+        key: 'daily_withdraw_crypto',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'dailyWithdrawCrypto')
+        render: object => renderCell(object, 'TextCell', 'daily_withdraw_crypto')
     },
     {
         title: <IntlMessages id="limitTable.title.dailyWithdrawFiat" />,
-        key: 'dailyWithdrawFiat',
+        key: 'daily_withdraw_fiat',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'dailyWithdrawFiat')
+        render: object => renderCell(object, 'TextCell', 'daily_withdraw_fiat')
     },
     {
         title: <IntlMessages id="limitTable.title.minWithdrawlCrypto" />,
-        key: 'minWithdrawlCrypto',
+        key: 'min_withdrawl_crypto',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'minWithdrawlCrypto')
+        render: object => renderCell(object, 'TextCell', 'min_withdrawl_crypto')
     },
     {
         title: <IntlMessages id="limitTable.title.minWithdrawlFiat" />,
-        key: 'minWithdrawlFiat',
+        key: 'min_withdrawl_fiat',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'minWithdrawlFiat')
+        render: object => renderCell(object, 'TextCell', 'min_withdrawl_fiat')
     },
     {
         title: <IntlMessages id="limitTable.title.Actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'LimitActionCell', 'id', 'user', 'monthlyDepositCrypto', 'monthlyDepositFiat',
-            'monthlyWithdrawCrypto', 'monthlyWithdrawFiat', 'dailyDepositCrypto', 'dailyDepositFiat',
-            'dailyWithdrawCrypto', 'dailyWithdrawFiat', 'minWithdrawlCrypto', 'minWithdrawlFiat')
+            'LimitActionCell', 'id', 'user', 'monthly_deposit_crypto', 'monthly_deposit_fiat',
+            'monthly_withdraw_crypto', 'monthly_withdraw_fiat', 'daily_deposit_crypto', 'daily_deposit_fiat',
+            'daily_withdraw_crypto', 'daily_withdraw_fiat', 'min_withdrawl_crypto', 'min_withdrawl_fiat')
     }
 ];
 

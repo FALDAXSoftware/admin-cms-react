@@ -18,7 +18,7 @@ class EditRoleModal extends Component {
             errType: 'Success',
             coins: this.props.fields['coins'],
             users: this.props.fields['users'],
-            staticPage: this.props.fields['staticPage'],
+            static_page: this.props.fields['static_page'],
             roles: this.props.fields['roles'],
             announcement: this.props.fields['announcement'],
             countries: this.props.fields['countries'],
@@ -26,7 +26,7 @@ class EditRoleModal extends Component {
             pairs: this.props.fields['pairs'],
             blogs: this.props.fields['blogs'],
             all: this.props.fields['employee'] && this.props.fields['coins'] && this.props.fields['users'] &&
-                this.props.fields['staticPage'] && this.props.fields['roles'] && this.props.fields['announcement'] &&
+                this.props.fields['static_page'] && this.props.fields['roles'] && this.props.fields['announcement'] &&
                 this.props.fields['countries'] && this.props.fields['pairs'] && this.props.fields['blogs'],
             isDisabled: false,
             showError: false
@@ -41,14 +41,14 @@ class EditRoleModal extends Component {
                 fields: nextProps.fields,
                 coins: nextProps.fields['coins'],
                 users: nextProps.fields['users'],
-                staticPage: nextProps.fields['staticPage'],
+                static_page: nextProps.fields['static_page'],
                 roles: nextProps.fields['roles'],
                 announcement: nextProps.fields['announcement'],
                 employee: nextProps.fields['employee'],
                 countries: nextProps.fields['countries'],
                 pairs: nextProps.fields['pairs'],
                 blogs: nextProps.fields['blogs'],
-                all: nextProps.fields['coins'] && nextProps.fields['users'] && nextProps.fields['staticPage'] &&
+                all: nextProps.fields['coins'] && nextProps.fields['users'] && nextProps.fields['static_page'] &&
                     nextProps.fields['roles'] && nextProps.fields['announcement'] && nextProps.fields['employee']
                     && nextProps.fields['countries'] && this.props.fields['pairs'] && this.props.fields['blogs']
                     ? true : false
@@ -90,10 +90,10 @@ class EditRoleModal extends Component {
 
     _editRole = () => {
         const { token, getAllRoles } = this.props;
-        const { fields, roles, users, coins, staticPage, announcement, countries,
+        const { fields, roles, users, coins, static_page, announcement, countries,
             employee, pairs, blogs, showError
         } = this.state;
-        if (users || coins | roles || staticPage || announcement || countries ||
+        if (users || coins | roles || static_page || announcement || countries ||
             employee || pairs || blogs) {
 
             if (this.validator.allValid() && !showError) {
@@ -105,7 +105,7 @@ class EditRoleModal extends Component {
                     roles,
                     users,
                     coins,
-                    staticPage,
+                    static_page,
                     announcement,
                     countries,
                     employee,
@@ -144,13 +144,13 @@ class EditRoleModal extends Component {
         const { all } = this.state;
         if (all == false && field == 'all') {
             this.setState({
-                all: true, coins: true, users: true, staticPage: true, announcement: true,
+                all: true, coins: true, users: true, static_page: true, announcement: true,
                 countries: true, roles: true, employee: true, pairs: true, blogs: true
             })
         } else {
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
-                    all: false, coins: false, users: false, staticPage: false, announcement: false,
+                    all: false, coins: false, users: false, static_page: false, announcement: false,
                     countries: false, roles: false, employee: false, pairs: false, blogs: false
                 })
             } else {
@@ -161,7 +161,7 @@ class EditRoleModal extends Component {
 
     render() {
         const { loader, showEditRoleModal, fields, errMsg, errType, coins, users,
-            staticPage, announcement, countries, roles, employee, all, isDisabled,
+            static_page, announcement, countries, roles, employee, all, isDisabled,
             pairs, blogs, showError
         } = this.state;
 
@@ -194,7 +194,7 @@ class EditRoleModal extends Component {
                         <Checkbox checked={all} onChange={this._onChangeRole.bind(this, 'all')}>All</Checkbox><br />
                         <Checkbox checked={users} onChange={this._onChangeRole.bind(this, 'users')}>Users Module</Checkbox><br />
                         <Checkbox checked={coins} onChange={this._onChangeRole.bind(this, 'coins')}>Coins Module</Checkbox><br />
-                        <Checkbox checked={staticPage} onChange={this._onChangeRole.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
+                        <Checkbox checked={static_page} onChange={this._onChangeRole.bind(this, 'static_page')}>Static Pages Module</Checkbox><br />
                         <Checkbox checked={announcement} onChange={this._onChangeRole.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
                         <Checkbox checked={countries} onChange={this._onChangeRole.bind(this, 'countries')}>Country Module</Checkbox><br />
                         <Checkbox checked={roles} onChange={this._onChangeRole.bind(this, 'roles')}>Roles Module</Checkbox><br />

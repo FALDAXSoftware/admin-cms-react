@@ -377,6 +377,11 @@
   "coinTable.title.description": "Description",
   "coinTable.title.walletAddress": "Wallet Address",
   "coinTable.title.Actions": "Actions",
+  "coinTable.title.name": "Coin Name",
+  "coinTable.title.email": "Email",
+  "coinTable.title.message": "Message",
+  "coinTable.title.url": "URL",
+  "coinTable.title.target_date": "Target Date",
   "staticPageTable.title.srNo": "#",
   "staticPageTable.title.name": "Name",
   "staticPageTable.title.title": "Title",
@@ -497,5 +502,6 @@
   "sidebar.limit": "Limit Management",
   "sidebar.transactionHistory": "Transaction History",
   "sidebar.tradeHistory": "Trade History",
-  "sidebar.withdrawRequests": "Withdraw Requests"
+  "sidebar.withdrawRequests": "Withdraw Requests",
+  "sidebar.coinRequests": "Coin Requests"
 }

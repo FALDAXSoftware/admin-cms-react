@@ -1,6 +1,5 @@
-// const API_URL = "http://192.168.0.148:1337"; // Local (Kalpit) URL
-// const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
-const API_URL = "http://18.191.87.133:8084"; //Live URL
+const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
+//const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -819,6 +818,24 @@ const ApiUtils = {
         }
     },
 
+    //get all coins api
+    getAllCoinRequests: function (page, limit, token, search) {
+        let url = "/admin/coin-requests?page=" + page + "&limit=" + limit;
+        if (search) {
+            url = url + "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;

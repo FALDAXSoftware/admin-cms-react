@@ -15,7 +15,7 @@ class AddRoleModal extends Component {
             fields: {},
             coins: false,
             users: false,
-            staticPage: false,
+            static_page: false,
             roles: false,
             announcement: false,
             countries: false,
@@ -49,7 +49,7 @@ class AddRoleModal extends Component {
 
     _closeAddRoleModal = () => {
         this.setState({
-            showAddRoleModal: false, users: false, coins: false, staticPage: false,
+            showAddRoleModal: false, users: false, coins: false, static_page: false,
             roles: false, countries: false, employee: false, pairs: false,
             blogs: false, showError: false
         }, () => {
@@ -73,7 +73,7 @@ class AddRoleModal extends Component {
 
         fields['name'] = '';
         this.setState({
-            fields, users: false, coins: false, staticPage: false, roles: false,
+            fields, users: false, coins: false, static_page: false, roles: false,
             countries: false, employee: false, pairs: false, blogs: false,
             showError: false
         });
@@ -81,9 +81,9 @@ class AddRoleModal extends Component {
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
-        let { fields, users, coins, roles, staticPage, announcement, countries,
+        let { fields, users, coins, roles, static_page, announcement, countries,
             employee, pairs, blogs, showError } = this.state;
-        if (users || coins | roles || staticPage || announcement || countries ||
+        if (users || coins | roles || static_page || announcement || countries ||
             employee || pairs || blogs) {
             if (this.validator.allValid() && !showError) {
                 this.setState({ loader: true, isDisabled: true });
@@ -92,7 +92,7 @@ class AddRoleModal extends Component {
                     roles,
                     users,
                     coins,
-                    staticPage,
+                    static_page,
                     announcement,
                     countries,
                     employee,
@@ -127,15 +127,15 @@ class AddRoleModal extends Component {
     }
 
     onChange = (field, e, val) => {
-        let { all, users, coins, roles, staticPage, announcement, countries,
+        let { all, users, coins, roles, static_page, announcement, countries,
             employee, pairs, blogs } = this.state;
 
         if (all == false && field == 'all') {
             this.setState({
-                all: true, coins: true, users: true, staticPage: true, announcement: true,
+                all: true, coins: true, users: true, static_page: true, announcement: true,
                 countries: true, roles: true, employee: true, pairs: true, blogs: true
             })
-        } else if (!users || !coins | !roles || !staticPage || !announcement || !countries ||
+        } else if (!users || !coins | !roles || !static_page || !announcement || !countries ||
             !employee || !pairs || !blogs) {
             this.setState({ all: false, [field]: e.target.checked })
 
@@ -143,7 +143,7 @@ class AddRoleModal extends Component {
 
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
-                    all: false, coins: false, users: false, staticPage: false, announcement: false,
+                    all: false, coins: false, users: false, static_page: false, announcement: false,
                     countries: false, roles: false, employee: false, pairs: false, blogs: false
                 })
             } else {
@@ -158,7 +158,7 @@ class AddRoleModal extends Component {
     }
 
     render() {
-        const { loader, showAddRoleModal, fields, all, users, staticPage, announcement,
+        const { loader, showAddRoleModal, fields, all, users, static_page, announcement,
             coins, countries, roles, employee, errMsg, errType, isDisabled, pairs, blogs,
             showError } = this.state;
 
@@ -190,7 +190,7 @@ class AddRoleModal extends Component {
                     <Checkbox checked={all} onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
                     <Checkbox checked={users} onChange={this.onChange.bind(this, 'users')}>Users Module</Checkbox><br />
                     <Checkbox checked={coins} onChange={this.onChange.bind(this, 'coins')}>Coins Module</Checkbox><br />
-                    <Checkbox checked={staticPage} onChange={this.onChange.bind(this, 'staticPage')}>Static Pages Module</Checkbox><br />
+                    <Checkbox checked={static_page} onChange={this.onChange.bind(this, 'static_page')}>Static Pages Module</Checkbox><br />
                     <Checkbox checked={announcement} onChange={this.onChange.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
                     <Checkbox checked={countries} onChange={this.onChange.bind(this, 'countries')}>Country Module</Checkbox><br />
                     <Checkbox checked={roles} onChange={this.onChange.bind(this, 'roles')}>Roles Module</Checkbox><br />

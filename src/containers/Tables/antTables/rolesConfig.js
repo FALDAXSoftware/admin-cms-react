@@ -12,7 +12,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const users = object[isUser];
     const coins = object[isCoin];
     const announcement = object[isAnnounce];
-    const staticPage = object[isStatic];
+    const static_page = object[isStatic];
     const roles = object[isRole];
     const countries = object[isCountry];
     const employee = object[isEmp];
@@ -26,11 +26,11 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
 
     switch (type) {
         case 'RoleSwitchCell':
-            return RoleSwitchCell(value, name, users, coins, announcement, staticPage,
+            return RoleSwitchCell(value, name, users, coins, announcement, static_page,
                 roles, countries, employee, pairs, blogs, limit_management,
                 transaction_history, trade_history, withdraw_requests, is_active);
         case 'RolesActionCell':
-            return RolesActionCell(value, name, users, coins, announcement, staticPage,
+            return RolesActionCell(value, name, users, coins, announcement, static_page,
                 roles, countries, employee, pairs, blogs, limit_management,
                 transaction_history, trade_history, withdraw_requests, is_active);
         default:
@@ -55,16 +55,17 @@ const columns = [
         title: <IntlMessages id="roleTable.title.status" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins', 'announcement', 'staticPage',
-            'roles', 'countries', 'employee', 'pairs', 'blogs', 'limit_management',
-            'transaction_history', 'trade_history', 'withdraw_requests', 'is_active')
+        render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins',
+            'announcement', 'static_page', 'roles', 'countries', 'employee', 'pairs',
+            'blogs', 'limit_management', 'transaction_history', 'trade_history',
+            'withdraw_requests', 'is_active')
     },
     {
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'RolesActionCell', 'id', 'name', 'users', 'coins', 'announcement', 'staticPage',
+            'RolesActionCell', 'id', 'name', 'users', 'coins', 'announcement', 'static_page',
             'roles', 'countries', 'employee', 'pairs', 'blogs', 'limit_management',
             'transaction_history', 'trade_history', 'withdraw_requests', 'is_active')
     }
