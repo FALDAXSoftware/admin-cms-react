@@ -95,6 +95,24 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "coin_requests"
   },
+  {
+    key: "inquiries",
+    label: "sidebar.inquiries",
+    leftIcon: "fas fa-coins",
+    module: "inquiries"
+  },
+  {
+    key: "jobs",
+    label: "sidebar.jobs",
+    leftIcon: "far fa-briefcase",
+    module: "jobs"
+  },
+  {
+    key: "contact-us",
+    label: "sidebar.contact",
+    leftIcon: "far fa-briefcase",
+    module: "contact_us"
+  },
 ];
 
 export default options;

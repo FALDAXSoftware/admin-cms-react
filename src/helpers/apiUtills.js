@@ -836,6 +836,60 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    //get all inquiry api
+    getAllInquiries: function (page, limit, token, search) {
+        let url = "/admin/get-all-inquiry?page=" + page + "&limit=" + limit;
+        if (search) {
+            url = url + "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all jobs api
+    getAllJobs: function (page, limit, token, search) {
+        let url = "/all-jobs?page=" + page + "&limit=" + limit;
+        if (search) {
+            url = url + "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    addJob: function (token, form) {
+        let url = "/admin/add-job";
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;

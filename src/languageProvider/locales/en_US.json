@@ -382,6 +382,10 @@
   "coinTable.title.message": "Message",
   "coinTable.title.url": "URL",
   "coinTable.title.target_date": "Target Date",
+  "inquiryTable.title.email": "Email",
+  "inquiryTable.title.last_name": "Last Name",
+  "inquiryTable.title.message": "Message",
+  "inquiryTable.title.first_name": "First Name",
   "staticPageTable.title.srNo": "#",
   "staticPageTable.title.name": "Name",
   "staticPageTable.title.title": "Title",
@@ -472,6 +476,12 @@
   "orderTable.title.fill_price": "Fill Price",
   "orderTable.title.volume": "Volume",
   "orderTable.title.created_at": "Created On",
+  "jobTable.title.position": "Position",
+  "jobTable.title.short_desc": "Short Description",
+  "jobTable.title.job_desc": "Job Description",
+  "jobTable.title.location": "Location",
+  "jobTable.title.created_at": "Created On",
+  "jobTable.title.active": "Active",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
@@ -503,5 +513,8 @@
   "sidebar.transactionHistory": "Transaction History",
   "sidebar.tradeHistory": "Trade History",
   "sidebar.withdrawRequests": "Withdraw Requests",
-  "sidebar.coinRequests": "Coin Requests"
+  "sidebar.coinRequests": "Coin Requests",
+  "sidebar.inquiries": "Inquiry",
+  "sidebar.jobs": "Jobs",
+  "sidebar.contact": "Contact Us Form"
 }
