@@ -49,7 +49,7 @@ class Jobs extends Component {
         const { token } = self.props;
 
         let formData = {
-            id: value,
+            job_id: value,
             position,
             location,
             short_desc,
@@ -59,20 +59,20 @@ class Jobs extends Component {
 
         self.setState({ loader: true })
         let message = is_active ? 'Job has been inactivated successfully.' : 'Job has been activated successfully.'
-        ApiUtils.updateRole(token, formData)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    self._getAllJobs();
-                    self.setState({ errMsg: true, errMessage: message, errType: 'Success' });
-                } else {
-                    self.setState({ errMsg: true, errMessage: message });
-                }
-                self.setState({ loader: false })
+
+        ApiUtils.updateJob(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                this.setState({
+                    errMsg: true, errMessage: message, loader: false,
+                    errType: 'Success', showError: false, isDisabled: false
+                });
+                this._getAllJobs();
             })
             .catch(() => {
-                self.setState({
-                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    loader: false, errType: 'error', showError: false, isDisabled: false
                 });
             });
     }
@@ -146,7 +146,7 @@ class Jobs extends Component {
         let _this = this;
 
         this.setState({ loader: true })
-        ApiUtils.deleteCoin(deleteJobId, token)
+        ApiUtils.deleteJob(deleteJobId, token)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {

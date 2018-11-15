@@ -110,7 +110,7 @@ class EditJobModal extends Component {
                 short_desc: fields["short_desc"]
             };
 
-            ApiUtils.editJob(token, formData)
+            ApiUtils.updateJob(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
                     this.setState({

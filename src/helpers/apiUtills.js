@@ -875,16 +875,77 @@ const ApiUtils = {
         }
     },
 
+    //add job api
     addJob: function (token, form) {
-        let url = "/admin/add-job";
         try {
-            return fetch(API_URL + url, {
+            return fetch(API_URL + "/admin/add-job", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit job api call
+    updateJob: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-job", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete job api call
+    deleteJob: function (jobId, token) {
+        try {
+            return fetch(API_URL + "/admin/delete-job?job_id=" + jobId, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit contact details api
+    editContact: function (token, form) {
+        try {
+            return fetch(API_URL + "/edit-contact-details", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get contact details api
+    getContactDetails: function () {
+        try {
+            return fetch(API_URL + "/get-contact-details", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);

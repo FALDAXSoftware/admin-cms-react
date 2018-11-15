@@ -19,11 +19,28 @@ class ContactUsForm extends Component {
     }
 
     componentDidMount = () => {
-        let fields = this.state.fields;
-        const { name, email } = this.props.user;
-        fields["name"] = name;
-        fields["email"] = email;
-        this.setState({ fields });
+        this._getContactDetails();
+    }
+
+    _getContactDetails = () => {
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getContactDetails()
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({ fields: res.data });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
     }
 
     openNotificationWithIconError = (type) => {
@@ -45,7 +62,7 @@ class ContactUsForm extends Component {
     }
 
     _editProfile = () => {
-        const { token, user } = this.props;
+        const { token } = this.props;
         let fields = this.state.fields;
         let _this = this;
 
@@ -53,8 +70,14 @@ class ContactUsForm extends Component {
             _this.setState({ loader: true });
 
             const formData = {
-                name: fields['name'],
-                email: user.email
+                press: fields['press'],
+                fb_profile: fields['fb_profile'],
+                twitter_profile: fields['twitter_profile'],
+                google_profile: fields['google_profile'],
+                linkedin_profile: fields['linkedin_profile'],
+                media_name: fields['media_name'],
+                media_email: fields['media_email'],
+                phone: fields['phone'],
             }
 
             ApiUtils.editContact(token, formData)
@@ -159,9 +182,9 @@ class ContactUsForm extends Component {
                         <b>Support Contact</b>
                     </span>
                     <Input placeholder="Support Contact" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                        onChange={this._onChangeFields.bind(this, "support_contact")} value={fields["support_contact"]} />
+                        onChange={this._onChangeFields.bind(this, "phone")} value={fields["phone"]} />
                     <span className="field-error">
-                        {this.validator.message('support contact', fields['support_contact'], 'required')}
+                        {this.validator.message('support contact', fields['phone'], 'required')}
                     </span>
 
                     <Button type="primary" onClick={this._editProfile}> Update </Button>
@@ -175,5 +198,4 @@ class ContactUsForm extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token'),
-        user: state.Auth.get('user'),
     }))(ContactUsForm);
