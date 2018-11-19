@@ -104,7 +104,7 @@ const options = [
   {
     key: "jobs",
     label: "sidebar.jobs",
-    leftIcon: "far fa-briefcase",
+    leftIcon: "fas fa-suitcase-rolling",
     module: "jobs"
   },
   {

@@ -82,10 +82,16 @@ class AddBlogModal extends Component {
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        if (e.target.value.trim() == "") {
-            fields[field] = "";
-        } else {
+        if (field === 'image' && document.getElementsByClassName("cover_image")[0] !== undefined) {
+            document.getElementsByClassName("cover_image")[0].style.display = "none";
             fields[field] = e.target.value;
+            this.setState({ fields });
+        } else {
+            if (e.target.value.trim() == "") {
+                fields[field] = "";
+            } else {
+                fields[field] = e.target.value;
+            }
         }
         this.setState({ fields });
     }
@@ -107,12 +113,20 @@ class AddBlogModal extends Component {
 
         if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor) {
             this.setState({ loader: true, isDisabled: true });
+            console.log('>>>>', this.uploadCoverInput.input.files)
             let formData = {
                 title: fields["title"],
                 author: selectedAuthor,
                 description: blogDesc,
                 tags: tags.toString(),
+                cover_image: this.uploadCoverInput.input.files[0]
             };
+            // let formData = new FormData();
+            // formData.append('title', fields['title']);
+            // formData.append('author', selectedAuthor);
+            // formData.append('description', blogDesc);
+            // formData.append('tags', tags.toString());
+            // formData.append('cover_image', this.uploadCoverInput.input.files[0]);
 
             ApiUtils.addBlog(token, formData)
                 .then((res) => res.json())
@@ -138,6 +152,7 @@ class AddBlogModal extends Component {
             this.setState({
                 showError: blogDescription.length > 0 ? false : true,
                 showAuthorErr: selectedAuthor.length > 0 ? false : true,
+                loader: false
             })
         }
     }
@@ -207,6 +222,14 @@ class AddBlogModal extends Component {
                     <Button disabled={isDisabled} onClick={this._addBlog}>Add</Button>,
                 ]}
             >
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Cover Image:</span>
+                    <Input ref={(ref) => { this.uploadCoverInput = ref; }} type="file"
+                        id="uploadCoverInput" name="uploadCoverInput"
+                        style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
+                        onChange={this._handleChange.bind(this, "cover_image")} value={fields["cover_image"]} />
+                </div>
+
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Title:</span>
                     <Input placeholder="Blog Title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />
