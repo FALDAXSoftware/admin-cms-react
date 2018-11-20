@@ -39,7 +39,7 @@ const options = [
     key: "static-pages",
     label: "sidebar.staticPages",
     leftIcon: "fas fa-file",
-    module: "staticPage"
+    module: "static_page"
   },
   {
     key: "blogs",

@@ -595,7 +595,7 @@ const ApiUtils = {
                 headers: {
                     Authorization: 'Bearer ' + token
                 },
-                body: JSON.stringify(form),
+                body: form,
             });
         } catch (error) {
             console.error(error);
@@ -610,7 +610,7 @@ const ApiUtils = {
                 headers: {
                     Authorization: 'Bearer ' + token
                 },
-                body: JSON.stringify(form),
+                body: form,
             });
         } catch (error) {
             console.error(error);
@@ -944,6 +944,25 @@ const ApiUtils = {
             return fetch(API_URL + "/get-contact-details", {
                 method: 'GET',
                 headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all jobs api
+    getAllJobApplications: function (jobId, page, limit, token, search) {
+        let url = "/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
+        if (search) {
+            url = url + "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
             });

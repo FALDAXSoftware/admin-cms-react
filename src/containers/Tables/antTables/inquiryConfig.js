@@ -1,14 +1,22 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, ContentCell } from '../../../components/tables/helperCells';
+import { TextCell, ContentCell, InquiryActionCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key) => {
+const renderCell = (object, type, key, fname = null, lname = null, emailId = null,
+    msg = null, created = null) => {
     const value = object[key];
+    const first_name = object[fname];
+    const last_name = object[lname];
+    const email = object[emailId];
+    const message = object[msg];
+    const created_at = object[created];
 
     switch (type) {
         case 'ContentCell':
             return ContentCell(value);
+        case 'InquiryActionCell':
+            return InquiryActionCell(value, first_name, last_name, email, message, created_at);
         default:
             return TextCell(value);
     }
@@ -38,6 +46,13 @@ const columns = [
         key: 'message',
         width: 200,
         render: object => renderCell(object, 'ContentCell', 'message')
+    }, {
+        title: <IntlMessages id="blogTable.title.Actions" />,
+        key: 'action',
+        width: 200,
+        render: object => renderCell(object,
+            'InquiryActionCell', 'id', 'first_name', 'last_name', 'email', 'message',
+            'created_at')
     }
 ];
 

@@ -40,17 +40,17 @@ class Blogs extends Component {
         Blogs.deleteBlog = Blogs.deleteBlog.bind(this);
     }
 
-    static editBlog(value, title, admin_name, tags, created_at, description, admin_id) {
+    static editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image) {
         let blogDetails = {
-            value, title, admin_name, tags, created_at, description, admin_id
+            value, title, admin_name, tags, created_at, description, admin_id, cover_image
         }
         let tagsArray = tags.split(",");
         self.setState({ showEditBlogModal: true, blogDetails, tags: tagsArray });
     }
 
-    static viewBlog(value, title, admin_name, tags, created_at, description, admin_id) {
+    static viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image) {
         let blogDetails = {
-            value, title, admin_name, tags, created_at, description, admin_id
+            value, title, admin_name, tags, created_at, description, admin_id, cover_image
         }
         self.setState({ showViewBlogModal: true, blogDetails });
     }

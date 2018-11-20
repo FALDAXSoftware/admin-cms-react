@@ -192,7 +192,7 @@ class EditJobModal extends Component {
                         <span>Location:</span>
                         <Input placeholder="Location" onChange={this._handleChange.bind(this, "location")} value={fields["location"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('location', fields["location"], 'required', 'text-danger')}
+                            {this.validator.message('location', fields["location"], 'required|max:50', 'text-danger')}
                         </span>
                     </div>
                     {loader && <Spin indicator={loaderIcon} />}

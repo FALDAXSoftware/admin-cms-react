@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { BUCKET_URL } from '../../../helpers/globals';
 
 class ViewUserModal extends Component {
     constructor(props) {
@@ -27,7 +28,6 @@ class ViewUserModal extends Component {
     render() {
         const { userDetails } = this.props;
         const { showViewUserModal } = this.state;
-        let IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/";
 
         return (
             <Modal
@@ -38,7 +38,8 @@ class ViewUserModal extends Component {
                     <Button onClick={this._closeViewUserModal}>OK</Button>,
                 ]}
             >
-                <img alt="user" style={{ width: '40px', height: '40px' }} src={IMAGE_URL + userDetails.profile_pic} />
+                <img alt="user" style={{ width: '40px', height: '40px' }}
+                    src={BUCKET_URL + userDetails.profile_pic} />
                 <br />
 
                 <span> <b>First Name:</b> </span>

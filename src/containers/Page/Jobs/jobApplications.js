@@ -1,46 +1,51 @@
 import React, { Component } from 'react';
 import { Input, Tabs, Pagination, notification, Spin } from 'antd';
-import { inquiryTableInfos } from "../../Tables/antTables";
+import { jobAppTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
-import ViewInquiryModal from './viewInquiry';
+import ViewJobAppModal from './viewJobAppModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 var self;
 
-class Inquiry extends Component {
+class JobApplications extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allInquiries: [],
-            allInquiryCount: 0,
-            searchInquiry: '',
+            allApplications: [],
+            allApplicationsCount: 0,
+            searchJobApp: '',
             limit: 50,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
             page: 1,
             loader: false,
-            inquiryDetails: [],
-            showViewInquiryModal: false
+            applicationDetails: [],
+            showViewJobAppModal: false,
+            jobId: ''
         }
         self = this;
-        Inquiry.viewInquiry = Inquiry.viewInquiry.bind(this);
+        JobApplications.viewJobApplication = JobApplications.viewJobApplication.bind(this);
+    }
+
+    static viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) {
+        let applicationDetails = {
+            value, first_name, last_name, email, phone_number, created_at, resume, cover_letter
+        }
+        self.setState({ showViewJobAppModal: true, applicationDetails });
     }
 
     componentDidMount = () => {
-        this._getAllInquiries();
-    }
-
-    static viewInquiry(value, first_name, last_name, email, message, created_at) {
-        let inquiryDetails = {
-            value, first_name, last_name, email, message, created_at
-        }
-        self.setState({ inquiryDetails, showViewInquiryModal: true })
+        const { location } = this.props;
+        let job = location.pathname.split('/');
+        let jobId = job[job.length - 1]
+        this._getAllJobApplicants(jobId);
+        this.setState({ jobId })
     }
 
     openNotificationWithIconError = (type) => {
@@ -51,50 +56,52 @@ class Inquiry extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllInquiries = () => {
+    _getAllJobApplicants = (jobId) => {
         const { token } = this.props;
-        const { limit, searchInquiry, page } = this.state;
+        const { limit, searchJobApp, page } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllInquiries(page, limit, token, searchInquiry)
+        ApiUtils.getAllJobApplications(jobId, page, limit, token, searchJobApp)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allInquiries: res.data, allInquiryCount: res.inquiryCount, searchInquiry: ''
+                        allApplications: res.data, allApplicationsCount: res.inquiryCount,
+                        searchJobApp: ''
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchInquiry: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, searchJobApp: '' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchInquiry: '', errType: 'error', loader: false
+                    searchJobApp: '', errType: 'error', loader: false
                 });
             });
     }
 
-    _searchInquiry = (val) => {
-        this.setState({ searchInquiry: val, page: 1 }, () => {
-            this._getAllInquiries();
+    _searchJobApp = (val) => {
+        this.setState({ searchJobApp: val, page: 1 }, () => {
+            this._getAllJobApplicants(this.state.jobId);
         });
     }
 
-    _handleInquiryPagination = (page) => {
-        this._getAllInquiries(page);
-        this.setState({ page })
+    _handleJobPagination = (page) => {
+        this.setState({ page }, () => {
+            this._getAllJobApplicants(this.state.jobId);
+        })
     }
 
-    _closeViewInquiryModal = () => {
-        this.setState({ showViewInquiryModal: false })
+    _closeViewJobAppModal = () => {
+        this.setState({ showViewJobAppModal: false });
     }
 
     render() {
-        const { allInquiries, allInquiryCount, errType, loader, errMsg,
-            page, inquiryDetails, showViewInquiryModal } = this.state;
+        const { allApplications, allApplicationsCount, errType, loader, errMsg, page,
+            showViewJobAppModal, applicationDetails } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -104,12 +111,12 @@ class Inquiry extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {inquiryTableInfos.map(tableInfo => (
+                        {jobAppTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Search
-                                        placeholder="Search inquiries"
-                                        onSearch={(value) => this._searchInquiry(value)}
+                                        placeholder="Search applicants"
+                                        onSearch={(value) => this._searchJobApp(value)}
                                         style={{ "float": "right", "width": "250px" }}
                                         enterButton
                                     />
@@ -118,25 +125,25 @@ class Inquiry extends Component {
                                     <Spin />
                                 </span>}
                                 <div>
-                                    <ViewInquiryModal
-                                        inquiryDetails={inquiryDetails}
-                                        showViewInquiryModal={showViewInquiryModal}
-                                        closeViewInquiryModal={this._closeViewInquiryModal}
+                                    <ViewJobAppModal
+                                        applicationDetails={applicationDetails}
+                                        showViewJobAppModal={showViewJobAppModal}
+                                        closeViewJobAppModal={this._closeViewJobAppModal}
                                     />
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
-                                        dataSource={allInquiries}
+                                        dataSource={allApplications}
                                         className="isoCustomizedTable"
                                     />
                                     <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
-                                        onChange={this._handleInquiryPagination.bind(this)}
+                                        onChange={this._handleJobPagination.bind(this)}
                                         pageSize={50}
                                         current={page}
-                                        total={allInquiryCount}
+                                        total={allApplicationsCount}
                                     />
                                 </div>
                             </TabPane>
@@ -151,6 +158,6 @@ class Inquiry extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Inquiry);
+    }))(JobApplications);
 
-export { Inquiry, inquiryTableInfos };
+export { JobApplications, jobAppTableInfos };

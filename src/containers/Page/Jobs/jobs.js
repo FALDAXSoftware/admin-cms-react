@@ -39,6 +39,7 @@ class Jobs extends Component {
         Jobs.deleteJob = Jobs.deleteJob.bind(this);
         Jobs.editJob = Jobs.editJob.bind(this);
         Jobs.viewJob = Jobs.viewJob.bind(this);
+        Jobs.showApplicants = Jobs.showApplicants.bind(this);
     }
 
     componentDidMount = () => {
@@ -75,6 +76,10 @@ class Jobs extends Component {
                     loader: false, errType: 'error', showError: false, isDisabled: false
                 });
             });
+    }
+
+    static showApplicants(value) {
+        self.props.history.push('/dashboard/job-applications/' + value);
     }
 
     static editJob(value, position, location, short_desc, job_desc, is_active) {
@@ -136,8 +141,9 @@ class Jobs extends Component {
     }
 
     _handleJobPagination = (page) => {
-        this._getAllJobs(page);
-        this.setState({ page })
+        this.setState({ page }, () => {
+            this._getAllJobs(page);
+        })
     }
 
     _deleteJob = () => {

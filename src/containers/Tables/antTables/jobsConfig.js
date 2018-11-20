@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, ContentCell, DateCell, JobActionCell, JobSwitchCell
+    TextCell, ContentCell, DateCell, JobActionCell, JobSwitchCell, JobButtonCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, title = null, loc = null, desc = null, jobDesc = null,
@@ -19,6 +19,8 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
             return ContentCell(value);
         case 'DateCell':
             return DateCell(value);
+        case 'JobButtonCell':
+            return JobButtonCell(value);
         case 'JobSwitchCell':
             return JobSwitchCell(value, position, location, short_desc, job_desc, is_active);
         case 'JobActionCell':
@@ -63,6 +65,11 @@ const columns = [
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'JobSwitchCell', 'id', 'position', 'location', 'short_desc', 'job_desc', 'is_active')
+    }, {
+        title: <IntlMessages id="jobTable.title.app" />,
+        key: 'button',
+        width: 200,
+        render: object => renderCell(object, 'JobButtonCell', 'id')
     }, {
         title: <IntlMessages id="blogTable.title.Actions" />,
         key: 'action',

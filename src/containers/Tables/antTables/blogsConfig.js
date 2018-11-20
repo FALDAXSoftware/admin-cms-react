@@ -5,7 +5,8 @@ import {
     TextCell, BlogActionCell, DateCell, TagsCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, blog_title = null, authorName = null, tag = null, created = null, desc = null, id = null) => {
+const renderCell = (object, type, key, blog_title = null, authorName = null, tag = null,
+    created = null, desc = null, id = null, image = null) => {
     const value = object[key];
     const title = object[blog_title];
     const admin_name = object[authorName];
@@ -13,14 +14,16 @@ const renderCell = (object, type, key, blog_title = null, authorName = null, tag
     const created_at = object[created];
     const description = object[desc];
     const admin_id = object[id];
+    const cover_image = object[image];
 
     switch (type) {
         case 'DateCell':
             return DateCell(value, created_at);
         case 'TagsCell':
-            return TagsCell(value, title, admin_name, tags, created_at, description, admin_id);
+            return TagsCell(value, title, admin_name, tags, created_at, description, admin_id, cover_image);
         case 'BlogActionCell':
-            return BlogActionCell(value, title, admin_name, tags, created_at, description, admin_id);
+            return BlogActionCell(value, title, admin_name, tags, created_at, description,
+                admin_id, cover_image);
         default:
             return TextCell(value);
     }
@@ -51,7 +54,8 @@ const columns = [{
     key: 'action',
     width: 200,
     render: object => renderCell(object,
-        'BlogActionCell', 'id', 'title', 'admin_name', 'tags', 'created_at', 'description', 'admin_id')
+        'BlogActionCell', 'id', 'title', 'admin_name', 'tags', 'created_at',
+        'description', 'admin_id', 'cover_image')
 }];
 
 const blogsTableInfos = [

@@ -113,20 +113,13 @@ class AddBlogModal extends Component {
 
         if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor) {
             this.setState({ loader: true, isDisabled: true });
-            console.log('>>>>', this.uploadCoverInput.input.files)
-            let formData = {
-                title: fields["title"],
-                author: selectedAuthor,
-                description: blogDesc,
-                tags: tags.toString(),
-                cover_image: this.uploadCoverInput.input.files[0]
-            };
-            // let formData = new FormData();
-            // formData.append('title', fields['title']);
-            // formData.append('author', selectedAuthor);
-            // formData.append('description', blogDesc);
-            // formData.append('tags', tags.toString());
-            // formData.append('cover_image', this.uploadCoverInput.input.files[0]);
+
+            let formData = new FormData();
+            formData.append('title', fields['title']);
+            formData.append('author', selectedAuthor);
+            formData.append('description', blogDesc);
+            formData.append('tags', tags.toString());
+            formData.append('cover_image', this.uploadCoverInput.input.files[0]);
 
             ApiUtils.addBlog(token, formData)
                 .then((res) => res.json())

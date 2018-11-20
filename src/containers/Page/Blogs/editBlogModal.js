@@ -8,6 +8,7 @@ import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
+import { BUCKET_URL } from '../../../helpers/globals';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
@@ -84,10 +85,17 @@ class EditBlogModal extends Component {
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        if (e.target.value.trim() == "") {
-            fields[field] = "";
-        } else {
+
+        if (field === 'image' && document.getElementsByClassName("cover_image")[0] !== undefined) {
+            document.getElementsByClassName("cover_image")[0].style.display = "none";
             fields[field] = e.target.value;
+            this.setState({ fields });
+        } else {
+            if (e.target.value.trim() == "") {
+                fields[field] = "";
+            } else {
+                fields[field] = e.target.value;
+            }
         }
         this.setState({ fields });
     }
@@ -103,45 +111,48 @@ class EditBlogModal extends Component {
         const { token, getAllBlogs } = this.props;
         let { fields, blogDesc, tags, selectedAuthor } = this.state;
         this.setState({ loader: true })
+        let _this = this;
         let blogDescription = striptags(blogDesc);
 
         if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor) {
             this.setState({ loader: true, isDisabled: true });
-            let formData = {
-                id: fields["value"],
-                title: fields["title"],
-                admin_id: selectedAuthor,
-                description: blogDesc,
-                tags: tags.toString(),
-            };
+
+            let formData = new FormData();
+            formData.append('id', fields['value']);
+            formData.append('title', fields['title']);
+            formData.append('author', selectedAuthor);
+            formData.append('description', blogDesc);
+            formData.append('tags', tags.toString());
+            formData.append('cover_image', this.uploadCoverInput.input.files[0]);
 
             ApiUtils.editBlog(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this._closeEditBlogModal();
-                    getAllBlogs();
-                    this._resetAddForm();
-                    this.setState({
+                    _this.setState({
                         blogDesc: '', loader: false, notify: true, notifyType: 'Success',
                         notifyMsg: res.message, showError: false, showAuthorErr: false,
                         isDisabled: false
+                    }, () => {
+                        getAllBlogs();
+                        _this._resetAddForm();
+                        _this._closeEditBlogModal();
                     })
                 })
                 .catch(() => {
-                    this.setState({
+                    _this.setState({
                         loader: false, notify: true, notifyType: 'error', isDisabled: false,
                         notifyMsg: 'Something went wrong!', showError: false, showAuthorErr: false
                     })
-                    this._resetAddForm();
+                    _this._resetAddForm();
                 });
         } else {
-            this.setState({
+            _this.setState({
                 loader: false,
                 showError: blogDescription.length > 0 ? false : true,
                 showAuthorErr: selectedAuthor.length > 0 ? false : true,
             })
-            this.validator.showMessages();
-            this.forceUpdate();
+            _this.validator.showMessages();
+            _this.forceUpdate();
         }
     }
 
@@ -177,7 +188,7 @@ class EditBlogModal extends Component {
     render() {
         const { loader, showEditBlogModal, fields, blogDesc, tags, inputVisible,
             inputTagVal, notify, notifyType, selectedAuthor, allAdmins, showError,
-            showAuthorErr, isDisabled
+            showAuthorErr, isDisabled, notifyMsg
         } = this.state;
 
         const options = {
@@ -209,6 +220,16 @@ class EditBlogModal extends Component {
                     <Button disabled={isDisabled} onClick={this._editBlog}>Update</Button>,
                 ]}
             >
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Cover Image:</span><br />
+                    <img style={{ width: '150px', height: 'auto' }}
+                        src={BUCKET_URL + fields['cover_image']} />
+                    <Input ref={(ref) => { this.uploadCoverInput = ref; }} type="file"
+                        id="uploadCoverInput" name="uploadCoverInput"
+                        style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
+                        onChange={this._handleChange.bind(this, "cover_image")} />
+                </div>
+
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Title:</span>
                     <Input placeholder="Blog Title" onChange={this._handleChange.bind(this, "title")} value={fields["title"]} />

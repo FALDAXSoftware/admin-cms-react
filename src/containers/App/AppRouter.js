@@ -22,7 +22,7 @@ const routes = [
     {
         path: "static-pages",
         component: asyncComponent(() => import("../Page/StaticPages/staticPages")),
-        module: "staticPage"
+        module: "static_page"
     },
     {
         path: "countries",
@@ -89,6 +89,7 @@ const routes = [
         component: asyncComponent(() => import("../Page/Jobs/jobs")),
         module: "jobs"
     },
+
 ];
 
 const mandatoryRoutes = [
@@ -131,6 +132,10 @@ const mandatoryRoutes = [
     {
         path: "contact-us",
         component: asyncComponent(() => import("../Page/adminSetting"))
+    },
+    {
+        path: "job-applications/:id",
+        component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
     },
 ]
 

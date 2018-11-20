@@ -117,7 +117,6 @@ class Sidebar extends Component {
   };
 
   render() {
-
     const { app, toggleOpenDrawer, customizedTheme, height, roles, location } = this.props;
 
     let that = this;
@@ -155,6 +154,13 @@ class Sidebar extends Component {
       color: customizedTheme.textColor,
     };
 
+    let rolesModuleArray = [];
+    rolesArray.map(role => {
+      if (role.value == true) {
+        rolesModuleArray.push(role.module)
+      }
+    });
+
     return (
       <SidebarWrapper>
         <Sider
@@ -179,18 +185,15 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
             >
               {
-                rolesArray.map((role) => {
-                  return (
-                    options.map(singleOption => {
-                      if ((singleOption.module == role.module) && role.value == true) {
-                        return (
-                          that.getMenuItem({ submenuStyle, submenuColor, singleOption })
-                        )
-                      }
-                    }
-                    ))
+                options.map(singleOption => {
+                  if (rolesModuleArray.indexOf(singleOption.module) > -1) {
+                    return (
+                      that.getMenuItem({ submenuStyle, submenuColor, singleOption })
+                    )
+                  }
                 }
-                )}
+                )
+              }
             </Menu>
           </Scrollbars>
         </Sider>

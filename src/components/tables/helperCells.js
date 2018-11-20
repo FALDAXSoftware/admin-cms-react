@@ -14,6 +14,8 @@ import { Employees } from '../../containers/Page/Employee/employee';
 import { Blogs } from '../../containers/Page/Blogs/blogs';
 import { Pairs } from '../../containers/Page/Pairs/pairs';
 import { Jobs } from '../../containers/Page/Jobs/jobs';
+import { JobApplications } from '../../containers/Page/Jobs/jobApplications';
+import { Inquiry } from '../../containers/Page/Inquiry/inquiry';
 import { LimitManagement } from '../../containers/Page/LimitManagement/limitManagement';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
@@ -120,16 +122,16 @@ const deleteEmployee = (value) => {
   Employees.deleteEmployee(value);
 }
 
-const editBlog = (value, title, admin_name, tags, created_at, description, admin_id) => {
-  Blogs.editBlog(value, title, admin_name, tags, created_at, description, admin_id);
+const editBlog = (value, title, admin_name, tags, created_at, description, admin_id, cover_image) => {
+  Blogs.editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image);
 }
 
 const deleteBlog = (value) => {
   Blogs.deleteBlog(value);
 }
 
-const viewBlog = (value, title, admin_name, tags, created_at, description) => {
-  Blogs.viewBlog(value, title, admin_name, tags, created_at, description);
+const viewBlog = (value, title, admin_name, tags, created_at, description, admin_id, cover_image) => {
+  Blogs.viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image);
 }
 
 const pairStatus = (value, name, maker_fee, taker_fee, created_at, is_active) => {
@@ -160,6 +162,18 @@ const jobStatus = (value, position, location, short_desc, job_desc, is_active) =
   Jobs.jobStatus(value, position, location, short_desc, job_desc, is_active);
 }
 
+const showApplicants = (value) => {
+  Jobs.showApplicants(value);
+}
+
+const viewJobApplication = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) => {
+  JobApplications.viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter);
+}
+
+const viewInquiry = (value, first_name, last_name, email, message, created_at) => {
+  Inquiry.viewInquiry(value, first_name, last_name, email, message, created_at);
+}
+
 const DateCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : ''}</p>;
 const DateTimeCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
@@ -187,13 +201,16 @@ const CountryButtonCell = (value) => <Button type="primary" onClick={() => showS
 const RoleSwitchCell = (value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, coin_requests, inquiries, jobs, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, coin_requests, inquiries, jobs, is_active) }} />
 const EmployeeSwitchCell = (value, name, email, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, name, email, role, is_active) }} />
 const EmployeeActionCell = (value, name, email, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, name, email, role, is_active)} /></Tooltip></div>;
-const BlogActionCell = (value, title, admin_name, tags, created_at, description, admin_id) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_name, tags, created_at, description, admin_id)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_name, tags, created_at, description, admin_id)} /></Tooltip></div>;
+const BlogActionCell = (value, title, admin_name, tags, created_at, description, admin_id, cover_image) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image)} /></Tooltip></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;
 const LimitActionCell = (value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat)} /></Tooltip></div>;
 const TagsCell = (value) => <Tooltip title={value}><p>{value.slice(0, 10) + (value.length > 10 ? "..." : "")}</p></Tooltip>
 const JobActionCell = (value, position, location, short_desc, job_desc, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteJob(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editJob(value, position, location, short_desc, job_desc, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJob(value, position, location, short_desc, job_desc, is_active)} /></Tooltip></div>;
 const JobSwitchCell = (value, position, location, short_desc, job_desc, is_active) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, is_active) }} />
+const JobButtonCell = (value) => <Button type="primary" onClick={() => showApplicants(value)} >Show Applications</Button>;
+const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter)} /></Tooltip></div>;
+const InquiryActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewInquiry(value, first_name, last_name, email, message, created_at)} /></Tooltip></div>;
 
 export {
   IPCell,
@@ -232,5 +249,8 @@ export {
   LimitActionCell,
   TagsCell,
   JobActionCell,
-  JobSwitchCell
+  JobSwitchCell,
+  JobButtonCell,
+  JobAppActionCell,
+  InquiryActionCell
 };
