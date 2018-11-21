@@ -1,5 +1,5 @@
-const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
-//const API_URL = "http://18.191.87.133:8084"; //Live URL
+//const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
+const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -858,7 +858,7 @@ const ApiUtils = {
 
     //get all jobs api
     getAllJobs: function (page, limit, token, search) {
-        let url = "/all-jobs?page=" + page + "&limit=" + limit;
+        let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
         if (search) {
             url = url + "&data=" + search;
         }

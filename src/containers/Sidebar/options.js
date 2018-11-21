@@ -98,7 +98,7 @@ const options = [
   {
     key: "inquiries",
     label: "sidebar.inquiries",
-    leftIcon: "fas fa-coins",
+    leftIcon: "fas fa-comments",
     module: "inquiries"
   },
   {

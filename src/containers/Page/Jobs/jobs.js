@@ -119,7 +119,7 @@ class Jobs extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allJobs: res.data, allJobsCount: res.inquiryCount, searchJob: ''
+                        allJobs: res.data, allJobsCount: res.allJobsCount, searchJob: ''
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchJob: '' });

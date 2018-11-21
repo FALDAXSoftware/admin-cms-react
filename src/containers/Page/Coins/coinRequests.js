@@ -49,7 +49,7 @@ class CoinRequests extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allCoinRequests: res.data, allCoinCount: res.CoinsCount, searchCoin: ''
+                        allCoinRequests: res.data, allCoinCount: res.coinReqCount, searchCoin: ''
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
