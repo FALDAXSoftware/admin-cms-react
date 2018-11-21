@@ -6,9 +6,11 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import ViewCoinReqModal from './viewCoinReqModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+var self;
 
 class CoinRequests extends Component {
     constructor(props) {
@@ -22,12 +24,23 @@ class CoinRequests extends Component {
             errMsg: false,
             errType: 'Success',
             page: 1,
-            loader: false
+            loader: false,
+            coinReqDetails: [],
+            showViewCoinReqModal: false
         }
+        self = this;
+        CoinRequests.viewCoinReq = CoinRequests.viewCoinReq.bind(this);
     }
 
     componentDidMount = () => {
         this._getAllCoinRequests();
+    }
+
+    static viewCoinReq(value, coin_name, email, target_date, message, url) {
+        let coinReqDetails = {
+            value, coin_name, email, target_date, message, url
+        }
+        self.setState({ coinReqDetails, showViewCoinReqModal: true, page: 1 });
     }
 
     openNotificationWithIconError = (type) => {
@@ -75,8 +88,13 @@ class CoinRequests extends Component {
         this.setState({ page })
     }
 
+    _closeViewCoinReqModal = () => {
+        this.setState({ showViewCoinReqModal: false })
+    }
+
     render() {
-        const { allCoinRequests, allCoinCount, errType, loader, errMsg, page } = this.state;
+        const { allCoinRequests, allCoinCount, errType, loader, errMsg,
+            page, showViewCoinReqModal, coinReqDetails } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -100,6 +118,11 @@ class CoinRequests extends Component {
                                     <Spin />
                                 </span>}
                                 <div>
+                                    <ViewCoinReqModal
+                                        coinReqDetails={coinReqDetails}
+                                        showViewCoinReqModal={showViewCoinReqModal}
+                                        closeViewCoinReqModal={this._closeViewCoinReqModal}
+                                    />
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}

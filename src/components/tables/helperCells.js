@@ -16,6 +16,7 @@ import { Pairs } from '../../containers/Page/Pairs/pairs';
 import { Jobs } from '../../containers/Page/Jobs/jobs';
 import { JobApplications } from '../../containers/Page/Jobs/jobApplications';
 import { Inquiry } from '../../containers/Page/Inquiry/inquiry';
+import { CoinRequests } from '../../containers/Page/Coins/coinRequests';
 import { LimitManagement } from '../../containers/Page/LimitManagement/limitManagement';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
@@ -174,6 +175,10 @@ const viewInquiry = (value, first_name, last_name, email, message, created_at) =
   Inquiry.viewInquiry(value, first_name, last_name, email, message, created_at);
 }
 
+const viewCoinReq = (value, coin_name, email, target_date, message, url) => {
+  CoinRequests.viewCoinReq(value, coin_name, email, target_date, message, url);
+}
+
 const DateCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : ''}</p>;
 const DateTimeCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
@@ -211,6 +216,7 @@ const JobSwitchCell = (value, position, location, short_desc, job_desc, is_activ
 const JobButtonCell = (value) => <Button type="primary" onClick={() => showApplicants(value)} >Show Applications</Button>;
 const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter)} /></Tooltip></div>;
 const InquiryActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewInquiry(value, first_name, last_name, email, message, created_at)} /></Tooltip></div>;
+const CoinReqActionCell = (value, coin_name, email, target_date, message, url) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoinReq(value, coin_name, email, target_date, message, url)} /></Tooltip></div>;
 
 export {
   IPCell,
@@ -252,5 +258,6 @@ export {
   JobSwitchCell,
   JobButtonCell,
   JobAppActionCell,
-  InquiryActionCell
+  InquiryActionCell,
+  CoinReqActionCell
 };
