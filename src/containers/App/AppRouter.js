@@ -89,7 +89,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Jobs/jobs")),
         module: "jobs"
     },
-
+    {
+        path: "contact-us",
+        component: asyncComponent(() => import("../Page/adminSetting")),
+        module: "contact_setting"
+    },
 ];
 
 const mandatoryRoutes = [
@@ -129,10 +133,7 @@ const mandatoryRoutes = [
         path: "country/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
-    {
-        path: "contact-us",
-        component: asyncComponent(() => import("../Page/adminSetting"))
-    },
+
     {
         path: "job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),

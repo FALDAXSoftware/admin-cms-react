@@ -110,8 +110,8 @@ const options = [
   {
     key: "contact-us",
     label: "sidebar.contact",
-    leftIcon: "far fa-briefcase",
-    module: "contact_us"
+    leftIcon: "fas fa-user-cog",
+    module: "contact_setting"
   },
 ];
 

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 
+const { TextArea } = Input;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class ContactUsForm extends Component {
@@ -70,11 +71,17 @@ class ContactUsForm extends Component {
             _this.setState({ loader: true });
 
             const formData = {
+                email: fields['email'],
+                address: fields['address'],
                 press: fields['press'],
                 fb_profile: fields['fb_profile'],
                 twitter_profile: fields['twitter_profile'],
+                insta_profile: fields['insta_profile'],
+                telegram_profile: fields['telegram_profile'],
+                faldax_url: fields['faldax_url'],
                 google_profile: fields['google_profile'],
                 linkedin_profile: fields['linkedin_profile'],
+                youtube_profile: fields['youtube_profile'],
                 media_name: fields['media_name'],
                 media_email: fields['media_email'],
                 phone: fields['phone'],
@@ -111,17 +118,53 @@ class ContactUsForm extends Component {
         return (
             <div style={{ "paddingLeft": "50px", "paddingTop": "50px" }}>
                 <h2>
-                    <b> Contact US </b>
+                    <b> Contact Setting </b>
                 </h2>
 
                 <div style={{ "marginTop": "10px" }}>
                     <span>
-                        <b>Press</b>
+                        <b>Contact Address</b>
                     </span>
-                    <Input placeholder="Press" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                        onChange={this._onChangeFields.bind(this, "press")} value={fields["press"]} />
+                    <TextArea placeholder="Contact Address" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "address")} value={fields["address"]} />
                     <span className="field-error">
-                        {this.validator.message('Press', fields['press'], 'required')}
+                        {this.validator.message('Address', fields['address'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Contact Email</b>
+                    </span>
+                    <Input placeholder="Contact Email" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "email")} value={fields["email"]} />
+                    <span className="field-error">
+                        {this.validator.message('Email', fields['email'], 'required|email')}
+                    </span>
+
+                    <span>
+                        <b>Support Contact</b>
+                    </span>
+                    <Input placeholder="Support Contact" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "phone")} value={fields["phone"]} />
+                    <span className="field-error">
+                        {this.validator.message('support contact', fields['phone'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Media Contact Name</b>
+                    </span>
+                    <Input placeholder="Media Contact Name" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "media_name")} value={fields["media_name"]} />
+                    <span className="field-error">
+                        {this.validator.message('Name', fields['media_name'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Media Contact Email</b>
+                    </span>
+                    <Input placeholder="Media Contact Email" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "media_email")} value={fields["media_email"]} />
+                    <span className="field-error">
+                        {this.validator.message('Email', fields['media_email'], 'required|email')}
                     </span>
 
                     <span>
@@ -161,32 +204,49 @@ class ContactUsForm extends Component {
                     </span>
 
                     <span>
-                        <b>Media Contact Name</b>
+                        <b>Youtube Profile</b>
                     </span>
-                    <Input placeholder="Media Contact Name" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                        onChange={this._onChangeFields.bind(this, "media_name")} value={fields["media_name"]} />
+                    <Input placeholder="Youtube Profile" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "youtube_profile")} value={fields["youtube_profile"]} />
                     <span className="field-error">
-                        {this.validator.message('Name', fields['media_name'], 'required')}
+                        {this.validator.message('Youtube profile', fields['youtube_profile'], 'required')}
                     </span>
 
                     <span>
-                        <b>Media Contact Email</b>
+                        <b>Instagram Profile</b>
                     </span>
-                    <Input placeholder="Media Contact Email" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                        onChange={this._onChangeFields.bind(this, "media_email")} value={fields["media_email"]} />
+                    <Input placeholder="Instagram Profile" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "insta_profile")} value={fields["insta_profile"]} />
                     <span className="field-error">
-                        {this.validator.message('Email', fields['media_email'], 'required|email')}
+                        {this.validator.message('Instagram profile', fields['insta_profile'], 'required')}
                     </span>
 
                     <span>
-                        <b>Support Contact</b>
+                        <b>Telegram Profile</b>
                     </span>
-                    <Input placeholder="Support Contact" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                        onChange={this._onChangeFields.bind(this, "phone")} value={fields["phone"]} />
+                    <Input placeholder="Telegram Profile" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "telegram_profile")} value={fields["telegram_profile"]} />
                     <span className="field-error">
-                        {this.validator.message('support contact', fields['phone'], 'required')}
+                        {this.validator.message('Telegram profile', fields['telegram_profile'], 'required')}
                     </span>
 
+                    <span>
+                        <b>FALDAX URL</b>
+                    </span>
+                    <Input placeholder="FALDAX URL" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "faldax_url")} value={fields["faldax_url"]} />
+                    <span className="field-error">
+                        {this.validator.message('FALDAX URL', fields['faldax_url'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Press</b>
+                    </span>
+                    <Input placeholder="Press" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "press")} value={fields["press"]} />
+                    <span className="field-error">
+                        {this.validator.message('Press', fields['press'], 'required')}
+                    </span>
                     <Button type="primary" onClick={this._editProfile}> Update </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
