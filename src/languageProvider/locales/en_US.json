@@ -436,6 +436,9 @@
   "feeTable.title.created_at": "Created On",
   "feeTable.title.status": "Status",
   "feeTable.title.Actions": "Actions",
+  "subscribeTable.title.email": "Email",
+  "subscribeTable.title.is_news_feed": "News Feed",
+  "subscribeTable.title.created_at": "Created On",
   "limitTable.title.user": "User",
   "limitTable.title.monthlyDepositCrypto": "Monthly Deposit Crypto",
   "limitTable.title.monthlyDepositFiat": "Monthly Deposit Fiat",
@@ -521,5 +524,6 @@
   "sidebar.coinRequests": "Coin Requests",
   "sidebar.inquiries": "Inquiry",
   "sidebar.jobs": "Jobs",
-  "sidebar.contact": "Contact Setting"
+  "sidebar.contact": "Contact Setting",
+  "sidebar.subscribe": "Subscribers"
 }

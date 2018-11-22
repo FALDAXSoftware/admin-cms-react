@@ -113,6 +113,12 @@ const options = [
     leftIcon: "fas fa-user-cog",
     module: "contact_setting"
   },
+  {
+    key: "subscribe",
+    label: "sidebar.subscribe",
+    leftIcon: "far fa-newspaper",
+    module: "subscribe"
+  },
 ];
 
 export default options;

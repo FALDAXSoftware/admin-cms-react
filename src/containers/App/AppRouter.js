@@ -94,6 +94,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/adminSetting")),
         module: "contact_setting"
     },
+    {
+        path: "subscribe",
+        component: asyncComponent(() => import("../Page/Subscribe/subscribers")),
+        module: "subscribe"
+    },
 ];
 
 const mandatoryRoutes = [
