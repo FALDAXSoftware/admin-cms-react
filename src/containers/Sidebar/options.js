@@ -9,8 +9,7 @@ const options = [
     key: "users",
     label: "sidebar.users",
     leftIcon: "fas fa-users",
-    module: "users"
-  },
+    module: "users"  },
   {
     key: "coins",
     label: "sidebar.coins",

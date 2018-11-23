@@ -123,7 +123,9 @@ class EditBlogModal extends Component {
             formData.append('author', selectedAuthor);
             formData.append('description', blogDesc);
             formData.append('tags', tags.toString());
-            formData.append('cover_image', this.uploadCoverInput.input.files[0]);
+            if (this.uploadCoverInput.input.files[0] !== undefined) {
+                formData.append('cover_image', this.uploadCoverInput.input.files[0]);
+            }
 
             ApiUtils.editBlog(token, formData)
                 .then((res) => res.json())
@@ -228,6 +230,7 @@ class EditBlogModal extends Component {
                         id="uploadCoverInput" name="uploadCoverInput"
                         style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
                         onChange={this._handleChange.bind(this, "cover_image")} />
+                    <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

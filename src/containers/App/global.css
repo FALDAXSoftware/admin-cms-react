@@ -222,3 +222,9 @@ html[dir='rtl'] .dz-hidden-input {
 .descriptionContainer ul{
   list-style: circle inside;
 }
+.image-note{
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 12px;
+  color: gray;
+}

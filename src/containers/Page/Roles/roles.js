@@ -33,7 +33,10 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, coin_requests, inquiries, is_active) {
+    static roleStatus(value, name, users, coins, announcement, static_page, roles,
+        countries, employee, pairs, blogs, limit_management, transaction_history,
+        trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
+        contact_setting, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -49,6 +52,14 @@ class Roles extends Component {
             withdraw_requests,
             coin_requests,
             inquiries,
+            jobs,
+            pairs,
+            blogs,
+            limit_management,
+            transaction_history,
+            trade_history,
+            subscribe,
+            contact_setting,
             is_active: !is_active
         };
 
@@ -72,9 +83,15 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, coin_requests, inquiries, is_active) {
+    static editRole(value, name, users, coins, announcement, static_page, roles,
+        countries, employee, pairs, blogs, limit_management, transaction_history,
+        trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
+        contact_setting, is_active) {
         let roleDetails = {
-            value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, blogs, limit_management, transaction_history, trade_history, withdraw_requests, coin_requests, inquiries, is_active
+            value, name, users, coins, announcement, static_page, roles, countries,
+            employee, pairs, blogs, limit_management, transaction_history, trade_history,
+            withdraw_requests, coin_requests, inquiries, jobs, subscribe,
+            contact_setting, is_active
         }
         self.setState({ showEditRoleModal: true, roleDetails });
     }

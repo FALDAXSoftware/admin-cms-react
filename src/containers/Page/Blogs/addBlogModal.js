@@ -220,7 +220,8 @@ class AddBlogModal extends Component {
                     <Input ref={(ref) => { this.uploadCoverInput = ref; }} type="file"
                         id="uploadCoverInput" name="uploadCoverInput"
                         style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
-                        onChange={this._handleChange.bind(this, "cover_image")} value={fields["cover_image"]} />
+                        onCange={this._handleChange.bind(this, "cover_image")} value={fields["cover_image"]} />
+                    <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
