@@ -99,6 +99,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Subscribe/subscribers")),
         module: "subscribe"
     },
+    {
+        path: "kyc",
+        component: asyncComponent(() => import("../Page/KYC/kyc")),
+        module: "kyc"
+    },
 ];
 
 const mandatoryRoutes = [

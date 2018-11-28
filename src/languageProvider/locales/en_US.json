@@ -490,6 +490,14 @@
   "jobTable.title.email": "Email",
   "jobTable.title.phone_number": "Phone Number",
   "jobTable.title.applied_at": "Applied On",
+  "kycTable.title.created_at": "Created On",
+  "kycTable.title.kycDoc_details": "Doc Details",
+  "kycTable.title.name": "First Name",
+  "kycTable.title.last_name": "Last Name",
+  "kycTable.title.email": "Email",
+  "kycTable.title.direct_response": "Response",
+  "kycTable.title.status": "Approve/Disapprove",
+  "kycTable.title.actions": "Actions",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
@@ -525,5 +533,6 @@
   "sidebar.inquiries": "Inquiry",
   "sidebar.jobs": "Jobs",
   "sidebar.contact": "Contact Setting",
-  "sidebar.subscribe": "Subscribers"
+  "sidebar.subscribe": "Subscribers",
+  "sidebar.kyc": "KYC Verification"
 }

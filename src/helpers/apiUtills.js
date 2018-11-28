@@ -989,6 +989,41 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    //get all kyc data api
+    getKYCData: function (token, page, limit, search) {
+        let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
+        if (search) {
+            url = url + "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit kyc status api
+    updateKYCStatus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-kyc-status", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;

@@ -9,7 +9,8 @@ const options = [
     key: "users",
     label: "sidebar.users",
     leftIcon: "fas fa-users",
-    module: "users"  },
+    module: "users"
+  },
   {
     key: "coins",
     label: "sidebar.coins",
@@ -117,6 +118,12 @@ const options = [
     label: "sidebar.subscribe",
     leftIcon: "far fa-newspaper",
     module: "subscribe"
+  },
+  {
+    key: "kyc",
+    label: "sidebar.kyc",
+    leftIcon: "far fa-newspaper",
+    module: "kyc"
   },
 ];
 
