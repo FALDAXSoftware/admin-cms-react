@@ -32,18 +32,23 @@ class KYC extends Component {
         KYC.viewKYC = KYC.viewKYC.bind(this);
     }
 
-    static viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details) {
+    static viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
+        front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) {
         let kycDetails = {
-            value, first_name, last_name, email, direct_response, kycDoc_details
+            value, first_name, last_name, email, direct_response, kycDoc_details, front_doc,
+            back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type
         }
         self.setState({ kycDetails, showViewKYCModal: true })
     }
 
-    static rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details) {
+    static rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
+        front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) {
         self._updateStatusKYC(value, false);
     }
 
-    static approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details) {
+    static approveKYC(value, first_name, last_name, email, direct_response,
+        kycDoc_details, front_doc, back_doc, ssn, webhook_response, address,
+        country, city, zip, dob, id_type) {
         self._updateStatusKYC(value, true);
     }
 

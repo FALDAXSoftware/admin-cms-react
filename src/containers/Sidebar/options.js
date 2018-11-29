@@ -122,7 +122,7 @@ const options = [
   {
     key: "kyc",
     label: "sidebar.kyc",
-    leftIcon: "far fa-newspaper",
+    leftIcon: "fas fa-id-card",
     module: "kyc"
   },
 ];

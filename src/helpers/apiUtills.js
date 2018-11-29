@@ -1,5 +1,5 @@
-const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
-//const API_URL = "http://18.191.87.133:8084"; //Live URL
+//const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
+const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api

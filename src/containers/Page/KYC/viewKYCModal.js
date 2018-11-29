@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
+import { BUCKET_URL } from '../../../helpers/globals';
 
 class ViewKYCModal extends Component {
     constructor(props) {
@@ -26,6 +27,16 @@ class ViewKYCModal extends Component {
     render() {
         const { kycDetails } = this.props;
         const { showViewKYCModal } = this.state;
+        let idType = ''
+        if (kycDetails.id_type == 1) {
+            idType = "Passport"
+        } else if (kycDetails.id_type == 2) {
+            idType = "Driving Licence"
+        } else if (kycDetails.id_type == 3) {
+            idType = "Identity Mind API"
+        } else {
+            idType = ""
+        }
 
         return (
             <Modal
@@ -46,20 +57,60 @@ class ViewKYCModal extends Component {
                     {kycDetails.last_name ? kycDetails.last_name : 'NA'}
                 </p>
 
-                <span> <b>Email:</b> </span>
+                <span> <b>Address:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {kycDetails.email ? kycDetails.email : 'NA'}
+                    {kycDetails.address ? kycDetails.address + ", " : ''}
+                    {kycDetails.address_2 ? kycDetails.address_2 + ", " : ''}
+                    {kycDetails.city ? kycDetails.city + ", " : ''}
+                    {kycDetails.country ? kycDetails.country + ", " : ''}
+                    {kycDetails.zip ? kycDetails.zip : ''}
+                </p>
+                <span> <b>Date of Birth:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {kycDetails.dob ? kycDetails.dob : 'NA'}
                 </p>
 
-                <span> <b>Direct Response:</b> </span>
-                <p style={{ "marginBottom": "15px" }}>
-                    {kycDetails.direct_response ? kycDetails.direct_response : 'NA'}
-                </p>
+                {kycDetails.direct_response ?
+                    <div>
+                        <span> <b>Identity Mind Review:</b> </span>
+                        <p style={{ "marginBottom": "15px" }}>
+                            {kycDetails.direct_response}<br />
+                            {kycDetails.comments ? kycDetails.comments : ''}
+                        </p>
+                    </div>
+                    : ''}
 
-                <span> <b>KYC document Details:</b> </span>
-                <p style={{ "marginBottom": "15px" }}>
-                    {kycDetails.kycDoc_details ? kycDetails.kycDoc_details : 'NA'}
-                </p>
+                {kycDetails.webhook_response ?
+                    <div>
+                        <span> <b>Document Verification Review:</b> </span>
+                        <p style={{ "marginBottom": "15px" }}>
+                            {kycDetails.webhook_response} <br />
+                            {kycDetails.kycDoc_details ? kycDetails.kycDoc_details : ''}
+                        </p>
+                    </div>
+                    : ''}
+
+                {kycDetails.ssn ?
+                    <div>
+                        <span> <b>SSN:</b> </span>
+                        <p style={{ "marginBottom": "15px" }}>
+                            {kycDetails.ssn}</p>
+                    </div>
+                    : ''}
+
+
+                {idType != '' ?
+                    <div>
+                        <span> <b>Document Type:</b> </span>
+                        <p style={{ "marginBottom": "15px" }}>
+                            {idType}</p>
+                    </div>
+                    : ''}
+
+                <div style={{ marginBottom: '20px' }}>
+                    <a href={BUCKET_URL + kycDetails.front_doc} target="_blank" style={{ backgroundImage: "url('" + BUCKET_URL + kycDetails.front_doc + "')" }} class="front-doc"></a>
+                    <a href={BUCKET_URL + kycDetails.front_doc} target="_blank" style={{ backgroundImage: "url('" + BUCKET_URL + kycDetails.back_doc + "')" }} class="front-doc"></a>
+                </div>
             </Modal>
         );
     }

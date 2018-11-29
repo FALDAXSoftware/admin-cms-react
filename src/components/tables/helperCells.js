@@ -184,12 +184,12 @@ const rejectKYC = (value, first_name, last_name, email, direct_response, kycDoc_
     KYC.rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details);
 }
 
-const approveKYC = (value, first_name, last_name, email, direct_response, kycDoc_details) => {
-    KYC.approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details);
+const approveKYC = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => {
+    KYC.approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type);
 }
 
-const viewKYC = (value, first_name, last_name, email, direct_response, kycDoc_details) => {
-    KYC.viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details);
+const viewKYC = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => {
+    KYC.viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type);
 }
 
 const DateCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : ''}</p>;
@@ -230,8 +230,8 @@ const JobButtonCell = (value) => <Button type="primary" onClick={() => showAppli
 const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter)} /></Tooltip></div>;
 const InquiryActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewInquiry(value, first_name, last_name, email, message, created_at)} /></Tooltip></div>;
 const CoinReqActionCell = (value, coin_name, email, target_date, message, url) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoinReq(value, coin_name, email, target_date, message, url)} /></Tooltip></div>;
-const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details) => <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip><Tooltip title="Reject"><Icon type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div>;
-const KYCActionCell = (value, first_name, last_name, email, direct_response, kycDoc_details) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div>;
+const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip><Tooltip title="Reject"><Icon type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div>;
+const KYCActionCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip></div>;
 
 export {
     IPCell,
