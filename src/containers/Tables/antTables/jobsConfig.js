@@ -41,14 +41,14 @@ const columns = [
         title: <IntlMessages id="jobTable.title.location" />,
         key: 'location',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'location')
+        render: object => renderCell(object, 'ContentCell', 'location')
     },
-    {
-        title: <IntlMessages id="jobTable.title.short_desc" />,
-        key: 'short_desc',
-        width: 200,
-        render: object => renderCell(object, 'ContentCell', 'short_desc')
-    },
+    // {
+    //     title: <IntlMessages id="jobTable.title.short_desc" />,
+    //     key: 'short_desc',
+    //     width: 200,
+    //     render: object => renderCell(object, 'ContentCell', 'short_desc')
+    // },
     // {
     //     title: <IntlMessages id="jobTable.title.job_desc" />,
     //     key: 'job_desc',

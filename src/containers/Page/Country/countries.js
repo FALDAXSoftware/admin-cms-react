@@ -51,8 +51,7 @@ class Countries extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self.setState({
-                    errMsg: true, errMessage: message, errType: 'Success',
-                    loader: false, page: 1
+                    errMsg: true, errMessage: message, errType: 'Success', loader: false
                 })
                 self._getAllCountries(1);
             })
@@ -82,9 +81,9 @@ class Countries extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllCountries = (page) => {
+    _getAllCountries = () => {
         const { token } = this.props;
-        const { limit, searchCountry } = this.state;
+        const { limit, searchCountry, page } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
@@ -113,13 +112,14 @@ class Countries extends Component {
 
     _searchCountry = (val) => {
         this.setState({ searchCountry: val, page: 1, loader: true }, () => {
-            this._getAllCountries(1);
+            this._getAllCountries();
         });
     }
 
     _handleCoinPagination = (page) => {
-        this._getAllCountries(page);
-        this.setState({ page })
+        this.setState({ page }, () => {
+            this._getAllCountries();
+        })
     }
 
     render() {

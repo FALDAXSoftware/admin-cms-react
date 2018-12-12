@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin } from 'antd';
+import { Tabs, notification, Spin, Pagination } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -24,7 +24,8 @@ class KYC extends Component {
             loader: false,
             page: 1,
             limit: 50,
-            searchKYC: ''
+            searchKYC: '',
+            allKYCCount: 0,
         }
         self = this;
         KYC.rejectKYC = KYC.rejectKYC.bind(this);
@@ -91,7 +92,7 @@ class KYC extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allKYCData: res.data });
+                    _this.setState({ allKYCData: res.data, allKYCCount: res.KYCCount });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
@@ -117,8 +118,15 @@ class KYC extends Component {
         this.setState({ showViewKYCModal: false });
     }
 
+    _handleKYCPagination = (page) => {
+        this.setState({ page }, () => {
+            this._getAllKYCData();
+        })
+    }
+
     render() {
-        const { allKYCData, notify, errType, loader, kycDetails, showViewKYCModal } = this.state;
+        const { allKYCData, notify, errType, loader, kycDetails,
+            showViewKYCModal, page, allKYCCount } = this.state;
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -144,6 +152,14 @@ class KYC extends Component {
                                     pagination={false}
                                     dataSource={allKYCData}
                                     className="isoCustomizedTable"
+                                />
+                                <Pagination
+                                    style={{ marginTop: '15px' }}
+                                    className="ant-users-pagination"
+                                    onChange={this._handleKYCPagination.bind(this)}
+                                    pageSize={50}
+                                    current={page}
+                                    total={allKYCCount}
                                 />
                             </TabPane>
                         ))}

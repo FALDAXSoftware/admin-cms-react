@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, ContentCell, KYCActionCell, KYCStatusCell
+    TextCell, KYCActionCell, KYCStatusCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailId = null,
@@ -27,8 +27,6 @@ const renderCell = (object, type, key, fname = null, lname = null, emailId = nul
     const id_type = object[idType];
 
     switch (type) {
-        case 'ContentCell':
-            return ContentCell(value);
         case 'KYCStatusCell':
             return KYCStatusCell(value, first_name, last_name, email, direct_response,
                 kycDoc_details, front_doc, back_doc, ssn, webhook_response, address,
@@ -64,9 +62,9 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'direct_response')
 }, {
     title: <IntlMessages id="kycTable.title.kycDoc_details" />,
-    key: 'kycDoc_details',
+    key: 'webhook_response',
     width: 100,
-    render: object => renderCell(object, 'ContentCell', 'kycDoc_details')
+    render: object => renderCell(object, 'TextCell', 'webhook_response')
 }, {
     title: <IntlMessages id="kycTable.title.status" />,
     key: 'action',

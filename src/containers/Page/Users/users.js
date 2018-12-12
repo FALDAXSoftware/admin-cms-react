@@ -66,10 +66,9 @@ class Users extends Component {
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllUsers(1);
+                self._getAllUsers();
                 self.setState({
-                    page: 1, errMsg: true, errMessage: message, errType: 'Success',
-                    loader: false
+                    errMsg: true, errMessage: message, errType: 'Success', loader: false
                 })
             })
             .catch(() => {
@@ -81,12 +80,12 @@ class Users extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllUsers(1);
+        this._getAllUsers();
     }
 
-    _getAllUsers = (page) => {
+    _getAllUsers = () => {
         const { token } = this.props;
-        const { searchUser, limit } = this.state;
+        const { searchUser, limit, page } = this.state;
         var _this = this;
 
         _this.setState({ loader: true });
@@ -143,8 +142,9 @@ class Users extends Component {
     }
 
     _handleUserPagination = (page) => {
-        this._getAllUsers(page);
-        this.setState({ page });
+        this.setState({ page }, () => {
+            this._getAllUsers();
+        });
     }
 
     _closeViewUserModal = () => {

@@ -82,7 +82,7 @@ class AddBlogModal extends Component {
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        if (field === 'image' && document.getElementsByClassName("cover_image")[0] !== undefined) {
+        if (field == 'image' && document.getElementsByClassName("cover_image")[0] != undefined) {
             document.getElementsByClassName("cover_image")[0].style.display = "none";
             fields[field] = e.target.value;
             this.setState({ fields });
@@ -220,7 +220,7 @@ class AddBlogModal extends Component {
                     <Input ref={(ref) => { this.uploadCoverInput = ref; }} type="file"
                         id="uploadCoverInput" name="uploadCoverInput"
                         style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
-                        onCange={this._handleChange.bind(this, "cover_image")} value={fields["cover_image"]} />
+                        onChange={this._handleChange.bind(this, "cover_image")} value={fields["cover_image"]} />
                     <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
 

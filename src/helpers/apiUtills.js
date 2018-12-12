@@ -1,5 +1,6 @@
-//const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
-const API_URL = "http://18.191.87.133:8084"; //Live URL
+//const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
+const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
+//const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -593,7 +594,7 @@ const ApiUtils = {
             return fetch(API_URL + "/admin/create-blog", {
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + token
+                    Authorization: 'Bearer ' + token,
                 },
                 body: form,
             });

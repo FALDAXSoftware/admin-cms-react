@@ -122,7 +122,7 @@ class AddPairModal extends Component {
         if (field === 'coin_id1') {
             if (this.state.name.indexOf('-')) {
                 let temp = this.state.name.split('-');
-                this.setState({ selectedCoin1: value, name: value + '-' + temp[1] }, () => {
+                this.setState({ selectedCoin1: value, name: value + '-' + (temp[1] == undefined ? '' : temp[1]) }, () => {
                     this.setState({ showCoin1Err: this.state.selectedCoin1 ? false : true });
                 })
             } else {
@@ -150,7 +150,7 @@ class AddPairModal extends Component {
 
         let coinOptions = allCoins.map((coin) => {
             return (
-                <Option value={coin.coin_code}>{coin.coin_name}</Option>
+                <Option value={coin.coin_code}>{coin.coin_name}-{coin.coin_code}</Option>
             )
         });
 

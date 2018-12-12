@@ -108,7 +108,7 @@ class Announce extends Component {
                 }
                 _this.setState({ loader: false });
             })
-            .catch(err => {
+            .catch(() => {
                 _this.setState({
                     notify: true, notifyMsg: 'Something went wrong!!',
                     errType: 'error', loader: false

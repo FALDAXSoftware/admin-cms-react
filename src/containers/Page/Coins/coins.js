@@ -71,7 +71,7 @@ class Coins extends Component {
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllCoins(1);
+                self._getAllCoins();
                 self.setState({
                     page: 1, errMsg: true, errMessage: message,
                     errType: 'Success', loader: false
@@ -89,7 +89,7 @@ class Coins extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllCoins(1);
+        this._getAllCoins();
     }
 
     openNotificationWithIconError = (type) => {
@@ -100,9 +100,9 @@ class Coins extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllCoins = (page) => {
+    _getAllCoins = () => {
         const { token } = this.props;
-        const { limit, searchCoin } = this.state;
+        const { limit, searchCoin, page } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
@@ -128,13 +128,14 @@ class Coins extends Component {
 
     _searchCoin = (val) => {
         this.setState({ searchCoin: val }, () => {
-            this._getAllCoins(1);
+            this._getAllCoins();
         });
     }
 
     _handleCoinPagination = (page) => {
-        this._getAllCoins(page - 1);
-        this.setState({ page })
+        this.setState({ page }, () => {
+            this._getAllCoins();
+        })
     }
 
     _showAddCoinModal = () => {
@@ -184,7 +185,7 @@ class Coins extends Component {
 
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
-            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page
+            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page, limit
         } = this.state;
 
         if (errMsg) {

@@ -63,6 +63,7 @@
     "react-sidebar": "^2.3.2",
     "react-smooth-scrollbar": "^8.0.6",
     "react-speech-recognition": "^1.0.4",
+    "react-stockcharts": "^0.7.8",
     "react-tag-input": "^4.7.2",
     "react-tags": "^0.2.2",
     "react-test-renderer": "^16.2.0",

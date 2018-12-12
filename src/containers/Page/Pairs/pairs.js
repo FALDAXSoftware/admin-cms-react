@@ -56,7 +56,7 @@ class Pairs extends Component {
             .then((res) => res.json())
             .then((res) => {
                 self._getAllPairs();
-                self.setState({ errType: 'Success', errMsg: true, errMessage: message, page: 1 })
+                self.setState({ errType: 'Success', errMsg: true, errMessage: message })
             })
             .catch(() => {
                 self.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });

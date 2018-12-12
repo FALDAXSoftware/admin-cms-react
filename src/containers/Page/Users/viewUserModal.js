@@ -87,19 +87,19 @@ class ViewUserModal extends Component {
                     {userDetails.phone_number}
                 </p> */}
 
-                <Link to={`/dashboard/users/history/${userDetails.value}`}>
+                <Link to={`/dashboard/users/history/${userDetails.value}`} replace>
                     View Login History
                 </Link><br />
 
-                <Link to={`/dashboard/users/sell-orders/${userDetails.value}`}>
+                <Link to={`/dashboard/users/sell-orders/${userDetails.value}`} replace>
                     View Sell Orders
                 </Link><br />
 
-                <Link to={`/dashboard/users/buy-orders/${userDetails.value}`}>
+                <Link to={`/dashboard/users/buy-orders/${userDetails.value}`} replace>
                     View Buy Orders
                 </Link><br />
 
-                <Link to={`/dashboard/users/trade-history/${userDetails.value}`}>
+                <Link to={`/dashboard/users/trade-history/${userDetails.value}`} replace>
                     View Trade History
                 </Link><br />
             </Modal>
