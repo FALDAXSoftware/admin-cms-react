@@ -724,10 +724,16 @@ const ApiUtils = {
         }
     },
 
-    getAllTransaction: function (page, limit, token, search) {
+    getAllTransaction: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
-        if (search) {
-            url += "&data=" + search;
+        if (search && filterVal && startDate) {
+            url += "&search=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
+            url += "&search=" + search
         }
         try {
             return fetch(API_URL + url, {
@@ -742,12 +748,12 @@ const ApiUtils = {
         }
     },
 
-    getAllTrades: function (page, limit, token, search, user_id) {
+    getAllTrades: function (page, limit, token, search, filterVal) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search) {
             url += "&data=" + search;
-        } else if (user_id) {
-            url += "&user_id=" + user_id;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
         }
 
         try {

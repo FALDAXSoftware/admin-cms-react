@@ -34,7 +34,7 @@ class Countries extends Component {
         Countries.showStates = Countries.showStates.bind(this);
     }
 
-    static countryStatus(value, name, legality, color, is_active) {
+    static countryStatus(value, name, legality, color, stateCount, is_active) {
         const { token } = this.props;
 
         self.setState({ loader: true })
@@ -60,8 +60,8 @@ class Countries extends Component {
             });
     }
 
-    static editCountry(value, name, legality, color, is_active) {
-        let countryDetails = { value, name, legality, color, is_active };
+    static editCountry(value, name, legality, color, stateCount, is_active) {
+        let countryDetails = { value, name, legality, color, stateCount, is_active };
         self.setState({ showEditCountryModal: true, countryDetails, page: 1 })
     }
 

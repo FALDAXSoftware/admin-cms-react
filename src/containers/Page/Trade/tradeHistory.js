@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin, Select, DatePicker, Button } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import moment from 'moment';
 
-const Search = Input.Search;
+const Option = Select.Option;
 const TabPane = Tabs.TabPane;
+const { RangePicker } = DatePicker;
 
 class TradeHistory extends Component {
     constructor(props) {
@@ -22,21 +24,22 @@ class TradeHistory extends Component {
             errMsg: false,
             errType: 'Success',
             page: 0,
-            loader: false
+            loader: false,
+            filterVal: '',
         }
     }
 
     componentDidMount = () => {
-        this._getAllTrades(0);
+        this._getAllTrades();
     }
 
     _getAllTrades = () => {
         const { token } = this.props;
-        const { searchTrade, page, limit } = this.state;
+        const { searchTrade, page, limit, filterVal } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTrades(page, limit, token, searchTrade)
+        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -64,20 +67,70 @@ class TradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
-    _searchTrade = (val) => {
-        this.setState({ searchTrade: val }, () => {
-            this._getAllTrades(0);
-        });
+    _searchTrade = () => {
+        this._getAllTrades();
+    }
+
+    _changeFilter = (val) => {
+        this.setState({ filterVal: val });
+    }
+
+    _changeSearch = (field, e) => {
+        this.setState({ searchTransaction: field.target.value })
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            startDate: moment(date[0]).endOf('day').toISOString(),
+            endDate: moment(date[1]).endOf('day').toISOString()
+        })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchTransaction: '',
+            startDate: '', endDate: ''
+        }, () => {
+            this._getAllTransactions();
+        })
+    }
+
+    _changeFilter = (val) => {
+        this.setState({ filterVal: val });
     }
 
     _handleTradePagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllTrades(page - 1);
+            this._getAllTrades();
         })
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader } = this.state;
+        const { allTrades, allTradeCount, errType, errMsg, page, loader,
+            searchTrade } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -90,12 +143,31 @@ class TradeHistory extends Component {
                         {tradeTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
+                                    <Input
                                         placeholder="Search trades"
-                                        onSearch={(value) => this._searchTrade(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
+                                        onChange={this._changeSearch.bind(this)}
+                                        style={{ "float": "right", "width": "180px" }}
+                                        value={searchTrade}
                                     />
+
+                                    <Select
+                                        style={{ width: 125, "marginLeft": "15px" }}
+                                        placeholder="Select a type"
+                                        onChange={this._changeFilter}
+                                    >
+                                        <Option value={'Sell'}>Sell</Option>
+                                        <Option value={'Buy'}>Buy</Option>
+                                    </Select><br />
+
+                                    <RangePicker
+                                        disabledTime={this.disabledRangeTime}
+                                        onChange={this._changeDate}
+                                        format="YYYY-MM-DD"
+                                    />
+
+                                    <Button type="primary" onClick={this._searchTrade}>Search</Button>
+                                    <Button type="primary" onClick={this._resetFilters}>Reset</Button>
+
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />

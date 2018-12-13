@@ -60,8 +60,7 @@ const columns = [
         title: <IntlMessages id="countryTable.title.State" />,
         key: 'button',
         width: 200,
-        render: object => renderCell(object, 'CountryButtonCell', 'id', 'name', 'legality',
-            'color', 'stateCount', 'is_active')
+        render: object => renderCell(object, 'CountryButtonCell', 'id', 'stateCount')
     },
     {
         title: <IntlMessages id="countryTable.title.actions" />,

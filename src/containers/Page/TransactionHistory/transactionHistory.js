@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Spin } from 'antd';
+import { Input, Tabs, Pagination, Spin, Select, Button, DatePicker, notification } from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import moment from 'moment';
 
-const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
 class Transactions extends Component {
     constructor(props) {
@@ -22,21 +24,25 @@ class Transactions extends Component {
             errMsg: false,
             errType: 'Success',
             page: 0,
-            loader: false
+            loader: false,
+            filterVal: '',
+            startDate: '',
+            endDate: ''
         }
     }
 
     componentDidMount = () => {
-        this._getAllTransactions(0);
+        this._getAllTransactions();
     }
 
     _getAllTransactions = () => {
         const { token } = this.props;
-        const { searchTransaction, page, limit } = this.state;
+        const { searchTransaction, page, limit, filterVal, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true })
-        ApiUtils.getAllTransaction(page, limit, token, searchTransaction)
+        ApiUtils.getAllTransaction(page, limit, token, searchTransaction, filterVal,
+            startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -48,7 +54,7 @@ class Transactions extends Component {
                 }
                 _this.setState({ loader: false })
             })
-            .catch(err => {
+            .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
                     searchTransaction: '', errType: 'error', loader: false
@@ -56,21 +62,74 @@ class Transactions extends Component {
             });
     }
 
-    _searchTransaction = (val) => {
-        this.setState({ searchTransaction: val }, () => {
-            this._getAllTransactions(0);
-        });
+    _searchTransaction = () => {
+        this._getAllTransactions();
     }
 
     _handleTransactionPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllTransactions(page - 1);
+            this._getAllTransactions();
         })
     }
 
+    _changeFilter = (val) => {
+        this.setState({ filterVal: val });
+    }
+
+    _changeSearch = (field, e) => {
+        this.setState({ searchTransaction: field.target.value })
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            startDate: moment(date[0]).endOf('day').toISOString(),
+            endDate: moment(date[1]).endOf('day').toISOString()
+        })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchTransaction: '',
+            startDate: '', endDate: ''
+        }, () => {
+            this._getAllTransactions();
+        })
+    }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
-            loader
+            loader, searchTransaction
         } = this.state;
 
         if (errMsg) {
@@ -84,12 +143,30 @@ class Transactions extends Component {
                         {transactionTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
+                                    <Input
                                         placeholder="Search transactions"
-                                        onSearch={(value) => this._searchTransaction(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
+                                        onChange={this._changeSearch.bind(this)}
+                                        style={{ "float": "right", "width": "180px" }}
+                                        value={searchTransaction}
                                     />
+
+                                    <Select
+                                        style={{ width: 125, "marginLeft": "15px" }}
+                                        placeholder="Select a type"
+                                        onChange={this._changeFilter}
+                                    >
+                                        <Option value={'receive'}>Receive</Option>
+                                        <Option value={'buy'}>Buy</Option>
+                                    </Select><br />
+
+                                    <RangePicker
+                                        disabledTime={this.disabledRangeTime}
+                                        onChange={this._changeDate}
+                                        format="YYYY-MM-DD"
+                                    />
+
+                                    <Button type="primary" onClick={this._searchTransaction}>Search</Button>
+                                    <Button type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
