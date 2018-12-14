@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, notification, Card } from 'antd';
+import { Row, Col, notification, Card, Progress } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import StickerWidget from "../Widgets/sticker/sticker-widget";
@@ -85,6 +85,10 @@ class Dashboard extends Component {
             withdrawReqCount: 0,
             lastSevenInquiry: 0,
             lastThirtyInquiry: 0,
+            kyc_disapproved: 0,
+            kyc_approved: 0,
+            total_kyc: 0,
+            kyc_pending: 0,
             errMsg: false,
             errMessage: ''
         }
@@ -113,14 +117,16 @@ class Dashboard extends Component {
                     const {
                         userCount, coinCount, pairCount, legalCountries, illegalCountries,
                         neutralCountries, blogsCount, employeeCount, jobsCount,
-                        coinReqCount, subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry
+                        coinReqCount, subscriberCount, withdrawReqCount, lastSevenInquiry,
+                        lastThirtyInquiry, kyc_disapproved, kyc_approved, total_kyc, kyc_pending
+
                     } = res;
                     _this.setState({
                         userCount, coinCount, pairCount, legalCountries,
                         illegalCountries, neutralCountries, blogsCount, employeeCount,
                         jobsCount, coinReqCount, subscriberCount, withdrawReqCount,
-                        lastSevenInquiry, lastThirtyInquiry
-
+                        lastSevenInquiry, lastThirtyInquiry, kyc_disapproved, kyc_approved,
+                        total_kyc, kyc_pending
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -135,7 +141,8 @@ class Dashboard extends Component {
         const { rowStyle, colStyle } = basicStyle;
         const { userCount, coinCount, pairCount, legalCountries, illegalCountries,
             neutralCountries, blogsCount, employeeCount, jobsCount, coinReqCount,
-            subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry
+            subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry,
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending
         } = this.state;
 
         const data = {
@@ -168,7 +175,7 @@ class Dashboard extends Component {
         const kycData = {
             labels: ['Grand Total', 'Total Outstanding', 'Total Approved', 'Total Disapproved'],
             datasets: [{
-                data: [legalCountries, illegalCountries, neutralCountries, neutralCountries],
+                data: [total_kyc, kyc_pending, kyc_approved, kyc_disapproved],
                 backgroundColor: ['#57ED16', '#E929DD', '#D2601F', '#B95671'],
                 hoverBackgroundColor: ['#57ED16', '#E929DD', '#D2601F', '#B95671']
             }]
@@ -198,19 +205,21 @@ class Dashboard extends Component {
                     </Col>
                 </Row>
 
-                {/*<Row style={rowStyle} gutter={0} justify="start">
+                {/* <Row style={rowStyle} gutter={0} justify="start">
                     <Col md={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <span><b>KYC:</b></span>
-                            <ChartWrapper>
-                                <ContentHolder>
-                                    <Doughnut data={kycData} />
-                                </ContentHolder>
-                            </ChartWrapper>
-                        </IsoWidgetsWrapper>
+                        <Card title="KYC">
+                            <span>Grand Total</span>
+                            <Progress percent={30} size="small" format={percent => `${percent}`} />
+                            <span>Total Outstanding</span>
+                            <Progress percent={40} size="small" format={percent => `${percent}`} />
+                            <span>Total Approved</span>
+                            <Progress percent={kyc_approved} size="small" format={percent => `${percent}`} />
+                            <span>Total Dis-Approved</span>
+                            <Progress percent={kyc_disapproved} size="small" format={percent => `${percent}`} />
+                        </Card>
                     </Col>
 
-                    <Col md={12} xs={24} style={colStyle}>
+                    {/* <Col md={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <span><b>Trade History:</b></span>
                             <ChartWrapper>
@@ -219,10 +228,10 @@ class Dashboard extends Component {
                                 </ContentHolder>
                             </ChartWrapper>
                         </IsoWidgetsWrapper>
-                    </Col>
-                </Row> */}
+                    </Col> */}
+                {/* </Row>  */}
 
-                <Row style={rowStyle} gutter={0} justify="start">
+                < Row style={rowStyle} gutter={0} justify="start" >
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
@@ -251,8 +260,8 @@ class Dashboard extends Component {
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={pairCount}
-                                text={<IntlMessages id="widget.stickerwidget3.staticPages" />}
-                                icon="ion-document"
+                                text={'Total Pairs'}
+                                icon="fas fa-file"
                                 fontColor="#ffffff"
                                 bgColor="#7ED320"
                             />
@@ -264,7 +273,7 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={blogsCount}
                                 text={'Total Blogs'}
-                                icon="ion-android-fastforward"
+                                icon="far fa-file-alt"
                                 fontColor="#ffffff"
                                 bgColor="#F75D81"
                             />
@@ -276,9 +285,9 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={employeeCount}
                                 text={'Total Employees'}
-                                icon="ion-android-fastforward"
+                                icon="fas fa-user-tie"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#E74C3C"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
@@ -288,9 +297,9 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={jobsCount}
                                 text={'Total Jobs'}
-                                icon="ion-android-fastforward"
+                                icon="fas fa-suitcase-rolling"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#F1C40F"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
@@ -300,9 +309,9 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={coinReqCount}
                                 text={'Total Coin Requests'}
-                                icon="ion-android-fastforward"
+                                icon="fas fa-coins"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#5499C7"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
@@ -312,9 +321,9 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={subscriberCount}
                                 text={'Total Subscribers'}
-                                icon="ion-android-fastforward"
+                                icon="far fa-newspaper"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#CD6155"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
@@ -324,9 +333,9 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={withdrawReqCount}
                                 text={'Total Withdraw Requests'}
-                                icon="ion-android-fastforward"
+                                icon="fas fa-hand-holding-usd"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#A569BD"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
@@ -336,9 +345,9 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={lastSevenInquiry}
                                 text={'Last Seven Days Inquiry'}
-                                icon="ion-android-fastforward"
+                                icon="fas fa-comments"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#2ECC71"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
@@ -348,13 +357,13 @@ class Dashboard extends Component {
                             <StickerWidget
                                 number={lastThirtyInquiry}
                                 text={'Last Thirty Days Inquiry'}
-                                icon="ion-android-fastforward"
+                                icon="fas fa-comments"
                                 fontColor="#ffffff"
-                                bgColor="#F75D81"
+                                bgColor="#21618C"
                             />
                         </IsoWidgetsWrapper>
                     </Col>
-                </Row>
+                </Row >
             </LayoutWrapper >
         );
     }

@@ -5,12 +5,12 @@ import {
     TextCell, DateCell, CoinActionCell, SwitchCell, ContentCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, name = null, code = null, Limit = null, desc = null, wallet = null, cratedAt = null, status = null) => {
+const renderCell = (object, type, key, name = null, code = null, Limit = null, wallet = null, cratedAt = null, status = null) => {
     const value = object[key];
     const coin_name = object[name];
     const coin_code = object[code];
     const limit = object[Limit];
-    const description = object[desc];
+    //const description = object[desc];
     const wallet_address = object[wallet];
     const created_at = object[cratedAt];
     const is_active = object[status];
@@ -21,9 +21,9 @@ const renderCell = (object, type, key, name = null, code = null, Limit = null, d
         case 'ContentCell':
             return ContentCell(value);
         case 'SwitchCell':
-            return SwitchCell(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active);
+            return SwitchCell(value, coin_name, coin_code, limit, wallet_address, created_at, is_active);
         case 'CoinActionCell':
-            return CoinActionCell(value, coin_name, coin_code, limit, description, wallet_address, created_at, is_active);
+            return CoinActionCell(value, coin_name, coin_code, limit, wallet_address, created_at, is_active);
         default:
             return TextCell(value);
     }
@@ -58,14 +58,15 @@ const columns = [
         title: <IntlMessages id="coinTable.title.active" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'SwitchCell', 'id', 'coin_name', 'coin_code', 'limit', 'description', 'wallet_address', 'created_at', 'is_active')
+        render: object => renderCell(object, 'SwitchCell', 'id', 'coin_name', 'coin_code',
+            'limit', 'wallet_address', 'created_at', 'is_active')
     },
     {
         title: <IntlMessages id="coinTable.title.Actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'CoinActionCell', 'id', 'coin_name', 'coin_code', 'limit', 'description', 'wallet_address', 'created_at', 'is_active')
+            'CoinActionCell', 'id', 'coin_name', 'coin_code', 'limit', 'wallet_address', 'created_at', 'is_active')
     }
 ];
 

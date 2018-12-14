@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Spin } from 'antd';
+import { Input, Tabs, Pagination, Spin, Button, DatePicker, Select } from 'antd';
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import moment from 'moment';
 
-const Search = Input.Search;
+const Option = Select.Option;
 const TabPane = Tabs.TabPane;
+const { RangePicker } = DatePicker;
 
 class WithdrawRequest extends Component {
     constructor(props) {
@@ -22,7 +24,11 @@ class WithdrawRequest extends Component {
             errMsg: false,
             errType: 'Success',
             page: 0,
-            loader: false
+            loader: false,
+            startDate: '',
+            endDate: '',
+            filterVal: '',
+            rangeDate: []
         }
     }
 
@@ -32,19 +38,19 @@ class WithdrawRequest extends Component {
 
     _getAllWithdrawReqs = () => {
         const { token } = this.props;
-        const { searchReq, page, limit } = this.state;
+        const { searchReq, page, limit, filterVal, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq)
+        ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq, filterVal, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allRequests: res.data, allReqCount: res.withdrawReqCount, searchReq: ''
+                        allRequests: res.data, allReqCount: res.withdrawReqCount
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchReq: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
@@ -56,20 +62,66 @@ class WithdrawRequest extends Component {
             });
     }
 
-    _searchReq = (val) => {
-        this.setState({ searchReq: val }, () => {
-            this._getAllWithdrawReqs(0);
-        });
+    _searchReq = () => {
+        this._getAllWithdrawReqs();
     }
 
     _handleReqPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllWithdrawReqs(page - 1);
+            this._getAllWithdrawReqs();
+        })
+    }
+
+    _changeSearch = (field, e) => {
+        this.setState({ searchReq: field.target.value })
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: moment(date[0]).endOf('day').toISOString(),
+            endDate: moment(date[1]).endOf('day').toISOString()
+        })
+    }
+
+    _changeFilter = (val) => {
+        this.setState({ filterVal: val });
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchReq: '', startDate: '', endDate: '', rangeDate: []
+        }, () => {
+            this._getAllWithdrawReqs();
         })
     }
 
     render() {
-        const { allRequests, allReqCount, errType, errMsg, page, loader } = this.state;
+        const { allRequests, allReqCount, errType, errMsg, page, loader,
+            searchReq, rangeDate } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -82,17 +134,39 @@ class WithdrawRequest extends Component {
                         {withdrawReqTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
+                                    <Input
                                         placeholder="Search Requests"
-                                        onSearch={(value) => this._searchReq(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
+                                        style={{ "width": "200px" }}
+                                        onChange={this._changeSearch.bind(this)}
+                                        value={searchReq}
                                     />
+
+                                    <Select
+                                        style={{ width: 125, "marginLeft": "15px" }}
+                                        placeholder="Select a type"
+                                        onChange={this._changeFilter}
+                                    >
+                                        <Option value={'true'}>Approve</Option>
+                                        <Option value={'false'}>Dis-Approve</Option>
+                                    </Select>
+
+                                    <RangePicker
+                                        value={rangeDate}
+                                        disabledTime={this.disabledRangeTime}
+                                        onChange={this._changeDate}
+                                        format="YYYY-MM-DD"
+                                        style={{ marginLeft: '15px' }}
+                                    />
+
+                                    <Button className="search-btn" type="primary" onClick={this._searchReq}>Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
                                 </span>}
                                 <TableWrapper
+                                    style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}

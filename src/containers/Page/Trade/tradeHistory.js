@@ -26,6 +26,9 @@ class TradeHistory extends Component {
             page: 0,
             loader: false,
             filterVal: '',
+            startDate: '',
+            endDate: '',
+            rangeDate: []
         }
     }
 
@@ -35,19 +38,19 @@ class TradeHistory extends Component {
 
     _getAllTrades = () => {
         const { token } = this.props;
-        const { searchTrade, page, limit, filterVal } = this.state;
+        const { searchTrade, page, limit, filterVal, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal)
+        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount, searchTrade: ''
+                        allTrades: res.data, allTradeCount: res.tradeCount
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchTrade: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
@@ -76,7 +79,7 @@ class TradeHistory extends Component {
     }
 
     _changeSearch = (field, e) => {
-        this.setState({ searchTransaction: field.target.value })
+        this.setState({ searchTrade: field.target.value })
     }
 
     range = (start, end) => {
@@ -104,6 +107,7 @@ class TradeHistory extends Component {
 
     _changeDate = (date, dateString) => {
         this.setState({
+            rangeDate: date,
             startDate: moment(date[0]).endOf('day').toISOString(),
             endDate: moment(date[1]).endOf('day').toISOString()
         })
@@ -111,10 +115,9 @@ class TradeHistory extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchTransaction: '',
-            startDate: '', endDate: ''
+            filterVal: '', searchTrade: '', startDate: '', endDate: '', rangeDate: []
         }, () => {
-            this._getAllTransactions();
+            this._getAllTrades();
         })
     }
 
@@ -130,7 +133,7 @@ class TradeHistory extends Component {
 
     render() {
         const { allTrades, allTradeCount, errType, errMsg, page, loader,
-            searchTrade } = this.state;
+            searchTrade, rangeDate } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -146,7 +149,7 @@ class TradeHistory extends Component {
                                     <Input
                                         placeholder="Search trades"
                                         onChange={this._changeSearch.bind(this)}
-                                        style={{ "float": "right", "width": "180px" }}
+                                        style={{ "width": "200px" }}
                                         value={searchTrade}
                                     />
 
@@ -157,22 +160,25 @@ class TradeHistory extends Component {
                                     >
                                         <Option value={'Sell'}>Sell</Option>
                                         <Option value={'Buy'}>Buy</Option>
-                                    </Select><br />
+                                    </Select>
 
                                     <RangePicker
+                                        value={rangeDate}
                                         disabledTime={this.disabledRangeTime}
                                         onChange={this._changeDate}
                                         format="YYYY-MM-DD"
+                                        style={{ marginLeft: '15px' }}
                                     />
 
-                                    <Button type="primary" onClick={this._searchTrade}>Search</Button>
-                                    <Button type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
                                 </span>}
                                 <TableWrapper
+                                    style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}

@@ -1,6 +1,6 @@
 //const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
-const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
-//const API_URL = "http://18.191.87.133:8084"; //Live URL
+//const API_URL = "http://192.168.2.32:1337"; // Local (Krina) URL
+const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -748,12 +748,16 @@ const ApiUtils = {
         }
     },
 
-    getAllTrades: function (page, limit, token, search, filterVal) {
+    getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
-        if (search) {
-            url += "&data=" + search;
+        if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
+            url += "&data=" + search;
         }
 
         try {
@@ -769,11 +773,23 @@ const ApiUtils = {
         }
     },
 
-    getAllWithdrawRequests: function (page, limit, token, search) {
+    getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit;
-        if (search) {
+
+        if (search && filterVal && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
             url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -826,11 +842,16 @@ const ApiUtils = {
     },
 
     //get all coins api
-    getAllCoinRequests: function (page, limit, token, search) {
+    getAllCoinRequests: function (page, limit, token, search, startDate, endDate) {
         let url = "/admin/coin-requests?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+        if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -979,11 +1000,17 @@ const ApiUtils = {
     },
 
     //get all subscribers api
-    getAllSubscribers: function (page, limit, token, search) {
+    getAllSubscribers: function (page, limit, token, search, startDate, endDate) {
         let url = "/admin/get-all-subscribers?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+
+        if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',

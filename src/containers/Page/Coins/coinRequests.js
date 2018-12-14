@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin, Button, Select, DatePicker } from 'antd';
 import { coinReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,9 +7,10 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewCoinReqModal from './viewCoinReqModal';
+import moment from 'moment';
 
-const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const { RangePicker } = DatePicker;
 var self;
 
 class CoinRequests extends Component {
@@ -26,7 +27,10 @@ class CoinRequests extends Component {
             page: 1,
             loader: false,
             coinReqDetails: [],
-            showViewCoinReqModal: false
+            showViewCoinReqModal: false,
+            startDate: '',
+            endDate: '',
+            coinFilter: ''
         }
         self = this;
         CoinRequests.viewCoinReq = CoinRequests.viewCoinReq.bind(this);
@@ -53,19 +57,19 @@ class CoinRequests extends Component {
 
     _getAllCoinRequests = () => {
         const { token } = this.props;
-        const { limit, searchCoin, page } = this.state;
+        const { limit, searchCoin, page, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllCoinRequests(page, limit, token, searchCoin)
+        ApiUtils.getAllCoinRequests(page, limit, token, searchCoin, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allCoinRequests: res.data, allCoinCount: res.coinReqCount, searchCoin: ''
+                        allCoinRequests: res.data, allCoinCount: res.coinReqCount
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
@@ -77,24 +81,65 @@ class CoinRequests extends Component {
             });
     }
 
-    _searchCoinReq = (val) => {
-        this.setState({ searchCoin: val, page: 1 }, () => {
-            this._getAllCoinRequests();
-        });
+    _searchCoinReq = () => {
+        this._getAllCoinRequests();
     }
 
     _handleCoinPagination = (page) => {
-        this._getAllCoinRequests(page);
-        this.setState({ page })
+        this.setState({ page }, () => {
+            this._getAllCoinRequests();
+        })
     }
 
     _closeViewCoinReqModal = () => {
         this.setState({ showViewCoinReqModal: false })
     }
 
+    _changeSearch = (field, e) => {
+        this.setState({ searchCoin: field.target.value })
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            startDate: moment(date[0]).endOf('day').toISOString(),
+            endDate: moment(date[1]).endOf('day').toISOString()
+        })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            searchCoin: '', startDate: '', endDate: ''
+        }, () => {
+            this._getAllCoinRequests();
+        })
+    }
+
     render() {
         const { allCoinRequests, allCoinCount, errType, loader, errMsg,
-            page, showViewCoinReqModal, coinReqDetails } = this.state;
+            page, showViewCoinReqModal, coinReqDetails, searchCoin } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -107,12 +152,22 @@ class CoinRequests extends Component {
                         {coinReqTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
+                                    <Input
                                         placeholder="Search coins"
-                                        onSearch={(value) => this._searchCoinReq(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
+                                        onChange={this._changeSearch.bind(this)}
+                                        style={{ "width": "200px" }}
+                                        value={searchCoin}
                                     />
+
+                                    <RangePicker
+                                        disabledTime={this.disabledRangeTime}
+                                        onChange={this._changeDate}
+                                        format="YYYY-MM-DD"
+                                        style={{ marginLeft: '15px' }}
+                                    />
+
+                                    <Button className="search-btn" type="primary" onClick={this._searchCoinReq}>Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
@@ -124,6 +179,7 @@ class CoinRequests extends Component {
                                         closeViewCoinReqModal={this._closeViewCoinReqModal}
                                     />
                                     <TableWrapper
+                                        style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

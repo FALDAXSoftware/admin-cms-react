@@ -51,9 +51,9 @@ class ViewCoinModal extends Component {
                     {coinDetails.limit ? coinDetails.limit : 'NA'}
                 </p>
 
-                <span> <b>Description:</b> </span>
+                {/* <span> <b>Description:</b> </span>
                 <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: coinDetails.description ? coinDetails.description : 'NA' }} />
+                    dangerouslySetInnerHTML={{ __html: coinDetails.description ? coinDetails.description : 'NA' }} /> */}
 
                 <span> <b>Wallet Address:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>

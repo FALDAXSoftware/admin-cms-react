@@ -42,11 +42,6 @@ const columns = [
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {
-        title: <IntlMessages id="inquiryTable.title.message" />,
-        key: 'message',
-        width: 200,
-        render: object => renderCell(object, 'ContentCell', 'message')
-    }, {
         title: <IntlMessages id="blogTable.title.Actions" />,
         key: 'action',
         width: 200,

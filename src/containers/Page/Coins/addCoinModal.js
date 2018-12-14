@@ -45,7 +45,7 @@ class AddCoinModal extends Component {
         };
         this.validator = new SimpleReactValidator({
             space: {
-                message: 'The :attribute must be a valid IP address.',
+                message: 'The attribute must be a valid IP address.',
                 rule: function (val, options) {
                     if (val) {
                         return val;
@@ -111,7 +111,7 @@ class AddCoinModal extends Component {
             let formData = {
                 coin_name: fields["coin_name"],
                 coin_code: fields["coin_code"],
-                description: editorContent,
+                // description: editorContent,
                 limit: fields["limit"],
                 wallet_address: fields["wallet_address"],
             };
@@ -119,13 +119,20 @@ class AddCoinModal extends Component {
             ApiUtils.addCoin(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
+                    if (res.status != 200) {
+                        this.setState({
+                            editorContent: '', errMsg: true, errMessage: res.err,
+                            loader: false, errType: 'Error', showError: false, isDisabled: false
+                        })
+                    } else {
+                        this.setState({
+                            editorContent: '', errMsg: true, errMessage: res.message,
+                            loader: false, errType: 'Success', showError: false, isDisabled: false
+                        })
+                    }
                     this._closeAddCoinModal();
                     getAllCoins();
                     this._resetAddForm();
-                    this.setState({
-                        editorContent: '', errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success', showError: false, isDisabled: false
-                    })
                 })
                 .catch(() => {
                     this._resetAddForm();
@@ -185,7 +192,7 @@ class AddCoinModal extends Component {
                     </span>
                 </div>
 
-                <div style={{ "marginBottom": "15px" }}>
+                {/* <div style={{ "marginBottom": "15px" }}>
                     <span>Description:</span>
                     <QuillEditor>
                         <ReactQuill {...options} />
@@ -193,7 +200,7 @@ class AddCoinModal extends Component {
                     {showError && <span style={{ "color": "red" }}>
                         {'The description field is required.'}
                     </span>}
-                </div>
+                </div> */}
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Limit:</span>

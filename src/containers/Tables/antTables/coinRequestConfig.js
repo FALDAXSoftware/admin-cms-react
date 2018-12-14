@@ -45,17 +45,6 @@ const columns = [
         render: object => renderCell(object, 'DateCell', 'target_date')
     },
     {
-        title: <IntlMessages id="coinTable.title.message" />,
-        key: 'message',
-        width: 200,
-        render: object => renderCell(object, 'ContentCell', 'message')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.url" />,
-        key: 'url',
-        width: 200,
-        render: object => renderCell(object, 'ContentCell', 'url')
-    }, {
         title: <IntlMessages id="coinTable.title.Actions" />,
         key: 'action',
         width: 200,

@@ -27,7 +27,8 @@ class Transactions extends Component {
             loader: false,
             filterVal: '',
             startDate: '',
-            endDate: ''
+            endDate: '',
+            rangeDate: []
         }
     }
 
@@ -47,10 +48,10 @@ class Transactions extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTransactions: res.data, allTransactionCount: res.transactionCount, searchTransaction: ''
+                        allTransactions: res.data, allTransactionCount: res.transactionCount
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchTransaction: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false })
             })
@@ -105,6 +106,7 @@ class Transactions extends Component {
 
     _changeDate = (date, dateString) => {
         this.setState({
+            rangeDate: date,
             startDate: moment(date[0]).endOf('day').toISOString(),
             endDate: moment(date[1]).endOf('day').toISOString()
         })
@@ -112,8 +114,7 @@ class Transactions extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchTransaction: '',
-            startDate: '', endDate: ''
+            filterVal: '', searchTransaction: '', startDate: '', endDate: '', rangeDate: []
         }, () => {
             this._getAllTransactions();
         })
@@ -129,7 +130,7 @@ class Transactions extends Component {
 
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
-            loader, searchTransaction
+            loader, searchTransaction, rangeDate
         } = this.state;
 
         if (errMsg) {
@@ -146,7 +147,7 @@ class Transactions extends Component {
                                     <Input
                                         placeholder="Search transactions"
                                         onChange={this._changeSearch.bind(this)}
-                                        style={{ "float": "right", "width": "180px" }}
+                                        style={{ "width": "200px" }}
                                         value={searchTransaction}
                                     />
 
@@ -157,21 +158,24 @@ class Transactions extends Component {
                                     >
                                         <Option value={'receive'}>Receive</Option>
                                         <Option value={'buy'}>Buy</Option>
-                                    </Select><br />
+                                    </Select>
 
                                     <RangePicker
+                                        value={rangeDate}
                                         disabledTime={this.disabledRangeTime}
                                         onChange={this._changeDate}
                                         format="YYYY-MM-DD"
+                                        style={{ marginLeft: '15px' }}
                                     />
 
-                                    <Button type="primary" onClick={this._searchTransaction}>Search</Button>
-                                    <Button type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
                                 </span>}
                                 <TableWrapper
+                                    style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}

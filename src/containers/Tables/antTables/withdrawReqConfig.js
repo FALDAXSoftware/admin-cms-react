@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, ApproveCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, approve = null, createdOn = null) => {
@@ -16,6 +16,8 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
     switch (type) {
         case 'DateCell':
             return DateCell(value, maker_email, source_address, destination_address, amount, is_approve, created_at);
+        case 'ApproveCell':
+            return ApproveCell(value);
         default:
             return TextCell(value);
     }
@@ -50,7 +52,7 @@ const columns = [
         title: <IntlMessages id="withdrawTable.title.approve" />,
         key: 'is_approve',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'is_approve')
+        render: object => renderCell(object, 'ApproveCell', 'is_approve')
     },
     {
         title: <IntlMessages id="withdrawTable.title.created_at" />,

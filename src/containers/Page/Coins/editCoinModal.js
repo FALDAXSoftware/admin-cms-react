@@ -50,7 +50,7 @@ class EditCoinModal extends Component {
             this.setState({
                 showEditCoinModal: nextProps.showEditCoinModal,
                 fields: nextProps.fields,
-                editorContent: nextProps.fields.description
+                // editorContent: nextProps.fields.description
             })
         }
     }
@@ -68,6 +68,7 @@ class EditCoinModal extends Component {
     }
 
     _handleChange = (field, e) => {
+        console.log('>>>>>>>>>', e.target.value)
         let fields = this.state.fields;
         if (e.target.value.trim() == "") {
             fields[field] = "";
@@ -84,7 +85,7 @@ class EditCoinModal extends Component {
         fields['limit'] = '';
         fields['wallet_address'] = '';
         this.setState({
-            fields, editorContent: this.props.fields.description, showError: false
+            fields, showError: false
         });
     }
 
@@ -97,26 +98,33 @@ class EditCoinModal extends Component {
     _editCoin = () => {
         const { token, getAllCoins } = this.props;
         const { fields, editorContent } = this.state;
-        let coinContent = striptags(editorContent);
+        //let coinContent = striptags(editorContent);
 
-        if (this.validator.allValid() && coinContent.length > 0) {
+        if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
 
             let formData = {
                 coin_id: fields["value"],
                 coin_name: fields["coin_name"],
                 limit: fields["limit"],
-                description: editorContent,
+                //description: editorContent,
                 wallet_address: fields["wallet_address"]
             };
 
             ApiUtils.editCoin(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', showError: false, isDisabled: false
-                    });
+                    if (res.status != 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.err, loader: false,
+                            errType: 'Error', showError: false, isDisabled: false
+                        });
+                    } else {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', showError: false, isDisabled: false
+                        });
+                    }
                     this._closeEditCoinModal();
                     getAllCoins();
                     this._resetForm();
@@ -130,7 +138,7 @@ class EditCoinModal extends Component {
         } else {
             this.validator.showMessages();
             this.forceUpdate();
-            this.setState({ showError: coinContent.length > 0 ? false : true })
+            //this.setState({ showError: coinContent.length > 0 ? false : true })
         }
     }
 
@@ -170,7 +178,7 @@ class EditCoinModal extends Component {
                         </span>
                     </div>
 
-                    <div style={{ "marginBottom": "15px" }}>
+                    {/* <div style={{ "marginBottom": "15px" }}>
                         <span>Description:</span>
                         <QuillEditor>
                             <ReactQuill {...options} />
@@ -178,7 +186,7 @@ class EditCoinModal extends Component {
                         {showError && <span style={{ "color": "red" }}>
                             {'The description field is required.'}
                         </span>}
-                    </div>
+                    </div> */}
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Limit:</span>
