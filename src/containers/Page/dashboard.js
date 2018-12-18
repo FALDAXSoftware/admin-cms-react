@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col, notification, Card, Progress } from 'antd';
-import IntlMessages from '../../components/utility/intlMessages';
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import StickerWidget from "../Widgets/sticker/sticker-widget";
 import IsoWidgetsWrapper from "../Widgets/widgets-wrapper";
@@ -11,6 +10,13 @@ import { Pie, Doughnut } from 'react-chartjs-2';
 import ContentHolder from '../../components/utility/contentHolder';
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
+import CountCard from '../Widgets/card/count-widget';
+
+const CardWrapper = styled(Card)`
+    & .ant-card-body{
+        min-height: 219px;
+    }
+`
 
 const ChartWrapper = styled.div`
   display: flex;
@@ -69,11 +75,14 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userCount: 0,
-            coinCount: 0,
+            activeUsers: 0,
+            inactiveUsers: 0,
+            activeCoins: 0,
+            InactiveCoins: 0,
             pagesCount: 0,
             referralCount: 0,
-            pairCount: 0,
+            activePairs: 0,
+            InactivePairs: 0,
             legalCountries: 0,
             illegalCountries: 0,
             neutralCountries: 0,
@@ -115,14 +124,16 @@ class Dashboard extends Component {
             .then(function (res) {
                 if (res) {
                     const {
-                        userCount, coinCount, pairCount, legalCountries, illegalCountries,
+                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs, InactivePairs,
+                        legalCountries, illegalCountries,
                         neutralCountries, blogsCount, employeeCount, jobsCount,
                         coinReqCount, subscriberCount, withdrawReqCount, lastSevenInquiry,
                         lastThirtyInquiry, kyc_disapproved, kyc_approved, total_kyc, kyc_pending
 
                     } = res;
                     _this.setState({
-                        userCount, coinCount, pairCount, legalCountries,
+                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                        InactivePairs, legalCountries,
                         illegalCountries, neutralCountries, blogsCount, employeeCount,
                         jobsCount, coinReqCount, subscriberCount, withdrawReqCount,
                         lastSevenInquiry, lastThirtyInquiry, kyc_disapproved, kyc_approved,
@@ -139,7 +150,8 @@ class Dashboard extends Component {
 
     render() {
         const { rowStyle, colStyle } = basicStyle;
-        const { userCount, coinCount, pairCount, legalCountries, illegalCountries,
+        const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+            InactivePairs, legalCountries, illegalCountries,
             neutralCountries, blogsCount, employeeCount, jobsCount, coinReqCount,
             subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry,
             kyc_approved, kyc_disapproved, total_kyc, kyc_pending
@@ -173,11 +185,11 @@ class Dashboard extends Component {
         }
 
         const kycData = {
-            labels: ['Grand Total', 'Total Outstanding', 'Total Approved', 'Total Disapproved'],
+            labels: ['Total Outstanding', 'Total Approved', 'Total Disapproved'],
             datasets: [{
-                data: [total_kyc, kyc_pending, kyc_approved, kyc_disapproved],
-                backgroundColor: ['#57ED16', '#E929DD', '#D2601F', '#B95671'],
-                hoverBackgroundColor: ['#57ED16', '#E929DD', '#D2601F', '#B95671']
+                data: [kyc_pending, kyc_approved, kyc_disapproved],
+                backgroundColor: ['#E929DD', '#D2601F', '#B95671'],
+                hoverBackgroundColor: ['#E929DD', '#D2601F', '#B95671']
             }]
         }
 
@@ -185,23 +197,24 @@ class Dashboard extends Component {
             <LayoutWrapper>
                 <Row style={rowStyle} gutter={0} justify="start">
                     <Col md={12} xs={24} style={colStyle}>
-                        <Card title="Country">
+                        <CardWrapper title="Country" >
                             <ChartWrapper>
                                 <ContentHolder>
                                     <Pie data={data} />
                                 </ContentHolder>
                             </ChartWrapper>
-                        </Card>
+                        </CardWrapper>
                     </Col>
 
                     <Col md={12} xs={24} style={colStyle}>
-                        <Card title="KYC">
+                        <CardWrapper title="KYC">
                             <ChartWrapper>
                                 <ContentHolder>
+                                    <b>Grand Total:</b> {total_kyc}
                                     <Doughnut data={kycData} />
                                 </ContentHolder>
                             </ChartWrapper>
-                        </Card>
+                        </CardWrapper>
                     </Col>
                 </Row>
 
@@ -231,48 +244,60 @@ class Dashboard extends Component {
                     </Col> */}
                 {/* </Row>  */}
 
-                < Row style={rowStyle} gutter={0} justify="start" >
+                <Row style={rowStyle} gutter={0} justify="start" >
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={userCount}
-                                text={<IntlMessages id="widget.stickerwidget1.user" />}
-                                icon="fa fa-users"
-                                fontColor="#ffffff"
-                                bgColor="#7266BA"
-                            />
-                        </IsoWidgetsWrapper>
+                        <CountCard number={activeUsers}
+                            headColor={'#6455b9'}
+                            number2={inactiveUsers}
+                            bgColor={'#8478cc'}
+                            title={'Users'}
+                            text={'Active Users'}
+                            text2={'Inactive Users'}
+                            icon="fa fa-users"
+                            fontColor="#ffffff" />
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={coinCount}
-                                text={<IntlMessages id="widget.stickerwidget2.coins" />}
-                                icon="fa fa-coins"
-                                fontColor="#ffffff"
-                                bgColor="#42A5F6"
-                            />
-                        </IsoWidgetsWrapper>
+                        <CountCard number={activeCoins}
+                            headColor={'#EB4278'}
+                            number2={InactiveCoins}
+                            bgColor={'#F96E9B'}
+                            title={'Coins'}
+                            text={'Active Coins'}
+                            text2={'Inactive Coins'}
+                            icon="fa fa-coins"
+                            fontColor="#ffffff" />
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={pairCount}
-                                text={'Total Pairs'}
-                                icon="fas fa-file"
-                                fontColor="#ffffff"
-                                bgColor="#7ED320"
-                            />
-                        </IsoWidgetsWrapper>
+                        <CountCard number={activePairs}
+                            headColor={'#0F67BA'}
+                            number2={InactivePairs}
+                            bgColor={'#3B95EA'}
+                            title={'Pairs'}
+                            text={'Active Pairs'}
+                            text2={'Inactive Pairs'}
+                            icon="fa fa-coins"
+                            fontColor="#ffffff" />
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <CountCard number={lastSevenInquiry}
+                            headColor={'#E54D0B'}
+                            number2={lastThirtyInquiry}
+                            bgColor={'#E3703E'}
+                            title={'Inquiry'}
+                            text={'Last Seven Days Inquiry'}
+                            text2={'Last Thirty Days Inquiry'}
+                            icon="fas fa-comments"
+                            fontColor="#ffffff" />
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={blogsCount}
-                                text={'Total Blogs'}
+                                text={'Blogs - Last 30 days'}
                                 icon="far fa-file-alt"
                                 fontColor="#ffffff"
                                 bgColor="#F75D81"
@@ -284,7 +309,7 @@ class Dashboard extends Component {
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={employeeCount}
-                                text={'Total Employees'}
+                                text={'Active Employees'}
                                 icon="fas fa-user-tie"
                                 fontColor="#ffffff"
                                 bgColor="#E74C3C"
@@ -296,7 +321,7 @@ class Dashboard extends Component {
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={jobsCount}
-                                text={'Total Jobs'}
+                                text={'Total Open Jobs'}
                                 icon="fas fa-suitcase-rolling"
                                 fontColor="#ffffff"
                                 bgColor="#F1C40F"
@@ -308,7 +333,7 @@ class Dashboard extends Component {
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={coinReqCount}
-                                text={'Total Coin Requests'}
+                                text={'Last 30 Days Coin Requests'}
                                 icon="fas fa-coins"
                                 fontColor="#ffffff"
                                 bgColor="#5499C7"
@@ -332,34 +357,10 @@ class Dashboard extends Component {
                         <IsoWidgetsWrapper>
                             <StickerWidget
                                 number={withdrawReqCount}
-                                text={'Total Withdraw Requests'}
+                                text={'Last 7 Days Withdraw Requests'}
                                 icon="fas fa-hand-holding-usd"
                                 fontColor="#ffffff"
                                 bgColor="#A569BD"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={lastSevenInquiry}
-                                text={'Last Seven Days Inquiry'}
-                                icon="fas fa-comments"
-                                fontColor="#ffffff"
-                                bgColor="#2ECC71"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={lastThirtyInquiry}
-                                text={'Last Thirty Days Inquiry'}
-                                icon="fas fa-comments"
-                                fontColor="#ffffff"
-                                bgColor="#21618C"
                             />
                         </IsoWidgetsWrapper>
                     </Col>

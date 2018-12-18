@@ -41,9 +41,11 @@ class Users extends Component {
         Users.changeStatus = Users.changeStatus.bind(this);
     }
 
-    static view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) {
+    static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
+        street_address_2, phone_number, country, dob, is_active, kyc) {
         let userDetails = {
-            value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active
+            value, profile_pic, first_name, last_name, email, city_town, street_address,
+            street_address_2, phone_number, country, dob, is_active, kyc
         }
         self.setState({ userDetails, showViewUserModal: true });
     }
@@ -52,7 +54,8 @@ class Users extends Component {
         self._getAllReferredUsers(value, 0)
     }
 
-    static changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active) {
+    static changeStatus(value, profile_pic, first_name, last_name, email, city_town,
+        street_address, street_address_2, phone_number, country, dob, is_active, kyc) {
         const { token } = this.props;
 
         let formData = {

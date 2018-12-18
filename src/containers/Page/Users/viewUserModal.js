@@ -82,24 +82,24 @@ class ViewUserModal extends Component {
                     {userDetails.dob ? userDetails.dob : 'NA'}
                 </p>
 
-                {/* <span> <b>Phone Number:</b> </span>
+                <span> <b>KYC Status:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.phone_number}
-                </p> */}
+                    {userDetails.kyc ? userDetails.kyc.isApprove == true ? 'Verfied' : 'Not Verified' : 'NA'}
+                </p>
 
-                <Link to={`/dashboard/users/history/${userDetails.value}`} replace>
+                <Link to={`/dashboard/users/history/${userDetails.value}`} target="_blank">
                     View Login History
                 </Link><br />
 
-                <Link to={`/dashboard/users/sell-orders/${userDetails.value}`} replace>
+                <Link to={`/dashboard/users/sell-orders/${userDetails.value}`} target="_blank">
                     View Sell Orders
                 </Link><br />
 
-                <Link to={`/dashboard/users/buy-orders/${userDetails.value}`} replace>
+                <Link to={`/dashboard/users/buy-orders/${userDetails.value}`} target="_blank">
                     View Buy Orders
                 </Link><br />
 
-                <Link to={`/dashboard/users/trade-history/${userDetails.value}`} replace>
+                <Link to={`/dashboard/users/trade-history/${userDetails.value}`} target="_blank">
                     View Trade History
                 </Link><br />
             </Modal>

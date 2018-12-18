@@ -34,7 +34,7 @@ class Countries extends Component {
         Countries.showStates = Countries.showStates.bind(this);
     }
 
-    static countryStatus(value, name, legality, color, stateCount, is_active) {
+    static countryStatus(value, name, legality, color, is_active) {
         const { token } = this.props;
 
         self.setState({ loader: true })
@@ -53,7 +53,7 @@ class Countries extends Component {
                 self.setState({
                     errMsg: true, errMessage: message, errType: 'Success', loader: false
                 })
-                self._getAllCountries(1);
+                self._getAllCountries();
             })
             .catch(() => {
                 self.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
@@ -70,7 +70,7 @@ class Countries extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllCountries(1);
+        this._getAllCountries();
     }
 
     openNotificationWithIconError = (type) => {
@@ -161,8 +161,7 @@ class Countries extends Component {
                                             showEditCountryModal={showEditCountryModal}
                                             closeEditCountryModal={this._closeEditCountryModal}
                                             getAllCountry={this._getAllCountries.bind(this, 1)}
-                                        />
-                                    }
+                                        />}
                                     <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"

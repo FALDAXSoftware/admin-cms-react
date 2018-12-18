@@ -58,7 +58,7 @@ class Transactions extends Component {
             .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTransaction: '', errType: 'error', loader: false
+                    errType: 'error', loader: false
                 });
             });
     }
@@ -130,7 +130,7 @@ class Transactions extends Component {
 
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
-            loader, searchTransaction, rangeDate
+            loader, searchTransaction, rangeDate, filterVal
         } = this.state;
 
         if (errMsg) {
@@ -155,6 +155,7 @@ class Transactions extends Component {
                                         style={{ width: 125, "marginLeft": "15px" }}
                                         placeholder="Select a type"
                                         onChange={this._changeFilter}
+                                        value={filterVal}
                                     >
                                         <Option value={'receive'}>Receive</Option>
                                         <Option value={'buy'}>Buy</Option>
@@ -182,14 +183,14 @@ class Transactions extends Component {
                                     dataSource={allTransactions}
                                     className="isoCustomizedTable"
                                 />
-                                <Pagination
+                                {allTransactionCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
                                     onChange={this._handleTransactionPagination.bind(this)}
                                     pageSize={50}
                                     current={page}
                                     total={allTransactionCount}
-                                />
+                                /> : ''}
                             </TabPane>
                         ))}
                     </Tabs>

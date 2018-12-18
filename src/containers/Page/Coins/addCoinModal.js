@@ -106,7 +106,7 @@ class AddCoinModal extends Component {
         let { fields, editorContent } = this.state;
         let coinContent = striptags(editorContent);
 
-        if (this.validator.allValid() && coinContent.length > 0) {
+        if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
             let formData = {
                 coin_name: fields["coin_name"],
@@ -144,7 +144,7 @@ class AddCoinModal extends Component {
         } else {
             this.validator.showMessages();
             this.forceUpdate();
-            this.setState({ showError: coinContent.length > 0 ? false : true })
+            //this.setState({ showError: coinContent.length > 0 ? false : true })
         }
     }
 
@@ -214,7 +214,7 @@ class AddCoinModal extends Component {
                     <span>Wallet Address:</span>
                     <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('wallet address', fields["wallet_address"], 'required|max:45', 'text-danger')}
+                        {this.validator.message('wallet address', fields["wallet_address"], 'max:45', 'text-danger')}
                     </span>
                 </div>
 

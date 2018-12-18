@@ -164,14 +164,14 @@ class Subscribers extends Component {
                                     dataSource={allSubscribers}
                                     className="isoCustomizedTable"
                                 />
-                                <Pagination
+                                {allSubscribersCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
                                     onChange={this._handleSubscribePagination.bind(this)}
                                     pageSize={50}
                                     current={page}
                                     total={allSubscribersCount}
-                                />
+                                /> : ''}
                             </TabPane>
                         ))}
                     </Tabs>

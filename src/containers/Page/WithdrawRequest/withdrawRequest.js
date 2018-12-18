@@ -121,7 +121,7 @@ class WithdrawRequest extends Component {
 
     render() {
         const { allRequests, allReqCount, errType, errMsg, page, loader,
-            searchReq, rangeDate } = this.state;
+            searchReq, rangeDate, filterVal } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -145,6 +145,7 @@ class WithdrawRequest extends Component {
                                         style={{ width: 125, "marginLeft": "15px" }}
                                         placeholder="Select a type"
                                         onChange={this._changeFilter}
+                                        value={filterVal}
                                     >
                                         <Option value={'true'}>Approve</Option>
                                         <Option value={'false'}>Dis-Approve</Option>
@@ -173,14 +174,14 @@ class WithdrawRequest extends Component {
                                     dataSource={allRequests}
                                     className="isoCustomizedTable"
                                 />
-                                <Pagination
+                                {allReqCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
                                     onChange={this._handleReqPagination.bind(this)}
                                     pageSize={50}
                                     current={page}
                                     total={allReqCount}
-                                />
+                                /> : ''}
                             </TabPane>
                         ))}
                     </Tabs>

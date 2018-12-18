@@ -123,9 +123,10 @@ class CoinRequests extends Component {
     }
 
     _changeDate = (date, dateString) => {
+        console.log(date)
         this.setState({
-            startDate: moment(date[0]).endOf('day').toISOString(),
-            endDate: moment(date[1]).endOf('day').toISOString()
+            startDate: moment(date[0]).format('YYYY-MM-DD'),
+            endDate: moment(date[1]).format('YYYY-MM-DD')
         })
     }
 

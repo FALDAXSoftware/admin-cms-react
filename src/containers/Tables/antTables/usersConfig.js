@@ -11,7 +11,9 @@ import {
     UserSwitchCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, image = null, fname = null, lname = null, emailID = null, city = null, street = null, street_1 = null, phone = null, countryName = null, bdate = null, status = null) => {
+const renderCell = (object, type, key, image = null, fname = null, lname = null,
+    emailID = null, city = null, street = null, street_1 = null, phone = null,
+    countryName = null, bdate = null, status = null, isKyc = null) => {
     const value = object[key];
     const profile_pic = object[image];
     const first_name = object[fname];
@@ -24,6 +26,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const country = object[countryName];
     const dob = object[bdate];
     const is_active = object[status];
+    const kyc = object[isKyc];
 
     switch (type) {
         case 'ImageCell':
@@ -35,9 +38,11 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'ButtonCell':
             return ButtonCell(value);
         case 'UserSwitchCell':
-            return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active);
+            return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town,
+                street_address, street_address_2, phone_number, country, dob, is_active, kyc);
         case 'ActionCell':
-            return ActionCell(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active);
+            return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
+                street_address, street_address_2, phone_number, country, dob, is_active, kyc);
         default:
             return TextCell(value);
     }
@@ -91,14 +96,17 @@ const columns = [
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active')
+        render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name',
+            'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number',
+            'country', 'dob', 'is_active', 'kyc')
     },
     {
         title: <IntlMessages id="antTable.title.details" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active')
+            'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
+            'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc')
     }
 ];
 

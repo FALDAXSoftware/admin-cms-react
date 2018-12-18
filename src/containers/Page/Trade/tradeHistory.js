@@ -133,7 +133,7 @@ class TradeHistory extends Component {
 
     render() {
         const { allTrades, allTradeCount, errType, errMsg, page, loader,
-            searchTrade, rangeDate } = this.state;
+            searchTrade, rangeDate, filterVal } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -157,6 +157,7 @@ class TradeHistory extends Component {
                                         style={{ width: 125, "marginLeft": "15px" }}
                                         placeholder="Select a type"
                                         onChange={this._changeFilter}
+                                        value={filterVal}
                                     >
                                         <Option value={'Sell'}>Sell</Option>
                                         <Option value={'Buy'}>Buy</Option>

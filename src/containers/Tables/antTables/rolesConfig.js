@@ -7,7 +7,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     isCountry = null, isAnnounce = null, isStatic = null, isEmp = null, isRole = null,
     isPair = null, isBlog = null, isLimit = null, isTransaction = null, isTrade = null,
     isWithdraw = null, isCoinReq = null, isInquiry = null, isJobs = null,
-    isSubscribe = null, contact = null, active = false) => {
+    isSubscribe = null, contact = null, isKyc = null, active = false) => {
     const value = object[key];
     const name = object[first_name];
     const users = object[isUser];
@@ -28,6 +28,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const jobs = object[isJobs];
     const subscribe = object[isSubscribe];
     const contact_setting = object[contact];
+    const kyc = object[isKyc];
     const is_active = object[active];
 
     switch (type) {
@@ -35,12 +36,12 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
             return RoleSwitchCell(value, name, users, coins, announcement, static_page,
                 roles, countries, employee, pairs, blogs, limit_management,
                 transaction_history, trade_history, withdraw_requests, coin_requests,
-                inquiries, jobs, subscribe, contact_setting, is_active);
+                inquiries, jobs, subscribe, contact_setting, kyc, is_active);
         case 'RolesActionCell':
             return RolesActionCell(value, name, users, coins, announcement, static_page,
                 roles, countries, employee, pairs, blogs, limit_management,
                 transaction_history, trade_history, withdraw_requests, coin_requests,
-                inquiries, jobs, subscribe, contact_setting, is_active);
+                inquiries, jobs, subscribe, contact_setting, kyc, is_active);
         default:
             return TextCell(value);
     }
@@ -60,7 +61,7 @@ const columns = [
             'announcement', 'static_page', 'roles', 'countries', 'employee', 'pairs',
             'blogs', 'limit_management', 'transaction_history', 'trade_history',
             'withdraw_requests', 'coin_requests', 'inquiries', 'jobs', 'subscribe',
-            'contact_setting', 'is_active')
+            'contact_setting', 'kyc', 'is_active')
     }, {
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'action',
@@ -69,7 +70,7 @@ const columns = [
             'RolesActionCell', 'id', 'name', 'users', 'coins', 'announcement', 'static_page',
             'roles', 'countries', 'employee', 'pairs', 'blogs', 'limit_management',
             'transaction_history', 'trade_history', 'withdraw_requests', 'coin_requests',
-            'inquiries', 'jobs', 'subscribe', 'contact_setting', 'is_active')
+            'inquiries', 'jobs', 'subscribe', 'contact_setting', 'kyc', 'is_active')
     }
 ];
 

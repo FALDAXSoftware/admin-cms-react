@@ -200,7 +200,7 @@ class EditCoinModal extends Component {
                         <span>Wallet Address:</span>
                         <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('wallet address', fields["wallet_address"], 'required|max:45', 'text-danger')}
+                            {this.validator.message('wallet address', fields["wallet_address"], 'max:45', 'text-danger')}
                         </span>
                     </div>
 

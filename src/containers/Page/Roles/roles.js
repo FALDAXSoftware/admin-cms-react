@@ -94,6 +94,7 @@ class Roles extends Component {
             withdraw_requests, coin_requests, inquiries, jobs, subscribe,
             contact_setting, kyc, is_active
         }
+        console.log('>>>>>>>>', roleDetails)
         self.setState({ showEditRoleModal: true, roleDetails });
     }
 
