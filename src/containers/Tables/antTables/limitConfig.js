@@ -49,7 +49,7 @@ const columns = [
     {
         title: <IntlMessages id="limitTable.title.monthlyDepositFiat" />,
         key: 'monthly_deposit_fiat',
-        width: 200,
+        maxWidth: 200,
         render: object => renderCell(object, 'TextCell', 'monthly_deposit_fiat')
     },
     {

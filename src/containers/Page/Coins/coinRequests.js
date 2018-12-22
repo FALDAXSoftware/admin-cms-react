@@ -30,7 +30,8 @@ class CoinRequests extends Component {
             showViewCoinReqModal: false,
             startDate: '',
             endDate: '',
-            coinFilter: ''
+            coinFilter: '',
+            rangeDate: []
         }
         self = this;
         CoinRequests.viewCoinReq = CoinRequests.viewCoinReq.bind(this);
@@ -123,8 +124,8 @@ class CoinRequests extends Component {
     }
 
     _changeDate = (date, dateString) => {
-        console.log(date)
         this.setState({
+            rangeDate: date,
             startDate: moment(date[0]).format('YYYY-MM-DD'),
             endDate: moment(date[1]).format('YYYY-MM-DD')
         })
@@ -132,14 +133,14 @@ class CoinRequests extends Component {
 
     _resetFilters = () => {
         this.setState({
-            searchCoin: '', startDate: '', endDate: ''
+            searchCoin: '', startDate: '', endDate: '', rangeDate: []
         }, () => {
             this._getAllCoinRequests();
         })
     }
 
     render() {
-        const { allCoinRequests, allCoinCount, errType, loader, errMsg,
+        const { allCoinRequests, allCoinCount, errType, loader, errMsg, rangeDate,
             page, showViewCoinReqModal, coinReqDetails, searchCoin } = this.state;
 
         if (errMsg) {
@@ -161,6 +162,7 @@ class CoinRequests extends Component {
                                     />
 
                                     <RangePicker
+                                        value={rangeDate}
                                         disabledTime={this.disabledRangeTime}
                                         onChange={this._changeDate}
                                         format="YYYY-MM-DD"

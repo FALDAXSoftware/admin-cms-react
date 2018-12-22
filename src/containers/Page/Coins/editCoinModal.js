@@ -68,7 +68,6 @@ class EditCoinModal extends Component {
     }
 
     _handleChange = (field, e) => {
-        console.log('>>>>>>>>>', e.target.value)
         let fields = this.state.fields;
         if (e.target.value.trim() == "") {
             fields[field] = "";

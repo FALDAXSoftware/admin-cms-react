@@ -211,7 +211,7 @@ class Dashboard extends Component {
                             <ChartWrapper>
                                 <ContentHolder>
                                     <b>Grand Total:</b> {total_kyc}
-                                    <Doughnut data={kycData} />
+                                    <Pie data={kycData} />
                                 </ContentHolder>
                             </ChartWrapper>
                         </CardWrapper>

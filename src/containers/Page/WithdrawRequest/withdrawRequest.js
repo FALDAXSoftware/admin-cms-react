@@ -33,7 +33,7 @@ class WithdrawRequest extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllWithdrawReqs(0);
+        this._getAllWithdrawReqs();
     }
 
     _getAllWithdrawReqs = () => {
@@ -57,7 +57,7 @@ class WithdrawRequest extends Component {
             .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchReq: '', errType: 'error', loader: false
+                    errType: 'error', loader: false
                 });
             });
     }

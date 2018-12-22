@@ -60,9 +60,6 @@ class Coins extends Component {
 
         let formData = {
             coin_id: value,
-            coin_name: coin_name,
-            limit: limit,
-            wallet_address: wallet_address,
             is_active: !is_active
         };
 
