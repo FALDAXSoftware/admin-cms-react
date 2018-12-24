@@ -85,6 +85,7 @@ class ContactUsForm extends Component {
                 media_name: fields['media_name'],
                 media_email: fields['media_email'],
                 phone: fields['phone'],
+                discord_profile: fields['discord_profile']
             }
 
             ApiUtils.editContact(token, formData)
@@ -228,6 +229,15 @@ class ContactUsForm extends Component {
                         onChange={this._onChangeFields.bind(this, "telegram_profile")} value={fields["telegram_profile"]} />
                     <span className="field-error">
                         {this.validator.message('Telegram profile', fields['telegram_profile'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Discord Profile</b>
+                    </span>
+                    <Input placeholder="Discord Profile" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                        onChange={this._onChangeFields.bind(this, "discord_profile")} value={fields["discord_profile"]} />
+                    <span className="field-error">
+                        {this.validator.message('Discord profile', fields['discord_profile'], 'required')}
                     </span>
 
                     <span>

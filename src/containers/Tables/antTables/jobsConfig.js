@@ -81,7 +81,7 @@ const columns = [
 
 const jobsTableInfos = [
     {
-        title: 'Jobs',
+        title: 'Careers',
         value: 'JobsTable',
         columns: clone(columns)
     }

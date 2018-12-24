@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification, Button } from 'antd';
+import { Modal, Input, Icon, Spin, notification, Button, Select } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -10,6 +10,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const Option = Select.Option;
 
 class AddJobModal extends Component {
     constructor(props) {
@@ -23,7 +24,8 @@ class AddJobModal extends Component {
             errMessage: '',
             errType: 'Success',
             showError: false,
-            isDisabled: false
+            isDisabled: false,
+            selectedCategory: ''
         }
         this.validator = new SimpleReactValidator();
 
@@ -86,12 +88,12 @@ class AddJobModal extends Component {
         fields['position'] = '';
         fields['location'] = '';
         fields['short_desc'] = '';
-        this.setState({ fields, editorContent: '', showError: false });
+        this.setState({ fields, editorContent: '', showError: false, selectedCategory: '' });
     }
 
     _addJob = () => {
         const { token, getAllJobs } = this.props;
-        let { fields, editorContent } = this.state;
+        let { fields, editorContent, selectedCategory } = this.state;
         let jobContent = striptags(editorContent);
 
         if (this.validator.allValid() && jobContent.length > 0) {
@@ -100,6 +102,7 @@ class AddJobModal extends Component {
                 position: fields["position"],
                 location: fields["location"],
                 job_desc: editorContent,
+                category: selectedCategory,
                 short_desc: fields["short_desc"],
                 wallet_address: fields["wallet_address"],
             };
@@ -127,6 +130,10 @@ class AddJobModal extends Component {
             this.forceUpdate();
             this.setState({ showError: jobContent.length > 0 ? false : true })
         }
+    }
+
+    _changeCategory = (value) => {
+        this.setState({ selectedCategory: value });
     }
 
     render() {
@@ -157,6 +164,28 @@ class AddJobModal extends Component {
                     <Button disabled={isDisabled} onClick={this._addJob}>Add</Button>,
                 ]}
             >
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Category:</span>
+                    <Select
+                        style={{ width: 200, "marginLeft": "15px" }}
+                        placeholder="Select a Category"
+                        onChange={this._changeCategory}
+                    >
+                        <Option value="business">Business Development</Option>
+                        <Option value="communications">Communications</Option>
+                        <Option value="customer_support">Customer Support</Option>
+                        <Option value="data_analytics">Data & Analytics</Option>
+                        <Option value="media">Media</Option>
+                        <Option value="engineering">Engineering</Option>
+                        <Option value="finance_administration">Finance & Administration</Option>
+                        <Option value="marketing">Marketing</Option>
+                        <Option value="operations">Operations</Option>
+                        <Option value="product_design">Product & Design</Option>
+                        <Option value="security">Security</Option>
+                        <Option value="human_resources">Human Resources</Option>
+                    </Select>
+                </div>
+
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Position:</span>
                     <Input placeholder="Position" onChange={this._handleChange.bind(this, "position")} value={fields["position"]} />
