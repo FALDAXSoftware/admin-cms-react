@@ -38,22 +38,48 @@ class Blogs extends Component {
         Blogs.viewBlog = Blogs.viewBlog.bind(this);
         Blogs.editBlog = Blogs.editBlog.bind(this);
         Blogs.deleteBlog = Blogs.deleteBlog.bind(this);
+        Blogs.blogStatus = Blogs.blogStatus.bind(this);
     }
 
-    static editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image) {
+    static editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) {
         let blogDetails = {
-            value, title, admin_name, tags, created_at, description, admin_id, cover_image
+            value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured
         }
         let tagsArray = tags.split(",");
         self.setState({ showEditBlogModal: true, blogDetails, tags: tagsArray });
     }
 
-    static viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image) {
+    static viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) {
         let blogDetails = {
-            value, title, admin_name, tags, created_at, description, admin_id, cover_image
+            value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured
         }
         self.setState({ showViewBlogModal: true, blogDetails });
     }
+
+    static blogStatus(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) {
+        const { token } = this.props;
+
+        let formData = {
+            blog_id: value,
+        };
+
+        self.setState({ loader: true })
+        ApiUtils.setFeatureBlog(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                self._getAllBlogs();
+                self.setState({
+                    page: 1, errMsg: true, errMessage: "Blog featured Successfully.",
+                    errType: 'Success', loader: false
+                })
+            })
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
 
     static deleteBlog(value) {
         self.setState({ showDeleteBlogModal: true, deleteBlogId: value });
@@ -197,14 +223,14 @@ class Blogs extends Component {
                                         showViewBlogModal={showViewBlogModal}
                                         closeViewBlogModal={this._closeViewBlogModal}
                                     />
-                                    <Pagination
+                                    {allBlogs.length > 0 ? <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleBlogPagination.bind(this)}
                                         pageSize={50}
                                         current={page}
                                         total={BlogCount}
-                                    />
+                                    /> : ""}
                                     {showDeleteBlogModal &&
                                         <Modal
                                             title="Delete Blog"

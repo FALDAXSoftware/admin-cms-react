@@ -36,6 +36,11 @@ class ViewJobModal extends Component {
                     <Button onClick={this._closeViewJobModal}>OK</Button>,
                 ]}
             >
+                <span> <b>Category:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {jobDetails.category ? jobDetails.category : 'NA'}
+                </p>
+
                 <span> <b>Position:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {jobDetails.position ? jobDetails.position : 'NA'}

@@ -117,7 +117,7 @@ class EditStateModal extends Component {
             { key: '1', colorCode: '#62d0c5' },
             { key: '2', colorCode: '#f6776e' },
             { key: '3', colorCode: '#b6cbfa' },
-            { key: '4', colorCode: '#b6cbfa' }
+            { key: '4', colorCode: '#FCD26E' }
         ]
 
         let temp = colorCodes.filter(function (val) {
@@ -142,7 +142,8 @@ class EditStateModal extends Component {
         const legailityValues = [
             { key: 1, value: 'Legal' },
             { key: 2, value: 'Illegal' },
-            { key: 3, value: 'Neutral' }
+            { key: 3, value: 'Neutral' },
+            { key: 4, value: 'Partial Services Available' }
         ];
 
         return (

@@ -32,7 +32,8 @@ class Jobs extends Component {
             showEditJobModal: false,
             showViewJobModal: false,
             showDeleteJobModal: false,
-            deleteJobId: ''
+            deleteJobId: '',
+            allJobCategories: []
         }
         self = this;
         Jobs.jobStatus = Jobs.jobStatus.bind(this);
@@ -44,9 +45,10 @@ class Jobs extends Component {
 
     componentDidMount = () => {
         this._getAllJobs();
+        this._getAllJobCategories();
     }
 
-    static jobStatus(value, position, location, short_desc, job_desc, is_active) {
+    static jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -82,16 +84,16 @@ class Jobs extends Component {
         self.props.history.push('/dashboard/job-applications/' + value);
     }
 
-    static editJob(value, position, location, short_desc, job_desc, is_active) {
+    static editJob(value, position, location, short_desc, job_desc, category_id, is_active) {
         let jobDetails = {
-            value, position, location, short_desc, job_desc, is_active
+            value, position, location, short_desc, job_desc, category_id, is_active
         }
         self.setState({ showEditJobModal: true, jobDetails });
     }
 
-    static viewJob(value, position, location, short_desc, job_desc, is_active) {
+    static viewJob(value, position, location, short_desc, job_desc, category_id, is_active) {
         let jobDetails = {
-            value, position, location, short_desc, job_desc, is_active
+            value, position, location, short_desc, job_desc, category_id, is_active
         }
         self.setState({ showViewJobModal: true, jobDetails });
     }
@@ -130,6 +132,28 @@ class Jobs extends Component {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
                     searchJob: '', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _getAllJobCategories = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        ApiUtils.getAllJobCategories(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({ allJobCategories: res.data });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
                 });
             });
     }
@@ -194,7 +218,8 @@ class Jobs extends Component {
     render() {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
-            jobDetails } = this.state;
+            jobDetails, allJobCategories } = this.state;
+        console.log('jobDetails', jobDetails)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -212,6 +237,7 @@ class Jobs extends Component {
                                         showAddJobModal={showAddJobModal}
                                         closeAddModal={this._closeAddJobModal}
                                         getAllJobs={this._getAllJobs.bind(this, 1)}
+                                        allJobCategories={allJobCategories}
                                     />
                                     <Search
                                         placeholder="Search jobs"
@@ -234,6 +260,7 @@ class Jobs extends Component {
                                         showEditJobModal={showEditJobModal}
                                         closeEditJobModal={this._closeEditJobModal}
                                         getAllJobs={this._getAllJobs.bind(this, 1)}
+                                        allJobCategories={allJobCategories}
                                     />
                                     <TableWrapper
                                         {...this.state}

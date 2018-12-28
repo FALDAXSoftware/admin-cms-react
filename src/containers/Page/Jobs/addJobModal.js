@@ -140,6 +140,7 @@ class AddJobModal extends Component {
         const { loader, showAddJobModal, fields, editorContent, errMsg,
             errType, showError, isDisabled
         } = this.state;
+        const { allJobCategories } = this.props;
 
         const options = {
             theme: 'snow',
@@ -148,6 +149,12 @@ class AddJobModal extends Component {
             onChange: this._onChangeContent,
             modules: this.quillModules,
         };
+
+        const catOptions = allJobCategories.map((category) => {
+            return (
+                <Option value={category.id}>{category.category}</Option>
+            )
+        })
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -171,18 +178,7 @@ class AddJobModal extends Component {
                         placeholder="Select a Category"
                         onChange={this._changeCategory}
                     >
-                        <Option value="business">Business Development</Option>
-                        <Option value="communications">Communications</Option>
-                        <Option value="customer_support">Customer Support</Option>
-                        <Option value="data_analytics">Data & Analytics</Option>
-                        <Option value="media">Media</Option>
-                        <Option value="engineering">Engineering</Option>
-                        <Option value="finance_administration">Finance & Administration</Option>
-                        <Option value="marketing">Marketing</Option>
-                        <Option value="operations">Operations</Option>
-                        <Option value="product_design">Product & Design</Option>
-                        <Option value="security">Security</Option>
-                        <Option value="human_resources">Human Resources</Option>
+                        {catOptions}
                     </Select>
                 </div>
 

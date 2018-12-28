@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Button } from 'antd';
+import { Modal, Input, notification, Icon, Spin, Button, Select } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -10,6 +10,7 @@ import QuillEditor from '../../../components/uielements/styles/editor.style';
 import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const Option = Select.Option;
 
 class EditJobModal extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class EditJobModal extends Component {
             editorContent: '',
             showError: false,
             isDisabled: false,
+            selectedCategory: parseInt(this.props.fields.category_id)
         }
         this.validator = new SimpleReactValidator();
 
@@ -50,7 +52,8 @@ class EditJobModal extends Component {
             this.setState({
                 showEditJobModal: nextProps.showEditJobModal,
                 fields: nextProps.fields,
-                editorContent: nextProps.fields.job_desc
+                editorContent: nextProps.fields.job_desc,
+                selectedCategory: parseInt(nextProps.fields.category_id),
             })
         }
     }
@@ -84,7 +87,8 @@ class EditJobModal extends Component {
         fields['location'] = '';
         fields['short_desc'] = '';
         this.setState({
-            fields, editorContent: this.props.fields.job_desc, showError: false
+            fields, editorContent: this.props.fields.job_desc, showError: false,
+            selectedCategory: parseInt(this.props.fields.category_id)
         });
     }
 
@@ -94,9 +98,13 @@ class EditJobModal extends Component {
         this._resetForm();
     }
 
+    _changeCategory = (value) => {
+        this.setState({ selectedCategory: value });
+    }
+
     _editJob = () => {
         const { token, getAllJobs } = this.props;
-        const { fields, editorContent } = this.state;
+        const { fields, editorContent, selectedCategory } = this.state;
         let jobContent = striptags(editorContent);
 
         if (this.validator.allValid() && jobContent.length > 0) {
@@ -107,7 +115,8 @@ class EditJobModal extends Component {
                 position: fields["position"],
                 location: fields["location"],
                 description: editorContent,
-                short_desc: fields["short_desc"]
+                short_desc: fields["short_desc"],
+                category: selectedCategory
             };
 
             ApiUtils.updateJob(token, formData)
@@ -136,8 +145,9 @@ class EditJobModal extends Component {
 
     render() {
         const { loader, showEditJobModal, fields, errMsg, errType, editorContent,
-            showError, isDisabled
+            showError, isDisabled, selectedCategory
         } = this.state;
+        const { allJobCategories } = this.props;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -149,6 +159,12 @@ class EditJobModal extends Component {
             onChange: this._onChangeContent,
             modules: this.quillModules,
         };
+
+        const catOptions = allJobCategories.map((category) => {
+            return (
+                <Option value={category.id}>{category.category}</Option>
+            )
+        })
 
         return (
             <div>
@@ -162,6 +178,18 @@ class EditJobModal extends Component {
                         <Button disabled={isDisabled} onClick={this._editJob}>Update</Button>,
                     ]}
                 >
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Category:</span>
+                        <Select
+                            style={{ width: 200, "marginLeft": "15px" }}
+                            placeholder="Select a Category"
+                            onChange={this._changeCategory}
+                            defaultValue={selectedCategory}
+                        >
+                            {catOptions}
+                        </Select>
+                    </div>
+
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Position:</span>
                         <Input placeholder="Position" onChange={this._handleChange.bind(this, "position")} value={fields["position"]} />
@@ -197,7 +225,7 @@ class EditJobModal extends Component {
                     </div>
                     {loader && <Spin indicator={loaderIcon} />}
                 </Modal>
-            </div>
+            </div >
         );
     }
 }

@@ -6,12 +6,13 @@ import {
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, title = null, loc = null, desc = null, jobDesc = null,
-    active = null) => {
+    cat = null, active = null) => {
     const value = object[key];
     const position = object[title];
     const location = object[loc];
     const short_desc = object[desc];
     const job_desc = object[jobDesc];
+    const category_id = object[cat];
     const is_active = object[active]
 
     switch (type) {
@@ -22,9 +23,9 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
         case 'JobButtonCell':
             return JobButtonCell(value);
         case 'JobSwitchCell':
-            return JobSwitchCell(value, position, location, short_desc, job_desc, is_active);
+            return JobSwitchCell(value, position, location, short_desc, job_desc, category_id, is_active);
         case 'JobActionCell':
-            return JobActionCell(value, position, location, short_desc, job_desc, is_active);
+            return JobActionCell(value, position, location, short_desc, job_desc, category_id, is_active);
         default:
             return TextCell(value);
     }
@@ -64,7 +65,8 @@ const columns = [
         title: <IntlMessages id="jobTable.title.active" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'JobSwitchCell', 'id', 'position', 'location', 'short_desc', 'job_desc', 'is_active')
+        render: object => renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
+            'short_desc', 'job_desc', 'category_id', 'is_active')
     }, {
         title: <IntlMessages id="jobTable.title.app" />,
         key: 'button',
@@ -75,7 +77,8 @@ const columns = [
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'JobActionCell', 'id', 'position', 'location', 'short_desc', 'job_desc', 'is_active')
+            'JobActionCell', 'id', 'position', 'location', 'short_desc', 'job_desc',
+            'category_id', 'is_active')
     }
 ];
 

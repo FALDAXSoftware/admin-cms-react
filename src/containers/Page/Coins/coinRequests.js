@@ -41,9 +41,11 @@ class CoinRequests extends Component {
         this._getAllCoinRequests();
     }
 
-    static viewCoinReq(value, coin_name, email, target_date, message, url) {
+    static viewCoinReq(value, coin_name, email, target_date, message, url, coin_symbol, country,
+        elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site) {
         let coinReqDetails = {
-            value, coin_name, email, target_date, message, url
+            value, coin_name, email, target_date, message, url, coin_symbol, country,
+            elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site
         }
         self.setState({ coinReqDetails, showViewCoinReqModal: true, page: 1 });
     }
