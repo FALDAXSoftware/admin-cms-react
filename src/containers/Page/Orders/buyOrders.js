@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification } from 'antd';
+import { Input, Tabs, Pagination, notification, Breadcrumb } from 'antd';
 import { buyOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -26,7 +26,7 @@ class BuyOrders extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllOrders(0);
+        this._getAllOrders();
     }
 
     openNotificationWithIconError = (type) => {
@@ -49,7 +49,8 @@ class BuyOrders extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allOrders: res.data, allOrderCount: res.transactionCount, searchOrder: ''
+                        allOrders: res.data, allOrderCount: res.transactionCount,
+                        searchOrder: '', user_name: res.user_name.full_name
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '' });
@@ -65,18 +66,18 @@ class BuyOrders extends Component {
 
     _searchOrder = (val) => {
         this.setState({ searchOrder: val }, () => {
-            this._getAllOrders(0);
+            this._getAllOrders();
         });
     }
 
     _handleOrderPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllOrders(page - 1);
+            this._getAllOrders();
         })
     }
 
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page, user_name } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -85,6 +86,11 @@ class BuyOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>Users</Breadcrumb.Item>
+                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
+                        <Breadcrumb.Item>Buy Orders</Breadcrumb.Item>
+                    </Breadcrumb>
                     <Tabs className="isoTableDisplayTab">
                         {buyOrderTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>

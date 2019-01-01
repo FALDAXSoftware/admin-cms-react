@@ -102,7 +102,7 @@ class AddBlogModal extends Component {
         fields['title'] = '';
         this.setState({
             fields, selectedAuthor: '', blogDesc: '', showError: false,
-            showAuthorErr: false
+            showAuthorErr: false, showCoverErr: false
         });
     }
 
@@ -110,8 +110,10 @@ class AddBlogModal extends Component {
         const { token, getAllBlogs } = this.props;
         let { fields, blogDesc, tags, selectedAuthor } = this.state;
         let blogDescription = striptags(blogDesc);
+        console.log('>>>>>>', this.uploadCoverInput.input.files.length)
 
-        if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor) {
+        if (this.validator.allValid() && blogDescription.length > 0 && selectedAuthor &&
+            this.uploadCoverInput.input.files.length > 0) {
             this.setState({ loader: true, isDisabled: true });
 
             let formData = new FormData();
@@ -145,6 +147,7 @@ class AddBlogModal extends Component {
             this.setState({
                 showError: blogDescription.length > 0 ? false : true,
                 showAuthorErr: selectedAuthor.length > 0 ? false : true,
+                showCoverErr: this.uploadCoverInput.input.files.length > 0 ? false : true,
                 loader: false
             })
         }
@@ -184,7 +187,7 @@ class AddBlogModal extends Component {
     render() {
         const { loader, showAddBlogModal, fields, blogDesc, tags, inputVisible,
             inputTagVal, allAdmins, errType, errMsg, showError, isDisabled,
-            showAuthorErr
+            showAuthorErr, showCoverErr
         } = this.state;
         const options = {
             theme: 'snow',
@@ -223,6 +226,9 @@ class AddBlogModal extends Component {
                         onChange={this._handleChange.bind(this, "cover_image")} value={fields["cover_image"]} />
                     <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
+                {showCoverErr && <span style={{ "color": "red" }}>
+                    {'The cover image is required.'}
+                </span>}
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Title:</span>

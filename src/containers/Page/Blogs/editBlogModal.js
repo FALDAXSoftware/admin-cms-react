@@ -104,7 +104,7 @@ class EditBlogModal extends Component {
         const { fields } = this.state;
 
         fields['title'] = '';
-        this.setState({ fields, showError: false, showAuthorErr: false });
+        this.setState({ fields, showError: false, showAuthorErr: false, showCoverErr: false });
     }
 
     _editBlog = () => {
@@ -152,6 +152,9 @@ class EditBlogModal extends Component {
                 loader: false,
                 showError: blogDescription.length > 0 ? false : true,
                 showAuthorErr: selectedAuthor.length > 0 ? false : true,
+                showCoverErr:
+                    this.uploadCoverInput.input.files[0] !== undefined ?
+                        this.uploadCoverInput.input.files.length > 0 ? false : true : false,
             })
             _this.validator.showMessages();
             _this.forceUpdate();
@@ -190,7 +193,7 @@ class EditBlogModal extends Component {
     render() {
         const { loader, showEditBlogModal, fields, blogDesc, tags, inputVisible,
             inputTagVal, notify, notifyType, selectedAuthor, allAdmins, showError,
-            showAuthorErr, isDisabled, notifyMsg
+            showAuthorErr, isDisabled, notifyMsg, showCoverErr
         } = this.state;
 
         const options = {
@@ -231,6 +234,9 @@ class EditBlogModal extends Component {
                         style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
                         onChange={this._handleChange.bind(this, "cover_image")} />
                     <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
+                    {showCoverErr && <span style={{ "color": "red" }}>
+                        {'The cover image is required.'}
+                    </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

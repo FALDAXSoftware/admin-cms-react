@@ -67,7 +67,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'webhook_response')
 }, {
     title: <IntlMessages id="kycTable.title.status" />,
-    key: 'action',
+    key: 'status',
     width: 100,
     render: object => renderCell(object, 'KYCStatusCell', 'id', 'first_name'
         , 'last_name', 'email', 'direct_response', 'kycDoc_details', 'front_doc',

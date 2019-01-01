@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin, Breadcrumb } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -22,12 +22,13 @@ class UserTradeHistory extends Component {
             errMsg: false,
             errType: 'Success',
             page: 0,
-            loader: false
+            loader: false,
+            user_name: ""
         }
     }
 
     componentDidMount = () => {
-        this._getUserAllTrades(0);
+        this._getUserAllTrades();
     }
 
     openNotificationWithIconError = (type) => {
@@ -46,12 +47,13 @@ class UserTradeHistory extends Component {
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTrades(page, limit, token, searchTrade, user_id)
+        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTrades: res.data, allTradeCount: res.transactionCount, searchTrade: ''
+                        allTrades: res.data, allTradeCount: res.transactionCount,
+                        searchTrade: '', user_name: res.user_name.full_name
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, searchTrade: '' });
@@ -68,18 +70,18 @@ class UserTradeHistory extends Component {
 
     _searchTrade = (val) => {
         this.setState({ searchTrade: val }, () => {
-            this._getUserAllTrades(0);
+            this._getUserAllTrades();
         });
     }
 
     _handleTradePagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getUserAllTrades(page - 1);
+            this._getUserAllTrades();
         })
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader } = this.state;
+        const { allTrades, allTradeCount, errType, errMsg, page, loader, user_name } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -88,6 +90,11 @@ class UserTradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>Users</Breadcrumb.Item>
+                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
+                        <Breadcrumb.Item>Trade History</Breadcrumb.Item>
+                    </Breadcrumb>
                     <Tabs className="isoTableDisplayTab">
                         {tradeTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>

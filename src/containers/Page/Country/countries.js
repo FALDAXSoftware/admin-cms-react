@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin, Button } from 'antd';
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import EditCountryModal from './editCountryModal';
 
 const Search = Input.Search;
@@ -70,7 +71,17 @@ class Countries extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllCountries();
+        if (this.props.location.search) {
+            console.log('in if')
+            let path = this.props.location.search.split('=')
+            path = decodeURI(path);
+            this.setState({ searchCountry: path[1] }, () => {
+                this._getAllCountries();
+            })
+        } else {
+            console.log('in else')
+            this._getAllCountries();
+        }
     }
 
     openNotificationWithIconError = (type) => {
@@ -84,6 +95,7 @@ class Countries extends Component {
     _getAllCountries = () => {
         const { token } = this.props;
         const { limit, searchCountry, page } = this.state;
+        console.log('searchCountry', searchCountry)
         let _this = this;
 
         _this.setState({ loader: true });
@@ -107,13 +119,15 @@ class Countries extends Component {
 
     _closeEditCountryModal = () => {
         this.setState({ showEditCountryModal: false, countryDetails: [] })
-
     }
 
-    _searchCountry = (val) => {
-        this.setState({ searchCountry: val, page: 1, loader: true }, () => {
-            this._getAllCountries();
-        });
+    _changeSearch = (field, e) => {
+        this.setState({ searchCountry: field.target.value })
+    }
+
+    _searchCountry = () => {
+        this.props.history.push('/dashboard/countries?search=' + this.state.searchCountry);
+        this.setState({ page: 1 });
     }
 
     _handleCoinPagination = (page) => {
@@ -124,7 +138,7 @@ class Countries extends Component {
 
     render() {
         const { allCountries, allCountryCount, errType, errMsg, loader,
-            page, showEditCountryModal, countryDetails } = this.state;
+            page, showEditCountryModal, countryDetails, searchCountry } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -137,18 +151,21 @@ class Countries extends Component {
                         {countryTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
+                                    <Input
                                         placeholder="Search countries"
-                                        onSearch={(value) => this._searchCountry(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
+                                        onChange={this._changeSearch.bind(this)}
+                                        style={{ "width": "200px" }}
+                                        value={searchCountry}
                                     />
+
+                                    <Button className="search-btn" type="primary" onClick={this._searchCountry}>Search</Button>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
                                 </span>}
                                 <div>
                                     <TableWrapper
+                                        style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
@@ -180,9 +197,9 @@ class Countries extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Countries);
+    }))(Countries));
 
 export { Countries, countryTableInfos };

@@ -1,6 +1,6 @@
 //const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
-const API_URL = "http://18.191.87.133:8084"; //Live URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -754,11 +754,30 @@ const ApiUtils = {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal;
-        } else if (filterVal) {
-            url += "&t_type=" + filterVal;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
         } else {
+            url += "&data=" + search;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getUserTrades: function (page, limit, token, search, user_id) {
+        let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search) {
             url += "&data=" + search;
         }
 

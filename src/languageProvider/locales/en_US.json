@@ -426,6 +426,7 @@
   "blogTable.title.title": "Title",
   "blogTable.title.author": "Author",
   "blogTable.title.tags": "Tags",
+  "blogTable.title.is_featured": "Is Feature",
   "blogTable.title.created_at": "Created On",
   "blogTable.title.Actions": "Actions",
   "historyTable.title.ip": "IP Address",

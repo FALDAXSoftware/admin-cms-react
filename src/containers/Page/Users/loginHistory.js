@@ -5,7 +5,7 @@ import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs } from 'antd';
+import { Tabs, Breadcrumb } from 'antd';
 
 const TabPane = Tabs.TabPane;
 
@@ -13,7 +13,8 @@ class LoginHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allHistory: []
+            allHistory: [],
+            user_name: ""
         }
     }
 
@@ -26,7 +27,7 @@ class LoginHistory extends Component {
         ApiUtils.getUserHistory(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ allHistory: res.data });
+                _this.setState({ allHistory: res.data, user_name: res.user_name.full_name });
             })
             .catch((err) => {
                 console.log(err)
@@ -34,11 +35,16 @@ class LoginHistory extends Component {
     }
 
     render() {
-        const { allHistory } = this.state;
+        const { allHistory, user_name } = this.state;
 
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>Users</Breadcrumb.Item>
+                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
+                        <Breadcrumb.Item>Login History</Breadcrumb.Item>
+                    </Breadcrumb>
                     <Tabs className="isoTableDisplayTab">
                         {historyTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
