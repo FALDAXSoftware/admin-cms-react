@@ -4,7 +4,6 @@ import Actions from '../../redux/themeSwitcher/actions.js';
 import Switcher from '../../components/themeSwitcher/themeSwitcher';
 import LanguageSwitcher from '../LanguageSwitcher';
 import Themes from './config';
-import bucketSVG from '../../image/bucket.svg';
 import IntlMessages from '../../components/utility/intlMessages';
 import ThemeSwitcherStyle from './themeSwitcher.style';
 
@@ -70,16 +69,6 @@ class ThemeSwitcher extends Component {
           </a>
         </div>
 
-        <button
-          type="primary"
-          className="switcherToggleBtn"
-          style={styleButton}
-          onClick={() => {
-            switchActivation();
-          }}
-        >
-          <img src={process.env.PUBLIC_URL + bucketSVG} alt="bucket" />
-        </button>
       </ThemeSwitcherStyle>
     );
   }

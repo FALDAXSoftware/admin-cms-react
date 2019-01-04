@@ -15,13 +15,14 @@ class EditProfile extends Component {
             fields: {},
             errors: {},
             loader: false,
+            errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
     }
 
     componentDidMount = () => {
         let fields = this.state.fields;
-        const { name, image, email } = this.props.user;
+        const { name, email } = this.props.user;
         fields["name"] = name;
         fields["email"] = email;
         this.setState({ fields });
@@ -29,7 +30,7 @@ class EditProfile extends Component {
 
     openNotificationWithIconError = (type) => {
         notification[type]({
-            message: 'Error',
+            message: this.state.errType,
             description: this.state.errMessage
         });
         this.setState({ errMsg: false });
@@ -37,33 +38,41 @@ class EditProfile extends Component {
 
     _onChangeFields(field, e) {
         let fields = this.state.fields;
-        fields[field] = e.target.value;
+        if (e.target.value.trim() == "") {
+            fields[field] = "";
+        } else {
+            fields[field] = e.target.value;
+        }
         this.setState({ fields });
     }
 
     _editProfile = () => {
-        const { token, login } = this.props;
+        const { token, login, user } = this.props;
         let fields = this.state.fields;
         let _this = this;
 
         if (this.validator.allValid()) {
             _this.setState({ loader: true });
 
-            const formData = new FormData();
-            formData.append('name', fields['name']);
+            const formData = {
+                name: fields['name'],
+                email: user.email
+            }
 
             ApiUtils.editProfile(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
                     if (res) {
-                        login({ user: res.data });
-                        _this.setState({ errMsg: true, errMessage: 'Profile edited successfully', loader: false });
+                        login({ user: res.data[0] });
+                        _this.setState({
+                            errMsg: true, errMessage: 'Profile updated successfully.',
+                            loader: false, errType: 'Success'
+                        });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
                 })
-                .catch(err => {
-                    console.log('error occured', err);
+                .catch(() => {
                     _this.setState({ loader: false });
                 });
         } else {
@@ -73,10 +82,10 @@ class EditProfile extends Component {
     }
 
     render() {
-        const { loader, fields, errMsg } = this.state;
+        const { loader, fields, errMsg, errType } = this.state;
 
         if (errMsg) {
-            this.openNotificationWithIconError('error');
+            this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
@@ -91,16 +100,14 @@ class EditProfile extends Component {
                     </span>
                     <Input placeholder="Name" style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }} onChange={this._onChangeFields.bind(this, "name")} value={fields["name"]} />
                     <span className="field-error">
-                        {this.validator.message('Name', fields['name'], 'required')}
+                        {this.validator.message('Name', fields['name'], 'required|max:30')}
                     </span>
 
                     <span>
                         <b>Email</b>
                     </span>
                     <Input disabled style={{ "marginBottom": "15px", "width": "25%", "display": "inherit", "readonly": "readonly" }} value={fields["email"]} />
-
-                    <Button type="primary" onClick={this._editProfile}> Edit </Button>
-
+                    <Button type="primary" onClick={this._editProfile}> Update </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </div>

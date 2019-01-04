@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination } from 'antd';
+import { Input, Tabs, Pagination, Button, Modal, notification, Spin } from 'antd';
 import { coinTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
+import { connect } from 'react-redux';
+import ViewCoinModal from './viewCoinModal';
+import AddCoinModal from './addCoinModal';
+import EditCoinModal from './editCoinModal';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+var self;
 
 class Coins extends Component {
     constructor(props) {
@@ -15,58 +20,190 @@ class Coins extends Component {
         this.state = {
             allCoins: [],
             allCoinCount: 0,
-            searchCoin: ''
+            showAddCoinModal: false,
+            showEditCoinModal: false,
+            showViewCoinModal: false,
+            showDeleteCoinModal: false,
+            searchCoin: '',
+            limit: 50,
+            coinDetails: [],
+            deleteCoinId: '',
+            errMessage: '',
+            errMsg: false,
+            errType: 'Success',
+            page: 1,
+            loader: false
         }
+        self = this;
+        Coins.view = Coins.view.bind(this);
+        Coins.edit = Coins.edit.bind(this);
+        Coins.deleteCoin = Coins.deleteCoin.bind(this);
+        Coins.changeStatus = Coins.changeStatus.bind(this);
+    }
+
+    static view(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+        let coinDetails = {
+            value, coin_name, coin_code, limit, wallet_address, created_at, is_active
+        }
+        self.setState({ coinDetails, showViewCoinModal: true, page: 1 });
+    }
+
+    static edit(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+        let coinDetails = {
+            value, coin_name, coin_code, limit, wallet_address, created_at, is_active
+        }
+        self.setState({ coinDetails, showEditCoinModal: true, page: 1 });
+    }
+
+    static changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) {
+        const { token } = this.props;
+
+        let formData = {
+            coin_id: value,
+            is_active: !is_active
+        };
+
+        self.setState({ loader: true })
+        let message = is_active ? 'Coin has been inactivated successfully.' : 'Coin has been activated successfully.'
+        ApiUtils.editCoin(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                self._getAllCoins();
+                self.setState({
+                    page: 1, errMsg: true, errMessage: message,
+                    errType: 'Success', loader: false
+                })
+            })
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    static deleteCoin(value) {
+        self.setState({ showDeleteCoinModal: true, deleteCoinId: value });
     }
 
     componentDidMount = () => {
-        //  this._getAllCoins();
+        this._getAllCoins();
     }
 
-    _getAllCoins = () => {
-        const { isLoggedIn } = this.props;
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
 
-        ApiUtils.getAllCount(isLoggedIn)
+    _getAllCoins = () => {
+        const { token } = this.props;
+        const { limit, searchCoin, page } = this.state;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getAllCoins(page, limit, token, searchCoin)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status === "SUCCESS") {
-                    const { allCoins, allReferralCount } = res.data;
-                    this.setState({ allCoins, allReferralCount });
+                if (res) {
+                    _this.setState({
+                        allCoins: res.data, allCoinCount: res.CoinsCount, searchCoin: ''
+                    });
                 } else {
-                    this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
                 }
+                _this.setState({ loader: false });
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchCoin: '', errType: 'error', loader: false
+                });
             });
     }
 
     _searchCoin = (val) => {
         this.setState({ searchCoin: val }, () => {
-            //this._getAllCoins(0);
+            this._getAllCoins();
         });
     }
 
     _handleCoinPagination = (page) => {
-        //this._getAllCoins(page - 1);
+        this.setState({ page }, () => {
+            this._getAllCoins();
+        })
+    }
+
+    _showAddCoinModal = () => {
+        console.log(this.state.page)
+        this.setState({ showAddCoinModal: true });
+    }
+
+    _closeViewCoinModal = () => {
+        this.setState({ showViewCoinModal: false });
+    }
+
+    _closeEditCoinModal = () => {
+        this.setState({ showEditCoinModal: false });
+    }
+
+    _closeAddCoinModal = () => {
+        this.setState({ showAddCoinModal: false });
+    }
+
+    _deleteCoin = () => {
+        const { token } = this.props;
+        const { deleteCoinId } = this.state;
+        let _this = this;
+
+        this.setState({ loader: true })
+        ApiUtils.deleteCoin(deleteCoinId, token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        deleteCoinId: '', showDeleteCoinModal: false,
+                        errMessage: res.message, errMsg: true
+                    });
+                    _this._getAllCoins(1);
+                } else {
+                    _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
+                }
+                this.setState({ loader: false })
+            })
+            .catch(() => {
+                _this.setState({ deleteCoinId: '', showDeleteCoinModal: false, loader: false });
+            });
+    }
+
+    _closeDeleteCoinModal = () => {
+        this.setState({ showDeleteCoinModal: false });
     }
 
     render() {
-        const { allCoins, allCoinCount } = this.state;
+        const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
+            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page, limit
+        } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
+
                         {coinTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    {/* <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddUserModal}>Add Coin</Button> */}
-                                    {/* <AddUserModal
-                                            showAddUserModal={showAddUserModal}
-                                            closeAddModal={this._closeAddUserModal}
-                                            getAllUsers={this._getAllUsers.bind(this, 0)}
-                                        /> */}
+                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Coin</Button>
+                                    <AddCoinModal
+                                        showAddCoinModal={showAddCoinModal}
+                                        closeAddModal={this._closeAddCoinModal}
+                                        getAllCoins={this._getAllCoins.bind(this, 1)}
+                                    />
                                     <Search
                                         placeholder="Search coins"
                                         onSearch={(value) => this._searchCoin(value)}
@@ -74,7 +211,35 @@ class Coins extends Component {
                                         enterButton
                                     />
                                 </div>
+                                {loader && <span className="loader-class">
+                                    <Spin />
+                                </span>}
                                 <div>
+                                    <ViewCoinModal
+                                        coinDetails={coinDetails}
+                                        showViewCoinModal={showViewCoinModal}
+                                        closeViewCoinModal={this._closeViewCoinModal}
+                                    />
+                                    <EditCoinModal
+                                        fields={coinDetails}
+                                        showEditCoinModal={showEditCoinModal}
+                                        closeEditCoinModal={this._closeEditCoinModal}
+                                        getAllCoins={this._getAllCoins.bind(this, 1)}
+                                    />
+                                    {
+                                        showDeleteCoinModal &&
+                                        <Modal
+                                            title="Delete Coin"
+                                            visible={showDeleteCoinModal}
+                                            onCancel={this._closeDeleteCoinModal}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteCoinModal}>No</Button>,
+                                                <Button onClick={this._deleteCoin}>Yes</Button>,
+                                            ]}
+                                        >
+                                            Are you sure you want to delete this coin ?
+                                    </Modal>
+                                    }
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}
@@ -83,10 +248,11 @@ class Coins extends Component {
                                         className="isoCustomizedTable"
                                     />
                                     <Pagination
+                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleCoinPagination.bind(this)}
-                                        pageSize={5}
-                                        defaultCurrent={1}
+                                        pageSize={50}
+                                        current={page}
                                         total={allCoinCount}
                                     />
                                 </div>
@@ -99,4 +265,9 @@ class Coins extends Component {
     }
 }
 
-export default Coins;
+export default connect(
+    state => ({
+        token: state.Auth.get('token')
+    }))(Coins);
+
+export { Coins, coinTableInfos };

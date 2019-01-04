@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
+import { Link } from 'react-router-dom';
+import { BUCKET_URL } from '../../../helpers/globals';
 
 class ViewUserModal extends Component {
     constructor(props) {
@@ -32,25 +34,74 @@ class ViewUserModal extends Component {
                 title="View User"
                 visible={showViewUserModal}
                 onCancel={this._closeViewUserModal}
-                onOk={this._closeViewUserModal}
+                footer={[
+                    <Button onClick={this._closeViewUserModal}>OK</Button>,
+                ]}
             >
-                <img style={{ width: '20%', height: '30%' }} src={userDetails.image} />
+                <img alt="user" style={{ width: '40px', height: '40px' }}
+                    src={BUCKET_URL + userDetails.profile_pic} />
                 <br />
 
-                <span> <b>User Name:</b> </span>
+                <span> <b>First Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.name}
+                    {userDetails.first_name ? userDetails.first_name : 'NA'}
                 </p>
 
-                <span> <b>Price:</b> </span>
+                <span> <b>Last Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.price}
+                    {userDetails.last_name ? userDetails.last_name : 'NA'}
                 </p>
 
-                <span> <b>Description:</b> </span>
+                <span> <b>Email:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {userDetails.description}
+                    {userDetails.email ? userDetails.email : 'NA'}
                 </p>
+
+                <span> <b>Street Address 1:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.street_address ? userDetails.street_address : 'NA'}
+                </p>
+
+                <span> <b>Street Address 2:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.street_address_2 ? userDetails.street_address_2 : 'NA'}
+                </p>
+
+                <span> <b>City:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.city_town ? userDetails.city_town : 'NA'}
+                </p>
+
+                <span> <b>Country:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.country ? userDetails.country : 'NA'}
+                </p>
+
+                <span> <b>Date Of Birth:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.dob ? userDetails.dob : 'NA'}
+                </p>
+
+                <span> <b>KYC Status:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {userDetails.kyc ? userDetails.kyc.isApprove == true ? 'Verfied' : 'Not Verified' : 'NA'}
+                </p>
+
+                <Link to={`/dashboard/users/history/${userDetails.value}`} target="_blank">
+                    View Login History
+                </Link><br />
+
+                <Link to={`/dashboard/users/sell-orders/${userDetails.value}`} target="_blank">
+                    View Sell Orders
+                </Link><br />
+
+                <Link to={`/dashboard/users/buy-orders/${userDetails.value}`} target="_blank">
+                    View Buy Orders
+                </Link><br />
+
+                <Link to={`/dashboard/users/trade-history/${userDetails.value}`} target="_blank">
+                    View Trade History
+                </Link><br />
             </Modal>
         );
     }

@@ -6,7 +6,6 @@ import AntdAutocomplete from '../AutoComplete';
 import AntdRadiobox from '../Radiobox';
 import AntdSelectBox from '../Select';
 import AntdMention from '../Mention';
-import AntdRater from '../Rating';
 import AntdSlider from '../Slider';
 import AntdInputNumber from '../InputNumber';
 import Button from '../../../components/uielements/button';
@@ -58,7 +57,6 @@ const steps = [
     title: 'Last',
     content: (
       <div className="isoExampleWrapper">
-        <AntdRater />
         <AntdSlider />
         <AntdInputNumber />
       </div>

@@ -11,7 +11,6 @@ import Sidebar from "../Sidebar/Sidebar";
 import Topbar from "../Topbar/Topbar";
 import ThemeSwitcher from "../../containers/ThemeSwitcher";
 import AppRouter from "./AppRouter";
-import { siteConfig } from "../../settings";
 import { AppLocale } from "../../dashApp";
 import themes from "../../settings/themes";
 import AppHolder from "./commonStyle";
@@ -20,11 +19,13 @@ import "./global.css";
 const { Content, Footer } = Layout;
 const { logout } = authAction;
 const { toggleAll } = appActions;
+
 export class App extends Component {
   render() {
     const { url } = this.props.match;
     const { locale, selectedTheme, height } = this.props;
     const currentAppLocale = AppLocale[locale];
+
     return (
       <LocaleProvider locale={currentAppLocale.antd}>
         <IntlProvider
@@ -71,7 +72,7 @@ export class App extends Component {
                         borderTop: "1px solid #ededed"
                       }}
                     >
-                      {siteConfig.footerText}
+                      <span>&copy; {new Date().getFullYear()} FALDAX. All Rights Reserved.</span>
                     </Footer>
                   </Layout>
                 </Layout>
