@@ -28,9 +28,9 @@ volumes: [
               namespace = getNamespace(myRepo.GIT_BRANCH);
               if (namespace){
               sh "ls -la"
-              sh "apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
-"
+              sh "apk update "
+              sh "apk upgrade "
+              sh "apk add --no-cache bash git openssh"
               sh "npm install"
               sh "npm run build"
               sh "ls -la" 
