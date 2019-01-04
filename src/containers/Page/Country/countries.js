@@ -72,14 +72,11 @@ class Countries extends Component {
 
     componentDidMount = () => {
         if (this.props.location.search) {
-            console.log('in if')
             let path = this.props.location.search.split('=')
-            path = decodeURI(path);
             this.setState({ searchCountry: path[1] }, () => {
                 this._getAllCountries();
             })
         } else {
-            console.log('in else')
             this._getAllCountries();
         }
     }
@@ -95,7 +92,6 @@ class Countries extends Component {
     _getAllCountries = () => {
         const { token } = this.props;
         const { limit, searchCountry, page } = this.state;
-        console.log('searchCountry', searchCountry)
         let _this = this;
 
         _this.setState({ loader: true });
@@ -127,7 +123,16 @@ class Countries extends Component {
 
     _searchCountry = () => {
         this.props.history.push('/dashboard/countries?search=' + this.state.searchCountry);
-        this.setState({ page: 1 });
+        this.setState({ page: 1 }, () => {
+            this._getAllCountries();
+        });
+    }
+
+    _resetFilters = () => {
+        this.props.history.push('/dashboard/countries');
+        this.setState({ searchCountry: '' }, () => {
+            this._getAllCountries();
+        })
     }
 
     _handleCoinPagination = (page) => {
@@ -159,6 +164,7 @@ class Countries extends Component {
                                     />
 
                                     <Button className="search-btn" type="primary" onClick={this._searchCountry}>Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />

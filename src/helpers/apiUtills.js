@@ -1,6 +1,6 @@
 //const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
-const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
-//const API_URL = "http://18.191.87.133:8084"; //Live URL
+//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://18.191.87.133:8084"; //Live URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -730,6 +730,10 @@ const ApiUtils = {
             url += "&search=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && filterVal) {
             url += "&search=" + search + "&t_type=" + filterVal;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal) {
@@ -754,6 +758,12 @@ const ApiUtils = {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search && filterVal) {
+            url += "&search=" + search + "&t_type=" + filterVal;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal) {
@@ -800,6 +810,8 @@ const ApiUtils = {
             url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {

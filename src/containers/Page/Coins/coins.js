@@ -136,6 +136,7 @@ class Coins extends Component {
     }
 
     _showAddCoinModal = () => {
+        console.log(this.state.page)
         this.setState({ showAddCoinModal: true });
     }
 

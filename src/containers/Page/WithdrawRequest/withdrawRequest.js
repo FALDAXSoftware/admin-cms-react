@@ -102,7 +102,7 @@ class WithdrawRequest extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).endOf('day').toISOString(),
+            startDate: moment(date[0]).startOf('day').toISOString(),
             endDate: moment(date[1]).endOf('day').toISOString()
         })
     }
