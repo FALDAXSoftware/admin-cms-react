@@ -28,7 +28,7 @@ volumes: [
               namespace = getNamespace(myRepo.GIT_BRANCH);
               if (namespace){
               sh "ls -la"
-              sh "npm install git"
+              sh "apt-get install git -y"
               sh "npm install"
               sh "npm run build"
               sh "ls -la" 
