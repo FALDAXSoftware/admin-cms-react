@@ -758,7 +758,7 @@ const ApiUtils = {
     getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search && filterVal) {
-            url += "&data=" + search + "&t_type=" + filterVal;
+            url += "&search=" + search + "&t_type=" + filterVal;
         } else if (search && filterVal) {
             url += "&search=" + search + "&t_type=" + filterVal;
         } else if (filterVal && startDate && endDate) {
@@ -770,7 +770,7 @@ const ApiUtils = {
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
-            url += "&data=" + search;
+            url += "&search=" + search;
         }
 
         try {
