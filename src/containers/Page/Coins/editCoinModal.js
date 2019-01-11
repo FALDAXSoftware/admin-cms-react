@@ -8,6 +8,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import striptags from 'striptags';
+import { BUCKET_URL } from '../../../helpers/globals';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -102,13 +103,14 @@ class EditCoinModal extends Component {
         if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
 
-            let formData = {
-                coin_id: fields["value"],
-                coin_name: fields["coin_name"],
-                limit: fields["limit"],
-                //description: editorContent,
-                wallet_address: fields["wallet_address"]
-            };
+            let formData = new FormData();
+            formData.append('coin_id', fields['value']);
+            formData.append('coin_name', fields['coin_name']);
+            formData.append('limit', fields['limit']);
+            formData.append('wallet_address', fields['wallet_address']);
+            // if (this.uploadCoinInput.input.files[0] !== undefined) {
+            //     formData.append('coin_icon', this.uploadCoinInput.input.files[0]);
+            // }
 
             ApiUtils.editCoin(token, formData)
                 .then((res) => res.json())
@@ -137,13 +139,12 @@ class EditCoinModal extends Component {
         } else {
             this.validator.showMessages();
             this.forceUpdate();
-            //this.setState({ showError: coinContent.length > 0 ? false : true })
         }
     }
 
     render() {
         const { loader, showEditCoinModal, fields, errMsg, errType, editorContent,
-            showError, isDisabled
+            showError, isDisabled, showCoinErr
         } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -169,6 +170,12 @@ class EditCoinModal extends Component {
                         <Button disabled={isDisabled} onClick={this._editCoin}>Update</Button>,
                     ]}
                 >
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Coin Icon:</span><br />
+                        <img style={{ width: '150px', height: 'auto' }}
+                            src={BUCKET_URL + fields['coin_icon']} />
+                    </div>
+
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Coin Name:</span>
                         <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />

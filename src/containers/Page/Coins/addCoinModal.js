@@ -82,10 +82,16 @@ class AddCoinModal extends Component {
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        if (e.target.value.trim() == "") {
-            fields[field] = "";
-        } else {
+        if (field == 'image' && document.getElementsByClassName("coin_icon")[0] != undefined) {
+            document.getElementsByClassName("coin_icon")[0].style.display = "none";
             fields[field] = e.target.value;
+            this.setState({ fields });
+        } else {
+            if (e.target.value.trim() == "") {
+                fields[field] = "";
+            } else {
+                fields[field] = e.target.value;
+            }
         }
         this.setState({ fields });
     }
@@ -106,15 +112,15 @@ class AddCoinModal extends Component {
         let { fields, editorContent } = this.state;
         let coinContent = striptags(editorContent);
 
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && this.uploadCoinInput.input.files.length > 0) {
             this.setState({ loader: true, isDisabled: true });
-            let formData = {
-                coin_name: fields["coin_name"],
-                coin_code: fields["coin_code"],
-                // description: editorContent,
-                limit: fields["limit"],
-                wallet_address: fields["wallet_address"],
-            };
+
+            let formData = new FormData();
+            formData.append('coin_name', fields['coin_name']);
+            formData.append('coin_code', fields['coin_code'])
+            formData.append('limit', fields['limit']);
+            formData.append('wallet_address', fields['wallet_address']);
+            formData.append('coin_icon', this.uploadCoinInput.input.files[0]);
 
             ApiUtils.addCoin(token, formData)
                 .then((res) => res.json())
@@ -144,13 +150,13 @@ class AddCoinModal extends Component {
         } else {
             this.validator.showMessages();
             this.forceUpdate();
-            //this.setState({ showError: coinContent.length > 0 ? false : true })
+            this.setState({ showCoinErr: this.uploadCoinInput.input.files.length > 0 ? false : true })
         }
     }
 
     render() {
         const { loader, showAddCoinModal, fields, editorContent, errMsg,
-            errType, showError, isDisabled
+            errType, showError, isDisabled, showCoinErr
         } = this.state;
 
         const options = {
@@ -176,6 +182,18 @@ class AddCoinModal extends Component {
                     <Button disabled={isDisabled} onClick={this._addCoin}>Add</Button>,
                 ]}
             >
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Coin Icon:</span>
+                    <Input ref={(ref) => { this.uploadCoinInput = ref; }} type="file"
+                        id="uploadCoinInput" name="uploadCoinInput"
+                        style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
+                        onChange={this._handleChange.bind(this, "coin_icon")} value={fields["coin_icon"]} />
+                    <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
+                </div>
+                {showCoinErr && <span style={{ "color": "red" }}>
+                    {'The coin icon is required.'}
+                </span>}
+
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Coin Name:</span>
                     <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />

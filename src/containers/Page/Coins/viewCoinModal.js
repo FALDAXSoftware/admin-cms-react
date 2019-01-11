@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
+import { BUCKET_URL } from '../../../helpers/globals';
 
 class ViewCoinModal extends Component {
     constructor(props) {
@@ -36,6 +37,11 @@ class ViewCoinModal extends Component {
                     <Button onClick={this._closeViewCoinModal}>OK</Button>,
                 ]}
             >
+                {coinDetails.coin_icon ?
+                    <img style={{ width: '40px', height: '40px' }}
+                        src={BUCKET_URL + coinDetails.coin_icon} /> : ''}
+                <br /><br />
+
                 <span> <b>Coin Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinDetails.coin_name ? coinDetails.coin_name : 'NA'}
