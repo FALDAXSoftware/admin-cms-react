@@ -283,14 +283,16 @@ class Jobs extends Component {
                                             Are you sure you want to delete this job ?
                                     </Modal>
                                     }
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleJobPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allJobsCount}
-                                    />
+                                    {allJobsCount.length > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleJobPagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={allJobsCount}
+                                        />
+                                        : ''}
                                 </div>
                             </TabPane>
                         ))}
