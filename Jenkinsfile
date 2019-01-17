@@ -34,9 +34,16 @@ volumes: [
               sh "npm install"
               sh "npm run build"
               sh "ls -la" 
-              withAWS(credentials:'jenkins_s3_upload') {
-                s3Delete(bucket:'admin.faldax.com', path:'')
-                 s3Upload(file:'build', bucket:'admin.faldax.com', path:'')
+              if (env.BRANCH_NAME == 'development') {
+                        withAWS(credentials:'jenkins_s3_upload') {
+                        s3Delete(bucket:'staging-admin.faldax.com', path:'')
+                        s3Upload(file:'build', bucket:'staging-admin.faldax.com', path:'')
+                }
+              else if (env.BRANCH_NAME == 'master') {
+                        withAWS(credentials:'jenkins_s3_upload') {
+                        s3Delete(bucket:'admin.faldax.com', path:'')
+                        s3Upload(file:'build', bucket:'admin.faldax.com', path:'')
+                }
                 }
                 
               
