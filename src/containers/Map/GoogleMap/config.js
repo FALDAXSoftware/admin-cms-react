@@ -180,9 +180,7 @@ const SnazyMapStyle = JSON.stringify([
     stylers: [{ visibility: 'off' }],
   },
 ]);
-// import infoWindowLoc from '../../../image/work.jpg';
-// import infoWindowLoc from '../../../image/work.jpg';
-// import infoWindowLoc from '../../../image/work.jpg';
+
 const posts = [
   {
     ID: 1,

@@ -1,44 +1,146 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
-import IntlMessages from '../../components/utility/intlMessages';
-import { dataList } from "../Tables/antTables";
+import { Row, Col, notification, Card, Progress } from 'antd';
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import StickerWidget from "../Widgets/sticker/sticker-widget";
 import IsoWidgetsWrapper from "../Widgets/widgets-wrapper";
 import basicStyle from "../../settings/basicStyle";
 import ApiUtils from '../../helpers/apiUtills';
-import clone from "clone";
+import { connect } from 'react-redux';
+import { Pie, Doughnut } from 'react-chartjs-2';
+import ContentHolder from '../../components/utility/contentHolder';
+import styled from 'styled-components';
+import { palette } from 'styled-theme';
+import CountCard from '../Widgets/card/count-widget';
 
-const tableDataList = clone(dataList);
-tableDataList.size = 5;
+const CardWrapper = styled(Card)`
+    & .ant-card-body{
+        min-height: 219px;
+    }
+`
+
+const ChartWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .isoChartControl {
+    display: flex;
+    align-items: center;
+    margin-left: ${props => (props['data-rtl'] === 'rtl' ? 'inherit' : 'auto')};
+    margin-right: ${props =>
+        props['data-rtl'] === 'rtl' ? 'auto' : 'inherit'};
+    margin-bottom: 20px;
+
+    span {
+      font-size: 13px;
+      color: ${palette('text', 1)};
+      font-weight: 400;
+      margin-right: ${props =>
+        props['data-rtl'] === 'rtl' ? 'inherit' : '15px'};
+      margin-left: ${props =>
+        props['data-rtl'] === 'rtl' ? '15px' : 'inherit'};
+    }
+
+    button {
+      border: 1px solid ${palette('border', 0)};
+      padding: 0 10px;
+      border-radius: 0;
+      position: relative;
+
+      span {
+        margin: 0;
+      }
+
+      &:last-child {
+        margin-left: ${props =>
+        props['data-rtl'] === 'rtl' ? 'inherit' : '-1px'};
+        margin-right: ${props =>
+        props['data-rtl'] === 'rtl' ? '-1px' : 'inherit'};
+      }
+
+      &:hover {
+        color: ${palette('primary', 0)};
+        border-color: ${palette('primary', 0)};
+        z-index: 1;
+
+        span {
+          color: ${palette('primary', 0)};
+        }
+      }
+    }
+  }
+`;
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allUsers: [],
-            allUserCount: 0,
-            coinsCount: 0,
+            activeUsers: 0,
+            inactiveUsers: 0,
+            activeCoins: 0,
+            InactiveCoins: 0,
             pagesCount: 0,
-            referralCount: 0
+            referralCount: 0,
+            activePairs: 0,
+            InactivePairs: 0,
+            legalCountries: 0,
+            illegalCountries: 0,
+            neutralCountries: 0,
+            blogsCount: 0,
+            employeeCount: 0,
+            jobsCount: 0,
+            coinReqCount: 0,
+            subscriberCount: 0,
+            withdrawReqCount: 0,
+            lastSevenInquiry: 0,
+            lastThirtyInquiry: 0,
+            kyc_disapproved: 0,
+            kyc_approved: 0,
+            total_kyc: 0,
+            kyc_pending: 0,
+            errMsg: false,
+            errMessage: ''
         }
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: 'Error',
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     componentDidMount() {
-        //  this._getAllCount();
+        this._getAllCount();
     }
 
     _getAllCount = () => {
-        const { isLoggedIn } = this.props;
+        const { token } = this.props;
+        let _this = this;
 
-        ApiUtils.getAllCount(isLoggedIn)
+        ApiUtils.getAllCount(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status === "SUCCESS") {
-                    const { allUserCount, coinsCount, pagesCount, referralCount } = res.data;
-                    this.setState({ allUserCount, coinsCount, pagesCount, referralCount });
+                if (res) {
+                    const {
+                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs, InactivePairs,
+                        legalCountries, illegalCountries,
+                        neutralCountries, blogsCount, employeeCount, jobsCount,
+                        coinReqCount, subscriberCount, withdrawReqCount, lastSevenInquiry,
+                        lastThirtyInquiry, kyc_disapproved, kyc_approved, total_kyc, kyc_pending
+
+                    } = res;
+                    _this.setState({
+                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                        InactivePairs, legalCountries,
+                        illegalCountries, neutralCountries, blogsCount, employeeCount,
+                        jobsCount, coinReqCount, subscriberCount, withdrawReqCount,
+                        lastSevenInquiry, lastThirtyInquiry, kyc_disapproved, kyc_approved,
+                        total_kyc, kyc_pending
+                    });
                 } else {
-                    this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message });
                 }
             })
             .catch(err => {
@@ -48,74 +150,227 @@ class Dashboard extends Component {
 
     render() {
         const { rowStyle, colStyle } = basicStyle;
-        const { allUserCount } = this.state;
+        const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+            InactivePairs, legalCountries, illegalCountries,
+            neutralCountries, blogsCount, employeeCount, jobsCount, coinReqCount,
+            subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry,
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending
+        } = this.state;
+
+        const data = {
+            labels: ['Legal', 'Illegal', 'Neutral'],
+            datasets: [{
+                data: [legalCountries, illegalCountries, neutralCountries],
+                backgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa'],
+                hoverBackgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa']
+            }]
+        };
+
+        const transactionData = {
+            labels: ['Total Last 7 days', 'Grand Total Last 7 days', 'Average Per day', 'Total Last 30 days'],
+            datasets: [{
+                data: [legalCountries, illegalCountries, neutralCountries, neutralCountries],
+                backgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671'],
+                hoverBackgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671']
+            }]
+        };
+
+        const tradeData = {
+            labels: ['Total Last 7 days', 'Grand Total Last 7 days', 'Average Per day', 'Total Last 30 days'],
+            datasets: [{
+                data: [legalCountries, illegalCountries, neutralCountries, neutralCountries],
+                backgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671'],
+                hoverBackgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671']
+            }]
+        }
+
+        const kycData = {
+            labels: ['Total Outstanding', 'Total Approved', 'Total Disapproved'],
+            datasets: [{
+                data: [kyc_pending, kyc_approved, kyc_disapproved],
+                backgroundColor: ['#E929DD', '#D2601F', '#B95671'],
+                hoverBackgroundColor: ['#E929DD', '#D2601F', '#B95671']
+            }]
+        }
 
         return (
             <LayoutWrapper>
                 <Row style={rowStyle} gutter={0} justify="start">
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={allUserCount}
-                                text={<IntlMessages id="widget.stickerwidget1.user" />}
-                                icon="ion-person"
-                                fontColor="#ffffff"
-                                bgColor="#7266BA"
-                            />
-                        </IsoWidgetsWrapper>
+                    <Col md={12} xs={24} style={colStyle}>
+                        <CardWrapper title="Country" >
+                            <ChartWrapper>
+                                <ContentHolder>
+                                    <Pie data={data} />
+                                </ContentHolder>
+                            </ChartWrapper>
+                        </CardWrapper>
                     </Col>
 
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
-                                text={<IntlMessages id="widget.stickerwidget2.coins" />}
-                                icon="ion-android-camera"
-                                fontColor="#ffffff"
-                                bgColor="#42A5F6"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
-                                text={<IntlMessages id="widget.stickerwidget3.staticPages" />}
-                                icon="ion-document"
-                                fontColor="#ffffff"
-                                bgColor="#7ED320"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
-                                text={<IntlMessages id="widget.stickerwidget4.emailTemplates" />}
-                                icon="ion-android-mail"
-                                fontColor="#ffffff"
-                                bgColor="#F75D81"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={<IntlMessages id="widget.stickerwidget1.number" />}
-                                text={<IntlMessages id="widget.stickerwidget5.referral" />}
-                                icon="ion-android-fastforward"
-                                fontColor="#ffffff"
-                                bgColor="#F75D81"
-                            />
-                        </IsoWidgetsWrapper>
+                    <Col md={12} xs={24} style={colStyle}>
+                        <CardWrapper title="KYC">
+                            <ChartWrapper>
+                                <ContentHolder>
+                                    <b>Grand Total:</b> {total_kyc}
+                                    <Pie data={kycData} />
+                                </ContentHolder>
+                            </ChartWrapper>
+                        </CardWrapper>
                     </Col>
                 </Row>
-            </LayoutWrapper>
+
+                {/* <Row style={rowStyle} gutter={0} justify="start">
+                    <Col md={12} xs={24} style={colStyle}>
+                        <Card title="KYC">
+                            <span>Grand Total</span>
+                            <Progress percent={30} size="small" format={percent => `${percent}`} />
+                            <span>Total Outstanding</span>
+                            <Progress percent={40} size="small" format={percent => `${percent}`} />
+                            <span>Total Approved</span>
+                            <Progress percent={kyc_approved} size="small" format={percent => `${percent}`} />
+                            <span>Total Dis-Approved</span>
+                            <Progress percent={kyc_disapproved} size="small" format={percent => `${percent}`} />
+                        </Card>
+                    </Col>
+
+                    {/* <Col md={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <span><b>Trade History:</b></span>
+                            <ChartWrapper>
+                                <ContentHolder>
+                                    <Pie data={tradeData} />
+                                </ContentHolder>
+                            </ChartWrapper>
+                        </IsoWidgetsWrapper>
+                    </Col> */}
+                {/* </Row>  */}
+
+                <Row style={rowStyle} gutter={0} justify="start" >
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <CountCard number={activeUsers}
+                            headColor={'#6455b9'}
+                            number2={inactiveUsers}
+                            bgColor={'#8478cc'}
+                            title={'Users'}
+                            text={'Active Users'}
+                            text2={'Inactive Users'}
+                            icon="fa fa-users"
+                            fontColor="#ffffff" />
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <CountCard number={activeCoins}
+                            headColor={'#EB4278'}
+                            number2={InactiveCoins}
+                            bgColor={'#F96E9B'}
+                            title={'Coins'}
+                            text={'Active Coins'}
+                            text2={'Inactive Coins'}
+                            icon="fa fa-coins"
+                            fontColor="#ffffff" />
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <CountCard number={activePairs}
+                            headColor={'#0F67BA'}
+                            number2={InactivePairs}
+                            bgColor={'#3B95EA'}
+                            title={'Pairs'}
+                            text={'Active Pairs'}
+                            text2={'Inactive Pairs'}
+                            icon="fa fa-coins"
+                            fontColor="#ffffff" />
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <CountCard number={lastSevenInquiry}
+                            headColor={'#E54D0B'}
+                            number2={lastThirtyInquiry}
+                            bgColor={'#E3703E'}
+                            title={'Inquiry'}
+                            text={'Last Seven Days Inquiry'}
+                            text2={'Last Thirty Days Inquiry'}
+                            icon="fas fa-comments"
+                            fontColor="#ffffff" />
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <StickerWidget
+                                number={blogsCount}
+                                text={'Blogs - Last 30 days'}
+                                icon="far fa-file-alt"
+                                fontColor="#ffffff"
+                                bgColor="#F75D81"
+                            />
+                        </IsoWidgetsWrapper>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <StickerWidget
+                                number={employeeCount}
+                                text={'Active Employees'}
+                                icon="fas fa-user-tie"
+                                fontColor="#ffffff"
+                                bgColor="#E74C3C"
+                            />
+                        </IsoWidgetsWrapper>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <StickerWidget
+                                number={jobsCount}
+                                text={'Total Open Jobs'}
+                                icon="fas fa-suitcase-rolling"
+                                fontColor="#ffffff"
+                                bgColor="#F1C40F"
+                            />
+                        </IsoWidgetsWrapper>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <StickerWidget
+                                number={coinReqCount}
+                                text={'Last 30 Days Coin Requests'}
+                                icon="fas fa-coins"
+                                fontColor="#ffffff"
+                                bgColor="#5499C7"
+                            />
+                        </IsoWidgetsWrapper>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <StickerWidget
+                                number={subscriberCount}
+                                text={'Total Subscribers'}
+                                icon="far fa-newspaper"
+                                fontColor="#ffffff"
+                                bgColor="#CD6155"
+                            />
+                        </IsoWidgetsWrapper>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <StickerWidget
+                                number={withdrawReqCount}
+                                text={'Last 7 Days Withdraw Requests'}
+                                icon="fas fa-hand-holding-usd"
+                                fontColor="#ffffff"
+                                bgColor="#A569BD"
+                            />
+                        </IsoWidgetsWrapper>
+                    </Col>
+                </Row >
+            </LayoutWrapper >
         );
     }
 }
 
-export default Dashboard;
+export default connect(
+    state => ({
+        token: state.Auth.get('token')
+    }))(Dashboard);

@@ -7,8 +7,9 @@ import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
+import logo from '../../image/Footer_logo.png';
 
-const { login, storeToken } = authAction;
+const { login, storeToken, checkRoles } = authAction;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class SignIn extends Component {
@@ -34,12 +35,16 @@ class SignIn extends Component {
 
   _onChangeFields(field, e) {
     let fields = this.state.fields;
-    fields[field] = e.target.value;
+    if (e.target.value.trim() == "") {
+      fields[field] = "";
+    } else {
+      fields[field] = e.target.value;
+    }
     this.setState({ fields });
   }
 
   _handleLogin = () => {
-    const { login, storeToken } = this.props;
+    const { login, storeToken, checkRoles } = this.props;
     const { fields } = this.state;
     let _this = this;
 
@@ -54,18 +59,18 @@ class SignIn extends Component {
       ApiUtils.adminSignIn(formData)
         .then((response) => response.json())
         .then(function (res) {
-          if (res) {
+          if (res.user) {
             _this.setState({ loader: false, redirect: true });
             login({ user: res.user });
             storeToken({ token: res.token });
+            checkRoles({ roles: res.user.roles })
             _this.props.history.push('/dashboard');
           } else {
-            _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+            _this.setState({ errMsg: true, errMessage: res.err, loader: false });
             login({ user: null });
           }
         })
         .catch(err => {
-          console.log('err', err)
           _this.setState({ loader: false, errMsg: true, errMessage: 'Something went wrong!!' });
         });
     } else {
@@ -93,7 +98,7 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.signInTitle" />
+                <img src={logo} />
               </Link>
             </div>
 
@@ -113,9 +118,9 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox>
+                {/* <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
-                </Checkbox>
+                </Checkbox> */}
                 <Button type="primary" onClick={this._handleLogin}>
                   <IntlMessages id="page.signInButton" />
                 </Button>
@@ -141,5 +146,5 @@ export default connect(
     isLoggedIn: state.Auth.get('token') !== null ? true : false,
     user: state.Auth.get('user'),
   }),
-  { login, storeToken }
+  { login, storeToken, checkRoles }
 )(SignIn);

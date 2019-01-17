@@ -29,6 +29,7 @@
     "polished": "^1.7.0",
     "postcss-inline-rtl": "^0.9.8",
     "prop-types": "^15.5.10",
+    "rc-color-picker": "^1.2.6",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.5.2",
     "react-big-calendar": "^0.17.0",
@@ -62,6 +63,7 @@
     "react-sidebar": "^2.3.2",
     "react-smooth-scrollbar": "^8.0.6",
     "react-speech-recognition": "^1.0.4",
+    "react-stockcharts": "^0.7.8",
     "react-tag-input": "^4.7.2",
     "react-tags": "^0.2.2",
     "react-test-renderer": "^16.2.0",
@@ -83,6 +85,7 @@
     "rich-marker": "^0.0.1",
     "simple-react-validator": "0.0.8",
     "smooth-scrollbar": "^8.2.5",
+    "striptags": "2.2.1",
     "styled-components": "^2.2.1",
     "styled-theme": "^0.3.3",
     "uppy": "0.18.0"

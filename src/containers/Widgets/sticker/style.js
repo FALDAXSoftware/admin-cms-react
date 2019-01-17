@@ -35,7 +35,7 @@ const StickerWidgetWrapper = styled.div`
     }
 
     .isoLabel {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
       margin: 0;
       line-height: 1.2;

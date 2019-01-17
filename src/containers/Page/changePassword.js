@@ -11,16 +11,19 @@ class ChangePassword extends Component {
         super(props)
         this.state = {
             fields: {},
+            errors: {},
             loader: false,
             errMsg: false,
-            errMessage: ''
+            errMessage: '',
+            errType: 'Success',
+            showErr: false
         }
         this.validator = new SimpleReactValidator();
     }
 
     openNotificationWithIconError = (type) => {
         notification[type]({
-            message: 'Error',
+            message: this.state.errType,
             description: this.state.errMessage
         });
         this.setState({ errMsg: false });
@@ -28,43 +31,56 @@ class ChangePassword extends Component {
 
     _onChangeFields(field, e) {
         let fields = this.state.fields;
-        fields[field] = e.target.value;
+        if (e.target.value.trim() == "") {
+            fields[field] = "";
+        } else {
+            fields[field] = e.target.value;
+        }
         this.setState({ fields });
     }
 
     _changePassword = () => {
         const { token, user } = this.props;
-        let { fields } = this.state;
+        let { fields, errors } = this.state;
         let _this = this;
 
         if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
             _this.setState({ loader: true });
 
             let formData = {
-                old: fields["oldPwd"],
-                new: fields["newPwd"],
+                email: user.email,
+                current_password: fields["oldPwd"],
+                new_password: fields["newPwd"],
+                confirm_password: fields["confirmPwd"]
             };
 
-            ApiUtils.changePassword(token, user.id, formData)
+            ApiUtils.changePassword(token, formData)
                 .then((response) => response.json())
-                .then(function (res) {
+                .then((res) => {
                     if (res) {
                         let fields = _this.state.fields;
                         fields["oldPwd"] = "";
                         fields["newPwd"] = "";
                         fields["confirmPwd"] = "";
-                        _this.setState({ fields, loader: false });
+                        _this.validator = new SimpleReactValidator();
+                        _this.setState({
+                            fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
+                            errMessage: res.err ? res.err : res.message
+                        });
                     } else {
-                        _this.setState({ loader: false, errMsg: true, errMessage: res.message, });
+                        _this.setState({
+                            loader: false, errMsg: true, errType: 'Error',
+                            errMessage: res.message
+                        });
                     }
                 })
                 .catch(err => {
                     _this.setState({ loader: false, errMsg: true });
-                    console.log('error occured', err);
                 });
         } else {
-            if (fields["newPwd"] !== fields["confirmPwd"]) {
-                this.setState({ loader: false })
+            if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
+                this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
+                this.setState({ errors, loader: false })
             }
             this.validator.showMessages();
             this.forceUpdate();
@@ -72,24 +88,29 @@ class ChangePassword extends Component {
     }
 
     render() {
-        const { fields, loader } = this.state;
+        const { fields, loader, errors, errMsg, errType } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
+
         return (
             <div style={{ "paddingLeft": "50px", "paddingTop": "50px" }}>
                 <h2> <b> Change Password </b> </h2>
 
                 <div style={{ "marginTop": "10px" }}>
                     <span>
-                        <b>Old Password</b>
+                        <b>Current Password</b>
                     </span>
                     <Input
                         type="password"
-                        placeholder="Old Password"
+                        placeholder="Current Password"
                         style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "oldPwd")}
                         value={fields["oldPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('Old password', fields["oldPwd"], 'required', 'text-danger')}
+                        {this.validator.message('Current Password', fields["oldPwd"], 'required', 'text-danger')}
                     </span>
 
                     <span>
@@ -116,7 +137,11 @@ class ChangePassword extends Component {
                         onChange={this._onChangeFields.bind(this, "confirmPwd")}
                         value={fields["confirmPwd"]}
                     />
-
+                    <span style={{ "color": "red" }}>
+                        {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
+                        {errors["main"]}
+                    </span>
+                    <br />
                     <Button type="primary" onClick={this._changePassword}> Change </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}

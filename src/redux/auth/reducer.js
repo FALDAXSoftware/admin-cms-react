@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import actions from './actions';
 
-const initState = new Map({ token: null, roles: ['admin'], user: null });
+const initState = new Map({ token: null, roles: [''], user: null });
 
 export default function authReducer(state = initState, action) {
   switch (action.type) {

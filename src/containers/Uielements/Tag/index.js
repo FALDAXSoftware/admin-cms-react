@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Input, Button } from 'antd';
 import Tags from '../../../components/uielements/tag';
-import Input from '../../../components/uielements/input';
-import Tooltip from '../../../components/uielements/tooltip';
-import Button from '../../../components/uielements/button';
 import PageHeader from '../../../components/utility/pageHeader';
 import Box from '../../../components/utility/box';
 import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
@@ -29,7 +26,7 @@ export default class extends Component {
     inputVisible: false,
     inputValue: ''
   };
-  log = e => {};
+  log = e => { };
   handleChange = (tag, checked) => {
     const { selectedTags } = this.state;
     const nextSelectedTags = checked
@@ -147,11 +144,7 @@ export default class extends Component {
                       {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                     </Tag>
                   );
-                  return isLongTag ? (
-                    <Tooltip title={tag}>{tagElem}</Tooltip>
-                  ) : (
-                    tagElem
-                  );
+                  tagElem
                 })}
                 {inputVisible && (
                   <Input

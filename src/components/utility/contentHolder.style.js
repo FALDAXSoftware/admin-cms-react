@@ -3,7 +3,7 @@ import { palette } from 'styled-theme';
 import WithDirection from '../../settings/withDirection';
 
 const WDContentHolderWrapper = styled.div`
-  margin-top: 30px;
+  
   -webkit-overflow-scrolling: touch;
 
   .demoBtn {
@@ -38,10 +38,10 @@ const WDContentHolderWrapper = styled.div`
 
     @media only screen and (max-width: 480px) {
       margin-left: ${props =>
-        props['data-rtl'] === 'rtl' ? '8px' : '0 !important'};
+    props['data-rtl'] === 'rtl' ? '8px' : '0 !important'};
       white-space: nowrap;
       margin-right: ${props =>
-        props['data-rtl'] === 'rtl' ? '0 !important' : '8px'};
+    props['data-rtl'] === 'rtl' ? '0 !important' : '8px'};
       float: none !important;
     }
 
@@ -62,32 +62,6 @@ const WDContentHolderWrapper = styled.div`
     &:not(.demoPosBtn) {
       &:last-child {
         margin-right: 0;
-      }
-    }
-  }
-
-  .tooltipBtn {
-    display: inline-block;
-    line-height: 32px;
-    height: 32px;
-    width: 70px;
-    font-size: 14px;
-    text-align: center;
-    background: ${palette('secondary', 1)};
-    margin-right: ${props => (props['data-rtl'] === 'rtl' ? 'auto' : '6px')};
-    margin-left: ${props => (props['data-rtl'] === 'rtl' ? '6px' : '0')};
-    margin-bottom: 6px;
-    border-radius: 6px;
-  }
-
-  .ant-progress {
-    &.ant-progress-circle {
-      margin-right: ${props => (props['data-rtl'] === 'rtl' ? '0' : '15px')};
-      margin-left: ${props => (props['data-rtl'] === 'rtl' ? '15px' : '0')};
-
-      &:last-child {
-        margin-right: ${props => (props['data-rtl'] === 'rtl' ? '0' : '0')};
-        margin-left: ${props => (props['data-rtl'] === 'rtl' ? '0' : '0')};
       }
     }
   }

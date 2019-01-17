@@ -17,9 +17,9 @@ const CardWidgetWrapper = styled.div`
     align-items: center;
     justify-content: center;
     padding: ${props =>
-      props['data-rtl'] === 'rtl'
-        ? '20px 20px 20px 30px'
-        : '20px 30px 20px 20px'};
+    props['data-rtl'] === 'rtl'
+      ? '20px 20px 20px 30px'
+      : '20px 30px 20px 20px'};
 
     i {
       font-size: 36px;
@@ -36,7 +36,7 @@ const CardWidgetWrapper = styled.div`
     }
 
     .isoLabel {
-      font-size: 14px;
+      font-size: 12px;
       color: ${palette('text', 2)};
       font-weight: 400;
       margin: 0;

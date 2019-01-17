@@ -122,21 +122,21 @@ const EditTable = ({ editableInvoice, editInvoice, updateValues }) => {
         invoiceList.length === 1 ? (
           ''
         ) : (
-          <Button
-            onClick={() => {
-              const newInvoiceList = [];
-              invoiceList.forEach((invoice, i) => {
-                if (i !== singleInvoice.key - 1) {
-                  newInvoiceList.push(invoice);
-                }
-              });
-              editableInvoice.invoiceList = newInvoiceList;
-              editInvoice(updateValues(editableInvoice));
-            }}
-          >
-            Delete
+            <Button
+              onClick={() => {
+                const newInvoiceList = [];
+                invoiceList.forEach((invoice, i) => {
+                  if (i !== singleInvoice.key - 1) {
+                    newInvoiceList.push(invoice);
+                  }
+                });
+                editableInvoice.invoiceList = newInvoiceList;
+                editInvoice(updateValues(editableInvoice));
+              }}
+            >
+              Delete
           </Button>
-        ),
+          ),
     },
   ];
   return (

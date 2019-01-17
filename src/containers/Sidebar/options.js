@@ -2,63 +2,128 @@ const options = [
   {
     key: "dashboard",
     label: "sidebar.dashboard",
-    leftIcon: "ion-android-apps"
+    leftIcon: "fas fa-tachometer-alt",
+    module: "dashboard"
   },
   {
     key: "users",
     label: "sidebar.users",
-    leftIcon: "ion-android-people"
+    leftIcon: "fas fa-users",
+    module: "users"
   },
   {
     key: "coins",
     label: "sidebar.coins",
-    leftIcon: "ion-logo-usd"
+    leftIcon: "fas fa-coins",
+    module: "coins"
+  },
+  {
+    key: "pairs",
+    label: "sidebar.fees",
+    leftIcon: "fas fa-coins",
+    module: "pairs"
+  },
+  {
+    key: "countries",
+    label: "sidebar.country",
+    leftIcon: "far fa-flag",
+    module: "countries"
+  },
+  {
+    key: "announcement",
+    label: "sidebar.announce",
+    leftIcon: "fas fa-bullhorn",
+    module: "announcement"
   },
   {
     key: "static-pages",
     label: "sidebar.staticPages",
-    leftIcon: "ion-document"
+    leftIcon: "fas fa-file",
+    module: "static_page"
   },
   {
-    key: "email-templates",
-    label: "sidebar.emailTemplates",
-    leftIcon: "ion-android-mail"
+    key: "blogs",
+    label: "sidebar.blogs",
+    leftIcon: "far fa-file-alt",
+    module: "blogs"
   },
   {
-    key: "referral",
-    label: "sidebar.referral",
-    leftIcon: "ion-document"
+    key: "roles",
+    label: "sidebar.roles",
+    leftIcon: "fas fa-tasks",
+    module: "roles"
   },
   {
-    key: "charts",
-    label: "sidebar.charts",
-    leftIcon: "ion-arrow-graph-up-right",
-    children: [
-      {
-        key: "googleChart",
-        label: "sidebar.googleCharts"
-      },
-      {
-        key: "reecharts",
-        label: "sidebar.recharts"
-      },
-      {
-        key: "reactVis",
-        label: "sidebar.reactVis"
-      },
-      {
-        key: "reactChart2",
-        label: "sidebar.reactChart2"
-      },
-      {
-        key: "reactTrend",
-        label: "sidebar.reactTrend"
-      },
-      {
-        key: "frappeChart",
-        label: "sidebar.frappeChart"
-      }
-    ]
+    key: "employee",
+    label: "sidebar.employee",
+    leftIcon: "fas fa-user-tie",
+    module: "employee"
+  },
+
+  // {
+  //   key: "send-coin-fee",
+  //   label: "sidebar.sendCoinFees",
+  //   leftIcon: "ion-filing"
+  // }
+  {
+    key: "limit-management",
+    label: "sidebar.limit",
+    leftIcon: "fas fa-sliders-h",
+    module: "limit_management"
+  },
+  {
+    key: "transaction-history",
+    label: "sidebar.transactionHistory",
+    leftIcon: "fas fa-exchange-alt",
+    module: "transaction_history"
+  },
+  {
+    key: "trade-history",
+    label: "sidebar.tradeHistory",
+    leftIcon: "fas fa-history",
+    module: "trade_history"
+  },
+  {
+    key: "withdraw-requests",
+    label: "sidebar.withdrawRequests",
+    leftIcon: "fas fa-hand-holding-usd",
+    module: "withdraw_requests"
+  },
+  {
+    key: "coin-requests",
+    label: "sidebar.coinRequests",
+    leftIcon: "fas fa-coins",
+    module: "coin_requests"
+  },
+  {
+    key: "inquiries",
+    label: "sidebar.inquiries",
+    leftIcon: "fas fa-comments",
+    module: "inquiries"
+  },
+  {
+    key: "jobs",
+    label: "sidebar.jobs",
+    leftIcon: "fas fa-suitcase-rolling",
+    module: "jobs"
+  },
+  {
+    key: "contact-us",
+    label: "sidebar.contact",
+    leftIcon: "fas fa-user-cog",
+    module: "contact_setting"
+  },
+  {
+    key: "subscribe",
+    label: "sidebar.subscribe",
+    leftIcon: "far fa-newspaper",
+    module: "subscribe"
+  },
+  {
+    key: "kyc",
+    label: "sidebar.kyc",
+    leftIcon: "fas fa-id-card",
+    module: "kyc"
   },
 ];
 

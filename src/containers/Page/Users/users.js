@@ -1,102 +1,180 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Input, Pagination, Modal } from 'antd';
+import { Tabs, Input, Pagination, Spin, notification } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
-import AddUserModal from './addUserModal';
 import ViewUserModal from './viewUserModal';
+import ReferralUsers from './referralUsersModal';
 import { connect } from 'react-redux';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+var self;
 
 class Users extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allUsers: [{
-                firstName: 'Jon',
-                lastName: 'Snow',
-                city: 'Night watch',
-                email: 'jon@snow.com'
-            }, {
-                firstName: 'Cersi',
-                lastName: 'Lannister',
-                city: 'Citadel',
-                email: 'cersi@lannister.com'
-            }],
-            allUserCount: 2,
+            allUsers: [],
+            allUserCount: 0,
             searchUser: '',
-            showAddUserModal: false,
             showViewUserModal: false,
-            showDeleteUser: false,
-            userDetails: []
+            showReferralModal: false,
+            userDetails: [],
+            allReferral: [],
+            allReferralCount: 0,
+            page: 1,
+            limit: 50,
+            referPage: 0,
+            referLimit: 10,
+            errMessage: '',
+            errMsg: false,
+            errType: 'Success',
+            loader: false
         }
+        self = this;
+        Users.view = Users.view.bind(this);
+        Users.showReferrals = Users.showReferrals.bind(this);
+        Users.changeStatus = Users.changeStatus.bind(this);
+    }
+
+    static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
+        street_address_2, phone_number, country, dob, is_active, kyc) {
+        let userDetails = {
+            value, profile_pic, first_name, last_name, email, city_town, street_address,
+            street_address_2, phone_number, country, dob, is_active, kyc
+        }
+        self.setState({ userDetails, showViewUserModal: true });
+    }
+
+    static showReferrals(value) {
+        self._getAllReferredUsers(value, 0)
+    }
+
+    static changeStatus(value, profile_pic, first_name, last_name, email, city_town,
+        street_address, street_address_2, phone_number, country, dob, is_active, kyc) {
+        const { token } = this.props;
+
+        let formData = {
+            user_id: value,
+            email: email,
+            is_active: !is_active
+        };
+
+        self.setState({ loader: true });
+        let message = is_active ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
+        ApiUtils.activateUser(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                self._getAllUsers();
+                self.setState({
+                    errMsg: true, errMessage: message, errType: 'Success', loader: false
+                })
+            })
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
+            });
     }
 
     componentDidMount = () => {
-        // this._getAllUsers();
+        this._getAllUsers();
     }
 
-    _getAllUsers = (page) => {
-        const { token, user } = this.props;
-        const { searchUser } = this.state;
+    _getAllUsers = () => {
+        const { token } = this.props;
+        const { searchUser, limit, page } = this.state;
         var _this = this;
 
-        let formData = {
-            name: searchUser
-        };
-
-        ApiUtils.getAllUsers(page, token, user.id, formData)
+        _this.setState({ loader: true });
+        ApiUtils.getAllUsers(page, limit, token, searchUser)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status === "SUCCESS") {
-                    _this.setState({ allUsers: res.data, allUserCount: res.totalElements });
+                if (res) {
+                    _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
+                _this.setState({ loader: false });
             })
-            .catch(err => {
-                console.log('error occured', err);
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
+            });
+    }
+
+    _getAllReferredUsers = (id, page) => {
+        const { token } = this.props;
+        const { referLimit } = this.state;
+
+        let _this = this;
+
+        this.setState({ loader: true })
+        ApiUtils.getAllReferrals(page, referLimit, token, id)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        allReferral: res.data, allReferralCount: res.usersDataCount,
+                        showReferralModal: true, userId: id
+                    });
+                } else {
+                    _this.setState({ errMsg: true, message: res.message });
+                }
+                _this.setState({ loader: false })
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
             });
     }
 
     _searchUser = (val) => {
-        this.setState({ searchUser: val }, () => {
-            //this._getAllUsers(0);
+        this.setState({ searchUser: val, page: 1 }, () => {
+            this._getAllUsers(1);
         });
     }
 
-    _deleteUser = () => {
-        //call api for delete user
-    }
-
     _handleUserPagination = (page) => {
-        //this._getAllUsers(page - 1);
-    }
-
-    _showAddUserModal = () => {
-        this.setState({ showAddUserModal: true });
-    }
-
-    _closeAddUserModal = () => {
-        this.setState({ showAddUserModal: false, searchUser: '' });
+        this.setState({ page }, () => {
+            this._getAllUsers();
+        });
     }
 
     _closeViewUserModal = () => {
         this.setState({ showViewUserModal: false });
     }
 
-    _closeDeleteUserModal = () => {
-        this.setState({ showDeleteUser: false });
+    _closeReferralModal = () => {
+        self.setState({ showReferralModal: false });
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     render() {
-        const { allUsers, allUserCount, showAddUserModal, showViewUserModal,
-            userDetails, showDeleteUser } = this.state;
+        const { allUsers, allUserCount, showViewUserModal, allReferral, page,
+            userDetails, showReferralModal, allReferralCount, userId, loader,
+            errMsg, errType
+        } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <LayoutWrapper>
@@ -106,12 +184,6 @@ class Users extends Component {
                             {tableinfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
-                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddUserModal}>Add User</Button>
-                                        {/* <AddUserModal
-                                            showAddUserModal={showAddUserModal}
-                                            closeAddModal={this._closeAddUserModal}
-                                            getAllUsers={this._getAllUsers.bind(this, 0)}
-                                        /> */}
                                         <Search
                                             placeholder="Search users"
                                             onSearch={(value) => this._searchUser(value)}
@@ -119,18 +191,15 @@ class Users extends Component {
                                             enterButton
                                         />
                                     </div>
+                                    {loader && <span className="loader-class">
+                                        <Spin />
+                                    </span>}
                                     <div>
-                                        {/* <ViewUserModal
+                                        <ViewUserModal
                                             userDetails={userDetails}
                                             showViewUserModal={showViewUserModal}
                                             closeViewUserModal={this._closeViewUserModal}
-                                        /> */}
-                                        {/* <EditBeerModal
-                                            fields={editBeerDetails}
-                                            showEditBeerModal={showEditBeerModal}
-                                            closeEditBeerModal={this._closeEditBeerModal}
-                                            getAllBeers={this._getAllUsers.bind(this, 0)}
-                                        />  */}
+                                        />
                                         <TableWrapper
                                             {...this.state}
                                             columns={tableInfo.columns}
@@ -138,26 +207,23 @@ class Users extends Component {
                                             dataSource={allUsers}
                                             className="isoCustomizedTable"
                                         />
-                                        {
-                                            showDeleteUser &&
-                                            <Modal
-                                                title="Delete User"
-                                                visible={showDeleteUser}
-                                                onOk={this._deleteUser}
-                                                onCancel={this._closeDeleteUserModal}
-                                            >
-                                                <span>
-                                                    Are you sure you want to delete this User?
-                                          </span>
-                                            </Modal>
-                                        }
                                         <Pagination
+                                            style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleUserPagination.bind(this)}
-                                            pageSize={5}
-                                            defaultCurrent={1}
+                                            pageSize={50}
+                                            current={page}
                                             total={allUserCount}
                                         />
+                                        {showReferralModal &&
+                                            <ReferralUsers
+                                                showReferralModal={showReferralModal}
+                                                allReferral={allReferral}
+                                                allReferralCount={allReferralCount}
+                                                closeReferalModal={this._closeReferralModal}
+                                                getAllReferredUsers={this._getAllReferredUsers.bind(this, userId)}
+                                            />
+                                        }
                                     </div>
                                 </TabPane>
                             ))}
@@ -171,7 +237,6 @@ class Users extends Component {
 
 export default connect(
     state => ({
-        // user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }))(Users);
 
