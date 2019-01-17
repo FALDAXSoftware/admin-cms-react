@@ -38,6 +38,7 @@ volumes: [
                         withAWS(credentials:'jenkins_s3_upload') {
                         s3Delete(bucket:'staging-admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'staging-admin.faldax.com', path:'')
+                    }
                 }
               else if (env.BRANCH_NAME == 'master') {
                         withAWS(credentials:'jenkins_s3_upload') {
@@ -53,7 +54,7 @@ volumes: [
          }
 
          }
-    }   }
+    }   } 
 
 
 

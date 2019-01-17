@@ -22,7 +22,8 @@ import { KYC } from '../../containers/Page/KYC/kyc';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
 
-const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
+//const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
+const S3BucketImageURL = 'https://s3.us-east-2.amazonaws.com/production-static-asset/';
 
 const viewUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) => {
     Users.view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc);
