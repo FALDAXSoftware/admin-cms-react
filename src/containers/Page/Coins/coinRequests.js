@@ -191,14 +191,14 @@ class CoinRequests extends Component {
                                         dataSource={allCoinRequests}
                                         className="isoCustomizedTable"
                                     />
-                                    <Pagination
+                                    {allCoinCount.length > 0 ? <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleCoinPagination.bind(this)}
                                         pageSize={50}
                                         current={page}
                                         total={allCoinCount}
-                                    />
+                                    /> : ''}
                                 </div>
                             </TabPane>
                         ))}
