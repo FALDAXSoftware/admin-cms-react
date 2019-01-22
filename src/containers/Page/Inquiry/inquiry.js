@@ -130,14 +130,14 @@ class Inquiry extends Component {
                                         dataSource={allInquiries}
                                         className="isoCustomizedTable"
                                     />
-                                    <Pagination
+                                    {allInquiryCount.length > 0 ? <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleInquiryPagination.bind(this)}
                                         pageSize={50}
                                         current={page}
                                         total={allInquiryCount}
-                                    />
+                                    /> : ''}
                                 </div>
                             </TabPane>
                         ))}
