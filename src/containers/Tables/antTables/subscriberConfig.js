@@ -1,14 +1,19 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, SubscriberActionCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key) => {
+const renderCell = (object, type, key, emailId = null, is_news = null, created = null) => {
     const value = object[key];
+    const email = object[emailId];
+    const is_news_feed = object[is_news];
+    const created_at = object[created];
 
     switch (type) {
         case 'DateCell':
             return DateCell(value);
+        case 'SubscriberActionCell':
+            return SubscriberActionCell(value, email, is_news_feed, created_at);
         default:
             return TextCell(value);
     }
@@ -32,6 +37,12 @@ const columns = [
         key: 'created_at',
         width: 200,
         render: object => renderCell(object, 'DateCell', 'created_at')
+    }, {
+        title: <IntlMessages id="subscribeTable.title.Actions" />,
+        key: 'action',
+        width: 200,
+        render: object => renderCell(object,
+            'SubscriberActionCell', 'id', 'email', 'is_news_feed', 'created_at')
     }
 ];
 
