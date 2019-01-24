@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin, Modal, Button } from 'antd';
 import { inquiryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -26,10 +26,13 @@ class Inquiry extends Component {
             page: 1,
             loader: false,
             inquiryDetails: [],
-            showViewInquiryModal: false
+            showViewInquiryModal: false,
+            showDeleteInquiryModal: false,
+            deleteInquiryId: ''
         }
         self = this;
         Inquiry.viewInquiry = Inquiry.viewInquiry.bind(this);
+        Inquiry.deleteInquiry = Inquiry.deleteInquiry.bind(this);
     }
 
     componentDidMount = () => {
@@ -41,6 +44,10 @@ class Inquiry extends Component {
             value, first_name, last_name, email, message, created_at
         }
         self.setState({ inquiryDetails, showViewInquiryModal: true })
+    }
+
+    static deleteInquiry(value) {
+        self.setState({ showDeleteInquiryModal: true, deleteInquiryId: value });
     }
 
     openNotificationWithIconError = (type) => {
@@ -77,6 +84,34 @@ class Inquiry extends Component {
             });
     }
 
+    _deleteInquiry = () => {
+        const { token } = this.props;
+        const { deleteInquiryId } = this.state;
+        let _this = this;
+
+        _this.setState({ loader: true })
+        ApiUtils.deleteInquiry(token, deleteInquiryId)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        deleteInquiryId: '', errMsg: true, errMessage: res.message, errType: 'Success'
+                    });
+                    _this._closeDeleteInquiryModal();
+                    _this._getAllInquiries();
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                _this.setState({ loader: false })
+            })
+            .catch(() => {
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
+            });
+    }
+
     _searchInquiry = (val) => {
         this.setState({ searchInquiry: val, page: 1 }, () => {
             this._getAllInquiries();
@@ -92,9 +127,13 @@ class Inquiry extends Component {
         this.setState({ showViewInquiryModal: false })
     }
 
+    _closeDeleteInquiryModal = () => {
+        this.setState({ showDeleteInquiryModal: false });
+    }
+
     render() {
         const { allInquiries, allInquiryCount, errType, loader, errMsg,
-            page, inquiryDetails, showViewInquiryModal } = this.state;
+            page, inquiryDetails, showViewInquiryModal, showDeleteInquiryModal } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -138,6 +177,19 @@ class Inquiry extends Component {
                                         current={page}
                                         total={allInquiryCount}
                                     /> : ''}
+                                    {showDeleteInquiryModal &&
+                                        <Modal
+                                            title="Delete Inquiry"
+                                            onCancel={this._closeDeleteInquiryModal}
+                                            visible={showDeleteInquiryModal}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteInquiryModal}>No</Button>,
+                                                <Button onClick={this._deleteInquiry}>Yes</Button>,
+                                            ]}
+                                        >
+                                            Are you sure you want to delete this inquiry ?
+                                    </Modal>
+                                    }
                                 </div>
                             </TabPane>
                         ))}

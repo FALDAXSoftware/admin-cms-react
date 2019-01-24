@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin, Pagination, Input, DatePicker, Button } from 'antd';
+import { Tabs, notification, Spin, Pagination, Input, DatePicker, Button, Modal } from 'antd';
 import { subscriberTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,6 +10,7 @@ import moment from 'moment';
 
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
+var self;
 
 class Subscribers extends Component {
     constructor(props) {
@@ -26,12 +27,20 @@ class Subscribers extends Component {
             searchSubscriber: '',
             startDate: '',
             endDate: '',
-            rangeDate: []
+            rangeDate: [],
+            showDeleteSubscriberModal: false,
+            deleteSubscriberId: ''
         }
+        self = this;
+        Subscribers.deleteSubscriber = Subscribers.deleteSubscriber.bind(this);
     }
 
     componentDidMount = () => {
         this._getAllSubscribers();
+    }
+
+    static deleteSubscriber(value) {
+        self.setState({ showDeleteSubscriberModal: true, deleteSubscriberId: value });
     }
 
     openNotificationWithIconError = (type) => {
@@ -68,6 +77,34 @@ class Subscribers extends Component {
             });
     }
 
+    _deleteSubscriber = () => {
+        const { token } = this.props;
+        const { deleteSubscriberId } = this.state;
+        let _this = this;
+
+        _this.setState({ loader: true })
+        ApiUtils.deleteSubscriber(token, deleteSubscriberId)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        deleteSubscriberId: '', errMsg: true, errMessage: res.message, errType: 'Success'
+                    });
+                    _this._closeDeleteSubscriberModal();
+                    _this._getAllSubscribers();
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                _this.setState({ loader: false })
+            })
+            .catch(() => {
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
+            });
+    }
+
     _searchSubscriber = () => {
         this._getAllSubscribers();
     }
@@ -80,6 +117,10 @@ class Subscribers extends Component {
 
     _changeSearch = (field, e) => {
         this.setState({ searchSubscriber: field.target.value })
+    }
+
+    _closeDeleteSubscriberModal = () => {
+        this.setState({ showDeleteSubscriberModal: false });
     }
 
     range = (start, end) => {
@@ -106,7 +147,6 @@ class Subscribers extends Component {
     }
 
     _changeDate = (date, dateString) => {
-        console.log('>>>date', date);
         this.setState({
             rangeDate: date,
             startDate: moment(date[0]).endOf('day').toISOString(),
@@ -124,7 +164,7 @@ class Subscribers extends Component {
 
     render() {
         const { allSubscribers, errType, errMsg, loader, page, allSubscribersCount,
-            searchSubscriber, rangeDate } = this.state;
+            searchSubscriber, rangeDate, showDeleteSubscriberModal } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -172,6 +212,19 @@ class Subscribers extends Component {
                                     current={page}
                                     total={allSubscribersCount}
                                 /> : ''}
+                                {showDeleteSubscriberModal &&
+                                    <Modal
+                                        title="Delete Subscriber"
+                                        onCancel={this._closeDeleteSubscriberModal}
+                                        visible={showDeleteSubscriberModal}
+                                        footer={[
+                                            <Button onClick={this._closeDeleteSubscriberModal}>No</Button>,
+                                            <Button onClick={this._deleteSubscriber}>Yes</Button>,
+                                        ]}
+                                    >
+                                        Are you sure you want to delete this subscriber ?
+                                    </Modal>
+                                }
                             </TabPane>
                         ))}
                     </Tabs>

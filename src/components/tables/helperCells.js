@@ -19,6 +19,7 @@ import { Inquiry } from '../../containers/Page/Inquiry/inquiry';
 import { CoinRequests } from '../../containers/Page/Coins/coinRequests';
 import { LimitManagement } from '../../containers/Page/LimitManagement/limitManagement';
 import { KYC } from '../../containers/Page/KYC/kyc';
+import { Subscribers } from '../../containers/Page/Subscribe/subscribers';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
 
@@ -181,6 +182,10 @@ const viewInquiry = (value, first_name, last_name, email, message, created_at) =
     Inquiry.viewInquiry(value, first_name, last_name, email, message, created_at);
 }
 
+const deleteInquiry = (value, first_name, last_name, email, message, created_at) => {
+    Inquiry.deleteInquiry(value, first_name, last_name, email, message, created_at);
+}
+
 const viewCoinReq = (value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site) => {
     CoinRequests.viewCoinReq(value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site);
 }
@@ -195,6 +200,10 @@ const approveKYC = (value, first_name, last_name, email, direct_response, kycDoc
 
 const viewKYC = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => {
     KYC.viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type);
+}
+
+const deleteSubscriber = (value, email, is_news_feed, created_at) => {
+    Subscribers.deleteSubscriber(value, email, is_news_feed, created_at);
 }
 
 const DateCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : ''}</p>;
@@ -235,7 +244,8 @@ const JobActionCell = (value, position, location, short_desc, job_desc, category
 const JobSwitchCell = (value, position, location, short_desc, job_desc, category_id, is_active) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) }} />
 const JobButtonCell = (value) => <Button type="primary" onClick={() => showApplicants(value)} >Show Applications</Button>;
 const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter)} /></Tooltip></div>;
-const InquiryActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewInquiry(value, first_name, last_name, email, message, created_at)} /></Tooltip></div>;
+const InquiryActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteInquiry(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewInquiry(value, first_name, last_name, email, message, created_at)} /></Tooltip></div>;
+const SubscriberActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteSubscriber(value)} style={{ "cursor": "pointer" }} /></Tooltip></div>;
 const CoinReqActionCell = (value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoinReq(value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site)} /></Tooltip></div>;
 const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => { direct_response != 'ACCEPT' ? <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip><Tooltip title="Reject"><Icon type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div> : 'b;la' };
 const KYCActionCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip></div>;
@@ -285,5 +295,6 @@ export {
     CoinReqActionCell,
     KYCStatusCell,
     KYCActionCell,
-    BlogSwitchCell
+    BlogSwitchCell,
+    SubscriberActionCell
 };
