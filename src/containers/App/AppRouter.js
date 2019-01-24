@@ -39,11 +39,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Employee/employee")),
         module: "employee"
     },
-    {
-        path: "blogs",
-        component: asyncComponent(() => import("../Page/Blogs/blogs")),
-        module: "blogs"
-    },
+    // {
+    //     path: "blogs",
+    //     component: asyncComponent(() => import("../Page/Blogs/blogs")),
+    //     module: "blogs"
+    // },
     {
         path: "pairs",
         component: asyncComponent(() => import("../Page/Pairs/pairs")),

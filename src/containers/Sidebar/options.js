@@ -41,12 +41,12 @@ const options = [
     leftIcon: "fas fa-file",
     module: "static_page"
   },
-  {
-    key: "blogs",
-    label: "sidebar.blogs",
-    leftIcon: "far fa-file-alt",
-    module: "blogs"
-  },
+  // {
+  //   key: "blogs",
+  //   label: "sidebar.blogs",
+  //   leftIcon: "far fa-file-alt",
+  //   module: "blogs"
+  // },
   {
     key: "roles",
     label: "sidebar.roles",

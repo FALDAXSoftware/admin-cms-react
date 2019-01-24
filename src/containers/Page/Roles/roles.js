@@ -54,7 +54,6 @@ class Roles extends Component {
             inquiries,
             jobs,
             pairs,
-            blogs,
             limit_management,
             transaction_history,
             trade_history,
@@ -85,12 +84,12 @@ class Roles extends Component {
     }
 
     static editRole(value, name, users, coins, announcement, static_page, roles,
-        countries, employee, pairs, blogs, limit_management, transaction_history,
+        countries, employee, pairs, limit_management, transaction_history,
         trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
         contact_setting, kyc, is_active) {
         let roleDetails = {
             value, name, users, coins, announcement, static_page, roles, countries,
-            employee, pairs, blogs, limit_management, transaction_history, trade_history,
+            employee, pairs, limit_management, transaction_history, trade_history,
             withdraw_requests, coin_requests, inquiries, jobs, subscribe,
             contact_setting, kyc, is_active
         }
