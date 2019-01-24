@@ -24,7 +24,6 @@ class EditRoleModal extends Component {
             countries: this.props.fields['countries'],
             employee: this.props.fields['employee'],
             pairs: this.props.fields['pairs'],
-            blogs: this.props.fields['blogs'],
             limit_management: this.props.fields['limit_management'],
             trade_history: this.props.fields['trade_history'],
             transaction_history: this.props.fields['transaction_history'],
@@ -38,7 +37,7 @@ class EditRoleModal extends Component {
             all: this.props.fields['employee'] && this.props.fields['coins'] && this.props.fields['users'] &&
                 this.props.fields['static_page'] && this.props.fields['roles'] && this.props.fields['announcement'] &&
                 this.props.fields['countries'] && this.props.fields['pairs'] &&
-                this.props.fields['blogs'] && this.props.fields['limit_management'] &&
+                this.props.fields['limit_management'] &&
                 this.props.fields['trade_history'] && this.props.fields['transaction_history'] &&
                 this.props.fields['jobs'] && this.props.fields['coin_requests'] &&
                 this.props.fields['inquiries'] && this.props.fields['contact_setting'] &&
@@ -63,7 +62,6 @@ class EditRoleModal extends Component {
                 employee: nextProps.fields['employee'],
                 countries: nextProps.fields['countries'],
                 pairs: nextProps.fields['pairs'],
-                blogs: nextProps.fields['blogs'],
                 limit_management: nextProps.fields['limit_management'],
                 trade_history: nextProps.fields['trade_history'],
                 transaction_history: nextProps.fields['transaction_history'],
@@ -77,7 +75,7 @@ class EditRoleModal extends Component {
 
                 all: nextProps.fields['coins'] && nextProps.fields['users'] && nextProps.fields['static_page'] &&
                     nextProps.fields['roles'] && nextProps.fields['announcement'] && nextProps.fields['employee']
-                    && nextProps.fields['countries'] && nextProps.fields['pairs'] && nextProps.fields['blogs'] &&
+                    && nextProps.fields['countries'] && nextProps.fields['pairs'] &&
                     nextProps.fields['withdraw_requests'] && nextProps.fields['subscribe'] && nextProps.fields['contact_setting'] &&
                     nextProps.fields['coin_requests'] && nextProps.fields['kyc'] && nextProps.fields['jobs'] &&
                     nextProps.fields['trade_history'] && nextProps.fields['limit_management'] && nextProps.fields['transaction_history'] &&
@@ -122,12 +120,12 @@ class EditRoleModal extends Component {
     _editRole = () => {
         const { token, getAllRoles } = this.props;
         const { fields, roles, users, coins, static_page, announcement, countries,
-            employee, pairs, blogs, showError, limit_management, trade_history,
+            employee, pairs, showError, limit_management, trade_history,
             transaction_history, jobs, coin_requests, inquiries, contact_setting,
             subscribe, withdraw_requests, kyc
         } = this.state;
         if (users || coins | roles || static_page || announcement || countries ||
-            employee || pairs || blogs || limit_management || trade_history ||
+            employee || pairs || limit_management || trade_history ||
             transaction_history || jobs || coin_requests || inquiries || contact_setting ||
             inquiries || contact_setting || subscribe || withdraw_requests || kyc) {
 
@@ -145,7 +143,6 @@ class EditRoleModal extends Component {
                     countries,
                     employee,
                     pairs,
-                    blogs,
                     limit_management,
                     trade_history,
                     transaction_history,
@@ -190,7 +187,7 @@ class EditRoleModal extends Component {
         if (all == false && field == 'all') {
             this.setState({
                 all: true, coins: true, users: true, static_page: true, announcement: true,
-                countries: true, roles: true, employee: true, pairs: true, blogs: true, limit_management: true, trade_history: true, transaction_history: true,
+                countries: true, roles: true, employee: true, pairs: true, limit_management: true, trade_history: true, transaction_history: true,
                 jobs: true, coin_requests: true, inquiries: true, contact_setting: true,
                 subscribe: true, withdraw_requests: true, kyc: true
             })
@@ -198,7 +195,7 @@ class EditRoleModal extends Component {
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
                     all: false, coins: false, users: false, static_page: false, announcement: false,
-                    countries: false, roles: false, employee: false, pairs: false, blogs: false,
+                    countries: false, roles: false, employee: false, pairs: false,
                     limit_management: false, trade_history: false, transaction_history: false,
                     jobs: false, coin_requests: false, inquiries: false, contact_setting: false,
                     subscribe: false, withdraw_requests: false, kyc: false
@@ -212,7 +209,7 @@ class EditRoleModal extends Component {
     render() {
         const { loader, showEditRoleModal, fields, errMsg, errType, coins, users,
             static_page, announcement, countries, roles, employee, all, isDisabled,
-            pairs, blogs, showError, limit_management, trade_history, transaction_history,
+            pairs, showError, limit_management, trade_history, transaction_history,
             contact_setting, coin_requests, subscribe, withdraw_requests, inquiries, jobs,
             kyc
         } = this.state;
@@ -252,7 +249,6 @@ class EditRoleModal extends Component {
                         <Checkbox checked={roles} onChange={this._onChangeRole.bind(this, 'roles')}>Roles Module</Checkbox><br />
                         <Checkbox checked={employee} onChange={this._onChangeRole.bind(this, 'employee')}>Employee Module</Checkbox><br />
                         <Checkbox checked={pairs} onChange={this._onChangeRole.bind(this, 'pairs')}>Pairs Module</Checkbox><br />
-                        <Checkbox checked={blogs} onChange={this._onChangeRole.bind(this, 'blogs')}>Blogs Module</Checkbox><br />
                         <Checkbox checked={limit_management} onChange={this._onChangeRole.bind(this, 'limit_management')}>Limit Management Module</Checkbox><br />
                         <Checkbox checked={transaction_history} onChange={this._onChangeRole.bind(this, 'transaction_history')}>Transaction History Module</Checkbox><br />
                         <Checkbox checked={trade_history} onChange={this._onChangeRole.bind(this, 'trade_history')}>Trade History Module</Checkbox><br />

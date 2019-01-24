@@ -5,7 +5,7 @@ import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/t
 
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
     isCountry = null, isAnnounce = null, isStatic = null, isEmp = null, isRole = null,
-    isPair = null, isBlog = null, isLimit = null, isTransaction = null, isTrade = null,
+    isPair = null, isLimit = null, isTransaction = null, isTrade = null,
     isWithdraw = null, isCoinReq = null, isInquiry = null, isJobs = null,
     isSubscribe = null, contact = null, isKyc = null, active = false) => {
     const value = object[key];
@@ -18,7 +18,6 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const countries = object[isCountry];
     const employee = object[isEmp];
     const pairs = object[isPair];
-    const blogs = object[isBlog];
     const limit_management = object[isLimit];
     const transaction_history = object[isTransaction];
     const trade_history = object[isTrade];
@@ -34,12 +33,12 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     switch (type) {
         case 'RoleSwitchCell':
             return RoleSwitchCell(value, name, users, coins, announcement, static_page,
-                roles, countries, employee, pairs, blogs, limit_management,
+                roles, countries, employee, pairs, limit_management,
                 transaction_history, trade_history, withdraw_requests, coin_requests,
                 inquiries, jobs, subscribe, contact_setting, kyc, is_active);
         case 'RolesActionCell':
             return RolesActionCell(value, name, users, coins, announcement, static_page,
-                roles, countries, employee, pairs, blogs, limit_management,
+                roles, countries, employee, pairs, limit_management,
                 transaction_history, trade_history, withdraw_requests, coin_requests,
                 inquiries, jobs, subscribe, contact_setting, kyc, is_active);
         default:
@@ -59,7 +58,7 @@ const columns = [
         width: 200,
         render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins',
             'announcement', 'static_page', 'roles', 'countries', 'employee', 'pairs',
-            'blogs', 'limit_management', 'transaction_history', 'trade_history',
+            'limit_management', 'transaction_history', 'trade_history',
             'withdraw_requests', 'coin_requests', 'inquiries', 'jobs', 'subscribe',
             'contact_setting', 'kyc', 'is_active')
     }, {
@@ -68,7 +67,7 @@ const columns = [
         width: 200,
         render: object => renderCell(object,
             'RolesActionCell', 'id', 'name', 'users', 'coins', 'announcement', 'static_page',
-            'roles', 'countries', 'employee', 'pairs', 'blogs', 'limit_management',
+            'roles', 'countries', 'employee', 'pairs', 'limit_management',
             'transaction_history', 'trade_history', 'withdraw_requests', 'coin_requests',
             'inquiries', 'jobs', 'subscribe', 'contact_setting', 'kyc', 'is_active')
     }
