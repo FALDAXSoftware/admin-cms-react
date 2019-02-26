@@ -1,8 +1,8 @@
 //const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
 //const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -1143,6 +1143,38 @@ const ApiUtils = {
         try {
             return fetch(API_URL + "/admin/set-featured-blog", {
                 method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all fees api
+    getFeesData: function (token) {
+        let url = "/admin/get-all-fee";
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit fees api
+    updateFees: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-fee", {
+                method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'

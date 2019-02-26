@@ -20,6 +20,7 @@ import { CoinRequests } from '../../containers/Page/Coins/coinRequests';
 import { LimitManagement } from '../../containers/Page/LimitManagement/limitManagement';
 import { KYC } from '../../containers/Page/KYC/kyc';
 import { Subscribers } from '../../containers/Page/Subscribe/subscribers';
+import { Fees } from '../../containers/Page/Fees/fees';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
 
@@ -206,6 +207,10 @@ const deleteSubscriber = (value, email, is_news_feed, created_at) => {
     Subscribers.deleteSubscriber(value, email, is_news_feed, created_at);
 }
 
+const editFees = (value, trade_volume, maker_fee, taker_fee) => {
+    Fees.editFees(value, trade_volume, maker_fee, taker_fee);
+}
+
 const DateCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : ''}</p>;
 const DateTimeCell = data => <p>{(moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
@@ -213,6 +218,7 @@ const LinkCell = (link, href) => <a href={href ? href : '#'}>{link}</a>;
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text + '%' }}></p>;
 const ApproveCell = text => <p>{text == true ? 'Approved' : 'Dis-Approved'}</p>;
 const IPCell = text => <p>{text.split(':')[3]}</p>;
 const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : 'Neutral'}</p>;
@@ -249,6 +255,8 @@ const SubscriberActionCell = (value, first_name, last_name, email, message, crea
 const CoinReqActionCell = (value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoinReq(value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site)} /></Tooltip></div>;
 const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => { direct_response != 'ACCEPT' ? <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip><Tooltip title="Reject"><Icon type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div> : 'b;la' };
 const KYCActionCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip></div>;
+const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => <p> {is_logged_in == false ? moment.utc(updated_at).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
+const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editFees(value, trade_volume, maker_fee, taker_fee)} /></Tooltip></div>;
 
 export {
     IPCell,
@@ -296,5 +304,8 @@ export {
     KYCStatusCell,
     KYCActionCell,
     BlogSwitchCell,
-    SubscriberActionCell
+    SubscriberActionCell,
+    LogoutDateCell,
+    FeesActionCell,
+    FeesCell
 };

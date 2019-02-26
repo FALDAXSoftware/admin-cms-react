@@ -104,6 +104,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/KYC/kyc")),
         module: "kyc"
     },
+    {
+        path: "fees",
+        component: asyncComponent(() => import("../Page/Fees/fees")),
+        module: "fees"
+    },
 ];
 
 const mandatoryRoutes = [

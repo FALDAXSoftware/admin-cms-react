@@ -125,6 +125,12 @@ const options = [
     leftIcon: "fas fa-id-card",
     module: "kyc"
   },
+  {
+    key: "fees",
+    label: "Fees",
+    leftIcon: "fas fa-id-card",
+    module: "fees"
+  },
 ];
 
 export default options;
