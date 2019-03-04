@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Breadcrumb } from 'antd';
+import { Input, Pagination, notification, Spin } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,7 +8,6 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
 
 class UserTradeHistory extends Component {
     constructor(props) {
@@ -40,10 +39,8 @@ class UserTradeHistory extends Component {
     };
 
     _getUserAllTrades = () => {
-        const { token } = this.props;
+        const { token, user_id } = this.props;
         const { searchTrade, page, limit } = this.state;
-        let path = this.props.location.pathname.split('/');
-        let user_id = path[path.length - 1]
         let _this = this;
 
         _this.setState({ loader: true });
@@ -52,7 +49,7 @@ class UserTradeHistory extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTrades: res.data, allTradeCount: res.transactionCount,
+                        allTrades: res.data, allTradeCount: res.tradeCount,
                         searchTrade: '', user_name: res.user_name.full_name
                     });
                 } else {
@@ -90,43 +87,38 @@ class UserTradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Breadcrumb>
-                        <Breadcrumb.Item>Users</Breadcrumb.Item>
-                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
-                        <Breadcrumb.Item>Trade History</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <Tabs className="isoTableDisplayTab">
-                        {tradeTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
-                                        placeholder="Search trades"
-                                        onSearch={(value) => this._searchTrade(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                {loader && <span className="loader-class">
+                    {tradeTableInfos.map(tableInfo => (
+                        <div>
+                            <div style={{ "display": "inline-block", "width": "100%" }}>
+                                <Search
+                                    placeholder="Search trades"
+                                    onSearch={(value) => this._searchTrade(value)}
+                                    style={{ "float": "right", "width": "250px" }}
+                                    enterButton
+                                />
+                            </div>
+                            {
+                                loader && <span className="loader-class">
                                     <Spin />
-                                </span>}
-                                <TableWrapper
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allTrades}
-                                    className="isoCustomizedTable"
-                                />
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allTradeCount}
-                                />
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                                </span>
+                            }
+                            < TableWrapper
+                                {...this.state}
+                                columns={tableInfo.columns}
+                                pagination={false}
+                                dataSource={allTrades}
+                                className="isoCustomizedTable"
+                            />
+                            <Pagination
+                                style={{ marginTop: '15px' }}
+                                className="ant-users-pagination"
+                                onChange={this._handleTradePagination.bind(this)}
+                                pageSize={50}
+                                current={page}
+                                total={allTradeCount}
+                            />
+                        </div>
+                    ))}
                 </TableDemoStyle>
             </LayoutWrapper>
         );

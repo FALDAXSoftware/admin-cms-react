@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Breadcrumb } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin } from 'antd';
 import { sellOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -8,7 +8,6 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
 
 class SellOrders extends Component {
     constructor(props) {
@@ -21,12 +20,13 @@ class SellOrders extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0
+            page: 0,
+            loader: false
         }
     }
 
     componentDidMount = () => {
-        this._getAllOrders(0);
+        this._getAllOrders();
     }
 
     openNotificationWithIconError = (type) => {
@@ -38,35 +38,34 @@ class SellOrders extends Component {
     };
 
     _getAllOrders = () => {
-        const { token } = this.props;
+        const { token, user_id } = this.props;
         const { searchOrder, page, limit } = this.state;
         let _this = this;
-        let path = this.props.location.pathname.split('/');
-        let user_id = path[path.length - 1]
 
+        _this.setState({ loader: true });
         ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allOrders: res.data, allOrderCount: res.transactionCount,
-                        searchOrder: '', user_name: res.user_name.full_name
+                        allOrders: res.data, allOrderCount: res.sellBookCount,
+                        searchOrder: '', loader: false
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '', loader: false });
                 }
             })
             .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchOrder: '', errType: 'error',
+                    searchOrder: '', errType: 'error', loader: false
                 });
             });
     }
 
     _searchOrder = (val) => {
         this.setState({ searchOrder: val }, () => {
-            this._getAllOrders(0);
+            this._getAllOrders();
         });
     }
 
@@ -77,7 +76,7 @@ class SellOrders extends Component {
     }
 
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page, user_name } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page, loader } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -86,29 +85,25 @@ class SellOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Breadcrumb>
-                        <Breadcrumb.Item>Users</Breadcrumb.Item>
-                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
-                        <Breadcrumb.Item>Sell Orders</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <Tabs className="isoTableDisplayTab">
-                        {sellOrderTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
-                                        placeholder="Search Orders"
-                                        onSearch={(value) => this._searchOrder(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                <TableWrapper
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allOrders}
-                                    className="isoCustomizedTable"
+                    {sellOrderTableInfos.map(tableInfo => (
+                        <div>
+                            <div style={{ "display": "inline-block", "width": "100%" }}>
+                                <Search
+                                    placeholder="Search Orders"
+                                    onSearch={(value) => this._searchOrder(value)}
+                                    style={{ "float": "right", "width": "250px" }}
+                                    enterButton
                                 />
+                            </div>
+                            <TableWrapper
+                                {...this.state}
+                                columns={tableInfo.columns}
+                                pagination={false}
+                                dataSource={allOrders}
+                                className="isoCustomizedTable"
+                            />
+                            {loader && <span className="loader-class"> <Spin /></span>}
+                            {allOrderCount > 0 ?
                                 <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
@@ -117,9 +112,10 @@ class SellOrders extends Component {
                                     current={page}
                                     total={allOrderCount}
                                 />
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                                : ''
+                            }
+                        </div>
+                    ))}
                 </TableDemoStyle>
             </LayoutWrapper>
         );

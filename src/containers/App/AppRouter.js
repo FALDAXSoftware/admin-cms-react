@@ -109,6 +109,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Fees/fees")),
         module: "fees"
     },
+    {
+        path: "panic-button",
+        component: asyncComponent(() => import("../Page/panicButton")),
+        module: "panic_button"
+    },
 ];
 
 const mandatoryRoutes = [
@@ -148,10 +153,17 @@ const mandatoryRoutes = [
         path: "country/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
-
     {
         path: "job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
+    },
+    {
+        path: "users/edit-user/:id",
+        component: asyncComponent(() => import("../Page/Users/editUser"))
+    },
+    {
+        path: "users/:id",
+        component: asyncComponent(() => import("../Page/Users/viewUser"))
     },
 ]
 

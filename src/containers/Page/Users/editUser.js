@@ -9,23 +9,26 @@ import { Tabs, Breadcrumb } from 'antd';
 
 const TabPane = Tabs.TabPane;
 
-class LoginHistory extends Component {
+class EditUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allHistory: [],
+            userDetails: [],
             user_name: ""
         }
     }
 
     componentDidMount = () => {
-        const { location, token, user_id } = this.props;
+        const { location, token } = this.props;
+        let path = location.pathname.split('/');
+        let user_id = path[path.length - 1]
         let _this = this;
 
-        ApiUtils.getUserHistory(token, user_id)
+        ApiUtils.getUserDetails(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ allHistory: res.data, user_name: res.user_name.full_name });
+                console.log('>>>>>>>res', res)
+                _this.setState({ userDetails: res.data });
             })
             .catch((err) => {
                 console.log(err)
@@ -33,11 +36,16 @@ class LoginHistory extends Component {
     }
 
     render() {
-        const { allHistory } = this.state;
+        const { userDetails, user_name } = this.state;
 
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>Users</Breadcrumb.Item>
+                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
+                        <Breadcrumb.Item>Edit User</Breadcrumb.Item>
+                    </Breadcrumb>
                     <Tabs className="isoTableDisplayTab">
                         {historyTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
@@ -46,7 +54,7 @@ class LoginHistory extends Component {
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
-                                        dataSource={allHistory}
+                                        dataSource={userDetails}
                                         className="isoCustomizedTable"
                                     />
                                 </div>
@@ -62,4 +70,4 @@ class LoginHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(LoginHistory);
+    }))(EditUser);

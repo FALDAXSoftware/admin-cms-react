@@ -33,10 +33,10 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, coins, announcement, static_page, roles,
-        countries, employee, pairs, blogs, limit_management, transaction_history,
-        trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
-        contact_setting, kyc, is_active) {
+    static roleStatus(value, name, users, coins, static_page, announcement, countries,
+        roles, employee, pairs, limit_management,
+        transaction_history, trade_history, withdraw_requests, coin_requests,
+        inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -60,6 +60,8 @@ class Roles extends Component {
             subscribe,
             contact_setting,
             kyc,
+            fees,
+            panic_button,
             is_active: !is_active
         };
 
@@ -83,15 +85,15 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, coins, announcement, static_page, roles,
-        countries, employee, pairs, limit_management, transaction_history,
-        trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
-        contact_setting, kyc, is_active) {
+    static editRole(value, name, users, coins, static_page, announcement, countries,
+        roles, employee, pairs, limit_management,
+        transaction_history, trade_history, withdraw_requests, coin_requests,
+        inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
         let roleDetails = {
-            value, name, users, coins, announcement, static_page, roles, countries,
-            employee, pairs, limit_management, transaction_history, trade_history,
-            withdraw_requests, coin_requests, inquiries, jobs, subscribe,
-            contact_setting, kyc, is_active
+            value, name, users, coins, static_page, announcement, countries,
+            roles, employee, pairs, limit_management,
+            transaction_history, trade_history, withdraw_requests, coin_requests,
+            inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active
         }
         console.log('>>>>>>>>', roleDetails)
         self.setState({ showEditRoleModal: true, roleDetails });

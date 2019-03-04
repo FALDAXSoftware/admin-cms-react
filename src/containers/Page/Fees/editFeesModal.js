@@ -42,11 +42,11 @@ class EditFeesModal extends Component {
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        if (e.target.value.trim() == "") {
-            fields[field] = "";
-        } else {
-            fields[field] = e.target.value;
-        }
+        // if (e.target.value.trim() == "") {
+        //     fields[field] = "";
+        // } else {
+        fields[field] = e.target.value;
+        //}
         this.setState({ fields });
     }
 
@@ -134,7 +134,7 @@ class EditFeesModal extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Maker Fee:</span>
-                        <Input placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
+                        <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('maker fee', fields["maker_fee"], 'required|numeric', 'text-danger')}
                         </span>
@@ -142,7 +142,7 @@ class EditFeesModal extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Taker Fee:</span>
-                        <Input placeholder="Taker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
+                        <Input addonAfter={'%'} placeholder="Taker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('Taker Fee', fields["taker_fee"], 'required|numeric', 'text-danger')}
                         </span>

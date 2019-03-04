@@ -753,6 +753,35 @@ const ApiUtils = {
             console.error(error);
         }
     },
+    //page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal
+    getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal) {
+        console.log('>>>>>>', page, limit, token, search, startDate, endDate, user_id, filterVal)
+        let url = "/admin/all-transactions?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && filterVal) {
+            url += "&search=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate) {
+            url += "&search=" + search + "&start_date=" + startDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&search=" + search
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 
     getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
@@ -1156,7 +1185,7 @@ const ApiUtils = {
 
     //get all fees api
     getFeesData: function (token) {
-        let url = "/admin/get-all-fee";
+        let url = "/get-all-fee";
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -1180,6 +1209,36 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //panic button api
+    panicBtn: function (token) {
+        try {
+            return fetch(API_URL + "/panic-button", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    // get user details api
+    getUserDetails: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);

@@ -32,6 +32,8 @@ class AddRoleModal extends Component {
             subscribe: false,
             withdraw_requests: false,
             kyc: false,
+            fees: false,
+            panic_button: false,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -62,7 +64,7 @@ class AddRoleModal extends Component {
             roles: false, countries: false, employee: false, pairs: false,
             showError: false, limit_management: false, trade_history: false, transaction_history: false,
             jobs: false, coin_requests: false, inquiries: false, contact_setting: false,
-            subscribe: false, withdraw_requests: false, kyc: false
+            subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
         }, () => {
             this.props.closeAddModal();
             this._resetAddForm();
@@ -88,7 +90,7 @@ class AddRoleModal extends Component {
             countries: false, employee: false, pairs: false,
             showError: false, limit_management: false, trade_history: false, transaction_history: false,
             jobs: false, coin_requests: false, inquiries: false, contact_setting: false,
-            subscribe: false, withdraw_requests: false, kyc: false
+            subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
         });
     }
 
@@ -97,7 +99,7 @@ class AddRoleModal extends Component {
         let { fields, users, coins, roles, static_page, announcement, countries,
             employee, pairs, showError, limit_management, trade_history,
             transaction_history, jobs, coin_requests, inquiries, contact_setting,
-            subscribe, withdraw_requests, kyc
+            subscribe, withdraw_requests, kyc, fees, panic_button
         } = this.state;
         if (users || coins | roles || static_page || announcement || countries ||
             employee || pairs || limit_management || trade_history ||
@@ -125,7 +127,9 @@ class AddRoleModal extends Component {
                     contact_setting,
                     subscribe,
                     withdraw_requests,
-                    kyc
+                    kyc,
+                    fees,
+                    panic_button
                 };
 
                 ApiUtils.addRole(token, formData)
@@ -158,7 +162,7 @@ class AddRoleModal extends Component {
         let { all, users, coins, roles, static_page, announcement, countries,
             employee, pairs, limit_management, trade_history,
             transaction_history, jobs, withdraw_requests, subscribe, contact_setting,
-            coin_requests, inquiries, kyc
+            coin_requests, inquiries, kyc, fees, panic_button
         } = this.state;
 
         if (all == false && field == 'all') {
@@ -167,12 +171,12 @@ class AddRoleModal extends Component {
                 countries: true, roles: true, employee: true, pairs: true,
                 limit_management: true, trade_history: true, transaction_history: true,
                 jobs: true, coin_requests: true, inquiries: true, contact_setting: true,
-                subscribe: true, withdraw_requests: true, kyc: true
+                subscribe: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
             })
         } else if (!users || !coins | !roles || !static_page || !announcement || !countries ||
             !employee || !pairs || !limit_management || !trade_history || !transaction_history ||
             !jobs || !coin_requests || !inquiries || !contact_setting || subscribe || !withdraw_requests
-            || !kyc) {
+            || !kyc || !fees || !panic_button) {
             this.setState({ all: false, [field]: e.target.checked })
 
         } else {
@@ -182,7 +186,7 @@ class AddRoleModal extends Component {
                     countries: false, roles: false, employee: false, pairs: false, limit_management: false,
                     trade_history: false, transaction_history: false,
                     jobs: false, coin_requests: false, inquiries: false, contact_setting: false,
-                    subscribe: false, withdraw_requests: false, kyc: false
+                    subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
                 })
             } else {
                 if (e.target.checked === false) {
@@ -198,7 +202,8 @@ class AddRoleModal extends Component {
         const { loader, showAddRoleModal, fields, all, users, static_page, announcement,
             coins, countries, roles, employee, errMsg, errType, isDisabled, pairs,
             showError, limit_management, trade_history, transaction_history,
-            contact_setting, coin_requests, subscribe, withdraw_requests, inquiries, jobs, kyc
+            contact_setting, coin_requests, subscribe, withdraw_requests, inquiries, jobs, kyc, fees,
+            panic_button
         } = this.state;
 
         if (errMsg) {
@@ -245,6 +250,8 @@ class AddRoleModal extends Component {
                     <Checkbox checked={contact_setting} onChange={this.onChange.bind(this, 'contact_setting')}>Contact Setting Module</Checkbox><br />
                     <Checkbox checked={subscribe} onChange={this.onChange.bind(this, 'subscribe')}>Subscribe Module</Checkbox><br />
                     <Checkbox checked={kyc} onChange={this.onChange.bind(this, 'kyc')}>KYC Module</Checkbox><br />
+                    <Checkbox checked={fees} onChange={this.onChange.bind(this, 'fees')}>Fees Module</Checkbox><br />
+                    <Checkbox checked={panic_button} onChange={this.onChange.bind(this, 'panic_button')}>Panic Button Module</Checkbox><br />
                 </div>
                 {showError && <span style={{ "color": "red" }}>
                     {'The module field is required.'}

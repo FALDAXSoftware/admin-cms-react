@@ -6,7 +6,6 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
-import ViewUserModal from './viewUserModal';
 import ReferralUsers from './referralUsersModal';
 import { connect } from 'react-redux';
 
@@ -21,7 +20,6 @@ class Users extends Component {
             allUsers: [],
             allUserCount: 0,
             searchUser: '',
-            showViewUserModal: false,
             showReferralModal: false,
             userDetails: [],
             allReferral: [],
@@ -37,6 +35,7 @@ class Users extends Component {
         }
         self = this;
         Users.view = Users.view.bind(this);
+        Users.editUser = Users.editUser.bind(this);
         Users.showReferrals = Users.showReferrals.bind(this);
         Users.changeStatus = Users.changeStatus.bind(this);
     }
@@ -48,6 +47,14 @@ class Users extends Component {
             street_address_2, phone_number, country, dob, is_active, kyc
         }
         self.setState({ userDetails, showViewUserModal: true });
+    }
+
+    static editUser(value, profile_pic, first_name, last_name, email, city_town, street_address,
+        street_address_2, phone_number, country, dob, is_active, kyc) {
+        let userDetails = {
+            value, profile_pic, first_name, last_name, email, city_town, street_address,
+            street_address_2, phone_number, country, dob, is_active, kyc
+        }
     }
 
     static showReferrals(value) {
@@ -150,10 +157,6 @@ class Users extends Component {
         });
     }
 
-    _closeViewUserModal = () => {
-        this.setState({ showViewUserModal: false });
-    }
-
     _closeReferralModal = () => {
         self.setState({ showReferralModal: false });
     }
@@ -195,11 +198,6 @@ class Users extends Component {
                                         <Spin />
                                     </span>}
                                     <div>
-                                        <ViewUserModal
-                                            userDetails={userDetails}
-                                            showViewUserModal={showViewUserModal}
-                                            closeViewUserModal={this._closeViewUserModal}
-                                        />
                                         <TableWrapper
                                             {...this.state}
                                             columns={tableInfo.columns}

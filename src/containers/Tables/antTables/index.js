@@ -17,6 +17,7 @@ import { historyTableInfos } from './loginHistoryConfig';
 import { pairsTableInfos } from './pairsConfig';
 import { limitTableInfos } from './limitConfig';
 import { transactionTableInfos } from './transactionConfig';
+import { userTransactionTableInfos } from './userTransactionConfig.js'
 import { tradeTableInfos } from './tradeConfig';
 import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
@@ -79,5 +80,5 @@ export {
   blogsTableInfos, historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   coinReqTableInfos, inquiryTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
-  KYCInfos, FeesInfos
+  KYCInfos, FeesInfos, userTransactionTableInfos
 };

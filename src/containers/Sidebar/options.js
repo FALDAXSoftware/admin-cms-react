@@ -128,9 +128,16 @@ const options = [
   {
     key: "fees",
     label: "Fees",
-    leftIcon: "fas fa-id-card",
+    leftIcon: "fas fa-percentage",
     module: "fees"
   },
+  {
+    key: "panic-button",
+    label: "Panic Button",
+    leftIcon: "fas fa-ban",
+    module: "panic_button"
+  },
 ];
+
 
 export default options;

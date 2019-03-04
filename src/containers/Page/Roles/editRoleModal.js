@@ -34,6 +34,8 @@ class EditRoleModal extends Component {
             subscribe: this.props.fields['subscribe'],
             withdraw_requests: this.props.fields['withdraw_requests'],
             kyc: this.props.fields['kyc'],
+            fees: this.props.fields['fees'],
+            panic_button: this.props.fields['panic_button'],
             all: this.props.fields['employee'] && this.props.fields['coins'] && this.props.fields['users'] &&
                 this.props.fields['static_page'] && this.props.fields['roles'] && this.props.fields['announcement'] &&
                 this.props.fields['countries'] && this.props.fields['pairs'] &&
@@ -42,7 +44,7 @@ class EditRoleModal extends Component {
                 this.props.fields['jobs'] && this.props.fields['coin_requests'] &&
                 this.props.fields['inquiries'] && this.props.fields['contact_setting'] &&
                 this.props.fields['subscribe'] && this.props.fields['withdraw_requests'] &&
-                this.props.fields['kyc'],
+                this.props.fields['kyc'] && this.props.fields['fees'] && this.props.fields['panic_button'],
             isDisabled: false,
             showError: false
         }
@@ -54,32 +56,35 @@ class EditRoleModal extends Component {
             this.setState({
                 showEditRoleModal: nextProps.showEditRoleModal,
                 fields: nextProps.fields,
-                coins: nextProps.fields['coins'],
                 users: nextProps.fields['users'],
+                coins: nextProps.fields['coins'],
                 static_page: nextProps.fields['static_page'],
-                roles: nextProps.fields['roles'],
                 announcement: nextProps.fields['announcement'],
-                employee: nextProps.fields['employee'],
                 countries: nextProps.fields['countries'],
+                roles: nextProps.fields['roles'],
+                employee: nextProps.fields['employee'],
                 pairs: nextProps.fields['pairs'],
                 limit_management: nextProps.fields['limit_management'],
-                trade_history: nextProps.fields['trade_history'],
                 transaction_history: nextProps.fields['transaction_history'],
-                jobs: nextProps.fields['jobs'],
+                trade_history: nextProps.fields['trade_history'],
+                withdraw_requests: nextProps.fields['withdraw_requests'],
                 coin_requests: nextProps.fields['coin_requests'],
                 inquiries: nextProps.fields['inquiries'],
+                jobs: nextProps.fields['jobs'],
                 contact_setting: nextProps.fields['contact_setting'],
                 subscribe: nextProps.fields['subscribe'],
-                withdraw_requests: nextProps.fields['withdraw_requests'],
                 kyc: nextProps.fields['kyc'],
-
+                fees: nextProps.fields['fees'],
+                panic_button: nextProps.fields['panic_button'],
                 all: nextProps.fields['coins'] && nextProps.fields['users'] && nextProps.fields['static_page'] &&
                     nextProps.fields['roles'] && nextProps.fields['announcement'] && nextProps.fields['employee']
                     && nextProps.fields['countries'] && nextProps.fields['pairs'] &&
                     nextProps.fields['withdraw_requests'] && nextProps.fields['subscribe'] && nextProps.fields['contact_setting'] &&
                     nextProps.fields['coin_requests'] && nextProps.fields['kyc'] && nextProps.fields['jobs'] &&
                     nextProps.fields['trade_history'] && nextProps.fields['limit_management'] && nextProps.fields['transaction_history'] &&
-                    nextProps.fields['inquiries']
+                    nextProps.fields['inquiries'] && nextProps.fields['fees'] && nextProps.fields['panic_button'] &&
+                    nextProps.fields['contact_setting'] && nextProps.fields['subscribe'] &&
+                    nextProps.fields['withdraw_requests']
                     ? true : false
             });
             this.validator = new SimpleReactValidator();
@@ -119,15 +124,16 @@ class EditRoleModal extends Component {
 
     _editRole = () => {
         const { token, getAllRoles } = this.props;
-        const { fields, roles, users, coins, static_page, announcement, countries,
-            employee, pairs, showError, limit_management, trade_history,
+        const { fields, users, coins, static_page, announcement, countries,
+            roles, employee, pairs, showError, limit_management, trade_history,
             transaction_history, jobs, coin_requests, inquiries, contact_setting,
-            subscribe, withdraw_requests, kyc
+            subscribe, withdraw_requests, kyc, fees, panic_button
         } = this.state;
         if (users || coins | roles || static_page || announcement || countries ||
             employee || pairs || limit_management || trade_history ||
             transaction_history || jobs || coin_requests || inquiries || contact_setting ||
-            inquiries || contact_setting || subscribe || withdraw_requests || kyc) {
+            inquiries || contact_setting || subscribe || withdraw_requests || kyc || fees ||
+            panic_button) {
 
             if (this.validator.allValid() && !showError) {
                 this.setState({ loader: true, isDisabled: true });
@@ -152,7 +158,9 @@ class EditRoleModal extends Component {
                     contact_setting,
                     subscribe,
                     withdraw_requests,
-                    kyc
+                    kyc,
+                    fees,
+                    panic_button
                 };
 
                 ApiUtils.updateRole(token, formData)
@@ -189,7 +197,7 @@ class EditRoleModal extends Component {
                 all: true, coins: true, users: true, static_page: true, announcement: true,
                 countries: true, roles: true, employee: true, pairs: true, limit_management: true, trade_history: true, transaction_history: true,
                 jobs: true, coin_requests: true, inquiries: true, contact_setting: true,
-                subscribe: true, withdraw_requests: true, kyc: true
+                subscribe: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
             })
         } else {
             if (field == 'all' && e.target.checked === false) {
@@ -198,7 +206,7 @@ class EditRoleModal extends Component {
                     countries: false, roles: false, employee: false, pairs: false,
                     limit_management: false, trade_history: false, transaction_history: false,
                     jobs: false, coin_requests: false, inquiries: false, contact_setting: false,
-                    subscribe: false, withdraw_requests: false, kyc: false
+                    subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
                 })
             } else {
                 this.setState({ [field]: e.target.checked })
@@ -211,7 +219,7 @@ class EditRoleModal extends Component {
             static_page, announcement, countries, roles, employee, all, isDisabled,
             pairs, showError, limit_management, trade_history, transaction_history,
             contact_setting, coin_requests, subscribe, withdraw_requests, inquiries, jobs,
-            kyc
+            kyc, fees, panic_button
         } = this.state;
 
         if (errMsg) {
@@ -259,6 +267,8 @@ class EditRoleModal extends Component {
                         <Checkbox checked={contact_setting} onChange={this._onChangeRole.bind(this, 'contact_setting')}>Contact Setting Module</Checkbox><br />
                         <Checkbox checked={subscribe} onChange={this._onChangeRole.bind(this, 'subscribe')}>Subscribe Module</Checkbox><br />
                         <Checkbox checked={kyc} onChange={this._onChangeRole.bind(this, 'kyc')}>KYC Module</Checkbox><br />
+                        <Checkbox checked={fees} onChange={this._onChangeRole.bind(this, 'fees')}>Fees Module</Checkbox><br />
+                        <Checkbox checked={panic_button} onChange={this._onChangeRole.bind(this, 'panic_button')}>Panic Button Module</Checkbox><br />
                     </div>
                     {showError && <span style={{ "color": "red" }}>
                         {'The module field is required.'}
