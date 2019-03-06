@@ -5,7 +5,7 @@ import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, Breadcrumb } from 'antd';
+import { Tabs, Spin } from 'antd';
 
 const TabPane = Tabs.TabPane;
 
@@ -14,26 +14,28 @@ class LoginHistory extends Component {
         super(props);
         this.state = {
             allHistory: [],
-            user_name: ""
+            loader: false
         }
     }
 
     componentDidMount = () => {
-        const { location, token, user_id } = this.props;
+        const { token, user_id } = this.props;
         let _this = this;
 
+        _this.setState({ loader: true })
         ApiUtils.getUserHistory(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ allHistory: res.data, user_name: res.user_name.full_name });
+                _this.setState({ allHistory: res.data, loader: false });
             })
             .catch((err) => {
+                _this.setState({ loader: false })
                 console.log(err)
             });
     }
 
     render() {
-        const { allHistory } = this.state;
+        const { allHistory, loader } = this.state;
 
         return (
             <LayoutWrapper>
@@ -49,6 +51,7 @@ class LoginHistory extends Component {
                                         dataSource={allHistory}
                                         className="isoCustomizedTable"
                                     />
+                                    {loader && <span className="loader-class"> <Spin /></span>}
                                 </div>
                             </TabPane>
                         ))}

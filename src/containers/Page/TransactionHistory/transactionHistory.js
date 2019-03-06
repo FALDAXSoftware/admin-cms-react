@@ -157,8 +157,8 @@ class Transactions extends Component {
                                         onChange={this._changeFilter}
                                         value={filterVal}
                                     >
+                                        <Option value={'send'}>Send</Option>
                                         <Option value={'receive'}>Receive</Option>
-                                        <Option value={'buy'}>Buy</Option>
                                     </Select>
 
                                     <RangePicker

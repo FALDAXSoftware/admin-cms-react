@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, VolumeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, pair = null, m_email = null, t_email = null, buy = null,
     quant = null, fillPrice = null, makerFee = null, takerFee = null, Vol = null, createdOn = null) => {
@@ -20,6 +20,8 @@ const renderCell = (object, type, key, pair = null, m_email = null, t_email = nu
     switch (type) {
         case 'DateCell':
             return DateCell(value, symbol, maker_email, taker_email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
+        case 'VolumeCell':
+            return VolumeCell(value, symbol, maker_email, taker_email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
         default:
             return TextCell(value);
     }
@@ -78,7 +80,9 @@ const columns = [
         title: <IntlMessages id="tradeTable.title.volume" />,
         key: 'volume',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'volume')
+        render: object => renderCell(object, 'VolumeCell', 'id', 'symbol', 'maker_email',
+            'taker_email', 'side', 'quantity', 'fill_price', 'maker_fee', 'taker_fee'
+            , 'volume', 'created_at')
     },
     {
         title: <IntlMessages id="tradeTable.title.created_at" />,

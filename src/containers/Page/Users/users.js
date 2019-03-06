@@ -6,7 +6,6 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
-import ReferralUsers from './referralUsersModal';
 import { connect } from 'react-redux';
 
 const Search = Input.Search;
@@ -20,14 +19,9 @@ class Users extends Component {
             allUsers: [],
             allUserCount: 0,
             searchUser: '',
-            showReferralModal: false,
             userDetails: [],
-            allReferral: [],
-            allReferralCount: 0,
             page: 1,
             limit: 50,
-            referPage: 0,
-            referLimit: 10,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -35,30 +29,12 @@ class Users extends Component {
         }
         self = this;
         Users.view = Users.view.bind(this);
-        Users.editUser = Users.editUser.bind(this);
-        Users.showReferrals = Users.showReferrals.bind(this);
         Users.changeStatus = Users.changeStatus.bind(this);
     }
 
     static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
         street_address_2, phone_number, country, dob, is_active, kyc) {
-        let userDetails = {
-            value, profile_pic, first_name, last_name, email, city_town, street_address,
-            street_address_2, phone_number, country, dob, is_active, kyc
-        }
-        self.setState({ userDetails, showViewUserModal: true });
-    }
-
-    static editUser(value, profile_pic, first_name, last_name, email, city_town, street_address,
-        street_address_2, phone_number, country, dob, is_active, kyc) {
-        let userDetails = {
-            value, profile_pic, first_name, last_name, email, city_town, street_address,
-            street_address_2, phone_number, country, dob, is_active, kyc
-        }
-    }
-
-    static showReferrals(value) {
-        self._getAllReferredUsers(value, 0)
+        self.props.push('dashboard/users/' + value)
     }
 
     static changeStatus(value, profile_pic, first_name, last_name, email, city_town,
@@ -117,34 +93,6 @@ class Users extends Component {
             });
     }
 
-    _getAllReferredUsers = (id, page) => {
-        const { token } = this.props;
-        const { referLimit } = this.state;
-
-        let _this = this;
-
-        this.setState({ loader: true })
-        ApiUtils.getAllReferrals(page, referLimit, token, id)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allReferral: res.data, allReferralCount: res.usersDataCount,
-                        showReferralModal: true, userId: id
-                    });
-                } else {
-                    _this.setState({ errMsg: true, message: res.message });
-                }
-                _this.setState({ loader: false })
-            })
-            .catch(() => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
-                });
-            });
-    }
-
     _searchUser = (val) => {
         this.setState({ searchUser: val, page: 1 }, () => {
             this._getAllUsers(1);
@@ -157,10 +105,6 @@ class Users extends Component {
         });
     }
 
-    _closeReferralModal = () => {
-        self.setState({ showReferralModal: false });
-    }
-
     openNotificationWithIconError = (type) => {
         notification[type]({
             message: this.state.errType,
@@ -170,8 +114,7 @@ class Users extends Component {
     };
 
     render() {
-        const { allUsers, allUserCount, showViewUserModal, allReferral, page,
-            userDetails, showReferralModal, allReferralCount, userId, loader,
+        const { allUsers, allUserCount, showViewUserModal, page, userDetails, userId, loader,
             errMsg, errType
         } = this.state;
 
@@ -213,15 +156,6 @@ class Users extends Component {
                                             current={page}
                                             total={allUserCount}
                                         />
-                                        {showReferralModal &&
-                                            <ReferralUsers
-                                                showReferralModal={showReferralModal}
-                                                allReferral={allReferral}
-                                                allReferralCount={allReferralCount}
-                                                closeReferalModal={this._closeReferralModal}
-                                                getAllReferredUsers={this._getAllReferredUsers.bind(this, userId)}
-                                            />
-                                        }
                                     </div>
                                 </TabPane>
                             ))}

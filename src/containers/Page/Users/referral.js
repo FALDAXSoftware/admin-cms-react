@@ -92,7 +92,7 @@ class Referral extends Component {
                     <span>
                         <b>Referral Percentage</b>
                     </span>
-                    <Input placeholder="Referral Percentage" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                    <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                     <span className="field-error">
                         {this.validator.message('percentage', fields['percentage'], 'required')}
@@ -101,7 +101,7 @@ class Referral extends Component {
                     <span>
                         <b>Referral Days</b>
                     </span>
-                    <Input placeholder="Referral Days" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                    <Input addonAfter={'%'} placeholder="Referral Days" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "days")} value={fields["days"]} />
                     <span className="field-error">
                         {this.validator.message('days', fields['days'], 'required')}

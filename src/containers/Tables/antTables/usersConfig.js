@@ -86,12 +86,12 @@ const columns = [
     //     width: 200,
     //     render: object => renderCell(object, 'TextCell', 'phone_number')
     // },
-    {
-        title: <IntlMessages id="antTable.title.referrals" />,
-        key: 'button',
-        width: 200,
-        render: object => renderCell(object, 'ButtonCell', 'id')
-    },
+    // {
+    //     title: <IntlMessages id="antTable.title.referrals" />,
+    //     key: 'button',
+    //     width: 200,
+    //     render: object => renderCell(object, 'ButtonCell', 'id')
+    // },
     {
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',

@@ -103,14 +103,17 @@ class BuyOrders extends Component {
                                 className="isoCustomizedTable"
                             />
                             {loader && <span className="loader-class"> <Spin /></span>}
-                            <Pagination
-                                style={{ marginTop: '15px' }}
-                                className="ant-users-pagination"
-                                onChange={this._handleOrderPagination.bind(this)}
-                                pageSize={50}
-                                current={page}
-                                total={allOrderCount}
-                            />
+
+                            {allOrderCount > 0 ?
+                                <Pagination
+                                    style={{ marginTop: '15px' }}
+                                    className="ant-users-pagination"
+                                    onChange={this._handleOrderPagination.bind(this)}
+                                    pageSize={50}
+                                    current={page}
+                                    total={allOrderCount}
+                                />
+                                : ''}
                         </div>
                     ))}
                 </TableDemoStyle>

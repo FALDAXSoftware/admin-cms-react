@@ -133,7 +133,6 @@ class UserTransactionHistory extends Component {
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
             searchTransaction } = this.state;
-        console.log('searchTransaction', searchTransaction)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -165,11 +164,7 @@ class UserTransactionHistory extends Component {
                                 <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
                                 <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                             </div>
-                            {
-                                loader && <span className="loader-class">
-                                    <Spin />
-                                </span>
-                            }
+                            {loader && <span className="loader-class"><Spin /></span>}
                             < TableWrapper
                                 style={{ marginTop: '20px' }}
                                 {...this.state}

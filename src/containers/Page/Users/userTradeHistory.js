@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Spin } from 'antd';
+import { Input, Pagination, notification, Spin, Select, Button } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,7 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 
-const Search = Input.Search;
+const Option = Select.Option;
 
 class UserTradeHistory extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ class UserTradeHistory extends Component {
             errType: 'Success',
             page: 0,
             loader: false,
-            user_name: ""
+            filterVal: '',
         }
     }
 
@@ -38,22 +38,29 @@ class UserTradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
+    _changeSearch = (field, e) => {
+        this.setState({ searchTrade: field.target.value })
+    }
+
+    _changeFilter = (val) => {
+        this.setState({ filterVal: val });
+    }
+
     _getUserAllTrades = () => {
         const { token, user_id } = this.props;
-        const { searchTrade, page, limit } = this.state;
+        const { searchTrade, page, limit, filterVal } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id)
+        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount,
-                        searchTrade: '', user_name: res.user_name.full_name
+                        allTrades: res.data, allTradeCount: res.tradeCount
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchTrade: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
@@ -65,10 +72,8 @@ class UserTradeHistory extends Component {
             });
     }
 
-    _searchTrade = (val) => {
-        this.setState({ searchTrade: val }, () => {
-            this._getUserAllTrades();
-        });
+    _searchTrade = () => {
+        this._getUserAllTrades();
     }
 
     _handleTradePagination = (page) => {
@@ -77,8 +82,15 @@ class UserTradeHistory extends Component {
         })
     }
 
+    _resetFilters = () => {
+        this.setState({ filterVal: '', searchTrade: '' }, () => {
+            this._getUserAllTrades();
+        })
+    }
+
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader, user_name } = this.state;
+        const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
+            searchTrade } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -90,19 +102,29 @@ class UserTradeHistory extends Component {
                     {tradeTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Search
+                                <Input
                                     placeholder="Search trades"
-                                    onSearch={(value) => this._searchTrade(value)}
-                                    style={{ "float": "right", "width": "250px" }}
-                                    enterButton
+                                    onChange={this._changeSearch.bind(this)}
+                                    style={{ "width": "200px" }}
+                                    value={searchTrade}
                                 />
+
+                                <Select
+                                    style={{ width: 125, "marginLeft": "15px" }}
+                                    placeholder="Select a type"
+                                    onChange={this._changeFilter}
+                                    value={filterVal}
+                                >
+                                    <Option value={'Buy'}>Buy</Option>
+                                    <Option value={'Sell'}>Sell</Option>
+                                </Select>
+
+                                <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
+                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                             </div>
-                            {
-                                loader && <span className="loader-class">
-                                    <Spin />
-                                </span>
-                            }
+                            {loader && <span className="loader-class"><Spin /></span>}
                             < TableWrapper
+                                style={{ marginTop: '20px' }}
                                 {...this.state}
                                 columns={tableInfo.columns}
                                 pagination={false}

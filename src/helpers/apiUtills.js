@@ -786,19 +786,19 @@ const ApiUtils = {
     getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && startDate && endDate) {
-            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
-            url += "&search=" + search;
+            url += "&data=" + search;
         }
 
         try {
@@ -814,10 +814,14 @@ const ApiUtils = {
         }
     },
 
-    getUserTrades: function (page, limit, token, search, user_id) {
+    getUserTrades: function (page, limit, token, search, user_id, filterVal) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search) {
+        if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search) {
             url += "&data=" + search;
+        } else {
+            url += "&t_type=" + filterVal;
         }
 
         try {
