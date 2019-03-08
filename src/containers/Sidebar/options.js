@@ -95,12 +95,12 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "coin_requests"
   },
-  {
-    key: "inquiries",
-    label: "sidebar.inquiries",
-    leftIcon: "fas fa-comments",
-    module: "inquiries"
-  },
+  // {
+  //   key: "inquiries",
+  //   label: "sidebar.inquiries",
+  //   leftIcon: "fas fa-comments",
+  //   module: "inquiries"
+  // },
   {
     key: "jobs",
     label: "sidebar.jobs",

@@ -930,41 +930,6 @@ const ApiUtils = {
         }
     },
 
-    //get all inquiry api
-    getAllInquiries: function (page, limit, token, search) {
-        let url = "/admin/get-all-inquiry?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
-        }
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete inquiry api call
-    deleteInquiry: function (token, inquiry_id) {
-        try {
-            return fetch(API_URL + "/admin/delete-inquiry", {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ inquiry_id })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //get all jobs api
     getAllJobs: function (page, limit, token, search) {
         let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;

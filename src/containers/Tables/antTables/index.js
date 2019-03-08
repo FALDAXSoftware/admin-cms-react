@@ -23,7 +23,6 @@ import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
 import { buyOrderTableInfos } from './buyOrderConfig';
 import { coinReqTableInfos } from './coinRequestConfig';
-import { inquiryTableInfos } from './inquiryConfig';
 import { jobsTableInfos } from './jobsConfig';
 import { jobAppTableInfos } from './jobAppConfig';
 import { subscriberTableinfos } from './subscriberConfig';
@@ -79,6 +78,6 @@ export {
   AnnounceInfos, countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
   blogsTableInfos, historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
-  coinReqTableInfos, inquiryTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
+  coinReqTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
   KYCInfos, FeesInfos, userTransactionTableInfos
 };

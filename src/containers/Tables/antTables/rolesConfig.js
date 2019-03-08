@@ -6,7 +6,7 @@ import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/t
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
     isCountry = null, isAnnounce = null, isStatic = null, isEmp = null, isRole = null,
     isPair = null, isLimit = null, isTransaction = null, isTrade = null,
-    isWithdraw = null, isCoinReq = null, isInquiry = null, isJobs = null,
+    isWithdraw = null, isCoinReq = null, isJobs = null,
     isSubscribe = null, contact = null, isKyc = null, active = false, fee = null, panic = null) => {
     const value = object[key];
     const name = object[first_name];
@@ -23,7 +23,6 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const trade_history = object[isTrade];
     const withdraw_requests = object[isWithdraw];
     const coin_requests = object[isCoinReq];
-    const inquiries = object[isInquiry];
     const jobs = object[isJobs];
     const subscribe = object[isSubscribe];
     const contact_setting = object[contact];
@@ -37,12 +36,12 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
             return RoleSwitchCell(value, name, users, coins, static_page, announcement, countries,
                 roles, employee, pairs, limit_management,
                 transaction_history, trade_history, withdraw_requests, coin_requests,
-                inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active);
+                jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active);
         case 'RolesActionCell':
             return RolesActionCell(value, name, users, coins, static_page, announcement, countries,
                 roles, employee, pairs, limit_management,
                 transaction_history, trade_history, withdraw_requests, coin_requests,
-                inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active);
+                jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active);
         default:
             return TextCell(value);
     }
@@ -61,7 +60,7 @@ const columns = [
         render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins',
             'static_page', 'announcement', 'countries', 'roles', 'employee', 'pairs',
             'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'coin_requests', 'inquiries', 'jobs', 'contact_setting', 'subscribe',
+            'withdraw_requests', 'coin_requests', 'jobs', 'contact_setting', 'subscribe',
             'kyc', 'fees', 'panic_button', 'is_active')
     }, {
         title: <IntlMessages id="roleTable.title.actions" />,
@@ -71,7 +70,7 @@ const columns = [
             'RolesActionCell', 'id', 'name', 'users', 'coins',
             'static_page', 'announcement', 'countries', 'roles', 'employee', 'pairs',
             'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'coin_requests', 'inquiries', 'jobs', 'contact_setting', 'subscribe',
+            'withdraw_requests', 'coin_requests', 'jobs', 'contact_setting', 'subscribe',
             'kyc', 'fees', 'panic_button', 'is_active')
     }
 ];

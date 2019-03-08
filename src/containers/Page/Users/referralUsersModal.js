@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Modal, Button } from 'antd';
+import { Tabs, Pagination, Modal, Button, Spin } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
@@ -54,7 +54,7 @@ class ReferralUsers extends Component {
     }
 
     render() {
-        const { allReferral, allReferralCount } = this.state;
+        const { allReferral, allReferralCount, loader } = this.state;
 
         return (
             <LayoutWrapper>
@@ -70,6 +70,7 @@ class ReferralUsers extends Component {
                                         dataSource={allReferral}
                                         className="isoCustomizedTable"
                                     />
+                                    {loader && <span className="loader-class"><Spin /></span>}
                                     {allReferralCount > 0 ?
                                         <Pagination
                                             style={{ marginTop: '15px' }}

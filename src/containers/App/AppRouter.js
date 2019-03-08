@@ -80,11 +80,6 @@ const routes = [
         module: "coin_requests"
     },
     {
-        path: "inquiries",
-        component: asyncComponent(() => import("../Page/Inquiry/inquiry")),
-        module: "inquiries"
-    },
-    {
         path: "jobs",
         component: asyncComponent(() => import("../Page/Jobs/jobs")),
         module: "jobs"

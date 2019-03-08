@@ -88,11 +88,11 @@ class Referral extends Component {
 
         return (
             <div>
-                <div style={{ "marginTop": "10px" }}>
+                <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
                     <span>
                         <b>Referral Percentage</b>
                     </span>
-                    <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                    <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                     <span className="field-error">
                         {this.validator.message('percentage', fields['percentage'], 'required')}
@@ -101,12 +101,12 @@ class Referral extends Component {
                     <span>
                         <b>Referral Days</b>
                     </span>
-                    <Input addonAfter={'%'} placeholder="Referral Days" style={{ "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                    <Input addonAfter={'%'} placeholder="Referral Days" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "days")} value={fields["days"]} />
                     <span className="field-error">
                         {this.validator.message('days', fields['days'], 'required')}
                     </span>
-                    <Button type="primary" onClick={this._updateReferral}> Update </Button>
+                    <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateReferral}> Update </Button>
                 </div>
                 {loader && <Spin indicator={loaderIcon} />}
             </div>

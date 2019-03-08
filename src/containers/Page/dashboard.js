@@ -92,8 +92,6 @@ class Dashboard extends Component {
             coinReqCount: 0,
             subscriberCount: 0,
             withdrawReqCount: 0,
-            lastSevenInquiry: 0,
-            lastThirtyInquiry: 0,
             kyc_disapproved: 0,
             kyc_approved: 0,
             total_kyc: 0,
@@ -124,11 +122,11 @@ class Dashboard extends Component {
             .then(function (res) {
                 if (res) {
                     const {
-                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs, InactivePairs,
-                        legalCountries, illegalCountries,
+                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                        InactivePairs, legalCountries, illegalCountries,
                         neutralCountries, blogsCount, employeeCount, jobsCount,
-                        coinReqCount, subscriberCount, withdrawReqCount, lastSevenInquiry,
-                        lastThirtyInquiry, kyc_disapproved, kyc_approved, total_kyc, kyc_pending
+                        coinReqCount, subscriberCount, withdrawReqCount, kyc_disapproved, kyc_approved,
+                        total_kyc, kyc_pending
 
                     } = res;
                     _this.setState({
@@ -136,8 +134,7 @@ class Dashboard extends Component {
                         InactivePairs, legalCountries,
                         illegalCountries, neutralCountries, blogsCount, employeeCount,
                         jobsCount, coinReqCount, subscriberCount, withdrawReqCount,
-                        lastSevenInquiry, lastThirtyInquiry, kyc_disapproved, kyc_approved,
-                        total_kyc, kyc_pending
+                        kyc_disapproved, kyc_approved, total_kyc, kyc_pending
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -153,7 +150,7 @@ class Dashboard extends Component {
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
             neutralCountries, blogsCount, employeeCount, jobsCount, coinReqCount,
-            subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry,
+            subscriberCount, withdrawReqCount,
             kyc_approved, kyc_disapproved, total_kyc, kyc_pending
         } = this.state;
 
@@ -278,18 +275,6 @@ class Dashboard extends Component {
                             text={'Active Pairs'}
                             text2={'Inactive Pairs'}
                             icon="fa fa-coins"
-                            fontColor="#ffffff" />
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <CountCard number={lastSevenInquiry}
-                            headColor={'#E54D0B'}
-                            number2={lastThirtyInquiry}
-                            bgColor={'#E3703E'}
-                            title={'Inquiry'}
-                            text={'Last Seven Days Inquiry'}
-                            text2={'Last Thirty Days Inquiry'}
-                            icon="fas fa-comments"
                             fontColor="#ffffff" />
                     </Col>
 

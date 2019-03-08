@@ -36,7 +36,7 @@ class Roles extends Component {
     static roleStatus(value, name, users, coins, static_page, announcement, countries,
         roles, employee, pairs, limit_management,
         transaction_history, trade_history, withdraw_requests, coin_requests,
-        inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
+        jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -51,7 +51,6 @@ class Roles extends Component {
             name: name,
             withdraw_requests,
             coin_requests,
-            inquiries,
             jobs,
             pairs,
             limit_management,
@@ -88,12 +87,12 @@ class Roles extends Component {
     static editRole(value, name, users, coins, static_page, announcement, countries,
         roles, employee, pairs, limit_management,
         transaction_history, trade_history, withdraw_requests, coin_requests,
-        inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
+        jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
         let roleDetails = {
             value, name, users, coins, static_page, announcement, countries,
             roles, employee, pairs, limit_management,
             transaction_history, trade_history, withdraw_requests, coin_requests,
-            inquiries, jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active
+            jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active
         }
         console.log('>>>>>>>>', roleDetails)
         self.setState({ showEditRoleModal: true, roleDetails });
