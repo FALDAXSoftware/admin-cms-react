@@ -148,14 +148,14 @@ class Users extends Component {
                                             dataSource={allUsers}
                                             className="isoCustomizedTable"
                                         />
-                                        <Pagination
+                                        {allUserCount > 0 ? <Pagination
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleUserPagination.bind(this)}
                                             pageSize={50}
                                             current={page}
                                             total={allUserCount}
-                                        />
+                                        /> : ''}
                                     </div>
                                 </TabPane>
                             ))}

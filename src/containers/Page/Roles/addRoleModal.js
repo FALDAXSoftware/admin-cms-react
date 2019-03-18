@@ -15,9 +15,7 @@ class AddRoleModal extends Component {
             fields: {},
             coins: false,
             users: false,
-            static_page: false,
             roles: false,
-            announcement: false,
             countries: false,
             employee: false,
             pairs: false,
@@ -26,9 +24,6 @@ class AddRoleModal extends Component {
             trade_history: false,
             transaction_history: false,
             jobs: false,
-            coin_requests: false,
-            contact_setting: false,
-            subscribe: false,
             withdraw_requests: false,
             kyc: false,
             fees: false,
@@ -59,11 +54,10 @@ class AddRoleModal extends Component {
 
     _closeAddRoleModal = () => {
         this.setState({
-            showAddRoleModal: false, users: false, coins: false, static_page: false,
+            showAddRoleModal: false, users: false, coins: false,
             roles: false, countries: false, employee: false, pairs: false,
             showError: false, limit_management: false, trade_history: false, transaction_history: false,
-            jobs: false, coin_requests: false, contact_setting: false,
-            subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
+            jobs: false, coin_requests: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
         }, () => {
             this.props.closeAddModal();
             this._resetAddForm();
@@ -85,25 +79,22 @@ class AddRoleModal extends Component {
 
         fields['name'] = '';
         this.setState({
-            fields, users: false, coins: false, static_page: false, roles: false,
+            fields, users: false, coins: false, roles: false,
             countries: false, employee: false, pairs: false,
             showError: false, limit_management: false, trade_history: false, transaction_history: false,
-            jobs: false, coin_requests: false, contact_setting: false,
-            subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
+            jobs: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
         });
     }
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
-        let { fields, users, coins, roles, static_page, announcement, countries,
+        let { fields, users, coins, roles, countries,
             employee, pairs, showError, limit_management, trade_history,
-            transaction_history, jobs, coin_requests, contact_setting,
-            subscribe, withdraw_requests, kyc, fees, panic_button
+            transaction_history, jobs, withdraw_requests, kyc, fees, panic_button
         } = this.state;
-        if (users || coins | roles || static_page || announcement || countries ||
+        if (users || coins | roles || countries ||
             employee || pairs || limit_management || trade_history ||
-            transaction_history || jobs || coin_requests || contact_setting ||
-            subscribe || withdraw_requests || kyc
+            transaction_history || jobs || withdraw_requests || kyc
         ) {
             if (this.validator.allValid() && !showError) {
                 this.setState({ loader: true, isDisabled: true });
@@ -112,8 +103,6 @@ class AddRoleModal extends Component {
                     roles,
                     users,
                     coins,
-                    static_page,
-                    announcement,
                     countries,
                     employee,
                     pairs,
@@ -121,9 +110,6 @@ class AddRoleModal extends Component {
                     trade_history,
                     transaction_history,
                     jobs,
-                    coin_requests,
-                    contact_setting,
-                    subscribe,
                     withdraw_requests,
                     kyc,
                     fees,
@@ -157,34 +143,30 @@ class AddRoleModal extends Component {
     }
 
     onChange = (field, e, val) => {
-        let { all, users, coins, roles, static_page, announcement, countries,
+        let { all, users, coins, roles, countries,
             employee, pairs, limit_management, trade_history,
-            transaction_history, jobs, withdraw_requests, subscribe, contact_setting,
-            coin_requests, kyc, fees, panic_button
+            transaction_history, jobs, withdraw_requests, kyc, fees, panic_button
         } = this.state;
 
         if (all == false && field == 'all') {
             this.setState({
-                all: true, coins: true, users: true, static_page: true, announcement: true,
+                all: true, coins: true, users: true,
                 countries: true, roles: true, employee: true, pairs: true,
                 limit_management: true, trade_history: true, transaction_history: true,
-                jobs: true, coin_requests: true, contact_setting: true,
-                subscribe: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
+                jobs: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
             })
-        } else if (!users || !coins | !roles || !static_page || !announcement || !countries ||
-            !employee || !pairs || !limit_management || !trade_history || !transaction_history ||
-            !jobs || !coin_requests || !contact_setting || subscribe || !withdraw_requests
+        } else if (!users || !coins | !roles || !countries || !employee || !pairs || !limit_management
+            || !trade_history || !transaction_history || !jobs || !withdraw_requests
             || !kyc || !fees || !panic_button) {
             this.setState({ all: false, [field]: e.target.checked })
 
         } else {
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
-                    all: false, coins: false, users: false, static_page: false, announcement: false,
-                    countries: false, roles: false, employee: false, pairs: false, limit_management: false,
-                    trade_history: false, transaction_history: false,
-                    jobs: false, coin_requests: false, contact_setting: false,
-                    subscribe: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
+                    all: false, coins: false, users: false, countries: false, roles: false,
+                    employee: false, pairs: false, limit_management: false, trade_history: false,
+                    transaction_history: false, jobs: false, withdraw_requests: false, kyc: false,
+                    fees: false, panic_button: false
                 })
             } else {
                 if (e.target.checked === false) {
@@ -197,11 +179,9 @@ class AddRoleModal extends Component {
     }
 
     render() {
-        const { loader, showAddRoleModal, fields, all, users, static_page, announcement,
-            coins, countries, roles, employee, errMsg, errType, isDisabled, pairs,
-            showError, limit_management, trade_history, transaction_history,
-            contact_setting, coin_requests, subscribe, withdraw_requests, jobs, kyc, fees,
-            panic_button
+        const { loader, showAddRoleModal, fields, all, users, coins, countries, roles, employee,
+            errMsg, errType, isDisabled, pairs, showError, limit_management, trade_history,
+            transaction_history, withdraw_requests, jobs, kyc, fees, panic_button
         } = this.state;
 
         if (errMsg) {
@@ -232,8 +212,6 @@ class AddRoleModal extends Component {
                     <Checkbox checked={all} onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
                     <Checkbox checked={users} onChange={this.onChange.bind(this, 'users')}>Users Module</Checkbox><br />
                     <Checkbox checked={coins} onChange={this.onChange.bind(this, 'coins')}>Coins Module</Checkbox><br />
-                    <Checkbox checked={static_page} onChange={this.onChange.bind(this, 'static_page')}>Static Pages Module</Checkbox><br />
-                    <Checkbox checked={announcement} onChange={this.onChange.bind(this, 'announcement')}>Announcement Module</Checkbox><br />
                     <Checkbox checked={countries} onChange={this.onChange.bind(this, 'countries')}>Country Module</Checkbox><br />
                     <Checkbox checked={roles} onChange={this.onChange.bind(this, 'roles')}>Roles Module</Checkbox><br />
                     <Checkbox checked={employee} onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />
@@ -242,10 +220,7 @@ class AddRoleModal extends Component {
                     <Checkbox checked={transaction_history} onChange={this.onChange.bind(this, 'transaction_history')}>Transaction History Module</Checkbox><br />
                     <Checkbox checked={trade_history} onChange={this.onChange.bind(this, 'trade_history')}>Trade History Module</Checkbox><br />
                     <Checkbox checked={withdraw_requests} onChange={this.onChange.bind(this, 'withdraw_requests')}>Withdraw Request Module</Checkbox><br />
-                    <Checkbox checked={coin_requests} onChange={this.onChange.bind(this, 'coin_requests')}>Coin Request Module</Checkbox><br />
                     <Checkbox checked={jobs} onChange={this.onChange.bind(this, 'jobs')}>Jobs Module</Checkbox><br />
-                    <Checkbox checked={contact_setting} onChange={this.onChange.bind(this, 'contact_setting')}>Contact Setting Module</Checkbox><br />
-                    <Checkbox checked={subscribe} onChange={this.onChange.bind(this, 'subscribe')}>Subscribe Module</Checkbox><br />
                     <Checkbox checked={kyc} onChange={this.onChange.bind(this, 'kyc')}>KYC Module</Checkbox><br />
                     <Checkbox checked={fees} onChange={this.onChange.bind(this, 'fees')}>Fees Module</Checkbox><br />
                     <Checkbox checked={panic_button} onChange={this.onChange.bind(this, 'panic_button')}>Panic Button Module</Checkbox><br />

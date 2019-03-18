@@ -29,18 +29,18 @@ const options = [
     leftIcon: "far fa-flag",
     module: "countries"
   },
-  {
-    key: "announcement",
-    label: "sidebar.announce",
-    leftIcon: "fas fa-bullhorn",
-    module: "announcement"
-  },
-  {
-    key: "static-pages",
-    label: "sidebar.staticPages",
-    leftIcon: "fas fa-file",
-    module: "static_page"
-  },
+  // {
+  //   key: "announcement",
+  //   label: "sidebar.announce",
+  //   leftIcon: "fas fa-bullhorn",
+  //   module: "announcement"
+  // },
+  // {
+  //   key: "static-pages",
+  //   label: "sidebar.staticPages",
+  //   leftIcon: "fas fa-file",
+  //   module: "static_page"
+  // },
   // {
   //   key: "blogs",
   //   label: "sidebar.blogs",
@@ -89,12 +89,12 @@ const options = [
     leftIcon: "fas fa-hand-holding-usd",
     module: "withdraw_requests"
   },
-  {
-    key: "coin-requests",
-    label: "sidebar.coinRequests",
-    leftIcon: "fas fa-coins",
-    module: "coin_requests"
-  },
+  // {
+  //   key: "coin-requests",
+  //   label: "sidebar.coinRequests",
+  //   leftIcon: "fas fa-coins",
+  //   module: "coin_requests"
+  // },
   // {
   //   key: "inquiries",
   //   label: "sidebar.inquiries",
@@ -107,18 +107,18 @@ const options = [
     leftIcon: "fas fa-suitcase-rolling",
     module: "jobs"
   },
-  {
-    key: "contact-us",
-    label: "sidebar.contact",
-    leftIcon: "fas fa-user-cog",
-    module: "contact_setting"
-  },
-  {
-    key: "subscribe",
-    label: "sidebar.subscribe",
-    leftIcon: "far fa-newspaper",
-    module: "subscribe"
-  },
+  // {
+  //   key: "contact-us",
+  //   label: "sidebar.contact",
+  //   leftIcon: "fas fa-user-cog",
+  //   module: "contact_setting"
+  // },
+  // {
+  //   key: "subscribe",
+  //   label: "sidebar.subscribe",
+  //   leftIcon: "far fa-newspaper",
+  //   module: "subscribe"
+  // },
   {
     key: "kyc",
     label: "sidebar.kyc",

@@ -33,10 +33,9 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, coins, static_page, announcement, countries,
-        roles, employee, pairs, limit_management,
-        transaction_history, trade_history, withdraw_requests, coin_requests,
-        jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
+    static roleStatus(value, name, users, coins, countries,
+        roles, employee, pairs, limit_management, transaction_history, trade_history,
+        withdraw_requests, jobs, kyc, fees, panic_button, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -44,20 +43,15 @@ class Roles extends Component {
             roles,
             users,
             coins,
-            static_page,
-            announcement,
             countries,
             employee,
             name: name,
             withdraw_requests,
-            coin_requests,
             jobs,
             pairs,
             limit_management,
             transaction_history,
             trade_history,
-            subscribe,
-            contact_setting,
             kyc,
             fees,
             panic_button,
@@ -84,17 +78,14 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, coins, static_page, announcement, countries,
-        roles, employee, pairs, limit_management,
-        transaction_history, trade_history, withdraw_requests, coin_requests,
-        jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active) {
+    static editRole(value, name, users, coins, countries,
+        roles, employee, pairs, limit_management, transaction_history, trade_history,
+        withdraw_requests, jobs, kyc, fees, panic_button, is_active) {
         let roleDetails = {
-            value, name, users, coins, static_page, announcement, countries,
-            roles, employee, pairs, limit_management,
-            transaction_history, trade_history, withdraw_requests, coin_requests,
-            jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active
+            value, name, users, coins, countries,
+            roles, employee, pairs, limit_management, transaction_history, trade_history,
+            withdraw_requests, jobs, kyc, fees, panic_button, is_active
         }
-        console.log('>>>>>>>>', roleDetails)
         self.setState({ showEditRoleModal: true, roleDetails });
     }
 

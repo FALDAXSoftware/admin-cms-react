@@ -317,30 +317,6 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <StickerWidget
-                                number={coinReqCount}
-                                text={'Last 30 Days Coin Requests'}
-                                icon="fas fa-coins"
-                                fontColor="#ffffff"
-                                bgColor="#5499C7"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={subscriberCount}
-                                text={'Total Subscribers'}
-                                icon="far fa-newspaper"
-                                fontColor="#ffffff"
-                                bgColor="#CD6155"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
                                 number={withdrawReqCount}
                                 text={'Last 7 Days Withdraw Requests'}
                                 icon="fas fa-hand-holding-usd"

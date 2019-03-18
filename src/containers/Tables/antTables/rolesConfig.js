@@ -4,16 +4,13 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
-    isCountry = null, isAnnounce = null, isStatic = null, isEmp = null, isRole = null,
+    isCountry = null, isEmp = null, isRole = null,
     isPair = null, isLimit = null, isTransaction = null, isTrade = null,
-    isWithdraw = null, isCoinReq = null, isJobs = null,
-    isSubscribe = null, contact = null, isKyc = null, active = false, fee = null, panic = null) => {
+    isWithdraw = null, isJobs = null, isKyc = null, fee = null, panic = null, active = false) => {
     const value = object[key];
     const name = object[first_name];
     const users = object[isUser];
     const coins = object[isCoin];
-    const announcement = object[isAnnounce];
-    const static_page = object[isStatic];
     const roles = object[isRole];
     const countries = object[isCountry];
     const employee = object[isEmp];
@@ -22,10 +19,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const transaction_history = object[isTransaction];
     const trade_history = object[isTrade];
     const withdraw_requests = object[isWithdraw];
-    const coin_requests = object[isCoinReq];
     const jobs = object[isJobs];
-    const subscribe = object[isSubscribe];
-    const contact_setting = object[contact];
     const kyc = object[isKyc];
     const fees = object[fee];
     const panic_button = object[panic];
@@ -33,15 +27,13 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
 
     switch (type) {
         case 'RoleSwitchCell':
-            return RoleSwitchCell(value, name, users, coins, static_page, announcement, countries,
-                roles, employee, pairs, limit_management,
-                transaction_history, trade_history, withdraw_requests, coin_requests,
-                jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active);
+            return RoleSwitchCell(value, name, users, coins, countries,
+                roles, employee, pairs, limit_management, transaction_history, trade_history,
+                withdraw_requests, jobs, kyc, fees, panic_button, is_active);
         case 'RolesActionCell':
-            return RolesActionCell(value, name, users, coins, static_page, announcement, countries,
-                roles, employee, pairs, limit_management,
-                transaction_history, trade_history, withdraw_requests, coin_requests,
-                jobs, contact_setting, subscribe, kyc, fees, panic_button, is_active);
+            return RolesActionCell(value, name, users, coins, countries,
+                roles, employee, pairs, limit_management, transaction_history, trade_history,
+                withdraw_requests, jobs, kyc, fees, panic_button, is_active);
         default:
             return TextCell(value);
     }
@@ -58,20 +50,18 @@ const columns = [
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins',
-            'static_page', 'announcement', 'countries', 'roles', 'employee', 'pairs',
+            'countries', 'roles', 'employee', 'pairs',
             'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'coin_requests', 'jobs', 'contact_setting', 'subscribe',
-            'kyc', 'fees', 'panic_button', 'is_active')
+            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'is_active')
     }, {
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
             'RolesActionCell', 'id', 'name', 'users', 'coins',
-            'static_page', 'announcement', 'countries', 'roles', 'employee', 'pairs',
+            'countries', 'roles', 'employee', 'pairs',
             'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'coin_requests', 'jobs', 'contact_setting', 'subscribe',
-            'kyc', 'fees', 'panic_button', 'is_active')
+            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'is_active')
     }
 ];
 
