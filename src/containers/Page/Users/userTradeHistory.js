@@ -115,6 +115,7 @@ class UserTradeHistory extends Component {
                                     onChange={this._changeFilter}
                                     value={filterVal}
                                 >
+                                    <Option value={' '}>All</Option>
                                     <Option value={'Buy'}>Buy</Option>
                                     <Option value={'Sell'}>Sell</Option>
                                 </Select>
@@ -131,14 +132,15 @@ class UserTradeHistory extends Component {
                                 dataSource={allTrades}
                                 className="isoCustomizedTable"
                             />
-                            <Pagination
-                                style={{ marginTop: '15px' }}
-                                className="ant-users-pagination"
-                                onChange={this._handleTradePagination.bind(this)}
-                                pageSize={50}
-                                current={page}
-                                total={allTradeCount}
-                            />
+                            {allTradeCount > 0 ?
+                                <Pagination
+                                    style={{ marginTop: '15px' }}
+                                    className="ant-users-pagination"
+                                    onChange={this._handleTradePagination.bind(this)}
+                                    pageSize={50}
+                                    current={page}
+                                    total={allTradeCount}
+                                /> : ''}
                         </div>
                     ))}
                 </TableDemoStyle>

@@ -8,6 +8,7 @@ import Referral from './referral';
 import UserTradeHistory from './userTradeHistory';
 import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';
+import UserWithdrawRequest from './userWithdrawRequest';
 
 const { TabPane } = Tabs;
 
@@ -26,15 +27,15 @@ class ViewUser extends Component {
         return (
             <Tabs defaultActiveKey="1" size={'large'}>
                 <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
-                <TabPane tab="Login History" key="2"><LoginHistory user_id={user_id} /></TabPane>
-                <TabPane tab="Referred Users" key="3"><ReferredUsers user_id={user_id} /></TabPane>
-                <TabPane tab="Referral" key="4"><Referral user_id={user_id} /></TabPane>
-                <TabPane tab="Buy Orders" key="5"><BuyOrders user_id={user_id} /></TabPane>
-                <TabPane tab="Sell Orders" key="6"><SellOrders user_id={user_id} /></TabPane>
-                <TabPane tab="KYC" key="7">Content of tab 3</TabPane>
-                <TabPane tab="Trade History" key="8"><UserTradeHistory user_id={user_id} /></TabPane>
+                <TabPane tab="KYC" key="2">Content of tab 3</TabPane>
+                <TabPane tab="Sell Orders" key="3"><SellOrders user_id={user_id} /></TabPane>
+                <TabPane tab="Buy Orders" key="4"><BuyOrders user_id={user_id} /></TabPane>
+                <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
+                <TabPane tab="Trade History" key="6"><UserTradeHistory user_id={user_id} /></TabPane>
+                <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
+                <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
                 <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
-                <TabPane tab="Withdraw Requests" key="10">Content of tab 3</TabPane>
+                <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
             </Tabs>
         );
     }

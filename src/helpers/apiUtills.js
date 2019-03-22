@@ -1,7 +1,7 @@
 //const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -340,11 +340,12 @@ const ApiUtils = {
     },
 
     //get all counties api
-    getAllCountries: function (page, limit, token, search) {
-        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit;
+    getAllCountries: function (page, limit, token, search, legality) {
+        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit + '&legality=' + legality;
         if (search) {
             url += '&data=' + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -855,6 +856,36 @@ const ApiUtils = {
             url += "&data=" + search;
         }
 
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
+    getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal) {
+        console.log('>>>>>>', page, limit, token, search, startDate, endDate, user_id, filterVal)
+        let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate) {
+            url += "&data=" + search + "&start_date=" + startDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search
+        }
         try {
             return fetch(API_URL + url, {
                 method: 'GET',

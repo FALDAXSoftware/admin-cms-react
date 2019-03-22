@@ -147,6 +147,7 @@ class WithdrawRequest extends Component {
                                         onChange={this._changeFilter}
                                         value={filterVal}
                                     >
+                                        <Option value={' '}>All</Option>
                                         <Option value={'true'}>Approve</Option>
                                         <Option value={'false'}>Dis-Approve</Option>
                                     </Select>

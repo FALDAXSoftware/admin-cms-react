@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination, Spin, notification } from 'antd';
+import { Tabs, Input, Pagination, Spin, notification, Button } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
+import { CSVLink } from "react-csv";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -129,18 +130,21 @@ class Users extends Component {
                         <Tabs className="isoTableDisplayTab">
                             {tableinfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                    <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <div style={{
+                                        "display": "flex", "width": "100%",
+                                        "justifyContent": "flex-end",
+                                        "alignItems": "center",
+                                    }}>
                                         <Search
                                             placeholder="Search users"
                                             onSearch={(value) => this._searchUser(value)}
-                                            style={{ "float": "right", "width": "250px" }}
+                                            style={{ "width": "250px", "marginRight": "20px" }}
                                             enterButton
                                         />
+                                        <CSVLink data={allUsers}><Button type="primary">EXPORT</Button></CSVLink>
                                     </div>
-                                    {loader && <span className="loader-class">
-                                        <Spin />
-                                    </span>}
-                                    <div>
+                                    {loader && <span className="loader-class"><Spin /></span>}
+                                    <div style={{ marginTop: "30px" }}>
                                         <TableWrapper
                                             {...this.state}
                                             columns={tableInfo.columns}

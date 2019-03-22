@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { CSVLink } from "react-csv";
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -157,6 +158,7 @@ class Transactions extends Component {
                                         onChange={this._changeFilter}
                                         value={filterVal}
                                     >
+                                        <Option value={' '}>All</Option>
                                         <Option value={'send'}>Send</Option>
                                         <Option value={'receive'}>Receive</Option>
                                     </Select>
@@ -171,6 +173,8 @@ class Transactions extends Component {
 
                                     <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+
+                                    <CSVLink data={allTransactions}><Button type="primary">EXPORT</Button></CSVLink>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
