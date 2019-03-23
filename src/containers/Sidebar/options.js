@@ -137,6 +137,12 @@ const options = [
     leftIcon: "fas fa-ban",
     module: "panic_button"
   },
+  {
+    key: "news",
+    label: "News",
+    leftIcon: "fas fa-ban",
+    module: "news"
+  },
 ];
 
 

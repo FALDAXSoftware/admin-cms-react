@@ -109,6 +109,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/panicButton")),
         module: "panic_button"
     },
+    {
+        path: "news",
+        component: asyncComponent(() => import("../Page/News/news")),
+        module: "news"
+    },
 ];
 
 const mandatoryRoutes = [
@@ -159,6 +164,10 @@ const mandatoryRoutes = [
     {
         path: "users/:id",
         component: asyncComponent(() => import("../Page/Users/viewUser"))
+    },
+    {
+        path: "employee/:id",
+        component: asyncComponent(() => import("../Page/Employee/employeeProfile"))
     },
 ]
 

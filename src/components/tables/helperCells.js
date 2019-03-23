@@ -118,12 +118,12 @@ const roleStatus = (value, name, users, coins, announcement, static_page, roles,
     Roles.roleStatus(value, name, users, coins, announcement, static_page, roles, countries, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe, contact_setting, kyc, is_active);
 }
 
-const employeeStatus = (value, name, email, role, is_active) => {
-    Employees.employeeStatus(value, name, email, role, is_active);
+const employeeStatus = (value, first_name, last_name, email, phone_number, address, role, is_active) => {
+    Employees.employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active);
 }
 
-const editEmployee = (value, name, email, role, is_active) => {
-    Employees.editEmployee(value, name, email, role, is_active);
+const editEmployee = (value, first_name, last_name, email, phone_number, address, role, is_active) => {
+    Employees.editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active);
 }
 
 const deleteEmployee = (value) => {
@@ -235,8 +235,8 @@ const StateActionCell = (value, name, legality, color, is_active) => <div><Toolt
 const CountryButtonCell = (value, stateCount) => <Button type="primary" onClick={() => showStates(value)} disabled={stateCount > 0 ? false : true} >Show States</Button>;
 const RoleSwitchCell = (value, name, users, coins, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, users, coins, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, is_active) }} />
 const BlogSwitchCell = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => <Switch checked={is_featured} onChange={() => { blogStatus(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) }} />
-const EmployeeSwitchCell = (value, name, email, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, name, email, role, is_active) }} />
-const EmployeeActionCell = (value, name, email, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, name, email, role, is_active)} /></Tooltip></div>;
+const EmployeeSwitchCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active) }} />
+const EmployeeActionCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active)} /></Tooltip></div>;
 const BlogActionCell = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured)} /></Tooltip></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;

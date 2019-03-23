@@ -1244,6 +1244,94 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    // get employee details api
+    getEmployeeDetails: function (token, emp_id) {
+        try {
+            return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    disableTwoFactor: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/disable-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    setupTwoFactor: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/setup-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    verifyOTP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/verify-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAdminDetails: function (token, admin_id) {
+        try {
+            return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate) {
+        try {
+            return fetch(API_URL + "/admin/get-all-news?page=" + page + "&limit=" + limit, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 };
 
 export default ApiUtils;
