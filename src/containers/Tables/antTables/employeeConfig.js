@@ -7,18 +7,26 @@ import {
     EmployeeSwitchCell
 } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, fname = null, emailID = null, roles = null, status = null) => {
+const renderCell = (object, type, key, fname = null, lname = null, emailID = null,
+    phone = null, s_address = null, roles = null, status = null,
+
+) => {
     const value = object[key];
-    const name = object[fname];
+    const first_name = object[fname];
+    const last_name = object[lname];
     const email = object[emailID];
+    const phone_number = object[phone];
+    const address = object[s_address];
     const role = object[roles];
     const is_active = object[status];
 
     switch (type) {
         case 'EmployeeSwitchCell':
-            return EmployeeSwitchCell(value, name, email, role, is_active);
+            return EmployeeSwitchCell(value, first_name, last_name, email, phone_number, address,
+                role, is_active);
         case 'EmployeeActionCell':
-            return EmployeeActionCell(value, name, email, role, is_active);
+            return EmployeeActionCell(value, first_name, last_name, email, phone_number, address,
+                role, is_active);
         default:
             return TextCell(value);
     }
@@ -29,7 +37,7 @@ const columns = [
         title: <IntlMessages id="antTable.title.name" />,
         key: 'name',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'name')
+        render: object => renderCell(object, 'TextCell', 'first_name')
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
@@ -47,14 +55,15 @@ const columns = [
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'name', 'email', 'role', 'is_active')
+        render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'first_name', 'last_name',
+            'email', 'phone_number', 'address', 'role', 'is_active')
     },
     {
         title: <IntlMessages id="antTable.title.details" />,
         key: 'action',
         width: 200,
-        render: object => renderCell(object,
-            'EmployeeActionCell', 'id', 'name', 'email', 'role', 'is_active')
+        render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
+            'email', 'phone_number', 'address', 'role', 'is_active')
     }
 ];
 

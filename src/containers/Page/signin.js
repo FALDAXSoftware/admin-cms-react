@@ -20,7 +20,8 @@ class SignIn extends Component {
       fields: {},
       errMsg: false,
       errMessage: '',
-      redirect: false
+      redirect: false,
+      isOtpRequired: true
     };
     this.validator = new SimpleReactValidator();
   }
@@ -53,7 +54,8 @@ class SignIn extends Component {
     if (this.validator.allValid()) {
       let formData = {
         email: fields["email"],
-        password: fields["password"]
+        password: fields["password"],
+        //otp: fields["otp"]
       };
 
       ApiUtils.adminSignIn(formData)
@@ -116,6 +118,17 @@ class SignIn extends Component {
                   {this.validator.message('Password', this.state.fields['password'], 'required')}
                 </span>
               </div>
+
+              {/* {this.state.isOtpRequired &&
+                <div className="isoInputWrapper">
+                  <span>Two-Factor Authentication is enabled for this account. Please enter your 2FA code below to proceed.</span>
+                  <div>
+                    <Input size="large" type="text" placeholder="OTP" onChange={this._onChangeFields.bind(this, "otp")} />
+                    {this.validator.message('OTP', this.state.fields['otp'], 'required')}
+                  </div>
+                  <span className="otp_msg">{this.state.otp_msg}</span>
+                </div>
+              } */}
 
               <div className="isoInputWrapper isoLeftRightComponent">
                 {/* <Checkbox>

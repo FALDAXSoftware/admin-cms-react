@@ -17,16 +17,18 @@ import { historyTableInfos } from './loginHistoryConfig';
 import { pairsTableInfos } from './pairsConfig';
 import { limitTableInfos } from './limitConfig';
 import { transactionTableInfos } from './transactionConfig';
+import { userTransactionTableInfos } from './userTransactionConfig.js'
 import { tradeTableInfos } from './tradeConfig';
 import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
 import { buyOrderTableInfos } from './buyOrderConfig';
 import { coinReqTableInfos } from './coinRequestConfig';
-import { inquiryTableInfos } from './inquiryConfig';
 import { jobsTableInfos } from './jobsConfig';
 import { jobAppTableInfos } from './jobAppConfig';
 import { subscriberTableinfos } from './subscriberConfig';
 import { KYCInfos } from './kycConfig';
+import { FeesInfos } from './feesConfig';
+import { newsTableInfos } from './newsConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -77,6 +79,6 @@ export {
   AnnounceInfos, countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
   blogsTableInfos, historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
-  coinReqTableInfos, inquiryTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
-  KYCInfos
+  coinReqTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
+  KYCInfos, FeesInfos, userTransactionTableInfos, newsTableInfos
 };

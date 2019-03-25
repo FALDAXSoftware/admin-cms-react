@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Modal, Button } from 'antd';
+import { Tabs, Pagination, Modal, Button, Spin } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
+import ApiUtils from '../../../helpers/apiUtills';
+import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import TableDemoStyle from '../../Tables/antTables/demo.style';
 
 const TabPane = Tabs.TabPane;
 
@@ -10,59 +13,65 @@ class ReferralUsers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showReferralModal: this.props.showReferralModal,
             allReferral: this.props.allReferral,
             allReferralCount: this.props.allReferralCount,
-            userId: this.props.userId
+            userId: this.props.userId,
+            page: 0,
+            limit: 50,
         }
     }
 
-    static getDerivedStateFromProps = (nextProps, prevState) => {
-        if (nextProps !== this.props) {
-            return {
-                allReferral: nextProps.allReferral,
-                allReferralCount: nextProps.allReferralCount,
-                showReferralModal: nextProps.showReferralModal,
-                userId: nextProps.userId
-            }
-        }
-        return null;
+    componentDidMount = () => {
+        const { token, user_id } = this.props;
+        const { limit, page } = this.state;
+
+        let _this = this;
+
+        this.setState({ loader: true })
+        ApiUtils.getAllReferrals(page, limit, token, user_id)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        allReferral: res.data, allReferralCount: res.usersDataCount,
+                        showReferralModal: true, userId: user_id
+                    });
+                } else {
+                    _this.setState({ errMsg: true, message: res.message });
+                }
+                _this.setState({ loader: false })
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errType: 'error', loader: false
+                });
+            });
     }
 
     _handleReferralPagination = (page) => {
         this.props.getAllReferredUsers(page - 1, this.state.userId);
     }
 
-    _closeReferralModal = () => {
-        this.setState({ showReferralModal: false })
-        this.props.closeReferalModal();
-    }
-
     render() {
-        const { allReferral, allReferralCount, showReferralModal } = this.state;
+        const { allReferral, allReferralCount, loader } = this.state;
 
         return (
-            <Modal
-                title="View Referred Users"
-                visible={showReferralModal}
-                onCancel={this._closeReferralModal}
-                footer={[
-                    <Button onClick={this._closeReferralModal}>OK</Button>,
-                ]}
-            >
-                {
-                    allReferralCount > 0 ?
-                        <Tabs className="isoTableDisplayTab">
-                            {
-                                referralInfos.map(tableInfo => (
-                                    <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                        <TableWrapper
-                                            {...this.state}
-                                            columns={tableInfo.columns}
-                                            pagination={false}
-                                            dataSource={allReferral}
-                                            className="isoCustomizedTable"
-                                        />
+            <LayoutWrapper>
+                <TableDemoStyle className="isoLayoutContent">
+                    <Tabs className="isoTableDisplayTab">
+                        {
+                            referralInfos.map(tableInfo => (
+                                <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                    <TableWrapper
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allReferral}
+                                        className="isoCustomizedTable"
+                                    />
+                                    {loader && <span className="loader-class"><Spin /></span>}
+                                    {allReferralCount > 0 ?
                                         <Pagination
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
@@ -70,14 +79,13 @@ class ReferralUsers extends Component {
                                             pageSize={10}
                                             defaultCurrent={1}
                                             total={allReferralCount}
-                                        />
-                                    </TabPane>
-                                ))
-                            }
-                        </Tabs>
-                        : 'No Data'
-                }
-            </Modal>
+                                        /> : ''}
+                                </TabPane>
+                            ))
+                        }
+                    </Tabs>
+                </TableDemoStyle>
+            </LayoutWrapper>
         );
     }
 }

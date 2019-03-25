@@ -37,9 +37,9 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
             return LinkCell(value);
         case 'ButtonCell':
             return ButtonCell(value);
-        case 'UserSwitchCell':
-            return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town,
-                street_address, street_address_2, phone_number, country, dob, is_active, kyc);
+        // case 'UserSwitchCell':
+        //     return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town,
+        //         street_address, street_address_2, phone_number, country, dob, is_active, kyc);
         case 'ActionCell':
             return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
                 street_address, street_address_2, phone_number, country, dob, is_active, kyc);
@@ -86,20 +86,20 @@ const columns = [
     //     width: 200,
     //     render: object => renderCell(object, 'TextCell', 'phone_number')
     // },
-    {
-        title: <IntlMessages id="antTable.title.referrals" />,
-        key: 'button',
-        width: 200,
-        render: object => renderCell(object, 'ButtonCell', 'id')
-    },
-    {
-        title: <IntlMessages id="antTable.title.Active" />,
-        key: 'is_active',
-        width: 200,
-        render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name',
-            'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number',
-            'country', 'dob', 'is_active', 'kyc')
-    },
+    // {
+    //     title: <IntlMessages id="antTable.title.referrals" />,
+    //     key: 'button',
+    //     width: 200,
+    //     render: object => renderCell(object, 'ButtonCell', 'id')
+    // },
+    // {
+    //     title: <IntlMessages id="antTable.title.Active" />,
+    //     key: 'is_active',
+    //     width: 200,
+    //     render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name',
+    //         'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number',
+    //         'country', 'dob', 'is_active', 'kyc')
+    // },
     {
         title: <IntlMessages id="antTable.title.details" />,
         key: 'action',

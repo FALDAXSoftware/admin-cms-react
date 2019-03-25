@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Spin, Select, Button } from 'antd';
-import { tradeTableInfos } from "../../Tables/antTables";
+import { Input, Pagination, notification, Spin, DatePicker, Select, Button } from 'antd';
+import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import moment from 'moment';
 
+const Search = Input.Search;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
-class UserTradeHistory extends Component {
+class UserTransactionHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allTrades: [],
-            allTradeCount: 0,
-            searchTrade: '',
+            allTransactions: [],
+            allTransactionCount: 0,
+            searchTransaction: '',
             limit: 50,
             errMessage: '',
             errMsg: false,
@@ -23,11 +26,15 @@ class UserTradeHistory extends Component {
             page: 0,
             loader: false,
             filterVal: '',
+            user_name: "",
+            startDate: '',
+            endDate: '',
+            rangeDate: []
         }
     }
 
     componentDidMount = () => {
-        this._getUserAllTrades();
+        this._getUserTransactions();
     }
 
     openNotificationWithIconError = (type) => {
@@ -38,59 +45,94 @@ class UserTradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
-    _changeSearch = (field, e) => {
-        this.setState({ searchTrade: field.target.value })
+    _getUserTransactions = () => {
+        const { token, user_id } = this.props;
+        const { searchTransaction, page, limit, startDate, endDate, filterVal } = this.state;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getUserTransaction(page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        allTransactions: res.data, allTransactionCount: res.transactionCount,
+                        searchTransaction: ''
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, searchTransaction: '' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(err => {
+                console.log('err', err)
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchTransaction: '', errType: 'error', loader: false
+                });
+            });
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: moment(date[0]).startOf('day').toISOString(),
+            endDate: moment(date[1]).endOf('day').toISOString()
+        })
     }
 
     _changeFilter = (val) => {
         this.setState({ filterVal: val });
     }
 
-    _getUserAllTrades = () => {
-        const { token, user_id } = this.props;
-        const { searchTrade, page, limit, filterVal } = this.state;
-        let _this = this;
-
-        _this.setState({ loader: true });
-        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
-                }
-                _this.setState({ loader: false });
-            })
-            .catch(err => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTrade: '', errType: 'error', loader: false
-                });
-            });
+    _changeSearch = (field, e) => {
+        this.setState({ searchTransaction: field.target.value })
     }
 
-    _searchTrade = () => {
-        this._getUserAllTrades();
+    _searchTransaction = () => {
+        this._getUserTransactions();
     }
 
-    _handleTradePagination = (page) => {
+    _handleTransactionPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getUserAllTrades();
+            this._getUserTransactions();
         })
     }
 
     _resetFilters = () => {
-        this.setState({ filterVal: '', searchTrade: '' }, () => {
-            this._getUserAllTrades();
+        this.setState({
+            filterVal: '', searchTransaction: '', startDate: '', endDate: '', rangeDate: []
+        }, () => {
+            this._getUserTransactions();
         })
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
-            searchTrade } = this.state;
+        const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
+            searchTransaction } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -99,14 +141,14 @@ class UserTradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {tradeTableInfos.map(tableInfo => (
+                    {userTransactionTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Input
-                                    placeholder="Search trades"
+                                    placeholder="Search transactions"
                                     onChange={this._changeSearch.bind(this)}
                                     style={{ "width": "200px" }}
-                                    value={searchTrade}
+                                    value={searchTransaction}
                                 />
 
                                 <Select
@@ -116,11 +158,11 @@ class UserTradeHistory extends Component {
                                     value={filterVal}
                                 >
                                     <Option value={' '}>All</Option>
-                                    <Option value={'Buy'}>Buy</Option>
-                                    <Option value={'Sell'}>Sell</Option>
+                                    <Option value={'receive'}>Receive</Option>
+                                    <Option value={'send'}>Send</Option>
                                 </Select>
 
-                                <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
+                                <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
                                 <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                             </div>
                             {loader && <span className="loader-class"><Spin /></span>}
@@ -129,18 +171,19 @@ class UserTradeHistory extends Component {
                                 {...this.state}
                                 columns={tableInfo.columns}
                                 pagination={false}
-                                dataSource={allTrades}
+                                dataSource={allTransactions}
                                 className="isoCustomizedTable"
                             />
-                            {allTradeCount > 0 ?
+                            {allTransactionCount > 0 ?
                                 <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
+                                    onChange={this._handleTransactionPagination.bind(this)}
                                     pageSize={50}
                                     current={page}
-                                    total={allTradeCount}
-                                /> : ''}
+                                    total={allTransactionCount}
+                                /> : ''
+                            }
                         </div>
                     ))}
                 </TableDemoStyle>
@@ -152,6 +195,6 @@ class UserTradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(UserTradeHistory);
+    }))(UserTransactionHistory);
 
-export { UserTradeHistory, tradeTableInfos };
+export { UserTransactionHistory, userTransactionTableInfos };

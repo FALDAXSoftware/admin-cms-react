@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Tabs, Pagination, notification, Spin, Select, DatePicker, Button } from 'antd';
-import { tradeTableInfos } from "../../Tables/antTables";
+import { newsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -12,43 +12,71 @@ import { CSVLink } from "react-csv";
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
+var self = this;
 
-class TradeHistory extends Component {
+class News extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allTrades: [],
-            allTradeCount: 0,
-            searchTrade: '',
+            allNews: [],
+            allNewsCount: 0,
+            searchNews: '',
             limit: 50,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0,
+            page: 1,
             loader: false,
             filterVal: '',
             startDate: '',
             endDate: '',
             rangeDate: []
         }
+        News.newsStatus = News.newsStatus.bind(this);
+    }
+
+    static newsStatus(value, cover_image, title, link, posted_at, description, is_active, owner) {
+        const { token } = this.props;
+        let self = this;
+
+        let formData = {
+            id: value,
+            is_active: !is_active
+        };
+
+        self.setState({ loader: true });
+        ApiUtils.changeNewsStatus(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    self._getAllNews();
+                }
+                self.setState({ loader: false });
+            })
+            .catch(err => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchNews: '', errType: 'error', loader: false
+                });
+            });
     }
 
     componentDidMount = () => {
-        this._getAllTrades();
+        this._getAllNews();
     }
 
-    _getAllTrades = () => {
+    _getAllNews = () => {
         const { token } = this.props;
-        const { searchTrade, page, limit, filterVal, startDate, endDate } = this.state;
+        const { searchNews, page, limit, filterVal, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal, startDate, endDate)
+        ApiUtils.getAllNews(page, limit, token, searchNews, filterVal, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount
+                        allNews: res.data, allNewsCount: res.newsCount
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
@@ -58,7 +86,7 @@ class TradeHistory extends Component {
             .catch(err => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTrade: '', errType: 'error', loader: false
+                    searchNews: '', errType: 'error', loader: false
                 });
             });
     }
@@ -71,8 +99,8 @@ class TradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
-    _searchTrade = () => {
-        this._getAllTrades();
+    _searchNews = () => {
+        this._getAllNews();
     }
 
     _changeFilter = (val) => {
@@ -80,7 +108,7 @@ class TradeHistory extends Component {
     }
 
     _changeSearch = (field, e) => {
-        this.setState({ searchTrade: field.target.value })
+        this.setState({ searchNews: field.target.value })
     }
 
     range = (start, end) => {
@@ -116,9 +144,9 @@ class TradeHistory extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchTrade: '', startDate: '', endDate: '', rangeDate: []
+            filterVal: '', searchNews: '', startDate: '', endDate: '', rangeDate: []
         }, () => {
-            this._getAllTrades();
+            this._getAllNews();
         })
     }
 
@@ -126,16 +154,20 @@ class TradeHistory extends Component {
         this.setState({ filterVal: val });
     }
 
-    _handleTradePagination = (page) => {
+    _handleNewsPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getAllTrades();
+            this._getAllNews();
         })
     }
 
-    render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader,
-            searchTrade, rangeDate, filterVal } = this.state;
+    _changeRow = (news) => {
+        console.log('>>>>>>>', news)
+        //this.props.history.push(news.link)
+    }
 
+    render() {
+        const { allNews, allNewsCount, errType, errMsg, page, loader,
+            searchNews, rangeDate, filterVal } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -144,14 +176,14 @@ class TradeHistory extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {tradeTableInfos.map(tableInfo => (
+                        {newsTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Input
-                                        placeholder="Search trades"
+                                        placeholder="Search news"
                                         onChange={this._changeSearch.bind(this)}
                                         style={{ "width": "200px" }}
-                                        value={searchTrade}
+                                        value={searchNews}
                                     />
 
                                     <Select
@@ -161,8 +193,10 @@ class TradeHistory extends Component {
                                         value={filterVal}
                                     >
                                         <Option value={' '}>All</Option>
-                                        <Option value={'Sell'}>Sell</Option>
-                                        <Option value={'Buy'}>Buy</Option>
+                                        <Option value={'bitcoinist'}>Bitcoinist</Option>
+                                        <Option value={'cointelegraph'}>Coin Telegraph</Option>
+                                        <Option value={'ccnpodcast'}>CCN Podcast</Option>
+                                        <Option value={'bitcoin'}>Bitcoin</Option>
                                     </Select>
 
                                     <RangePicker
@@ -173,30 +207,32 @@ class TradeHistory extends Component {
                                         style={{ marginLeft: '15px' }}
                                     />
 
-                                    <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._searchNews}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-
-                                    <CSVLink data={allTrades}><Button type="primary">EXPORT</Button></CSVLink>
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <TableWrapper
+                                    onRow={(record, rowIndex) => {
+                                        return {
+                                            onClick: () => { this._changeRow(record) },
+                                        };
+                                    }}
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}
-                                    dataSource={allTrades}
+                                    dataSource={allNews}
                                     className="isoCustomizedTable"
                                 />
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allTradeCount}
-                                />
+                                {allNewsCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleNewsPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allNewsCount}
+                                    /> : ''}
                             </TabPane>
                         ))}
                     </Tabs>
@@ -209,6 +245,6 @@ class TradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(TradeHistory);
+    }))(News);
 
-export { TradeHistory, tradeTableInfos };
+export { News, newsTableInfos };

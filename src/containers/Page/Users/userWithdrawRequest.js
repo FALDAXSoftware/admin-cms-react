@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Pagination, notification, Spin, Select, Button } from 'antd';
-import { tradeTableInfos } from "../../Tables/antTables";
+import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -9,13 +9,13 @@ import { connect } from 'react-redux';
 
 const Option = Select.Option;
 
-class UserTradeHistory extends Component {
+class UserWithdrawRequest extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allTrades: [],
-            allTradeCount: 0,
-            searchTrade: '',
+            allRequests: [],
+            allReqCount: 0,
+            searchReq: '',
             limit: 50,
             errMessage: '',
             errMsg: false,
@@ -27,7 +27,7 @@ class UserTradeHistory extends Component {
     }
 
     componentDidMount = () => {
-        this._getUserAllTrades();
+        this._getUserRequests();
     }
 
     openNotificationWithIconError = (type) => {
@@ -38,59 +38,62 @@ class UserTradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
-    _changeSearch = (field, e) => {
-        this.setState({ searchTrade: field.target.value })
+    _getUserRequests = () => {
+        const { token, user_id } = this.props;
+        const { searchReq, page, limit, startDate, endDate, filterVal } = this.state;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getUserWithdrawReq(page, limit, token, searchReq, startDate, endDate, user_id, filterVal)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        allRequests: res.data, allReqCount: res.withdrawReqCount
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, searchReq: '' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(err => {
+                console.log('err', err)
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchReq: '', errType: 'error', loader: false
+                });
+            });
     }
 
     _changeFilter = (val) => {
         this.setState({ filterVal: val });
     }
 
-    _getUserAllTrades = () => {
-        const { token, user_id } = this.props;
-        const { searchTrade, page, limit, filterVal } = this.state;
-        let _this = this;
-
-        _this.setState({ loader: true });
-        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
-                }
-                _this.setState({ loader: false });
-            })
-            .catch(err => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTrade: '', errType: 'error', loader: false
-                });
-            });
+    _changeSearch = (field, e) => {
+        this.setState({ searchReq: field.target.value })
     }
 
-    _searchTrade = () => {
-        this._getUserAllTrades();
+    _searchReq = () => {
+        this._getUserRequests();
     }
 
-    _handleTradePagination = (page) => {
+    _handleWithdrawPagination = (page) => {
         this.setState({ page: page - 1 }, () => {
-            this._getUserAllTrades();
+            this._getUserRequests();
         })
     }
 
     _resetFilters = () => {
-        this.setState({ filterVal: '', searchTrade: '' }, () => {
-            this._getUserAllTrades();
+        this.setState({
+            filterVal: '', searchReq: '', startDate: '', endDate: '', rangeDate: []
+        }, () => {
+            this._getUserRequests();
         })
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
-            searchTrade } = this.state;
+        const { allRequests, allReqCount, errType, errMsg, page, loader, filterVal,
+            searchReq } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -99,14 +102,14 @@ class UserTradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {tradeTableInfos.map(tableInfo => (
+                    {userTransactionTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Input
-                                    placeholder="Search trades"
+                                    placeholder="Search requests"
                                     onChange={this._changeSearch.bind(this)}
                                     style={{ "width": "200px" }}
-                                    value={searchTrade}
+                                    value={searchReq}
                                 />
 
                                 <Select
@@ -116,11 +119,11 @@ class UserTradeHistory extends Component {
                                     value={filterVal}
                                 >
                                     <Option value={' '}>All</Option>
-                                    <Option value={'Buy'}>Buy</Option>
-                                    <Option value={'Sell'}>Sell</Option>
+                                    <Option value={'true'}>Approve</Option>
+                                    <Option value={'false'}>Dis-Approve</Option>
                                 </Select>
 
-                                <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
+                                <Button className="search-btn" type="primary" onClick={this._searchReq}>Search</Button>
                                 <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                             </div>
                             {loader && <span className="loader-class"><Spin /></span>}
@@ -129,18 +132,19 @@ class UserTradeHistory extends Component {
                                 {...this.state}
                                 columns={tableInfo.columns}
                                 pagination={false}
-                                dataSource={allTrades}
+                                dataSource={allRequests}
                                 className="isoCustomizedTable"
                             />
-                            {allTradeCount > 0 ?
+                            {allReqCount > 0 ?
                                 <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
+                                    onChange={this._handleWithdrawPagination.bind(this)}
                                     pageSize={50}
                                     current={page}
-                                    total={allTradeCount}
-                                /> : ''}
+                                    total={allReqCount}
+                                /> : ''
+                            }
                         </div>
                     ))}
                 </TableDemoStyle>
@@ -152,6 +156,6 @@ class UserTradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(UserTradeHistory);
+    }))(UserWithdrawRequest);
 
-export { UserTradeHistory, tradeTableInfos };
+export { UserWithdrawRequest, userTransactionTableInfos };

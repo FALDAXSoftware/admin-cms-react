@@ -31,7 +31,7 @@ const columns = [{
 
 const referralInfos = [
     {
-        title: 'Referral Users',
+        title: 'Referred Users',
         value: 'ReferralsTable',
         columns: clone(columns)
     }

@@ -1,8 +1,8 @@
-//const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
+//const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -340,11 +340,12 @@ const ApiUtils = {
     },
 
     //get all counties api
-    getAllCountries: function (page, limit, token, search) {
-        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit;
+    getAllCountries: function (page, limit, token, search, legality) {
+        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit + '&legality=' + legality;
         if (search) {
             url += '&data=' + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -753,23 +754,52 @@ const ApiUtils = {
             console.error(error);
         }
     },
+    //page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal
+    getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal) {
+        console.log('>>>>>>', page, limit, token, search, startDate, endDate, user_id, filterVal)
+        let url = "/admin/all-transactions?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && filterVal) {
+            url += "&search=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate) {
+            url += "&search=" + search + "&start_date=" + startDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&search=" + search
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 
     getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
         if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && startDate && endDate) {
-            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
-            url += "&search=" + search;
+            url += "&data=" + search;
         }
 
         try {
@@ -785,10 +815,14 @@ const ApiUtils = {
         }
     },
 
-    getUserTrades: function (page, limit, token, search, user_id) {
+    getUserTrades: function (page, limit, token, search, user_id, filterVal) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search) {
+        if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search) {
             url += "&data=" + search;
+        } else {
+            url += "&t_type=" + filterVal;
         }
 
         try {
@@ -822,6 +856,36 @@ const ApiUtils = {
             url += "&data=" + search;
         }
 
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
+    getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal) {
+        console.log('>>>>>>', page, limit, token, search, startDate, endDate, user_id, filterVal)
+        let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate) {
+            url += "&data=" + search + "&start_date=" + startDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search
+        }
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -891,41 +955,6 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //get all inquiry api
-    getAllInquiries: function (page, limit, token, search) {
-        let url = "/admin/get-all-inquiry?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
-        }
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete inquiry api call
-    deleteInquiry: function (token, inquiry_id) {
-        try {
-            return fetch(API_URL + "/admin/delete-inquiry", {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ inquiry_id })
             });
         } catch (error) {
             console.error(error);
@@ -1142,6 +1171,213 @@ const ApiUtils = {
     setFeatureBlog: function (token, form) {
         try {
             return fetch(API_URL + "/admin/set-featured-blog", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all fees api
+    getFeesData: function (token) {
+        let url = "/get-all-fee";
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit fees api
+    updateFees: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-fee", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //panic button api
+    panicBtn: function (token) {
+        try {
+            return fetch(API_URL + "/panic-button", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    // get user details api
+    getUserDetails: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    // get employee details api
+    getEmployeeDetails: function (token, emp_id) {
+        try {
+            return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    disableTwoFactor: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/disable-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    setupTwoFactor: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/setup-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    verifyOTP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/verify-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAdminDetails: function (token, admin_id) {
+        try {
+            return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate) {
+        let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
+        if (searchNews && startDate && endDate) {
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&filterVal=" + filterVal;
+        } else if (filterVal && searchNews) {
+            url += "&filterVal=" + filterVal + "&search=" + searchNews;
+        } else {
+            url += "&search=" + searchNews;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    changeNewsStatus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/change-news-status", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getNewsDetails: function (token, news_id) {
+        try {
+            return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateReferral: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/updateUserReferal", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,

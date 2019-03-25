@@ -33,14 +33,17 @@ class Employees extends Component {
         Employees.deleteEmployee = Employees.deleteEmployee.bind(this);
     }
 
-    static employeeStatus(value, name, email, role, is_active) {
+    static employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active) {
         const { token } = self.props;
 
         let message = is_active ? 'Employee has been inactivated successfully.' : 'Employee has been activated successfully.'
         let formData = {
             id: value,
-            name,
+            first_name,
+            last_name,
             email,
+            phone_number,
+            address,
             roles: role,
             is_active: !is_active
         };
@@ -57,9 +60,9 @@ class Employees extends Component {
             });
     }
 
-    static editEmployee(value, name, email, role, is_active) {
+    static editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active) {
         let empDetails = {
-            value, name, email, role, is_active
+            value, first_name, last_name, email, phone_number, address, role, is_active
         }
         self.setState({ showEditEmpModal: true, empDetails });
     }
@@ -147,6 +150,10 @@ class Employees extends Component {
         this.setState({ showDeleteEmpModal: false });
     }
 
+    _changeRow = (emp) => {
+        this.props.history.push('/dashboard/employee/' + emp.id)
+    }
+
     render() {
         const { allEmployee, errType, errMsg, loader, showAddEmpModal,
             showEditEmpModal, empDetails, showDeleteEmpModal } = this.state;
@@ -169,11 +176,14 @@ class Employees extends Component {
                                         getAllEmployee={this._getAllEmployees.bind(this, 0)}
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <div>
                                     <TableWrapper
+                                        onRow={(record, rowIndex) => {
+                                            return {
+                                                onClick: (event) => { this._changeRow(record) },
+                                            };
+                                        }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

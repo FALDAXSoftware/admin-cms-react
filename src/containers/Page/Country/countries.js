@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Button } from 'antd';
+import { Input, Tabs, Pagination, notification, Spin, Button, Select } from 'antd';
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import EditCountryModal from './editCountryModal';
 
-const Search = Input.Search;
+const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 var self;
 
@@ -27,7 +27,8 @@ class Countries extends Component {
             loader: false,
             page: 1,
             showEditCountryModal: false,
-            countryDetails: []
+            countryDetails: [],
+            localityVal: ''
         }
         self = this;
         Countries.countryStatus = Countries.countryStatus.bind(this);
@@ -91,11 +92,11 @@ class Countries extends Component {
 
     _getAllCountries = () => {
         const { token } = this.props;
-        const { limit, searchCountry, page } = this.state;
+        const { limit, searchCountry, page, localityVal } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllCountries(page, limit, token, searchCountry)
+        ApiUtils.getAllCountries(page, limit, token, searchCountry, localityVal)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -130,7 +131,7 @@ class Countries extends Component {
 
     _resetFilters = () => {
         this.props.history.push('/dashboard/countries');
-        this.setState({ searchCountry: '' }, () => {
+        this.setState({ searchCountry: '', localityVal: '' }, () => {
             this._getAllCountries();
         })
     }
@@ -141,9 +142,13 @@ class Countries extends Component {
         })
     }
 
+    _changeLocality = (val) => {
+        this.setState({ localityVal: val });
+    }
+
     render() {
         const { allCountries, allCountryCount, errType, errMsg, loader,
-            page, showEditCountryModal, countryDetails, searchCountry } = this.state;
+            page, showEditCountryModal, countryDetails, searchCountry, localityVal } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -163,12 +168,22 @@ class Countries extends Component {
                                         value={searchCountry}
                                     />
 
+                                    <Select
+                                        style={{ width: 125, "marginLeft": "15px" }}
+                                        placeholder="Select a locality"
+                                        onChange={this._changeLocality}
+                                        value={localityVal}
+                                    >
+                                        <Option value={''}>All</Option>
+                                        <Option value={1}>Legal</Option>
+                                        <Option value={2}>Illegal</Option>
+                                        <Option value={3}>Neutral</Option>
+                                    </Select>
+
                                     <Button className="search-btn" type="primary" onClick={this._searchCountry}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <div>
                                     <TableWrapper
                                         style={{ marginTop: '20px' }}

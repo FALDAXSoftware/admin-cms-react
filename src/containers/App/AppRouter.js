@@ -9,21 +9,21 @@ const routes = [
         component: asyncComponent(() => import("../Page/Users/users")),
         module: "users"
     },
-    {
-        path: "announcement",
-        component: asyncComponent(() => import("../Page/Announce/announce")),
-        module: "announcement"
-    },
+    // {
+    //     path: "announcement",
+    //     component: asyncComponent(() => import("../Page/Announce/announce")),
+    //     module: "announcement"
+    // },
     {
         path: "coins",
         component: asyncComponent(() => import("../Page/Coins/coins")),
         module: "coins"
     },
-    {
-        path: "static-pages",
-        component: asyncComponent(() => import("../Page/StaticPages/staticPages")),
-        module: "static_page"
-    },
+    // {
+    //     path: "static-pages",
+    //     component: asyncComponent(() => import("../Page/StaticPages/staticPages")),
+    //     module: "static_page"
+    // },
     {
         path: "countries",
         component: asyncComponent(() => import("../Page/Country/countries")),
@@ -74,35 +74,45 @@ const routes = [
         component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest")),
         module: "withdraw_requests"
     },
-    {
-        path: "coin-requests",
-        component: asyncComponent(() => import("../Page/Coins/coinRequests")),
-        module: "coin_requests"
-    },
-    {
-        path: "inquiries",
-        component: asyncComponent(() => import("../Page/Inquiry/inquiry")),
-        module: "inquiries"
-    },
+    // {
+    //     path: "coin-requests",
+    //     component: asyncComponent(() => import("../Page/Coins/coinRequests")),
+    //     module: "coin_requests"
+    // },
     {
         path: "jobs",
         component: asyncComponent(() => import("../Page/Jobs/jobs")),
         module: "jobs"
     },
-    {
-        path: "contact-us",
-        component: asyncComponent(() => import("../Page/adminSetting")),
-        module: "contact_setting"
-    },
-    {
-        path: "subscribe",
-        component: asyncComponent(() => import("../Page/Subscribe/subscribers")),
-        module: "subscribe"
-    },
+    // {
+    //     path: "contact-us",
+    //     component: asyncComponent(() => import("../Page/adminSetting")),
+    //     module: "contact_setting"
+    // },
+    // {
+    //     path: "subscribe",
+    //     component: asyncComponent(() => import("../Page/Subscribe/subscribers")),
+    //     module: "subscribe"
+    // },
     {
         path: "kyc",
         component: asyncComponent(() => import("../Page/KYC/kyc")),
         module: "kyc"
+    },
+    {
+        path: "fees",
+        component: asyncComponent(() => import("../Page/Fees/fees")),
+        module: "fees"
+    },
+    {
+        path: "panic-button",
+        component: asyncComponent(() => import("../Page/panicButton")),
+        module: "panic_button"
+    },
+    {
+        path: "news",
+        component: asyncComponent(() => import("../Page/News/news")),
+        module: "news"
     },
 ];
 
@@ -143,10 +153,21 @@ const mandatoryRoutes = [
         path: "country/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
-
     {
         path: "job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
+    },
+    {
+        path: "users/edit-user/:id",
+        component: asyncComponent(() => import("../Page/Users/editUser"))
+    },
+    {
+        path: "users/:id",
+        component: asyncComponent(() => import("../Page/Users/viewUser"))
+    },
+    {
+        path: "employee/:id",
+        component: asyncComponent(() => import("../Page/Employee/employeeProfile"))
     },
 ]
 
