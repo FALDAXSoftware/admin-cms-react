@@ -140,7 +140,7 @@ const options = [
   {
     key: "news",
     label: "News",
-    leftIcon: "fas fa-ban",
+    leftIcon: "fas fa-newspaper",
     module: "news"
   },
 ];

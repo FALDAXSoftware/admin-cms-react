@@ -12,6 +12,7 @@ import { CSVLink } from "react-csv";
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
+var self = this;
 
 class News extends Component {
     constructor(props) {
@@ -31,6 +32,33 @@ class News extends Component {
             endDate: '',
             rangeDate: []
         }
+        News.newsStatus = News.newsStatus.bind(this);
+    }
+
+    static newsStatus(value, cover_image, title, link, posted_at, description, is_active, owner) {
+        const { token } = this.props;
+        let self = this;
+
+        let formData = {
+            id: value,
+            is_active: !is_active
+        };
+
+        self.setState({ loader: true });
+        ApiUtils.changeNewsStatus(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    self._getAllNews();
+                }
+                self.setState({ loader: false });
+            })
+            .catch(err => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    searchNews: '', errType: 'error', loader: false
+                });
+            });
     }
 
     componentDidMount = () => {
@@ -132,10 +160,14 @@ class News extends Component {
         })
     }
 
+    _changeRow = (news) => {
+        console.log('>>>>>>>', news)
+        //this.props.history.push(news.link)
+    }
+
     render() {
         const { allNews, allNewsCount, errType, errMsg, page, loader,
             searchNews, rangeDate, filterVal } = this.state;
-
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -161,8 +193,10 @@ class News extends Component {
                                         value={filterVal}
                                     >
                                         <Option value={' '}>All</Option>
-                                        <Option value={'Sell'}>Sell</Option>
-                                        <Option value={'Buy'}>Buy</Option>
+                                        <Option value={'bitcoinist'}>Bitcoinist</Option>
+                                        <Option value={'cointelegraph'}>Coin Telegraph</Option>
+                                        <Option value={'ccnpodcast'}>CCN Podcast</Option>
+                                        <Option value={'bitcoin'}>Bitcoin</Option>
                                     </Select>
 
                                     <RangePicker
@@ -178,6 +212,11 @@ class News extends Component {
                                 </div>
                                 {loader && <span className="loader-class"><Spin /></span>}
                                 <TableWrapper
+                                    onRow={(record, rowIndex) => {
+                                        return {
+                                            onClick: () => { this._changeRow(record) },
+                                        };
+                                    }}
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}

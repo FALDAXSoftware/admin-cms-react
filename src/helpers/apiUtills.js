@@ -1,7 +1,7 @@
-//const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
-const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
+//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -1320,8 +1320,21 @@ const ApiUtils = {
     },
 
     getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate) {
+        let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
+        if (searchNews && startDate && endDate) {
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&filterVal=" + filterVal;
+        } else if (filterVal && searchNews) {
+            url += "&filterVal=" + filterVal + "&search=" + searchNews;
+        } else {
+            url += "&search=" + searchNews;
+        }
+
         try {
-            return fetch(API_URL + "/admin/get-all-news?page=" + page + "&limit=" + limit, {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -1331,7 +1344,51 @@ const ApiUtils = {
         } catch (error) {
             console.error(error);
         }
-    }
+    },
+
+    changeNewsStatus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/change-news-status", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getNewsDetails: function (token, news_id) {
+        try {
+            return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateReferral: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/updateUserReferal", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;
