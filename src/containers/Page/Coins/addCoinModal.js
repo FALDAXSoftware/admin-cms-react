@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification, Button } from 'antd';
+import { Modal, Input, Icon, Spin, notification, Button, Select } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
@@ -10,6 +10,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
 
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const Option = Select.Option;
 
 class AddCoinModal extends Component {
     constructor(props) {
@@ -23,7 +24,8 @@ class AddCoinModal extends Component {
             errMessage: '',
             errType: 'Success',
             showError: false,
-            isDisabled: false
+            isDisabled: false,
+            selectedToken: false
         }
         this.validator = new SimpleReactValidator();
 
@@ -101,15 +103,16 @@ class AddCoinModal extends Component {
 
         fields['coin_name'] = '';
         fields['coin_code'] = '';
-        fields['description'] = '';
-        fields['limit'] = '';
-        fields['wallet_address'] = '';
-        this.setState({ fields, editorContent: '', showError: false });
+        //fields['description'] = '';
+        fields['minLimit'] = '';
+        fields['maxLimit'] = '';
+        //fields['wallet_address'] = '';
+        this.setState({ fields, editorContent: '', showError: false, selectedToken: false });
     }
 
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
-        let { fields, editorContent } = this.state;
+        let { fields, editorContent, selectedToken } = this.state;
         let coinContent = striptags(editorContent);
 
         if (this.validator.allValid() && this.uploadCoinInput.input.files.length > 0) {
@@ -118,8 +121,9 @@ class AddCoinModal extends Component {
             let formData = new FormData();
             formData.append('coin_name', fields['coin_name']);
             formData.append('coin_code', fields['coin_code'])
-            formData.append('limit', fields['limit']);
-            formData.append('wallet_address', fields['wallet_address']);
+            formData.append('minLimit', fields['minLimit']);
+            formData.append('maxLimit', fields['maxLimit']);
+            formData.append('isERC', selectedToken);
             formData.append('coin_icon', this.uploadCoinInput.input.files[0]);
 
             ApiUtils.addCoin(token, formData)
@@ -154,9 +158,13 @@ class AddCoinModal extends Component {
         }
     }
 
+    _changeFilter = (val) => {
+        this.setState({ selectedToken: val });
+    }
+
     render() {
         const { loader, showAddCoinModal, fields, editorContent, errMsg,
-            errType, showError, isDisabled, showCoinErr
+            errType, showError, isDisabled, showCoinErr, selectedToken
         } = this.state;
 
         const options = {
@@ -221,21 +229,41 @@ class AddCoinModal extends Component {
                 </div> */}
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Limit:</span>
-                    <Input placeholder="Limit" onChange={this._handleChange.bind(this, "limit")} disabled={this.state.disabled} value={fields["limit"]} />
+                    <span>Minimum Limit:</span>
+                    <Input placeholder="Minimum Limit" onChange={this._handleChange.bind(this, "minLimit")} value={fields["minLimit"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('limit', fields["limit"], 'required|numeric', 'text-danger')}
+                        {this.validator.message('minimum limit', fields["minLimit"], 'required|numeric', 'text-danger')}
                     </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
+                    <span>Maximum Limit:</span>
+                    <Input placeholder="Maximum Limit" onChange={this._handleChange.bind(this, "maxLimit")} value={fields["maxLimit"]} />
+                    <span style={{ "color": "red" }}>
+                        {this.validator.message('maximum limit', fields["maxLimit"], 'required|numeric', 'text-danger')}
+                    </span>
+                </div>
+
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Is ERC20 Token? :</span>
+                    <Select
+                        style={{ width: 125, "marginLeft": "15px" }}
+                        placeholder="Select a type"
+                        onChange={this._changeFilter}
+                        value={selectedToken}
+                    >
+                        <Option value={true}>Yes</Option>
+                        <Option value={false}>No</Option>
+                    </Select>
+                </div>
+
+                {/* <div style={{ "marginBottom": "15px" }}>
                     <span>Wallet Address:</span>
                     <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('wallet address', fields["wallet_address"], 'max:45', 'text-danger')}
                     </span>
-                </div>
-
+                </div> */}
                 {loader && <Spin indicator={loaderIcon} />}
             </Modal>
         );

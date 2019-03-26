@@ -43,16 +43,16 @@ const userStatus = (value, profile_pic, first_name, last_name, email, city_town,
     Users.changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc);
 }
 
-const viewCoin = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) => {
-    Coins.view(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon);
+const viewCoin = (value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) => {
+    Coins.view(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon);
 }
 
-const editCoin = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) => {
-    Coins.edit(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon);
+const editCoin = (value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) => {
+    Coins.edit(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon);
 }
 
-const coinstatus = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) => {
-    Coins.changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon);
+const coinstatus = (value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) => {
+    Coins.changeStatus(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon);
 }
 
 const deleteCoin = (value) => {
@@ -226,7 +226,7 @@ const ApproveCell = text => <p>{text == true ? 'Approved' : 'Dis-Approved'}</p>;
 const IPCell = text => <p>{text.split(':')[3]}</p>;
 const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : 'Neutral'}</p>;
 const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Referred Users</Button>;
-const SwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) }} />
+const SwitchCell = (value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) }} />
 const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
 const UserSwitchCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) => <Switch checked={is_active} onChange={() => { userStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) }} />
 const CountrySwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { countryStatus(value, name, legality, color, is_active) }} />
@@ -235,7 +235,7 @@ const NewsSwitchCell = (value, cover_image, title, link, posted_at, description,
 const NewsDescCell = (value) => <Tooltip title={value}><p>{value.slice(0, 35) + (value.length > 35 ? "..." : "")}</p></Tooltip>
 //const NewsActionsCell = (value, cover_image, title, link, posted_at, description, is_active, owner) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewNews(value, cover_image, title, link, posted_at, description, is_active, owner)} /></Tooltip></div>;
 const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc)} /></Tooltip></div>;
-const CoinActionCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon)} /></Tooltip></div>;
+const CoinActionCell = (value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon)} /></Tooltip></div>;
 const PageActionCell = (value, name, title, content, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deletePage(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPage(value, name, title, content, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPage(value, name, title, content, is_active)} /></Tooltip></div>;
 const AnnounceActionCell = (value, name, title, content, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteTemplate(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, title, content, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewTemplate(value, name, title, content, is_active)} /></Tooltip></div>;
 const AnnounceAnnouncementCell = (value) => <Button type="primary" onClick={() => sendAnnouncement(value)} > Announce </Button>;

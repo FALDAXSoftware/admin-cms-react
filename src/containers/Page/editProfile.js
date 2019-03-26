@@ -26,8 +26,8 @@ class EditProfile extends Component {
 
     componentDidMount = () => {
         let fields = this.state.fields;
-        const { name, email, is_twofactor } = this.props.user;
-        fields["name"] = name;
+        const { first_name, email, is_twofactor } = this.props.user;
+        fields["first_name"] = first_name;
         fields["email"] = email;
         this.setState({ fields, is_twofactor });
         this._getAdminDetails();
@@ -87,14 +87,17 @@ class EditProfile extends Component {
     }
 
     _getAdminDetails = () => {
+        console.log('CALL _getAdminDetails');
         const { token, user, login } = this.props;
         let _this = this;
 
         ApiUtils.getAdminDetails(token, user.id)
             .then((response) => response.json())
             .then(function (res) {
+                console.log('_getAdminDetails res', res)
                 if (res) {
                     login({ user: res.data });
+                    _this.setState({ isEnabled: res.data.is_twofactor ? 'ENABLED' : 'DISABLED' })
                 }
             })
             .catch(() => {
@@ -118,7 +121,7 @@ class EditProfile extends Component {
                 if (res.status == 200) {
                     _this.setState({
                         errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success', QRImage: res.dataURL,
+                        loader: false, errType: 'success', QRImage: res.dataURL,
                         QRKey: res.tempSecret
                     }, () => {
                         if (_this.state.is_twofactor == false)
@@ -155,12 +158,15 @@ class EditProfile extends Component {
         ApiUtils.disableTwoFactor(token, formData)
             .then((response) => response.json())
             .then(function (res) {
+                console.log('disableTwoFactor Res', res)
                 if (res.status == 200) {
+                    console.log('inside if');
                     _this.setState({
                         errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success', QRImage: res.QR_code.dataURL, QRKey: res.QR_code.tempSecret
+                        loader: false, errType: 'success'
+                    }, () => {
+                        _this._getAdminDetails();
                     });
-                    _this._getAdminDetails();
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                 }
@@ -185,6 +191,7 @@ class EditProfile extends Component {
         ApiUtils.verifyOTP(token, formData)
             .then((response) => response.json())
             .then(function (res) {
+                console.log('verify Res', res)
                 if (res.status == 200) {
                     let fields = this.state.fields;
                     fields["otp"] = "";
@@ -206,6 +213,7 @@ class EditProfile extends Component {
 
     render() {
         const { loader, fields, errMsg, errType, isEnabled, is_twofactor, QRKey, showQR } = this.state;
+        console.log(isEnabled)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -221,9 +229,9 @@ class EditProfile extends Component {
                     <span>
                         <b>Name</b>
                     </span>
-                    <Input placeholder="Name" style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }} onChange={this._onChangeFields.bind(this, "name")} value={fields["name"]} />
+                    <Input placeholder="Name" style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }} onChange={this._onChangeFields.bind(this, "first_name")} value={fields["first_name"]} />
                     <span className="field-error">
-                        {this.validator.message('Name', fields['name'], 'required|max:30')}
+                        {this.validator.message('Name', fields['first_name'], 'required|max:30')}
                     </span>
 
                     <span>

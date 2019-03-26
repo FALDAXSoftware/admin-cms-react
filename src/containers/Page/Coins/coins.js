@@ -41,22 +41,21 @@ class Coins extends Component {
         Coins.changeStatus = Coins.changeStatus.bind(this);
     }
 
-    static view(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) {
+    static view(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) {
         let coinDetails = {
-            value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon
+            value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon
         }
         self.setState({ coinDetails, showViewCoinModal: true, page: 1 });
     }
 
-    static edit(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) {
+    static edit(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) {
         let coinDetails = {
-            value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon
+            value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon
         }
-        console.log(coinDetails)
         self.setState({ coinDetails, showEditCoinModal: true, page: 1 });
     }
 
-    static changeStatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active, coin_icon) {
+    static changeStatus(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) {
         const { token } = this.props;
 
         let formData = {
@@ -137,7 +136,6 @@ class Coins extends Component {
     }
 
     _showAddCoinModal = () => {
-        console.log(this.state.page)
         this.setState({ showAddCoinModal: true });
     }
 
@@ -195,7 +193,6 @@ class Coins extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-
                         {coinTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
@@ -212,9 +209,7 @@ class Coins extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <div>
                                     <ViewCoinModal
                                         coinDetails={coinDetails}
@@ -248,14 +243,15 @@ class Coins extends Component {
                                         dataSource={allCoins}
                                         className="isoCustomizedTable"
                                     />
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleCoinPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allCoinCount}
-                                    />
+                                    {allCoinCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleCoinPagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={allCoinCount}
+                                        /> : ''}
                                 </div>
                             </TabPane>
                         ))}
