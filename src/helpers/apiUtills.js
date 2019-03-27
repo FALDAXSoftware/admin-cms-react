@@ -899,7 +899,7 @@ const ApiUtils = {
         }
     },
 
-    getAllSellOrders: function (page, limit, token, search, userId) {
+    getAllSellOrders: function (page, limit, token, search, user_id) {
         let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
         if (search) {
             url += "&data=" + search;
@@ -911,14 +911,14 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userId })
+                body: JSON.stringify({ user_id })
             });
         } catch (error) {
             console.error(error);
         }
     },
 
-    getAllBuyOrders: function (page, limit, token, search, userId) {
+    getAllBuyOrders: function (page, limit, token, search, user_id) {
         let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
         if (search) {
             url += "&data=" + search;
@@ -930,7 +930,7 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userId })
+                body: JSON.stringify({ user_id })
             });
         } catch (error) {
             console.error(error);
