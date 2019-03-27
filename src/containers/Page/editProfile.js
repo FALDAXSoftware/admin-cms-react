@@ -97,7 +97,10 @@ class EditProfile extends Component {
                 console.log('_getAdminDetails res', res)
                 if (res) {
                     login({ user: res.data });
-                    _this.setState({ isEnabled: res.data.is_twofactor ? 'ENABLED' : 'DISABLED' })
+                    _this.setState({
+                        isEnabled: res.data.is_twofactor ? 'ENABLED' : 'DISABLED',
+                        is_twofactor: res.data.is_twofactor
+                    })
                 }
             })
             .catch(() => {
@@ -118,7 +121,7 @@ class EditProfile extends Component {
         ApiUtils.setupTwoFactor(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                if (res.status == 200) {
+                if (res) {
                     _this.setState({
                         errMsg: true, errMessage: res.message,
                         loader: false, errType: 'success', QRImage: res.dataURL,
@@ -159,11 +162,11 @@ class EditProfile extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 console.log('disableTwoFactor Res', res)
-                if (res.status == 200) {
+                if (res) {
                     console.log('inside if');
                     _this.setState({
                         errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'success'
+                        loader: false, errType: 'success', isEnabled: 'ENABLED',
                     }, () => {
                         _this._getAdminDetails();
                     });
@@ -192,16 +195,20 @@ class EditProfile extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 console.log('verify Res', res)
-                if (res.status == 200) {
+                if (res) {
+                    if (res.err) {
+                        _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
+                    } else {
+                        _this.setState({
+                            errMsg: true, errMessage: res.message,
+                            loader: false, errType: 'Success', isEnabled: 'ENABLED', showQR: false
+                        }, () => {
+                            _this._getAdminDetails();
+                        });
+                    }
                     let fields = this.state.fields;
                     fields["otp"] = "";
-
-                    _this.setState({
-                        errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success', isEnabled: 'ENABLED', fields
-                    }, () => {
-                        _this._getAdminDetails();
-                    });
+                    _this.setState({ fields });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                 }
@@ -270,7 +277,6 @@ class EditProfile extends Component {
                                                 <div style={{ height: "200px", width: "200px", display: "flex", alignItems: "center", justifyContent: "center" }} >
                                                     <img src={this.state.QRImage} />
                                                 </div>
-
                                             </div>
                                             <div>16 Digit Key</div>
                                             <div>{QRKey}</div>
