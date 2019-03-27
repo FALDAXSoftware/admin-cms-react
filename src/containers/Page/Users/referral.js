@@ -63,7 +63,7 @@ class Referral extends Component {
         let fields = this.state.fields;
         let _this = this;
 
-        if (this.validator.allValid()) {
+        if (_this.validator.allValid()) {
             _this.setState({ loader: true });
 
             const formData = {
@@ -112,7 +112,7 @@ class Referral extends Component {
                     <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                     <span className="field-error">
-                        {this.validator.message('percentage', fields['percentage'], 'required')}
+                        {this.validator.message('percentage', fields['percentage'], 'required|numeric|between:0,100|size:num')}
                     </span>
 
                     {/* <span>

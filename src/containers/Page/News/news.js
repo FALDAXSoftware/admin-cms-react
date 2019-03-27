@@ -7,7 +7,6 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { CSVLink } from "react-csv";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -44,12 +43,14 @@ class News extends Component {
             is_active: !is_active
         };
 
+        let message = is_active ? 'News has been inactivated successfully.' : 'News has been activated successfully.'
         self.setState({ loader: true });
         ApiUtils.changeNewsStatus(token, formData)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     self._getAllNews();
+                    self.setState({ errMsg: true, errMessage: message, errType: 'Success', loader: false })
                 }
                 self.setState({ loader: false });
             })

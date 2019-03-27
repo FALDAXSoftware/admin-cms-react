@@ -176,15 +176,15 @@ class EditCountryModal extends Component {
                         </Select>
                     </div>
 
-                    <div style={{ "marginBottom": "15px" }}>
+                    <div style={{ "marginBottom": "15px", display: 'flex' }}>
                         <span>Color Code:</span>
-                        <ColorPicker defaultColor={code} color={code} onChange={this._changeColor} />
-                        <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
-                            {color.color}
-                        </div>
+                        <ColorPicker className="color-picker" style={{ marginLeft: '10px' }} defaultColor={code} color={code} onChange={this._changeColor} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('color', fields["color"], 'required|max:7', 'text-danger')}
                         </span>
+                    </div>
+                    <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
+                        {color.color}
                     </div>
 
                     {loader && <Spin indicator={loaderIcon} />}

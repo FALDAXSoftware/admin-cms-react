@@ -141,7 +141,12 @@ class Users extends Component {
                                             style={{ "width": "250px", "marginRight": "20px" }}
                                             enterButton
                                         />
-                                        <CSVLink data={allUsers}><Button type="primary">EXPORT</Button></CSVLink>
+                                        {allUsers.length > 0 ? <CSVLink
+                                            data={allUsers}
+                                            filename={'users.csv'}
+                                        >
+                                            <Button type="primary">EXPORT</Button>
+                                        </CSVLink> : ''}
                                     </div>
                                     {loader && <span className="loader-class"><Spin /></span>}
                                     <div style={{ marginTop: "30px" }}>

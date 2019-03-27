@@ -439,6 +439,8 @@
   "feeTable.title.created_at": "Created On",
   "feeTable.title.status": "Status",
   "feeTable.title.actions": "Actions",
+  "feeTable.title.name": "Pair Name",
+  "feeTable.title.Actions": "Actions",
   "subscribeTable.title.email": "Email",
   "subscribeTable.title.is_news_feed": "News Feed",
   "subscribeTable.title.created_at": "Created On",

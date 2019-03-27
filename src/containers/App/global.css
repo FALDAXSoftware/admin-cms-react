@@ -276,3 +276,6 @@ html[dir='rtl'] .dz-hidden-input {
   font-weight: 600;
   font-size: 20px;
 }
+.color-picker{
+  margin-left: 10px;
+}

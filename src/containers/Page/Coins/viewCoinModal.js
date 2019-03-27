@@ -44,26 +44,26 @@ class ViewCoinModal extends Component {
 
                 <span> <b>Coin Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.coin_name ? coinDetails.coin_name : 'NA'}
+                    {coinDetails.coin_name ? coinDetails.coin_name : 'N/A'}
                 </p>
 
                 <span> <b>Coin Code:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.coin_code ? coinDetails.coin_code : 'NA'}
+                    {coinDetails.coin_code ? coinDetails.coin_code : 'N/A'}
                 </p>
 
                 <span> <b>Limit:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.limit ? coinDetails.limit : 'NA'}
+                    {coinDetails.limit ? coinDetails.limit : 'N/A'}
                 </p>
 
                 {/* <span> <b>Description:</b> </span>
                 <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: coinDetails.description ? coinDetails.description : 'NA' }} /> */}
+                    dangerouslySetInnerHTML={{ __html: coinDetails.description ? coinDetails.description : 'N/A' }} /> */}
 
                 <span> <b>Wallet Address:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.wallet_address ? coinDetails.wallet_address : 'NA'}
+                    {coinDetails.wallet_address ? coinDetails.wallet_address : 'N/A'}
                 </p>
             </Modal>
         );

@@ -178,6 +178,7 @@ class Countries extends Component {
                                         <Option value={1}>Legal</Option>
                                         <Option value={2}>Illegal</Option>
                                         <Option value={3}>Neutral</Option>
+                                        <Option value={4}>Partial Services Available</Option>
                                     </Select>
 
                                     <Button className="search-btn" type="primary" onClick={this._searchCountry}>Search</Button>

@@ -133,9 +133,7 @@ class StateList extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
