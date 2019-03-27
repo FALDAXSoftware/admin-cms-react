@@ -38,27 +38,27 @@ class ViewJobModal extends Component {
             >
                 <span> <b>Category:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {jobDetails.category ? jobDetails.category : 'NA'}
+                    {jobDetails.category ? jobDetails.category : 'N/A'}
                 </p>
 
                 <span> <b>Position:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {jobDetails.position ? jobDetails.position : 'NA'}
+                    {jobDetails.position ? jobDetails.position : 'N/A'}
                 </p>
 
                 <span> <b>Short Description:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {jobDetails.short_desc ? jobDetails.short_desc : 'NA'}
+                    {jobDetails.short_desc ? jobDetails.short_desc : 'N/A'}
                 </p>
 
                 <span> <b>Location:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {jobDetails.location ? jobDetails.location : 'NA'}
+                    {jobDetails.location ? jobDetails.location : 'N/A'}
                 </p>
 
                 <span> <b>Job Description:</b> </span>
                 <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: jobDetails.job_desc ? jobDetails.job_desc : 'NA' }} />
+                    dangerouslySetInnerHTML={{ __html: jobDetails.job_desc ? jobDetails.job_desc : 'N/A' }} />
             </Modal>
         );
     }

@@ -174,7 +174,7 @@ class Transactions extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
-                                    <CSVLink data={allTransactions}><Button type="primary">EXPORT</Button></CSVLink>
+                                    <CSVLink filename={'transaction_history.csv'} data={allTransactions}><Button type="primary">EXPORT</Button></CSVLink>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />

@@ -13,7 +13,7 @@ import {
 
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
     emailID = null, city = null, street = null, street_1 = null, phone = null,
-    countryName = null, bdate = null, status = null, isKyc = null) => {
+    countryName = null, bdate = null, status = null, isKyc = null, format = null) => {
     const value = object[key];
     const profile_pic = object[image];
     const first_name = object[fname];
@@ -27,6 +27,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const dob = object[bdate];
     const is_active = object[status];
     const kyc = object[isKyc];
+    const date_format = object[format]
 
     switch (type) {
         case 'ImageCell':
@@ -42,7 +43,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         //         street_address, street_address_2, phone_number, country, dob, is_active, kyc);
         case 'ActionCell':
             return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
-                street_address, street_address_2, phone_number, country, dob, is_active, kyc);
+                street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format);
         default:
             return TextCell(value);
     }
@@ -106,7 +107,7 @@ const columns = [
         width: 200,
         render: object => renderCell(object,
             'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
-            'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc')
+            'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc', 'date_format')
     }
 ];
 

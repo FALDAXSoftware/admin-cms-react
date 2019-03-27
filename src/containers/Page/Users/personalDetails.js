@@ -55,22 +55,34 @@ class PersonalDetails extends Component {
                                 {userDetails.street_address ? userDetails.street_address_2 ? userDetails.street_address + ',' + userDetails.street_address_2 : userDetails.street_address : ''}
                             </p>
 
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.city_town ? userDetails.city_town : 'NA'}
-                            </p>
+                            {userDetails.city_town ?
+                                <p style={{ "marginBottom": "10px" }}>
+                                    {userDetails.city_town}
+                                </p> : ''}
 
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.country ? userDetails.country : 'NA'}
-                            </p>
+                            {userDetails.country ?
+                                <p style={{ "marginBottom": "10px" }}>
+                                    {userDetails.country}
+                                </p> : ''}
 
                             <span> <b>Date Of Birth:</b> </span>
                             <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.dob ? userDetails.dob : 'NA'}
+                                {userDetails.dob ? userDetails.dob : 'N/A'}
+                            </p>
+
+                            <span> <b>Default Date Format:</b> </span>
+                            <p style={{ "marginBottom": "10px" }}>
+                                {userDetails.date_format ? userDetails.date_format : 'N/A'}
+                            </p>
+
+                            <span> <b>Default Currency:</b> </span>
+                            <p style={{ "marginBottom": "10px" }}>
+                                {userDetails.fiat ? userDetails.fiat : 'N/A'}
                             </p>
                         </div>
                     </Col>
                 </Row>
-            </div>
+            </div >
         );
     }
 }

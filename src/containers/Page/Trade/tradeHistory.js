@@ -176,7 +176,7 @@ class TradeHistory extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
-                                    <CSVLink data={allTrades}><Button type="primary">EXPORT</Button></CSVLink>
+                                    <CSVLink filename={'trade_history.csv'} data={allTrades}><Button type="primary">EXPORT</Button></CSVLink>
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />
