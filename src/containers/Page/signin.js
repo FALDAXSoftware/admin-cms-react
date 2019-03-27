@@ -21,7 +21,7 @@ class SignIn extends Component {
       errMsg: false,
       errMessage: '',
       redirect: false,
-      isOtpRequired: true
+      isOtpRequired: false,
     };
     this.validator = new SimpleReactValidator();
   }
@@ -55,18 +55,23 @@ class SignIn extends Component {
       let formData = {
         email: fields["email"],
         password: fields["password"],
-        //otp: fields["otp"]
+        otp: fields["otp"]
       };
 
       ApiUtils.adminSignIn(formData)
         .then((response) => response.json())
         .then(function (res) {
+          console.log('>>>>>res', res)
           if (res.user) {
             _this.setState({ loader: false, redirect: true });
             login({ user: res.user });
             storeToken({ token: res.token });
             checkRoles({ roles: res.user.roles })
             _this.props.history.push('/dashboard');
+          } else if (res.status == 201) {
+            _this.setState({ isOtpRequired: true, loader: false });
+          } else if (res.status == 402) {
+            _this.setState({ errMsg: true, errMessage: res.err, loader: false });
           } else {
             _this.setState({ errMsg: true, errMessage: res.err, loader: false });
             login({ user: null });
@@ -119,16 +124,16 @@ class SignIn extends Component {
                 </span>
               </div>
 
-              {/* {this.state.isOtpRequired &&
+              {this.state.isOtpRequired &&
                 <div className="isoInputWrapper">
                   <span>Two-Factor Authentication is enabled for this account. Please enter your 2FA code below to proceed.</span>
                   <div>
                     <Input size="large" type="text" placeholder="OTP" onChange={this._onChangeFields.bind(this, "otp")} />
-                    {this.validator.message('OTP', this.state.fields['otp'], 'required')}
+                    {this.validator.message('OTP', this.state.fields['otp'], 'required|numeric')}
                   </div>
                   <span className="otp_msg">{this.state.otp_msg}</span>
                 </div>
-              } */}
+              }
 
               <div className="isoInputWrapper isoLeftRightComponent">
                 {/* <Checkbox>
