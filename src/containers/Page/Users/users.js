@@ -115,9 +115,25 @@ class Users extends Component {
     };
 
     render() {
-        const { allUsers, allUserCount, showViewUserModal, page, userDetails, userId, loader,
-            errMsg, errType
-        } = this.state;
+        const { allUsers, allUserCount, page, loader, errMsg, errType } = this.state;
+        const headers = [
+            { label: "First Name", key: "first_name" },
+            { label: "Last Name", key: "last_name" },
+            { label: "Full Name", key: "full_name" },
+            { label: "Email", key: "email" },
+            { label: "Country", key: "country" },
+            { label: "State", key: "state" },
+            { label: "City", key: "city_town" },
+            { label: "Street Address Line 1", key: "street_address" },
+            { label: "Street Address Line 2", key: "street_address_2" },
+            { label: "Postal Code", key: "postal_code" },
+            { label: "DOB", key: "dob" },
+            { label: "Active/Inactive", key: "is_active" },
+            { label: "Verified/Non Verified", key: "is_verified" },
+            { label: "Fiat Currency", key: "fiat" },
+            { label: "Referral Percentage", key: "referal_percentage" },
+            { label: "Created On", key: "created_at" }
+        ];
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -141,12 +157,14 @@ class Users extends Component {
                                             style={{ "width": "250px", "marginRight": "20px" }}
                                             enterButton
                                         />
-                                        {allUsers.length > 0 ? <CSVLink
-                                            data={allUsers}
-                                            filename={'users.csv'}
-                                        >
-                                            <Button type="primary">EXPORT</Button>
-                                        </CSVLink> : ''}
+                                        {allUsers.length > 0 ?
+                                            <CSVLink
+                                                data={allUsers}
+                                                filename={'users.csv'}
+                                                headers={headers}
+                                            >
+                                                <Button type="primary">Export</Button>
+                                            </CSVLink> : ''}
                                     </div>
                                     {loader && <span className="loader-class"><Spin /></span>}
                                     <div style={{ marginTop: "30px" }}>
