@@ -133,6 +133,13 @@ class Transactions extends Component {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
             loader, searchTransaction, rangeDate, filterVal
         } = this.state;
+        const transactionsHeaders = [
+            { label: "Source Address", key: "source_address" },
+            { label: "Destination Address", key: "destination_address" },
+            { label: "Transaction Type", key: "transaction_type" },
+            { label: "Amount", key: "amount" },
+            { label: "Email", key: "email" },
+        ];
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -174,7 +181,11 @@ class Transactions extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
-                                    <CSVLink filename={'transaction_history.csv'} data={allTransactions}><Button type="primary">EXPORT</Button></CSVLink>
+                                    {allTransactions.length > 0 ?
+                                        <CSVLink filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                            <Button type="primary">Export</Button>
+                                        </CSVLink>
+                                        : ''}
                                 </div>
                                 {loader && <span className="loader-class">
                                     <Spin />

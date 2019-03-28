@@ -135,6 +135,25 @@ class TradeHistory extends Component {
     render() {
         const { allTrades, allTradeCount, errType, errMsg, page, loader,
             searchTrade, rangeDate, filterVal } = this.state;
+        const tradeHeaders = [
+            { label: "Currency", key: "currency" },
+            { label: "Settle Currency", key: "settle_currency" },
+            { label: "Order Type", key: "order_type" },
+            { label: "Type", key: "side" },
+            { label: "Pair", key: "symbol" },
+            { label: "Quantity", key: "quantity" },
+            { label: "Price", key: "price" },
+            { label: "Stop Price", key: "stop_price" },
+            { label: "Limit Price", key: "limit_price" },
+            { label: "Fill Price", key: "fill_price" },
+            { label: "Average Price", key: "average_price" },
+            { label: "Maker Fee", key: "maker_fee" },
+            { label: "Taker Fee", key: "taker_fee" },
+            { label: "Status", key: "order_status" },
+            { label: "Requested Fee", key: "requested_fee" },
+            { label: "Requested Coin", key: "requested_coin" },
+            { label: "Created On", key: "created_at" }
+        ];
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -176,11 +195,13 @@ class TradeHistory extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
-                                    <CSVLink filename={'trade_history.csv'} data={allTrades}><Button type="primary">EXPORT</Button></CSVLink>
+                                    {allTrades.length > 0 ?
+                                        <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                            <Button type="primary">Export</Button>
+                                        </CSVLink>
+                                        : ''}
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <TableWrapper
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
