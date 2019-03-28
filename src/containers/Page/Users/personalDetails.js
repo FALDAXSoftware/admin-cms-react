@@ -52,7 +52,7 @@ class PersonalDetails extends Component {
 
                             <span><b>Address: </b></span>
                             <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.street_address ? userDetails.street_address_2 ? userDetails.street_address + ',' + userDetails.street_address_2 : userDetails.street_address : ''}
+                                {userDetails.street_address ? userDetails.street_address_2 ? userDetails.street_address + ',' + userDetails.street_address_2 : userDetails.street_address : 'N/A'}
                             </p>
 
                             {userDetails.city_town ?

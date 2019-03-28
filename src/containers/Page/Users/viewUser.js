@@ -9,6 +9,7 @@ import UserTradeHistory from './userTradeHistory';
 import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';
 import UserWithdrawRequest from './userWithdrawRequest';
+import UserKYCDetails from './userKYC';
 
 const { TabPane } = Tabs;
 
@@ -27,7 +28,7 @@ class ViewUser extends Component {
         return (
             <Tabs defaultActiveKey="1" size={'large'}>
                 <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
-                <TabPane tab="KYC" key="2">Content of tab 3</TabPane>
+                <TabPane tab="KYC" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
                 <TabPane tab="Sell Orders" key="3"><SellOrders user_id={user_id} /></TabPane>
                 <TabPane tab="Buy Orders" key="4"><BuyOrders user_id={user_id} /></TabPane>
                 <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>

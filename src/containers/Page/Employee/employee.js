@@ -179,11 +179,11 @@ class Employees extends Component {
                                 {loader && <span className="loader-class"><Spin /></span>}
                                 <div>
                                     <TableWrapper
-                                        onRow={(record, rowIndex) => {
-                                            return {
-                                                onClick: (event) => { this._changeRow(record) },
-                                            };
-                                        }}
+                                        // onRow={(record, rowIndex) => {
+                                        //     return {
+                                        //         onClick: (event) => { this._changeRow(record) },
+                                        //     };
+                                        // }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

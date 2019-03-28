@@ -1389,6 +1389,20 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getKYCDetails: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/get-kyc-detail?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 };
 
 export default ApiUtils;

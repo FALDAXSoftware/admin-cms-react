@@ -299,15 +299,17 @@ class Dashboard extends Component {
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={jobsCount}
-                                text={'Total Open Jobs'}
-                                icon="fas fa-suitcase-rolling"
-                                fontColor="#ffffff"
-                                bgColor="#F1C40F"
-                            />
-                        </IsoWidgetsWrapper>
+                        <Link to='/dashboard/jobs'>
+                            <IsoWidgetsWrapper>
+                                <StickerWidget
+                                    number={jobsCount}
+                                    text={'Total Open Jobs'}
+                                    icon="fas fa-suitcase-rolling"
+                                    fontColor="#ffffff"
+                                    bgColor="#F1C40F"
+                                />
+                            </IsoWidgetsWrapper>
+                        </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>

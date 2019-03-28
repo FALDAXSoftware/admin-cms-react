@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Button, Modal } from 'antd';
+import { notification, Button, Modal, Switch } from 'antd';
 import ApiUtils from '../../helpers/apiUtills';
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
@@ -12,12 +12,11 @@ class PanicButton extends Component {
             notify: false,
             errType: '',
             loader: false,
-            isPanic: false
+            isPanic: false,
         }
     }
 
     _panicButton = () => {
-
         const { token } = this.props;
         let _this = this;
 
@@ -25,17 +24,19 @@ class PanicButton extends Component {
         ApiUtils.panicBtn(token)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('res', res)
+                //console.log('res', res)
                 _this.setState({
                     notify: true, errType: 'Success', isPanic: false,
                     message: res.message
                 });
+                _this._closeConfirmModal();
             })
             .catch(() => {
                 _this.setState({
                     notify: true, message: 'Something went wrong!!',
                     errType: 'error', isPanic: false
                 });
+                _this._closeConfirmModal();
             });
     }
 
@@ -65,7 +66,9 @@ class PanicButton extends Component {
 
         return (
             <LayoutWrapper>
-                <Button type="primary" onClick={this._showConfirmPanicModal} disabled={isPanic}>Panic Button</Button>
+                <span>Panic Button : </span>
+                <Switch checked={isPanic} onChange={this._showConfirmPanicModal} />
+                {/* <Button type="primary" onClick={this._showConfirmPanicModal} disabled={isPanic}>Panic Button</Button> */}
                 <Modal
                     title="Confirm Panic"
                     onCancel={this._closeConfirmModal}

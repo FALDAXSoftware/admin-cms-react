@@ -75,7 +75,11 @@ class EditEmployeeModal extends Component {
     _resetForm = () => {
         const { fields } = this.state;
 
-        fields['name'] = '';
+        fields['first_name'] = '';
+        fields['last_name'] = '';
+        fields['email'] = '';
+        fields['phone_number'] = '';
+        fields['address'] = '';
         this.setState({ fields, selectedRole: '' });
     }
 
@@ -94,7 +98,12 @@ class EditEmployeeModal extends Component {
 
             let formData = {
                 id: fields["value"],
-                name: fields["name"],
+                first_name: fields["first_name"],
+                last_name: fields["last_name"],
+                email: fields["email"],
+                address: fields["address"],
+                roles: selectedRole,
+                phone_number: fields["phone_number"],
                 role_id: selectedRole
             };
 
@@ -151,10 +160,42 @@ class EditEmployeeModal extends Component {
                     ]}
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Name:</span>
-                        <Input placeholder="Name" onChange={this._handleChange.bind(this, "name")} value={fields["name"]} />
+                        <span>First Name:</span>
+                        <Input placeholder="First Name" onChange={this._handleChange.bind(this, "first_name")} value={fields["first_name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
+                            {this.validator.message('first name', fields["first_name"], 'required|max:30', 'text-danger')}
+                        </span>
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Last Name:</span>
+                        <Input placeholder="Last Name" onChange={this._handleChange.bind(this, "last_name")} value={fields["last_name"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('last name', fields["last_name"], 'required|max:30', 'text-danger')}
+                        </span>
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Email:</span>
+                        <Input placeholder="Email" onChange={this._handleChange.bind(this, "email")} value={fields["email"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('email', fields["email"], 'required|email', 'text-danger')}
+                        </span>
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Phone Number:</span>
+                        <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone_number")} value={fields["phone_number"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('phone number', fields["phone_number"], 'required|numeric', 'text-danger')}
+                        </span>
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Address:</span>
+                        <Input placeholder="Address" onChange={this._handleChange.bind(this, "address")} value={fields["address"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('address', fields["address"], 'required', 'text-danger')}
                         </span>
                     </div>
 
@@ -169,7 +210,7 @@ class EditEmployeeModal extends Component {
                             {options}
                         </Select>
                     </div>
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <span className="loader-class"><Spin /></span>}
                 </Modal>
             </div>
         );
