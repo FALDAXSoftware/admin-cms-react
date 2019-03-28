@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, notification, Spin } from 'antd';
+import { Input, Tabs, notification, Spin, Button, Icon } from 'antd';
 import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -121,6 +121,10 @@ class StateList extends Component {
 
         return (
             <LayoutWrapper>
+                {/* <div>
+                    <Icon type="left-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => { this.props.history.push('/dashboard/countries') }} />
+                    <Button type="primary" onClick={() => { this.props.history.push('/dashboard/countries') }}>Back To Countries</Button>
+                </div> */}
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
                         {stateTableInfos.map(tableInfo => (

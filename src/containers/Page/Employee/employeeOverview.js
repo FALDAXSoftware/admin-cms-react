@@ -92,89 +92,85 @@ class PersonalDetails extends Component {
         const { employeeDetails, fields, errors } = this.state;
 
         return (
-            <div>
-                <Row>
-                    <Col span={24}>
-                        <Divider>Personal Information</Divider>
-                        <div className="">
-                            <span> <b>Name:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {employeeDetails.first_name ? employeeDetails.last_name ? employeeDetails.first_name + ' ' + employeeDetails.last_name : employeeDetails.first_name : ''}
-                            </p>
+            <div className="kyc-div">
+                <Divider>Personal Information</Divider>
+                <div className="">
+                    <p style={{ "marginBottom": "10px" }}>
+                        <span> <b>Name:</b> </span>
+                        {employeeDetails.first_name ? employeeDetails.last_name ? employeeDetails.first_name + ' ' + employeeDetails.last_name : employeeDetails.first_name : ''}
+                    </p>
 
-                            <span> <b>Email:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {employeeDetails.email ? employeeDetails.email : ''}
-                            </p>
+                    <p style={{ "marginBottom": "10px" }}>
+                        <span> <b>Email:</b> </span>
+                        {employeeDetails.email ? employeeDetails.email : ''}
+                    </p>
 
-                            <span><b>Address: </b></span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {employeeDetails.address ? employeeDetails.address : ''}
-                            </p>
+                    <p style={{ "marginBottom": "10px" }}>
+                        <span><b>Address: </b></span>
+                        {employeeDetails.address ? employeeDetails.address : ''}
+                    </p>
 
-                            <span><b>Phone Number: </b></span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {employeeDetails.phone_number ? employeeDetails.phone_number : ''}
-                            </p>
-                        </div>
-                        <Divider>Change Password</Divider>
-                        <div className="">
-                            <div style={{ "marginTop": "10px" }}>
-                                <span>
-                                    <b>New Password</b>
-                                </span>
-                                <Input
-                                    type="password"
-                                    placeholder="New Password"
-                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                                    onChange={this._onChangeFields.bind(this, "newPwd")}
-                                    value={fields["newPwd"]}
-                                />
-                                <span style={{ "color": "red" }}>
-                                    {this.validator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
-                                </span>
+                    <p style={{ "marginBottom": "10px" }}>
+                        <span><b>Phone Number: </b></span>
+                        {employeeDetails.phone_number ? employeeDetails.phone_number : ''}
+                    </p>
+                </div>
+                <Divider>Change Password</Divider>
+                <div className="">
+                    <div style={{ "marginTop": "10px" }}>
+                        <span>
+                            <b>New Password</b>
+                        </span>
+                        <Input
+                            type="password"
+                            placeholder="New Password"
+                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                            onChange={this._onChangeFields.bind(this, "newPwd")}
+                            value={fields["newPwd"]}
+                        />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
+                        </span>
 
-                                <span>
-                                    <b>Confirm Password</b>
-                                </span>
-                                <Input
-                                    type="password"
-                                    placeholder="Confirm Password"
-                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                                    onChange={this._onChangeFields.bind(this, "confirmPwd")}
-                                    value={fields["confirmPwd"]}
-                                />
-                                <span style={{ "color": "red" }}>
-                                    {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
-                                    {errors["main"]}
-                                </span>
-                                <br />
-                                <Button type="primary" onClick={this._changePassword}> Change </Button>
-                            </div>
-                        </div>
-                        <Divider>Change Email Address</Divider>
-                        <div className="">
-                            <div style={{ "marginTop": "10px" }}>
-                                <span>
-                                    <b>Email ID</b>
-                                </span>
-                                <Input
-                                    type="email"
-                                    placeholder="Email ID"
-                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                                    onChange={this._onChangeFields.bind(this, "email")}
-                                    value={fields["email"]}
-                                />
-                                <span style={{ "color": "red" }}>
-                                    {this.validator.message('Email ID', fields["email"], 'required', 'text-danger')}
-                                </span>
-                                <br />
-                                <Button type="primary" onClick={this._changePassword}> Change </Button>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
+                        <span>
+                            <b>Confirm Password</b>
+                        </span>
+                        <Input
+                            type="password"
+                            placeholder="Confirm Password"
+                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                            onChange={this._onChangeFields.bind(this, "confirmPwd")}
+                            value={fields["confirmPwd"]}
+                        />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
+                            {errors["main"]}
+                        </span>
+                        <br />
+                        <Button type="primary" onClick={this._changePassword}> Change </Button>
+                    </div>
+                </div>
+                {/* <Divider>Change Email Address</Divider>
+                <div className="">
+                    <div style={{ "marginTop": "10px" }}>
+                        <span>
+                            <b>Email ID</b>
+                        </span>
+                        <Input
+                            type="email"
+                            placeholder="Email ID"
+                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                            onChange={this._onChangeFields.bind(this, "email")}
+                            value={fields["email"]}
+                        />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('Email ID', fields["email"], 'required', 'text-danger')}
+                        </span>
+                        <br />
+                        <Button type="primary" onClick={this._changePassword}> Change </Button>
+                    </div> 
+                </div>*/}
+            </div >
         );
     }
 }
