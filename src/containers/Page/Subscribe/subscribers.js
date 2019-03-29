@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin, Pagination, Input, DatePicker, Button, Modal } from 'antd';
+import { Tabs, notification, Pagination, Input, DatePicker, Button, Modal } from 'antd';
 import { subscriberTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
@@ -193,9 +194,7 @@ class Subscribers extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchSubscriber}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <TableWrapper
                                     style={{ marginTop: '20px' }}
                                     {...this.state}

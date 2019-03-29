@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, notification, Icon, Spin, Select, Button } from 'antd';
+import { Modal, notification, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ColorPicker from 'rc-color-picker';
 import 'rc-color-picker/assets/index.css';
+import FaldaxLoader from '../faldaxLoader';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class EditCountryModal extends Component {
@@ -186,7 +186,7 @@ class EditCountryModal extends Component {
                     <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
                         {color.color}
                     </div>
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div>
         );

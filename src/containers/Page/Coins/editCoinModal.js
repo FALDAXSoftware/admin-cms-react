@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Button, Select } from 'antd';
+import { Modal, Input, notification, Button, Select } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -9,8 +9,8 @@ import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import striptags from 'striptags';
 import { BUCKET_URL } from '../../../helpers/globals';
+import FaldaxLoader from '../faldaxLoader';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class EditCoinModal extends Component {
@@ -240,7 +240,7 @@ class EditCoinModal extends Component {
                         </span>
                     </div> */}
 
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div>
         );

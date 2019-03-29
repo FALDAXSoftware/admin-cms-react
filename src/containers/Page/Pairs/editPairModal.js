@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification, Button } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../faldaxLoader';
 
 class EditPairModal extends Component {
     constructor(props) {
@@ -141,7 +140,7 @@ class EditPairModal extends Component {
                     </span>
                 </div>
 
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }

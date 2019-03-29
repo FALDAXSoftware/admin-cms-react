@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Checkbox, Button } from 'antd';
+import { Modal, Input, notification, Checkbox, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../faldaxLoader';
 
 class EditRoleModal extends Component {
     constructor(props) {
@@ -241,7 +240,7 @@ class EditRoleModal extends Component {
                         {'The module field is required.'}
                     </span>
                     }
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div>
         );

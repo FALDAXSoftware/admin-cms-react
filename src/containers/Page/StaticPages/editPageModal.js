@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Button } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../faldaxLoader';
 
 class EditPageModal extends Component {
     constructor(props) {
@@ -181,7 +180,7 @@ class EditPageModal extends Component {
                         {'The description field is required.'}
                     </span>}
                 </div>
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Select, DatePicker, Button } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button } from 'antd';
 import { newsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import FaldaxLoader from '../faldaxLoader';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -211,7 +212,7 @@ class News extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchNews}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <TableWrapper
                                     onRow={(record, rowIndex) => {
                                         return {

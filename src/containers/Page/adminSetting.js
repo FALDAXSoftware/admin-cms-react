@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Input, Spin, Icon, notification } from 'antd';
+import { Button, Input, notification } from 'antd';
 import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
+import FaldaxLoader from '../Page/faldaxLoader';
 
 const { TextArea } = Input;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class ContactUsForm extends Component {
     constructor(props) {
@@ -259,7 +259,7 @@ class ContactUsForm extends Component {
                     </span>
                     <Button type="primary" onClick={this._editProfile}> Update </Button>
                 </div>
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </div>
         );
     }

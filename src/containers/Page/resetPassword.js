@@ -6,6 +6,7 @@ import ResetPasswordStyleWrapper from './resetPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import logo from '../../image/Footer_logo.png';
+import FaldaxLoader from '../Page/faldaxLoader';
 
 export default class extends Component {
   constructor(props) {
@@ -76,8 +77,6 @@ export default class extends Component {
           _this.setState({ errMsg: true, errMessage: err.err, loader: false });
         });
     } else {
-      console.log(fields["confirmPwd"]);
-
       if (fields["newPwd"] !== fields["confirmPwd"] && fields["confirmPwd"] != "" && fields["confirmPwd"] != undefined) {
         this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
         this.setState({ errors, loader: false })
@@ -88,7 +87,7 @@ export default class extends Component {
   }
 
   render() {
-    const { fields, errors, errMsg, errType } = this.state;
+    const { fields, errors, errMsg, errType, loader } = this.state;
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -146,7 +145,7 @@ export default class extends Component {
                   <IntlMessages id="page.resetPassSave" />
                 </Button>
               </div>
-
+              {loader && <FaldaxLoader />}
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="/signin" className="isoForgotPass">
                   <IntlMessages id="page.signInButton" />

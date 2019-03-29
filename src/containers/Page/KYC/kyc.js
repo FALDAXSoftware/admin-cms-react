@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin, Pagination } from 'antd';
+import { Tabs, notification, Pagination } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewKYCModal from './viewKYCModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -138,9 +139,7 @@ class KYC extends Component {
                     <Tabs className="isoTableDisplayTab">
                         {KYCInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <ViewKYCModal
                                     kycDetails={kycDetails}
                                     showViewKYCModal={showViewKYCModal}

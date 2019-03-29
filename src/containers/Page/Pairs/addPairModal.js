@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Select, notification, Button } from 'antd';
+import { Modal, Input, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import FaldaxLoader from '../faldaxLoader';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class AddPairModal extends Component {
@@ -221,7 +221,7 @@ class AddPairModal extends Component {
                     </span>
                 </div>
 
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }

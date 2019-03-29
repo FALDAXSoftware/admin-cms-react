@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Button, Select } from 'antd';
+import { Input, Tabs, Pagination, notification, Button, Select } from 'antd';
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import EditCountryModal from './editCountryModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -184,7 +185,7 @@ class Countries extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchCountry}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
                                         style={{ marginTop: '20px' }}
@@ -201,14 +202,15 @@ class Countries extends Component {
                                             closeEditCountryModal={this._closeEditCountryModal}
                                             getAllCountry={this._getAllCountries.bind(this, 1)}
                                         />}
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleCoinPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allCountryCount}
-                                    />
+                                    {allCountryCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleCoinPagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={allCountryCount}
+                                        /> : ''}
                                 </div>
                             </TabPane>
                         ))}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Button, Modal, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, Button, Modal, notification } from 'antd';
 import { coinTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import ViewCoinModal from './viewCoinModal';
 import AddCoinModal from './addCoinModal';
 import EditCoinModal from './editCoinModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -209,7 +210,7 @@ class Coins extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <ViewCoinModal
                                         coinDetails={coinDetails}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Spin, Select, Button, DatePicker, notification } from 'antd';
+import { Input, Tabs, Pagination, Select, Button, DatePicker, notification } from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { CSVLink } from "react-csv";
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -182,14 +183,12 @@ class Transactions extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
                                     {allTransactions.length > 0 ?
-                                        <CSVLink filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
-                                            <Button type="primary">Export</Button>
+                                        <CSVLink style={{ marginLeft: '20px' }} filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                            <Button className="search-btn" type="primary">Export</Button>
                                         </CSVLink>
                                         : ''}
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <TableWrapper
                                     style={{ marginTop: '20px' }}
                                     {...this.state}

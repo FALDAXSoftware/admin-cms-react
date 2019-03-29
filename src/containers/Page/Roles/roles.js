@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Spin, Modal } from 'antd';
+import { Button, Tabs, notification, Modal } from 'antd';
 import { rolesTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddRoleModal from './addRoleModal';
 import EditRoleModal from './editRoleModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -193,9 +194,7 @@ class Roles extends Component {
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -241,4 +240,3 @@ export default connect(
     }))(Roles);
 
 export { Roles, rolesTableInfos };
-

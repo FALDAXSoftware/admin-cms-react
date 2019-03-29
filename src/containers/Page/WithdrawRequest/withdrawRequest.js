@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import FaldaxLoader from '../faldaxLoader';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -164,9 +165,7 @@ class WithdrawRequest extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
 
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <TableWrapper
                                     style={{ marginTop: '20px' }}
                                     {...this.state}

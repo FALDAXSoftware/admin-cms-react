@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Spin, Modal } from 'antd';
+import { Button, Tabs, notification, Modal } from 'antd';
 import { employeeTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddEmployeeModal from './addEmployeeModal';
 import EditEmployeeModal from './editEmployeeModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -176,7 +177,7 @@ class Employees extends Component {
                                         getAllEmployee={this._getAllEmployees.bind(this, 0)}
                                     />
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
                                         // onRow={(record, rowIndex) => {

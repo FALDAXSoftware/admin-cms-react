@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Row, Col, Divider, Input, Button } from 'antd';
+import { Divider, Input, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
-
 
 class PersonalDetails extends Component {
     constructor(props) {

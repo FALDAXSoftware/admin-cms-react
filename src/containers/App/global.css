@@ -282,3 +282,7 @@ html[dir='rtl'] .dz-hidden-input {
 .kyc-div{
   padding: 15px;
 }
+.faldax-loader {
+  width: 70px !important;
+  height: 70px !important;
+}

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Modal, Button, Spin } from 'antd';
+import { Tabs, Pagination } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 
@@ -70,7 +71,7 @@ class ReferralUsers extends Component {
                                         dataSource={allReferral}
                                         className="isoCustomizedTable"
                                     />
-                                    {loader && <span className="loader-class"><Spin /></span>}
+                                    {loader && <FaldaxLoader />}
                                     {allReferralCount > 0 ?
                                         <Pagination
                                             style={{ marginTop: '15px' }}

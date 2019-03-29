@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Select, DatePicker, Button } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { CSVLink } from "react-csv";
+import FaldaxLoader from '../faldaxLoader';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -201,7 +202,7 @@ class TradeHistory extends Component {
                                         </CSVLink>
                                         : ''}
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <TableWrapper
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
