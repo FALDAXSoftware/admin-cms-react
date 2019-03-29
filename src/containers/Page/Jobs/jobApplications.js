@@ -121,9 +121,7 @@ class JobApplications extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <span className="loader-class"><Spin /></span>}
                                 <div>
                                     <ViewJobAppModal
                                         applicationDetails={applicationDetails}
@@ -137,14 +135,15 @@ class JobApplications extends Component {
                                         dataSource={allApplications}
                                         className="isoCustomizedTable"
                                     />
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleJobPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allApplicationsCount}
-                                    />
+                                    {allApplicationsCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleJobPagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={allApplicationsCount}
+                                        /> : ''}
                                 </div>
                             </TabPane>
                         ))}

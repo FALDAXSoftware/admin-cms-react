@@ -6,6 +6,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import FaldaxLoader from '../faldaxLoader';
 
 const Search = Input.Search;
 
@@ -20,7 +21,7 @@ class SellOrders extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0,
+            page: 1,
             loader: false
         }
     }
@@ -102,7 +103,7 @@ class SellOrders extends Component {
                                 dataSource={allOrders}
                                 className="isoCustomizedTable"
                             />
-                            {loader && <span className="loader-class"> <Spin /></span>}
+                            {loader && <FaldaxLoader />}
                             {allOrderCount > 0 ?
                                 <Pagination
                                     style={{ marginTop: '15px' }}

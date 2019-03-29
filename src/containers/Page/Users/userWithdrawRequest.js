@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Spin, Select, Button } from 'antd';
+import { Input, Pagination, notification, Select, Button } from 'antd';
 import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import FaldaxLoader from '../faldaxLoader';
 
 const Option = Select.Option;
 
@@ -126,7 +127,7 @@ class UserWithdrawRequest extends Component {
                                 <Button className="search-btn" type="primary" onClick={this._searchReq}>Search</Button>
                                 <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                             </div>
-                            {loader && <span className="loader-class"><Spin /></span>}
+                            {loader && <FaldaxLoader />}
                             < TableWrapper
                                 style={{ marginTop: '20px' }}
                                 {...this.state}

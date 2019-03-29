@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin, Pagination, Button } from 'antd';
+import { Tabs, notification, Pagination, Button } from 'antd';
 import { pairsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddPairModal from './addPairModal';
 import EditPairModal from './editPairModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -144,9 +145,7 @@ class Pairs extends Component {
                                         />
                                     }
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <EditPairModal
                                         allCoins={allCoins}

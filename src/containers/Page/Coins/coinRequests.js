@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Button, Select, DatePicker } from 'antd';
+import { Input, Tabs, Pagination, notification, Button, DatePicker } from 'antd';
 import { coinReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewCoinReqModal from './viewCoinReqModal';
 import moment from 'moment';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
@@ -174,9 +175,7 @@ class CoinRequests extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._searchCoinReq}>Search</Button>
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <ViewCoinReqModal
                                         coinReqDetails={coinReqDetails}

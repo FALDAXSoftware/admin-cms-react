@@ -51,7 +51,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
 
 const columns = [
     {
-        title: <IntlMessages id="antTable.title.image" />,
+        title: "",
         key: 'profile_pic',
         width: '1%',
         className: 'isoImageCell',

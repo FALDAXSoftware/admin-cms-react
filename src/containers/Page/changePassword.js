@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Button, notification, Spin, Icon, Input } from 'antd';
+import { Button, notification, Input } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import { connect } from 'react-redux';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../Page/faldaxLoader';
 
 class ChangePassword extends Component {
     constructor(props) {
@@ -144,7 +143,7 @@ class ChangePassword extends Component {
                     <br />
                     <Button type="primary" onClick={this._changePassword}> Change </Button>
                 </div>
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </div>
         );
     }

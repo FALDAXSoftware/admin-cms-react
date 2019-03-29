@@ -8,6 +8,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { CSVLink } from "react-csv";
+import FaldaxLoader from '../faldaxLoader';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -157,7 +158,7 @@ class Users extends Component {
                                             style={{ "width": "250px", "marginRight": "20px" }}
                                             enterButton
                                         />
-                                        {allUsers.length > 0 ?
+                                        {allUsers && allUsers.length > 0 ?
                                             <CSVLink
                                                 data={allUsers}
                                                 filename={'users.csv'}
@@ -166,7 +167,7 @@ class Users extends Component {
                                                 <Button type="primary">Export</Button>
                                             </CSVLink> : ''}
                                     </div>
-                                    {loader && <span className="loader-class"><Spin /></span>}
+                                    {loader && <FaldaxLoader />}
                                     <div style={{ marginTop: "30px" }}>
                                         <TableWrapper
                                             {...this.state}

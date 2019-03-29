@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Input, Checkbox, Icon, Spin, notification } from 'antd';
+import { Button, Input, Checkbox, notification } from 'antd';
 import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import logo from '../../image/Footer_logo.png';
+import FaldaxLoader from '../Page/faldaxLoader';
 
 const { login, storeToken, checkRoles } = authAction;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class SignIn extends Component {
   constructor(props) {
@@ -61,7 +61,6 @@ class SignIn extends Component {
       ApiUtils.adminSignIn(formData)
         .then((response) => response.json())
         .then(function (res) {
-          console.log('>>>>>res', res)
           if (res.user) {
             _this.setState({ loader: false, redirect: true });
             login({ user: res.user });
@@ -149,8 +148,7 @@ class SignIn extends Component {
                   <IntlMessages id="page.signInForgotPass" />
                 </Link>
               </div>
-
-              {loader && <Spin indicator={loaderIcon} />}
+              {loader && <FaldaxLoader />}
             </div>
           </div>
         </div>

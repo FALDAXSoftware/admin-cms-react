@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Spin, DatePicker, Select, Button } from 'antd';
+import { Input, Pagination, notification, DatePicker, Select, Button } from 'antd';
 import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,8 +7,9 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import FaldaxLoader from '../faldaxLoader';
+import { CSVLink } from "react-csv";
 
-const Search = Input.Search;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
@@ -133,6 +134,13 @@ class UserTransactionHistory extends Component {
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
             searchTransaction } = this.state;
+        const transactionsHeaders = [
+            { label: "Source Address", key: "source_address" },
+            { label: "Destination Address", key: "destination_address" },
+            { label: "Transaction Type", key: "transaction_type" },
+            { label: "Amount", key: "amount" },
+            { label: "Email", key: "email" },
+        ];
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -164,8 +172,14 @@ class UserTransactionHistory extends Component {
 
                                 <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
                                 <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+
+                                {allTransactions.length > 0 ?
+                                    <CSVLink filename={'user_transactions_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                        <Button className="search-btn" type="primary">Export</Button>
+                                    </CSVLink>
+                                    : ''}
                             </div>
-                            {loader && <span className="loader-class"><Spin /></span>}
+                            {loader && <FaldaxLoader />}
                             < TableWrapper
                                 style={{ marginTop: '20px' }}
                                 {...this.state}

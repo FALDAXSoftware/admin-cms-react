@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification, Button, Select } from 'antd';
+import { Modal, Input, notification, Button, Select } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
+import FaldaxLoader from '../faldaxLoader';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class AddCoinModal extends Component {
@@ -264,7 +264,7 @@ class AddCoinModal extends Component {
                         {this.validator.message('wallet address', fields["wallet_address"], 'max:45', 'text-danger')}
                     </span>
                 </div> */}
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }

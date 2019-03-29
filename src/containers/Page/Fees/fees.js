@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin } from 'antd';
+import { Tabs, notification } from 'antd';
 import { FeesInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditFeesModal from "./editFeesModal";
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -86,9 +87,7 @@ class Fees extends Component {
                     <Tabs className="isoTableDisplayTab">
                         {FeesInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 {showEditFeesModal && <EditFeesModal
                                     fields={feesDetails}
                                     getAllFees={this._getAllFeesData}

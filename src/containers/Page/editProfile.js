@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Input, Spin, Icon, notification, Col, Row } from 'antd';
+import { Button, Input, notification, Col, Row } from 'antd';
 import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import authAction from '../../redux/auth/actions';
+import FaldaxLoader from '../Page/faldaxLoader';
 
 const { login } = authAction;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class EditProfile extends Component {
     constructor(props) {
@@ -305,7 +305,7 @@ class EditProfile extends Component {
                             : ''}
                     </div>
                 </div>
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </div >
         );
     }

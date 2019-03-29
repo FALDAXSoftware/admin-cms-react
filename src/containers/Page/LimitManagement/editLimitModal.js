@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin } from 'antd';
+import { Modal, Input, notification } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../faldaxLoader';
 
 class EditCoinModal extends Component {
     constructor(props) {
@@ -126,7 +125,6 @@ class EditCoinModal extends Component {
                     confirmLoading={loader}
                     okText="Update"
                 >
-
                     <div style={{ "marginBottom": "15px" }}>
                         <span>User:</span>
                         <Input placeholder="User" value={fields["user"]} disabled />
@@ -261,7 +259,7 @@ class EditCoinModal extends Component {
                         </span>
                     </div>
 
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div>
         );

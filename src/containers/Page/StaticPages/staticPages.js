@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Modal, notification, Spin } from 'antd';
+import { Tabs, Button, Modal, notification } from 'antd';
 import { staticPagesInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import AddPageModal from './addPageModal';
 import EditPageModal from './editPageModal';
 import ViewPageModal from './viewPageModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -158,9 +159,7 @@ class StaticPages extends Component {
                                         getAllStaticPages={this._getAllStaticPages.bind(this, 0)}
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <ViewPageModal
                                     staticPagesDetails={staticPagesDetails}
                                     showViewPageModal={showViewPageModal}

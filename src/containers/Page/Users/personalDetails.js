@@ -91,4 +91,3 @@ export default connect(
     state => ({
         token: state.Auth.get('token')
     }))(PersonalDetails);
-

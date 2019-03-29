@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Select, Button } from 'antd';
+import { Modal, Input, notification, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import FaldaxLoader from '../faldaxLoader';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class EditEmployeeModal extends Component {
@@ -210,7 +210,7 @@ class EditEmployeeModal extends Component {
                             {options}
                         </Select>
                     </div>
-                    {loader && <span className="loader-class"><Spin /></span>}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div>
         );

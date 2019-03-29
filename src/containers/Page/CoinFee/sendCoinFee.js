@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Input, Icon, Spin, Button } from 'antd';
+import { Input, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../faldaxLoader';
 
 class SendCoinFee extends Component {
     constructor(props) {
@@ -89,7 +88,6 @@ class SendCoinFee extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Edit Coin Fee:</span>
                         <Input placeholder="Coin Fee" onChange={this._handleChange.bind(this, "coin_fee")} value={fields["coin_fee"]} />
@@ -97,10 +95,8 @@ class SendCoinFee extends Component {
                             {this.validator.message('coin fee', fields["coin_fee"], 'required|decimal', 'text-danger')}
                         </span>
                     </div>
-
                     <Button type="primary" onClick={this._sendCoinFee}>Save</Button>
-
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </TableDemoStyle>
             </LayoutWrapper>
         );

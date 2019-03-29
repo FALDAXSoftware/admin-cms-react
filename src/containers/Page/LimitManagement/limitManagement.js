@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Spin } from 'antd';
+import { Tabs } from 'antd';
 import { limitTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditLimitModal from './editLimitModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -88,9 +89,7 @@ class LimitManagement extends Component {
                                         closeEditModal={this._closeEditLimitModal}
                                         getAllLimits={this._getAllLimits}
                                     />
-                                    {loader && <span className="loader-class">
-                                        <Spin />
-                                    </span>}
+                                    {loader && <FaldaxLoader />}
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}

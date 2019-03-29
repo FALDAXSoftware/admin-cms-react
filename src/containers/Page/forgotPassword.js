@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Input, Icon, Spin, notification } from 'antd';
+import { Button, Input, notification } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import ForgotPasswordStyleWrapper from './forgotPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import logo from '../../image/Footer_logo.png';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../Page/faldaxLoader';
 
 export default class extends Component {
   constructor(props) {
@@ -111,14 +110,12 @@ export default class extends Component {
                 </Button>
               </div>
 
-              {loader && <Spin indicator={loaderIcon} />}
-
+              {loader && <FaldaxLoader />}
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="/signin" className="isoForgotPass">
                   <IntlMessages id="page.signInButton" />
                 </Link>
               </div>
-
             </div>
           </div>
         </div>

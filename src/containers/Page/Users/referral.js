@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Input, notification, Spin, Icon } from 'antd';
+import { Button, Input, notification } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+import FaldaxLoader from '../faldaxLoader';
 
 class Referral extends Component {
     constructor(props) {
@@ -125,7 +124,7 @@ class Referral extends Component {
                     </span> */}
                     <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateReferral}> Update </Button>
                 </div>
-                {loader && <span className="loader-class"><Spin /></span>}
+                {loader && <FaldaxLoader />}
             </div>
         );
     }

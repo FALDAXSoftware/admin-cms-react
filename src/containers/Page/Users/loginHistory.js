@@ -5,7 +5,8 @@ import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, Spin } from 'antd';
+import { Tabs } from 'antd';
+import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 
@@ -51,7 +52,7 @@ class LoginHistory extends Component {
                                         dataSource={allHistory}
                                         className="isoCustomizedTable"
                                     />
-                                    {loader && <span className="loader-class"> <Spin /></span>}
+                                    {loader && <FaldaxLoader />}
                                 </div>
                             </TabPane>
                         ))}

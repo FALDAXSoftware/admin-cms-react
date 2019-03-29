@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, notification, Spin, Button, Icon } from 'antd';
+import { Input, Tabs, notification } from 'antd';
 import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditStateModal from './editStateModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -137,7 +138,7 @@ class StateList extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
