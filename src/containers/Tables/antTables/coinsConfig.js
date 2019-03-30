@@ -48,9 +48,15 @@ const columns = [
     },
     {
         title: <IntlMessages id="coinTable.title.limit" />,
-        key: 'limit',
+        key: 'minLimit',
         width: 200,
-        render: object => renderCell(object, 'LinkCell', 'limit')
+        render: object => renderCell(object, 'LinkCell', 'minLimit')
+    },
+    {
+        title: <IntlMessages id="coinTable.title.maxlimit" />,
+        key: 'maxLimit',
+        width: 200,
+        render: object => renderCell(object, 'LinkCell', 'maxLimit')
     },
     {
         title: <IntlMessages id="coinTable.title.walletAddress" />,

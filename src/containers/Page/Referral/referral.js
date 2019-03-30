@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Pagination } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { userReferralInfos } from "../../Tables/antTables";
+import { referralInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -10,7 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
 
-class ReferralUsers extends Component {
+class Referral extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -62,7 +62,7 @@ class ReferralUsers extends Component {
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
                         {
-                            userReferralInfos.map(tableInfo => (
+                            referralInfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <TableWrapper
                                         {...this.state}
@@ -94,4 +94,4 @@ class ReferralUsers extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(ReferralUsers);
+    }))(Referral);

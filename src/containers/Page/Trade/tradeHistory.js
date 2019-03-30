@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Select, DatePicker, Button } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -72,7 +72,8 @@ class TradeHistory extends Component {
         this.setState({ errMsg: false });
     };
 
-    _searchTrade = () => {
+    _searchTrade = (e) => {
+        e.preventDefault();
         this._getAllTrades();
     }
 
@@ -167,38 +168,40 @@ class TradeHistory extends Component {
                         {tradeTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Input
-                                        placeholder="Search trades"
-                                        onChange={this._changeSearch.bind(this)}
-                                        style={{ "width": "200px" }}
-                                        value={searchTrade}
-                                    />
+                                    <Form onSubmit={this._searchTrade}>
+                                        <Input
+                                            placeholder="Search trades"
+                                            onChange={this._changeSearch.bind(this)}
+                                            style={{ "width": "200px" }}
+                                            value={searchTrade}
+                                        />
 
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a type"
-                                        onChange={this._changeFilter}
-                                        value={filterVal}
-                                    >
-                                        <Option value={' '}>All</Option>
-                                        <Option value={'Sell'}>Sell</Option>
-                                        <Option value={'Buy'}>Buy</Option>
-                                    </Select>
+                                        <Select
+                                            style={{ width: 125, "marginLeft": "15px" }}
+                                            placeholder="Select a type"
+                                            onChange={this._changeFilter}
+                                            value={filterVal}
+                                        >
+                                            <Option value={' '}>All</Option>
+                                            <Option value={'Sell'}>Sell</Option>
+                                            <Option value={'Buy'}>Buy</Option>
+                                        </Select>
 
-                                    <RangePicker
-                                        value={rangeDate}
-                                        disabledTime={this.disabledRangeTime}
-                                        onChange={this._changeDate}
-                                        format="YYYY-MM-DD"
-                                        style={{ marginLeft: '15px' }}
-                                    />
+                                        <RangePicker
+                                            value={rangeDate}
+                                            disabledTime={this.disabledRangeTime}
+                                            onChange={this._changeDate}
+                                            format="YYYY-MM-DD"
+                                            style={{ marginLeft: '15px' }}
+                                        />
 
-                                    <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
+                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    </Form>
 
-                                    {allTrades.length > 0 ?
+                                    {allTrades && allTrades.length > 0 ?
                                         <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                            <Button type="primary">Export</Button>
+                                            <Button className="search-btn" type="primary">Export</Button>
                                         </CSVLink>
                                         : ''}
                                 </div>

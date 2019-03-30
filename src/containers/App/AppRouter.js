@@ -114,6 +114,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/News/news")),
         module: "news"
     },
+    {
+        path: "referral",
+        component: asyncComponent(() => import("../Page/Referral/referral")),
+        module: "referral"
+    },
 ];
 
 const mandatoryRoutes = [

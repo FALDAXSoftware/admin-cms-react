@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Select, DatePicker, Button } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form } from 'antd';
 import { newsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -87,8 +87,7 @@ class News extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchNews: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -101,7 +100,8 @@ class News extends Component {
         this.setState({ errMsg: false });
     };
 
-    _searchNews = () => {
+    _searchNews = (e) => {
+        e.preventDefault();
         this._getAllNews();
     }
 
@@ -181,36 +181,38 @@ class News extends Component {
                         {newsTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Input
-                                        placeholder="Search news"
-                                        onChange={this._changeSearch.bind(this)}
-                                        style={{ "width": "200px" }}
-                                        value={searchNews}
-                                    />
+                                    <Form onSubmit={this._searchNews}>
+                                        <Input
+                                            placeholder="Search news"
+                                            onChange={this._changeSearch.bind(this)}
+                                            style={{ "width": "200px" }}
+                                            value={searchNews}
+                                        />
 
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a type"
-                                        onChange={this._changeFilter}
-                                        value={filterVal}
-                                    >
-                                        <Option value={' '}>All</Option>
-                                        <Option value={'bitcoinist'}>Bitcoinist</Option>
-                                        <Option value={'cointelegraph'}>Coin Telegraph</Option>
-                                        <Option value={'ccnpodcast'}>CCN Podcast</Option>
-                                        <Option value={'bitcoin'}>Bitcoin</Option>
-                                    </Select>
+                                        <Select
+                                            style={{ width: 125, "marginLeft": "15px" }}
+                                            placeholder="Select a type"
+                                            onChange={this._changeFilter}
+                                            value={filterVal}
+                                        >
+                                            <Option value={' '}>All</Option>
+                                            <Option value={'bitcoinist'}>Bitcoinist</Option>
+                                            <Option value={'cointelegraph'}>Coin Telegraph</Option>
+                                            <Option value={'ccnpodcast'}>CCN Podcast</Option>
+                                            <Option value={'bitcoin'}>Bitcoin</Option>
+                                        </Select>
 
-                                    <RangePicker
-                                        value={rangeDate}
-                                        disabledTime={this.disabledRangeTime}
-                                        onChange={this._changeDate}
-                                        format="YYYY-MM-DD"
-                                        style={{ marginLeft: '15px' }}
-                                    />
+                                        <RangePicker
+                                            value={rangeDate}
+                                            disabledTime={this.disabledRangeTime}
+                                            onChange={this._changeDate}
+                                            format="YYYY-MM-DD"
+                                            style={{ marginLeft: '15px' }}
+                                        />
 
-                                    <Button className="search-btn" type="primary" onClick={this._searchNews}>Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    </Form>
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <TableWrapper

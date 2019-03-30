@@ -6,7 +6,7 @@ import fakeData from '../fakeData';
 import { tableinfos } from './usersConfig';
 import { coinTableInfos } from './coinsConfig';
 import { staticPagesInfos } from './staticPagesConfig';
-import { referralInfos } from './referralConfig';
+import { userReferralInfos } from './userReferralConfig';
 import { AnnounceInfos } from './announceConfig';
 import { countryTableInfos } from './countriesConfig';
 import { rolesTableInfos } from './rolesConfig';
@@ -29,6 +29,7 @@ import { subscriberTableinfos } from './subscriberConfig';
 import { KYCInfos } from './kycConfig';
 import { FeesInfos } from './feesConfig';
 import { newsTableInfos } from './newsConfig';
+import { referralInfos } from './referralConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -80,5 +81,5 @@ export {
   blogsTableInfos, historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   coinReqTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
-  KYCInfos, FeesInfos, userTransactionTableInfos, newsTableInfos
+  KYCInfos, FeesInfos, userTransactionTableInfos, newsTableInfos, userReferralInfos
 };

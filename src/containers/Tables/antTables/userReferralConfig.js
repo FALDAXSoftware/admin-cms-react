@@ -29,12 +29,12 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'country')
 }];
 
-const referralInfos = [
+const userReferralInfos = [
     {
-        title: 'Referral',
-        value: 'ReferralTable',
+        title: 'Referred Users',
+        value: 'ReferralsTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, referralInfos };
+export { columns, userReferralInfos };

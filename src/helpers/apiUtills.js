@@ -1,7 +1,7 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -635,9 +635,18 @@ const ApiUtils = {
         }
     },
 
-    getUserHistory: function (token, user_id) {
+    getUserHistory: function (token, user_id, page, limit, data, startDate, endDate) {
+        let url = "/admin/getUserloginHistory?page=" + page + "&limit=" + limit;
+        if (data && startDate && endDate) {
+            url += "&data=" + data + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
+            url += "&data=" + data;
+        }
+
         try {
-            return fetch(API_URL + "/admin/getUserloginHistory", {
+            return fetch(API_URL + url, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -650,9 +659,13 @@ const ApiUtils = {
         }
     },
 
-    getAllPairs: function (page, limit, token) {
+    getAllPairs: function (page, limit, token, searchPair) {
+        let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
+        if (searchPair) {
+            url += "&data=" + searchPair;
+        }
         try {
-            return fetch(API_URL + "/admin/all-pairs?page=" + page + "&limit=" + limit, {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -1321,14 +1334,18 @@ const ApiUtils = {
 
     getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate) {
         let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
-        if (searchNews && startDate && endDate) {
+        if (searchNews && filterVal && startDate && endDate) {
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filterVal=" + filterVal;
+        } else if (searchNews && startDate && endDate) {
             url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && startDate && endDate) {
+            url += "&filterVal=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && searchNews) {
+            url += "&filterVal=" + filterVal + "&search=" + searchNews;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal) {
             url += "&filterVal=" + filterVal;
-        } else if (filterVal && searchNews) {
-            url += "&filterVal=" + filterVal + "&search=" + searchNews;
         } else {
             url += "&search=" + searchNews;
         }
