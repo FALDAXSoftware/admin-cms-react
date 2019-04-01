@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination } from 'antd';
+import { Tabs, Pagination, Input } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
@@ -9,33 +9,38 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
+const Search = Input.Search;
 
 class Referral extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allReferral: this.props.allReferral,
-            allReferralCount: this.props.allReferralCount,
-            userId: this.props.userId,
-            page: 0,
+            allReferral: [],
+            allReferralCount: 0,
+            page: 1,
             limit: 50,
+            searchReferral: ''
         }
     }
 
     componentDidMount = () => {
-        const { token, user_id } = this.props;
-        const { limit, page } = this.state;
+        this._getAllReferredAdmins();
+    }
+
+    _getAllReferredAdmins = () => {
+        const { token } = this.props;
+        const { limit, page, searchReferral } = this.state;
 
         let _this = this;
 
         this.setState({ loader: true })
-        ApiUtils.getAllReferrals(page, limit, token, user_id)
+        ApiUtils.getAllReferrals(page, limit, token, searchReferral)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allReferral: res.data, allReferralCount: res.usersDataCount,
-                        showReferralModal: true, userId: user_id
+                        allReferral: res.data, allReferralCount: res.referralCount,
+                        showReferralModal: true
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -51,7 +56,18 @@ class Referral extends Component {
     }
 
     _handleReferralPagination = (page) => {
-        this.props.getAllReferredUsers(page - 1, this.state.userId);
+        this._getAllReferredAdmins(page);
+    }
+
+    _searchCoin = (val) => {
+        this.setState({ searchReferral: val }, () => {
+            this._getAllReferredAdmins();
+        });
+    }
+
+    _changeRow = (referral) => {
+        console.log('>>>>>>>', referral)
+        this.props.history.push('/dashboard/referral/' + referral.id)
     }
 
     render() {
@@ -64,7 +80,20 @@ class Referral extends Component {
                         {
                             referralInfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                    <div style={{ "display": "inline-block", "width": "100%" }}>
+                                        <Search
+                                            placeholder="Search users"
+                                            onSearch={(value) => this._searchCoin(value)}
+                                            style={{ "float": "right", "width": "250px" }}
+                                            enterButton
+                                        />
+                                    </div>
                                     <TableWrapper
+                                        onRow={(record, rowIndex) => {
+                                            return {
+                                                onClick: () => { this._changeRow(record) },
+                                            };
+                                        }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
@@ -77,7 +106,7 @@ class Referral extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={10}
+                                            pageSize={50}
                                             defaultCurrent={1}
                                             total={allReferralCount}
                                         /> : ''}

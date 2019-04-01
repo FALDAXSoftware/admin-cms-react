@@ -286,3 +286,11 @@ html[dir='rtl'] .dz-hidden-input {
   width: 70px !important;
   height: 70px !important;
 }
+.amount-span{
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+.referral-div{
+  margin: 20px;
+}

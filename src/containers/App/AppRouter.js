@@ -174,6 +174,10 @@ const mandatoryRoutes = [
         path: "employee/:id",
         component: asyncComponent(() => import("../Page/Employee/employeeProfile"))
     },
+    {
+        path: "referral/:id",
+        component: asyncComponent(() => import("../Page/Referral/referredAmount"))
+    },
 ]
 
 class AppRouter extends Component {

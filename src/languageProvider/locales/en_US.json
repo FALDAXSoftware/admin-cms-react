@@ -411,6 +411,8 @@
   "antTable.title.country": "Country",
   "antTable.title.Active": "Status",
   "antTable.title.details": "Details",
+  "antTable.title.amount": "Amount",
+  "antTable.title.coin": "Coin",
   "countryTable.title.name": "Country Name",
   "countryTable.title.legality": "Legality",
   "countryTable.title.color": "Color",
