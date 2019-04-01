@@ -6,7 +6,8 @@ import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/t
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
     isCountry = null, isEmp = null, isRole = null,
     isPair = null, isLimit = null, isTransaction = null, isTrade = null,
-    isWithdraw = null, isJobs = null, isKyc = null, fee = null, panic = null, active = false) => {
+    isWithdraw = null, isJobs = null, isKyc = null, fee = null, panic = null,
+    isNews = null, isReferral = null, active = false) => {
     const value = object[key];
     const name = object[first_name];
     const users = object[isUser];
@@ -23,17 +24,19 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const kyc = object[isKyc];
     const fees = object[fee];
     const panic_button = object[panic];
+    const news = object[isNews];
+    const referral = object[isReferral];
     const is_active = object[active];
 
     switch (type) {
         case 'RoleSwitchCell':
             return RoleSwitchCell(value, name, users, coins, countries,
                 roles, employee, pairs, limit_management, transaction_history, trade_history,
-                withdraw_requests, jobs, kyc, fees, panic_button, is_active);
+                withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active);
         case 'RolesActionCell':
             return RolesActionCell(value, name, users, coins, countries,
                 roles, employee, pairs, limit_management, transaction_history, trade_history,
-                withdraw_requests, jobs, kyc, fees, panic_button, is_active);
+                withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active);
         default:
             return TextCell(value);
     }
@@ -52,7 +55,7 @@ const columns = [
         render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins',
             'countries', 'roles', 'employee', 'pairs',
             'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'is_active')
+            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news', 'referral', 'is_active')
     }, {
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'action',
@@ -61,7 +64,7 @@ const columns = [
             'RolesActionCell', 'id', 'name', 'users', 'coins',
             'countries', 'roles', 'employee', 'pairs',
             'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'is_active')
+            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news', 'referral', 'is_active')
     }
 ];
 

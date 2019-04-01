@@ -143,6 +143,12 @@ const options = [
     leftIcon: "fas fa-newspaper",
     module: "news"
   },
+  {
+    key: "referral",
+    label: "Affiliate Program & Referrals",
+    leftIcon: "fas fa-newspaper",
+    module: "referral"
+  },
 ];
 
 

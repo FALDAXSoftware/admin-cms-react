@@ -22,26 +22,19 @@ const columns = [{
     key: 'email',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'email')
-},
-    // {
-    //     title: <IntlMessages id="antTable.title.amount" />,
-    //     key: 'amount',
-    //     width: 200,
-    //     render: object => renderCell(object, 'TextCell', 'amount')
-    // }, {
-    //     title: <IntlMessages id="antTable.title.coin" />,
-    //     key: 'coin_name',
-    //     width: 200,
-    //     render: object => renderCell(object, 'TextCell', 'coin_name')
-    // }
-];
+}, {
+    title: <IntlMessages id="antTable.title.country" />,
+    key: 'country',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'country')
+}];
 
-const referralInfos = [
+const userReferralInfos = [
     {
-        title: 'Referral',
-        value: 'ReferralTable',
+        title: 'Referred Users',
+        value: 'ReferralsTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, referralInfos };
+export { columns, userReferralInfos };

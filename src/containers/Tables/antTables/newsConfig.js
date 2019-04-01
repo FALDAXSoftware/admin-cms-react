@@ -36,7 +36,7 @@ const renderCell = (object, type, key, image = null, news_title = null, news_lin
 
 const columns = [
     {
-        title: <IntlMessages id="newsTable.title.cover_image" />,
+        title: '',
         key: 'cover_image',
         width: 200,
         render: object => renderCell(object, 'StaticImageCell', 'cover_image')

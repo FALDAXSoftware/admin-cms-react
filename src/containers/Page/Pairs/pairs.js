@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Pagination, Button } from 'antd';
+import { Tabs, notification, Pagination, Button, Input } from 'antd';
 import { pairsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -10,6 +10,7 @@ import AddPairModal from './addPairModal';
 import EditPairModal from './editPairModal';
 import FaldaxLoader from '../faldaxLoader';
 
+const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 var self;
 
@@ -27,7 +28,8 @@ class Pairs extends Component {
             limit: 50,
             allCoins: [],
             showAddPairsModal: false,
-            showEditPairModal: false
+            showEditPairModal: false,
+            searchPair: '',
         }
         self = this;
         Pairs.editPair = Pairs.editPair.bind(this);
@@ -79,11 +81,11 @@ class Pairs extends Component {
 
     _getAllPairs = () => {
         const { token } = this.props;
-        const { page, limit } = this.state;
+        const { page, limit, searchPair } = this.state;
         let _this = this;
 
         _this.setState({ loader: true })
-        ApiUtils.getAllPairs(page, limit, token)
+        ApiUtils.getAllPairs(page, limit, token, searchPair)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -120,6 +122,12 @@ class Pairs extends Component {
         this.setState({ showEditPairModal: false })
     }
 
+    _searchPair = (val) => {
+        this.setState({ searchPair: val }, () => {
+            this._getAllPairs();
+        });
+    }
+
     render() {
         const { allPairs, errType, errMsg, page, pairsCount, loader, allCoins,
             showAddPairsModal, pairDetails, showEditPairModal } = this.state;
@@ -144,6 +152,12 @@ class Pairs extends Component {
                                             getAllPairs={this._getAllPairs}
                                         />
                                     }
+                                    <Search
+                                        placeholder="Search pairs"
+                                        onSearch={(value) => this._searchPair(value)}
+                                        style={{ "float": "right", "width": "250px" }}
+                                        enterButton
+                                    />
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div>

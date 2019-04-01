@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Select, Button, DatePicker, notification } from 'antd';
+import { Input, Tabs, Pagination, Select, Button, DatePicker, notification, Form } from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -65,7 +65,8 @@ class Transactions extends Component {
             });
     }
 
-    _searchTransaction = () => {
+    _searchTransaction = (e) => {
+        e.preventDefault();
         this._getAllTransactions();
     }
 
@@ -153,36 +154,38 @@ class Transactions extends Component {
                         {transactionTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Input
-                                        placeholder="Search transactions"
-                                        onChange={this._changeSearch.bind(this)}
-                                        style={{ "width": "200px" }}
-                                        value={searchTransaction}
-                                    />
+                                    <Form onSubmit={this._searchTransaction}>
+                                        <Input
+                                            placeholder="Search transactions"
+                                            onChange={this._changeSearch.bind(this)}
+                                            style={{ "width": "200px" }}
+                                            value={searchTransaction}
+                                        />
 
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a type"
-                                        onChange={this._changeFilter}
-                                        value={filterVal}
-                                    >
-                                        <Option value={' '}>All</Option>
-                                        <Option value={'send'}>Send</Option>
-                                        <Option value={'receive'}>Receive</Option>
-                                    </Select>
+                                        <Select
+                                            style={{ width: 125, "marginLeft": "15px" }}
+                                            placeholder="Select a type"
+                                            onChange={this._changeFilter}
+                                            value={filterVal}
+                                        >
+                                            <Option value={' '}>All</Option>
+                                            <Option value={'send'}>Send</Option>
+                                            <Option value={'receive'}>Receive</Option>
+                                        </Select>
 
-                                    <RangePicker
-                                        value={rangeDate}
-                                        disabledTime={this.disabledRangeTime}
-                                        onChange={this._changeDate}
-                                        format="YYYY-MM-DD"
-                                        style={{ marginLeft: '15px' }}
-                                    />
+                                        <RangePicker
+                                            value={rangeDate}
+                                            disabledTime={this.disabledRangeTime}
+                                            onChange={this._changeDate}
+                                            format="YYYY-MM-DD"
+                                            style={{ marginLeft: '15px' }}
+                                        />
 
-                                    <Button className="search-btn" type="primary" onClick={this._searchTransaction}>Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    </Form>
 
-                                    {allTransactions.length > 0 ?
+                                    {allTransactions && allTransactions.length > 0 ?
                                         <CSVLink style={{ marginLeft: '20px' }} filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
                                             <Button className="search-btn" type="primary">Export</Button>
                                         </CSVLink>

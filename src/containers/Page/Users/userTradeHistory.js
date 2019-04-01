@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -74,7 +74,8 @@ class UserTradeHistory extends Component {
             });
     }
 
-    _searchTrade = () => {
+    _searchTrade = (e) => {
+        e.preventDefault();
         this._getUserAllTrades();
     }
 
@@ -113,7 +114,6 @@ class UserTradeHistory extends Component {
             { label: "Created On", key: "created_at" }
         ];
 
-
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -124,26 +124,28 @@ class UserTradeHistory extends Component {
                     {tradeTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Input
-                                    placeholder="Search trades"
-                                    onChange={this._changeSearch.bind(this)}
-                                    style={{ "width": "200px" }}
-                                    value={searchTrade}
-                                />
+                                <Form onSubmit={this._searchHistory}>
+                                    <Input
+                                        placeholder="Search trades"
+                                        onChange={this._changeSearch.bind(this)}
+                                        style={{ "width": "200px" }}
+                                        value={searchTrade}
+                                    />
 
-                                <Select
-                                    style={{ width: 125, "marginLeft": "15px" }}
-                                    placeholder="Select a type"
-                                    onChange={this._changeFilter}
-                                    value={filterVal}
-                                >
-                                    <Option value={' '}>All</Option>
-                                    <Option value={'Buy'}>Buy</Option>
-                                    <Option value={'Sell'}>Sell</Option>
-                                </Select>
+                                    <Select
+                                        style={{ width: 125, "marginLeft": "15px" }}
+                                        placeholder="Select a type"
+                                        onChange={this._changeFilter}
+                                        value={filterVal}
+                                    >
+                                        <Option value={' '}>All</Option>
+                                        <Option value={'Buy'}>Buy</Option>
+                                        <Option value={'Sell'}>Sell</Option>
+                                    </Select>
 
-                                <Button className="search-btn" type="primary" onClick={this._searchTrade}>Search</Button>
-                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                </Form>
 
                                 {allTrades.length > 0 ?
                                     <CSVLink filename={'user_trade_history.csv'} data={allTrades} headers={tradeHeaders}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Spin, Button, DatePicker, Select } from 'antd';
+import { Input, Tabs, Pagination, Spin, Button, DatePicker, Select, Form } from 'antd';
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -63,7 +63,8 @@ class WithdrawRequest extends Component {
             });
     }
 
-    _searchReq = () => {
+    _searchReq = (e) => {
+        e.preventDefault();
         this._getAllWithdrawReqs();
     }
 
@@ -135,34 +136,36 @@ class WithdrawRequest extends Component {
                         {withdrawReqTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Input
-                                        placeholder="Search Requests"
-                                        style={{ "width": "200px" }}
-                                        onChange={this._changeSearch.bind(this)}
-                                        value={searchReq}
-                                    />
+                                    <Form onSubmit={this._searchReq}>
+                                        <Input
+                                            placeholder="Search Requests"
+                                            style={{ "width": "200px" }}
+                                            onChange={this._changeSearch.bind(this)}
+                                            value={searchReq}
+                                        />
 
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a type"
-                                        onChange={this._changeFilter}
-                                        value={filterVal}
-                                    >
-                                        <Option value={' '}>All</Option>
-                                        <Option value={'true'}>Approve</Option>
-                                        <Option value={'false'}>Dis-Approve</Option>
-                                    </Select>
+                                        <Select
+                                            style={{ width: 125, "marginLeft": "15px" }}
+                                            placeholder="Select a type"
+                                            onChange={this._changeFilter}
+                                            value={filterVal}
+                                        >
+                                            <Option value={' '}>All</Option>
+                                            <Option value={'true'}>Approve</Option>
+                                            <Option value={'false'}>Dis-Approve</Option>
+                                        </Select>
 
-                                    <RangePicker
-                                        value={rangeDate}
-                                        disabledTime={this.disabledRangeTime}
-                                        onChange={this._changeDate}
-                                        format="YYYY-MM-DD"
-                                        style={{ marginLeft: '15px' }}
-                                    />
+                                        <RangePicker
+                                            value={rangeDate}
+                                            disabledTime={this.disabledRangeTime}
+                                            onChange={this._changeDate}
+                                            format="YYYY-MM-DD"
+                                            style={{ marginLeft: '15px' }}
+                                        />
 
-                                    <Button className="search-btn" type="primary" onClick={this._searchReq}>Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
+                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    </Form>
 
                                 </div>
                                 {loader && <FaldaxLoader />}
