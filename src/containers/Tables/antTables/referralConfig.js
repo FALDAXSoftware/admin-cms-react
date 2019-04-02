@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell } from '../../../components/tables/helperCells';
+import { TextCell, referralActionCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key) => {
     const value = object[key];
@@ -9,6 +9,8 @@ const renderCell = (object, type, key) => {
     switch (type) {
         case 'TextCell':
             return TextCell(value);
+        case 'referralActionCell':
+            return referralActionCell(value);
     }
 };
 
@@ -22,7 +24,12 @@ const columns = [{
     key: 'email',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'email')
-},
+}, {
+    title: <IntlMessages id="antTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object, 'referralActionCell', 'id')
+}
     // {
     //     title: <IntlMessages id="antTable.title.amount" />,
     //     key: 'amount',

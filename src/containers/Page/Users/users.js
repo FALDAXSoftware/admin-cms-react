@@ -73,11 +73,11 @@ class Users extends Component {
 
     _getAllUsers = () => {
         const { token } = this.props;
-        const { searchUser, limit, page } = this.state;
+        const { searchUser, limit, page, sorterCol, sortOrder } = this.state;
         var _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllUsers(page, limit, token, searchUser)
+        ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -114,6 +114,13 @@ class Users extends Component {
         });
         this.setState({ errMsg: false });
     };
+
+    handleTableChange = (pagination, filters, sorter) => {
+        console.log('arguments', sorter)
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllUsers();
+        })
+    }
 
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType } = this.state;
@@ -175,6 +182,7 @@ class Users extends Component {
                                             pagination={false}
                                             dataSource={allUsers}
                                             className="isoCustomizedTable"
+                                            onChange={this.handleTableChange}
                                         />
                                         {allUserCount > 0 ? <Pagination
                                             style={{ marginTop: '15px' }}

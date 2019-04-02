@@ -4,7 +4,7 @@ import LoginHistory from './loginHistory';
 import PersonalDetails from './personalDetails';
 import BuyOrders from '../Orders/buyOrders';
 import SellOrders from '../Orders/sellOrders';
-import Referral from './referral';
+import Referral from './userReferral';
 import UserTradeHistory from './userTradeHistory';
 import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';

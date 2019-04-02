@@ -100,11 +100,11 @@ class Coins extends Component {
 
     _getAllCoins = () => {
         const { token } = this.props;
-        const { limit, searchCoin, page } = this.state;
+        const { limit, searchCoin, page, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllCoins(page, limit, token, searchCoin)
+        ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -181,6 +181,14 @@ class Coins extends Component {
         this.setState({ showDeleteCoinModal: false });
     }
 
+    handleTableChange = (pagination, filters, sorter) => {
+        console.log('arguments', sorter)
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllCoins();
+        })
+    }
+
+
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
             showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page, limit
@@ -242,6 +250,7 @@ class Coins extends Component {
                                         columns={tableInfo.columns}
                                         pagination={false}
                                         dataSource={allCoins}
+                                        onChange={this.handleTableChange}
                                         className="isoCustomizedTable"
                                     />
                                     {allCoinCount > 0 ?

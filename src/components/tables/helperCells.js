@@ -221,6 +221,7 @@ const NewsLinkCell = (link, href) => <a href={link ? link : '#'} target="_blank"
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const referralActionCell = value => <div><Tooltip title="View"><Icon type="right-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} /></Tooltip></div>
 const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text.toPrecision(2) + '%' }}></p>;
 const ApproveCell = text => <p>{text == true ? 'Approved' : 'Dis-Approved'}</p>;
 const IPCell = text => <p>{(text.split(":").length > 1) ? text.split(':')[3] : text}</p>;
@@ -316,5 +317,6 @@ export {
     StaticImageCell,
     NewsSwitchCell,
     NewsDescCell,
-    NewsLinkCell
+    NewsLinkCell,
+    referralActionCell
 };

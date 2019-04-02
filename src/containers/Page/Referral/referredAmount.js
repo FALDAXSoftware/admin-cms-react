@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { Card } from 'antd';
+import FaldaxLoader from '../faldaxLoader';
 
 class ReferredAmount extends Component {
     constructor(props) {
         super(props)
         this.state = {
             referredAmounts: [],
-            userData: []
+            userData: [],
+            loader: false
         }
     }
 
@@ -18,18 +20,20 @@ class ReferredAmount extends Component {
         let user_id = path[path.length - 1]
         let _this = this;
 
+        _this.setState({ loader: true });
         ApiUtils.getReferredAmounts(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ referredAmounts: res.data, userData: res.userData[0] });
+                _this.setState({ referredAmounts: res.data, userData: res.userData[0], loader: false });
             })
             .catch((err) => {
                 console.log(err)
+                _this.setState({ loader: false });
             });
     }
 
     render() {
-        const { referredAmounts, userData } = this.state;
+        const { referredAmounts, userData, loader } = this.state;
 
         return (
             <div className="referral-div">
@@ -46,6 +50,7 @@ class ReferredAmount extends Component {
                         )
                     })}
                 </Card>
+                {loader && <FaldaxLoader />}
             </div>
         );
     }

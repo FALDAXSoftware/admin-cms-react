@@ -40,11 +40,11 @@ class SellOrders extends Component {
 
     _getAllOrders = () => {
         const { token, user_id } = this.props;
-        const { searchOrder, page, limit } = this.state;
+        const { searchOrder, page, limit, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id)
+        ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -76,6 +76,12 @@ class SellOrders extends Component {
         })
     }
 
+    _handleSellOrderChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllOrders();
+        })
+    }
+
     render() {
         const { allOrders, allOrderCount, errType, errMsg, page, loader } = this.state;
 
@@ -102,6 +108,7 @@ class SellOrders extends Component {
                                 pagination={false}
                                 dataSource={allOrders}
                                 className="isoCustomizedTable"
+                                onChange={this._handleSellOrderChange}
                             />
                             {loader && <FaldaxLoader />}
                             {allOrderCount > 0 ?
