@@ -38,24 +38,28 @@ const columns = [
         title: <IntlMessages id="coinTable.title.coin" />,
         key: 'coin_name',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'coin_name')
     },
     {
         title: <IntlMessages id="coinTable.title.code" />,
         key: 'coin_code',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'coin_code')
     },
     {
         title: <IntlMessages id="coinTable.title.limit" />,
         key: 'minLimit',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'LinkCell', 'minLimit')
     },
     {
         title: <IntlMessages id="coinTable.title.maxlimit" />,
         key: 'maxLimit',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'LinkCell', 'maxLimit')
     },
     {

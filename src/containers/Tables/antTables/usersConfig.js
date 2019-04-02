@@ -59,28 +59,30 @@ const columns = [
     },
     {
         title: <IntlMessages id="antTable.title.firstName" />,
-        key: 'firstName',
+        key: 'first_name',
         width: 100,
-        sorter: (a, b) => a.first_name.length - b.first_name.length,
-        sortDirections: ['descend', 'ascend'],
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'first_name')
     },
     {
         title: <IntlMessages id="antTable.title.lastName" />,
-        key: 'lastName',
+        key: 'last_name',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'last_name')
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
         key: 'email',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {
         title: <IntlMessages id="antTable.title.country" />,
         key: 'country',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'country')
     },
     // {

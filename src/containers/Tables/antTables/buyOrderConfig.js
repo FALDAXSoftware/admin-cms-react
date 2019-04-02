@@ -25,24 +25,28 @@ const columns = [
         title: <IntlMessages id="orderTable.title.pair" />,
         key: 'symbol',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'symbol')
     },
     {
         title: <IntlMessages id="orderTable.title.quantity" />,
         key: 'quantity',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'quantity')
     },
     {
         title: <IntlMessages id="orderTable.title.fill_price" />,
         key: 'fill_price',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'fill_price')
     },
     {
         title: <IntlMessages id="orderTable.title.volume" />,
         key: 'stop_price',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'stop_price')
     },
     {

@@ -1,7 +1,7 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -68,10 +68,14 @@ const ApiUtils = {
     },
 
     //get all users api
-    getAllUsers: function (page, limit, token, searchUser) {
+    getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder) {
         let url = "/admin/getUsers?page=" + page + "&limit=" + limit;
-        if (searchUser) {
-            url = url + "&data=" + searchUser;
+        if (sorterCol && sortOrder && searchUser) {
+            url += "&data=" + searchUser + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + searchUser;
         }
         try {
             return fetch(API_URL + url, {
@@ -102,11 +106,16 @@ const ApiUtils = {
     },
 
     //get all coins api
-    getAllCoins: function (page, limit, token, search) {
+    getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/getCoins?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -916,11 +925,16 @@ const ApiUtils = {
         }
     },
 
-    getAllSellOrders: function (page, limit, token, search, user_id) {
+    getAllSellOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
-        if (search) {
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'POST',
@@ -935,9 +949,13 @@ const ApiUtils = {
         }
     },
 
-    getAllBuyOrders: function (page, limit, token, search, user_id) {
+    getAllBuyOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
-        if (search) {
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + search;
         }
         try {
