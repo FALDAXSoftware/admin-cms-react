@@ -147,7 +147,7 @@ const options = [
     key: "referral",
     label: "Affiliate Program & Referrals",
     leftIcon: "fas fa-newspaper",
-    module: "referral"
+    module: "is_referral"
   },
 ];
 

@@ -61,6 +61,8 @@ const columns = [
         title: <IntlMessages id="antTable.title.firstName" />,
         key: 'firstName',
         width: 100,
+        sorter: (a, b) => a.first_name.length - b.first_name.length,
+        sortDirections: ['descend', 'ascend'],
         render: object => renderCell(object, 'TextCell', 'first_name')
     },
     {
