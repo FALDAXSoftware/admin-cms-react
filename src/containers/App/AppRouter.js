@@ -117,7 +117,7 @@ const routes = [
     {
         path: "referral",
         component: asyncComponent(() => import("../Page/Referral/referral")),
-        module: "referral"
+        module: "is_referral"
     },
 ];
 

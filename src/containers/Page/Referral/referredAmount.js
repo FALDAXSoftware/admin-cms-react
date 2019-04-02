@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Row, Col, Card } from 'antd';
+import { Card } from 'antd';
 
 class ReferredAmount extends Component {
     constructor(props) {
