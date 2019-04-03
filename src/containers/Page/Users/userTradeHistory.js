@@ -22,7 +22,7 @@ class UserTradeHistory extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0,
+            page: 1,
             loader: false,
             filterVal: '',
         }
@@ -50,17 +50,15 @@ class UserTradeHistory extends Component {
 
     _getUserAllTrades = () => {
         const { token, user_id } = this.props;
-        const { searchTrade, page, limit, filterVal } = this.state;
+        const { searchTrade, page, limit, filterVal, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal)
+        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount
-                    });
+                    _this.setState({ allTrades: res.data, allTradeCount: res.tradeCount });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -68,25 +66,32 @@ class UserTradeHistory extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTrade: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
 
     _searchTrade = (e) => {
         e.preventDefault();
-        this._getUserAllTrades();
+        this.setState({ page: 1 }, () => {
+            this._getUserAllTrades();
+        })
     }
 
     _handleTradePagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getUserAllTrades();
         })
     }
 
     _resetFilters = () => {
-        this.setState({ filterVal: '', searchTrade: '' }, () => {
+        this.setState({ filterVal: '', searchTrade: '', page: 1 }, () => {
+            this._getUserAllTrades();
+        })
+    }
+
+    _handleUserTradeChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getUserAllTrades();
         })
     }
@@ -124,7 +129,7 @@ class UserTradeHistory extends Component {
                     {tradeTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Form onSubmit={this._searchHistory}>
+                                <Form onSubmit={this._searchTrade}>
                                     <Input
                                         placeholder="Search trades"
                                         onChange={this._changeSearch.bind(this)}
@@ -147,7 +152,7 @@ class UserTradeHistory extends Component {
                                     <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                 </Form>
 
-                                {allTrades.length > 0 ?
+                                {allTrades && allTrades.length > 0 ?
                                     <CSVLink filename={'user_trade_history.csv'} data={allTrades} headers={tradeHeaders}>
                                         <Button className="search-btn" type="primary">Export</Button>
                                     </CSVLink>
@@ -161,6 +166,7 @@ class UserTradeHistory extends Component {
                                 pagination={false}
                                 dataSource={allTrades}
                                 className="isoCustomizedTable"
+                                onChange={this._handleUserTradeChange}
                             />
                             {allTradeCount > 0 ?
                                 <Pagination

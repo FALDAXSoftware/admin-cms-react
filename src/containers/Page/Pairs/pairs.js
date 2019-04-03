@@ -81,11 +81,11 @@ class Pairs extends Component {
 
     _getAllPairs = () => {
         const { token } = this.props;
-        const { page, limit, searchPair } = this.state;
+        const { page, limit, searchPair, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true })
-        ApiUtils.getAllPairs(page, limit, token, searchPair)
+        ApiUtils.getAllPairs(page, limit, token, searchPair, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -126,6 +126,12 @@ class Pairs extends Component {
         this.setState({ searchPair: val }, () => {
             this._getAllPairs();
         });
+    }
+
+    _handlePairsChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllPairs();
+        })
     }
 
     render() {
@@ -174,6 +180,7 @@ class Pairs extends Component {
                                         pagination={false}
                                         dataSource={allPairs}
                                         className="isoCustomizedTable"
+                                        onChange={this._handlePairsChange}
                                     />
                                     <Pagination
                                         style={{ marginTop: '15px' }}

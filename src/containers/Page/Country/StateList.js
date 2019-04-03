@@ -79,14 +79,14 @@ class StateList extends Component {
 
     _getAllStates = () => {
         const { token } = this.props;
-        const { searchState } = this.state;
+        const { searchState, sorterCol, sortOrder } = this.state;
         let _this = this;
         let countryId = '';
         let path = this.props.location.pathname.split('/');
         countryId = path[3];
 
         _this.setState({ loader: true })
-        ApiUtils.getAllStates(token, countryId, searchState)
+        ApiUtils.getAllStates(token, countryId, searchState, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -112,6 +112,12 @@ class StateList extends Component {
         this.setState({ searchState: val, loader: true }, () => {
             this._getAllStates();
         });
+    }
+
+    _handleCountryChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllStates();
+        })
     }
 
     render() {
@@ -146,6 +152,7 @@ class StateList extends Component {
                                         pagination={false}
                                         dataSource={allStates}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleStateChange}
                                     />
                                     {showEditStateModal &&
                                         <EditStateModal

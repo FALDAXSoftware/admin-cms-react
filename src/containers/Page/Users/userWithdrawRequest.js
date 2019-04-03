@@ -86,7 +86,7 @@ class UserWithdrawRequest extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchReq: '', startDate: '', endDate: '', rangeDate: []
+            filterVal: '', searchReq: '', startDate: '', endDate: '', rangeDate: [], page: 1
         }, () => {
             this._getUserRequests();
         })

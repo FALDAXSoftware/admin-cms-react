@@ -126,7 +126,7 @@ class UserTransactionHistory extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchTransaction: '', startDate: '', endDate: '', rangeDate: []
+            filterVal: '', searchTransaction: '', startDate: '', endDate: '', rangeDate: [], page: 1
         }, () => {
             this._getUserTransactions();
         })

@@ -1,7 +1,7 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -353,10 +353,14 @@ const ApiUtils = {
     },
 
     //get all counties api
-    getAllCountries: function (page, limit, token, search, legality) {
+    getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
         let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit + '&legality=' + legality;
-        if (search) {
-            url += '&data=' + search;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
 
         try {
@@ -433,11 +437,16 @@ const ApiUtils = {
     },
 
     //get all states api
-    getAllStates: function (token, countryId, search) {
+    getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
         let url = "/admin/getStateData?country_id=" + countryId;
-        if (search) {
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -672,9 +681,13 @@ const ApiUtils = {
         }
     },
 
-    getAllPairs: function (page, limit, token, searchPair) {
+    getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder) {
         let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
-        if (searchPair) {
+        if (sorterCol && sortOrder && searchPair) {
+            url += "&data=" + searchPair + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + searchPair;
         }
         try {
@@ -841,14 +854,20 @@ const ApiUtils = {
         }
     },
 
-    getUserTrades: function (page, limit, token, search, user_id, filterVal) {
+    getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search && filterVal) {
-            url += "&data=" + search + "&t_type=" + filterVal;
-        } else if (search) {
-            url += "&data=" + search;
-        } else {
+        if (search && filterVal && sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && search) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&data=" + search;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (filterVal) {
             url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search;
         }
 
         try {
