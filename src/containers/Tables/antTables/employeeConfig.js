@@ -35,14 +35,16 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
 const columns = [
     {
         title: <IntlMessages id="antTable.title.name" />,
-        key: 'name',
+        key: 'first_name',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'first_name')
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
         key: 'email',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {

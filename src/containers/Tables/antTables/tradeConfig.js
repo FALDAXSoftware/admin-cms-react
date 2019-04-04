@@ -32,54 +32,63 @@ const columns = [
         title: <IntlMessages id="tradeTable.title.symbol" />,
         key: 'symbol',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'symbol')
     },
     {
         title: <IntlMessages id="tradeTable.title.maker_email" />,
         key: 'maker_email',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'maker_email')
     },
     {
         title: <IntlMessages id="tradeTable.title.taker_email" />,
         key: 'taker_email',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'taker_email')
     },
     {
         title: <IntlMessages id="tradeTable.title.side" />,
         key: 'side',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'side')
     },
     {
         title: <IntlMessages id="tradeTable.title.quantity" />,
         key: 'quantity',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'quantity')
     },
     {
         title: <IntlMessages id="tradeTable.title.fill_price" />,
         key: 'fill_price',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'fill_price')
     },
     {
         title: <IntlMessages id="tradeTable.title.maker_fee" />,
         key: 'maker_fee',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'maker_fee')
     },
     {
         title: <IntlMessages id="tradeTable.title.taker_fee" />,
         key: 'taker_fee',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'taker_fee')
     },
     {
         title: <IntlMessages id="tradeTable.title.volume" />,
         key: 'volume',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'VolumeCell', 'id', 'symbol', 'maker_email',
             'taker_email', 'side', 'quantity', 'fill_price', 'maker_fee', 'taker_fee'
             , 'volume', 'created_at')

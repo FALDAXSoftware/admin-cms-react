@@ -31,12 +31,14 @@ const columns = [
         title: <IntlMessages id="stateTable.title.name" />,
         key: 'name',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'name')
     },
     {
         title: <IntlMessages id="countryTable.title.legality" />,
         key: 'legality',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'LegalityCell', 'legality')
     },
     {

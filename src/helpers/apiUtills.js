@@ -175,68 +175,6 @@ const ApiUtils = {
         }
     },
 
-    //get all static pages api
-    getStaticPages: function (token) {
-        try {
-            return fetch(API_URL + "/admin/static/getStaticPage", {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //add static pages api
-    addPage: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/static/create", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit static pages api
-    editPage: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/static/update", {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete static pages api
-    deleteStaticPage: function (token, pageId) {
-        try {
-            return fetch(API_URL + "/admin/static/delete?id=" + pageId, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //forgot password api
     forgotPassword: function (form) {
         try {
@@ -290,73 +228,15 @@ const ApiUtils = {
         }
     },
 
-    //get all announcement emails api
-    getEmailTemplates: function (token) {
-        try {
-            return fetch(API_URL + "/admin/announcement/getAnnouncementTemplate", {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //add announcement email api
-    addTemplate: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/announcement/create", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit announcement email api
-    editTemplate: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/announcement/update", {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete announcement  email api
-    deleteTemplate: function (token, templateId) {
-        try {
-            return fetch(API_URL + "/admin/announcement/delete?id=" + templateId, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //get all counties api
-    getAllCountries: function (page, limit, token, search, legality) {
+    getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
         let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit + '&legality=' + legality;
-        if (search) {
-            url += '&data=' + search;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
 
         try {
@@ -403,9 +283,14 @@ const ApiUtils = {
     },
 
     //get all roles api
-    getAllRoles: function (token) {
+    getAllRoles: function (token, sorterCol, sortOrder) {
+        let url = "/admin/role/get";
+        if (sorterCol && sortOrder) {
+            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        }
+
         try {
-            return fetch(API_URL + "/admin/role/get", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -433,11 +318,16 @@ const ApiUtils = {
     },
 
     //get all states api
-    getAllStates: function (token, countryId, search) {
+    getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
         let url = "/admin/getStateData?country_id=" + countryId;
-        if (search) {
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -527,9 +417,17 @@ const ApiUtils = {
     },
 
     //get all employee api
-    getAllEmployee: function (token) {
+    getAllEmployee: function (token, sorterCol, sortOrder, search) {
+        let url = "/admin/get-employees";
+        if (sorterCol && sortOrder && search) {
+            url += "?data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "?data=" + search;
+        }
         try {
-            return fetch(API_URL + "/admin/get-employees", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -587,67 +485,6 @@ const ApiUtils = {
         }
     },
 
-    //get all blogs api
-    getAllBlogs: function (page, limit, token) {
-        try {
-            return fetch(API_URL + "/admin/all-blogs?page=" + page + "&limit=" + limit, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //add blog api call
-    addBlog: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/create-blog", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-                body: form,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit blog api call
-    editBlog: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/edit-blog", {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + token
-                },
-                body: form,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete blog api call
-    deleteBlog: function (token, blogId) {
-        try {
-            return fetch(API_URL + "/admin/delete-blog", {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: blogId })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     getUserHistory: function (token, user_id, page, limit, data, startDate, endDate) {
         let url = "/admin/getUserloginHistory?page=" + page + "&limit=" + limit;
         if (data && startDate && endDate) {
@@ -672,9 +509,13 @@ const ApiUtils = {
         }
     },
 
-    getAllPairs: function (page, limit, token, searchPair) {
+    getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder) {
         let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
-        if (searchPair) {
+        if (sorterCol && sortOrder && searchPair) {
+            url += "&data=" + searchPair + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + searchPair;
         }
         try {
@@ -841,14 +682,20 @@ const ApiUtils = {
         }
     },
 
-    getUserTrades: function (page, limit, token, search, user_id, filterVal) {
+    getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search && filterVal) {
-            url += "&data=" + search + "&t_type=" + filterVal;
-        } else if (search) {
-            url += "&data=" + search;
-        } else {
+        if (search && filterVal && sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && search) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&data=" + search;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (filterVal) {
             url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search;
         }
 
         try {
@@ -972,36 +819,17 @@ const ApiUtils = {
         }
     },
 
-    //get all coins api
-    getAllCoinRequests: function (page, limit, token, search, startDate, endDate) {
-        let url = "/admin/coin-requests?page=" + page + "&limit=" + limit;
-        if (search && startDate && endDate) {
-            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (startDate && endDate) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
-        } else {
-            url += "&data=" + search;
-        }
-
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //get all jobs api
-    getAllJobs: function (page, limit, token, search) {
+    getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+        if (sorterCol && sortOrder && search) {
+            url += "?data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "?data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -1126,47 +954,6 @@ const ApiUtils = {
         }
     },
 
-    //get all subscribers api
-    getAllSubscribers: function (page, limit, token, search, startDate, endDate) {
-        let url = "/admin/get-all-subscribers?page=" + page + "&limit=" + limit;
-
-        if (search && startDate && endDate) {
-            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (startDate && endDate) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
-        } else {
-            url += "&data=" + search;
-        }
-
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete subscriber api call
-    deleteSubscriber: function (token, subscriber_id) {
-        try {
-            return fetch(API_URL + "/admin/delete-subscriber", {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ subscriber_id })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //get all kyc data api
     getKYCData: function (token, page, limit, search) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
@@ -1190,22 +977,6 @@ const ApiUtils = {
     updateKYCStatus: function (token, form) {
         try {
             return fetch(API_URL + "/admin/update-kyc-status", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //set featured blog api
-    setFeatureBlog: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/set-featured-blog", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,

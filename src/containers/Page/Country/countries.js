@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Button, Select } from 'antd';
+import { Input, Tabs, Pagination, notification, Button, Select, Form } from 'antd';
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -69,18 +69,11 @@ class Countries extends Component {
     }
 
     static showStates(value) {
-        this.props.history.push('/dashboard/country/' + value + '/states');
+        self.props.history.push('/dashboard/country/' + value + '/states');
     }
 
     componentDidMount = () => {
-        if (this.props.location.search) {
-            let path = this.props.location.search.split('=')
-            this.setState({ searchCountry: path[1] }, () => {
-                this._getAllCountries();
-            })
-        } else {
-            this._getAllCountries();
-        }
+        this._getAllCountries();
     }
 
     openNotificationWithIconError = (type) => {
@@ -93,17 +86,17 @@ class Countries extends Component {
 
     _getAllCountries = () => {
         const { token } = this.props;
-        const { limit, searchCountry, page, localityVal } = this.state;
+        const { limit, searchCountry, page, localityVal, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllCountries(page, limit, token, searchCountry, localityVal)
+        ApiUtils.getAllCountries(page, limit, token, searchCountry, localityVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({ allCountries: res.data, allCountryCount: res.CountryCount });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message, searchCountry: '' });
+                    _this.setState({ errMsg: true, message: res.message });
                 }
                 _this.setState({ loader: false })
             })
@@ -123,17 +116,17 @@ class Countries extends Component {
         this.setState({ searchCountry: field.target.value })
     }
 
-    _searchCountry = () => {
-        this.props.history.push('/dashboard/countries?search=' + this.state.searchCountry);
+    _searchCountry = (e) => {
+        e.preventDefault();
         this.setState({ page: 1 }, () => {
             this._getAllCountries();
         });
     }
 
     _resetFilters = () => {
-        this.props.history.push('/dashboard/countries');
-        this.setState({ searchCountry: '', localityVal: '' }, () => {
+        this.setState({ searchCountry: '', localityVal: '', page: 1, sorterCol: '', sortOrder: '' }, () => {
             this._getAllCountries();
+            this.props.history.push('/dashboard/countries');
         })
     }
 
@@ -145,6 +138,12 @@ class Countries extends Component {
 
     _changeLocality = (val) => {
         this.setState({ localityVal: val });
+    }
+
+    _handleCountryChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllCountries();
+        })
     }
 
     render() {
@@ -162,28 +161,30 @@ class Countries extends Component {
                         {countryTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Input
-                                        placeholder="Search countries"
-                                        onChange={this._changeSearch.bind(this)}
-                                        style={{ "width": "200px" }}
-                                        value={searchCountry}
-                                    />
+                                    <Form onSubmit={this._searchCountry}>
+                                        <Input
+                                            placeholder="Search countries"
+                                            onChange={this._changeSearch}
+                                            style={{ "width": "200px" }}
+                                            value={searchCountry}
+                                        />
 
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a locality"
-                                        onChange={this._changeLocality}
-                                        value={localityVal}
-                                    >
-                                        <Option value={''}>All</Option>
-                                        <Option value={1}>Legal</Option>
-                                        <Option value={2}>Illegal</Option>
-                                        <Option value={3}>Neutral</Option>
-                                        <Option value={4}>Partial Services Available</Option>
-                                    </Select>
+                                        <Select
+                                            style={{ width: 125, "marginLeft": "15px" }}
+                                            placeholder="Select a locality"
+                                            onChange={this._changeLocality}
+                                            value={localityVal}
+                                        >
+                                            <Option value={''}>All</Option>
+                                            <Option value={1}>Legal</Option>
+                                            <Option value={2}>Illegal</Option>
+                                            <Option value={3}>Neutral</Option>
+                                            <Option value={4}>Partial Services Available</Option>
+                                        </Select>
 
-                                    <Button className="search-btn" type="primary" onClick={this._searchCountry}>Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    </Form>
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div>
@@ -194,6 +195,7 @@ class Countries extends Component {
                                         pagination={false}
                                         dataSource={allCountries}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleCountryChange}
                                     />
                                     {showEditCountryModal &&
                                         <EditCountryModal

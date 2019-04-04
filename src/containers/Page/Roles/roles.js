@@ -110,10 +110,12 @@ class Roles extends Component {
 
     _getAllRoles = () => {
         const { token } = this.props;
+        const { sorterCol, sortOrder } = this.state;
+
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllRoles(token)
+        ApiUtils.getAllRoles(token, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -174,6 +176,12 @@ class Roles extends Component {
         this.setState({ showDeleteRoleModal: false });
     }
 
+    _handleRoleChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllRoles();
+        })
+    }
+
     render() {
         const { allRoles, errType, errMsg, loader, showAddRoleModal,
             showEditRoleModal, roleDetails, showDeleteRoleModal } = this.state;
@@ -204,6 +212,7 @@ class Roles extends Component {
                                         pagination={false}
                                         dataSource={allRoles}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleRoleChange}
                                     />
                                     {/* {showEditRoleModal && */}
                                     <EditRoleModal

@@ -83,7 +83,7 @@ class LoginHistory extends Component {
 
     _resetFilters = () => {
         this.setState({
-            searchHistory: '', startDate: '', endDate: '', rangeDate: []
+            searchHistory: '', startDate: '', endDate: '', rangeDate: [], page: 1
         }, () => {
             this._getAllLoginHistory();
         })
@@ -91,7 +91,9 @@ class LoginHistory extends Component {
 
     _searchHistory = (e) => {
         e.preventDefault();
-        this._getAllLoginHistory();
+        this.setState({ page: 1 }, () => {
+            this._getAllLoginHistory();
+        })
     }
 
     _handleHistoryPagination = (page) => {
@@ -135,6 +137,7 @@ class LoginHistory extends Component {
                                 </div>
                                 <div>
                                     <TableWrapper
+                                        style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

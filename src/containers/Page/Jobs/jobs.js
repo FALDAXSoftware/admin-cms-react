@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import AddJobModal from './addJobModal';
 import ViewJobModal from './viewJobModal';
 import EditJobModal from './editJobModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -112,11 +113,11 @@ class Jobs extends Component {
 
     _getAllJobs = () => {
         const { token } = this.props;
-        const { limit, searchJob, page } = this.state;
+        const { limit, searchJob, page, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllJobs(page, limit, token, searchJob)
+        ApiUtils.getAllJobs(page, limit, token, searchJob, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -215,6 +216,12 @@ class Jobs extends Component {
         this.setState({ showEditJobModal: false });
     }
 
+    _handleJobTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllJobs();
+        })
+    }
+
     render() {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
@@ -246,9 +253,7 @@ class Jobs extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <ViewJobModal
                                         jobDetails={jobDetails}
@@ -268,6 +273,7 @@ class Jobs extends Component {
                                         pagination={false}
                                         dataSource={allJobs}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleJobTableChange}
                                     />
                                     {
                                         showDeleteJobModal &&

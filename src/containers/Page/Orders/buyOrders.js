@@ -49,17 +49,15 @@ class BuyOrders extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allOrders: res.data, allOrderCount: res.buyBookCount,
-                        searchOrder: '', loader: false
+                        allOrders: res.data, allOrderCount: res.buyBookCount, loader: false
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchOrder: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -71,7 +69,7 @@ class BuyOrders extends Component {
     }
 
     _handleOrderPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getAllOrders();
         })
     }

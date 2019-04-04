@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Modal } from 'antd';
+import { Button, Tabs, notification, Modal, Input } from 'antd';
 import { employeeTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,6 +11,7 @@ import EditEmployeeModal from './editEmployeeModal';
 import FaldaxLoader from '../faldaxLoader';
 
 const TabPane = Tabs.TabPane;
+const Search = Input.Search;
 var self;
 
 class Employees extends Component {
@@ -26,7 +27,8 @@ class Employees extends Component {
             showEditEmpModal: false,
             showDeleteEmpModal: false,
             empDetails: [],
-            deleteEmpId: ''
+            deleteEmpId: '',
+            searchEmp: ''
         }
         self = this;
         Employees.employeeStatus = Employees.employeeStatus.bind(this);
@@ -86,14 +88,15 @@ class Employees extends Component {
 
     _getAllEmployees = () => {
         const { token } = this.props;
+        const { searchEmp, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllEmployee(token)
+        ApiUtils.getAllEmployee(token, sorterCol, sortOrder, searchEmp)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({ allEmployee: res.data });
+                    _this.setState({ allEmployee: res.data.employees });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -155,6 +158,18 @@ class Employees extends Component {
         this.props.history.push('/dashboard/employee/' + emp.id)
     }
 
+    _handleEmployeeChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllEmployees();
+        })
+    }
+
+    _searchEmpoyee = (val) => {
+        this.setState({ searchEmp: val }, () => {
+            this._getAllEmployees();
+        });
+    }
+
     render() {
         const { allEmployee, errType, errMsg, loader, showAddEmpModal,
             showEditEmpModal, empDetails, showDeleteEmpModal } = this.state;
@@ -170,6 +185,12 @@ class Employees extends Component {
                         {employeeTableinfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Search
+                                        placeholder="Search employees"
+                                        onSearch={(value) => this._searchEmpoyee(value)}
+                                        style={{ "float": "right", "width": "250px" }}
+                                        enterButton
+                                    />
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddEmpModal}>Add Employee</Button>
                                     <AddEmployeeModal
                                         showAddEmpModal={showAddEmpModal}
@@ -190,6 +211,7 @@ class Employees extends Component {
                                         pagination={false}
                                         dataSource={allEmployee}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleEmployeeChange}
                                     />
                                     <EditEmployeeModal
                                         fields={empDetails}

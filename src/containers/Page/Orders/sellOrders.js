@@ -49,11 +49,10 @@ class SellOrders extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allOrders: res.data, allOrderCount: res.sellBookCount,
-                        searchOrder: '', loader: false
+                        allOrders: res.data, allOrderCount: res.sellBookCount, loader: false
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '', loader: false });
+                    _this.setState({ errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(() => {
@@ -71,13 +70,13 @@ class SellOrders extends Component {
     }
 
     _handleOrderPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
-            this._getAllOrders(page - 1);
+        this.setState({ page }, () => {
+            this._getAllOrders();
         })
     }
 
     _handleSellOrderChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllOrders();
         })
     }

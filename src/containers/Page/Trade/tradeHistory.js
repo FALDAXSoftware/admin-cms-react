@@ -118,7 +118,7 @@ class TradeHistory extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchTrade: '', startDate: '', endDate: '', rangeDate: []
+            filterVal: '', searchTrade: '', startDate: '', endDate: '', rangeDate: [], page: 1
         }, () => {
             this._getAllTrades();
         })

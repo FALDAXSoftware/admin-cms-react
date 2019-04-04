@@ -17,12 +17,16 @@ class ReferralUsers extends Component {
             allReferral: this.props.allReferral,
             allReferralCount: this.props.allReferralCount,
             userId: this.props.userId,
-            page: 0,
+            page: 1,
             limit: 50,
         }
     }
 
     componentDidMount = () => {
+        this._getAllUserReferral();
+    }
+
+    _getAllUserReferral = () => {
         const { token, user_id } = this.props;
         const { limit, page } = this.state;
 
@@ -51,7 +55,9 @@ class ReferralUsers extends Component {
     }
 
     _handleReferralPagination = (page) => {
-        this.props.getAllReferredUsers(page - 1, this.state.userId);
+        this.setState({ page }, () => {
+            this._getAllUserReferral();
+        })
     }
 
     render() {

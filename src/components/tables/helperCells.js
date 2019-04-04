@@ -5,20 +5,15 @@ import EditableCell from './editableCell';
 import FilterDropdown from './filterDropdown';
 import { Users } from '../../containers/Page/Users/users';
 import { Coins } from '../../containers/Page/Coins/coins';
-import { StaticPages } from '../../containers/Page/StaticPages/staticPages';
-import { Announce } from '../../containers/Page/Announce/announce';
 import { Countries } from '../../containers/Page/Country/countries';
 import { StateList } from '../../containers/Page/Country/StateList';
 import { Roles } from '../../containers/Page/Roles/roles';
 import { Employees } from '../../containers/Page/Employee/employee';
-import { Blogs } from '../../containers/Page/Blogs/blogs';
 import { Pairs } from '../../containers/Page/Pairs/pairs';
 import { Jobs } from '../../containers/Page/Jobs/jobs';
 import { JobApplications } from '../../containers/Page/Jobs/jobApplications';
-import { CoinRequests } from '../../containers/Page/Coins/coinRequests';
 import { LimitManagement } from '../../containers/Page/LimitManagement/limitManagement';
 import { KYC } from '../../containers/Page/KYC/kyc';
-import { Subscribers } from '../../containers/Page/Subscribe/subscribers';
 import { Fees } from '../../containers/Page/Fees/fees';
 import { News } from '../../containers/Page/News/news';
 import { Icon, Switch, Button, Tooltip } from 'antd';
@@ -57,34 +52,6 @@ const coinstatus = (value, coin_name, coin_code, minLimit, maxLimit, wallet_addr
 
 const deleteCoin = (value) => {
     Coins.deleteCoin(value);
-}
-
-const editPage = (value, name, title, content, is_active) => {
-    StaticPages.edit(value, name, title, content, is_active);
-}
-
-const viewPage = (value, name, title, content, is_active) => {
-    StaticPages.view(value, name, title, content, is_active);
-}
-
-const deletePage = (value) => {
-    StaticPages.delete(value);
-}
-
-const editTemplate = (value, name, title, content, is_active) => {
-    Announce.edit(value, name, title, content, is_active);
-}
-
-const viewTemplate = (value, name, title, content, is_active) => {
-    Announce.view(value, name, title, content, is_active);
-}
-
-const deleteTemplate = (value) => {
-    Announce.delete(value);
-}
-
-const sendAnnouncement = (value) => {
-    Announce.announce(value);
 }
 
 const countryStatus = (value, name, legality, color, stateCount, is_active) => {
@@ -131,22 +98,6 @@ const deleteEmployee = (value) => {
     Employees.deleteEmployee(value);
 }
 
-const editBlog = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => {
-    Blogs.editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured);
-}
-
-const deleteBlog = (value) => {
-    Blogs.deleteBlog(value);
-}
-
-const viewBlog = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => {
-    Blogs.viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured);
-}
-
-const blogStatus = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => {
-    Blogs.blogStatus(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured);
-}
-
 const pairStatus = (value, name, maker_fee, taker_fee, created_at, is_active) => {
     Pairs.pairStatus(value, name, maker_fee, taker_fee, created_at, is_active);
 }
@@ -183,10 +134,6 @@ const viewJobApplication = (value, first_name, last_name, email, phone_number, c
     JobApplications.viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter);
 }
 
-const viewCoinReq = (value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site) => {
-    CoinRequests.viewCoinReq(value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site);
-}
-
 const rejectKYC = (value, first_name, last_name, email, direct_response, kycDoc_details) => {
     KYC.rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details);
 }
@@ -197,10 +144,6 @@ const approveKYC = (value, first_name, last_name, email, direct_response, kycDoc
 
 const viewKYC = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => {
     KYC.viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type);
-}
-
-const deleteSubscriber = (value, email, is_news_feed, created_at) => {
-    Subscribers.deleteSubscriber(value, email, is_news_feed, created_at);
 }
 
 const editFees = (value, trade_volume, maker_fee, taker_fee) => {
@@ -237,18 +180,13 @@ const NewsDescCell = (value) => <Tooltip title={value}><p>{value.slice(0, 35) + 
 //const NewsActionsCell = (value, cover_image, title, link, posted_at, description, is_active, owner) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewNews(value, cover_image, title, link, posted_at, description, is_active, owner)} /></Tooltip></div>;
 const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format)} /></Tooltip></div>;
 const CoinActionCell = (value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon)} /></Tooltip></div>;
-const PageActionCell = (value, name, title, content, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deletePage(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPage(value, name, title, content, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPage(value, name, title, content, is_active)} /></Tooltip></div>;
-const AnnounceActionCell = (value, name, title, content, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteTemplate(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, title, content, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewTemplate(value, name, title, content, is_active)} /></Tooltip></div>;
-const AnnounceAnnouncementCell = (value) => <Button type="primary" onClick={() => sendAnnouncement(value)} > Announce </Button>;
 const RolesActionCell = (value, name, users, coins, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteRole(value, name, users, coins, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active)} /></Tooltip></div>;
 const CountryActionCell = (value, name, legality, color, stateCount, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCountry(value, name, legality, color, is_active)} /></Tooltip></div>;
 const StateActionCell = (value, name, legality, color, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editState(value, name, legality, color, is_active)} /></Tooltip></div>;
 const CountryButtonCell = (value, stateCount) => <Button type="primary" onClick={() => showStates(value)} disabled={stateCount > 0 ? false : true} >Show States</Button>;
 const RoleSwitchCell = (value, name, users, coins, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, users, coins, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) }} />
-const BlogSwitchCell = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => <Switch checked={is_featured} onChange={() => { blogStatus(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) }} />
 const EmployeeSwitchCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active) }} />
 const EmployeeActionCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active)} /></Tooltip></div>;
-const BlogActionCell = (value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteBlog(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewBlog(value, title, admin_name, tags, created_at, description, admin_id, cover_image, is_featured)} /></Tooltip></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;
 const LimitActionCell = (value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat)} /></Tooltip></div>;
@@ -257,8 +195,6 @@ const JobActionCell = (value, position, location, short_desc, job_desc, category
 const JobSwitchCell = (value, position, location, short_desc, job_desc, category_id, is_active) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) }} />
 const JobButtonCell = (value) => <Button type="primary" onClick={() => showApplicants(value)} >Show Applications</Button>;
 const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter)} /></Tooltip></div>;
-const SubscriberActionCell = (value, first_name, last_name, email, message, created_at) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteSubscriber(value)} style={{ "cursor": "pointer" }} /></Tooltip></div>;
-const CoinReqActionCell = (value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoinReq(value, coin_name, email, target_date, message, url, coin_symbol, country, elevator_pitch, first_name, last_name, skype, ref_site, phone, other_site)} /></Tooltip></div>;
 const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => { direct_response != 'ACCEPT' ? <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip><Tooltip title="Reject"><Icon type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div> : 'b;la' };
 const KYCActionCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip></div>;
 const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => <p> {is_logged_in == false ? moment.utc(updated_at).local().format("DD MMM, YYYY HH:mm") : ''}</p>;
@@ -278,12 +214,9 @@ export {
     SwitchCell,
     CoinActionCell,
     StaticSwitchCell,
-    PageActionCell,
     ButtonCell,
     UserSwitchCell,
-    AnnounceActionCell,
     CountrySwitchCell,
-    AnnounceAnnouncementCell,
     ContentCell,
     RolesActionCell,
     CountryActionCell,
@@ -295,7 +228,6 @@ export {
     RoleSwitchCell,
     EmployeeSwitchCell,
     EmployeeActionCell,
-    BlogActionCell,
     FeeSwitchCell,
     DateTimeCell,
     FeeActionCell,
@@ -305,11 +237,8 @@ export {
     JobSwitchCell,
     JobButtonCell,
     JobAppActionCell,
-    CoinReqActionCell,
     KYCStatusCell,
     KYCActionCell,
-    BlogSwitchCell,
-    SubscriberActionCell,
     LogoutDateCell,
     FeesActionCell,
     FeesCell,
