@@ -80,18 +80,14 @@ class Dashboard extends Component {
             inactiveUsers: 0,
             activeCoins: 0,
             InactiveCoins: 0,
-            pagesCount: 0,
             referralCount: 0,
             activePairs: 0,
             InactivePairs: 0,
             legalCountries: 0,
             illegalCountries: 0,
             neutralCountries: 0,
-            blogsCount: 0,
             employeeCount: 0,
             jobsCount: 0,
-            coinReqCount: 0,
-            subscriberCount: 0,
             withdrawReqCount: 0,
             kyc_disapproved: 0,
             kyc_approved: 0,
@@ -125,16 +121,15 @@ class Dashboard extends Component {
                     const {
                         activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
                         InactivePairs, legalCountries, illegalCountries,
-                        neutralCountries, blogsCount, employeeCount, jobsCount,
-                        coinReqCount, subscriberCount, withdrawReqCount, kyc_disapproved, kyc_approved,
+                        neutralCountries, employeeCount, jobsCount,
+                        withdrawReqCount, kyc_disapproved, kyc_approved,
                         total_kyc, kyc_pending
-
                     } = res;
                     _this.setState({
                         activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
                         InactivePairs, legalCountries,
-                        illegalCountries, neutralCountries, blogsCount, employeeCount,
-                        jobsCount, coinReqCount, subscriberCount, withdrawReqCount,
+                        illegalCountries, neutralCountries, employeeCount,
+                        jobsCount, withdrawReqCount,
                         kyc_disapproved, kyc_approved, total_kyc, kyc_pending
                     });
                 } else {
@@ -150,8 +145,7 @@ class Dashboard extends Component {
         const { rowStyle, colStyle } = basicStyle;
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
-            neutralCountries, blogsCount, employeeCount, jobsCount, coinReqCount,
-            subscriberCount, withdrawReqCount,
+            neutralCountries, employeeCount, jobsCount, withdrawReqCount,
             kyc_approved, kyc_disapproved, total_kyc, kyc_pending
         } = this.state;
 

@@ -9,21 +9,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Users/users")),
         module: "users"
     },
-    // {
-    //     path: "announcement",
-    //     component: asyncComponent(() => import("../Page/Announce/announce")),
-    //     module: "announcement"
-    // },
     {
         path: "coins",
         component: asyncComponent(() => import("../Page/Coins/coins")),
         module: "coins"
     },
-    // {
-    //     path: "static-pages",
-    //     component: asyncComponent(() => import("../Page/StaticPages/staticPages")),
-    //     module: "static_page"
-    // },
     {
         path: "countries",
         component: asyncComponent(() => import("../Page/Country/countries")),
@@ -39,11 +29,6 @@ const routes = [
         component: asyncComponent(() => import("../Page/Employee/employee")),
         module: "employee"
     },
-    // {
-    //     path: "blogs",
-    //     component: asyncComponent(() => import("../Page/Blogs/blogs")),
-    //     module: "blogs"
-    // },
     {
         path: "pairs",
         component: asyncComponent(() => import("../Page/Pairs/pairs")),
@@ -74,26 +59,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest")),
         module: "withdraw_requests"
     },
-    // {
-    //     path: "coin-requests",
-    //     component: asyncComponent(() => import("../Page/Coins/coinRequests")),
-    //     module: "coin_requests"
-    // },
     {
         path: "jobs",
         component: asyncComponent(() => import("../Page/Jobs/jobs")),
         module: "jobs"
     },
-    // {
-    //     path: "contact-us",
-    //     component: asyncComponent(() => import("../Page/adminSetting")),
-    //     module: "contact_setting"
-    // },
-    // {
-    //     path: "subscribe",
-    //     component: asyncComponent(() => import("../Page/Subscribe/subscribers")),
-    //     module: "subscribe"
-    // },
     {
         path: "kyc",
         component: asyncComponent(() => import("../Page/KYC/kyc")),

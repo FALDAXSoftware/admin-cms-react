@@ -55,7 +55,7 @@ const columns = [
         width: 200,
         render: object => renderCell(object, 'DateCell', 'created_at')
     }, {
-        title: <IntlMessages id="blogTable.title.Actions" />,
+        title: <IntlMessages id="jobTable.title.Actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,

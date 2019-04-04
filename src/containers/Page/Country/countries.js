@@ -69,20 +69,11 @@ class Countries extends Component {
     }
 
     static showStates(value) {
-        this.props.history.push('/dashboard/country/' + value + '/states');
+        self.props.history.push('/dashboard/country/' + value + '/states');
     }
 
     componentDidMount = () => {
-        if (this.props.location.search) {
-            console.log('if')
-            let path = this.props.location.search.split('=')
-            this.setState({ searchCountry: path[1] }, () => {
-                this._getAllCountries();
-            })
-        } else {
-            console.log('else')
-            this._getAllCountries();
-        }
+        this._getAllCountries();
     }
 
     openNotificationWithIconError = (type) => {
@@ -125,17 +116,17 @@ class Countries extends Component {
         this.setState({ searchCountry: field.target.value })
     }
 
-    _searchCountry = () => {
-        this.props.history.push('/dashboard/countries?search=' + this.state.searchCountry);
+    _searchCountry = (e) => {
+        e.preventDefault();
         this.setState({ page: 1 }, () => {
             this._getAllCountries();
         });
     }
 
     _resetFilters = () => {
-        this.props.history.push('/dashboard/countries');
-        this.setState({ searchCountry: '', localityVal: '', page: 1 }, () => {
+        this.setState({ searchCountry: '', localityVal: '', page: 1, sorterCol: '', sortOrder: '' }, () => {
             this._getAllCountries();
+            this.props.history.push('/dashboard/countries');
         })
     }
 
@@ -173,7 +164,7 @@ class Countries extends Component {
                                     <Form onSubmit={this._searchCountry}>
                                         <Input
                                             placeholder="Search countries"
-                                            onChange={this._changeSearch.bind(this)}
+                                            onChange={this._changeSearch}
                                             style={{ "width": "200px" }}
                                             value={searchCountry}
                                         />

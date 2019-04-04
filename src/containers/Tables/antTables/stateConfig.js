@@ -38,6 +38,7 @@ const columns = [
         title: <IntlMessages id="countryTable.title.legality" />,
         key: 'legality',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'LegalityCell', 'legality')
     },
     {

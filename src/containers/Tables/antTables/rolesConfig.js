@@ -47,6 +47,7 @@ const columns = [
         title: <IntlMessages id="roleTable.title.name" />,
         key: 'name',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'name')
     }, {
         title: <IntlMessages id="roleTable.title.status" />,

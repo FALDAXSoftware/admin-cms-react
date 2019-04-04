@@ -114,7 +114,7 @@ class StateList extends Component {
         });
     }
 
-    _handleCountryChange = (pagination, filters, sorter) => {
+    _handleStateChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
             this._getAllStates();
         })
