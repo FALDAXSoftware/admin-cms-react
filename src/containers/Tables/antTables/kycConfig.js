@@ -44,11 +44,13 @@ const columns = [{
     title: <IntlMessages id="kycTable.title.name" />,
     key: 'first_name',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'first_name')
 }, {
     title: <IntlMessages id="kycTable.title.last_name" />,
     key: 'last_name',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'last_name')
 }, {
     title: <IntlMessages id="kycTable.title.email" />,

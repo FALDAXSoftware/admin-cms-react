@@ -66,15 +66,13 @@ class KYC extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 self.setState({
-                    loader: false, errMsg: true, errMessage: res.message,
-                    errType: 'error',
+                    loader: false, errMsg: true, errMessage: res.message, errType: 'error',
                 });
                 self._getAllKYCData();
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -85,11 +83,11 @@ class KYC extends Component {
 
     _getAllKYCData = () => {
         const { token } = this.props;
-        const { page, limit, searchKYC } = this.state;
+        const { page, limit, searchKYC, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getKYCData(token, page, limit, searchKYC)
+        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -101,8 +99,7 @@ class KYC extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -121,6 +118,12 @@ class KYC extends Component {
 
     _handleKYCPagination = (page) => {
         this.setState({ page }, () => {
+            this._getAllKYCData();
+        })
+    }
+
+    _handleKYCTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
             this._getAllKYCData();
         })
     }
@@ -151,15 +154,18 @@ class KYC extends Component {
                                     pagination={false}
                                     dataSource={allKYCData}
                                     className="isoCustomizedTable"
+                                    onChange={this._handleKYCTableChange}
                                 />
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleKYCPagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allKYCCount}
-                                />
+                                {allKYCCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleKYCPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allKYCCount}
+                                    />
+                                    : ''}
                             </TabPane>
                         ))}
                     </Tabs>

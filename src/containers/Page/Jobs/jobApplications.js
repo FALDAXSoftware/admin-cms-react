@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin } from 'antd';
+import { Input, Tabs, Pagination, notification } from 'antd';
 import { jobAppTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,6 +7,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewJobAppModal from './viewJobAppModal';
+import FaldaxLoader from '../faldaxLoader';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -33,9 +34,9 @@ class JobApplications extends Component {
         JobApplications.viewJobApplication = JobApplications.viewJobApplication.bind(this);
     }
 
-    static viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter) {
+    static viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url) {
         let applicationDetails = {
-            value, first_name, last_name, email, phone_number, created_at, resume, cover_letter
+            value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url
         }
         self.setState({ showViewJobAppModal: true, applicationDetails });
     }
@@ -44,8 +45,9 @@ class JobApplications extends Component {
         const { location } = this.props;
         let job = location.pathname.split('/');
         let jobId = job[job.length - 1]
-        this._getAllJobApplicants(jobId);
-        this.setState({ jobId })
+        this.setState({ jobId }, () => {
+            this._getAllJobApplicants();
+        })
     }
 
     openNotificationWithIconError = (type) => {
@@ -56,47 +58,51 @@ class JobApplications extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllJobApplicants = (jobId) => {
+    _getAllJobApplicants = () => {
         const { token } = this.props;
-        const { limit, searchJobApp, page } = this.state;
+        const { limit, searchJobApp, page, sorterCol, sortOrder, jobId } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllJobApplications(jobId, page, limit, token, searchJobApp)
+        ApiUtils.getAllJobApplications(jobId, page, limit, token, searchJobApp, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allApplications: res.data, allApplicationsCount: res.inquiryCount,
-                        searchJobApp: ''
+                        allApplications: res.data, allApplicationsCount: res.applicationCount,
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchJobApp: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchJobApp: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
 
     _searchJobApp = (val) => {
         this.setState({ searchJobApp: val, page: 1 }, () => {
-            this._getAllJobApplicants(this.state.jobId);
+            this._getAllJobApplicants();
         });
     }
 
     _handleJobPagination = (page) => {
         this.setState({ page }, () => {
-            this._getAllJobApplicants(this.state.jobId);
+            this._getAllJobApplicants();
         })
     }
 
     _closeViewJobAppModal = () => {
         this.setState({ showViewJobAppModal: false });
+    }
+
+    _handleJobAppTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllJobApplicants();
+        })
     }
 
     render() {
@@ -121,7 +127,7 @@ class JobApplications extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class"><Spin /></span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <ViewJobAppModal
                                         applicationDetails={applicationDetails}
@@ -134,6 +140,7 @@ class JobApplications extends Component {
                                         pagination={false}
                                         dataSource={allApplications}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleJobAppTableChange}
                                     />
                                     {allApplicationsCount > 0 ?
                                         <Pagination

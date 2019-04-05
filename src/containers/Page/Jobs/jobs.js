@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Button, Modal } from 'antd';
+import { Input, Tabs, Pagination, notification, Button, Modal } from 'antd';
 import { jobsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -121,18 +121,15 @@ class Jobs extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        allJobs: res.data, allJobsCount: res.allJobsCount, searchJob: ''
-                    });
+                    _this.setState({ allJobs: res.data, allJobsCount: res.allJobsCount });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchJob: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchJob: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -226,7 +223,6 @@ class Jobs extends Component {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
             jobDetails, allJobCategories } = this.state;
-        console.log('jobDetails', jobDetails)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -289,7 +285,7 @@ class Jobs extends Component {
                                             Are you sure you want to delete this job ?
                                     </Modal>
                                     }
-                                    {allJobsCount.length > 0 ?
+                                    {allJobsCount > 0 ?
                                         <Pagination
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
