@@ -25,7 +25,7 @@ class TradeHistory extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0,
+            page: 1,
             loader: false,
             filterVal: '',
             startDate: '',
@@ -48,9 +48,7 @@ class TradeHistory extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        allTrades: res.data, allTradeCount: res.tradeCount
-                    });
+                    _this.setState({ allTrades: res.data, allTradeCount: res.tradeCount });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }

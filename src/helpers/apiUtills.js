@@ -823,11 +823,11 @@ const ApiUtils = {
     getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
         if (sorterCol && sortOrder && search) {
-            url += "?data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else {
-            url += "?data=" + search;
+            url += "&data=" + search;
         }
 
         try {
@@ -936,11 +936,16 @@ const ApiUtils = {
     },
 
     //get all jobs api
-    getAllJobApplications: function (jobId, page, limit, token, search) {
+    getAllJobApplications: function (jobId, page, limit, token, search, sorterCol, sortOrder) {
         let url = "/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
-        if (search) {
-            url = url + "&data=" + search;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -955,11 +960,16 @@ const ApiUtils = {
     },
 
     //get all kyc data api
-    getKYCData: function (token, page, limit, search) {
+    getKYCData: function (token, page, limit, search, sorterCol, sortOrder) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
