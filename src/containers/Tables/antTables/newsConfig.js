@@ -45,12 +45,14 @@ const columns = [
         title: <IntlMessages id="newsTable.title.title" />,
         key: 'title',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'NewsDescCell', 'title')
     },
     {
         title: <IntlMessages id="newsTable.title.link" />,
         key: 'link',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'NewsLinkCell', 'link')
     },
     {

@@ -1135,18 +1135,28 @@ const ApiUtils = {
         }
     },
 
-    getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate) {
+    getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
-        if (searchNews && filterVal && startDate && endDate) {
-            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filterVal=" + filterVal;
-        } else if (searchNews && startDate && endDate) {
+        if (searchNews && filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filterVal=" + filterVal + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (searchNews && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (filterVal && startDate && endDate) {
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&filterVal=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (filterVal && searchNews) {
+        } else if (filterVal && searchNews && sorterCol && sortOrder) {
             url += "&filterVal=" + filterVal + "&search=" + searchNews;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&filterVal=" + filterVal + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (searchNews && sorterCol && sortOrder) {
+            url += "&data=" + searchNews + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (filterVal) {
             url += "&filterVal=" + filterVal;
         } else {
