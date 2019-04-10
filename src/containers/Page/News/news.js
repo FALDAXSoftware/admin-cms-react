@@ -69,17 +69,15 @@ class News extends Component {
 
     _getAllNews = () => {
         const { token } = this.props;
-        const { searchNews, page, limit, filterVal, startDate, endDate } = this.state;
+        const { searchNews, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllNews(page, limit, token, searchNews, filterVal, startDate, endDate)
+        ApiUtils.getAllNews(page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        allNews: res.data, allNewsCount: res.newsCount
-                    });
+                    _this.setState({ allNews: res.data, allNewsCount: res.newsCount });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -167,6 +165,12 @@ class News extends Component {
         //this.props.history.push(news.link)
     }
 
+    _handleNewsTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllNews();
+        })
+    }
+
     render() {
         const { allNews, allNewsCount, errType, errMsg, page, loader,
             searchNews, rangeDate, filterVal } = this.state;
@@ -216,17 +220,18 @@ class News extends Component {
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <TableWrapper
-                                    onRow={(record, rowIndex) => {
-                                        return {
-                                            onClick: () => { this._changeRow(record) },
-                                        };
-                                    }}
+                                    // onRow={(record, rowIndex) => {
+                                    //     return {
+                                    //         onClick: () => { this._changeRow(record) },
+                                    //     };
+                                    // }}
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}
                                     dataSource={allNews}
                                     className="isoCustomizedTable"
+                                    onChange={this._handleNewsTableChange}
                                 />
                                 {allNewsCount > 0 ?
                                     <Pagination
