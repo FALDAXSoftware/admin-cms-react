@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification } from 'antd';
+import { Tabs, notification, Input, Button } from 'antd';
 import { FeesInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditFeesModal from "./editFeesModal";
 import FaldaxLoader from '../faldaxLoader';
+import SimpleReactValidator from 'simple-react-validator';
 
 const TabPane = Tabs.TabPane;
 var self;
@@ -23,7 +24,9 @@ class Fees extends Component {
             notify: false,
             errType: '',
             loader: false,
+            fields: {}
         }
+        this.validator = new SimpleReactValidator();
         self = this;
         Fees.editFees = Fees.editFees.bind(this);
     }
@@ -37,6 +40,30 @@ class Fees extends Component {
 
     componentDidMount = () => {
         this._getAllFeesData();
+        this._getContactDetails();
+    }
+
+    _getContactDetails = () => {
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getContactDetails()
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    let fields = _this.state.fields;
+                    fields['default_send_coin_fee'] = res.data.default_send_coin_fee;
+                    _this.setState({ fields });
+                } else {
+                    _this.setState({ errMsg: true, notifyMsg: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, notifyMsg: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
     }
 
     _getAllFeesData = () => {
@@ -56,10 +83,53 @@ class Fees extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errMsg: true, notifyMsg: 'Something went wrong!!',
                     errType: 'error', loader: false
                 });
             });
+    }
+
+    _onChangeFields(field, e) {
+        let fields = this.state.fields;
+        if (e.target.value.trim() == "") {
+            fields[field] = "";
+        } else {
+            fields[field] = e.target.value;
+        }
+        this.setState({ fields });
+    }
+
+    _updateSendFee = () => {
+        const { token } = this.props;
+        const { userDetails } = this.state;
+        let fields = this.state.fields;
+        let _this = this;
+
+        if (_this.validator.allValid()) {
+            _this.setState({ loader: true });
+
+            const formData = {
+                send_coin_fee: fields['default_send_coin_fee'],
+            }
+
+            ApiUtils.updateSendCoinFee(token, formData)
+                .then((response) => response.json())
+                .then(function (res) {
+                    if (res) {
+                        _this.setState({
+                            errMsg: true, notifyMsg: res.message, loader: false, errType: 'Success'
+                        })
+                    } else {
+                        _this.setState({ errMsg: true, notifyMsg: res.message, loader: false, errType: 'error' });
+                    }
+                })
+                .catch(() => {
+                    _this.setState({ loader: false });
+                });
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
     }
 
     openNotificationWithIcon = (type) => {
@@ -75,7 +145,8 @@ class Fees extends Component {
     }
 
     render() {
-        const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal } = this.state;
+        const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal,
+            fields } = this.state;
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -104,6 +175,20 @@ class Fees extends Component {
                                 />
                             </TabPane>
                         ))}
+                        <TabPane tab="Send Fee" key="2">
+                            <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
+                                <span>
+                                    <b>Send Fee</b>
+                                </span>
+                                <Input addonAfter={'%'} placeholder="Send Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                                    onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields["default_send_coin_fee"]} />
+                                <span className="field-error">
+                                    {this.validator.message('send fee', fields['default_send_coin_fee'], 'required|numeric')}
+                                </span>
+                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateSendFee}> Update </Button>
+                            </div>
+                            {loader && <FaldaxLoader />}
+                        </TabPane>
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>

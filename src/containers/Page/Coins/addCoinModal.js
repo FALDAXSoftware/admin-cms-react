@@ -104,8 +104,8 @@ class AddCoinModal extends Component {
         fields['coin_name'] = '';
         fields['coin_code'] = '';
         //fields['description'] = '';
-        fields['minLimit'] = '';
-        fields['maxLimit'] = '';
+        fields['min_limit'] = '';
+        fields['max_limit'] = '';
         //fields['wallet_address'] = '';
         this.setState({ fields, editorContent: '', showError: false, selectedToken: false });
     }
@@ -121,8 +121,8 @@ class AddCoinModal extends Component {
             let formData = new FormData();
             formData.append('coin_name', fields['coin_name']);
             formData.append('coin_code', fields['coin_code'])
-            formData.append('minLimit', fields['minLimit']);
-            formData.append('maxLimit', fields['maxLimit']);
+            formData.append('min_limit', fields['min_limit']);
+            formData.append('max_limit', fields['max_limit']);
             formData.append('isERC', selectedToken);
             formData.append('coin_icon', this.uploadCoinInput.input.files[0]);
 
@@ -230,17 +230,17 @@ class AddCoinModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Minimum Limit:</span>
-                    <Input placeholder="Minimum Limit" onChange={this._handleChange.bind(this, "minLimit")} value={fields["minLimit"]} />
+                    <Input placeholder="Minimum Limit" onChange={this._handleChange.bind(this, "min_limit")} value={fields["min_limit"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('minimum limit', fields["minLimit"], 'required|numeric', 'text-danger')}
+                        {this.validator.message('minimum limit', fields["min_limit"], 'required|numeric', 'text-danger')}
                     </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Maximum Limit:</span>
-                    <Input placeholder="Maximum Limit" onChange={this._handleChange.bind(this, "maxLimit")} value={fields["maxLimit"]} />
+                    <Input placeholder="Maximum Limit" onChange={this._handleChange.bind(this, "max_limit")} value={fields["max_limit"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('maximum limit', fields["maxLimit"], 'required|numeric', 'text-danger')}
+                        {this.validator.message('maximum limit', fields["max_limit"], 'required|numeric', 'text-danger')}
                     </span>
                 </div>
 

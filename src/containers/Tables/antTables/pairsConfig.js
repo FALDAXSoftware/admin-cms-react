@@ -47,6 +47,7 @@ const columns = [{
     title: <IntlMessages id="feeTable.title.created_at" />,
     key: 'created_at',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="feeTable.title.status" />,

@@ -61,6 +61,7 @@ const columns = [
     {
         title: <IntlMessages id="jobTable.title.created_at" />,
         key: 'created_at',
+        sorter: true,
         width: 200,
         render: object => renderCell(object, 'DateCell', 'created_at')
     }, {
