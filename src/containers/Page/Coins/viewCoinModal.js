@@ -52,9 +52,14 @@ class ViewCoinModal extends Component {
                     {coinDetails.coin_code ? coinDetails.coin_code : 'N/A'}
                 </p>
 
-                <span> <b>Limit:</b> </span>
+                <span> <b>Minimum Limit:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.limit ? coinDetails.limit : 'N/A'}
+                    {coinDetails.min_limit ? coinDetails.min_limit : 'N/A'}
+                </p>
+
+                <span> <b>Maximum Limit:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {coinDetails.max_limit ? coinDetails.max_limit : 'N/A'}
                 </p>
 
                 {/* <span> <b>Description:</b> </span>

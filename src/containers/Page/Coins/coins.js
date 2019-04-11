@@ -42,21 +42,21 @@ class Coins extends Component {
         Coins.changeStatus = Coins.changeStatus.bind(this);
     }
 
-    static view(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) {
+    static view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
         let coinDetails = {
-            value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon
+            value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon
         }
         self.setState({ coinDetails, showViewCoinModal: true, page: 1 });
     }
 
-    static edit(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) {
+    static edit(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
         let coinDetails = {
-            value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon
+            value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon
         }
         self.setState({ coinDetails, showEditCoinModal: true, page: 1 });
     }
 
-    static changeStatus(value, coin_name, coin_code, minLimit, maxLimit, wallet_address, created_at, is_active, isERC, coin_icon) {
+    static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
         const { token } = this.props;
 
         let formData = {
