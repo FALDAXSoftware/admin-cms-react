@@ -137,10 +137,11 @@ class StateList extends Component {
                         {stateTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <a onClick={() => { this.props.history.push('/dashboard/countries') }}>Back to Countries</a>
                                     <Search
                                         placeholder="Search states"
                                         onSearch={(value) => this._searchState(value)}
-                                        style={{ "float": "right", "width": "250px" }}
+                                        style={{ "float": "right", "width": "250px", marginBottom: '15px' }}
                                         enterButton
                                     />
                                 </div>

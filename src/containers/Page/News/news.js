@@ -37,8 +37,6 @@ class News extends Component {
 
     static newsStatus(value, cover_image, title, link, posted_at, description, is_active, owner) {
         const { token } = this.props;
-        let self = this;
-
         let formData = {
             id: value,
             is_active: !is_active
@@ -144,7 +142,8 @@ class News extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchNews: '', startDate: '', endDate: '', rangeDate: []
+            filterVal: '', searchNews: '', startDate: '', endDate: '',
+            rangeDate: [], sorterCol: '', sortOrder: ''
         }, () => {
             this._getAllNews();
         })

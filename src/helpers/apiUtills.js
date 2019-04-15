@@ -1,7 +1,7 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -1144,7 +1144,10 @@ const ApiUtils = {
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&filterVal=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && searchNews && sorterCol && sortOrder) {
-            url += "&filterVal=" + filterVal + "&search=" + searchNews;
+            console.log('else')
+            url += "&filterVal=" + filterVal + "&search=" + searchNews + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (filterVal && searchNews && startDate && endDate) {
+            url += "&filterVal=" + filterVal + "&search=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate && sorterCol && sortOrder) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate && sorterCol && sortOrder) {
@@ -1157,11 +1160,15 @@ const ApiUtils = {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (sorterCol && sortOrder) {
             url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (searchNews && filterVal) {
+            url += "&data=" + searchNews + "&filterVal=" + filterVal;
         } else if (filterVal) {
             url += "&filterVal=" + filterVal;
         } else {
-            url += "&search=" + searchNews;
+            url += "&data=" + searchNews;
         }
+
+        console.log('url', url)
 
         try {
             return fetch(API_URL + url, {
