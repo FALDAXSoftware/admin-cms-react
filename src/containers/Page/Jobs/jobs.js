@@ -214,7 +214,7 @@ class Jobs extends Component {
     }
 
     _handleJobTableChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllJobs();
         })
     }

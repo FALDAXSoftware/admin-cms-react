@@ -1,7 +1,7 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {

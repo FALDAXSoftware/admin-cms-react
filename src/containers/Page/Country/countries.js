@@ -141,7 +141,7 @@ class Countries extends Component {
     }
 
     _handleCountryChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllCountries();
         })
     }

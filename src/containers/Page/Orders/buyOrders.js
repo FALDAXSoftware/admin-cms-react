@@ -63,7 +63,7 @@ class BuyOrders extends Component {
     }
 
     _searchOrder = (val) => {
-        this.setState({ searchOrder: val }, () => {
+        this.setState({ searchOrder: val, page: 1 }, () => {
             this._getAllOrders();
         });
     }
@@ -75,7 +75,7 @@ class BuyOrders extends Component {
     }
 
     _handleBuyOrderChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllOrders();
         })
     }

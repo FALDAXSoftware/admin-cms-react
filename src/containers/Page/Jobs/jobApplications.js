@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewJobAppModal from './viewJobAppModal';
 import FaldaxLoader from '../faldaxLoader';
+import { Link } from 'react-router-dom';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -120,6 +121,10 @@ class JobApplications extends Component {
                         {jobAppTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Link to="/dashboard/jobs">
+                                        <i style={{ marginRight: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                                        <a onClick={() => { this.props.history.push('/dashboard/jobs') }}>Back</a>
+                                    </Link>
                                     <Search
                                         placeholder="Search applicants"
                                         onSearch={(value) => this._searchJobApp(value)}
@@ -135,6 +140,7 @@ class JobApplications extends Component {
                                         closeViewJobAppModal={this._closeViewJobAppModal}
                                     />
                                     <TableWrapper
+                                        style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

@@ -65,9 +65,7 @@ class KYC extends Component {
         ApiUtils.updateKYCStatus(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                self.setState({
-                    loader: false, errMsg: true, errMessage: res.message, errType: 'error',
-                });
+                self.setState({ loader: false, errMsg: true, errMessage: res.message, errType: 'error' });
                 self._getAllKYCData();
             })
             .catch(() => {
@@ -123,14 +121,13 @@ class KYC extends Component {
     }
 
     _handleKYCTableChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllKYCData();
         })
     }
 
     render() {
-        const { allKYCData, notify, errType, loader, kycDetails,
-            showViewKYCModal, page, allKYCCount } = this.state;
+        const { allKYCData, notify, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount } = this.state;
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());

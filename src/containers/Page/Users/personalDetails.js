@@ -39,7 +39,7 @@ class PersonalDetails extends Component {
                     </Col>
 
                     <Col span={24}>
-                        <div className="right-div">
+                        <div className="right-div user-profile">
                             <span> <b>Name:</b> </span>
                             <p style={{ "marginBottom": "10px" }}>
                                 {userDetails.first_name ? userDetails.last_name ? userDetails.first_name + ' ' + userDetails.last_name : userDetails.first_name : ''}

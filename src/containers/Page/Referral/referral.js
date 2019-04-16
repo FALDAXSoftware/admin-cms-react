@@ -57,7 +57,6 @@ class Referral extends Component {
     _getAllReferredAdmins = () => {
         const { token } = this.props;
         const { limit, page, searchReferral } = this.state;
-
         let _this = this;
 
         this.setState({ loader: true })
@@ -66,8 +65,7 @@ class Referral extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        allReferral: res.data, allReferralCount: res.referralCount,
-                        showReferralModal: true
+                        allReferral: res.data, allReferralCount: res.referralCount, showReferralModal: true
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -76,18 +74,19 @@ class Referral extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
 
     _handleReferralPagination = (page) => {
-        this._getAllReferredAdmins(page);
+        this.setState({ page }, () => {
+            this._getAllReferredAdmins();
+        });
     }
 
     _searchCoin = (val) => {
-        this.setState({ searchReferral: val }, () => {
+        this.setState({ searchReferral: val, page: 1 }, () => {
             this._getAllReferredAdmins();
         });
     }
@@ -108,7 +107,6 @@ class Referral extends Component {
 
     _updateDefaultReferral = () => {
         const { token } = this.props;
-        const { userDetails } = this.state;
         let fields = this.state.fields;
         let _this = this;
 
@@ -124,10 +122,7 @@ class Referral extends Component {
                 .then(function (res) {
                     if (res) {
                         _this.setState({
-                            errMsg: true, errMessage: res.message,
-                            loader: false, errType: 'Success'
-                        }, () => {
-                            //  _this._getUserDetails();
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
                         })
                     } else {
                         _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
@@ -151,7 +146,7 @@ class Referral extends Component {
     };
 
     render() {
-        const { allReferral, allReferralCount, loader, fields, errMsg, errType } = this.state;
+        const { allReferral, allReferralCount, loader, fields, errMsg, errType, page } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -165,7 +160,7 @@ class Referral extends Component {
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Search
-                                            placeholder="Search users"
+                                            placeholder="Search fgdfgusers"
                                             onSearch={(value) => this._searchCoin(value)}
                                             style={{ "float": "right", "width": "250px" }}
                                             enterButton
@@ -190,7 +185,7 @@ class Referral extends Component {
                                             className="ant-users-pagination"
                                             onChange={this._handleReferralPagination.bind(this)}
                                             pageSize={50}
-                                            defaultCurrent={1}
+                                            current={page}
                                             total={allReferralCount}
                                         /> : ''}
                                 </TabPane>

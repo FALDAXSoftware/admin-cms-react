@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, notification } from 'antd';
+import { Input, Tabs, notification, Icon } from 'antd';
 import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditStateModal from './editStateModal';
 import FaldaxLoader from '../faldaxLoader';
+import { Link } from 'react-router-dom';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -128,26 +129,26 @@ class StateList extends Component {
 
         return (
             <LayoutWrapper>
-                {/* <div>
-                    <Icon type="left-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => { this.props.history.push('/dashboard/countries') }} />
-                    <Button type="primary" onClick={() => { this.props.history.push('/dashboard/countries') }}>Back To Countries</Button>
-                </div> */}
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
                         {stateTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <a onClick={() => { this.props.history.push('/dashboard/countries') }}>Back to Countries</a>
+                                    <Link to="/dashboard/countries">
+                                        <i style={{ marginRight: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                                        <a onClick={() => { this.props.history.push('/dashboard/countries') }}>Back</a>
+                                    </Link>
                                     <Search
                                         placeholder="Search states"
                                         onSearch={(value) => this._searchState(value)}
-                                        style={{ "float": "right", "width": "250px", marginBottom: '15px' }}
+                                        className='search-btn-back'
                                         enterButton
                                     />
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
+                                        style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
