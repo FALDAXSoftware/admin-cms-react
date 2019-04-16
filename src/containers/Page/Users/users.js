@@ -117,7 +117,7 @@ class Users extends Component {
 
     handleTableChange = (pagination, filters, sorter) => {
         console.log('arguments', sorter)
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllUsers();
         })
     }

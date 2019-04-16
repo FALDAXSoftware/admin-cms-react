@@ -10,6 +10,7 @@ import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';
 import UserWithdrawRequest from './userWithdrawRequest';
 import UserKYCDetails from './userKYC';
+import { Link } from 'react-router-dom';
 
 const { TabPane } = Tabs;
 
@@ -26,18 +27,24 @@ class ViewUser extends Component {
         let user_id = path[path.length - 1]
 
         return (
-            <Tabs defaultActiveKey="1" size={'large'}>
-                <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
-                <TabPane tab="KYC" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
-                <TabPane tab="Sell Orders" key="3"><SellOrders user_id={user_id} /></TabPane>
-                <TabPane tab="Buy Orders" key="4"><BuyOrders user_id={user_id} /></TabPane>
-                <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
-                <TabPane tab="Trade History" key="6"><UserTradeHistory user_id={user_id} /></TabPane>
-                <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
-                <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
-                <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
-                <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
-            </Tabs>
+            <div>
+                <Link to="/dashboard/users">
+                    <i style={{ margin: '20px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                    <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
+                </Link>
+                <Tabs defaultActiveKey="1" size={'large'} style={{ marginTop: '20px' }}>
+                    <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
+                    <TabPane tab="KYC" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
+                    <TabPane tab="Sell Orders" key="3"><SellOrders user_id={user_id} /></TabPane>
+                    <TabPane tab="Buy Orders" key="4"><BuyOrders user_id={user_id} /></TabPane>
+                    <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
+                    <TabPane tab="Trade History" key="6"><UserTradeHistory user_id={user_id} /></TabPane>
+                    <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
+                    <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
+                    <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
+                    <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
+                </Tabs>
+            </div>
         );
     }
 }

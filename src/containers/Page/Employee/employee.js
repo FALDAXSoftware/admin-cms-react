@@ -159,13 +159,13 @@ class Employees extends Component {
     }
 
     _handleEmployeeChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllEmployees();
         })
     }
 
     _searchEmpoyee = (val) => {
-        this.setState({ searchEmp: val }, () => {
+        this.setState({ searchEmp: val, page: 1 }, () => {
             this._getAllEmployees();
         });
     }
@@ -248,4 +248,3 @@ export default connect(
     }))(Employees);
 
 export { Employees, employeeTableinfos };
-

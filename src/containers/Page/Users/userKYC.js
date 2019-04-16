@@ -19,7 +19,6 @@ class UserKYCDetails extends Component {
         ApiUtils.getKYCDetails(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('res kyc', res)
                 _this.setState({ kycDetails: res.data });
             })
             .catch((err) => {
@@ -31,7 +30,7 @@ class UserKYCDetails extends Component {
         const { kycDetails } = this.state;
 
         return (
-            <div className="kyc-div">
+            <div className="kyc-div user-profile">
                 <Divider>KYC Information</Divider>
                 <div className="">
                     <p style={{ "marginBottom": "10px" }}>

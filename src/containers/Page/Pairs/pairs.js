@@ -123,7 +123,7 @@ class Pairs extends Component {
     }
 
     _searchPair = (val) => {
-        this.setState({ searchPair: val }, () => {
+        this.setState({ searchPair: val, page: 1 }, () => {
             this._getAllPairs();
         });
     }
@@ -182,14 +182,16 @@ class Pairs extends Component {
                                         className="isoCustomizedTable"
                                         onChange={this._handlePairsChange}
                                     />
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleFeesPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={pairsCount}
-                                    />
+                                    {pairsCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleFeesPagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={pairsCount}
+                                        />
+                                        : ''}
                                 </div>
                             </TabPane>
                         ))}

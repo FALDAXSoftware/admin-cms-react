@@ -25,7 +25,7 @@ class Transactions extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0,
+            page: 1,
             loader: false,
             filterVal: '',
             startDate: '',
@@ -49,9 +49,7 @@ class Transactions extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        allTransactions: res.data, allTransactionCount: res.transactionCount
-                    });
+                    _this.setState({ allTransactions: res.data, allTransactionCount: res.transactionCount });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -59,8 +57,7 @@ class Transactions extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -71,7 +68,7 @@ class Transactions extends Component {
     }
 
     _handleTransactionPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getAllTransactions();
         })
     }

@@ -64,7 +64,7 @@ class SellOrders extends Component {
     }
 
     _searchOrder = (val) => {
-        this.setState({ searchOrder: val }, () => {
+        this.setState({ searchOrder: val, page: 1 }, () => {
             this._getAllOrders();
         });
     }

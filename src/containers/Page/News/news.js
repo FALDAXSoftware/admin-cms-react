@@ -37,8 +37,6 @@ class News extends Component {
 
     static newsStatus(value, cover_image, title, link, posted_at, description, is_active, owner) {
         const { token } = this.props;
-        let self = this;
-
         let formData = {
             id: value,
             is_active: !is_active
@@ -57,8 +55,7 @@ class News extends Component {
             })
             .catch(err => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchNews: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', searchNews: '', errType: 'error', loader: false
                 });
             });
     }
@@ -83,7 +80,7 @@ class News extends Component {
                 }
                 _this.setState({ loader: false });
             })
-            .catch(err => {
+            .catch(() => {
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
@@ -144,7 +141,8 @@ class News extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchNews: '', startDate: '', endDate: '', rangeDate: []
+            filterVal: '', searchNews: '', startDate: '', endDate: '',
+            rangeDate: [], sorterCol: '', sortOrder: ''
         }, () => {
             this._getAllNews();
         })
@@ -155,7 +153,7 @@ class News extends Component {
     }
 
     _handleNewsPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getAllNews();
         })
     }
@@ -166,7 +164,7 @@ class News extends Component {
     }
 
     _handleNewsTableChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllNews();
         })
     }

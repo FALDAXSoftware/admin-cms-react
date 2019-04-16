@@ -125,7 +125,7 @@ class Coins extends Component {
     }
 
     _searchCoin = (val) => {
-        this.setState({ searchCoin: val }, () => {
+        this.setState({ searchCoin: val, page: 1 }, () => {
             this._getAllCoins();
         });
     }
@@ -182,12 +182,10 @@ class Coins extends Component {
     }
 
     handleTableChange = (pagination, filters, sorter) => {
-        console.log('arguments', sorter)
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllCoins();
         })
     }
-
 
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,

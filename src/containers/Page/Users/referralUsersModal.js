@@ -48,8 +48,7 @@ class ReferralUsers extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -61,7 +60,7 @@ class ReferralUsers extends Component {
     }
 
     render() {
-        const { allReferral, allReferralCount, loader } = this.state;
+        const { allReferral, allReferralCount, loader, page } = this.state;
 
         return (
             <LayoutWrapper>
@@ -83,8 +82,8 @@ class ReferralUsers extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={10}
-                                            defaultCurrent={1}
+                                            pageSize={50}
+                                            current={page}
                                             total={allReferralCount}
                                         /> : ''}
                                 </TabPane>
