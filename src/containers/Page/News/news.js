@@ -200,7 +200,7 @@ class News extends Component {
                                             <Option value={' '}>All</Option>
                                             <Option value={'bitcoinist'}>Bitcoinist</Option>
                                             <Option value={'cointelegraph'}>Coin Telegraph</Option>
-                                            <Option value={'ccnpodcast'}>CCN Podcast</Option>
+                                            {/* <Option value={'ccnpodcast'}>CCN Podcast</Option> */}
                                             <Option value={'bitcoin'}>Bitcoin</Option>
                                         </Select>
 

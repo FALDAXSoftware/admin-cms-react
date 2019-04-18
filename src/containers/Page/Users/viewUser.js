@@ -28,10 +28,12 @@ class ViewUser extends Component {
 
         return (
             <div>
-                <Link to="/dashboard/users">
-                    <i style={{ margin: '20px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                    <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
-                </Link>
+                <div style={{ "display": "inline-block", "width": "100%", marginLeft: '20px' }}>
+                    <Link to="/dashboard/users">
+                        <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
+                    </Link>
+                </div>
                 <Tabs defaultActiveKey="1" size={'large'} style={{ marginTop: '20px' }}>
                     <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
                     <TabPane tab="KYC" key="2"><UserKYCDetails user_id={user_id} /></TabPane>

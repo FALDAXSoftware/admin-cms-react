@@ -160,7 +160,7 @@ class Referral extends Component {
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Search
-                                            placeholder="Search fgdfgusers"
+                                            placeholder="Search users"
                                             onSearch={(value) => this._searchCoin(value)}
                                             style={{ "float": "right", "width": "250px" }}
                                             enterButton
