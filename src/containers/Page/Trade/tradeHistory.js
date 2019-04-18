@@ -40,11 +40,11 @@ class TradeHistory extends Component {
 
     _getAllTrades = () => {
         const { token } = this.props;
-        const { searchTrade, page, limit, filterVal, startDate, endDate } = this.state;
+        const { searchTrade, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal, startDate, endDate)
+        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -116,7 +116,8 @@ class TradeHistory extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchTrade: '', startDate: '', endDate: '', rangeDate: [], page: 1
+            filterVal: '', searchTrade: '', startDate: '', endDate: '',
+            rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
         }, () => {
             this._getAllTrades();
         })
@@ -128,6 +129,12 @@ class TradeHistory extends Component {
 
     _handleTradePagination = (page) => {
         this.setState({ page: page - 1 }, () => {
+            this._getAllTrades();
+        })
+    }
+
+    _handleTradeTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllTrades();
         })
     }
@@ -211,6 +218,7 @@ class TradeHistory extends Component {
                                     pagination={false}
                                     dataSource={allTrades}
                                     className="isoCustomizedTable"
+                                    onChange={this._handleTradeTableChange}
                                 />
                                 <Pagination
                                     style={{ marginTop: '15px' }}

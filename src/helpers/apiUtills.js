@@ -651,9 +651,9 @@ const ApiUtils = {
         }
     },
 
-    getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
+    getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
-        if (search && filterVal) {
+        if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal;
         } else if (search && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal;
@@ -1138,37 +1138,36 @@ const ApiUtils = {
     getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
         if (searchNews && filterVal && startDate && endDate && sorterCol && sortOrder) {
-            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filterVal=" + filterVal + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filter_val=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (searchNews && startDate && endDate && sorterCol && sortOrder) {
-            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
-            url += "&filterVal=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&filter_val=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && searchNews && sorterCol && sortOrder) {
-            console.log('else')
-            url += "&filterVal=" + filterVal + "&search=" + searchNews + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&filter_val=" + filterVal + "&search=" + searchNews + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && searchNews && startDate && endDate) {
-            url += "&filterVal=" + filterVal + "&search=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&filter_val=" + filterVal + "&search=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate && sorterCol && sortOrder) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate && sorterCol && sortOrder) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && sorterCol && sortOrder) {
-            url += "&filterVal=" + filterVal + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&filter_val=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate) {
+            url += "&filter_val=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (searchNews && sorterCol && sortOrder) {
-            url += "&data=" + searchNews + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + searchNews + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (searchNews && filterVal) {
-            url += "&data=" + searchNews + "&filterVal=" + filterVal;
+            url += "&data=" + searchNews + "&filter_val=" + filterVal;
         } else if (filterVal) {
-            url += "&filterVal=" + filterVal;
+            url += "&filter_val=" + filterVal;
         } else {
             url += "&data=" + searchNews;
         }
-
-        console.log('url', url)
 
         try {
             return fetch(API_URL + url, {
