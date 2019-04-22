@@ -209,6 +209,7 @@ class News extends Component {
                                             disabledTime={this.disabledRangeTime}
                                             onChange={this._changeDate}
                                             format="YYYY-MM-DD"
+                                            allowClear={false}
                                             style={{ marginLeft: '15px' }}
                                         />
 

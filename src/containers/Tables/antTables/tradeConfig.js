@@ -3,12 +3,12 @@ import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, DateCell, VolumeCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, pair = null, m_email = null, t_email = null, buy = null,
+const renderCell = (object, type, key, pair = null, reqested_email = null, emailID = null, buy = null,
     quant = null, fillPrice = null, makerFee = null, takerFee = null, Vol = null, createdOn = null) => {
     const value = object[key];
     const symbol = object[pair];
-    const maker_email = object[m_email];
-    const taker_email = object[t_email];
+    const reqested_user_email = object[reqested_email];
+    const email = object[emailID];
     const side = object[buy];
     const quantity = object[quant];
     const fill_price = object[fillPrice];
@@ -19,9 +19,9 @@ const renderCell = (object, type, key, pair = null, m_email = null, t_email = nu
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, symbol, maker_email, taker_email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
+            return DateCell(value, symbol, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
         case 'VolumeCell':
-            return VolumeCell(value, symbol, maker_email, taker_email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
+            return VolumeCell(value, symbol, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
         default:
             return TextCell(value);
     }
@@ -37,17 +37,17 @@ const columns = [
     },
     {
         title: <IntlMessages id="tradeTable.title.maker_email" />,
-        key: 'maker_email',
+        key: 'reqested_user_email',
         width: 100,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'maker_email')
+        render: object => renderCell(object, 'TextCell', 'reqested_user_email')
     },
     {
         title: <IntlMessages id="tradeTable.title.taker_email" />,
-        key: 'taker_email',
+        key: 'email',
         width: 100,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'taker_email')
+        render: object => renderCell(object, 'TextCell', 'email')
     },
     {
         title: <IntlMessages id="tradeTable.title.side" />,
@@ -88,9 +88,8 @@ const columns = [
         title: <IntlMessages id="tradeTable.title.volume" />,
         key: 'volume',
         width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'VolumeCell', 'id', 'symbol', 'maker_email',
-            'taker_email', 'side', 'quantity', 'fill_price', 'maker_fee', 'taker_fee'
+        render: object => renderCell(object, 'VolumeCell', 'id', 'symbol', 'reqested_user_email',
+            'email', 'side', 'quantity', 'fill_price', 'maker_fee', 'taker_fee'
             , 'volume', 'created_at')
     },
     {
