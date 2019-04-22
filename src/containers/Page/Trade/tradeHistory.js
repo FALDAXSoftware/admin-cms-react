@@ -56,8 +56,7 @@ class TradeHistory extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTrade: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -72,7 +71,9 @@ class TradeHistory extends Component {
 
     _searchTrade = (e) => {
         e.preventDefault();
-        this._getAllTrades();
+        this.setState({ page: 1 }, () => {
+            this._getAllTrades();
+        })
     }
 
     _changeFilter = (val) => {
@@ -128,7 +129,7 @@ class TradeHistory extends Component {
     }
 
     _handleTradePagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getAllTrades();
         })
     }
@@ -197,6 +198,7 @@ class TradeHistory extends Component {
                                             disabledTime={this.disabledRangeTime}
                                             onChange={this._changeDate}
                                             format="YYYY-MM-DD"
+                                            allowClear={false}
                                             style={{ marginLeft: '15px' }}
                                         />
 
@@ -220,14 +222,15 @@ class TradeHistory extends Component {
                                     className="isoCustomizedTable"
                                     onChange={this._handleTradeTableChange}
                                 />
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allTradeCount}
-                                />
+                                {allTradeCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleTradePagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allTradeCount}
+                                    /> : ''}
                             </TabPane>
                         ))}
                     </Tabs>

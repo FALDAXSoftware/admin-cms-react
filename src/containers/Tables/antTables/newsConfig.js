@@ -59,6 +59,7 @@ const columns = [
         title: <IntlMessages id="newsTable.title.posted_at" />,
         key: 'posted_at',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'DateCell', 'posted_at')
     },
     {
