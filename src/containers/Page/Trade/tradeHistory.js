@@ -9,10 +9,12 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
+const { logout } = authAction;
 
 class TradeHistory extends Component {
     constructor(props) {
@@ -47,8 +49,12 @@ class TradeHistory extends Component {
         ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allTrades: res.data, allTradeCount: res.tradeCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -110,8 +116,8 @@ class TradeHistory extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).startOf('day').toISOString(),
-            endDate: moment(date[1]).endOf('day').toISOString()
+            startDate: moment(date[0]).toISOString(),
+            endDate: moment(date[1]).toISOString()
         })
     }
 
@@ -243,6 +249,6 @@ class TradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(TradeHistory);
+    }), { logout })(TradeHistory);
 
 export { TradeHistory, tradeTableInfos };
