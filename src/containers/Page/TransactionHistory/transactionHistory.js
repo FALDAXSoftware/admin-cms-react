@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -40,16 +42,19 @@ class Transactions extends Component {
 
     _getAllTransactions = () => {
         const { token } = this.props;
-        const { searchTransaction, page, limit, filterVal, startDate, endDate } = this.state;
+        const { searchTransaction, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true })
-        ApiUtils.getAllTransaction(page, limit, token, searchTransaction, filterVal,
-            startDate, endDate)
+        ApiUtils.getAllTransaction(page, limit, token, searchTransaction, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allTransactions: res.data, allTransactionCount: res.transactionCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -107,8 +112,8 @@ class Transactions extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).startOf('day').toISOString(),
-            endDate: moment(date[1]).endOf('day').toISOString()
+            startDate: moment(date[0]).toISOString(),
+            endDate: moment(date[1]).toISOString()
         })
     }
 
@@ -127,6 +132,12 @@ class Transactions extends Component {
         });
         this.setState({ errMsg: false });
     };
+
+    _handleTransactionTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllTransactions();
+        })
+    }
 
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
@@ -217,6 +228,6 @@ class Transactions extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Transactions);
+    }), { logout })(Transactions);
 
 export { Transactions, transactionTableInfos };

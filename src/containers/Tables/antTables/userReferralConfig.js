@@ -16,16 +16,19 @@ const columns = [{
     title: <IntlMessages id="antTable.title.Name" />,
     key: 'full_name',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'full_name')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
     key: 'email',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="antTable.title.country" />,
     key: 'country',
     width: 200,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'country')
 }];
 

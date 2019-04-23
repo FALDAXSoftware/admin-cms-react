@@ -28,18 +28,22 @@ class ReferralUsers extends Component {
 
     _getAllUserReferral = () => {
         const { token, user_id } = this.props;
-        const { limit, page } = this.state;
+        const { limit, page, sorterCol, sortOrder } = this.state;
 
         let _this = this;
 
         this.setState({ loader: true })
-        ApiUtils.getAllReferrals(page, limit, token, user_id)
+        ApiUtils.getAllReferrals(page, limit, token, user_id, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({
-                        allReferral: res.data, allReferralCount: res.usersDataCount,
+                        allReferral: res.data, allReferralCount: res.referralCount,
                         showReferralModal: true, userId: user_id
+                    });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
                     });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
@@ -55,6 +59,12 @@ class ReferralUsers extends Component {
 
     _handleReferralPagination = (page) => {
         this.setState({ page }, () => {
+            this._getAllUserReferral();
+        })
+    }
+
+    _handleReferralTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllUserReferral();
         })
     }
@@ -75,6 +85,7 @@ class ReferralUsers extends Component {
                                         pagination={false}
                                         dataSource={allReferral}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleReferralTableChange}
                                     />
                                     {loader && <FaldaxLoader />}
                                     {allReferralCount > 0 ?

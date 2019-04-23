@@ -10,9 +10,11 @@ import AddJobModal from './addJobModal';
 import ViewJobModal from './viewJobModal';
 import EditJobModal from './editJobModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Jobs extends Component {
@@ -120,8 +122,12 @@ class Jobs extends Component {
         ApiUtils.getAllJobs(page, limit, token, searchJob, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allJobs: res.data, allJobsCount: res.allJobsCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -293,8 +299,7 @@ class Jobs extends Component {
                                             pageSize={50}
                                             current={page}
                                             total={allJobsCount}
-                                        />
-                                        : ''}
+                                        /> : ''}
                                 </div>
                             </TabPane>
                         ))}
@@ -308,6 +313,6 @@ class Jobs extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Jobs);
+    }), { logout })(Jobs);
 
 export { Jobs, jobsTableInfos };
