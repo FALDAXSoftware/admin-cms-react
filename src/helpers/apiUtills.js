@@ -71,9 +71,9 @@ const ApiUtils = {
     getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder) {
         let url = "/admin/getUsers?page=" + page + "&limit=" + limit;
         if (sorterCol && sortOrder && searchUser) {
-            url += "&data=" + searchUser + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else {
             url += "&data=" + searchUser;
         }
@@ -622,23 +622,36 @@ const ApiUtils = {
             console.error(error);
         }
     },
-    //page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal
-    getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal) {
-        console.log('>>>>>>', page, limit, token, search, startDate, endDate, user_id, filterVal)
+
+    //user wise transaction list api call
+    getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
-        } else if (search && startDate) {
-            url += "&search=" + search + "&start_date=" + startDate;
+        if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder && startDate && endDate) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && startDate && endDate) {
-            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
-            url += "&search=" + search
+            url += "&data=" + search
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -704,13 +717,13 @@ const ApiUtils = {
     getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         if (search && filterVal && sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
         } else if (sorterCol && sortOrder && filterVal) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&t_type=" + filterVal;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&t_type=" + filterVal;
         } else if (sorterCol && sortOrder && search) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&data=" + search;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {

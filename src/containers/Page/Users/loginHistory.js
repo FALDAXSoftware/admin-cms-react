@@ -5,12 +5,11 @@ import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, Input, Pagination, DatePicker, Button, Form } from 'antd';
+import { Tabs, Input, Pagination, DatePicker, Button, Form, notification } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 
 const TabPane = Tabs.TabPane;
-const Search = Input.Search;
 const { RangePicker } = DatePicker;
 
 class LoginHistory extends Component {
@@ -25,7 +24,10 @@ class LoginHistory extends Component {
             startDate: '',
             endDate: '',
             rangeDate: [],
-            searchHistory: ''
+            searchHistory: '',
+            errMessage: '',
+            errMsg: false,
+            errType: 'Success',
         }
     }
 
@@ -42,11 +44,18 @@ class LoginHistory extends Component {
         ApiUtils.getUserHistory(token, user_id, page, limit, searchHistory, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ allHistory: res.data, loader: false, allHistoryCount: res.allHistoryCount });
+                if (res.status == 200) {
+                    _this.setState({ allHistory: res.data, loader: false, allHistoryCount: res.allHistoryCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch((err) => {
                 _this.setState({ loader: false })
-                console.log(err)
             });
     }
 
@@ -102,12 +111,25 @@ class LoginHistory extends Component {
         })
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     _changeSearch = (field, e) => {
         this.setState({ searchHistory: field.target.value })
     }
 
     render() {
-        const { allHistory, loader, allHistoryCount, page, rangeDate, searchHistory } = this.state;
+        const { allHistory, loader, allHistoryCount, page, rangeDate, searchHistory,
+            errMsg, errType } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
             <LayoutWrapper>
@@ -128,6 +150,7 @@ class LoginHistory extends Component {
                                             disabledTime={this.disabledRangeTime}
                                             onChange={this._changeDate}
                                             format="YYYY-MM-DD"
+                                            allowClear={false}
                                             style={{ marginLeft: '15px' }}
                                         />
 

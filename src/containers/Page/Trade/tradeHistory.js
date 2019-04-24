@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form, Row, Col } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,11 +10,24 @@ import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import styled from 'styled-components';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
+const ColWithPadding = styled(Col)`
+    padding:0px 10px !important;
+    margin-bottom:15px;
+    &:first-child{
+        padding-left:0px !important;
+    }
+    @media only screen and (device-width: 575px),
+       only screen and (max-width: 575px) {
+     &{
+         padding:0px !important;
+     }   
+}`
 
 class TradeHistory extends Component {
     constructor(props) {
@@ -181,42 +194,44 @@ class TradeHistory extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchTrade}>
-                                        <Input
-                                            placeholder="Search trades"
-                                            onChange={this._changeSearch.bind(this)}
-                                            style={{ "width": "200px" }}
-                                            value={searchTrade}
-                                        />
-
-                                        <Select
-                                            style={{ width: 125, "marginLeft": "15px" }}
-                                            placeholder="Select a type"
-                                            onChange={this._changeFilter}
-                                            value={filterVal}
-                                        >
-                                            <Option value={' '}>All</Option>
-                                            <Option value={'Sell'}>Sell</Option>
-                                            <Option value={'Buy'}>Buy</Option>
-                                        </Select>
-
-                                        <RangePicker
-                                            value={rangeDate}
-                                            disabledTime={this.disabledRangeTime}
-                                            onChange={this._changeDate}
-                                            format="YYYY-MM-DD"
-                                            allowClear={false}
-                                            style={{ marginLeft: '15px' }}
-                                        />
-
-                                        <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
+                                        <Row>
+                                            <ColWithPadding sm={8}>
+                                                <Input
+                                                    placeholder="Search trades"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    value={searchTrade}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={8}>
+                                                <Select
+                                                    placeholder="Select a type"
+                                                    onChange={this._changeFilter}
+                                                    value={filterVal}
+                                                >
+                                                    <Option value={' '}>All</Option>
+                                                    <Option value={'Sell'}>Sell</Option>
+                                                    <Option value={'Buy'}>Buy</Option>
+                                                </Select>
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={8}>
+                                                <RangePicker
+                                                    value={rangeDate}
+                                                    disabledTime={this.disabledRangeTime}
+                                                    onChange={this._changeDate}
+                                                    format="YYYY-MM-DD"
+                                                    allowClear={false}
+                                                    style={{ width: "100%" }}
+                                                />
+                                            </ColWithPadding>
+                                        </Row>
+                                        <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
                                         <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        {allTrades && allTrades.length > 0 ?
+                                            <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                                <Button className="search-btn" type="primary">Export</Button>
+                                            </CSVLink>
+                                            : ''}
                                     </Form>
-
-                                    {allTrades && allTrades.length > 0 ?
-                                        <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                            <Button className="search-btn" type="primary">Export</Button>
-                                        </CSVLink>
-                                        : ''}
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <TableWrapper

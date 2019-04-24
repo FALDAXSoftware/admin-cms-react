@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, DatePicker, Select, Button, Form } from 'antd';
+import { Input, Pagination, notification, DatePicker, Select, Button, Form, Row } from 'antd';
 import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,9 +9,12 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
+import ColWithPadding from '../common.style';
+import authAction from '../../../redux/auth/actions';
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
+const { logout } = authAction;
 
 class UserTransactionHistory extends Component {
     constructor(props) {
@@ -24,7 +27,7 @@ class UserTransactionHistory extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0,
+            page: 1,
             loader: false,
             filterVal: '',
             user_name: "",
@@ -48,28 +51,27 @@ class UserTransactionHistory extends Component {
 
     _getUserTransactions = () => {
         const { token, user_id } = this.props;
-        const { searchTransaction, page, limit, startDate, endDate, filterVal } = this.state;
+        const { searchTransaction, page, limit, startDate, endDate, filterVal, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserTransaction(page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal)
+        ApiUtils.getUserTransaction(page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allTransactions: res.data, allTransactionCount: res.transactionCount,
-                        searchTransaction: ''
+                if (res.status == 200) {
+                    _this.setState({ allTransactions: res.data, allTransactionCount: res.transactionCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchTransaction: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(err => {
-                console.log('err', err)
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchTransaction: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -132,6 +134,12 @@ class UserTransactionHistory extends Component {
         })
     }
 
+    _handleUserTransactionChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getUserTransactions();
+        })
+    }
+
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
             searchTransaction } = this.state;
@@ -154,33 +162,40 @@ class UserTransactionHistory extends Component {
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Form onSubmit={this._searchTransaction}>
-                                    <Input
-                                        placeholder="Search transactions"
-                                        onChange={this._changeSearch.bind(this)}
-                                        style={{ "width": "200px" }}
-                                        value={searchTransaction}
-                                    />
-
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a type"
-                                        onChange={this._changeFilter}
-                                        value={filterVal}
-                                    >
-                                        <Option value={' '}>All</Option>
-                                        <Option value={'receive'}>Receive</Option>
-                                        <Option value={'send'}>Send</Option>
-                                    </Select>
-
-                                    <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    <Row>
+                                        <ColWithPadding sm={8}>
+                                            <Input
+                                                placeholder="Search transactions"
+                                                onChange={this._changeSearch.bind(this)}
+                                                value={searchTransaction}
+                                            />
+                                        </ColWithPadding>
+                                        <ColWithPadding sm={7}>
+                                            <Select
+                                                placeholder="Select a type"
+                                                onChange={this._changeFilter}
+                                                value={filterVal}
+                                            >
+                                                <Option value={' '}>All</Option>
+                                                <Option value={'receive'}>Receive</Option>
+                                                <Option value={'send'}>Send</Option>
+                                            </Select>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            {allTransactions && allTransactions.length > 0 ?
+                                                <CSVLink filename={'user_transactions_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                                    <Button className="search-btn" type="primary">Export</Button>
+                                                </CSVLink>
+                                                : ''}
+                                        </ColWithPadding>
+                                    </Row>
                                 </Form>
-
-                                {allTransactions.length > 0 ?
-                                    <CSVLink filename={'user_transactions_history.csv'} data={allTransactions} headers={transactionsHeaders}>
-                                        <Button className="search-btn" type="primary">Export</Button>
-                                    </CSVLink>
-                                    : ''}
                             </div>
                             {loader && <FaldaxLoader />}
                             < TableWrapper
@@ -190,6 +205,7 @@ class UserTransactionHistory extends Component {
                                 pagination={false}
                                 dataSource={allTransactions}
                                 className="isoCustomizedTable"
+                                onChange={this._handleUserTransactionChange}
                             />
                             {allTransactionCount > 0 ?
                                 <Pagination
@@ -212,6 +228,6 @@ class UserTransactionHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(UserTransactionHistory);
+    }), { logout })(UserTransactionHistory);
 
 export { UserTransactionHistory, userTransactionTableInfos };

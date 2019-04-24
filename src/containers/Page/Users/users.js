@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination, Spin, notification, Button } from 'antd';
+import { Tabs, Input, Pagination, notification, Button } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,9 +9,11 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Users extends Component {
@@ -54,15 +56,22 @@ class Users extends Component {
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllUsers();
-                self.setState({
-                    errMsg: true, errMessage: message, errType: 'Success', loader: false
-                })
+                if (res.status == 200) {
+                    self._getAllUsers();
+                    self.setState({
+                        errMsg: true, errMessage: message, errType: 'Success', loader: false
+                    })
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -80,8 +89,12 @@ class Users extends Component {
         ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allUsers: res.data, allUserCount: res.userCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
@@ -89,15 +102,14 @@ class Users extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, message: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
 
     _searchUser = (val) => {
         this.setState({ searchUser: val, page: 1 }, () => {
-            this._getAllUsers(1);
+            this._getAllUsers();
         });
     }
 
@@ -116,7 +128,6 @@ class Users extends Component {
     };
 
     handleTableChange = (pagination, filters, sorter) => {
-        console.log('arguments', sorter)
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllUsers();
         })
@@ -206,6 +217,6 @@ class Users extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Users);
+    }), { logout })(Users);
 
 export { Users, tableinfos };
