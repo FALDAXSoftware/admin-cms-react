@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Form } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form, Row, Col } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,8 +8,11 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
+import authAction from '../../../redux/auth/actions';
+import ColWithPadding from '../common.style';
 
 const Option = Select.Option;
+const { logout } = authAction;
 
 class UserTradeHistory extends Component {
     constructor(props) {
@@ -57,10 +60,14 @@ class UserTradeHistory extends Component {
         ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allTrades: res.data, allTradeCount: res.tradeCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
@@ -130,33 +137,40 @@ class UserTradeHistory extends Component {
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Form onSubmit={this._searchTrade}>
-                                    <Input
-                                        placeholder="Search trades"
-                                        onChange={this._changeSearch.bind(this)}
-                                        style={{ "width": "200px" }}
-                                        value={searchTrade}
-                                    />
-
-                                    <Select
-                                        style={{ width: 125, "marginLeft": "15px" }}
-                                        placeholder="Select a type"
-                                        onChange={this._changeFilter}
-                                        value={filterVal}
-                                    >
-                                        <Option value={' '}>All</Option>
-                                        <Option value={'Buy'}>Buy</Option>
-                                        <Option value={'Sell'}>Sell</Option>
-                                    </Select>
-
-                                    <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
-                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    <Row>
+                                        <ColWithPadding sm={8}>
+                                            <Input
+                                                placeholder="Search trades"
+                                                onChange={this._changeSearch.bind(this)}
+                                                value={searchTrade}
+                                            />
+                                        </ColWithPadding>
+                                        <ColWithPadding sm={7}>
+                                            <Select
+                                                placeholder="Select a type"
+                                                onChange={this._changeFilter}
+                                                value={filterVal}
+                                            >
+                                                <Option value={' '}>All</Option>
+                                                <Option value={'Buy'}>Buy</Option>
+                                                <Option value={'Sell'}>Sell</Option>
+                                            </Select>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0px" }} >Search</Button>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            <Button className="search-btn" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            {allTrades && allTrades.length > 0 ?
+                                                <CSVLink filename={'user_trade_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                                    <Button type="primary" className="search-btn" style={{ margin: "0px" }}>Export</Button>
+                                                </CSVLink>
+                                                : ''}
+                                        </ColWithPadding>
+                                    </Row>
                                 </Form>
-
-                                {allTrades && allTrades.length > 0 ?
-                                    <CSVLink filename={'user_trade_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                        <Button className="search-btn" type="primary">Export</Button>
-                                    </CSVLink>
-                                    : ''}
                             </div>
                             {loader && <FaldaxLoader />}
                             < TableWrapper
@@ -188,6 +202,6 @@ class UserTradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(UserTradeHistory);
+    }), { logout })(UserTradeHistory);
 
 export { UserTradeHistory, tradeTableInfos };

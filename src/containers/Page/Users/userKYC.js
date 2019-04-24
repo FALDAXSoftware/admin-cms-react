@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Divider } from 'antd';
+import { Divider, Row, Col, Card } from 'antd';
 import { BUCKET_URL } from '../../../helpers/globals';
 
 class UserKYCDetails extends Component {
@@ -69,12 +69,18 @@ class UserKYCDetails extends Component {
                 </div>
                 <Divider>KYC Documents</Divider>
                 <div>
-                    <span><b>Front Document: </b></span>
-                    <img src={kycDetails && kycDetails.front_doc ? BUCKET_URL + kycDetails.front_doc : ''} />
-                </div>
-                <div>
-                    <span><b>Back Document: </b></span>
-                    <img src={kycDetails && kycDetails.back_doc ? BUCKET_URL + kycDetails.back_doc : ''} />
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Card title={<b>Front Document: </b>} bordered={false}>
+                                <img className="kyc-doc" src={kycDetails && kycDetails.front_doc ? BUCKET_URL + kycDetails.front_doc : ''} />
+                            </Card>
+                        </Col>
+                        <Col span={12}>
+                            <Card title={<b>Back Document: </b>} bordered={false}>
+                                <img className="kyc-doc" src={kycDetails && kycDetails.back_doc ? BUCKET_URL + kycDetails.back_doc : ''} />
+                            </Card>
+                        </Col>
+                    </Row>
                 </div>
                 <Divider>IDM Details</Divider>
                 <div>

@@ -35,6 +35,7 @@ const columns = [
         title: <IntlMessages id="transactionTable.title.email" />,
         key: 'email',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {
@@ -53,18 +54,21 @@ const columns = [
         title: <IntlMessages id="transactionTable.title.amount" />,
         key: 'amount',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'amount', 'coin_id')
     },
     {
         title: <IntlMessages id="transactionTable.title.transactionType" />,
         key: 'transaction_type',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'transaction_type')
     },
     {
         title: <IntlMessages id="transactionTable.title.created_at" />,
         key: 'created_at',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'DateCell', 'created_at')
     },
 ];

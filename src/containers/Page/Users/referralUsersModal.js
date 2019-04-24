@@ -7,8 +7,10 @@ import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 
 class ReferralUsers extends Component {
     constructor(props) {
@@ -110,4 +112,4 @@ class ReferralUsers extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(ReferralUsers);
+    }), { logout })(ReferralUsers);
