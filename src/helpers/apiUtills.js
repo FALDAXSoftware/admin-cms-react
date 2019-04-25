@@ -1,7 +1,7 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -109,9 +109,9 @@ const ApiUtils = {
     getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/getCoins?page=" + page + "&limit=" + limit;
         if (sorterCol && sortOrder && search) {
-            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else {
             url += "&data=" + search;
         }
@@ -232,9 +232,9 @@ const ApiUtils = {
     getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
         let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit + '&legality=' + legality;
         if (sorterCol && sortOrder && search) {
-            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else {
             url += "&data=" + search;
         }
@@ -513,9 +513,9 @@ const ApiUtils = {
     getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder) {
         let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
         if (sorterCol && sortOrder && searchPair) {
-            url += "&data=" + searchPair + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else {
             url += "&data=" + searchPair;
         }
@@ -636,6 +636,8 @@ const ApiUtils = {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && search && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && startDate && endDate) {
             url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && sorterCol && sortOrder) {
@@ -775,17 +777,30 @@ const ApiUtils = {
     },
 
     //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
-    getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal) {
-        console.log('>>>>>>', page, limit, token, search, startDate, endDate, user_id, filterVal)
+    getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search && filterVal) {
-            url += "&data=" + search + "&t_type=" + filterVal;
-        } else if (search && startDate) {
-            url += "&data=" + search + "&start_date=" + startDate;
-        } else if (startDate && endDate) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        if (search && startDate && endDate && filterVal && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&start_date=" + startDate + "&start_date=" + startDate + "&end_date=" + endDate;;
+        } else if (search && startDate && endDate && filterVal) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && startDate && endDate) {
             url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {

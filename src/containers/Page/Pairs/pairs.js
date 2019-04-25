@@ -9,9 +9,11 @@ import { connect } from 'react-redux';
 import AddPairModal from './addPairModal';
 import EditPairModal from './editPairModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Pairs extends Component {
@@ -88,18 +90,21 @@ class Pairs extends Component {
         ApiUtils.getAllPairs(page, limit, token, searchPair, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     const { pairsCount, allCoins } = res;
                     _this.setState({ allPairs: res.data, pairsCount, allCoins });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false })
             })
             .catch(() => {
                 _this.setState({
-                    errType: 'error', errMsg: true,
-                    errMessage: 'Something went wrong', loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
             });
     }
@@ -190,8 +195,7 @@ class Pairs extends Component {
                                             pageSize={50}
                                             current={page}
                                             total={pairsCount}
-                                        />
-                                        : ''}
+                                        /> : ''}
                                 </div>
                             </TabPane>
                         ))}
@@ -205,6 +209,6 @@ class Pairs extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Pairs);
+    }), { logout })(Pairs);
 
 export { Pairs, pairsTableInfos };

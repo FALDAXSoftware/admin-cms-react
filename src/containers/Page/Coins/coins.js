@@ -10,9 +10,11 @@ import ViewCoinModal from './viewCoinModal';
 import AddCoinModal from './addCoinModal';
 import EditCoinModal from './editCoinModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Coins extends Component {
@@ -69,11 +71,20 @@ class Coins extends Component {
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllCoins();
-                self.setState({
-                    page: 1, errMsg: true, errMessage: message,
-                    errType: 'Success', loader: false
-                })
+                if (res.status == 200) {
+                    self.setState({
+                        page: 1, errMsg: true, errMessage: message, errType: 'Success', loader: false
+                    })
+                    self._getAllCoins();
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    });
+                }
             })
             .catch(() => {
                 self.setState({
@@ -107,19 +118,20 @@ class Coins extends Component {
         ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allCoins: res.data, allCoinCount: res.CoinsCount, searchCoin: ''
+                if (res.status == 200) {
+                    _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchCoin: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchCoin: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -163,10 +175,9 @@ class Coins extends Component {
             .then(function (res) {
                 if (res) {
                     _this.setState({
-                        deleteCoinId: '', showDeleteCoinModal: false,
-                        errMessage: res.message, errMsg: true
+                        deleteCoinId: '', showDeleteCoinModal: false, errMessage: res.message, errMsg: true
                     });
-                    _this._getAllCoins(1);
+                    _this._getAllCoins();
                 } else {
                     _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
                 }
@@ -189,7 +200,7 @@ class Coins extends Component {
 
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
-            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page, limit
+            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page
         } = this.state;
 
         if (errMsg) {
@@ -273,6 +284,6 @@ class Coins extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Coins);
+    }), { logout })(Coins);
 
 export { Coins, coinTableInfos };
