@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form, Row, Col } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form, Row } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,24 +10,12 @@ import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import styled from 'styled-components';
+import ColWithPadding from '../common.style';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
-const ColWithPadding = styled(Col)`
-    padding:0px 10px !important;
-    margin-bottom:15px;
-    &:first-child{
-        padding-left:0px !important;
-    }
-    @media only screen and (device-width: 575px),
-       only screen and (max-width: 575px) {
-     &{
-         padding:0px !important;
-     }   
-}`
 
 class TradeHistory extends Component {
     constructor(props) {
@@ -202,7 +190,7 @@ class TradeHistory extends Component {
                                                     value={searchTrade}
                                                 />
                                             </ColWithPadding>
-                                            <ColWithPadding sm={8}>
+                                            <ColWithPadding sm={7}>
                                                 <Select
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}

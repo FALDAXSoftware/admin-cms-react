@@ -61,38 +61,32 @@ class Referral extends Component {
         const { userDetails } = this.state;
         let fields = this.state.fields;
         let _this = this;
+        _this.setState({ loader: true });
 
-        if (_this.validator.allValid()) {
-            _this.setState({ loader: true });
-
-            const formData = {
-                referal_percentage: fields['percentage'],
-                user_id: user_id,
-                email: userDetails.email
-                //days: fields['days'],
-            }
-
-            ApiUtils.updateReferral(token, formData)
-                .then((response) => response.json())
-                .then(function (res) {
-                    if (res) {
-                        _this.setState({
-                            errMsg: true, errMessage: res.message,
-                            loader: false, errType: 'Success'
-                        }, () => {
-                            _this._getUserDetails();
-                        })
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
-                    }
-                })
-                .catch(() => {
-                    _this.setState({ loader: false });
-                });
-        } else {
-            this.validator.showMessages();
-            this.forceUpdate();
+        const formData = {
+            referal_percentage: fields['percentage'],
+            user_id: user_id,
+            email: userDetails.email
+            //days: fields['days'],
         }
+
+        ApiUtils.updateReferral(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    _this.setState({
+                        errMsg: true, errMessage: res.message,
+                        loader: false, errType: 'Success'
+                    }, () => {
+                        _this._getUserDetails();
+                    })
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
+                }
+            })
+            .catch(() => {
+                _this.setState({ loader: false });
+            });
     }
 
     render() {
@@ -110,10 +104,6 @@ class Referral extends Component {
                     </span>
                     <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
-                    <span className="field-error">
-                        {this.validator.message('percentage', fields['percentage'], 'required|numeric')}
-                    </span>
-
                     {/* <span>
                         <b>Referral Days</b>
                     </span>

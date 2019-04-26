@@ -25,6 +25,7 @@ import { KYCInfos } from './kycConfig';
 import { FeesInfos } from './feesConfig';
 import { newsTableInfos } from './newsConfig';
 import { referralInfos } from './referralConfig';
+import { userWithdrawReqTableInfos } from './userWithdrawReqConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -76,5 +77,5 @@ export {
   historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
-  newsTableInfos, userReferralInfos
+  newsTableInfos, userReferralInfos, userWithdrawReqTableInfos
 };

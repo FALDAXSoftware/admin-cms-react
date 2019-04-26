@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Select, Button, DatePicker, notification, Form } from 'antd';
+import { Input, Tabs, Pagination, Select, Button, DatePicker, notification, Form, Row } from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,6 +10,7 @@ import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import ColWithPadding from '../common.style';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -163,41 +164,51 @@ class Transactions extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchTransaction}>
-                                        <Input
-                                            placeholder="Search transactions"
-                                            onChange={this._changeSearch.bind(this)}
-                                            style={{ "width": "200px" }}
-                                            value={searchTransaction}
-                                        />
-
-                                        <Select
-                                            style={{ width: 125, "marginLeft": "15px" }}
-                                            placeholder="Select a type"
-                                            onChange={this._changeFilter}
-                                            value={filterVal}
-                                        >
-                                            <Option value={' '}>All</Option>
-                                            <Option value={'send'}>Send</Option>
-                                            <Option value={'receive'}>Receive</Option>
-                                        </Select>
-
-                                        <RangePicker
-                                            value={rangeDate}
-                                            disabledTime={this.disabledRangeTime}
-                                            onChange={this._changeDate}
-                                            format="YYYY-MM-DD"
-                                            style={{ marginLeft: '15px' }}
-                                        />
-
-                                        <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Row>
+                                            <ColWithPadding sm={6}>
+                                                <Input
+                                                    placeholder="Search transactions"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    style={{ "width": "200px" }}
+                                                    value={searchTransaction}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={6}>
+                                                <Select
+                                                    style={{ width: 125, "marginLeft": "15px" }}
+                                                    placeholder="Select a type"
+                                                    onChange={this._changeFilter}
+                                                    value={filterVal}
+                                                >
+                                                    <Option value={' '}>All</Option>
+                                                    <Option value={'send'}>Send</Option>
+                                                    <Option value={'receive'}>Receive</Option>
+                                                </Select>
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={6}>
+                                                <RangePicker
+                                                    value={rangeDate}
+                                                    disabledTime={this.disabledRangeTime}
+                                                    onChange={this._changeDate}
+                                                    format="YYYY-MM-DD"
+                                                    style={{ marginLeft: '15px' }}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                {allTransactions && allTransactions.length > 0 ?
+                                                    <CSVLink style={{ marginLeft: '20px' }} filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                                        <Button className="search-btn" type="primary">Export</Button>
+                                                    </CSVLink>
+                                                    : ''}
+                                            </ColWithPadding>
+                                        </Row>
                                     </Form>
-
-                                    {allTransactions && allTransactions.length > 0 ?
-                                        <CSVLink style={{ marginLeft: '20px' }} filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
-                                            <Button className="search-btn" type="primary">Export</Button>
-                                        </CSVLink>
-                                        : ''}
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <TableWrapper

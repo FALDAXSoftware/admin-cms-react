@@ -9,9 +9,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import EditCountryModal from './editCountryModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Countries extends Component {
@@ -93,17 +95,20 @@ class Countries extends Component {
         ApiUtils.getAllCountries(page, limit, token, searchCountry, localityVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allCountries: res.data, allCountryCount: res.CountryCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false })
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, message: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, message: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -226,6 +231,6 @@ class Countries extends Component {
 export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Countries));
+    }), { logout })(Countries));
 
 export { Countries, countryTableInfos };

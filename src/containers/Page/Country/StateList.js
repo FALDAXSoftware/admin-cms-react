@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, notification, Icon } from 'antd';
+import { Input, Tabs, notification } from 'antd';
 import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -55,8 +55,7 @@ class StateList extends Component {
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -99,8 +98,7 @@ class StateList extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    loader: false, errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error',
+                    loader: false, errMsg: true, errMessage: 'Something went wrong!!', errType: 'error'
                 })
             });
     }
