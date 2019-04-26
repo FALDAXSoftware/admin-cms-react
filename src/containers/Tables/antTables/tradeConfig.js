@@ -96,6 +96,7 @@ const columns = [
         title: <IntlMessages id="tradeTable.title.created_at" />,
         key: 'created_at',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'DateCell', 'created_at')
     },
 ];

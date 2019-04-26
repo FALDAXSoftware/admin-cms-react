@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import { CSVLink } from "react-csv";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -108,6 +109,14 @@ class UserWithdrawRequest extends Component {
         const { allRequests, allReqCount, errType, errMsg, page, loader, filterVal,
             searchReq } = this.state;
 
+        const requestHeaders = [
+            { label: "Source Address", key: "source_address" },
+            { label: "Destination Address", key: "destination_address" },
+            { label: "Status", key: "is_approve" },
+            { label: "Amount", key: "amount" },
+            { label: "Email", key: "email" },
+        ];
+
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -128,7 +137,7 @@ class UserWithdrawRequest extends Component {
                                                 value={searchReq}
                                             />
                                         </ColWithPadding>
-                                        <ColWithPadding sm={8}>
+                                        <ColWithPadding sm={7}>
                                             <Select
                                                 style={{ width: 125, "marginLeft": "15px" }}
                                                 placeholder="Select a type"
@@ -145,6 +154,13 @@ class UserWithdrawRequest extends Component {
                                         </ColWithPadding>
                                         <ColWithPadding xs={12} sm={3}>
                                             <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        </ColWithPadding>
+                                        <ColWithPadding xs={12} sm={3}>
+                                            {allRequests && allRequests.length > 0 ?
+                                                <CSVLink filename={'user_withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
+                                                    <Button className="search-btn" type="primary">Export</Button>
+                                                </CSVLink>
+                                                : ''}
                                         </ColWithPadding>
                                     </Row>
                                 </Form>

@@ -35,7 +35,6 @@ const columns = [
         title: <IntlMessages id="transactionTable.title.email" />,
         key: 'email',
         width: 100,
-        sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {

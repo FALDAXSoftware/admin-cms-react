@@ -28,21 +28,18 @@ const columns = [
         title: <IntlMessages id="withdrawTable.title.email" />,
         key: 'email',
         width: 200,
-        sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {
         title: <IntlMessages id="withdrawTable.title.source_address" />,
         key: 'source_address',
         width: 100,
-        sorter: true,
         render: object => renderCell(object, 'TextCell', 'source_address')
     },
     {
         title: <IntlMessages id="withdrawTable.title.destination_address" />,
         key: 'destination_address',
         width: 100,
-        sorter: true,
         render: object => renderCell(object, 'TextCell', 'destination_address')
     },
     {
