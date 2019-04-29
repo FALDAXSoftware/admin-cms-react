@@ -8,6 +8,9 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import { Tabs, Input, Pagination, DatePicker, Button, Form, notification } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
@@ -190,4 +193,4 @@ class LoginHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(LoginHistory);
+    }), { logout })(LoginHistory);

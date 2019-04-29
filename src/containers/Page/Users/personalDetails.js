@@ -3,6 +3,9 @@ import { BUCKET_URL } from '../../../helpers/globals';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { Row, Col } from 'antd';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class PersonalDetails extends Component {
     constructor(props) {
@@ -19,7 +22,13 @@ class PersonalDetails extends Component {
         ApiUtils.getUserDetails(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ userDetails: res.data[0] });
+                if (res.status == 200) {
+                    _this.setState({ userDetails: res.data[0] });
+                } else if (res.status == 403) {
+                    _this.props.logout();
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -90,4 +99,4 @@ class PersonalDetails extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(PersonalDetails);
+    }), { logout })(PersonalDetails);

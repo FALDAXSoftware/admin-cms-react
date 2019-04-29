@@ -4,6 +4,9 @@ import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class Referral extends Component {
     constructor(props) {
@@ -13,7 +16,8 @@ class Referral extends Component {
             fields: {},
             errors: {},
             loader: false,
-            errType: 'Success'
+            errType: 'Success',
+            prevReferral: ''
         }
         this.validator = new SimpleReactValidator();
     }
@@ -29,9 +33,18 @@ class Referral extends Component {
         ApiUtils.getUserDetails(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                let fields = _this.state.fields;
-                fields["percentage"] = res.data[0].referal_percentage;
-                _this.setState({ userDetails: res.data[0], fields });
+                if (res.status == 200) {
+                    let fields = _this.state.fields;
+                    fields["percentage"] = res.data[0].referal_percentage;
+                    _this.setState({ userDetails: res.data[0], fields, prevReferral: res.data[0].referal_percentage });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
             })
             .catch((err) => {
                 console.log(err)
@@ -64,7 +77,7 @@ class Referral extends Component {
         _this.setState({ loader: true });
 
         const formData = {
-            referal_percentage: fields['percentage'],
+            percentage: fields['percentage'],
             user_id: user_id,
             email: userDetails.email
             //days: fields['days'],
@@ -74,24 +87,38 @@ class Referral extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success'
-                    }, () => {
-                        _this._getUserDetails();
-                    })
+                    if (res.status == 200) {
+                        _this.setState({
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        }, () => {
+                            _this._getUserDetails();
+                        })
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message });
+                    }
+                    _this.setState({ loader: false });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                 }
-            })
-            .catch(() => {
+            }).catch(() => {
                 _this.setState({ loader: false });
             });
     }
 
-    render() {
-        const { errMsg, errType, fields, loader } = this.state;
+    _cancelReferral = () => {
+        let _this = this;
+        let fields = _this.state.fields;
+        fields["percentage"] = this.state.prevReferral;
+        _this.setState({ fields });
+    }
 
+    render() {
+        const { errMsg, errType, fields, loader, prevReferral } = this.state;
+        console.log('prevReferral', prevReferral)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -113,6 +140,7 @@ class Referral extends Component {
                         {this.validator.message('days', fields['days'], 'required')}
                     </span> */}
                     <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateReferral}> Update </Button>
+                    <Button type="primary" style={{ "marginBottom": "15px", marginLeft: '10px' }} onClick={this._cancelReferral}> Cancel </Button>
                 </div>
                 {loader && <FaldaxLoader />}
             </div>
@@ -124,4 +152,4 @@ export default connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }))(Referral);
+    }), { logout })(Referral);

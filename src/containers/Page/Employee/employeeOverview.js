@@ -3,6 +3,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { Divider, Input, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class PersonalDetails extends Component {
     constructor(props) {
@@ -22,7 +25,15 @@ class PersonalDetails extends Component {
         ApiUtils.getEmployeeDetails(token, emp_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ employeeDetails: res.data[0] });
+                if (res.status == 200) {
+                    _this.setState({ employeeDetails: res.data[0] });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -57,7 +68,7 @@ class PersonalDetails extends Component {
             ApiUtils.changePassword(token, formData)
                 .then((response) => response.json())
                 .then((res) => {
-                    if (res) {
+                    if (res.status == 200) {
                         let fields = _this.state.fields;
                         fields["oldPwd"] = "";
                         fields["newPwd"] = "";
@@ -67,10 +78,13 @@ class PersonalDetails extends Component {
                             fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
                             errMessage: res.err ? res.err : res.message
                         });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
                     } else {
                         _this.setState({
-                            loader: false, errMsg: true, errType: 'Error',
-                            errMessage: res.message
+                            loader: false, errMsg: true, errType: 'Error', errMessage: res.message
                         });
                     }
                 })
@@ -177,5 +191,5 @@ class PersonalDetails extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(PersonalDetails);
+    }), { logout })(PersonalDetails);
 

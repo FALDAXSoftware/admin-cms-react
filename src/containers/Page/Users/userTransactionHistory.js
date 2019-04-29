@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, DatePicker, Select, Button, Form, Row } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form, Row } from 'antd';
 import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -13,7 +13,6 @@ import ColWithPadding from '../common.style';
 import authAction from '../../../redux/auth/actions';
 
 const Option = Select.Option;
-const { RangePicker } = DatePicker;
 const { logout } = authAction;
 
 class UserTransactionHistory extends Component {

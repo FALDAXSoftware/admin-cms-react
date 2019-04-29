@@ -9,7 +9,9 @@ import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Option = Select.Option;
 
 class AddCoinModal extends Component {
@@ -129,22 +131,25 @@ class AddCoinModal extends Component {
             ApiUtils.addCoin(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    if (res.status != 200) {
-                        this.setState({
-                            editorContent: '', errMsg: true, errMessage: res.err,
-                            loader: false, errType: 'Error', showError: false, isDisabled: false
-                        })
-                    } else {
+                    if (res.status == 200) {
                         this.setState({
                             editorContent: '', errMsg: true, errMessage: res.message,
                             loader: false, errType: 'Success', showError: false, isDisabled: false
+                        })
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({
+                            editorContent: '', errMsg: true, errMessage: res.err,
+                            loader: false, errType: 'Error', showError: false, isDisabled: false
                         })
                     }
                     this._closeAddCoinModal();
                     getAllCoins();
                     this._resetAddForm();
-                })
-                .catch(() => {
+                }).catch(() => {
                     this._resetAddForm();
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
@@ -273,4 +278,4 @@ class AddCoinModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(AddCoinModal);
+    }), { logout })(AddCoinModal);

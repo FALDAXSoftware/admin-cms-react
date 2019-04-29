@@ -174,16 +174,24 @@ class Coins extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        deleteCoinId: '', showDeleteCoinModal: false, errMessage: res.message, errMsg: true
-                    });
-                    _this._getAllCoins();
+                    if (res.status == 200) {
+                        _this.setState({
+                            deleteCoinId: '', showDeleteCoinModal: false, errMessage: res.message, errMsg: true
+                        }, () => {
+                            _this._getAllCoins();
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    }
                 } else {
                     _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
                 }
                 this.setState({ loader: false })
-            })
-            .catch(() => {
+            }).catch(() => {
                 _this.setState({ deleteCoinId: '', showDeleteCoinModal: false, loader: false });
             });
     }
