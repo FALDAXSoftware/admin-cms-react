@@ -4,7 +4,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Option = Select.Option;
 
 class EditEmployeeModal extends Component {
@@ -42,9 +44,13 @@ class EditEmployeeModal extends Component {
         ApiUtils.getAllRoles(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     let roles = res.roles.map((role) => ({ key: role.id, value: role.name }));
                     _this.setState({ allRoles: roles });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -92,7 +98,6 @@ class EditEmployeeModal extends Component {
         const { token, getAllEmployee } = this.props;
         const { fields, selectedRole } = this.state;
 
-
         if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
 
@@ -110,13 +115,21 @@ class EditEmployeeModal extends Component {
             ApiUtils.editEmployee(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', isDisabled: false
-                    });
-                    this._closeEditEmpModal();
-                    getAllEmployee();
-                    this._resetForm();
+                    if (res.status == 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', isDisabled: false
+                        });
+                        this._closeEditEmpModal();
+                        getAllEmployee();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -220,4 +233,4 @@ class EditEmployeeModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditEmployeeModal);
+    }), { logout })(EditEmployeeModal);

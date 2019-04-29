@@ -7,8 +7,10 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
+import authAction from '../../../redux/auth/actions';
 import striptags from 'striptags';
 
+const { logout } = authAction;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
@@ -122,13 +124,21 @@ class EditJobModal extends Component {
             ApiUtils.updateJob(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', showError: false, isDisabled: false
-                    });
-                    this._closeEditJobModal();
-                    getAllJobs();
-                    this._resetForm();
+                    if (res.status == 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', showError: false, isDisabled: false
+                        });
+                        this._closeEditJobModal();
+                        getAllJobs();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -233,4 +243,4 @@ class EditJobModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditJobModal);
+    }), { logout })(EditJobModal);

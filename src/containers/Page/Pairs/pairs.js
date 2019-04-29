@@ -60,8 +60,16 @@ class Pairs extends Component {
         ApiUtils.updatePair(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self._getAllPairs();
-                self.setState({ errType: 'Success', errMsg: true, errMessage: message })
+                if (res.status == 200) {
+                    self._getAllPairs();
+                    self.setState({ errType: 'Success', errMsg: true, errMessage: message })
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch(() => {
                 self.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });

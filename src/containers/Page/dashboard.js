@@ -12,6 +12,9 @@ import styled from 'styled-components';
 import { palette } from 'styled-theme';
 import CountCard from '../Widgets/card/count-widget';
 import { Link } from 'react-router-dom';
+import authAction from '../../redux/auth/actions';
+
+const { logout } = authAction;
 
 const CardWrapper = styled(Card)`
     & .ant-card-body{
@@ -118,20 +121,26 @@ class Dashboard extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    const {
-                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                        InactivePairs, legalCountries, illegalCountries,
-                        neutralCountries, employeeCount, jobsCount,
-                        withdrawReqCount, kyc_disapproved, kyc_approved,
-                        total_kyc, kyc_pending
-                    } = res;
-                    _this.setState({
-                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                        InactivePairs, legalCountries,
-                        illegalCountries, neutralCountries, employeeCount,
-                        jobsCount, withdrawReqCount,
-                        kyc_disapproved, kyc_approved, total_kyc, kyc_pending
-                    });
+                    if (res.status == 200) {
+                        const {
+                            activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                            InactivePairs, legalCountries, illegalCountries,
+                            neutralCountries, employeeCount, jobsCount,
+                            withdrawReqCount, kyc_disapproved, kyc_approved,
+                            total_kyc, kyc_pending
+                        } = res;
+                        _this.setState({
+                            activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                            InactivePairs, legalCountries,
+                            illegalCountries, neutralCountries, employeeCount,
+                            jobsCount, withdrawReqCount,
+                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending
+                        });
+                    } else if (res.status == 403) {
+                        _this.props.logout();
+                    } else {
+                        _this.setState({ errMsg: true, message: res.message });
+                    }
                 } else {
                     _this.setState({ errMsg: true, message: res.message });
                 }
@@ -328,4 +337,4 @@ class Dashboard extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Dashboard);
+    }), { logout })(Dashboard);

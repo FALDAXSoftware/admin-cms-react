@@ -3,6 +3,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { Divider, Row, Col, Card } from 'antd';
 import { BUCKET_URL } from '../../../helpers/globals';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class UserKYCDetails extends Component {
     constructor(props) {
@@ -19,7 +22,13 @@ class UserKYCDetails extends Component {
         ApiUtils.getKYCDetails(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ kycDetails: res.data });
+                if (res.status == 200) {
+                    _this.setState({ kycDetails: res.data });
+                } else if (res.status == 403) {
+                    _this.props.logout();
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -112,4 +121,4 @@ class UserKYCDetails extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(UserKYCDetails);
+    }), { logout })(UserKYCDetails);

@@ -8,7 +8,9 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditLimitModal from './editLimitModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 var self;
 
@@ -48,8 +50,12 @@ class LimitManagement extends Component {
         ApiUtils.getAllLimit(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allLimitData: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -57,8 +63,7 @@ class LimitManagement extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errType: 'error', errMsg: true,
-                    errMessage: 'Something went wrong', loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
             });
     }
@@ -68,9 +73,7 @@ class LimitManagement extends Component {
     }
 
     render() {
-        const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal,
-            loader
-        } = this.state;
+        const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal, loader } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -110,6 +113,6 @@ class LimitManagement extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(LimitManagement);
+    }), { logout })(LimitManagement);
 
 export { LimitManagement, limitTableInfos };

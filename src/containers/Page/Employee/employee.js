@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import AddEmployeeModal from './addEmployeeModal';
 import EditEmployeeModal from './editEmployeeModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const Search = Input.Search;
 var self;
@@ -55,8 +57,16 @@ class Employees extends Component {
         ApiUtils.editEmployee(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                this.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
-                this._getAllEmployees();
+                if (res.status == 200) {
+                    this.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
+                    this._getAllEmployees();
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch(error => {
                 this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
@@ -95,8 +105,12 @@ class Employees extends Component {
         ApiUtils.getAllEmployee(token, sorterCol, sortOrder, searchEmp)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allEmployee: res.data.employees });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -104,8 +118,7 @@ class Employees extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errType: 'error', errMsg: true, errMessage: 'Something went wrong',
-                    loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
             });
     }
@@ -119,12 +132,16 @@ class Employees extends Component {
         ApiUtils.deleteEmployee(token, deleteEmpId)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({
                         deleteEmpId: '', errMsg: true, errMessage: res.message, errType: 'Success'
                     });
                     _this._closeDeleteEmpModal();
                     _this._getAllEmployees();
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
@@ -132,8 +149,7 @@ class Employees extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errType: 'error', errMsg: true,
-                    errMessage: 'Something went wrong', loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
             });
     }
@@ -245,6 +261,6 @@ class Employees extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Employees);
+    }), { logout })(Employees);
 
 export { Employees, employeeTableinfos };

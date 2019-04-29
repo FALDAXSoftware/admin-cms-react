@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import ViewJobAppModal from './viewJobAppModal';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 var self;
@@ -68,9 +70,11 @@ class JobApplications extends Component {
         ApiUtils.getAllJobApplications(jobId, page, limit, token, searchJobApp, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allApplications: res.data, allApplicationsCount: res.applicationCount,
+                if (res.status == 200) {
+                    _this.setState({ allApplications: res.data, allApplicationsCount: res.applicationCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
                     });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
@@ -101,7 +105,7 @@ class JobApplications extends Component {
     }
 
     _handleJobAppTableChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllJobApplicants();
         })
     }
@@ -170,6 +174,6 @@ class JobApplications extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(JobApplications);
+    }), { logout })(JobApplications);
 
 export { JobApplications, jobAppTableInfos };

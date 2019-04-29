@@ -6,7 +6,9 @@ import SimpleReactValidator from 'simple-react-validator';
 import ColorPicker from 'rc-color-picker';
 import 'rc-color-picker/assets/index.css';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Option = Select.Option;
 
 class EditCountryModal extends Component {
@@ -92,13 +94,21 @@ class EditCountryModal extends Component {
             ApiUtils.editCountry(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', isDisabled: false
-                    });
-                    this._closeEditCountryModal();
-                    getAllCountry();
-                    this._resetForm();
+                    if (res.status == 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', isDisabled: false
+                        });
+                        this._closeEditCountryModal();
+                        getAllCountry();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -196,4 +206,4 @@ class EditCountryModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditCountryModal);
+    }), { logout })(EditCountryModal);

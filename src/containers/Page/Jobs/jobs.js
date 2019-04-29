@@ -69,11 +69,19 @@ class Jobs extends Component {
         ApiUtils.updateJob(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                this.setState({
-                    errMsg: true, errMessage: message, loader: false,
-                    errType: 'Success', showError: false, isDisabled: false
-                });
-                this._getAllJobs();
+                if (res.status == 200) {
+                    this.setState({
+                        errMsg: true, errMessage: message, loader: false,
+                        errType: 'Success', showError: false, isDisabled: false
+                    });
+                    this._getAllJobs();
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch(() => {
                 this.setState({
@@ -147,8 +155,12 @@ class Jobs extends Component {
         ApiUtils.getAllJobCategories(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allJobCategories: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -156,8 +168,7 @@ class Jobs extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -170,7 +181,7 @@ class Jobs extends Component {
 
     _handleJobPagination = (page) => {
         this.setState({ page }, () => {
-            this._getAllJobs(page);
+            this._getAllJobs();
         })
     }
 
@@ -183,12 +194,16 @@ class Jobs extends Component {
         ApiUtils.deleteJob(deleteJobId, token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({
                         deleteJobId: '', showDeleteJobModal: false,
                         errMessage: res.message, errMsg: true, page: 1
                     });
                     _this._getAllJobs();
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ deleteJobId: '', showDeleteJobModal: false });
                 }

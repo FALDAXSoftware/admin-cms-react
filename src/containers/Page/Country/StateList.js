@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import EditStateModal from './editStateModal';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 var self;
@@ -48,10 +50,18 @@ class StateList extends Component {
         ApiUtils.activateState(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                self.setState({
-                    loader: false, errMsg: true, errMessage: message, errType: 'Success'
-                })
-                self._getAllStates();
+                if (res.status == 200) {
+                    self.setState({
+                        loader: false, errMsg: true, errMessage: message, errType: 'Success'
+                    })
+                    self._getAllStates();
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({ errMsg: true, errMessage: res.message, searchState: '' });
+                }
             })
             .catch(() => {
                 self.setState({
@@ -89,10 +99,14 @@ class StateList extends Component {
         ApiUtils.getAllStates(token, countryId, searchState, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allStates: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message, searchState: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, searchState: '' });
                 }
                 _this.setState({ loader: false })
             })
@@ -175,6 +189,6 @@ class StateList extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(StateList);
+    }), { logout })(StateList);
 
 export { StateList, stateTableInfos };

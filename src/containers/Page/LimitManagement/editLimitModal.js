@@ -4,6 +4,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class EditCoinModal extends Component {
     constructor(props) {
@@ -92,12 +95,20 @@ class EditCoinModal extends Component {
             ApiUtils.updateLimit(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
-                    });
-                    this._closeEditLimitModal();
-                    getAllLimits();
-                    this._resetForm();
+                    if (res.status == 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        });
+                        this._closeEditLimitModal();
+                        getAllLimits();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
@@ -269,4 +280,4 @@ class EditCoinModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditCoinModal);
+    }), { logout })(EditCoinModal);

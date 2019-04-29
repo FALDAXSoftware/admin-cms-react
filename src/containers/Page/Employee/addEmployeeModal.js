@@ -4,7 +4,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Option = Select.Option;
 
 class AddEmployeeModal extends Component {
@@ -29,11 +31,15 @@ class AddEmployeeModal extends Component {
         ApiUtils.getAllRoles(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     let roles = res.roles.map((role) => ({ key: role.id, value: role.name }));
                     _this.setState({ allRoles: roles });
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    this.setState({ errMsg: true, errMessage: res.message });
                 }
             })
             .catch(err => {
@@ -102,13 +108,21 @@ class AddEmployeeModal extends Component {
             ApiUtils.addEmployee(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this._closeAddEmpModal();
-                    getAllEmployee();
-                    this._resetAddForm();
-                    this.setState({
-                        errMsg: true, errMessage: res.message, showRoleErr: false,
-                        errType: 'Success', loader: false, isDisabled: false
-                    })
+                    if (res.status == 200) {
+                        this._closeAddEmpModal();
+                        getAllEmployee();
+                        this._resetAddForm();
+                        this.setState({
+                            errMsg: true, errMessage: res.message, showRoleErr: false,
+                            errType: 'Success', loader: false, isDisabled: false
+                        })
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -216,4 +230,4 @@ class AddEmployeeModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(AddEmployeeModal);
+    }), { logout })(AddEmployeeModal);

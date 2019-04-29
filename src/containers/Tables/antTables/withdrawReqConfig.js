@@ -6,7 +6,7 @@ import { TextCell, DateCell, ApproveCell } from '../../../components/tables/help
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, approve = null, createdOn = null) => {
     const value = object[key];
-    const maker_email = object[m_email];
+    const email = object[m_email];
     const source_address = object[source];
     const destination_address = object[destination];
     const amount = object[coinAmt];
@@ -15,7 +15,7 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, maker_email, source_address, destination_address, amount, is_approve, created_at);
+            return DateCell(value, email, source_address, destination_address, amount, is_approve, created_at);
         case 'ApproveCell':
             return ApproveCell(value);
         default:
@@ -26,9 +26,9 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 const columns = [
     {
         title: <IntlMessages id="withdrawTable.title.email" />,
-        key: 'maker_email',
+        key: 'email',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'maker_email')
+        render: object => renderCell(object, 'TextCell', 'email')
     },
     {
         title: <IntlMessages id="withdrawTable.title.source_address" />,
@@ -46,6 +46,7 @@ const columns = [
         title: <IntlMessages id="withdrawTable.title.amount" />,
         key: 'amount',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'amount')
     },
     {
@@ -58,6 +59,7 @@ const columns = [
         title: <IntlMessages id="withdrawTable.title.created_at" />,
         key: 'created_at',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'DateCell', 'created_at')
     },
 ];

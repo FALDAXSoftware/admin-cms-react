@@ -217,6 +217,7 @@ class Transactions extends Component {
                                     columns={tableInfo.columns}
                                     pagination={false}
                                     dataSource={allTransactions}
+                                    onChange={this._handleTransactionTableChange}
                                     className="isoCustomizedTable"
                                 />
                                 {allTransactionCount > 0 ? <Pagination

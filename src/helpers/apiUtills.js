@@ -1,5 +1,6 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
 const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
@@ -745,15 +746,23 @@ const ApiUtils = {
         }
     },
 
-    getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate) {
+    getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit;
-        if (search && filterVal && startDate && endDate) {
-            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && filterVal) {
+        if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate) {
             url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (filterVal && sorterCol && sortOrder) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && startDate && endDate) {
+        } else if (search && sorterCol && sortOrder) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;

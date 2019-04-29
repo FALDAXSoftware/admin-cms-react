@@ -10,7 +10,9 @@ import QuillEditor from '../../../components/uielements/styles/editor.style';
 import striptags from 'striptags';
 import { BUCKET_URL } from '../../../helpers/globals';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const Option = Select.Option;
 
 class EditCoinModal extends Component {
@@ -119,15 +121,19 @@ class EditCoinModal extends Component {
             ApiUtils.editCoin(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    if (res.status != 200) {
-                        this.setState({
-                            errMsg: true, errMessage: res.err, loader: false,
-                            errType: 'Error', showError: false, isDisabled: false
-                        });
-                    } else {
+                    if (res.status == 200) {
                         this.setState({
                             errMsg: true, errMessage: res.message, loader: false,
                             errType: 'Success', showError: false, isDisabled: false
+                        });
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({
+                            errMsg: true, errMessage: res.err, loader: false,
+                            errType: 'Error', showError: false, isDisabled: false
                         });
                     }
                     this._closeEditCoinModal();
@@ -154,7 +160,6 @@ class EditCoinModal extends Component {
         const { loader, showEditCoinModal, fields, errMsg, errType, editorContent,
             showError, isDisabled, showCoinErr, selectedToken
         } = this.state;
-        console.log('selectedToken', selectedToken)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -239,7 +244,6 @@ class EditCoinModal extends Component {
                             {this.validator.message('wallet address', fields["wallet_address"], 'max:45', 'text-danger')}
                         </span>
                     </div> */}
-
                     {loader && <FaldaxLoader />}
                 </Modal>
             </div>
@@ -250,4 +254,4 @@ class EditCoinModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditCoinModal);
+    }), { logout })(EditCoinModal);

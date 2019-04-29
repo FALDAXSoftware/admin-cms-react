@@ -8,7 +8,9 @@ import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
@@ -110,13 +112,21 @@ class AddJobModal extends Component {
             ApiUtils.addJob(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this._closeAddJobModal();
-                    getAllJobs();
-                    this._resetAddForm();
-                    this.setState({
-                        editorContent: '', errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success', showError: false, isDisabled: false
-                    })
+                    if (res.status == 200) {
+                        this._closeAddJobModal();
+                        getAllJobs();
+                        this._resetAddForm();
+                        this.setState({
+                            editorContent: '', errMsg: true, errMessage: res.message,
+                            loader: false, errType: 'Success', showError: false, isDisabled: false
+                        })
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this._resetAddForm();
@@ -224,4 +234,4 @@ class AddJobModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(AddJobModal);
+    }), { logout })(AddJobModal);
