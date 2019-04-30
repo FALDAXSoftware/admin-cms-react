@@ -140,7 +140,7 @@ class Referral extends Component {
                         {this.validator.message('days', fields['days'], 'required')}
                     </span> */}
                     <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateReferral}> Update </Button>
-                    <Button type="primary" style={{ "marginBottom": "15px", marginLeft: '10px' }} onClick={this._cancelReferral}> Cancel </Button>
+                    <Button type="primary" className="cancel-btn" onClick={this._cancelReferral}> Cancel </Button>
                 </div>
                 {loader && <FaldaxLoader />}
             </div>

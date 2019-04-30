@@ -6,7 +6,7 @@ import ApiUtils from '../../helpers/apiUtills';
 import authAction from '../../redux/auth/actions';
 import FaldaxLoader from '../Page/faldaxLoader';
 
-const { login } = authAction;
+const { login, logout } = authAction;
 
 class EditProfile extends Component {
     constructor(props) {
@@ -67,11 +67,15 @@ class EditProfile extends Component {
             ApiUtils.editProfile(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
-                    if (res) {
+                    if (res.status == 200) {
                         login({ user: res.data[0] });
                         _this.setState({
                             errMsg: true, errMessage: 'Profile updated successfully.',
                             loader: false, errType: 'Success'
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
                         });
                     } else {
                         _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
@@ -87,14 +91,12 @@ class EditProfile extends Component {
     }
 
     _getAdminDetails = () => {
-        console.log('CALL _getAdminDetails');
         const { token, user, login } = this.props;
         let _this = this;
 
         ApiUtils.getAdminDetails(token, user.id)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('_getAdminDetails res', res)
                 if (res) {
                     login({ user: res.data });
                     _this.setState({
@@ -122,16 +124,22 @@ class EditProfile extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'success', QRImage: res.dataURL,
-                        QRKey: res.tempSecret
-                    }, () => {
-                        if (_this.state.is_twofactor == false)
-                            _this.setState({ showQR: true })
-                        else
-                            _this.setState({ showQR: false })
-                    });
+                    if (res.status == 200) {
+                        _this.setState({
+                            loader: false, QRImage: res.dataURL, QRKey: res.tempSecret
+                        }, () => {
+                            if (_this.state.is_twofactor == false)
+                                _this.setState({ showQR: true })
+                            else
+                                _this.setState({ showQR: false })
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
+                    }
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                 }
@@ -161,15 +169,21 @@ class EditProfile extends Component {
         ApiUtils.disableTwoFactor(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('disableTwoFactor Res', res)
                 if (res) {
-                    console.log('inside if');
-                    _this.setState({
-                        errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'success', isEnabled: 'ENABLED',
-                    }, () => {
-                        _this._getAdminDetails();
-                    });
+                    if (res.status == 200) {
+                        _this.setState({
+                            errMsg: true, errMessage: res.message,
+                            loader: false, errType: 'success', isEnabled: 'ENABLED',
+                        }, () => {
+                            _this._getAdminDetails();
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
+                    }
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                 }
@@ -194,17 +208,20 @@ class EditProfile extends Component {
         ApiUtils.verifyOTP(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('verify Res', res)
                 if (res) {
-                    if (res.err) {
-                        _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
-                    } else {
+                    if (res.status == 200) {
                         _this.setState({
                             errMsg: true, errMessage: res.message,
                             loader: false, errType: 'Success', isEnabled: 'ENABLED', showQR: false
                         }, () => {
                             _this._getAdminDetails();
                         });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                     }
                     let fields = this.state.fields;
                     fields["otp"] = "";
@@ -219,8 +236,7 @@ class EditProfile extends Component {
     }
 
     render() {
-        const { loader, fields, errMsg, errType, isEnabled, is_twofactor, QRKey, showQR } = this.state;
-        console.log(isEnabled)
+        const { loader, fields, errMsg, errType, isEnabled, is_twofactor, QRKey } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -316,5 +332,5 @@ export default connect(
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
     }),
-    { login }
+    { login, logout }
 )(EditProfile);

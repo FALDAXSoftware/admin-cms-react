@@ -9,8 +9,10 @@ import { connect } from 'react-redux';
 import EditFeesModal from "./editFeesModal";
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
+import authAction from '../../../redux/auth/actions';
 
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Fees extends Component {
@@ -20,11 +22,12 @@ class Fees extends Component {
             allFeesData: [],
             showEditFeesModal: false,
             feesDetails: [],
-            notifyMsg: '',
+            errMessage: '',
             notify: false,
             errType: '',
             loader: false,
-            fields: {}
+            fields: {},
+            prevFees: ''
         }
         this.validator = new SimpleReactValidator();
         self = this;
@@ -51,17 +54,23 @@ class Fees extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    let fields = _this.state.fields;
-                    fields['default_send_coin_fee'] = res.data.default_send_coin_fee;
-                    _this.setState({ fields });
-                } else {
-                    _this.setState({ errMsg: true, notifyMsg: res.message });
+                    if (res.status == 200) {
+                        let fields = _this.state.fields;
+                        fields['default_send_coin_fee'] = res.data.default_send_coin_fee;
+                        _this.setState({ fields, prevFees: res.data.default_send_coin_fee });
+                    } else if (res.status == 403) {
+                        self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            self.props.logout();
+                        });
+                    } else {
+                        self.setState({ errMsg: true, errMessage: res.message });
+                    }
+                    _this.setState({ loader: false });
                 }
-                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, notifyMsg: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -74,17 +83,20 @@ class Fees extends Component {
         ApiUtils.getFeesData(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allFeesData: res.data });
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    self.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, notifyMsg: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -101,7 +113,6 @@ class Fees extends Component {
 
     _updateSendFee = () => {
         const { token } = this.props;
-        const { userDetails } = this.state;
         let fields = this.state.fields;
         let _this = this;
 
@@ -115,12 +126,16 @@ class Fees extends Component {
             ApiUtils.updateSendCoinFee(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
-                    if (res) {
+                    if (res.status == 200) {
                         _this.setState({
-                            errMsg: true, notifyMsg: res.message, loader: false, errType: 'Success'
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
                         })
+                    } else if (res.status == 403) {
+                        self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            self.props.logout();
+                        });
                     } else {
-                        _this.setState({ errMsg: true, notifyMsg: res.message, loader: false, errType: 'error' });
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
                 })
                 .catch(() => {
@@ -135,7 +150,7 @@ class Fees extends Component {
     openNotificationWithIcon = (type) => {
         notification[type]({
             message: this.state.errType,
-            description: this.state.notifyMsg
+            description: this.state.errMessage
         });
         this.setState({ notify: false });
     };
@@ -144,9 +159,14 @@ class Fees extends Component {
         this.setState({ showEditFeesModal: false });
     }
 
+    _cancelSendFee = () => {
+        let fields = this.state.fields;
+        fields['default_send_coin_fee'] = this.state.prevFees;
+        this.setState({ fields });
+    }
+
     render() {
-        const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal,
-            fields } = this.state;
+        const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal, fields } = this.state;
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -186,6 +206,7 @@ class Fees extends Component {
                                     {this.validator.message('send fee', fields['default_send_coin_fee'], 'required|numeric')}
                                 </span>
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateSendFee}> Update </Button>
+                                <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button>
                             </div>
                             {loader && <FaldaxLoader />}
                         </TabPane>
@@ -200,6 +221,6 @@ export default connect(
     state => ({
         user: state.Auth.get('user'),
         token: state.Auth.get('token')
-    }))(Fees);
+    }), { logout })(Fees);
 
 export { Fees }

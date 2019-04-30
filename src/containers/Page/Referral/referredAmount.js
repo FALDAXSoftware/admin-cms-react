@@ -24,10 +24,17 @@ class ReferredAmount extends Component {
         ApiUtils.getReferredAmounts(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                _this.setState({ referredAmounts: res.data, userData: res.userData[0], loader: false });
+                if (res.status == 200) {
+                    _this.setState({ referredAmounts: res.data, userData: res.userData[0], loader: false });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch((err) => {
-                console.log(err)
                 _this.setState({ loader: false });
             });
     }
