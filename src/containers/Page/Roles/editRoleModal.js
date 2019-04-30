@@ -4,6 +4,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification, Checkbox, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class EditRoleModal extends Component {
     constructor(props) {
@@ -141,13 +144,21 @@ class EditRoleModal extends Component {
                 ApiUtils.updateRole(token, formData)
                     .then((res) => res.json())
                     .then((res) => {
-                        this.setState({
-                            errMsg: true, errMessage: res.message, loader: false,
-                            errType: 'Success', isDisabled: false
-                        });
-                        this._closeEditRoleModal();
-                        getAllRoles();
-                        this._resetForm();
+                        if (res.status == 200) {
+                            this.setState({
+                                errMsg: true, errMessage: res.message, loader: false,
+                                errType: 'Success', isDisabled: false
+                            });
+                            this._closeEditRoleModal();
+                            getAllRoles();
+                            this._resetForm();
+                        } else if (res.status == 403) {
+                            this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                                this.props.logout();
+                            });
+                        } else {
+                            this.setState({ errMsg: true, errMessage: res.message });
+                        }
                     })
                     .catch(() => {
                         this.setState({
@@ -250,4 +261,4 @@ class EditRoleModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditRoleModal);
+    }), { logout })(EditRoleModal);

@@ -9,8 +9,10 @@ import { connect } from 'react-redux';
 import AddRoleModal from './addRoleModal';
 import EditRoleModal from './editRoleModal';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Roles extends Component {
@@ -66,9 +68,13 @@ class Roles extends Component {
         ApiUtils.updateRole(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     self._getAllRoles();
                     self.setState({ errMsg: true, errMessage: message, errType: 'Success' });
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
                 } else {
                     self.setState({ errMsg: true, errMessage: message });
                 }
@@ -118,8 +124,12 @@ class Roles extends Component {
         ApiUtils.getAllRoles(token, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allRoles: res.roles });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -143,15 +153,23 @@ class Roles extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        deleteRoleId: '', errType: 'Success', errMsg: true, errMessage: res.message
-                    });
-                    _this._closeDeleteRoleModal();
-                    _this._getAllRoles();
+                    if (res.status == 200) {
+                        _this.setState({
+                            deleteRoleId: '', errType: 'Success', errMsg: true, errMessage: res.message
+                        });
+                        _this._closeDeleteRoleModal();
+                        _this._getAllRoles();
+                    } else if (res.status == 403) {
+                        self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            self.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message });
+                    }
+                    _this.setState({ loader: false });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
-                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
@@ -248,6 +266,6 @@ class Roles extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Roles);
+    }), { logout })(Roles);
 
 export { Roles, rolesTableInfos };

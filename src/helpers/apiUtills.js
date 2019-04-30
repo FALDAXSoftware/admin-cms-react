@@ -42,7 +42,7 @@ const ApiUtils = {
     //change admin password api
     changePassword: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/changePassword", {
+            return fetch(API_URL + "/admin/change-password", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -980,7 +980,7 @@ const ApiUtils = {
     //get contact details api
     getContactDetails: function () {
         try {
-            return fetch(API_URL + "/get-contact-details", {
+            return fetch(API_URL + "/admin/get-contact-details", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -993,7 +993,7 @@ const ApiUtils = {
 
     //get all jobs api
     getAllJobApplications: function (jobId, page, limit, token, search, sorterCol, sortOrder) {
-        let url = "/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
+        let url = "/admin/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -1057,7 +1057,7 @@ const ApiUtils = {
 
     //get all fees api
     getFeesData: function (token) {
-        let url = "/get-all-fee";
+        let url = "/admin/get-all-fee";
         try {
             return fetch(API_URL + url, {
                 method: 'GET',

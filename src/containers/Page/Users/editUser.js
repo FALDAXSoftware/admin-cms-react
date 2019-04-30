@@ -27,7 +27,6 @@ class EditUser extends Component {
         ApiUtils.getUserDetails(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('>>>>>>>res', res)
                 _this.setState({ userDetails: res.data });
             })
             .catch((err) => {

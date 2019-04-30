@@ -4,6 +4,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, Checkbox, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class AddRoleModal extends Component {
     constructor(props) {
@@ -118,12 +121,20 @@ class AddRoleModal extends Component {
                 ApiUtils.addRole(token, formData)
                     .then((res) => res.json())
                     .then((res) => {
-                        this._closeAddRoleModal();
-                        getAllRoles();
-                        this._resetAddForm();
-                        this.setState({
-                            errType: 'Success', errMsg: true, errMessage: res.message, isDisabled: false
-                        });
+                        if (res.status == 200) {
+                            this._closeAddRoleModal();
+                            getAllRoles();
+                            this._resetAddForm();
+                            this.setState({
+                                errType: 'Success', errMsg: true, errMessage: res.message, isDisabled: false
+                            });
+                        } else if (res.status == 403) {
+                            this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                                this.props.logout();
+                            });
+                        } else {
+                            this.setState({ errMsg: true, errMessage: res.message });
+                        }
                     })
                     .catch(() => {
                         this.setState({
@@ -237,4 +248,4 @@ class AddRoleModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(AddRoleModal);
+    }), { logout })(AddRoleModal);
