@@ -8,8 +8,10 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
+import authAction from '../../../redux/auth/actions';
 
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 const Search = Input.Search;
 
 class Referral extends Component {
@@ -21,7 +23,8 @@ class Referral extends Component {
             page: 1,
             limit: 50,
             searchReferral: '',
-            fields: {}
+            fields: {},
+            prevDefaultReferral: ''
         }
         this.validator = new SimpleReactValidator();
     }
@@ -38,10 +41,14 @@ class Referral extends Component {
         ApiUtils.getContactDetails()
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     let fields = _this.state.fields;
                     fields['percentage'] = res.data.default_referral_percentage;
-                    _this.setState({ fields });
+                    _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -63,12 +70,16 @@ class Referral extends Component {
         ApiUtils.getAllReferrals(page, limit, token, searchReferral)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({
                         allReferral: res.data, allReferralCount: res.referralCount, showReferralModal: true
                     });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false })
             })
@@ -114,16 +125,22 @@ class Referral extends Component {
             _this.setState({ loader: true });
 
             const formData = {
-                referal_percentage: fields['percentage'],
+                percentage: fields['percentage'],
             }
 
             ApiUtils.updateReferral(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
-                    if (res) {
+                    if (res.status == 200) {
                         _this.setState({
                             errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        }, () => {
+                            _this._getContactDetails();
                         })
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
                     } else {
                         _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
@@ -144,6 +161,12 @@ class Referral extends Component {
         });
         this.setState({ errMsg: false });
     };
+
+    _cancelDefaultReferral = () => {
+        let fields = this.state.fields;
+        fields['percentage'] = this.state.prevDefaultReferral;
+        this.setState({ fields });
+    }
 
     render() {
         const { allReferral, allReferralCount, loader, fields, errMsg, errType, page } = this.state;
@@ -202,6 +225,7 @@ class Referral extends Component {
                                     {this.validator.message('percentage', fields['percentage'], 'required|numeric')}
                                 </span>
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateDefaultReferral}> Update </Button>
+                                <Button type="primary" className="cancel-btn" onClick={this._cancelDefaultReferral}> Cancel </Button>
                             </div>
                             {loader && <FaldaxLoader />}
                         </TabPane>
@@ -216,4 +240,4 @@ export default connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }))(Referral);
+    }), { logout })(Referral);

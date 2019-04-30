@@ -310,3 +310,7 @@ html[dir='rtl'] .dz-hidden-input {
 .kyc-doc{
   width: 100%;
 }
+.cancel-btn{
+  margin-bottom: 15px;
+  margin-left: 10px;
+}
