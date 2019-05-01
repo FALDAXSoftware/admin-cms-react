@@ -165,17 +165,17 @@ class Transactions extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchTransaction}>
                                         <Row>
-                                            <ColWithPadding sm={6}>
+                                            <ColWithPadding sm={5}>
                                                 <Input
                                                     placeholder="Search transactions"
                                                     onChange={this._changeSearch.bind(this)}
-                                                    style={{ "width": "200px" }}
+                                                    style={{ "width": "100%" }}
                                                     value={searchTransaction}
                                                 />
                                             </ColWithPadding>
-                                            <ColWithPadding sm={6}>
+                                            <ColWithPadding sm={3}>
                                                 <Select
-                                                    style={{ width: 125, "marginLeft": "15px" }}
+                                                    style={{ width: '100%', "marginLeft": "15px" }}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -185,7 +185,7 @@ class Transactions extends Component {
                                                     <Option value={'receive'}>Receive</Option>
                                                 </Select>
                                             </ColWithPadding>
-                                            <ColWithPadding sm={6}>
+                                            <ColWithPadding sm={7}>
                                                 <RangePicker
                                                     value={rangeDate}
                                                     disabledTime={this.disabledRangeTime}
@@ -202,7 +202,7 @@ class Transactions extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding xs={12} sm={3}>
                                                 {allTransactions && allTransactions.length > 0 ?
-                                                    <CSVLink style={{ marginLeft: '20px' }} filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                                    <CSVLink filename={'transaction_history.csv'} data={allTransactions} headers={transactionsHeaders}>
                                                         <Button className="search-btn" type="primary">Export</Button>
                                                     </CSVLink>
                                                     : ''}

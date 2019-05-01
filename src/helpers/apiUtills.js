@@ -57,7 +57,7 @@ const ApiUtils = {
     //get all counts for dashboard api
     getAllCount: function (token) {
         try {
-            return fetch(API_URL + "/admin/dashboard/getData", {
+            return fetch(API_URL + "/admin/dashboard/get-data", {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -70,7 +70,7 @@ const ApiUtils = {
 
     //get all users api
     getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder) {
-        let url = "/admin/getUsers?page=" + page + "&limit=" + limit;
+        let url = "/admin/get-users?page=" + page + "&limit=" + limit;
         if (sorterCol && sortOrder && searchUser) {
             url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -94,7 +94,7 @@ const ApiUtils = {
     //activate user api
     activateUser: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/userActivate", {
+            return fetch(API_URL + "/admin/user-activate", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -108,7 +108,7 @@ const ApiUtils = {
 
     //get all coins api
     getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
-        let url = "/admin/getCoins?page=" + page + "&limit=" + limit;
+        let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -179,7 +179,7 @@ const ApiUtils = {
     //forgot password api
     forgotPassword: function (form) {
         try {
-            return fetch(API_URL + "/admin/forgotPassword", {
+            return fetch(API_URL + "/admin/forgot-password", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -195,7 +195,7 @@ const ApiUtils = {
     //reset password api
     resetPassword: function (form) {
         try {
-            return fetch(API_URL + "/admin/resetPassword", {
+            return fetch(API_URL + "/admin/reset-password", {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -204,14 +204,13 @@ const ApiUtils = {
                 body: JSON.stringify(form),
             });
         } catch (error) {
-            console.log('>>>>>>>>>>>>>>>>>>>>>>', error)
             console.error(error);
         }
     },
 
     //get all referrals api
     getAllReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
-        let url = "/admin/referredUsers?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        let url = "/admin/referred-users?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         if (sorterCol, sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         }
@@ -231,7 +230,7 @@ const ApiUtils = {
 
     //get all counties api
     getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
-        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit + '&legality=' + legality;
+        let url = "/admin/get-countries-data?page=" + page + "&limit=" + limit + '&legality=' + legality;
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -256,7 +255,7 @@ const ApiUtils = {
     //Activate-deactivate country api 
     activateCountry: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/countryActivate", {
+            return fetch(API_URL + "/admin/country-activate", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -306,7 +305,7 @@ const ApiUtils = {
     //edit country api call
     editCountry: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/countryUpdate", {
+            return fetch(API_URL + "/admin/country-update", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -320,7 +319,7 @@ const ApiUtils = {
 
     //get all states api
     getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
-        let url = "/admin/getStateData?country_id=" + countryId;
+        let url = "/admin/get-state-data?country_id=" + countryId;
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -345,7 +344,7 @@ const ApiUtils = {
     //Activate-deactivate state api 
     activateState: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/stateActivate", {
+            return fetch(API_URL + "/admin/state-activate", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -360,7 +359,7 @@ const ApiUtils = {
     //edit state api call
     editState: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/stateUpdate", {
+            return fetch(API_URL + "/admin/state-update", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -488,7 +487,7 @@ const ApiUtils = {
 
     //user login history api call
     getUserHistory: function (token, user_id, page, limit, data, startDate, endDate) {
-        let url = "/admin/getUserloginHistory?page=" + page + "&limit=" + limit;
+        let url = "/admin/get-user-login-history?page=" + page + "&limit=" + limit;
         if (data && startDate && endDate) {
             url += "&data=" + data + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
@@ -1270,7 +1269,7 @@ const ApiUtils = {
 
     updateReferral: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/updateUserReferal", {
+            return fetch(API_URL + "/admin/update-user-referal", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
