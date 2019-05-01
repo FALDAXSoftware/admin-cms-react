@@ -89,6 +89,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Referral/referral")),
         module: "is_referral"
     },
+    {
+        path: "users/add-user",
+        component: asyncComponent(() => import("../Page/Users/addUser")),
+        module: "add_user"
+    },
 ];
 
 const mandatoryRoutes = [

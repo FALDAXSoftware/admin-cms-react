@@ -133,6 +133,8 @@ class Users extends Component {
         })
     }
 
+    _addUser
+
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType } = this.state;
         const headers = [
@@ -167,9 +169,9 @@ class Users extends Component {
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{
                                         "display": "flex", "width": "100%",
-                                        "justifyContent": "flex-end",
                                         "alignItems": "center",
                                     }}>
+                                        {/* <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._addUser}>Add User</Button> */}
                                         <Search
                                             placeholder="Search users"
                                             onSearch={(value) => this._searchUser(value)}
