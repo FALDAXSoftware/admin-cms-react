@@ -88,25 +88,26 @@ export default class CountryFields extends Component {
     }
 
     _changeCountry = (value, position) => {
+        console.log(value)
         var newPosition = Number(position.key) - 1;
         var states = CountryData.getStatesOfCountry(newPosition + 1);
-        this.setState({ selectedCountry: value, countryID: newPosition, states });
-        this.props.onCountryChange(value, null, null, null, null);
+        this.setState({ selectedCountry: value.name, countryID: newPosition, states, countryCode: value.sortname });
+        this.props.onCountryChange(value.name, null, null, null, null, value.sortname);
     }
 
     _changeState = (value, position) => {
         var cities = CountryData.getCitiesOfState(position.key);
         var stateID = position.key;
-        var countryID = this.state.countryID;
+        const { selectedCountry, countryID, countryCode } = this.state;
 
         this.setState({ selectedState: value, selectedCity: "", stateID: position.key, cities });
-        this.props.onCountryChange(this.state.selectedCountry, value, null, stateID, countryID);
+        this.props.onCountryChange(selectedCountry, value, null, stateID, countryID, countryCode);
     }
 
     handleChangeCity(value, position) {
-        const { selectedCountry, selectedState, countryID, stateID } = this.state;
+        const { selectedCountry, selectedState, countryID, stateID, countryCode } = this.state;
         this.setState({ selectedCity: value });
-        this.props.onCountryChange(selectedCountry, selectedState, value, stateID, countryID);
+        this.props.onCountryChange(selectedCountry, selectedState, value, stateID, countryID, countryCode);
     }
 
     handleBlur() {
@@ -136,7 +137,7 @@ export default class CountryFields extends Component {
                             onBlur={this.handleBlur}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                            {this.state.countries.map((country, index) => <Option key={country.id} value={country.name}>{country.name}</Option>)}
+                            {this.state.countries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
                         </SelectS>
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8}>

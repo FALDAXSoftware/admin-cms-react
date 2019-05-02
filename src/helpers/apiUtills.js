@@ -1324,6 +1324,36 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    //add user api call
+    addUser: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-user", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getWalletCoins: function (token) {
+        try {
+            return fetch(API_URL + "/coin-list", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;
