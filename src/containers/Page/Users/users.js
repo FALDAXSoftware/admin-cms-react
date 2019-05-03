@@ -133,7 +133,9 @@ class Users extends Component {
         })
     }
 
-    _addUser
+    _addUser = () => {
+        this.props.history.push('/dashboard/users/add-user')
+    }
 
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType } = this.state;
@@ -171,7 +173,7 @@ class Users extends Component {
                                         "display": "flex", "width": "100%",
                                         "alignItems": "center",
                                     }}>
-                                        {/* <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._addUser}>Add User</Button> */}
+                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._addUser}>Add User</Button>
                                         <Search
                                             placeholder="Search users"
                                             onSearch={(value) => this._searchUser(value)}
