@@ -6,6 +6,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import CountryFields from './countryFields';
+import { Link } from 'react-router-dom';
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -91,9 +92,9 @@ class AddUser extends Component {
             fields, selectedTier, selectedClass, isHubspot, isKYC, countryCode,
             countrySelected, stateSelected, citySelected, generate_wallet_coins
         } = this.state;
+        let _this = this;
 
         if (this.validator.allValid() && selectedTier && selectedClass) {
-            console.log('if');
             let formData = {
                 first_name: fields["first_name"],
                 last_name: fields["last_name"],
@@ -112,33 +113,35 @@ class AddUser extends Component {
                 create_hubspot_contact: isHubspot
             };
 
-            //this.setState({ loader: true, isDisabled: true })
+            this.setState({ loader: true, isDisabled: true })
             ApiUtils.addUser(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log('>>>>', res)
-                    // if (res.status == 200) {
-                    //     this._resetAddForm();
-                    //     this.setState({
-                    //         errMsg: true, errMessage: res.message, errType: 'Success', loader: false
-                    //     })
-                    // } else if (res.status == 403) {
-                    //     this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                    //         this.props.logout();
-                    //     });
-                    // } else {
-                    //     this.setState({ errMsg: true, errMessage: res.message });
-                    // }
+                    if (res.status == 200) {
+                        _this._resetAddForm();
+                        _this.setState({
+                            errMsg: true, errMessage: res.message, errType: 'Success'
+                        }, () => {
+                            _this.props.history.push('/dashboard/users');
+                        })
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
+                    }
+                    _this.setState({ loader: false })
                 })
                 .catch(() => {
-                    this.setState({
+                    _this.setState({
                         errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                     });
                 });
         } else {
             this.setState({
                 showTierError: selectedTier ? false : true,
-                showClassError: selectedClass ? false : true
+                showClassError: selectedClass ? false : true, loader: false
             })
             this.validator.showMessages();
             this.forceUpdate();
@@ -184,7 +187,7 @@ class AddUser extends Component {
         const {
             loader, fields, errType, errMsg, showTierError, isHubspot, allCoins, showClassError, isKYC, generate_wallet_coins
         } = this.state;
-        console.log('>render', generate_wallet_coins)
+        console.log('>render', this.state)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -192,8 +195,15 @@ class AddUser extends Component {
 
         return (
             <div className="isoLayoutContent">
+                <div style={{ "display": "inline-block", "width": "100%" }}>
+                    <Link to="/dashboard/users">
+                        <i style={{ marginRight: '10px', marginBottom: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
+                    </Link>
+                </div>
                 <div>
                     <h2>Add User</h2>
+                    <br />
                 </div>
                 <Form onSubmit={this._addUser}>
                     <div style={{ "marginBottom": "15px" }}>
@@ -222,7 +232,7 @@ class AddUser extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Street Address 1:</span>
-                        <Input placeholder="Address" onChange={this._handleChange.bind(this, "street_address")} value={fields["street_address"]} />
+                        <Input placeholder="Street Address 1" onChange={this._handleChange.bind(this, "street_address")} value={fields["street_address"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('address', fields["street_address"], 'required', 'text-danger')}
                         </span>
@@ -230,7 +240,7 @@ class AddUser extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Street Address 2:</span>
-                        <Input placeholder="Address" onChange={this._handleChange.bind(this, "street_address_2")} value={fields["street_address_2"]} />
+                        <Input placeholder="Street Address 2" onChange={this._handleChange.bind(this, "street_address_2")} value={fields["street_address_2"]} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('address 2', fields["street_address_2"], 'required', 'text-danger')}
                         </span>
@@ -280,18 +290,18 @@ class AddUser extends Component {
                         </span>}
                     </div>
 
-                    <div>
+                    <div style={{ "marginBottom": "15px" }}>
                         <span>Do you want to create Hubspot Contact ? :</span><br />
                         <Checkbox checked={isHubspot} onChange={this._isHubspotContact}>Yes</Checkbox><br />
                     </div>
 
-                    <div>
+                    <div style={{ "marginBottom": "15px" }}>
                         <span>Do you want to accept KYC ? :</span><br />
                         <Checkbox checked={isKYC} onChange={this._isKYCCompleted}>Yes</Checkbox><br />
                     </div>
 
                     <div>
-                        <span>Coins:</span><br />
+                        <span>Select Coins to generate wallet address:</span><br />
                         {
                             allCoins && allCoins.map((coin) => {
                                 return (
@@ -306,7 +316,7 @@ class AddUser extends Component {
                         {...this.props}
                         onCountryChange={(country, state, city, stateID, countryID, countryCode) => this.onCountryChange(country, state, city, stateID, countryID, countryCode)} />
 
-                    <Button type="primary" htmlType="submit" className="search-btn" >Add</Button>
+                    <Button type="primary" htmlType="submit" className="user-btn" >Add</Button>
                 </Form>
 
                 {loader && <FaldaxLoader />}

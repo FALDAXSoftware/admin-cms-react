@@ -489,7 +489,7 @@
   "kycTable.title.last_name": "Last Name",
   "kycTable.title.email": "Email",
   "kycTable.title.direct_response": "Data Review",
-  "kycTable.title.status": "Approve/Disapprove",
+  "kycTable.title.status": "Status",
   "kycTable.title.actions": "Actions",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",

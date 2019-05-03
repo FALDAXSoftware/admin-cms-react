@@ -1,8 +1,8 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
-const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
+//const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -595,21 +595,34 @@ const ApiUtils = {
 
     getAllTransaction: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
-        if (search && filterVal && startDate && endDate) {
-            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && startDate && endDate) {
-            url += "&data=" + search + "&t_type=" + filterVal;
+        if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder && startDate && endDate) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && filterVal) {
+        } else if (filterVal && search && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && startDate && endDate) {
             url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
             url += "&data=" + search
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',

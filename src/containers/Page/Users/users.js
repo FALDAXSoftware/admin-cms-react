@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination, notification, Button } from 'antd';
+import { Tabs, Input, Pagination, notification, Button, Row } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import ColWithPadding from '../common.style';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -169,25 +170,30 @@ class Users extends Component {
                         <Tabs className="isoTableDisplayTab">
                             {tableinfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                    <div style={{
-                                        "display": "flex", "width": "100%",
-                                        "alignItems": "center",
-                                    }}>
-                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._addUser}>Add User</Button>
-                                        <Search
-                                            placeholder="Search users"
-                                            onSearch={(value) => this._searchUser(value)}
-                                            style={{ "width": "250px", "marginRight": "20px" }}
-                                            enterButton
-                                        />
-                                        {allUsers && allUsers.length > 0 ?
-                                            <CSVLink
-                                                data={allUsers}
-                                                filename={'users.csv'}
-                                                headers={headers}
-                                            >
-                                                <Button type="primary">Export</Button>
-                                            </CSVLink> : ''}
+                                    <div style={{ "display": "inline-block", "width": "100%" }}>
+                                        <Row type="flex" justify="end">
+                                            <ColWithPadding sm={14}>
+                                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._addUser}>Add User</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={7}>
+                                                <Search
+                                                    placeholder="Search users"
+                                                    onSearch={(value) => this._searchUser(value)}
+                                                    style={{ width: "100%", "marginRight": "20px" }}
+                                                    enterButton
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={3}>
+                                                {allUsers && allUsers.length > 0 ?
+                                                    <CSVLink
+                                                        data={allUsers}
+                                                        filename={'users.csv'}
+                                                        headers={headers}
+                                                    >
+                                                        <Button style={{}} className="search-btn" type="primary">Export</Button>
+                                                    </CSVLink> : ''}
+                                            </ColWithPadding>
+                                        </Row>
                                     </div>
                                     {loader && <FaldaxLoader />}
                                     <div style={{ marginTop: "30px" }}>
