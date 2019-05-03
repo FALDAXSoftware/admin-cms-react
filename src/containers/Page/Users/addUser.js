@@ -146,7 +146,7 @@ class AddUser extends Component {
     }
 
     _changeAccountTier = (field, value) => {
-        let tier = field + value;
+        let tier = value;
         this.setState({ selectedTier: tier })
     }
 
@@ -167,11 +167,11 @@ class AddUser extends Component {
     _selectCoin = (field, val) => {
         let selectedCoins = this.state.generate_wallet_coins;
 
-        if (selectedCoins.indexOf(field.coin_code) > -1) {
-            selectedCoins.splice(selectedCoins.indexOf(field.coin_code), 1);
+        if (selectedCoins.indexOf(field.coin) > -1) {
+            selectedCoins.splice(selectedCoins.indexOf(field.coin), 1);
             this.setState({ generate_wallet_coins: selectedCoins })
         } else {
-            selectedCoins.push(field.coin_code);
+            selectedCoins.push(field.coin);
             this.setState({ generate_wallet_coins: selectedCoins })
         }
     }
