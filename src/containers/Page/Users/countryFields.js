@@ -8,8 +8,7 @@ const Option = Select.Option;
 
 const Country = styled.span`
     font-size: 14.007px;
-    font-family: "Open Sans";
-    color: ${props => props.theme.mode == "dark" ? "rgba( 152, 171, 215, 0.502 )" : "rgba( 80, 80, 80, 0.502 )"};
+    color: "rgba( 80, 80, 80, 0.502 )";
     -moz-transform: matrix( 0.99999985149599,0,0,0.99949238260564,0,0);
     -webkit-transform: matrix( 0.99999985149599,0,0,0.99949238260564,0,0);
     -ms-transform: matrix( 0.99999985149599,0,0,0.99949238260564,0,0);
@@ -17,10 +16,10 @@ const Country = styled.span`
     margin-bottom:10px;
 `
 const SelectS = styled(Select)`
-    width:85%;
+    width:85% !important;
     & .Country_Select
     {
-        width:85%;
+        width:75%;
     }
     & .Country_Select:first-child
     {
@@ -59,6 +58,7 @@ const SelectWrap = styled.div`
     }
 `
 const CountryWrap = styled.div`
+    margin-top:15px;
     @media(max-width:991px)
     {
         margin-right:20px;
@@ -88,7 +88,6 @@ export default class CountryFields extends Component {
     }
 
     _changeCountry = (value, position) => {
-        console.log(value)
         var newPosition = Number(position.key) - 1;
         var states = CountryData.getStatesOfCountry(newPosition + 1);
         this.setState({ selectedCountry: value.name, countryID: newPosition, states, countryCode: value.sortname });
@@ -110,8 +109,8 @@ export default class CountryFields extends Component {
         this.props.onCountryChange(selectedCountry, selectedState, value, stateID, countryID, countryCode);
     }
 
-    handleBlur() {
-        /* console.log('blur'); */
+    _handleBlur = () => {
+
     }
 
     componentDidMount() {
@@ -120,13 +119,13 @@ export default class CountryFields extends Component {
     }
 
     render() {
-        const { selectedCountry, selectedState, selectedCity } = this.state;
+        const { selectedCountry, selectedState, selectedCity, states, cities, countries } = this.state;
 
         return (
             <CountryWrap>
                 <Row>
                     <Col sm={24} md={8} xl={8} xxl={8}>
-                        <Country>Country*</Country>
+                        <Country>Country</Country>
                         <SelectS
                             showSearch
                             value={selectedCountry}
@@ -134,15 +133,15 @@ export default class CountryFields extends Component {
                             dropdownClassName="country_select_drop"
                             optionFilterProp="children"
                             onChange={this._changeCountry}
-                            onBlur={this.handleBlur}
+                            onBlur={this._handleBlur}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                            {this.state.countries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
+                            {countries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
                         </SelectS>
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8}>
                         <SelectWrap>
-                            <Country>State*</Country>
+                            <Country>State</Country>
                             <SelectS
                                 showSearch
                                 value={selectedState}
@@ -150,16 +149,15 @@ export default class CountryFields extends Component {
                                 dropdownClassName="country_select_drop"
                                 optionFilterProp="children"
                                 onChange={this._changeState}
-                                onBlur={this.handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                {this.state.states.map((state, index) => <Option key={state.id} value={state.name}>{state.name}</Option>)}
+                                {states.map((state, index) => <Option key={state.id} value={state.name}>{state.name}</Option>)}
                             </SelectS>
                         </SelectWrap>
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8}>
                         <SelectWrap>
-                            <Country>City*</Country>
+                            <Country>City</Country>
                             <SelectS
                                 showSearch
                                 value={selectedCity}
@@ -167,10 +165,9 @@ export default class CountryFields extends Component {
                                 dropdownClassName="country_select_drop"
                                 optionFilterProp="children"
                                 onChange={this.handleChangeCity}
-                                onBlur={this.handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                {this.state.cities !== null ? this.state.cities.map((city, index) => <Option key={city.id} value={city.name}>{city.name}</Option>) : ''}
+                                {cities !== null ? cities.map((city, index) => <Option key={city.id} value={city.name}>{city.name}</Option>) : ''}
                             </SelectS>
                         </SelectWrap>
                     </Col>
