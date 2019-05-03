@@ -10,7 +10,7 @@
     "chart.js": "^2.5.0",
     "classnames": "^2.2.5",
     "clone": "^2.1.1",
-    "country-state-city": "^0.1.2",
+    "country-state-city": "0.0.5",
     "d3-shape": "^1.0.6",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-react-intl": "^1.4.8",
