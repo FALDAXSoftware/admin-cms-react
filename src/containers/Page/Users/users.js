@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Pagination, notification, Button, Row } from 'antd';
+import { Tabs, Input, Pagination, notification, Button, Row, Select, Form } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,9 +11,11 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import CountryData from 'country-state-city';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const Option = Select.Option;
 const { logout } = authAction;
 var self;
 
@@ -30,7 +32,8 @@ class Users extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            loader: false
+            loader: false,
+            allCountries: []
         }
         self = this;
         Users.view = Users.view.bind(this);
@@ -79,15 +82,17 @@ class Users extends Component {
 
     componentDidMount = () => {
         this._getAllUsers();
+        let allCountries = CountryData.getAllCountries();
+        this.setState({ allCountries });
     }
 
     _getAllUsers = () => {
         const { token } = this.props;
-        const { searchUser, limit, page, sorterCol, sortOrder } = this.state;
+        const { searchUser, limit, page, sorterCol, sortOrder, filterVal } = this.state;
         var _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder)
+        ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -108,10 +113,9 @@ class Users extends Component {
             });
     }
 
-    _searchUser = (val) => {
-        this.setState({ searchUser: val, page: 1 }, () => {
-            this._getAllUsers();
-        });
+    _searchUser = (e) => {
+        e.preventDefault();
+        this._getAllUsers();
     }
 
     _handleUserPagination = (page) => {
@@ -134,12 +138,29 @@ class Users extends Component {
         })
     }
 
+    _changeSearch = (field, e) => {
+        this.setState({ searchUser: field.target.value })
+    }
+
     _addUser = () => {
         this.props.history.push('/dashboard/users/add-user')
     }
 
+    _changeCountry = (val) => {
+        this.setState({ filterVal: val.name });
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchUser: '', page: 1
+        }, () => {
+            this._getAllUsers();
+        })
+    }
+
     render() {
-        const { allUsers, allUserCount, page, loader, errMsg, errType } = this.state;
+        const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal, allCountries } = this.state;
+
         const headers = [
             { label: "First Name", key: "first_name" },
             { label: "Last Name", key: "last_name" },
@@ -171,29 +192,47 @@ class Users extends Component {
                             {tableinfos.map(tableInfo => (
                                 <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
-                                        <Row type="flex" justify="end">
-                                            <ColWithPadding sm={14}>
-                                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._addUser}>Add User</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={7}>
-                                                <Search
-                                                    placeholder="Search users"
-                                                    onSearch={(value) => this._searchUser(value)}
-                                                    style={{ width: "100%", "marginRight": "20px" }}
-                                                    enterButton
-                                                />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={3}>
-                                                {allUsers && allUsers.length > 0 ?
-                                                    <CSVLink
-                                                        data={allUsers}
-                                                        filename={'users.csv'}
-                                                        headers={headers}
+                                        <Form onSubmit={this._searchUser}>
+                                            <Row type="flex" justify="end">
+                                                <ColWithPadding sm={5}>
+                                                    <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._addUser}>Add User</Button>
+                                                </ColWithPadding>
+                                                <ColWithPadding sm={5}>
+                                                    <Input
+                                                        placeholder="Search users"
+                                                        onChange={this._changeSearch.bind(this)}
+                                                        style={{ "width": "100%" }}
+                                                        value={searchUser}
+                                                    />
+                                                </ColWithPadding>
+                                                <ColWithPadding sm={5}>
+                                                    <Select
+                                                        style={{ width: '100%', "marginLeft": "15px" }}
+                                                        placeholder="Select a country"
+                                                        onChange={this._changeCountry}
+                                                        value={filterVal}
                                                     >
-                                                        <Button style={{}} className="search-btn" type="primary">Export</Button>
-                                                    </CSVLink> : ''}
-                                            </ColWithPadding>
-                                        </Row>
+                                                        {allCountries && allCountries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
+                                                    </Select>
+                                                </ColWithPadding>
+                                                <ColWithPadding xs={12} sm={3}>
+                                                    <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                                </ColWithPadding>
+                                                <ColWithPadding xs={12} sm={3}>
+                                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                                </ColWithPadding>
+                                                <ColWithPadding sm={3}>
+                                                    {allUsers && allUsers.length > 0 ?
+                                                        <CSVLink
+                                                            data={allUsers}
+                                                            filename={'users.csv'}
+                                                            headers={headers}
+                                                        >
+                                                            <Button style={{}} className="search-btn" type="primary">Export</Button>
+                                                        </CSVLink> : ''}
+                                                </ColWithPadding>
+                                            </Row>
+                                        </Form>
                                     </div>
                                     {loader && <FaldaxLoader />}
                                     <div style={{ marginTop: "30px" }}>

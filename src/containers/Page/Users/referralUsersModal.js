@@ -35,7 +35,7 @@ class ReferralUsers extends Component {
         let _this = this;
 
         this.setState({ loader: true })
-        ApiUtils.getAllReferrals(page, limit, token, user_id, sorterCol, sortOrder)
+        ApiUtils.getAllUserReferrals(page, limit, token, user_id, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {

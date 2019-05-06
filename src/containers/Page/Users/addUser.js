@@ -301,7 +301,7 @@ class AddUser extends Component {
                     </div>
 
                     <div>
-                        <span>Select Coins to generate wallet address:</span><br />
+                        <span>Select Assets to generate wallet address:</span><br />
                         {
                             allCoins && allCoins.map((coin) => {
                                 return (

@@ -175,7 +175,7 @@ class EditCoinModal extends Component {
         return (
             <div>
                 <Modal
-                    title="Edit Coin"
+                    title="Edit Asset"
                     visible={showEditCoinModal}
                     onCancel={this._closeEditCoinModal}
                     confirmLoading={loader}
@@ -185,16 +185,16 @@ class EditCoinModal extends Component {
                     ]}
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Coin Icon:</span><br />
+                        <span>Asset Icon:</span><br />
                         <img style={{ width: '150px', height: 'auto' }}
                             src={BUCKET_URL + fields['coin_icon']} />
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Coin Name:</span>
-                        <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
+                        <span>Asset Name:</span>
+                        <Input placeholder="Asset Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('coin name', fields["coin_name"], 'required|max:30', 'text-danger')}
+                            {this.validator.message('asset name', fields["coin_name"], 'required|max:30', 'text-danger')}
                         </span>
                     </div>
 

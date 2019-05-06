@@ -10,7 +10,7 @@ const routes = [
         module: "users"
     },
     {
-        path: "coins",
+        path: "assets",
         component: asyncComponent(() => import("../Page/Coins/coins")),
         module: "coins"
     },

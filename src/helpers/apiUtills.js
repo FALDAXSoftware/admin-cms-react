@@ -69,12 +69,18 @@ const ApiUtils = {
     },
 
     //get all users api
-    getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder) {
+    getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
         let url = "/admin/get-users?page=" + page + "&limit=" + limit;
-        if (sorterCol && sortOrder && searchUser) {
-            url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        if (sorterCol && sortOrder && searchUser && filterVal) {
+            url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
         } else if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (searchUser && filterVal) {
+            url += "&data=" + searchUser + "&country=" + filterVal;
+        } else if (filterVal) {
+            url += "&country=" + filterVal;
         } else {
             url += "&data=" + searchUser;
         }
@@ -209,10 +215,30 @@ const ApiUtils = {
     },
 
     //get all referrals api
-    getAllReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
+    getAllUserReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         if (sorterCol, sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all referrals api
+    getAllReferrals: function (page, limit, token, searchReferral) {
+        let url = "/admin/referred-users?page=" + page + "&limit=" + limit;
+        if (searchReferral) {
+            url += "&data=" + searchReferral;
         }
 
         try {

@@ -135,7 +135,7 @@ class Countries extends Component {
         })
     }
 
-    _handleCoinPagination = (page) => {
+    _handleCountryPagination = (page) => {
         this.setState({ page }, () => {
             this._getAllCountries();
         })
@@ -213,7 +213,7 @@ class Countries extends Component {
                                         <Pagination
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
-                                            onChange={this._handleCoinPagination.bind(this)}
+                                            onChange={this._handleCountryPagination.bind(this)}
                                             pageSize={50}
                                             current={page}
                                             total={allCountryCount}
