@@ -36,8 +36,7 @@ class SendCoinFee extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchCoin: '', errType: 'error',
+                    errMsg: true, errMessage: 'Something went wrong!!', searchCoin: '', errType: 'error',
                 });
             });
     }
@@ -89,10 +88,10 @@ class SendCoinFee extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Edit Coin Fee:</span>
-                        <Input placeholder="Coin Fee" onChange={this._handleChange.bind(this, "coin_fee")} value={fields["coin_fee"]} />
+                        <span>Edit Asset Fee:</span>
+                        <Input placeholder="Asset Fee" onChange={this._handleChange.bind(this, "coin_fee")} value={fields["coin_fee"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('coin fee', fields["coin_fee"], 'required|decimal', 'text-danger')}
+                            {this.validator.message('asset fee', fields["coin_fee"], 'required|decimal', 'text-danger')}
                         </span>
                     </div>
                     <Button type="primary" onClick={this._sendCoinFee}>Save</Button>

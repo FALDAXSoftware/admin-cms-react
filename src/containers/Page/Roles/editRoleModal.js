@@ -233,7 +233,7 @@ class EditRoleModal extends Component {
                         <span>Modules:</span><br />
                         <Checkbox checked={all} onChange={this._onChangeRole.bind(this, 'all')}>All</Checkbox><br />
                         <Checkbox checked={users} onChange={this._onChangeRole.bind(this, 'users')}>Users Module</Checkbox><br />
-                        <Checkbox checked={coins} onChange={this._onChangeRole.bind(this, 'coins')}>Coins Module</Checkbox><br />
+                        <Checkbox checked={coins} onChange={this._onChangeRole.bind(this, 'coins')}>Assets Module</Checkbox><br />
                         <Checkbox checked={countries} onChange={this._onChangeRole.bind(this, 'countries')}>Country Module</Checkbox><br />
                         <Checkbox checked={roles} onChange={this._onChangeRole.bind(this, 'roles')}>Roles Module</Checkbox><br />
                         <Checkbox checked={employee} onChange={this._onChangeRole.bind(this, 'employee')}>Employee Module</Checkbox><br />

@@ -8,7 +8,7 @@ import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
 
-class EditCoinModal extends Component {
+class EditLimitModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -280,4 +280,4 @@ class EditCoinModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(EditCoinModal);
+    }), { logout })(EditLimitModal);

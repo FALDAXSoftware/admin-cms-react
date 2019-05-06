@@ -160,7 +160,7 @@ class AddPairModal extends Component {
 
         let coinOptions = allCoins.map((coin) => {
             return (
-                <Option value={coin.coin_code}>{coin.coin_name}-{coin.coin_code}</Option>
+                <Option value={coin.coin}>{coin.coin_name}-{coin.coin_code}</Option>
             )
         });
 
@@ -185,34 +185,34 @@ class AddPairModal extends Component {
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin 1:</span>
+                    <span>Asset 1:</span>
                     <Select
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Coin"
+                        placeholder="Select a Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id1')}
                     >
                         {coinOptions}
                     </Select><br />
                     {showCoin1Err && <span style={{ "color": "red" }}>
-                        {'The coin 1 field is required.'}
+                        {'The asset 1 field is required.'}
                     </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin 2:</span>
+                    <span>Asset 2:</span>
                     <Select
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Coin"
+                        placeholder="Select a Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id2')}
                     >
                         {coinOptions}
                     </Select><br />
                     {showCoin2Err && <span style={{ "color": "red" }}>
-                        {'The coin 2 field is required.'}
+                        {'The asset 2 field is required.'}
                     </span>}
                 </div>
                 {showError && <span style={{ "color": "red" }}>
-                    {'The coin 1 & coin 2 field can not be same.'}
+                    {'The asset 1 & asset 2 field can not be same.'}
                 </span>}
 
                 <div style={{ "marginBottom": "15px" }}>

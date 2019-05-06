@@ -30,19 +30,19 @@ class ViewCoinReqModal extends Component {
 
         return (
             <Modal
-                title="View Coin Request"
+                title="View Asset Request"
                 visible={showViewCoinReqModal}
                 onCancel={this._closeViewCoinReqModal}
                 footer={[
                     <Button onClick={this._closeViewCoinReqModal}>OK</Button>,
                 ]}
             >
-                <span> <b>Coin Name:</b> </span>
+                <span> <b>Asset Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinReqDetails.coin_name ? coinReqDetails.coin_name : 'NA'}
                 </p>
 
-                <span> <b>Coin Symbol:</b> </span>
+                <span> <b>Asset Symbol:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinReqDetails.coin_symbol ? coinReqDetails.coin_symbol : 'NA'}
                 </p>

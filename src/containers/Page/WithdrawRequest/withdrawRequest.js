@@ -180,8 +180,8 @@ class WithdrawRequest extends Component {
                                                     value={filterVal}
                                                 >
                                                     <Option value={' '}>All</Option>
-                                                    <Option value={'true'}>Approve</Option>
-                                                    <Option value={'false'}>Dis-Approve</Option>
+                                                    <Option value={'true'}>Approved</Option>
+                                                    <Option value={'false'}>Declined</Option>
                                                 </Select>
                                             </ColWithPadding>
                                             <ColWithPadding sm={8}>

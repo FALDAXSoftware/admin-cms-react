@@ -8,12 +8,13 @@ import {
     ActionCell,
     DateCell,
     ButtonCell,
-    UserSwitchCell
+    TierCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
     emailID = null, city = null, street = null, street_1 = null, phone = null,
-    countryName = null, bdate = null, status = null, isKyc = null, format = null) => {
+    countryName = null, bdate = null, status = null, isKyc = null, format = null, tier = null,
+    aClass = null) => {
     const value = object[key];
     const profile_pic = object[image];
     const first_name = object[fname];
@@ -27,7 +28,9 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const dob = object[bdate];
     const is_active = object[status];
     const kyc = object[isKyc];
-    const date_format = object[format]
+    const date_format = object[format];
+    const account_tier = object[status];
+    const account_class = object[isKyc];
 
     switch (type) {
         case 'ImageCell':
@@ -38,12 +41,15 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
             return LinkCell(value);
         case 'ButtonCell':
             return ButtonCell(value);
+        case 'TierCell':
+            return TierCell(value);
         // case 'UserSwitchCell':
         //     return UserSwitchCell(value, profile_pic, first_name, last_name, email, city_town,
         //         street_address, street_address_2, phone_number, country, dob, is_active, kyc);
         case 'ActionCell':
             return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
-                street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format);
+                street_address, street_address_2, phone_number, country, dob, is_active, kyc,
+                date_format, account_tier, account_class);
         default:
             return TextCell(value);
     }
@@ -85,12 +91,12 @@ const columns = [
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'country')
     },
-    // {
-    //     title: <IntlMessages id="antTable.title.phone" />,
-    //     key: 'phone',
-    //     width: 200,
-    //     render: object => renderCell(object, 'TextCell', 'phone_number')
-    // },
+    {
+        title: <IntlMessages id="antTable.title.tier" />,
+        key: 'account_tier',
+        width: 200,
+        render: object => renderCell(object, 'TierCell', 'account_tier')
+    },
     // {
     //     title: <IntlMessages id="antTable.title.referrals" />,
     //     key: 'button',
@@ -111,7 +117,8 @@ const columns = [
         width: 200,
         render: object => renderCell(object,
             'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
-            'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc', 'date_format')
+            'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
+            'date_format', 'account_tier', 'account_class')
     }
 ];
 

@@ -11,6 +11,7 @@ import ReferredUsers from './referralUsersModal';
 import UserWithdrawRequest from './userWithdrawRequest';
 import UserKYCDetails from './userKYC';
 import { Link } from 'react-router-dom';
+import UserTickets from './userTickets';
 
 const { TabPane } = Tabs;
 
@@ -45,6 +46,7 @@ class ViewUser extends Component {
                     <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
                     <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
                     <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
+                    {/* <TabPane tab="Tickets" key="10"><UserTickets user_id={user_id} /></TabPane> */}
                 </Tabs>
             </div>
         );

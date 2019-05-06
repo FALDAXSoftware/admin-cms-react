@@ -260,14 +260,14 @@ class Dashboard extends Component {
                         </Link></Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <Link to='/dashboard/coins'>
+                        <Link to='/dashboard/assets'>
                             <CountCard number={activeCoins}
                                 headColor={'#EB4278'}
                                 number2={InactiveCoins}
                                 bgColor={'#F96E9B'}
-                                title={'Coins'}
-                                text={'Active Coins'}
-                                text2={'Inactive Coins'}
+                                title={'Assets'}
+                                text={'Active Assets'}
+                                text2={'Inactive Assets'}
                                 icon="fa fa-coins"
                                 fontColor="#ffffff" />
                         </Link>

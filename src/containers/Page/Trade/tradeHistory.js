@@ -166,7 +166,7 @@ class TradeHistory extends Component {
             { label: "Taker Fee", key: "taker_fee" },
             { label: "Status", key: "order_status" },
             { label: "Requested Fee", key: "requested_fee" },
-            { label: "Requested Coin", key: "requested_coin" },
+            { label: "Requested Asset", key: "requested_coin" },
             { label: "Created On", key: "created_at" }
         ];
 

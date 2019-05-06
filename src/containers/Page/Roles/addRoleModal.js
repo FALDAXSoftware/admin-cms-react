@@ -221,7 +221,7 @@ class AddRoleModal extends Component {
                     <span>Modules:</span><br />
                     <Checkbox checked={all} onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
                     <Checkbox checked={users} onChange={this.onChange.bind(this, 'users')}>Users Module</Checkbox><br />
-                    <Checkbox checked={coins} onChange={this.onChange.bind(this, 'coins')}>Coins Module</Checkbox><br />
+                    <Checkbox checked={coins} onChange={this.onChange.bind(this, 'coins')}>Assets Module</Checkbox><br />
                     <Checkbox checked={countries} onChange={this.onChange.bind(this, 'countries')}>Country Module</Checkbox><br />
                     <Checkbox checked={roles} onChange={this.onChange.bind(this, 'roles')}>Roles Module</Checkbox><br />
                     <Checkbox checked={employee} onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />

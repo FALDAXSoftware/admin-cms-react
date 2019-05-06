@@ -67,7 +67,7 @@ class Coins extends Component {
         };
 
         self.setState({ loader: true })
-        let message = is_active ? 'Coin has been inactivated successfully.' : 'Coin has been activated successfully.'
+        let message = is_active ? 'Asset has been inactivated successfully.' : 'Asset has been activated successfully.'
         ApiUtils.editCoin(token, formData)
             .then((res) => res.json())
             .then((res) => {
@@ -222,14 +222,14 @@ class Coins extends Component {
                         {coinTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Coin</Button>
+                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Asset</Button>
                                     <AddCoinModal
                                         showAddCoinModal={showAddCoinModal}
                                         closeAddModal={this._closeAddCoinModal}
                                         getAllCoins={this._getAllCoins.bind(this, 1)}
                                     />
                                     <Search
-                                        placeholder="Search coins"
+                                        placeholder="Search assets"
                                         onSearch={(value) => this._searchCoin(value)}
                                         style={{ "float": "right", "width": "250px" }}
                                         enterButton
@@ -251,7 +251,7 @@ class Coins extends Component {
                                     {
                                         showDeleteCoinModal &&
                                         <Modal
-                                            title="Delete Coin"
+                                            title="Delete Asset"
                                             visible={showDeleteCoinModal}
                                             onCancel={this._closeDeleteCoinModal}
                                             footer={[
@@ -259,7 +259,7 @@ class Coins extends Component {
                                                 <Button onClick={this._deleteCoin}>Yes</Button>,
                                             ]}
                                         >
-                                            Are you sure you want to delete this coin ?
+                                            Are you sure you want to delete this asset ?
                                     </Modal>
                                     }
                                     <TableWrapper

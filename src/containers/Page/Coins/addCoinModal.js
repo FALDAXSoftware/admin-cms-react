@@ -186,7 +186,7 @@ class AddCoinModal extends Component {
 
         return (
             <Modal
-                title="Add Coin"
+                title="Add Asset"
                 visible={showAddCoinModal}
                 confirmLoading={loader}
                 onCancel={this._closeAddCoinModal}
@@ -196,7 +196,7 @@ class AddCoinModal extends Component {
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin Icon:</span>
+                    <span>Asset Icon:</span>
                     <Input ref={(ref) => { this.uploadCoinInput = ref; }} type="file"
                         id="uploadCoinInput" name="uploadCoinInput"
                         style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
@@ -204,22 +204,22 @@ class AddCoinModal extends Component {
                     <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
                 {showCoinErr && <span style={{ "color": "red" }}>
-                    {'The coin icon is required.'}
+                    {'The asset icon is required.'}
                 </span>}
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin Name:</span>
-                    <Input placeholder="Coin Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
+                    <span>Asset Name:</span>
+                    <Input placeholder="Asset Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('coin name', fields["coin_name"], 'required|max:30', 'text-danger')}
+                        {this.validator.message('asset name', fields["coin_name"], 'required|max:30', 'text-danger')}
                     </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin Code:</span>
-                    <Input placeholder="Coin Code" onChange={this._handleChange.bind(this, "coin_code")} value={fields["coin_code"]} />
+                    <span>Asset Code:</span>
+                    <Input placeholder="Asset Code" onChange={this._handleChange.bind(this, "coin_code")} value={fields["coin_code"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('coin code', fields["coin_code"], 'required|max:10', 'text-danger')}
+                        {this.validator.message('asset code', fields["coin_code"], 'required|max:10', 'text-danger')}
                     </span>
                 </div>
 

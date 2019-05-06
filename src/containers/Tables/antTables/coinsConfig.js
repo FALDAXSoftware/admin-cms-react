@@ -87,7 +87,7 @@ const columns = [
 
 const coinTableInfos = [
     {
-        title: 'Coins',
+        title: 'Assets',
         value: 'CoinsTable',
         columns: clone(columns)
     }

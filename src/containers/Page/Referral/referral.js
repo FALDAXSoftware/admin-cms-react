@@ -24,7 +24,8 @@ class Referral extends Component {
             limit: 50,
             searchReferral: '',
             fields: {},
-            prevDefaultReferral: ''
+            prevDefaultReferral: '',
+            errType: 'Success'
         }
         this.validator = new SimpleReactValidator();
     }
@@ -79,7 +80,7 @@ class Referral extends Component {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false })
             })
@@ -96,7 +97,7 @@ class Referral extends Component {
         });
     }
 
-    _searchCoin = (val) => {
+    _searchReferral = (val) => {
         this.setState({ searchReferral: val, page: 1 }, () => {
             this._getAllReferredAdmins();
         });
@@ -184,7 +185,7 @@ class Referral extends Component {
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Search
                                             placeholder="Search users"
-                                            onSearch={(value) => this._searchCoin(value)}
+                                            onSearch={(value) => this._searchReferral(value)}
                                             style={{ "float": "right", "width": "250px" }}
                                             enterButton
                                         />

@@ -30,7 +30,7 @@ class ViewCoinModal extends Component {
 
         return (
             <Modal
-                title="View Coin"
+                title="View Asset"
                 visible={showViewCoinModal}
                 onCancel={this._closeViewCoinModal}
                 footer={[
@@ -42,12 +42,12 @@ class ViewCoinModal extends Component {
                         src={BUCKET_URL + coinDetails.coin_icon} /> : ''}
                 <br /><br />
 
-                <span> <b>Coin Name:</b> </span>
+                <span> <b>Asset Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinDetails.coin_name ? coinDetails.coin_name : 'N/A'}
                 </p>
 
-                <span> <b>Coin Code:</b> </span>
+                <span> <b>Asset Code:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinDetails.coin_code ? coinDetails.coin_code : 'N/A'}
                 </p>
