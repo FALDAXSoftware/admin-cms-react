@@ -46,7 +46,7 @@ class Users extends Component {
     }
 
     static changeStatus(value, profile_pic, first_name, last_name, email, city_town,
-        street_address, street_address_2, phone_number, country, dob, is_active, kyc) {
+        street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state) {
         const { token } = this.props;
 
         let formData = {

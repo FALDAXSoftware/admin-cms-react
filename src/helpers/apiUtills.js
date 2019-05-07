@@ -1054,12 +1054,18 @@ const ApiUtils = {
     },
 
     //get all kyc data api
-    getKYCData: function (token, page, limit, search, sorterCol, sortOrder) {
+    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, status) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
-        if (sorterCol && sortOrder && search) {
+        if (sorterCol && sortOrder && search && status) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status
+        } else if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
             url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (search && status) {
+            url += "&data=" + search + "&status=" + status;
+        } else if (status) {
+            url += "&status=" + status;
         } else {
             url += "&data=" + search;
         }
@@ -1393,6 +1399,22 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getUserTickets: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/get-user-tickets", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 export default ApiUtils;
