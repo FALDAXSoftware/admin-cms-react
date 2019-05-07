@@ -20,7 +20,6 @@ class AddUser extends Component {
             tierMsg: false,
             countryCode: '',
             selectedClass: '',
-            isHubspot: false,
             errType: 'Success',
             allCoins: [],
             showClassError: false,
@@ -89,7 +88,7 @@ class AddUser extends Component {
         e.preventDefault();
         const { token } = this.props;
         let {
-            fields, selectedTier, selectedClass, isHubspot, isKYC, countryCode,
+            fields, selectedTier, selectedClass, isKYC, countryCode,
             countrySelected, stateSelected, citySelected, generate_wallet_coins
         } = this.state;
         let _this = this;
@@ -110,7 +109,6 @@ class AddUser extends Component {
                 country_code: countryCode,
                 generate_wallet_coins,
                 kyc_done: isKYC,
-                create_hubspot_contact: isHubspot
             };
 
             this.setState({ loader: true, isDisabled: true })
@@ -163,10 +161,6 @@ class AddUser extends Component {
         this.setState({ selectedClass: value })
     }
 
-    _isHubspotContact = (e) => {
-        this.setState({ isHubspot: e.target.checked })
-    }
-
     _selectCoin = (field, val) => {
         let selectedCoins = this.state.generate_wallet_coins;
 
@@ -185,7 +179,7 @@ class AddUser extends Component {
 
     render() {
         const {
-            loader, fields, errType, errMsg, showTierError, isHubspot, allCoins, showClassError, isKYC, generate_wallet_coins
+            loader, fields, errType, errMsg, showTierError, allCoins, showClassError, isKYC, generate_wallet_coins
         } = this.state;
         console.log('>render', this.state)
 
@@ -288,11 +282,6 @@ class AddUser extends Component {
                         {showClassError && <span style={{ "color": "red" }}>
                             {'The account class field is required.'}
                         </span>}
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Do you want to create Hubspot Contact ? :</span><br />
-                        <Checkbox checked={isHubspot} onChange={this._isHubspotContact}>Yes</Checkbox><br />
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>

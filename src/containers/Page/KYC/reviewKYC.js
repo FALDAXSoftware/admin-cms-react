@@ -9,16 +9,13 @@ import { connect } from 'react-redux';
 import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ApprovedKYC from './approvedKYC';
-import ReviewKYC from './reviewKYC';
-import DeclinedKYC from './declinedKYC';
 
 const Search = Input.Search;
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 var self;
 
-class KYC extends Component {
+class ReviewKYC extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,10 +30,9 @@ class KYC extends Component {
             limit: 50,
             searchKYC: '',
             allKYCCount: 0,
+            status: 'REVIEW'
         }
         self = this;
-        KYC.rejectKYC = KYC.rejectKYC.bind(this);
-        KYC.viewKYC = KYC.viewKYC.bind(this);
     }
 
     static viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
@@ -46,17 +42,6 @@ class KYC extends Component {
             back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type
         }
         self.setState({ kycDetails, showViewKYCModal: true })
-    }
-
-    static rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
-        front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) {
-        self._updateStatusKYC(value, false);
-    }
-
-    static approveKYC(value, first_name, last_name, email, direct_response,
-        kycDoc_details, front_doc, back_doc, ssn, webhook_response, address,
-        country, city, zip, dob, id_type) {
-        self._updateStatusKYC(value, true);
     }
 
     _updateStatusKYC = (value, isApprove) => {
@@ -94,11 +79,11 @@ class KYC extends Component {
 
     _getAllKYCData = () => {
         const { token } = this.props;
-        const { page, limit, searchKYC, sorterCol, sortOrder } = this.state;
+        const { page, limit, searchKYC, sorterCol, sortOrder, status } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder)
+        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, status)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -158,10 +143,10 @@ class KYC extends Component {
 
         return (
             <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
+                <TableDemoStyle>
+                    <div className="isoTableDisplayTab">
                         {KYCInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                            <div>
                                 <div style={{
                                     "display": "flex", "width": "100%",
                                     "justifyContent": "flex-end",
@@ -199,19 +184,9 @@ class KYC extends Component {
                                             total={allKYCCount}
                                         /> : ''}
                                 </div>
-                            </TabPane>
+                            </div>
                         ))}
-
-                        <TabPane tab="Approved KYC" key="2">
-                            <ApprovedKYC />
-                        </TabPane>
-                        <TabPane tab="Under Review KYC" key="3">
-                            <ReviewKYC />
-                        </TabPane>
-                        <TabPane tab="Declined KYC" key="4">
-                            <DeclinedKYC />
-                        </TabPane>
-                    </Tabs>
+                    </div>
                 </TableDemoStyle>
             </LayoutWrapper>
         );
@@ -222,6 +197,6 @@ export default connect(
     state => ({
         user: state.Auth.get('user'),
         token: state.Auth.get('token')
-    }), { logout })(KYC);
+    }), { logout })(ReviewKYC);
 
-export { KYC }
+export { ReviewKYC }
