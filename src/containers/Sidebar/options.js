@@ -12,10 +12,10 @@ const options = [
     module: "users"
   },
   {
-    key: "coins",
+    key: "assets",
     label: "sidebar.coins",
     leftIcon: "fas fa-coins",
-    module: "coins"
+    module: "assets"
   },
   {
     key: "pairs",

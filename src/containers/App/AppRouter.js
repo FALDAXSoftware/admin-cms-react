@@ -12,7 +12,7 @@ const routes = [
     {
         path: "assets",
         component: asyncComponent(() => import("../Page/Coins/coins")),
-        module: "coins"
+        module: "assets"
     },
     {
         path: "countries",

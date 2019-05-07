@@ -15,7 +15,7 @@ class AddRoleModal extends Component {
             showAddRoleModal: this.props.showAddRoleModal,
             loader: false,
             fields: {},
-            coins: false,
+            assets: false,
             users: false,
             roles: false,
             countries: false,
@@ -56,7 +56,7 @@ class AddRoleModal extends Component {
 
     _closeAddRoleModal = () => {
         this.setState({
-            showAddRoleModal: false, users: false, coins: false,
+            showAddRoleModal: false, users: false, assets: false,
             roles: false, countries: false, employee: false, pairs: false,
             showError: false, limit_management: false, trade_history: false, transaction_history: false,
             jobs: false, coin_requests: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
@@ -81,7 +81,7 @@ class AddRoleModal extends Component {
 
         fields['name'] = '';
         this.setState({
-            fields, users: false, coins: false, roles: false,
+            fields, users: false, assets: false, roles: false,
             countries: false, employee: false, pairs: false,
             showError: false, limit_management: false, trade_history: false, transaction_history: false,
             jobs: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
@@ -90,11 +90,11 @@ class AddRoleModal extends Component {
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
-        let { fields, users, coins, roles, countries,
+        let { fields, users, assets, roles, countries,
             employee, pairs, showError, limit_management, trade_history,
             transaction_history, jobs, withdraw_requests, kyc, fees, panic_button
         } = this.state;
-        if (users || coins | roles || countries ||
+        if (users || assets | roles || countries ||
             employee || pairs || limit_management || trade_history ||
             transaction_history || jobs || withdraw_requests || kyc
         ) {
@@ -104,7 +104,7 @@ class AddRoleModal extends Component {
                     name: fields["name"],
                     roles,
                     users,
-                    coins,
+                    assets,
                     countries,
                     employee,
                     pairs,
@@ -153,19 +153,19 @@ class AddRoleModal extends Component {
     }
 
     onChange = (field, e, val) => {
-        let { all, users, coins, roles, countries,
+        let { all, users, assets, roles, countries,
             employee, pairs, limit_management, trade_history,
             transaction_history, jobs, withdraw_requests, kyc, fees, panic_button
         } = this.state;
 
         if (all == false && field == 'all') {
             this.setState({
-                all: true, coins: true, users: true,
+                all: true, assets: true, users: true,
                 countries: true, roles: true, employee: true, pairs: true,
                 limit_management: true, trade_history: true, transaction_history: true,
                 jobs: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
             })
-        } else if (!users || !coins | !roles || !countries || !employee || !pairs || !limit_management
+        } else if (!users || !assets | !roles || !countries || !employee || !pairs || !limit_management
             || !trade_history || !transaction_history || !jobs || !withdraw_requests
             || !kyc || !fees || !panic_button) {
             this.setState({ all: false, [field]: e.target.checked })
@@ -173,7 +173,7 @@ class AddRoleModal extends Component {
         } else {
             if (field == 'all' && e.target.checked === false) {
                 this.setState({
-                    all: false, coins: false, users: false, countries: false, roles: false,
+                    all: false, assets: false, users: false, countries: false, roles: false,
                     employee: false, pairs: false, limit_management: false, trade_history: false,
                     transaction_history: false, jobs: false, withdraw_requests: false, kyc: false,
                     fees: false, panic_button: false
@@ -189,7 +189,7 @@ class AddRoleModal extends Component {
     }
 
     render() {
-        const { loader, showAddRoleModal, fields, all, users, coins, countries, roles, employee,
+        const { loader, showAddRoleModal, fields, all, users, assets, countries, roles, employee,
             errMsg, errType, isDisabled, pairs, showError, limit_management, trade_history,
             transaction_history, withdraw_requests, jobs, kyc, fees, panic_button
         } = this.state;
@@ -221,7 +221,7 @@ class AddRoleModal extends Component {
                     <span>Modules:</span><br />
                     <Checkbox checked={all} onChange={this.onChange.bind(this, 'all')}>All</Checkbox><br />
                     <Checkbox checked={users} onChange={this.onChange.bind(this, 'users')}>Users Module</Checkbox><br />
-                    <Checkbox checked={coins} onChange={this.onChange.bind(this, 'coins')}>Assets Module</Checkbox><br />
+                    <Checkbox checked={assets} onChange={this.onChange.bind(this, 'assets')}>Assets Module</Checkbox><br />
                     <Checkbox checked={countries} onChange={this.onChange.bind(this, 'countries')}>Country Module</Checkbox><br />
                     <Checkbox checked={roles} onChange={this.onChange.bind(this, 'roles')}>Roles Module</Checkbox><br />
                     <Checkbox checked={employee} onChange={this.onChange.bind(this, 'employee')}>Employee Module</Checkbox><br />

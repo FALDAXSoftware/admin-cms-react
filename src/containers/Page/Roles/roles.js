@@ -36,7 +36,7 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, coins, countries,
+    static roleStatus(value, name, users, assets, countries,
         roles, employee, pairs, limit_management, transaction_history, trade_history,
         withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) {
         const { token } = self.props;
@@ -45,7 +45,7 @@ class Roles extends Component {
             id: value,
             roles,
             users,
-            coins,
+            assets,
             countries,
             employee,
             name: name,
@@ -87,11 +87,11 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, coins, countries,
+    static editRole(value, name, users, assets, countries,
         roles, employee, pairs, limit_management, transaction_history, trade_history,
         withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) {
         let roleDetails = {
-            value, name, users, coins, countries,
+            value, name, users, assets, countries,
             roles, employee, pairs, limit_management, transaction_history, trade_history,
             withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active
         }
