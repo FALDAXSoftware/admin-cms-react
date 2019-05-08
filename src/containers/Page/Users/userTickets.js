@@ -43,9 +43,10 @@ class UserTickets extends Component {
         _this.setState({ loader: true })
         ApiUtils.getUserTickets(token, formData)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
-                    _this.setState({ allTickets: res.data, loader: false, allTicketsCount: res.allHistoryCount });
+                    //let tickets = properties;
+                    _this.setState({ allTickets: res.tickets, loader: false, allTicketsCount: res.allHistoryCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();

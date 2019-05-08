@@ -59,6 +59,18 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
+    title: <IntlMessages id="kycTable.title.country" />,
+    key: 'country',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'country')
+}, {
+    title: <IntlMessages id="kycTable.title.account_tier" />,
+    key: 'account_tier',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'account_tier')
+}, {
     title: <IntlMessages id="kycTable.title.direct_response" />,
     key: 'direct_response',
     width: 100,

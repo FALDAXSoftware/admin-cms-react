@@ -2,20 +2,61 @@ import React, { Component } from 'react';
 import { BUCKET_URL } from '../../../helpers/globals';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Row, Col } from 'antd';
+import { Row, Col, Switch, notification } from 'antd';
 import authAction from '../../../redux/auth/actions';
-
+import styled from 'styled-components';
 const { logout } = authAction;
 
+const ParentDiv = styled.div`
+padding: 20px;
+background-color: white;
+margin: 30px !important;
+`
+const UserPic = styled.div`
+height: 150px;
+width: 150px;
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+border-radius:5px;
+`
+const UserName = styled.h2`
+    padding-top:10px;
+`
+const UserEmail = styled.p`
+`
+const Address = styled.p`
+    margin-top:10px;
+    color: grey;
+    & i {
+        margin-right:10px;
+    }
+`
+const DateOfBirth = styled(Address)`
+`
+const StatusSwitch = styled(Switch)`
+width: 84px;
+text-align: center;
+height: 30px !important;
+line-height: 26px !important;
+&::after{
+    width: 26px !important;
+    height: 26px !important;
+}
+`
 class PersonalDetails extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            userDetails: []
+            userDetails: null
         }
     }
 
     componentDidMount = () => {
+        this._getUserDetail();
+    }
+
+    _getUserDetail = () => {
         const { token, user_id } = this.props;
         let _this = this;
 
@@ -35,63 +76,101 @@ class PersonalDetails extends Component {
             });
     }
 
-    render() {
+    _userStatus = () => {
+        const { token } = this.props;
         const { userDetails } = this.state;
+        let formData = {
+            user_id: userDetails.id,
+            email: userDetails.email,
+            is_active: !userDetails.is_active
+        };
+
+        this.setState({ loader: true });
+        let message = userDetails.is_active ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
+        ApiUtils.activateUser(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    this._getUserDetail();
+                    this.setState({
+                        errMsg: true, errMessage: message, errType: 'Success', loader: false
+                    })
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({ errMsg: true, errMessage: res.message });
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
+    render() {
+        const { userDetails, errMsg, errType } = this.state;
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
 
         return (
-            <div className="parent-div">
-                <Row>
-                    <Col span={24}>
-                        <div className="left-div">
-                            <img alt="user" src={BUCKET_URL + userDetails.profile_pic} />
-                        </div>
-                    </Col>
-
-                    <Col span={24}>
-                        <div className="right-div user-profile">
-                            <span> <b>Name:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.first_name ? userDetails.last_name ? userDetails.first_name + ' ' + userDetails.last_name : userDetails.first_name : ''}
-                            </p>
-
-                            <span> <b>Email:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.email ? userDetails.email : ''}
-                            </p>
-
-                            <span><b>Address: </b></span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.street_address ? userDetails.street_address_2 ? userDetails.street_address + ',' + userDetails.street_address_2 : userDetails.street_address : 'N/A'}
-                            </p>
-
-                            {userDetails.city_town ?
-                                <p style={{ "marginBottom": "10px" }}>
-                                    {userDetails.city_town}
-                                </p> : ''}
-
-                            {userDetails.country ?
-                                <p style={{ "marginBottom": "10px" }}>
-                                    {userDetails.country}
-                                </p> : ''}
-
-                            <span> <b>Date Of Birth:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.dob ? userDetails.dob : 'N/A'}
-                            </p>
-
-                            <span> <b>Default Date Format:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.date_format ? userDetails.date_format : 'N/A'}
-                            </p>
-
-                            <span> <b>Default Currency:</b> </span>
-                            <p style={{ "marginBottom": "10px" }}>
-                                {userDetails.fiat ? userDetails.fiat : 'N/A'}
-                            </p>
-                        </div>
-                    </Col>
-                </Row>
-            </div >
+            <div>
+                {userDetails != null &&
+                    <ParentDiv className="parent-div">
+                        <Row type="flex" justify="end">
+                            <Col>
+                                <StatusSwitch checked={userDetails.is_active} checkedChildren="Active" unCheckedChildren="Inactive" size="large" onChange={this._userStatus} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <UserPic style={{ backgroundImage: `url(${BUCKET_URL + userDetails.profile_pic})` }} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <UserName>{userDetails.first_name ? userDetails.last_name ? userDetails.first_name + ' ' + userDetails.last_name : userDetails.first_name : ''}</UserName>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <UserEmail>{userDetails.email ? userDetails.email : ''}</UserEmail>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Address>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    {userDetails.street_address ? userDetails.street_address_2 ? userDetails.street_address + ',' + userDetails.street_address_2 : userDetails.street_address : 'N/A'}
+                                    {userDetails.city_town ? `, ${userDetails.city_town}` : ''}
+                                    {userDetails.country ? `, ${userDetails.country}` : ''}
+                                </Address>
+                            </Col>
+                        </Row>
+                        {userDetails.dob &&
+                            <Row>
+                                <Col>
+                                    <DateOfBirth>
+                                        <i class="fas fa-calendar-day"></i>
+                                        {userDetails.dob}
+                                    </DateOfBirth>
+                                </Col>
+                            </Row>
+                        }
+                    </ParentDiv>
+                }
+            </div>
         );
     }
 }
