@@ -76,17 +76,25 @@ class PersonalDetails extends Component {
             });
     }
 
-    _userStatus = () => {
+    _userStatus = (val) => {
         const { token } = this.props;
         const { userDetails } = this.state;
         let formData = {
             user_id: userDetails.id,
             email: userDetails.email,
-            is_active: !userDetails.is_active
         };
+        let message;
+
+        if (val == 'is_active') {
+            formData['is_active'] = !userDetails.is_active
+            message = userDetails.is_active ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
+        } else {
+            message = userDetails.is_verified ? 'User has been non verified successfully.' : 'User has been verified successfully.'
+            formData['is_verified'] = !userDetails.is_verified
+        }
 
         this.setState({ loader: true });
-        let message = userDetails.is_active ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
+
         ApiUtils.activateUser(token, formData)
             .then((res) => res.json())
             .then((res) => {
@@ -130,7 +138,8 @@ class PersonalDetails extends Component {
                     <ParentDiv className="parent-div">
                         <Row type="flex" justify="end">
                             <Col>
-                                <StatusSwitch checked={userDetails.is_active} checkedChildren="Active" unCheckedChildren="Inactive" size="large" onChange={this._userStatus} />
+                                <StatusSwitch checked={userDetails.is_active} checkedChildren="Active" unCheckedChildren="Inactive" size="large" onChange={this._userStatus.bind(this, 'is_active')} /><br />
+                                <StatusSwitch style={{ marginTop: '15px' }} checked={userDetails.is_verified} checkedChildren="Verified" unCheckedChildren="Non-verified" size="large" onChange={this._userStatus.bind(this, 'is_verified')} />
                             </Col>
                         </Row>
                         <Row>

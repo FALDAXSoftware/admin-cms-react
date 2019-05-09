@@ -147,8 +147,7 @@ class AddUser extends Component {
     }
 
     _changeAccountTier = (field, value) => {
-        let tier = value;
-        this.setState({ selectedTier: tier })
+        this.setState({ selectedTier: value })
     }
 
     onCountryChange(country, state, city, stateID, countryID, countryCode) {
@@ -208,7 +207,6 @@ class AddUser extends Component {
                             </span>
                         </Col>
                     </Row>
-
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
                             <span>Last Name:</span>
@@ -218,7 +216,6 @@ class AddUser extends Component {
                             </span>
                         </Col>
                     </Row>
-
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
                             <span>Email:</span>
@@ -228,17 +225,15 @@ class AddUser extends Component {
                             </span>
                         </Col>
                     </Row>
-
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
                             <span>Street Address 1:</span>
                             <Input placeholder="Street Address 1" onChange={this._handleChange.bind(this, "street_address")} value={fields["street_address"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('address', fields["street_address"], 'required', 'text-danger')}
+                                {this.validator.message('address 1', fields["street_address"], 'required', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
-
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
                             <span>Street Address 2:</span>
@@ -255,7 +250,6 @@ class AddUser extends Component {
                                 onCountryChange={(country, state, city, stateID, countryID, countryCode) => this.onCountryChange(country, state, city, stateID, countryID, countryCode)} />
                         </Col>
                     </Row>
-
                     <Row style={{ "marginBottom": "15px", "paddingTop": "78px" }}>
                         <Col>
                             <span>Postal Code:</span>
@@ -265,7 +259,6 @@ class AddUser extends Component {
                             </span>
                         </Col>
                     </Row>
-
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col sm={4}>
                             <span>Account Tier:</span>
@@ -273,7 +266,7 @@ class AddUser extends Component {
                         <Col>
                             <Select
                                 style={{ width: 300, "marginLeft": "15px" }}
-                                placeholder="Select a Account Tier"
+                                placeholder="Select an Account Tier"
                                 onChange={this._changeAccountTier.bind(this, 'tier')}
                             >
                                 <Option value='1'>Tier 1</Option>
@@ -293,7 +286,7 @@ class AddUser extends Component {
                         <Col>
                             <Select
                                 style={{ width: 300, "marginLeft": "15px" }}
-                                placeholder="Select a Account Class"
+                                placeholder="Select an Account Class"
                                 onChange={this._changeAccountClass.bind(this, 'acc_class')}
                             >
                                 <Option value='0'>FALDAX Internal Account</Option>
@@ -346,7 +339,6 @@ class AddUser extends Component {
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Add</Button>
                         </Col>
                     </Row>
-
                 </Form>
 
                 {loader && <FaldaxLoader />}

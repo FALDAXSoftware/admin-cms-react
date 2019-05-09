@@ -536,12 +536,16 @@ const ApiUtils = {
         }
     },
 
-    getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder) {
+    getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder, selectedAsset) {
         let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
-        if (sorterCol && sortOrder && searchPair) {
-            url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-        } else if (sorterCol && sortOrder) {
-            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        if (sorterCol && sortOrder && searchPair && selectedAsset) {
+            url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
+        } else if (sorterCol && sortOrder && selectedAsset) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
+        } else if (searchPair && selectedAsset) {
+            url += "&data=" + searchPair + "&filter_val=" + selectedAsset;
+        } else if (selectedAsset) {
+            url += "&filter_val=" + selectedAsset;
         } else {
             url += "&data=" + searchPair;
         }

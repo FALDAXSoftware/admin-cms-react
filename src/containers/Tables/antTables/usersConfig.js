@@ -109,7 +109,7 @@ const columns = [{
     title: <IntlMessages id="antTable.title.zip" />,
     key: 'postal_code',
     width: 200,
-    render: object => renderCell(object, 'TierCell', 'postal_code')
+    render: object => renderCell(object, 'TextCell', 'postal_code')
 }, {
     title: <IntlMessages id="antTable.title.created_at" />,
     key: 'created_at',

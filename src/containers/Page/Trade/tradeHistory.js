@@ -192,7 +192,7 @@ class TradeHistory extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={7}>
                                                 <Select
-                                                    placeholder="Select a type"
+                                                    placeholder="Select type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
                                                 >
