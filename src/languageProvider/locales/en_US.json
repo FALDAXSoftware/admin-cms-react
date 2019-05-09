@@ -408,6 +408,8 @@
   "antTable.title.coin": "Coin",
   "antTable.title.tier": "Account Tier",
   "antTable.title.created_at": "Referred Date",
+  "antTable.title.numReferral": "Number Of Referrals",
+  "antTable.title.zip": "Postal Code",
   "antTable.title.referral_by_email": "Referred User",
   "antTable.title.state": "State",
   "countryTable.title.name": "Country Name",

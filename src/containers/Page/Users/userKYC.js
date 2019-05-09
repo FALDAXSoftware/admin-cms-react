@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Divider, Row, Col, Card } from 'antd';
-import { BUCKET_URL } from '../../../helpers/globals';
+import { Divider } from 'antd';
 import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
@@ -41,55 +40,11 @@ class UserKYCDetails extends Component {
         return (
             <div className="kyc-div user-profile">
                 <Divider>KYC Information</Divider>
-                <div className="">
+                <div>
                     <p style={{ "marginBottom": "10px" }}>
                         <span> <b>Status:</b> </span>
                         {kycDetails && kycDetails.isApprove !== undefined && kycDetails.isApprove ? 'APPROVED' : 'DIS-APPROVED'}
                     </p>
-
-                    <p style={{ "marginBottom": "10px" }}>
-                        <span> <b>Name:</b> </span>
-                        {kycDetails && kycDetails.first_name ? kycDetails.last_name ? kycDetails.first_name + ' ' + kycDetails.last_name : kycDetails.first_name : 'N/A'}
-                    </p>
-
-                    <p style={{ "marginBottom": "10px" }}>
-                        <span><b>Address: </b></span>
-                        {kycDetails && kycDetails.address ? kycDetails.address2 ? kycDetails.address + kycDetails.address2 : kycDetails.address : 'N/A'}
-                    </p>
-                    {kycDetails && kycDetails.city_town ?
-                        <p style={{ "marginBottom": "10px" }}>
-                            {kycDetails.city_town}
-                        </p> : ''}
-
-                    {kycDetails && kycDetails.state ?
-                        <p style={{ "marginBottom": "10px" }}>
-                            {kycDetails.state}
-                        </p> : ''}
-
-                    {kycDetails && kycDetails.country ?
-                        <p style={{ "marginBottom": "10px" }}>
-                            {kycDetails.country}
-                        </p> : ''}
-
-                    <p style={{ "marginBottom": "10px" }}>
-                        <span><b>Phone Number: </b></span>
-                        {kycDetails && kycDetails.phone_number ? kycDetails.phone_number : 'N/A'}
-                    </p>
-                </div>
-                <Divider>KYC Documents</Divider>
-                <div>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Card title={<b>Front Document: </b>} bordered={false}>
-                                <img className="kyc-doc" src={kycDetails && kycDetails.front_doc ? BUCKET_URL + kycDetails.front_doc : ''} />
-                            </Card>
-                        </Col>
-                        <Col span={12}>
-                            <Card title={<b>Back Document: </b>} bordered={false}>
-                                <img className="kyc-doc" src={kycDetails && kycDetails.back_doc ? BUCKET_URL + kycDetails.back_doc : ''} />
-                            </Card>
-                        </Col>
-                    </Row>
                 </div>
                 <Divider>IDM Details</Divider>
                 <div>

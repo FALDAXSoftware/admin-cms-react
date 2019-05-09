@@ -160,7 +160,7 @@ class AddPairModal extends Component {
 
         let coinOptions = allCoins.map((coin) => {
             return (
-                <Option value={coin.coin}>{coin.coin_name}-{coin.coin_code}</Option>
+                <Option value={coin.coin}>{coin.coin_name}-{coin.coin}</Option>
             )
         });
 
