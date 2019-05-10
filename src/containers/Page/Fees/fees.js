@@ -167,6 +167,7 @@ class Fees extends Component {
 
     render() {
         const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal, fields } = this.state;
+        console.log(this.state);
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());

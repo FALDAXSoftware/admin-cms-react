@@ -13,7 +13,6 @@ const Country = styled.span`
     -webkit-transform: matrix( 0.99999985149599,0,0,0.99949238260564,0,0);
     -ms-transform: matrix( 0.99999985149599,0,0,0.99949238260564,0,0);
     display:block;
-    margin-bottom:10px;
 `
 const SelectS = styled(Select)`
     width:85% !important;
@@ -84,7 +83,7 @@ export default class CountryFields extends Component {
         }
         this._changeCountry = this._changeCountry.bind(this);
         this._changeState = this._changeState.bind(this);
-        this.handleChangeCity = this.handleChangeCity.bind(this);
+        this._changeCity = this._changeCity.bind(this);
     }
 
     _changeCountry = (value, position) => {
@@ -103,7 +102,7 @@ export default class CountryFields extends Component {
         this.props.onCountryChange(selectedCountry, value, null, stateID, countryID, countryCode);
     }
 
-    handleChangeCity(value, position) {
+    _changeCity = (value, position) => {
         const { selectedCountry, selectedState, countryID, stateID, countryCode } = this.state;
         this.setState({ selectedCity: value });
         this.props.onCountryChange(selectedCountry, selectedState, value, stateID, countryID, countryCode);
@@ -164,7 +163,7 @@ export default class CountryFields extends Component {
                                 placeholder="Select a City"
                                 dropdownClassName="country_select_drop"
                                 optionFilterProp="children"
-                                onChange={this.handleChangeCity}
+                                onChange={this._changeCity}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
                                 {cities !== null ? cities.map((city, index) => <Option key={city.id} value={city.name}>{city.name}</Option>) : ''}
