@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Input, Select, notification, Button, Form, Checkbox, Col, Row } from 'antd';
+import { Input, Select, notification, Button, Form, Checkbox, Col, Row, DatePicker } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import CountryFields from './countryFields';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 const { logout } = authAction;
 const Option = Select.Option;
+const CheckboxGroup = Checkbox.Group;
 
 class AddUser extends Component {
     constructor(props) {
@@ -24,7 +26,9 @@ class AddUser extends Component {
             allCoins: [],
             showClassError: false,
             isKYC: false,
-            generate_wallet_coins: []
+            indeterminate: true,
+            checkAll: false,
+            showDOBErr: false
         }
         this.validator = new SimpleReactValidator();
     }
@@ -41,7 +45,11 @@ class AddUser extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allCoins: res.data });
+                    let coinsArray = [];
+                    res.data && res.data.map((asset) => {
+                        coinsArray.push(asset.coin_name);
+                    })
+                    _this.setState({ allCoins: coinsArray });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -89,7 +97,7 @@ class AddUser extends Component {
         const { token } = this.props;
         let {
             fields, selectedTier, selectedClass, isKYC, countryCode,
-            countrySelected, stateSelected, citySelected, generate_wallet_coins
+            countrySelected, stateSelected, citySelected, checkedList, dob
         } = this.state;
         let _this = this;
 
@@ -107,8 +115,9 @@ class AddUser extends Component {
                 city_town: citySelected,
                 state: stateSelected,
                 country_code: countryCode,
-                generate_wallet_coins,
+                generate_wallet_coins: checkedList,
                 kyc_done: isKYC,
+                dob
             };
 
             this.setState({ loader: true, isDisabled: true })
@@ -139,7 +148,8 @@ class AddUser extends Component {
         } else {
             this.setState({
                 showTierError: selectedTier ? false : true,
-                showClassError: selectedClass ? false : true, loader: false
+                showClassError: selectedClass ? false : true, loader: false,
+                showDOBErr: dob ? false : true
             })
             this.validator.showMessages();
             this.forceUpdate();
@@ -160,26 +170,33 @@ class AddUser extends Component {
         this.setState({ selectedClass: value })
     }
 
-    _selectCoin = (field, val) => {
-        let selectedCoins = this.state.generate_wallet_coins;
-
-        if (selectedCoins.indexOf(field.coin) > -1) {
-            selectedCoins.splice(selectedCoins.indexOf(field.coin), 1);
-            this.setState({ generate_wallet_coins: selectedCoins })
-        } else {
-            selectedCoins.push(field.coin);
-            this.setState({ generate_wallet_coins: selectedCoins })
-        }
-    }
-
     _isKYCCompleted = (e) => {
         this.setState({ isKYC: e.target.checked })
     }
 
+    onChange = (checkedList) => {
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && (checkedList.length < this.state.allCoins.length),
+            checkAll: checkedList.length === this.state.allCoins.length,
+        });
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({ dob: moment(date).format('DD-MM-YYYY') })
+    }
+
+    onCheckAllChange = (e) => {
+        this.setState({
+            checkedList: e.target.checked ? this.state.allCoins : [],
+            indeterminate: false,
+            checkAll: e.target.checked,
+        });
+    }
+
     render() {
-        const {
-            loader, fields, errType, errMsg, showTierError, allCoins, showClassError, isKYC, generate_wallet_coins
-        } = this.state;
+        const { loader, fields, errType, errMsg, showTierError, allCoins, showClassError,
+            showDOBErr, isKYC } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -244,6 +261,17 @@ class AddUser extends Component {
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
+                        <Col sm={4}>
+                            <span>Date of Birth:</span>
+                        </Col>
+                        <Col>
+                            <DatePicker onChange={this._changeDate} /><br />
+                            {showDOBErr && <span style={{ "color": "red" }}>
+                                {'The date of birth field is required.'}
+                            </span>}
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
                         <Col>
                             <CountryFields
                                 {...this.props}
@@ -273,7 +301,7 @@ class AddUser extends Component {
                                 <Option value='2'>Tier 2</Option>
                                 <Option value='3'>Tier 3</Option>
                                 <Option value='4'>Tier 4</Option>
-                            </Select>
+                            </Select><br />
                             {showTierError && <span style={{ "color": "red" }}>
                                 {'The tier field is required.'}
                             </span>}
@@ -295,7 +323,7 @@ class AddUser extends Component {
                                 <Option value='3'>Retail Customer</Option>
                                 <Option value='4'>Future FALDAX Venture 1 Customers</Option>
                                 <Option value='5'>Future FALDAX Venture 2 Customers</Option>
-                            </Select>
+                            </Select><br />
                             {showClassError && <span style={{ "color": "red" }}>
                                 {'The account class field is required.'}
                             </span>}
@@ -303,36 +331,22 @@ class AddUser extends Component {
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Do you want to accept KYC ? :</span><br />
-                            <Checkbox checked={isKYC} onChange={this._isKYCCompleted}>Yes</Checkbox><br />
+                            <Checkbox checked={isKYC} onChange={this._isKYCCompleted} /> <span>Do you want to accept KYC ?</span><br />
                         </Col>
                     </Row>
                     <Row>
                         <Col >
                             <span>Select Assets to generate wallet address:</span><br />
-                            <Select
-                                mode="multiple"
-                                style={{ width: '100%' }}
-                                placeholder="Please select"
-                                allowClear={true}
-                            // onChange={handleChange}
+                            <Checkbox
+                                indeterminate={this.state.indeterminate}
+                                onChange={this.onCheckAllChange}
+                                checked={this.state.checkAll}
                             >
-                                {
-                                    allCoins && allCoins.map((coin) => (
-                                        <Option value={coin.coin} key={coin.id}>{coin.coin_name}-{coin.coin}</Option>
-                                    ))
-                                }
-                            </Select>
+                                Check all
+          </Checkbox>
+                            <br />
+                            <CheckboxGroup options={allCoins} value={this.state.checkedList} onChange={this.onChange} />
                         </Col>
-                        {/* {
-                                allCoins && allCoins.map((coin) => {
-                                    return (
-                                        <Col md={6}>
-                                            <Checkbox onChange={this._selectCoin.bind(this, coin)}>{coin.coin_name}-{coin.coin}</Checkbox>
-                                        </Col>
-                                    )
-                                })
-                            } */}
                     </Row>
                     <Row>
                         <Col>
@@ -342,7 +356,7 @@ class AddUser extends Component {
                 </Form>
 
                 {loader && <FaldaxLoader />}
-            </div>
+            </div >
         );
     }
 }

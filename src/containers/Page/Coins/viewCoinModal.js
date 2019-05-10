@@ -37,9 +37,8 @@ class ViewCoinModal extends Component {
                     <Button onClick={this._closeViewCoinModal}>OK</Button>,
                 ]}
             >
-                {coinDetails.coin_icon ?
-                    <img style={{ width: '40px', height: '40px' }}
-                        src={BUCKET_URL + coinDetails.coin_icon} /> : ''}
+                <img style={{ width: '40px', height: '40px' }}
+                    src={coinDetails.coin_icon ? BUCKET_URL + coinDetails.coin_icon : BUCKET_URL + 'coin/defualt_coin.png'} />
                 <br /><br />
 
                 <span> <b>Asset Name:</b> </span>
