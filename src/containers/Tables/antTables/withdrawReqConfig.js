@@ -24,12 +24,12 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 };
 
 const columns = [
-    {
-        title: <IntlMessages id="withdrawTable.title.email" />,
-        key: 'email',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'email')
-    },
+    // {
+    //     title: <IntlMessages id="withdrawTable.title.email" />,
+    //     key: 'email',
+    //     width: 200,
+    //     render: object => renderCell(object, 'TextCell', 'email')
+    // },
     {
         title: <IntlMessages id="withdrawTable.title.source_address" />,
         key: 'source_address',

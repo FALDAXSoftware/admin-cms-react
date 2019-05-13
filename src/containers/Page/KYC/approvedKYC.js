@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Pagination, Input } from 'antd';
+import { notification, Pagination, Input } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -12,7 +12,6 @@ import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
 var self;
 
 class ApprovedKYC extends Component {

@@ -218,6 +218,7 @@ class WithdrawRequest extends Component {
                                     dataSource={allRequests}
                                     className="isoCustomizedTable"
                                     onChange={this._handleWithdrawTableChange}
+                                    expandedRowRender={record => <p style={{ margin: 0 }}>{<div><b>Email ID</b> - {record.email}  <b>Fees</b> - {record.fees}% </div>}</p>}
                                 />
                                 {allReqCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}

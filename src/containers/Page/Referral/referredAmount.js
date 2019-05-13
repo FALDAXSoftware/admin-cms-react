@@ -3,6 +3,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { Card } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
+import { Link } from 'react-router-dom';
 
 class ReferredAmount extends Component {
     constructor(props) {
@@ -44,6 +45,12 @@ class ReferredAmount extends Component {
 
         return (
             <div className="referral-div">
+                <div style={{ "display": "inline-block", "width": "100%" }}>
+                    <Link to="/dashboard/referral">
+                        <i style={{ marginBottom: '15px', marginRight: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <a onClick={() => { this.props.history.push('/dashboard/referral') }}>Back</a>
+                    </Link>
+                </div>
                 <Card
                     title={userData.full_name}
                     style={{ width: 300 }}

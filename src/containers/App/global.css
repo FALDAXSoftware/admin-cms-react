@@ -314,3 +314,6 @@ html[dir='rtl'] .dz-hidden-input {
   margin-bottom: 15px;
   margin-left: 10px;
 }
+.isoCustomizedTable .ant-table-row{
+  cursor: pointer;
+}

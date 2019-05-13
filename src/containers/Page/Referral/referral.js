@@ -64,11 +64,11 @@ class Referral extends Component {
 
     _getAllReferredAdmins = () => {
         const { token } = this.props;
-        const { limit, page, searchReferral } = this.state;
+        const { limit, page, searchReferral, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         this.setState({ loader: true })
-        ApiUtils.getAllReferrals(page, limit, token, searchReferral)
+        ApiUtils.getAllReferrals(page, limit, token, searchReferral, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -115,6 +115,13 @@ class Referral extends Component {
             fields[field] = e.target.value;
         }
         this.setState({ fields });
+    }
+
+    _handleReferralChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllReferredAdmins();
+            this._getContactDetails();
+        })
     }
 
     _updateDefaultReferral = () => {
@@ -201,6 +208,7 @@ class Referral extends Component {
                                         pagination={false}
                                         dataSource={allReferral}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleReferralChange}
                                     />
                                     {loader && <FaldaxLoader />}
                                     {allReferralCount > 0 ?
