@@ -129,10 +129,12 @@ class Fees extends Component {
                     if (res.status == 200) {
                         _this.setState({
                             errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        }, () => {
+                            _this._getContactDetails();
                         })
                     } else if (res.status == 403) {
-                        self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            self.props.logout();
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
                         });
                     } else {
                         _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
@@ -167,7 +169,6 @@ class Fees extends Component {
 
     render() {
         const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal, fields } = this.state;
-        console.log(this.state);
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());

@@ -13,7 +13,6 @@ import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import CountryData from 'country-state-city';
 
-const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { logout } = authAction;
@@ -98,17 +97,17 @@ class Users extends Component {
                 if (res.status == 200) {
                     _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, message: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }

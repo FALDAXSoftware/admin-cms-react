@@ -235,9 +235,13 @@ const ApiUtils = {
     },
 
     //get all referrals api
-    getAllReferrals: function (page, limit, token, searchReferral) {
+    getAllReferrals: function (page, limit, token, searchReferral, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit;
-        if (searchReferral) {
+        if (sorterCol && sortOrder && searchReferral) {
+            url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
             url += "&data=" + searchReferral;
         }
 

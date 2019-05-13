@@ -155,9 +155,9 @@ const newsStatus = (value, cover_image, title, link, posted_at, description, is_
 }
 
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
-const ReferralDateCell = (value, full_name, email, created_at, referral_by_email) => <p>{referral_by_email != null ? created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : '' : ''}</p>;
+const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id) => <p>{referred_id !== null ? created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : '' : ''}</p>;
 const TransactionTypeCell = data => <p>{data == 'send' ? 'Send' : 'Receive'}</p>
-const VolumeCell = (value, symbol, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at) => <p>{quantity * fill_price}</p>;
+const VolumeCell = (value, currency, settle_currency, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at) => <p>{quantity * fill_price}</p>;
 const DateTimeCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : '' : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
 const StaticImageCell = src => <img style={{ width: '40px', height: '40px' }} src={src} />;

@@ -3,10 +3,11 @@ import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, DateCell, VolumeCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, pair = null, reqested_email = null, emailID = null, buy = null,
+const renderCell = (object, type, key, pair = null, pair1 = null, reqested_email = null, emailID = null, buy = null,
     quant = null, fillPrice = null, makerFee = null, takerFee = null, Vol = null, createdOn = null) => {
     const value = object[key];
-    const symbol = object[pair];
+    const currency = object[pair];
+    const settle_currency = object[pair1];
     const reqested_user_email = object[reqested_email];
     const email = object[emailID];
     const side = object[buy];
@@ -19,9 +20,9 @@ const renderCell = (object, type, key, pair = null, reqested_email = null, email
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, symbol, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
+            return DateCell(value, currency, settle_currency, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
         case 'VolumeCell':
-            return VolumeCell(value, symbol, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
+            return VolumeCell(value, currency, settle_currency, reqested_user_email, email, side, quantity, fill_price, maker_fee, taker_fee, volume, created_at);
         default:
             return TextCell(value);
     }
@@ -29,11 +30,17 @@ const renderCell = (object, type, key, pair = null, reqested_email = null, email
 
 const columns = [
     {
-        title: <IntlMessages id="tradeTable.title.symbol" />,
-        key: 'symbol',
+        title: <IntlMessages id="tradeTable.title.currency" />,
+        key: 'currency',
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'symbol')
+        render: object => renderCell(object, 'TextCell', 'currency')
+    }, {
+        title: <IntlMessages id="tradeTable.title.settle_currency" />,
+        key: 'settle_currency',
+        width: 200,
+        sorter: true,
+        render: object => renderCell(object, 'TextCell', 'settle_currency')
     },
     {
         title: <IntlMessages id="tradeTable.title.maker_email" />,
