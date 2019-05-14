@@ -219,7 +219,7 @@ class AddPairModal extends Component {
                     <span>Maker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('maker fee', fields["maker_fee"], 'required|decimal', 'text-danger')}
+                        {this.validator.message('maker fee', fields["maker_fee"], 'required|min:20|max:100', 'text-danger')}
                     </span>
                 </div>
 

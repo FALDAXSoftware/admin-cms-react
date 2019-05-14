@@ -25,6 +25,7 @@ import { KYCInfos } from './kycConfig';
 import { FeesInfos } from './feesConfig';
 import { newsTableInfos } from './newsConfig';
 import { referralInfos } from './referralConfig';
+import { ticketsTableInfos } from './ticketsConfig';
 import { userWithdrawReqTableInfos } from './userWithdrawReqConfig';
 import * as TableViews from './tableViews/';
 
@@ -77,5 +78,5 @@ export {
   historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
-  newsTableInfos, userReferralInfos, userWithdrawReqTableInfos
+  newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos
 };
