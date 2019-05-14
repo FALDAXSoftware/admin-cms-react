@@ -6,7 +6,7 @@ import {
     LinkCell,
     TextCell,
     ActionCell,
-    DateCell,
+    UserDateCell,
     ButtonCell,
     TierCell,
     ReferralCell
@@ -15,7 +15,7 @@ import {
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
     emailID = null, city = null, street = null, street_1 = null, phone = null,
     countryName = null, bdate = null, status = null, isKyc = null, format = null, tier = null,
-    aClass = null, stateName = null, referrals = null) => {
+    aClass = null, stateName = null, referrals = null, created = null) => {
     const value = object[key];
     const profile_pic = object[image];
     const first_name = object[fname];
@@ -34,12 +34,15 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const account_class = object[aClass];
     const state = object[stateName];
     const no_of_referrals = object[referrals]
+    const created_at = object[created]
 
     switch (type) {
         case 'ImageCell':
             return ImageCell(value);
-        case 'DateCell':
-            return DateCell(value);
+        case 'UserDateCell':
+            return UserDateCell(value, profile_pic, first_name, last_name, email, city_town,
+                street_address, street_address_2, phone_number, country, dob, is_active, kyc,
+                date_format, account_tier, account_class, state, no_of_referrals, created_at);
         case 'LinkCell':
             return LinkCell(value);
         case 'ButtonCell':
@@ -114,22 +117,10 @@ const columns = [{
     title: <IntlMessages id="antTable.title.created_at" />,
     key: 'created_at',
     width: 200,
-    render: object => renderCell(object, 'DateCell', 'created_at')
+    render: object => renderCell(object, 'UserDateCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
+        'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
+        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at')
 },
-// {
-//     title: <IntlMessages id="antTable.title.referrals" />,
-//     key: 'button',
-//     width: 200,
-//     render: object => renderCell(object, 'ButtonCell', 'id')
-// },
-// {
-//     title: <IntlMessages id="antTable.title.Active" />,
-//     key: 'is_active',
-//     width: 200,
-//     render: object => renderCell(object, 'UserSwitchCell', 'id', 'profile_pic', 'first_name',
-//         'last_name', 'email', 'city_town', 'street_address', 'street_address_2', 'phone_number',
-//         'country', 'dob', 'is_active', 'kyc')
-// },
 {
     title: <IntlMessages id="antTable.title.details" />,
     key: 'action',
@@ -137,9 +128,8 @@ const columns = [{
     render: object => renderCell(object,
         'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
-        'date_format', 'account_tier', 'account_class', 'state')
-}
-];
+        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at')
+}];
 
 const tableinfos = [
     {

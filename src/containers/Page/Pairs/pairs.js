@@ -179,7 +179,9 @@ class Pairs extends Component {
     }
 
     _resetFilters = () => {
-        this.setState({ selectedAsset: '', searchPair: '' });
+        this.setState({ selectedAsset: '', searchPair: '' }, () => {
+            this._getAllPairs();
+        });
     }
 
     _changeSearch = (field, e) => {
