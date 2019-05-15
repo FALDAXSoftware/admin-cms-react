@@ -271,8 +271,8 @@ class AddUser extends Component {
                             </span>}
                         </Col>
                     </Row>
-                    <Row style={{ "marginBottom": "15px" }}>
-                        <Col>
+                    <Row>
+                        <Col sm={24}>
                             <CountryFields
                                 {...this.props}
                                 onCountryChange={(country, state, city, stateID, countryID, countryCode) => this.onCountryChange(country, state, city, stateID, countryID, countryCode)} />
