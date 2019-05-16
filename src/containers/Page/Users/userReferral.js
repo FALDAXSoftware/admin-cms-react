@@ -117,8 +117,7 @@ class Referral extends Component {
     }
 
     render() {
-        const { errMsg, errType, fields, loader, prevReferral } = this.state;
-        console.log('prevReferral', prevReferral)
+        const { errMsg, errType, fields, loader } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

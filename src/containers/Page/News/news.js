@@ -225,11 +225,6 @@ class News extends Component {
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <TableWrapper
-                                    // onRow={(record, rowIndex) => {
-                                    //     return {
-                                    //         onClick: () => { this._changeRow(record) },
-                                    //     };
-                                    // }}
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
                                     columns={tableInfo.columns}

@@ -29,7 +29,22 @@ class Fees extends Component {
             fields: {},
             prevFees: ''
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            className: 'text-danger',
+            custom_between: {
+                message: 'The :attribute must be between 1 to 100 %.',
+                rule: function (val, params, validator) {
+                    if (isNaN(val)) {
+                        return false;
+                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true
+            }
+        });
         self = this;
         Fees.editFees = Fees.editFees.bind(this);
     }
@@ -205,7 +220,7 @@ class Fees extends Component {
                                 <Input addonAfter={'%'} placeholder="Send Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                                     onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields["default_send_coin_fee"]} />
                                 <span className="field-error">
-                                    {this.validator.message('send fee', fields['default_send_coin_fee'], 'required|numeric')}
+                                    {this.validator.message('send fee', fields['default_send_coin_fee'], 'required|custom_between:0,100')}
                                 </span>
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateSendFee}> Update </Button>
                                 <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button>

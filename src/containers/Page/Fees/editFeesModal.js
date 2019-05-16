@@ -21,7 +21,22 @@ class EditFeesModal extends Component {
             editorContent: '',
             isDisabled: false,
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            className: 'text-danger',
+            custom_between: {
+                message: 'The :attribute must be between 1 to 100 %.',
+                rule: function (val, params, validator) {
+                    if (isNaN(val)) {
+                        return false;
+                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true
+            }
+        });
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -43,11 +58,7 @@ class EditFeesModal extends Component {
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        // if (e.target.value.trim() == "") {
-        //     fields[field] = "";
-        // } else {
         fields[field] = e.target.value;
-        //}
         this.setState({ fields });
     }
 
@@ -138,7 +149,7 @@ class EditFeesModal extends Component {
                         <span>Maker Fee:</span>
                         <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('maker fee', fields["maker_fee"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('maker fee', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
                         </span>
                     </div>
 
@@ -146,7 +157,7 @@ class EditFeesModal extends Component {
                         <span>Taker Fee:</span>
                         <Input addonAfter={'%'} placeholder="Taker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('Taker Fee', fields["taker_fee"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('Taker Fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                         </span>
                     </div>
 
