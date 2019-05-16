@@ -28,7 +28,22 @@ class AddPairModal extends Component {
             showCoin2Err: false,
             showError: false
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            className: 'text-danger',
+            custom_between: {
+                message: 'The :attribute must be between 1 to 100 %.',
+                rule: function (val, params, validator) {
+                    if (isNaN(val)) {
+                        return false;
+                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true
+            }
+        });
     }
 
     openNotificationWithIconError = (type) => {
@@ -45,7 +60,22 @@ class AddPairModal extends Component {
                 showAddPairsModal: nextProps.showAddPairsModal,
                 allCoins: nextProps.allCoins
             })
-            this.validator = new SimpleReactValidator();
+            this.validator = new SimpleReactValidator({
+                className: 'text-danger',
+                custom_between: {
+                    message: 'The :attribute must be between 1 to 100 %.',
+                    rule: function (val, params, validator) {
+                        if (isNaN(val)) {
+                            return false;
+                        } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                    required: true
+                }
+            });
         }
     }
 
@@ -219,7 +249,7 @@ class AddPairModal extends Component {
                     <span>Maker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('maker fee', fields["maker_fee"], 'required|min:20|max:100', 'text-danger')}
+                        {this.validator.message('maker fee', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
 
@@ -227,7 +257,7 @@ class AddPairModal extends Component {
                     <span>Taker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('taker fee', fields["taker_fee"], 'required|decimal', 'text-danger')}
+                        {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
                 {loader && <FaldaxLoader />}

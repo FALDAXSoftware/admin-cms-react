@@ -123,7 +123,7 @@ export default class CountryFields extends Component {
         return (
             <CountryWrap>
                 <Row>
-                    <Col sm={24} md={8} xl={8} xxl={8}>
+                    <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <Country>Country:</Country>
                         <SelectS
                             showSearch
@@ -138,7 +138,7 @@ export default class CountryFields extends Component {
                             {countries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
                         </SelectS>
                     </Col>
-                    <Col sm={24} md={8} xl={8} xxl={8}>
+                    <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <SelectWrap>
                             <Country>State:</Country>
                             <SelectS
@@ -154,7 +154,7 @@ export default class CountryFields extends Component {
                             </SelectS>
                         </SelectWrap>
                     </Col>
-                    <Col sm={24} md={8} xl={8} xxl={8}>
+                    <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <SelectWrap>
                             <Country>City:</Country>
                             <SelectS

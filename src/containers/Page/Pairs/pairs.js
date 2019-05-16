@@ -246,14 +246,14 @@ class Pairs extends Component {
                                     </Form>
                                 </div>
                                 {loader && <FaldaxLoader />}
-                                < div >
-                                    <EditPairModal
+                                <div>
+                                    {showEditPairModal && <EditPairModal
                                         allCoins={allCoins}
                                         fields={pairDetails}
                                         showEditPairModal={showEditPairModal}
                                         closeEditModal={this._closeEditPairModal}
                                         getAllPairs={this._getAllPairs}
-                                    />
+                                    />}
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}

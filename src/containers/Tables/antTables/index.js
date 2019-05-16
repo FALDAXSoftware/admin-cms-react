@@ -27,6 +27,7 @@ import { newsTableInfos } from './newsConfig';
 import { referralInfos } from './referralConfig';
 import { ticketsTableInfos } from './ticketsConfig';
 import { userWithdrawReqTableInfos } from './userWithdrawReqConfig';
+import { accountClassTableinfos } from './accountClassConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -78,5 +79,6 @@ export {
   historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
-  newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos
+  newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
+  accountClassTableinfos
 };

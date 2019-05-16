@@ -28,7 +28,8 @@ class AddUser extends Component {
             isKYC: false,
             indeterminate: true,
             checkAll: false,
-            showDOBErr: false
+            showDOBErr: false,
+            selectedGender: 'male'
         }
         this.validator = new SimpleReactValidator();
     }
@@ -97,7 +98,7 @@ class AddUser extends Component {
         const { token } = this.props;
         let {
             fields, selectedTier, selectedClass, isKYC, countryCode,
-            countrySelected, stateSelected, citySelected, checkedList, dob
+            countrySelected, stateSelected, citySelected, checkedList, dob, selectedGender
         } = this.state;
         let _this = this;
 
@@ -105,6 +106,7 @@ class AddUser extends Component {
             let formData = {
                 first_name: fields["first_name"],
                 last_name: fields["last_name"],
+                middle_name: fields["middle_name"],
                 email: fields["email"],
                 street_address: fields["street_address"],
                 street_address_2: fields["street_address_2"],
@@ -117,6 +119,7 @@ class AddUser extends Component {
                 country_code: countryCode,
                 generate_wallet_coins: checkedList,
                 kyc_done: isKYC,
+                gender: selectedGender,
                 dob
             };
 
@@ -194,9 +197,13 @@ class AddUser extends Component {
         });
     }
 
+    _changeGender = (val) => {
+        this.setState({ selectedGender: val });
+    }
+
     render() {
         const { loader, fields, errType, errMsg, showTierError, allCoins, showClassError,
-            showDOBErr, isKYC } = this.state;
+            showDOBErr, isKYC, selectedGender } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -222,6 +229,12 @@ class AddUser extends Component {
                             <span style={{ "color": "red" }}>
                                 {this.validator.message('first name', fields["first_name"], 'required|max:30', 'text-danger')}
                             </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Middle Name:</span>
+                            <Input placeholder="Middle Name" onChange={this._handleChange.bind(this, "middle_name")} value={fields["middle_name"]} />
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
@@ -271,8 +284,24 @@ class AddUser extends Component {
                             </span>}
                         </Col>
                     </Row>
-                    <Row style={{ "marginBottom": "15px" }}>
+                    <Row>
+                        <Col sm={4}>
+                            <span>Gender:</span>
+                        </Col>
                         <Col>
+                            <Select
+                                style={{ width: 125 }}
+                                placeholder="Select a type"
+                                onChange={this._changeGender}
+                                value={selectedGender}
+                            >
+                                <Option value={'male'}>Male</Option>
+                                <Option value={'female'}>Female</Option>
+                            </Select>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={24}>
                             <CountryFields
                                 {...this.props}
                                 onCountryChange={(country, state, city, stateID, countryID, countryCode) => this.onCountryChange(country, state, city, stateID, countryID, countryCode)} />

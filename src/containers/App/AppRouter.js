@@ -94,6 +94,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Users/addUser")),
         module: "add_user"
     },
+    {
+        path: "account-class",
+        component: asyncComponent(() => import("../Page/Users/addUser")),
+        module: "account_class"
+    },
 ];
 
 const mandatoryRoutes = [
