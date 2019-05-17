@@ -60,7 +60,7 @@ class AddAccountClassModal extends Component {
     _resetAddForm = () => {
         const { fields } = this.state;
 
-        fields['acc_name'] = '';
+        fields['class_name'] = '';
         this.setState({ fields });
     }
 
@@ -71,10 +71,11 @@ class AddAccountClassModal extends Component {
         if (this.validator.allValid()) {
             this.setState({ loader: true });
 
-            let formData = new FormData();
-            formData.append('acc_name', fields['acc_name']);
+            let formData = {
+                class_name: fields['class_name']
+            }
 
-            ApiUtils.addCoin(token, formData)
+            ApiUtils.addAccountClass(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
@@ -125,9 +126,9 @@ class AddAccountClassModal extends Component {
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Account Class Name:</span>
-                    <Input placeholder="Account Class Name" onChange={this._handleChange.bind(this, "acc_name")} value={fields["acc_name"]} />
+                    <Input placeholder="Account Class Name" onChange={this._handleChange.bind(this, "class_name")} value={fields["class_name"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('account class name', fields["acc_name"], 'required|max:30', 'text-danger')}
+                        {this.validator.message('account class name', fields["class_name"], 'required|max:60', 'text-danger')}
                     </span>
                 </div>
                 {loader && <FaldaxLoader />}

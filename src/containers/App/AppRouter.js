@@ -96,7 +96,7 @@ const routes = [
     },
     {
         path: "account-class",
-        component: asyncComponent(() => import("../Page/Users/addUser")),
+        component: asyncComponent(() => import("../Page/AccountClass/accountClass")),
         module: "account_class"
     },
 ];

@@ -7,11 +7,13 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddAccountClassModal from './addAccountClassModal';
+import EditAccountClassModal from './editAccountClass';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
+var self;
 
 class AccountClass extends Component {
     constructor(props) {
@@ -23,8 +25,53 @@ class AccountClass extends Component {
             errType: 'Success',
             loader: false,
             showAddClassModal: false,
+            showEditAccountClassModal: false,
+            showDeleteAccountClassModal: false,
         }
         self = this;
+        AccountClass.editAccountClass = AccountClass.editAccountClass.bind(this);
+        AccountClass.deleteAccountClass = AccountClass.deleteAccountClass.bind(this);
+    }
+
+    static editAccountClass(value, class_name) {
+        let accountClassDetails = {
+            value, class_name
+        }
+        self.setState({ accountClassDetails, showEditAccountClassModal: true });
+    }
+
+    static deleteAccountClass(value, class_name) {
+        const { token } = this.props;
+
+        let formData = {
+            id: value,
+            class_name: class_name
+        };
+
+        self.setState({ loader: true })
+        ApiUtils.editCoin(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    self.setState({
+                        errMsg: true, errMessage: res.message, errType: 'Success', loader: false
+                    })
+                    self._getAllAccountClasses();
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    });
+                }
+            })
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
     }
 
     componentDidMount = () => {
@@ -41,15 +88,15 @@ class AccountClass extends Component {
 
     _getAllAccountClasses = () => {
         const { token } = this.props;
-        const { searchEmp, sorterCol, sortOrder } = this.state;
+        const { } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllEmployee(token, sorterCol, sortOrder, searchEmp)
+        ApiUtils.getAllAccountClasses(token)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allAccountClasses: res.data.employees });
+                    _this.setState({ allAccountClasses: res.allClasses });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -74,12 +121,18 @@ class AccountClass extends Component {
         this.setState({ showAddClassModal: false });
     }
 
+    _closeEditClassModal = () => {
+        this.setState({ showEditAccountClassModal: false });
+    }
+
     _changeRow = (emp) => {
         this.props.history.push('/dashboard/employee/' + emp.id)
     }
 
     render() {
-        const { allAccountClasses, errType, errMsg, loader, showAddClassModal } = this.state;
+        const { allAccountClasses, errType, errMsg, loader, showAddClassModal, accountClassDetails,
+            showEditAccountClassModal, showDeleteAccountClassModal
+        } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -89,7 +142,7 @@ class AccountClass extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {employeeTableinfos.map(tableInfo => (
+                        {accountClassTableinfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAccClassModal}>Add</Button>
@@ -97,6 +150,12 @@ class AccountClass extends Component {
                                         showAddClassModal={showAddClassModal}
                                         closeAddModal={this._closeAddClassModal}
                                         getAllAccountClass={this._getAllAccountClasses.bind(this, 0)}
+                                    />
+                                    <EditAccountClassModal
+                                        fields={accountClassDetails}
+                                        showEditAccountClassModal={showEditAccountClassModal}
+                                        closeEditClassModal={this._closeEditClassModal}
+                                        getAllAccountClass={this._getAllAccountClasses.bind(this, 1)}
                                     />
                                 </div>
                                 {loader && <FaldaxLoader />}
@@ -122,6 +181,6 @@ class AccountClass extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(Employees);
+    }), { logout })(AccountClass);
 
 export { AccountClass, accountClassTableinfos };
