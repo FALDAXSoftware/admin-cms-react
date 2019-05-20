@@ -119,7 +119,7 @@ class Dashboard extends Component {
 
         ApiUtils.getAllCount(token)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res) {
                     if (res.status == 200) {
                         const {
@@ -212,6 +212,7 @@ class Dashboard extends Component {
                             <ChartWrapper>
                                 <ContentHolder>
                                     <b>Grand Total:</b> {total_kyc}
+                                    <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
                                     <Pie data={kycData} />
                                 </ContentHolder>
                             </ChartWrapper>

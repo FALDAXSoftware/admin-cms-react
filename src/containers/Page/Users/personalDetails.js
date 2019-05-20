@@ -48,7 +48,8 @@ class PersonalDetails extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            userDetails: null
+            userDetails: null,
+            errType: 'error'
         }
     }
 
@@ -173,6 +174,16 @@ class PersonalDetails extends Component {
                                     <DateOfBirth>
                                         <i class="fas fa-calendar-day"></i>
                                         {userDetails.dob}
+                                    </DateOfBirth>
+                                </Col>
+                            </Row>
+                        }
+                        {userDetails.uuid &&
+                            <Row>
+                                <Col>
+                                    <DateOfBirth>
+                                        <i class="fas fa-id-card"></i>
+                                        {userDetails.uuid}
                                     </DateOfBirth>
                                 </Col>
                             </Row>

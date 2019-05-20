@@ -8,13 +8,13 @@ import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
 
-class AddAccountClassModal extends Component {
+class EditAccountClassModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showAddClassModal: this.props.showAddClassModal,
+            showEditAccountClassModal: this.props.showEditAccountClassModal,
             loader: false,
-            fields: {},
+            fields: this.props.fields,
             errMsg: false,
             errMessage: '',
             errType: 'Success',
@@ -24,7 +24,10 @@ class AddAccountClassModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            this.setState({ showAddClassModal: nextProps.showAddClassModal });
+            this.setState({
+                showEditAccountClassModal: nextProps.showEditAccountClassModal,
+                fields: nextProps.fields,
+            });
             this.validator = new SimpleReactValidator();
         }
     }
@@ -37,14 +40,10 @@ class AddAccountClassModal extends Component {
         this.setState({ errMsg: false });
     };
 
-    _onChangeContent = (val) => {
-        this.setState({ editorContent: val })
-    }
-
-    _closeAddClassModal = () => {
-        this.setState({ showAddClassModal: false })
-        this.props.closeAddModal();
-        this._resetAddForm()
+    _closeEditClassModal = () => {
+        this.setState({ showEditAccountClassModal: false })
+        this.props.closeEditClassModal();
+        this._resetEditForm()
     }
 
     _handleChange = (field, e) => {
@@ -57,14 +56,14 @@ class AddAccountClassModal extends Component {
         this.setState({ fields });
     }
 
-    _resetAddForm = () => {
+    _resetEditForm = () => {
         const { fields } = this.state;
 
         fields['class_name'] = '';
         this.setState({ fields });
     }
 
-    _addAccountClass = () => {
+    _editAccountClass = () => {
         const { token, getAllAccountClass } = this.props;
         let { fields } = this.state;
 
@@ -75,7 +74,7 @@ class AddAccountClassModal extends Component {
                 class_name: fields['class_name']
             }
 
-            ApiUtils.addAccountClass(token, formData)
+            ApiUtils.updateAccountClass(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
@@ -91,11 +90,11 @@ class AddAccountClassModal extends Component {
                             errMsg: true, errMessage: res.err, loader: false, errType: 'Error'
                         })
                     }
-                    this._closeAddClassModal();
+                    this._closeEditClassModal();
                     getAllAccountClass();
-                    this._resetAddForm();
+                    this._resetEditForm();
                 }).catch(() => {
-                    this._resetAddForm();
+                    this._resetEditForm();
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error'
                     });
@@ -107,7 +106,7 @@ class AddAccountClassModal extends Component {
     }
 
     render() {
-        const { loader, showAddClassModal, fields, errMsg, errType } = this.state;
+        const { loader, showEditAccountClassModal, fields, errMsg, errType } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -115,13 +114,13 @@ class AddAccountClassModal extends Component {
 
         return (
             <Modal
-                title="Add Account Class"
-                visible={showAddClassModal}
+                title="Update Account Class"
+                visible={showEditAccountClassModal}
                 confirmLoading={loader}
-                onCancel={this._closeAddClassModal}
+                onCancel={this._closeEditClassModal}
                 footer={[
-                    <Button onClick={this._closeAddClassModal}>Cancel</Button>,
-                    <Button onClick={this._addAccountClass}>Add</Button>,
+                    <Button onClick={this._closeEditClassModal}>Cancel</Button>,
+                    <Button onClick={this._editAccountClass}>Update</Button>,
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
@@ -140,4 +139,4 @@ class AddAccountClassModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(AddAccountClassModal);
+    }), { logout })(EditAccountClassModal);

@@ -101,6 +101,12 @@ const options = [
     leftIcon: "fas fa-newspaper",
     module: "is_referral"
   },
+  {
+    key: "account-class",
+    label: "Account Class Management",
+    leftIcon: "fas fa-newspaper",
+    module: "account_class"
+  },
 ];
 
 
