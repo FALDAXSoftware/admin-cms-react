@@ -36,6 +36,7 @@ class AddUser extends Component {
 
     componentDidMount = () => {
         this._getAllCoins();
+        this._getAllAccountClasses();
     }
 
     _getAllCoins = () => {
@@ -61,6 +62,32 @@ class AddUser extends Component {
             })
             .catch((err) => {
                 _this.setState({ loader: false })
+            });
+    }
+
+    _getAllAccountClasses = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getAllAccountClasses(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ allAccountClasses: res.allClasses });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(err => {
+                _this.setState({
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                });
             });
     }
 
@@ -203,7 +230,7 @@ class AddUser extends Component {
 
     render() {
         const { loader, fields, errType, errMsg, showTierError, allCoins, showClassError,
-            showDOBErr, isKYC, selectedGender } = this.state;
+            showDOBErr, isKYC, selectedGender, allAccountClasses } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -346,13 +373,8 @@ class AddUser extends Component {
                                 placeholder="Select an Account Class"
                                 onChange={this._changeAccountClass.bind(this, 'acc_class')}
                             >
-                                <Option value='0'>FALDAX Internal Account</Option>
-                                <Option value='1'>Liquidity Partner</Option>
-                                <Option value='2'>Institutional Customer</Option>
-                                <Option value='3'>Retail Customer</Option>
-                                <Option value='4'>Future FALDAX Venture 1 Customers</Option>
-                                <Option value='5'>Future FALDAX Venture 2 Customers</Option>
-                            </Select><br />
+                                {allAccountClasses && allAccountClasses.map((account) => <Option value={account.id}>{account.class_name}</Option>)}
+                            </Select>
                             {showClassError && <span style={{ "color": "red" }}>
                                 {'The account class field is required.'}
                             </span>}

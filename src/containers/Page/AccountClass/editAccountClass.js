@@ -14,7 +14,7 @@ class EditAccountClassModal extends Component {
         this.state = {
             showEditAccountClassModal: this.props.showEditAccountClassModal,
             loader: false,
-            fields: {},
+            fields: this.props.fields,
             errMsg: false,
             errMessage: '',
             errType: 'Success',
@@ -24,7 +24,10 @@ class EditAccountClassModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            this.setState({ showEditAccountClassModal: nextProps.showEditAccountClassModal });
+            this.setState({
+                showEditAccountClassModal: nextProps.showEditAccountClassModal,
+                fields: nextProps.fields,
+            });
             this.validator = new SimpleReactValidator();
         }
     }
@@ -37,14 +40,10 @@ class EditAccountClassModal extends Component {
         this.setState({ errMsg: false });
     };
 
-    _onChangeContent = (val) => {
-        this.setState({ editorContent: val })
-    }
-
-    _closeAddClassModal = () => {
+    _closeEditClassModal = () => {
         this.setState({ showEditAccountClassModal: false })
         this.props.closeEditClassModal();
-        this._resetAddForm()
+        this._resetEditForm()
     }
 
     _handleChange = (field, e) => {
@@ -57,14 +56,14 @@ class EditAccountClassModal extends Component {
         this.setState({ fields });
     }
 
-    _resetAddForm = () => {
+    _resetEditForm = () => {
         const { fields } = this.state;
 
         fields['class_name'] = '';
         this.setState({ fields });
     }
 
-    _addAccountClass = () => {
+    _editAccountClass = () => {
         const { token, getAllAccountClass } = this.props;
         let { fields } = this.state;
 
@@ -91,11 +90,11 @@ class EditAccountClassModal extends Component {
                             errMsg: true, errMessage: res.err, loader: false, errType: 'Error'
                         })
                     }
-                    this._closeAddClassModal();
+                    this._closeEditClassModal();
                     getAllAccountClass();
-                    this._resetAddForm();
+                    this._resetEditForm();
                 }).catch(() => {
-                    this._resetAddForm();
+                    this._resetEditForm();
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error'
                     });
@@ -118,10 +117,10 @@ class EditAccountClassModal extends Component {
                 title="Update Account Class"
                 visible={showEditAccountClassModal}
                 confirmLoading={loader}
-                onCancel={this._closeAddClassModal}
+                onCancel={this._closeEditClassModal}
                 footer={[
-                    <Button onClick={this._closeAddClassModal}>Cancel</Button>,
-                    <Button onClick={this._addAccountClass}>Add</Button>,
+                    <Button onClick={this._closeEditClassModal}>Cancel</Button>,
+                    <Button onClick={this._editAccountClass}>Update</Button>,
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>

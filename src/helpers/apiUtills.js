@@ -1467,6 +1467,21 @@ const ApiUtils = {
         }
     },
 
+    deleteAccountClass: function (classId, token) {
+        try {
+            return fetch(API_URL + "/admin/delete-account-class?class_id=" + classId, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+
 };
 
 export default ApiUtils;

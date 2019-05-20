@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification } from 'antd';
+import { Button, Tabs, notification, Modal } from 'antd';
 import { accountClassTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -41,37 +41,7 @@ class AccountClass extends Component {
     }
 
     static deleteAccountClass(value, class_name) {
-        const { token } = this.props;
-
-        let formData = {
-            id: value,
-            class_name: class_name
-        };
-
-        self.setState({ loader: true })
-        ApiUtils.editCoin(token, formData)
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.status == 200) {
-                    self.setState({
-                        errMsg: true, errMessage: res.message, errType: 'Success', loader: false
-                    })
-                    self._getAllAccountClasses();
-                } else if (res.status == 403) {
-                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false }, () => {
-                        self.props.logout();
-                    });
-                } else {
-                    self.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                    });
-                }
-            })
-            .catch(() => {
-                self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
+        self.setState({ showDeleteAccountClassModal: true, deleteClassId: value });
     }
 
     componentDidMount = () => {
@@ -88,7 +58,6 @@ class AccountClass extends Component {
 
     _getAllAccountClasses = () => {
         const { token } = this.props;
-        const { } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
@@ -125,8 +94,40 @@ class AccountClass extends Component {
         this.setState({ showEditAccountClassModal: false });
     }
 
-    _changeRow = (emp) => {
-        this.props.history.push('/dashboard/employee/' + emp.id)
+    _closeDeleteClassModal = () => {
+        this.setState({ showDeleteAccountClassModal: false });
+    }
+
+    _deleteAccountClass = () => {
+        const { token } = this.props;
+        const { deleteClassId } = this.state;
+        let _this = this;
+
+        this.setState({ loader: true })
+        ApiUtils.deleteAccountClass(deleteClassId, token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    if (res.status == 200) {
+                        _this.setState({
+                            deleteClassId: '', showDeleteAccountClassModal: false, errMessage: res.message, errMsg: true
+                        }, () => {
+                            _this._getAllAccountClasses();
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    }
+                } else {
+                    _this.setState({ deleteClassId: '', showDeleteAccountClassModal: false });
+                }
+                this.setState({ loader: false })
+            }).catch(() => {
+                _this.setState({ deleteClassId: '', showDeleteCoinModal: false, loader: false });
+            });
     }
 
     render() {
@@ -146,17 +147,19 @@ class AccountClass extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAccClassModal}>Add</Button>
-                                    <AddAccountClassModal
-                                        showAddClassModal={showAddClassModal}
-                                        closeAddModal={this._closeAddClassModal}
-                                        getAllAccountClass={this._getAllAccountClasses.bind(this, 0)}
-                                    />
-                                    <EditAccountClassModal
-                                        fields={accountClassDetails}
-                                        showEditAccountClassModal={showEditAccountClassModal}
-                                        closeEditClassModal={this._closeEditClassModal}
-                                        getAllAccountClass={this._getAllAccountClasses.bind(this, 1)}
-                                    />
+                                    {showAddClassModal &&
+                                        <AddAccountClassModal
+                                            showAddClassModal={showAddClassModal}
+                                            closeAddModal={this._closeAddClassModal}
+                                            getAllAccountClass={this._getAllAccountClasses.bind(this, 0)}
+                                        />}
+                                    {showEditAccountClassModal &&
+                                        <EditAccountClassModal
+                                            fields={accountClassDetails}
+                                            showEditAccountClassModal={showEditAccountClassModal}
+                                            closeEditClassModal={this._closeEditClassModal}
+                                            getAllAccountClass={this._getAllAccountClasses.bind(this, 1)}
+                                        />}
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div>
@@ -168,6 +171,20 @@ class AccountClass extends Component {
                                         className="isoCustomizedTable"
                                         onChange={this._handleEmployeeChange}
                                     />
+                                    {
+                                        showDeleteAccountClassModal &&
+                                        <Modal
+                                            title="Delete Account Class"
+                                            visible={showDeleteAccountClassModal}
+                                            onCancel={this._closeDeleteClassModal}
+                                            footer={[
+                                                <Button onClick={this._closeDeleteClassModal}>No</Button>,
+                                                <Button onClick={this._deleteAccountClass}>Yes</Button>,
+                                            ]}
+                                        >
+                                            Are you sure you want to delete this class ?
+                                    </Modal>
+                                    }
                                 </div>
                             </TabPane>
                         ))}
