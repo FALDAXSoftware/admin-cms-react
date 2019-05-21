@@ -178,12 +178,12 @@ class PersonalDetails extends Component {
                                 </Col>
                             </Row>
                         }
-                        {userDetails.uuid &&
+                        {userDetails.UUID &&
                             <Row>
                                 <Col>
                                     <DateOfBirth>
                                         <i class="fas fa-id-card"></i>
-                                        {userDetails.uuid}
+                                        {userDetails.UUID}
                                     </DateOfBirth>
                                 </Col>
                             </Row>

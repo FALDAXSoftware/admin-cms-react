@@ -374,7 +374,7 @@ class AddUser extends Component {
                                 onChange={this._changeAccountClass.bind(this, 'acc_class')}
                             >
                                 {allAccountClasses && allAccountClasses.map((account) => <Option value={account.id}>{account.class_name}</Option>)}
-                            </Select>
+                            </Select><br />
                             {showClassError && <span style={{ "color": "red" }}>
                                 {'The account class field is required.'}
                             </span>}
