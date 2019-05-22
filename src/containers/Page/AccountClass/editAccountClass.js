@@ -71,6 +71,7 @@ class EditAccountClassModal extends Component {
             this.setState({ loader: true });
 
             let formData = {
+                id: fields['value'],
                 class_name: fields['class_name']
             }
 

@@ -8,6 +8,7 @@ import authAction from '../../../redux/auth/actions';
 import CountryFields from './countryFields';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import PasswordGenerator from './passwordGenerator';
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -228,6 +229,10 @@ class AddUser extends Component {
         this.setState({ selectedGender: val });
     }
 
+    _disabledDate = (current) => {
+        return current && current > moment().endOf('day');
+    }
+
     render() {
         const { loader, fields, errType, errMsg, showTierError, allCoins, showClassError,
             showDOBErr, isKYC, selectedGender, allAccountClasses } = this.state;
@@ -305,7 +310,7 @@ class AddUser extends Component {
                             <span>Date of Birth:</span>
                         </Col>
                         <Col>
-                            <DatePicker onChange={this._changeDate} /><br />
+                            <DatePicker disabledDate={this._disabledDate} onChange={this._changeDate} /><br />
                             {showDOBErr && <span style={{ "color": "red" }}>
                                 {'The date of birth field is required.'}
                             </span>}
@@ -399,6 +404,8 @@ class AddUser extends Component {
                             <CheckboxGroup options={allCoins} value={this.state.checkedList} onChange={this.onChange} />
                         </Col>
                     </Row>
+                    <br /><br />
+                    <PasswordGenerator />
                     <Row>
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Add</Button>

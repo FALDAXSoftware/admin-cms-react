@@ -138,9 +138,11 @@ class PersonalDetails extends Component {
                 {userDetails != null &&
                     <ParentDiv className="parent-div">
                         <Row type="flex" justify="end">
-                            <Col>
+                            <Col span={3}>
                                 <StatusSwitch checked={userDetails.is_active} checkedChildren="Active" unCheckedChildren="Inactive" size="large" onChange={this._userStatus.bind(this, 'is_active')} /><br />
-                                <StatusSwitch style={{ marginTop: '15px' }} checked={userDetails.is_verified} checkedChildren="Verified" unCheckedChildren="Non-verified" size="large" onChange={this._userStatus.bind(this, 'is_verified')} />
+                            </Col>
+                            <Col span={3}>
+                                <StatusSwitch style={{ width: '120px' }} checked={userDetails.is_verified} checkedChildren="Verified" unCheckedChildren="Non-verified" size="large" onChange={this._userStatus.bind(this, 'is_verified')} />
                             </Col>
                         </Row>
                         <Row>
@@ -158,6 +160,16 @@ class PersonalDetails extends Component {
                                 <UserEmail>{userDetails.email ? userDetails.email : ''}</UserEmail>
                             </Col>
                         </Row>
+                        {userDetails.UUID &&
+                            <Row>
+                                <Col>
+                                    <DateOfBirth>
+                                        <i class="fas fa-hashtag"></i>
+                                        {userDetails.UUID}
+                                    </DateOfBirth>
+                                </Col>
+                            </Row>
+                        }
                         <Row>
                             <Col>
                                 <Address>
@@ -174,16 +186,6 @@ class PersonalDetails extends Component {
                                     <DateOfBirth>
                                         <i class="fas fa-calendar-day"></i>
                                         {userDetails.dob}
-                                    </DateOfBirth>
-                                </Col>
-                            </Row>
-                        }
-                        {userDetails.UUID &&
-                            <Row>
-                                <Col>
-                                    <DateOfBirth>
-                                        <i class="fas fa-id-card"></i>
-                                        {userDetails.UUID}
                                     </DateOfBirth>
                                 </Col>
                             </Row>
