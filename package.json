@@ -18,6 +18,7 @@
     "firebase": "^4.8.1",
     "fixed-data-table-2": "^0.8.8",
     "frappe-charts": "^0.0.8",
+    "generate-password": "^1.4.1",
     "globalize": "^1.2.3",
     "history": "^4.6.3",
     "immutable": "^3.8.1",
