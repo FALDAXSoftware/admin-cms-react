@@ -4,7 +4,7 @@ import DeleteCell from './deleteCell';
 import EditableCell from './editableCell';
 import FilterDropdown from './filterDropdown';
 import { Users } from '../../containers/Page/Users/users';
-import { Coins } from '../../containers/Page/Coins/coins';
+import { Assets } from '../../containers/Page/Assets/assets';
 import { Countries } from '../../containers/Page/Country/countries';
 import { StateList } from '../../containers/Page/Country/StateList';
 import { Roles } from '../../containers/Page/Roles/roles';
@@ -40,19 +40,19 @@ const userStatus = (value, profile_pic, first_name, last_name, email, city_town,
 }
 
 const viewCoin = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => {
-    Coins.view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
+    Assets.view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
 }
 
 const editCoin = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => {
-    Coins.edit(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
+    Assets.edit(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
 }
 
 const coinstatus = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => {
-    Coins.changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
+    Assets.changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
 }
 
 const deleteCoin = (value) => {
-    Coins.deleteCoin(value);
+    Assets.deleteCoin(value);
 }
 
 const countryStatus = (value, name, legality, color, stateCount, is_active) => {
@@ -107,8 +107,8 @@ const editPair = (value, name, maker_fee, taker_fee, created_at, is_active) => {
     Pairs.editPair(value, name, maker_fee, taker_fee, created_at, is_active);
 }
 
-const editLimit = (value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => {
-    LimitManagement.editLimit(value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat);
+const editLimit = (value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => {
+    LimitManagement.editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat);
 }
 
 const editJob = (value, position, location, short_desc, job_desc, category_id, is_active) => {
@@ -202,7 +202,7 @@ const EmployeeSwitchCell = (value, first_name, last_name, email, phone_number, a
 const EmployeeActionCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active)} /></Tooltip></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;
-const LimitActionCell = (value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, user, monthly_deposit_crypto, monthly_deposit_fiat, monthly_withdraw_crypto, monthly_withdraw_fiat, daily_deposit_crypto, daily_deposit_fiat, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat)} /></Tooltip></div>;
+const LimitActionCell = (value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat)} /></Tooltip></div>;
 const TagsCell = (value) => <Tooltip title={value}><p>{value.slice(0, 10) + (value.length > 10 ? "..." : "")}</p></Tooltip>
 const JobActionCell = (value, position, location, short_desc, job_desc, category_id, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteJob(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editJob(value, position, location, short_desc, job_desc, category_id, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJob(value, position, location, short_desc, job_desc, category_id, is_active)} /></Tooltip></div>;
 const JobSwitchCell = (value, position, location, short_desc, job_desc, category_id, is_active) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) }} />

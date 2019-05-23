@@ -11,7 +11,7 @@ const routes = [
     },
     {
         path: "assets",
-        component: asyncComponent(() => import("../Page/Coins/coins")),
+        component: asyncComponent(() => import("../Page/Assets/assets")),
         module: "assets"
     },
     {
@@ -99,6 +99,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/AccountClass/accountClass")),
         module: "account_class"
     },
+    // {
+    //     path: "edit-asset",
+    //     component: asyncComponent(() => import("../Page/Assets/editAsset")),
+    //     module: "edit_asset"
+    // },
 ];
 
 const mandatoryRoutes = [
@@ -157,6 +162,10 @@ const mandatoryRoutes = [
     {
         path: "referral/:id",
         component: asyncComponent(() => import("../Page/Referral/referredAmount"))
+    },
+    {
+        path: "assets/edit-asset/:id",
+        component: asyncComponent(() => import("../Page/Assets/editAsset"))
     },
 ]
 

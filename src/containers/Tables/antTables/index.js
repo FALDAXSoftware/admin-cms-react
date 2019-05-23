@@ -4,7 +4,7 @@ import LayoutContentWrapper from '../../../components/utility/layoutWrapper.js';
 import TableDemoStyle from './demo.style';
 import fakeData from '../fakeData';
 import { tableinfos } from './usersConfig';
-import { coinTableInfos } from './coinsConfig';
+import { assetTableInfos } from './coinsConfig';
 import { userReferralInfos } from './userReferralConfig';
 import { countryTableInfos } from './countriesConfig';
 import { rolesTableInfos } from './rolesConfig';
@@ -74,7 +74,7 @@ export default class AntTable extends Component {
 }
 
 export {
-  TableViews, tableinfos, dataList, coinTableInfos, referralInfos,
+  TableViews, tableinfos, dataList, assetTableInfos, referralInfos,
   countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
   historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,

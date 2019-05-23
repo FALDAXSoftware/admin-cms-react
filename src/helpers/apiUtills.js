@@ -1481,6 +1481,19 @@ const ApiUtils = {
         }
     },
 
+    getAssetDetails: function (token, coin_id) {
+        try {
+            return fetch(API_URL + "/admin/coin/get-coin-details?id=" + coin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 
 };
 
