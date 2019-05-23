@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs } from 'antd';
+import { Tabs, notification } from 'antd';
 import { limitTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -27,13 +27,9 @@ class LimitManagement extends Component {
         LimitManagement.editLimit = LimitManagement.editLimit.bind(this);
     }
 
-    static editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto,
-        monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto,
-        dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat) {
+    static editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) {
         let limitDetails = {
-            value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto,
-            monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto,
-            dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat
+            value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat
         }
         self.setState({ limitDetails, showEditLimitModal: true });
     }
@@ -71,6 +67,14 @@ class LimitManagement extends Component {
     _closeEditLimitModal = () => {
         this.setState({ showEditLimitModal: false })
     }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
 
     render() {
         const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal, loader } = this.state;

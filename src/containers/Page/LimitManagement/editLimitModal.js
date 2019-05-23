@@ -52,16 +52,10 @@ class EditLimitModal extends Component {
     _resetForm = () => {
         const { fields } = this.state;
 
-        fields['monthlyDepositCrypto'] = '';
-        fields['monthlyDepositFiat'] = '';
-        fields['monthlyWithdrawCrypto'] = '';
-        fields['monthlyWithdrawFiat'] = '';
-        fields['dailyDepositCrypto'] = '';
-        fields['dailyDepositFiat'] = '';
-        fields['dailyWithdrawCrypto'] = '';
-        fields['dailyWithdrawFiat'] = '';
-        fields['minWithdrawlCrypto'] = '';
-        fields['minWithdrawlFiat'] = '';
+        fields['daily_withdraw_crypto'] = '';
+        fields['daily_withdraw_fiat'] = '';
+        fields['min_withdrawl_crypto'] = '';
+        fields['min_withdrawl_fiat'] = '';
         this.setState({ fields });
     }
 
@@ -76,20 +70,12 @@ class EditLimitModal extends Component {
 
         if (this.validator.allValid()) {
             this.setState({ loader: true });
-
             let formData = {
                 id: fields["value"],
-                user: fields["user"],
-                monthlyDepositCrypto: fields["monthlyDepositCrypto"],
-                monthlyDepositFiat: fields["monthlyDepositFiat"],
-                monthlyWithdrawCrypto: fields["monthlyWithdrawCrypto"],
-                monthlyWithdrawFiat: fields["monthlyWithdrawFiat"],
-                dailyDepositCrypto: fields["dailyDepositCrypto"],
-                dailyDepositFiat: fields["dailyDepositFiat"],
-                dailyWithdrawCrypto: fields["dailyWithdrawCrypto"],
-                dailyWithdrawFiat: fields["dailyWithdrawFiat"],
-                minWithdrawlCrypto: fields["minWithdrawlCrypto"],
-                minWithdrawlFiat: fields["minWithdrawlFiat"]
+                daily_withdraw_crypto: fields["daily_withdraw_crypto"],
+                daily_withdraw_fiat: fields["daily_withdraw_fiat"],
+                min_withdrawl_crypto: fields["min_withdrawl_crypto"],
+                min_withdrawl_fiat: fields["min_withdrawl_fiat"],
             };
 
             ApiUtils.updateLimit(token, formData)
@@ -137,98 +123,15 @@ class EditLimitModal extends Component {
                     okText="Update"
                 >
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>User:</span>
-                        <Input placeholder="User" value={fields["user"]} disabled />
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Monthly Deposit Crypto:</span>
-                        <Input
-                            placeholder="Monthly Deposit Crypto"
-                            onChange={this._handleChange.bind(this, "monthlyDepositCrypto")}
-                            value={fields["monthlyDepositCrypto"]}
-                            addonAfter={'$'}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('Monthly Deposit Crypto', fields["monthlyDepositCrypto"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Monthly Deposit Fiat:</span>
-                        <Input
-                            placeholder="Monthly Deposit Fiat"
-                            onChange={this._handleChange.bind(this, "monthlyDepositFiat")}
-                            value={fields["monthlyDepositFiat"]}
-                            addonAfter={'$'}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('Monthly Deposit Fiat', fields["monthlyDepositFiat"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Monthly Withdraw Crypto:</span>
-                        <Input
-                            placeholder="Monthly Withdraw Crypto"
-                            onChange={this._handleChange.bind(this, "monthlyWithdrawCrypto")}
-                            value={fields["monthlyWithdrawCrypto"]}
-                            addonAfter={'$'}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('Monthly Withdraw Crypto', fields["monthlyWithdrawCrypto"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Monthly Withdraw Fiat:</span>
-                        <Input
-                            placeholder="Monthly Withdraw Fiat"
-                            onChange={this._handleChange.bind(this, "monthlyWithdrawFiat")}
-                            value={fields["monthlyWithdrawFiat"]}
-                            addonAfter={'$'}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('Monthly Withdraw Fiat', fields["monthlyWithdrawFiat"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Daily Deposit Crypto:</span>
-                        <Input
-                            placeholder="Daily Deposit Crypto"
-                            onChange={this._handleChange.bind(this, "dailyDepositCrypto")}
-                            value={fields["dailyDepositCrypto"]}
-                            addonAfter={'$'}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('Daily Deposit Crypto', fields["dailyDepositCrypto"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
-                        <span>Daily Deposit Fiat:</span>
-                        <Input
-                            placeholder="Daily Deposit Fiat"
-                            onChange={this._handleChange.bind(this, "dailyDepositFiat")}
-                            value={fields["dailyDepositFiat"]}
-                            addonAfter={'$'}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('Daily Deposit Fiat', fields["dailyDepositFiat"], 'required|numeric', 'text-danger')}
-                        </span>
-                    </div>
-
-                    <div style={{ "marginBottom": "15px" }}>
                         <span>Daily Withdraw Crypto:</span>
                         <Input
                             placeholder="Daily Withdraw Crypto"
-                            onChange={this._handleChange.bind(this, "dailyWithdrawCrypto")}
-                            value={fields["dailyWithdrawCrypto"]}
+                            onChange={this._handleChange.bind(this, "daily_withdraw_crypto")}
+                            value={fields["daily_withdraw_crypto"]}
                             addonAfter={'$'}
                         />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('Daily Withdraw Crypto', fields["dailyWithdrawCrypto"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('Daily Withdraw Crypto', fields["daily_withdraw_crypto"], 'required|numeric', 'text-danger')}
                         </span>
                     </div>
 
@@ -236,40 +139,40 @@ class EditLimitModal extends Component {
                         <span>Daily Withdraw Fiat:</span>
                         <Input
                             placeholder="Daily Withdraw Fiat"
-                            onChange={this._handleChange.bind(this, "dailyWithdrawFiat")}
-                            value={fields["dailyWithdrawFiat"]}
+                            onChange={this._handleChange.bind(this, "daily_withdraw_fiat")}
+                            value={fields["daily_withdraw_fiat"]}
                             addonAfter={'$'}
                         />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('Daily Withdraw Fiat', fields["dailyWithdrawFiat"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('Daily Withdraw Fiat', fields["daily_withdraw_fiat"], 'required|numeric', 'text-danger')}
                         </span>
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Min Withdrawl Crypto:</span>
+                        <span>Minimum Withdraw Crypto:</span>
                         <Input
-                            placeholder="Min Withdrawl Crypto"
-                            onChange={this._handleChange.bind(this, "minWithdrawlCrypto")}
-                            value={fields["minWithdrawlCrypto"]}
+                            placeholder="Minimum Withdraw Crypto"
+                            onChange={this._handleChange.bind(this, "min_withdrawl_crypto")}
+                            value={fields["min_withdrawl_crypto"]}
                             addonAfter={'$'}
                         />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('Min Withdrawl Crypto', fields["minWithdrawlCrypto"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('Minimum Withdraw Crypto', fields["min_withdrawl_crypto"], 'required|numeric', 'text-danger')}
                         </span>
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
-                        <span>Min Withdrawl Fiat:</span>
-                        <Input placeholder="Min Withdrawl Fiat"
-                            onChange={this._handleChange.bind(this, "minWithdrawlFiat")}
-                            value={fields["minWithdrawlFiat"]}
+                        <span>Minimum Withdraw Fiat:</span>
+                        <Input
+                            placeholder="Minimum Withdraw Fiat"
+                            onChange={this._handleChange.bind(this, "min_withdrawl_fiat")}
+                            value={fields["min_withdrawl_fiat"]}
                             addonAfter={'$'}
                         />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('Min Withdrawl Fiat', fields["minWithdrawlFiat"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('Minimum Withdraw Fiat', fields["min_withdrawl_fiat"], 'required|numeric', 'text-danger')}
                         </span>
                     </div>
-
                     {loader && <FaldaxLoader />}
                 </Modal>
             </div>

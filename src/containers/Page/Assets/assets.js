@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Input, Tabs, Pagination, Button, Modal, notification } from 'antd';
-import { coinTableInfos } from "../../Tables/antTables";
+import { assetTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewCoinModal from './viewCoinModal';
 import AddCoinModal from './addCoinModal';
-import EditCoinModal from './editCoinModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
@@ -17,14 +16,13 @@ const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 var self;
 
-class Coins extends Component {
+class Assets extends Component {
     constructor(props) {
         super(props);
         this.state = {
             allCoins: [],
             allCoinCount: 0,
             showAddCoinModal: false,
-            showEditCoinModal: false,
             showViewCoinModal: false,
             showDeleteCoinModal: false,
             searchCoin: '',
@@ -38,24 +36,21 @@ class Coins extends Component {
             loader: false
         }
         self = this;
-        Coins.view = Coins.view.bind(this);
-        Coins.edit = Coins.edit.bind(this);
-        Coins.deleteCoin = Coins.deleteCoin.bind(this);
-        Coins.changeStatus = Coins.changeStatus.bind(this);
+        Assets.view = Assets.view.bind(this);
+        Assets.edit = Assets.edit.bind(this);
+        Assets.deleteCoin = Assets.deleteCoin.bind(this);
+        Assets.changeStatus = Assets.changeStatus.bind(this);
     }
 
     static view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
         let coinDetails = {
             value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon
         }
-        self.setState({ coinDetails, showViewCoinModal: true, page: 1 });
+        self.setState({ coinDetails, showViewCoinModal: true });
     }
 
     static edit(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
-        let coinDetails = {
-            value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon
-        }
-        self.setState({ coinDetails, showEditCoinModal: true, page: 1 });
+        self.props.history.push('/dashboard/assets/edit-asset/' + value);
     }
 
     static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
@@ -156,10 +151,6 @@ class Coins extends Component {
         this.setState({ showViewCoinModal: false });
     }
 
-    _closeEditCoinModal = () => {
-        this.setState({ showEditCoinModal: false });
-    }
-
     _closeAddCoinModal = () => {
         this.setState({ showAddCoinModal: false });
     }
@@ -208,7 +199,7 @@ class Coins extends Component {
 
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
-            showViewCoinModal, showEditCoinModal, showDeleteCoinModal, errMsg, page
+            showViewCoinModal, showDeleteCoinModal, errMsg, page
         } = this.state;
 
         if (errMsg) {
@@ -219,7 +210,7 @@ class Coins extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {coinTableInfos.map(tableInfo => (
+                        {assetTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Asset</Button>
@@ -241,12 +232,6 @@ class Coins extends Component {
                                         coinDetails={coinDetails}
                                         showViewCoinModal={showViewCoinModal}
                                         closeViewCoinModal={this._closeViewCoinModal}
-                                    />
-                                    <EditCoinModal
-                                        fields={coinDetails}
-                                        showEditCoinModal={showEditCoinModal}
-                                        closeEditCoinModal={this._closeEditCoinModal}
-                                        getAllCoins={this._getAllCoins.bind(this, 1)}
                                     />
                                     {
                                         showDeleteCoinModal &&
@@ -292,6 +277,6 @@ class Coins extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(Coins);
+    }), { logout })(Assets);
 
-export { Coins, coinTableInfos };
+export { Assets, assetTableInfos };

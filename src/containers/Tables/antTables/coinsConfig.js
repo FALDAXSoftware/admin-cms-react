@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, DateCell, CoinActionCell, SwitchCell, ContentCell
+    TextCell, DateCell, CoinActionCell, SwitchCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, name = null, code = null, minlimit = null, maxlimit = null,
@@ -22,8 +22,6 @@ const renderCell = (object, type, key, name = null, code = null, minlimit = null
     switch (type) {
         case 'DateCell':
             return DateCell(value);
-        case 'ContentCell':
-            return ContentCell(value);
         case 'SwitchCell':
             return SwitchCell(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
         case 'CoinActionCell':
@@ -53,20 +51,20 @@ const columns = [
         key: 'min_limit',
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'LinkCell', 'min_limit')
+        render: object => renderCell(object, 'TextCell', 'min_limit')
     },
     {
         title: <IntlMessages id="coinTable.title.maxlimit" />,
         key: 'max_limit',
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'LinkCell', 'max_limit')
+        render: object => renderCell(object, 'TextCell', 'max_limit')
     },
     {
         title: <IntlMessages id="coinTable.title.walletAddress" />,
         key: 'wallet_address',
         width: 200,
-        render: object => renderCell(object, 'LinkCell', 'wallet_address')
+        render: object => renderCell(object, 'TextCell', 'wallet_address')
     },
     {
         title: <IntlMessages id="coinTable.title.active" />,
@@ -85,7 +83,7 @@ const columns = [
     }
 ];
 
-const coinTableInfos = [
+const assetTableInfos = [
     {
         title: 'Assets',
         value: 'CoinsTable',
@@ -93,4 +91,4 @@ const coinTableInfos = [
     }
 ];
 
-export { columns, coinTableInfos };
+export { columns, assetTableInfos };
