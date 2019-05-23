@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, KYCActionCell, KYCStatusCell
+    TextCell, KYCActionCell, KYCStatusCell, TierCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailId = null,
@@ -35,6 +35,8 @@ const renderCell = (object, type, key, fname = null, lname = null, emailId = nul
             return KYCActionCell(value, first_name, last_name, email, direct_response,
                 kycDoc_details, front_doc, back_doc, ssn, webhook_response, address,
                 country, city, zip, dob, id_type);
+        case 'TierCell':
+            return TierCell(value);
         default:
             return TextCell(value);
     }
@@ -69,7 +71,7 @@ const columns = [{
     key: 'account_tier',
     width: 100,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'account_tier')
+    render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {
     title: <IntlMessages id="kycTable.title.direct_response" />,
     key: 'direct_response',
