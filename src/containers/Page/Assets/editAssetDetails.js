@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Input, notification, Select } from 'antd';
+import { Input, notification, Select, Form, Col, Row, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import { BUCKET_URL } from '../../../helpers/globals';
 import FaldaxLoader from '../faldaxLoader';
@@ -140,49 +140,62 @@ class EditAssetDetails extends Component {
         }
 
         return (
-            <div>
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Asset Icon:</span><br />
-                    <img style={{ width: '150px', height: 'auto' }}
-                        src={BUCKET_URL + fields['coin_icon']} />
-                </div>
-
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Asset Name:</span>
-                    <Input placeholder="Asset Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('asset name', fields["coin_name"], 'required|max:30', 'text-danger')}
-                    </span>
-                </div>
-
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Minimum Limit:</span>
-                    <Input placeholder="Minimum Limit" onChange={this._handleChange.bind(this, "min_limit")} value={fields["min_limit"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('minimum limit', fields["min_limit"], 'required|numeric', 'text-danger')}
-                    </span>
-                </div>
-
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Maximum Limit:</span>
-                    <Input placeholder="Maximum Limit" onChange={this._handleChange.bind(this, "max_limit")} value={fields["max_limit"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('maximum limit', fields["max_limit"], 'required|numeric', 'text-danger')}
-                    </span>
-                </div>
-
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Is ERC20 Token? :</span>
-                    <Select
-                        style={{ width: 125, "marginLeft": "15px" }}
-                        placeholder="Select a type"
-                        onChange={this._changeFilter}
-                        value={selectedToken}
-                    >
-                        <Option value={true}>Yes</Option>
-                        <Option value={false}>No</Option>
-                    </Select>
-                </div>
+            <div className="isoLayoutContent">
+                <Form onSubmit={this._editCoin}>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Asset Icon:</span><br />
+                            <img style={{ width: '150px', height: 'auto' }}
+                                src={BUCKET_URL + fields['coin_icon']} />
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Asset Name:</span>
+                            <Input placeholder="Asset Name" onChange={this._handleChange.bind(this, "coin_name")} value={fields["coin_name"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('asset name', fields["coin_name"], 'required|max:30', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Minimum Limit:</span>
+                            <Input placeholder="Minimum Limit" onChange={this._handleChange.bind(this, "min_limit")} value={fields["min_limit"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('minimum limit', fields["min_limit"], 'required|numeric', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Maximum Limit:</span>
+                            <Input placeholder="Maximum Limit" onChange={this._handleChange.bind(this, "max_limit")} value={fields["max_limit"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('maximum limit', fields["max_limit"], 'required|numeric', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Is ERC20 Token? :</span>
+                            <Select
+                                style={{ width: 125, "marginLeft": "15px" }}
+                                placeholder="Select a type"
+                                onChange={this._changeFilter}
+                                value={selectedToken}
+                            >
+                                <Option value={true}>Yes</Option>
+                                <Option value={false}>No</Option>
+                            </Select>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
+                        </Col>
+                    </Row>
+                </Form>
                 {loader && <FaldaxLoader />}
             </div >
         );

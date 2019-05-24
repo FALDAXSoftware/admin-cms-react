@@ -548,6 +548,8 @@ const ApiUtils = {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
         } else if (searchPair && selectedAsset) {
             url += "&data=" + searchPair + "&filter_val=" + selectedAsset;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (selectedAsset) {
             url += "&filter_val=" + selectedAsset;
         } else {
@@ -1489,6 +1491,35 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAssetLimits: function (token, coin_id) {
+        try {
+            return fetch(API_URL + "/admin/all-limits?coin_id" + coin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateAssetLimits: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-limit", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
             });
         } catch (error) {
             console.error(error);
