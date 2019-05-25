@@ -122,6 +122,7 @@ class AddUser extends Component {
     }
 
     _addUser = (e) => {
+        console.log(this.props);
         e.preventDefault();
         const { token } = this.props;
         let {
@@ -404,8 +405,8 @@ class AddUser extends Component {
                             <CheckboxGroup options={allCoins} value={this.state.checkedList} onChange={this.onChange} />
                         </Col>
                     </Row>
-                    {/* <br /><br />
-                    <PasswordGenerator /> */}
+                    <br /><br />
+                    <PasswordGenerator />
                     <Row>
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Add</Button>
