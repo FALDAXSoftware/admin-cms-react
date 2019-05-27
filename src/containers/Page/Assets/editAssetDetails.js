@@ -83,15 +83,16 @@ class EditAssetDetails extends Component {
         this.setState({ fields, selectedToken: false });
     }
 
-    _editCoin = () => {
-        const { token } = this.props;
+    _editCoin = (e) => {
+        e.preventDefault();
+        const { token, coin_id } = this.props;
         const { fields, selectedToken } = this.state;
 
         if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
 
             let formData = new FormData();
-            formData.append('coin_id', fields['value']);
+            formData.append('coin_id', coin_id);
             formData.append('coin_name', fields['coin_name']);
             formData.append('min_limit', fields['min_limit']);
             formData.append('max_limit', fields['max_limit']);
@@ -104,6 +105,8 @@ class EditAssetDetails extends Component {
                         this.setState({
                             errMsg: true, errMessage: res.message, loader: false,
                             errType: 'Success', isDisabled: false
+                        }, () => {
+                            this._getAssetDetails();
                         });
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

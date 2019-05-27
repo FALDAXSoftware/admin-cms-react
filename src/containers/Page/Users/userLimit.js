@@ -53,14 +53,13 @@ class EditableCell extends React.Component {
     }
 }
 
-class EditableTable extends React.Component {
+class EditableUserLimitTable extends React.Component {
     constructor(props) {
         super(props);
         this.columns = [
             {
-                title: 'Daily Withdraw Crypto',
-                dataIndex: 'daily_withdraw_crypto',
-                editable: true,
+                title: 'Asset',
+                dataIndex: 'coin',
             },
             {
                 title: 'Daily Withdraw Fiat',
@@ -286,9 +285,9 @@ class EditableTable extends React.Component {
     }
 }
 
-const EditAssetLimit = Form.create()(EditableTable);
+const UserLimit = Form.create()(EditableUserLimitTable);
 
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(EditAssetLimit);
+    }), { logout })(UserLimit);

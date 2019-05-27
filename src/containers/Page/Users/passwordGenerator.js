@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import generator from 'generate-password';
-import { Input, Checkbox, Button } from 'antd';
+import { Input, Checkbox, Button, Card } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 
 class PasswordGenerator extends Component {
@@ -9,55 +9,63 @@ class PasswordGenerator extends Component {
         this.state = {
             password: '',
             fields: {},
-            isNumbers: false,
-            isSymbols: false,
-            isUppercase: false
+            numbers: false,
+            symbols: false,
+            uppercase: false
         }
         this.validator = new SimpleReactValidator();
     }
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
-        if (e.target.value.trim() == "") {
-            fields[field] = "";
-        } else {
-            fields[field] = e.target.value;
-        }
+        fields[field] = e.target.value;
         this.setState({ fields });
     }
 
     _changeCheckbox = (field, val) => {
-        console.log('>>>>>>>>field, val', field, val)
+        this.setState({ [field]: val.target.checked })
     }
 
     _generatePassword = () => {
-        var password = generator.generate({
-            length: 20,
-            numbers: true,
-            symbols: true,
-            uppercase: true
-        });
-        this.setState({ password })
+        const { numbers, symbols, uppercase, fields } = this.state;
+        console.log('fields', fields)
+
+        if (this.validator.allValid()) {
+            var password = generator.generate({
+                length: fields['length'],
+                numbers: numbers,
+                symbols: symbols,
+                uppercase: uppercase
+            });
+            this.setState({ password }, () => {
+                this.props.getPassword(password);
+            })
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
     }
 
     render() {
-        const { password, fields, isNumbers, isSymbols, isUppercase } = this.state;
+        const { password, fields, numbers, symbols, uppercase } = this.state;
 
         return (
             <React.Fragment>
-                <span>Generated Password is {password}</span>
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Length:</span>
-                    <Input placeholder="Length" onChange={this._handleChange.bind(this, "length")} value={fields["length"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('length', fields["length"], 'required|numeric', 'text-danger')}
-                    </span>
-                </div>
-                <Checkbox checked={isNumbers} onChange={this._changeCheckbox.bind(this, 'numbers')} /> <span>Numbers</span><br />
-                <Checkbox checked={isSymbols} onChange={this._changeCheckbox.bind(this, 'symbols')} /> <span>Symbols</span><br />
-                <Checkbox checked={isUppercase} onChange={this._changeCheckbox.bind(this, 'uppercase')} /> <span>Uppercase</span><br />
+                <Card title="Password Generator" style={{ width: 300 }}>
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Length:</span>
+                        <Input placeholder="Length" onChange={this._handleChange.bind(this, "length")} value={fields["length"]} />
+                        <span style={{ "color": "red" }}>
+                            {this.validator.message('length', fields["length"], 'required|numeric', 'text-danger')}
+                        </span>
+                    </div>
+                    <Checkbox checked={numbers} onChange={this._changeCheckbox.bind(this, 'numbers')} /> <span>Numbers</span><br />
+                    <Checkbox checked={symbols} onChange={this._changeCheckbox.bind(this, 'symbols')} /> <span>Symbols</span><br />
+                    <Checkbox checked={uppercase} onChange={this._changeCheckbox.bind(this, 'uppercase')} /> <span>Uppercase</span><br />
 
-                <Button type="primary" className="user-btn" style={{ marginLeft: "0px" }} onClick={this._generatePassword} >Generate</Button>
+                    <Button type="primary" className="user-btn" style={{ marginLeft: "0px" }} onClick={this._generatePassword} >Generate</Button><br />
+                    {password.length > 0 && <span>Generated Password is <b>{password}</b></span>}
+                </Card>
             </React.Fragment>
         )
     }

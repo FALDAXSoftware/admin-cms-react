@@ -1499,7 +1499,7 @@ const ApiUtils = {
 
     getAssetLimits: function (token, coin_id) {
         try {
-            return fetch(API_URL + "/admin/all-limits?coin_id" + coin_id, {
+            return fetch(API_URL + "/admin/all-limits?coin_id=" + coin_id, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,

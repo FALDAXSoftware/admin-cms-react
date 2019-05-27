@@ -32,7 +32,7 @@ class EditAsset extends Component {
                 </div>
                 <Tabs defaultActiveKey="1" size={'large'}>
                     <TabPane tab="Asset Details" key="1"><EditAssetDetails coin_id={coin_id} /></TabPane>
-                    {/* <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane> */}
+                    <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane>
                 </Tabs>
             </div >
         );
