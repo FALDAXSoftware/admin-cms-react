@@ -122,11 +122,10 @@ class AddUser extends Component {
     }
 
     _addUser = (e) => {
-        console.log(this.props);
         e.preventDefault();
         const { token } = this.props;
         let {
-            fields, selectedTier, selectedClass, isKYC, countryCode,
+            fields, selectedTier, selectedClass, isKYC, countryCode, password,
             countrySelected, stateSelected, citySelected, checkedList, dob, selectedGender
         } = this.state;
         let _this = this;
@@ -149,6 +148,7 @@ class AddUser extends Component {
                 generate_wallet_coins: checkedList,
                 kyc_done: isKYC,
                 gender: selectedGender,
+                password,
                 dob
             };
 
@@ -232,6 +232,10 @@ class AddUser extends Component {
 
     _disabledDate = (current) => {
         return current && current > moment().endOf('day');
+    }
+
+    _getPassword = (value) => {
+        this.setState({ password: value });
     }
 
     render() {
@@ -406,7 +410,7 @@ class AddUser extends Component {
                         </Col>
                     </Row>
                     <br /><br />
-                    <PasswordGenerator />
+                    <PasswordGenerator getPassword={this._getPassword.bind(this)} />
                     <Row>
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Add</Button>

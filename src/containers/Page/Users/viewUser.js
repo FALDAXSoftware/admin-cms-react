@@ -12,6 +12,7 @@ import UserWithdrawRequest from './userWithdrawRequest';
 import UserKYCDetails from './userKYC';
 import { Link } from 'react-router-dom';
 import UserTickets from './userTickets';
+import UserLimit from './userLimit';
 
 const { TabPane } = Tabs;
 
@@ -47,6 +48,7 @@ class ViewUser extends Component {
                     <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
                     <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
                     <TabPane tab="Tickets" key="11"><UserTickets user_id={user_id} /></TabPane>
+                    {/* <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane> */}
                 </Tabs>
             </div>
         );
