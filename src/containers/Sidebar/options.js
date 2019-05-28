@@ -107,7 +107,12 @@ const options = [
     leftIcon: "fas fa-newspaper",
     module: "account_class"
   },
+  {
+    key: "email-templates",
+    label: "Email Templates",
+    leftIcon: "fas fa-newspaper",
+    module: "email_templates"
+  },
 ];
-
 
 export default options;

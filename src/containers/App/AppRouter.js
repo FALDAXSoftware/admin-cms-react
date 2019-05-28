@@ -99,6 +99,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/AccountClass/accountClass")),
         module: "account_class"
     },
+    {
+        path: "email-templates",
+        component: asyncComponent(() => import("../Page/EmailTemplates/emailTemplates")),
+        module: "email_templates"
+    },
     // {
     //     path: "edit-asset",
     //     component: asyncComponent(() => import("../Page/Assets/editAsset")),

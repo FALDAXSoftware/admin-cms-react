@@ -64,6 +64,7 @@ class News extends Component {
 
     componentDidMount = () => {
         this._getAllNews();
+        this._getAllNewsSources();
     }
 
     _getAllNews = () => {
@@ -77,6 +78,32 @@ class News extends Component {
             .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({ allNews: res.data, allNewsCount: res.newsCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _getAllNewsSources = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getAllNewsSources(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ allNewsSources: res.data });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -164,11 +191,6 @@ class News extends Component {
         })
     }
 
-    _changeRow = (news) => {
-        console.log('>>>>>>>', news)
-        //this.props.history.push(news.link)
-    }
-
     _handleNewsTableChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllNews();
@@ -177,7 +199,7 @@ class News extends Component {
 
     render() {
         const { allNews, allNewsCount, errType, errMsg, page, loader,
-            searchNews, rangeDate, filterVal } = this.state;
+            searchNews, rangeDate, filterVal, allNewsSources } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -196,18 +218,13 @@ class News extends Component {
                                             style={{ "width": "200px" }}
                                             value={searchNews}
                                         />
-
                                         <Select
                                             style={{ width: 125, "marginLeft": "15px" }}
-                                            placeholder="Select a type"
+                                            placeholder="Select a source"
                                             onChange={this._changeFilter}
                                             value={filterVal}
                                         >
-                                            <Option value={' '}>All</Option>
-                                            <Option value={'bitcoinist'}>Bitcoinist</Option>
-                                            <Option value={'cointelegraph'}>Coin Telegraph</Option>
-                                            {/* <Option value={'ccnpodcast'}>CCN Podcast</Option> */}
-                                            <Option value={'bitcoin'}>Bitcoin</Option>
+                                            {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
                                         </Select>
 
                                         <RangePicker
