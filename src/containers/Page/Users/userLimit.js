@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Divider, notification } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, notification } from 'antd';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
@@ -62,6 +62,11 @@ class EditableUserLimitTable extends React.Component {
                 dataIndex: 'coin',
             },
             {
+                title: 'Daily Withdraw Crypto',
+                dataIndex: 'daily_withdraw_crypto',
+                editable: true,
+            },
+            {
                 title: 'Daily Withdraw Fiat',
                 dataIndex: 'daily_withdraw_fiat',
                 editable: true,
@@ -118,7 +123,7 @@ class EditableUserLimitTable extends React.Component {
             },
         ];
         this.state = {
-            allAssetLimit: [],
+            userAllLimits: [],
             editingKey: ''
         };
     }
@@ -138,18 +143,16 @@ class EditableUserLimitTable extends React.Component {
     };
 
     save = (form, key) => {
-        const { token, coin_id } = this.props;
+        const { token, user_id } = this.props;
         let _this = this;
         form.validateFields((error, row) => {
-            // if (error) {
-            //     return;
-            // }
-            const newData = [...this.state.allAssetLimit];
+            const newData = [...this.state.userAllLimits];
             const index = newData.findIndex(item => key === item.id);
 
             let formData = {
                 id: newData[index].id,
                 coin_id: newData[index].coin_id,
+                user_id: user_id,
                 daily_withdraw_crypto: parseInt(row.daily_withdraw_crypto),
                 daily_withdraw_fiat: parseInt(row.daily_withdraw_fiat),
                 min_withdrawl_crypto: parseInt(row.min_withdrawl_crypto),
@@ -159,12 +162,12 @@ class EditableUserLimitTable extends React.Component {
             }
 
             _this.setState({ loader: true });
-            ApiUtils.updateAssetLimits(token, formData)
+            ApiUtils.updateUserLimits(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
                     if (res.status == 200) {
                         _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
-                            _this._getAllAssetLimit();
+                            _this._getUserLimit();
                         });
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -181,32 +184,30 @@ class EditableUserLimitTable extends React.Component {
                     });
                 });
 
-
             if (index > -1) {
                 const item = newData[index];
                 newData.splice(index, 1, {
                     ...item,
                     ...row,
                 });
-                this.setState({ allAssetLimit: newData, editingKey: '' });
+                this.setState({ userAllLimits: newData, editingKey: '' });
             } else {
                 newData.push(row);
-                this.setState({ allAssetLimit: newData, editingKey: '' });
+                this.setState({ userAllLimits: newData, editingKey: '' });
             }
         });
     }
 
-    _getAllAssetLimit = () => {
-
-        const { token, coin_id } = this.props;
+    _getUserLimit = () => {
+        const { token, user_id } = this.props;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAssetLimits(token, coin_id)
+        ApiUtils.getUserLimits(token, user_id)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allAssetLimit: res.data });
+                    _this.setState({ userAllLimits: res.data });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -224,7 +225,7 @@ class EditableUserLimitTable extends React.Component {
     }
 
     componentDidMount = () => {
-        this._getAllAssetLimit();
+        this._getUserLimit();
     }
 
     edit(key) {
@@ -232,7 +233,7 @@ class EditableUserLimitTable extends React.Component {
     }
 
     render() {
-        const { allAssetLimit, loader, errMsg, errType } = this.state;
+        const { userAllLimits, loader, errMsg, errType } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -260,25 +261,16 @@ class EditableUserLimitTable extends React.Component {
 
         return (
             <div className="isoLayoutContent">
-                {
-                    allAssetLimit && allAssetLimit.map((asset) => {
-                        return (
-                            <div>
-                                <Divider orientation="left">Tier {asset.tier_step}</Divider>
-                                <EditableContext.Provider value={this.props.form}>
-                                    <Table
-                                        components={components}
-                                        bordered
-                                        dataSource={[{ ...asset }]}
-                                        columns={columns}
-                                        rowClassName="editable-row"
-                                        pagination={false}
-                                    />
-                                </EditableContext.Provider>
-                            </div>
-                        )
-                    })
-                }
+                <EditableContext.Provider value={this.props.form}>
+                    <Table
+                        components={components}
+                        bordered
+                        dataSource={userAllLimits}
+                        columns={columns}
+                        rowClassName="editable-row"
+                        pagination={false}
+                    />
+                </EditableContext.Provider>
                 {loader && <FaldaxLoader />}
             </div>
         );

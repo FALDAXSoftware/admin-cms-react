@@ -1526,6 +1526,63 @@ const ApiUtils = {
         }
     },
 
+    getUserLimits: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/all-user-limits?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateUserLimits: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-user-limit", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllEmailTemplates: function (token) {
+        try {
+            return fetch(API_URL + "/admin/emailTemplate/get", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllNewsSources: function (token) {
+        try {
+            return fetch(API_URL + "/admin/all-new-source", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 export default ApiUtils;

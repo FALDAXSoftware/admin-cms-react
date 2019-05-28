@@ -17,6 +17,7 @@ import { KYC } from '../../containers/Page/KYC/kyc';
 import { Fees } from '../../containers/Page/Fees/fees';
 import { News } from '../../containers/Page/News/news';
 import { AccountClass } from '../../containers/Page/AccountClass/accountClass';
+import { EmailTemplates } from '../../containers/Page/EmailTemplates/emailTemplates';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
 
@@ -163,6 +164,10 @@ const deleteAccountClass = (value, class_name) => {
     AccountClass.deleteAccountClass(value, class_name);
 }
 
+const editTemplate = (value, name, content, note) => {
+    EmailTemplates.editTemplate(value, name, content, note);
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id) => <p>{referred_id !== null ? created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : '' : ''}</p>;
@@ -215,6 +220,7 @@ const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => <div><Tool
 const ReferralCell = (value) => <p>{value !== null ? value : 0}</p>
 const PipelineCell = (text) => <p>{text == 1 ? 'NEW' : text == 2 ? 'Waiting on Customer Feedback' ? text == 3 ? 'Waiting on FALDAX' : 'AClosed' : 'BClosed' : 'CClosed'}</p>;
 const AccountClassActionCell = (value, class_name) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteAccountClass(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editAccountClass(value, class_name)} /></Tooltip></div>;
+const TemplateActionCell = (value, name, content, note) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, content, note)} /></Tooltip></div>;
 
 export {
     IPCell,
@@ -270,5 +276,6 @@ export {
     ReferralCell,
     PipelineCell,
     UserDateCell,
-    AccountClassActionCell
+    AccountClassActionCell,
+    TemplateActionCell
 };
