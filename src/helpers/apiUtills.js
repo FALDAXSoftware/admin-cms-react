@@ -1583,6 +1583,21 @@ const ApiUtils = {
         }
     },
 
+    updateNewsSource: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-news-source", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 export default ApiUtils;

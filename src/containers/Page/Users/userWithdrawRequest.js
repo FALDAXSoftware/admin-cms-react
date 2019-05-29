@@ -145,8 +145,8 @@ class UserWithdrawRequest extends Component {
                                                 value={filterVal}
                                             >
                                                 <Option value={' '}>All</Option>
-                                                <Option value={'TRUE'}>Approve</Option>
-                                                <Option value={'FALSE'}>Dis-Approve</Option>
+                                                <Option value={'true'}>Approve</Option>
+                                                <Option value={'false'}>Dis-Approve</Option>
                                             </Select>
                                         </ColWithPadding>
                                         <ColWithPadding xs={12} sm={3}>

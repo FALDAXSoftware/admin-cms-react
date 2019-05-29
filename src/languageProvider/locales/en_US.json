@@ -374,6 +374,8 @@
   "newsTable.title.link": "URL",
   "newsTable.title.posted_at": "Posted On",
   "newsTable.title.active": "Status",
+  "newsTable.title.source_name": "Source Name",
+  "newsTable.title.slug": "Slug",
   "coinTable.title.coin": "Asset",
   "coinTable.title.code": "Asset Code",
   "coinTable.title.createdOn": "Created On",
