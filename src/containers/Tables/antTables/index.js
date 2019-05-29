@@ -29,6 +29,7 @@ import { ticketsTableInfos } from './ticketsConfig';
 import { userWithdrawReqTableInfos } from './userWithdrawReqConfig';
 import { accountClassTableinfos } from './accountClassConfig';
 import { templateTableinfos } from './templateconfig';
+import { newsSourceTableInfos } from './newsSourceConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -81,5 +82,5 @@ export {
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
   newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
-  accountClassTableinfos, templateTableinfos
+  accountClassTableinfos, templateTableinfos, newsSourceTableInfos
 };

@@ -11,7 +11,7 @@ import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
-var self = this;
+var self;
 
 class NewsSources extends Component {
     constructor(props) {
@@ -23,21 +23,22 @@ class NewsSources extends Component {
             errType: 'Success',
             loader: false,
         }
-        NewsSources.newsStatus = NewsSources.newsStatus.bind(this);
+        NewsSources.newsSourceStatus = NewsSources.newsSourceStatus.bind(this);
+        self = this;
     }
 
-    static newsStatus(value, cover_image, title, link, posted_at, description, is_active, owner) {
+    static newsSourceStatus(value, source_name, slug, is_active) {
         const { token } = this.props;
         let formData = {
             id: value,
-            is_active: !is_active
+            status: !is_active
         };
 
         let message = is_active ? 'News Source has been inactivated successfully.' : 'News Source has been activated successfully.'
         self.setState({ loader: true });
-        ApiUtils.changeNewsStatus(token, formData)
+        ApiUtils.updateNewsSource(token, formData)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res) {
                     self._getAllNewsSources();
                     self.setState({ errMsg: true, errMessage: message, errType: 'Success', loader: false })
@@ -62,7 +63,7 @@ class NewsSources extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllNewsSources(token)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({ allNewsSources: res.data });
                 } else if (res.status == 403) {

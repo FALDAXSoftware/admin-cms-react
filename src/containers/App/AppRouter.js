@@ -104,6 +104,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/EmailTemplates/emailTemplates")),
         module: "email_templates"
     },
+    {
+        path: "news-source",
+        component: asyncComponent(() => import("../Page/NewsSource/newsSources")),
+        module: "news_source"
+    },
     // {
     //     path: "edit-asset",
     //     component: asyncComponent(() => import("../Page/Assets/editAsset")),

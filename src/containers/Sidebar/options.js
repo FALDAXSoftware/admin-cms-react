@@ -113,6 +113,12 @@ const options = [
     leftIcon: "fas fa-newspaper",
     module: "email_templates"
   },
+  {
+    key: "news-source",
+    label: "News Sources",
+    leftIcon: "fas fa-newspaper",
+    module: "news_source"
+  },
 ];
 
 export default options;
