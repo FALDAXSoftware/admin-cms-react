@@ -8,6 +8,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import { Tabs, notification } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { withRouter } from 'react-router';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -41,9 +42,11 @@ class UserTickets extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    let tickets = []
+                    let tickets = [];
+                    let url = 'https://app.hubspot.com/contacts/';
                     for (var i = 0; i < res.tickets.length; i++) {
                         tickets.push({
+                            'redirect_url': url + res.tickets[i].portalId + '/ticket/' + res.tickets[i].objectId,
                             'created_by': res.tickets[i]['properties'].created_by.timestamp,
                             'pipeline_stage': res.tickets[i]['properties'].hs_pipeline_stage.value,
                             'subject': res.tickets[i]['properties'].subject.value,
@@ -72,6 +75,10 @@ class UserTickets extends Component {
         this.setState({ errMsg: false });
     };
 
+    _changeRow = (value) => {
+        window.open(value.redirect_url, '_blank');
+    }
+
     render() {
         const { allTickets, loader, errMsg, errType } = this.state;
         if (errMsg) {
@@ -86,6 +93,11 @@ class UserTickets extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div>
                                     <TableWrapper
+                                        onRow={(record, rowIndex) => {
+                                            return {
+                                                onClick: () => { this._changeRow(record) },
+                                            };
+                                        }}
                                         style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
@@ -105,7 +117,7 @@ class UserTickets extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(UserTickets);
+    }), { logout })(UserTickets));

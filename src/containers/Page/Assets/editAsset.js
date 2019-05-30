@@ -25,7 +25,7 @@ class EditAsset extends Component {
         return (
             <div>
                 <div style={{ "display": "inline-block", "width": "100%", marginLeft: '20px' }}>
-                    <Link to="/dashboard/users">
+                    <Link to="/dashboard/assets">
                         <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
                         <a onClick={() => { this.props.history.push('/dashboard/assets') }}>Back</a>
                     </Link>

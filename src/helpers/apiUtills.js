@@ -75,6 +75,8 @@ const ApiUtils = {
             url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
         } else if (sorterCol && sortOrder && filterVal) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && searchUser) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + searchUser;
         } else if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (searchUser && filterVal) {

@@ -151,7 +151,7 @@ class Users extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchUser: '', page: 1
+            filterVal: '', searchUser: '', page: 1, sorterCol: '', sortOrder: ''
         }, () => {
             this._getAllUsers();
         })
@@ -159,6 +159,7 @@ class Users extends Component {
 
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal, allCountries } = this.state;
+        console.log('this.state', this.state)
 
         const headers = [
             { label: "First Name", key: "first_name" },
