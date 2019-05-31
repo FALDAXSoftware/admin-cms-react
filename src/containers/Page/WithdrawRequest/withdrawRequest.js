@@ -16,6 +16,7 @@ const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
+var self;
 
 class WithdrawRequest extends Component {
     constructor(props) {
@@ -35,6 +36,46 @@ class WithdrawRequest extends Component {
             filterVal: '',
             rangeDate: []
         }
+        self = this;
+        WithdrawRequest.updateWithdrawReq = WithdrawRequest.updateWithdrawReq.bind(this);
+    }
+
+    static updateWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at) {
+        //console.log(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at)
+        const { token } = this.props;
+
+        let formData = {
+            status: false,
+            id: value,
+            amount,
+            destination_address,
+            coin_id,
+            user_id
+        };
+
+        self.setState({ loader: true });
+        let message = true ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
+        ApiUtils.changeWithdrawStaus(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    self._getAllUsers();
+                    self.setState({
+                        errMsg: true, errMessage: message, errType: 'Success', loader: false
+                    })
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({ errMsg: true, errMessage: res.message });
+                }
+            })
+            .catch(() => {
+                self.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
     }
 
     componentDidMount = () => {

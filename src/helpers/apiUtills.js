@@ -162,7 +162,7 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Accept': 'application/json',
                 },
-                body: form,
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);
@@ -1589,6 +1589,21 @@ const ApiUtils = {
         try {
             return fetch(API_URL + "/admin/edit-news-source", {
                 method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    changeWithdrawStaus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
+                method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'

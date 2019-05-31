@@ -1,21 +1,26 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, ApproveCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, ApproveCell, WithdrawActionCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
-    coinAmt = null, approve = null, createdOn = null) => {
+    coinAmt = null, approve = null, userId = null, coinId = null, createdOn = null, Status = true) => {
     const value = object[key];
     const email = object[m_email];
     const source_address = object[source];
     const destination_address = object[destination];
     const amount = object[coinAmt];
     const is_approve = object[approve];
+    const user_id = object[userId];
+    const coin_id = object[coinId];
+    const status = object[Status];
     const created_at = object[createdOn];
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address, amount, is_approve, created_at);
+            return DateCell(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at);
+        case 'WithdrawActionCell':
+            return WithdrawActionCell(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at);
         case 'ApproveCell':
             return ApproveCell(value);
         default:
@@ -24,12 +29,6 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 };
 
 const columns = [
-    // {
-    //     title: <IntlMessages id="withdrawTable.title.email" />,
-    //     key: 'email',
-    //     width: 200,
-    //     render: object => renderCell(object, 'TextCell', 'email')
-    // },
     {
         title: <IntlMessages id="withdrawTable.title.source_address" />,
         key: 'source_address',
@@ -55,6 +54,13 @@ const columns = [
         width: 100,
         render: object => renderCell(object, 'ApproveCell', 'is_approve')
     },
+    // {
+    //     title: <IntlMessages id="withdrawTable.title.approve" />,
+    //     key: 'action',
+    //     width: 100,
+    //     render: object => renderCell(object, 'WithdrawActionCell', 'id', 'email', 'source_address',
+    //         'destination_address', 'amount', 'is_approve', 'user_id', 'coin_id', 'status', 'created_at')
+    // },
     {
         title: <IntlMessages id="withdrawTable.title.created_at" />,
         key: 'created_at',
