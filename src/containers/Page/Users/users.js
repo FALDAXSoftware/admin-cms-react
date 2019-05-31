@@ -157,9 +157,12 @@ class Users extends Component {
         })
     }
 
+    _goToUserDetails = (user) => {
+        this.props.history.push('/dashboard/users/' + user.id)
+    }
+
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal, allCountries } = this.state;
-        console.log('this.state', this.state)
 
         const headers = [
             { label: "First Name", key: "first_name" },
@@ -237,6 +240,11 @@ class Users extends Component {
                                     {loader && <FaldaxLoader />}
                                     <div style={{ marginTop: "30px" }}>
                                         <TableWrapper
+                                            onRow={(record, rowIndex) => {
+                                                return {
+                                                    onClick: () => { this._goToUserDetails(record) },
+                                                };
+                                            }}
                                             {...this.state}
                                             columns={tableInfo.columns}
                                             pagination={false}

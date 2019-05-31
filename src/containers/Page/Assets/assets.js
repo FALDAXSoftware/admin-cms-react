@@ -54,6 +54,7 @@ class Assets extends Component {
     }
 
     static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
+        console.log('status')
         const { token } = this.props;
 
         let formData = {
@@ -197,6 +198,11 @@ class Assets extends Component {
         })
     }
 
+    _changeRow = (e) => {
+        console.log('>>>>>>>>>>.', e);
+        e.preventDefault();
+    }
+
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
             showViewCoinModal, showDeleteCoinModal, errMsg, page
@@ -248,6 +254,11 @@ class Assets extends Component {
                                     </Modal>
                                     }
                                     <TableWrapper
+                                        onRow={(record, rowIndex) => {
+                                            return {
+                                                onClick: () => { this._changeRow.bind(this) },
+                                            };
+                                        }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

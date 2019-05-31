@@ -1,8 +1,8 @@
 //const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -162,7 +162,7 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Accept': 'application/json',
                 },
-                body: form,
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);
@@ -1589,6 +1589,21 @@ const ApiUtils = {
         try {
             return fetch(API_URL + "/admin/edit-news-source", {
                 method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    changeWithdrawStaus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
+                method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'

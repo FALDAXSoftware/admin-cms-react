@@ -23,7 +23,7 @@ class Fees extends Component {
             showEditFeesModal: false,
             feesDetails: [],
             errMessage: '',
-            notify: false,
+            errMsg: false,
             errType: '',
             loader: false,
             fields: {},
@@ -169,7 +169,7 @@ class Fees extends Component {
             message: this.state.errType,
             description: this.state.errMessage
         });
-        this.setState({ notify: false });
+        this.setState({ errMsg: false });
     };
 
     _closeEditFeesModal = () => {
@@ -183,9 +183,9 @@ class Fees extends Component {
     }
 
     render() {
-        const { allFeesData, notify, errType, loader, feesDetails, showEditFeesModal, fields } = this.state;
+        const { allFeesData, errMsg, errType, loader, feesDetails, showEditFeesModal, fields } = this.state;
 
-        if (notify) {
+        if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
 
@@ -212,15 +212,15 @@ class Fees extends Component {
                                 />
                             </TabPane>
                         ))}
-                        <TabPane tab="Send Fee" key="2">
+                        <TabPane tab="Withdrawal Fee" key="2">
                             <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
                                 <span>
-                                    <b>Send Fee</b>
+                                    <b>Withdrawal Fee</b>
                                 </span>
-                                <Input addonAfter={'%'} placeholder="Send Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                                <Input addonAfter={'%'} placeholder="Withdrawal Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                                     onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields["default_send_coin_fee"]} />
                                 <span className="field-error">
-                                    {this.validator.message('send fee', fields['default_send_coin_fee'], 'required|custom_between:0,100')}
+                                    {this.validator.message('withdrawal fee', fields['default_send_coin_fee'], 'required|custom_between:0,100')}
                                 </span>
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateSendFee}> Update </Button>
                                 <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button>

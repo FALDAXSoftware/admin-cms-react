@@ -19,6 +19,7 @@ import { News } from '../../containers/Page/News/news';
 import { AccountClass } from '../../containers/Page/AccountClass/accountClass';
 import { EmailTemplates } from '../../containers/Page/EmailTemplates/emailTemplates';
 import { NewsSources } from '../../containers/Page/NewsSource/newsSources';
+import { WithdrawRequest } from '../../containers/Page/WithdrawRequest/withdrawRequest';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
 
@@ -173,6 +174,10 @@ const newsSourceStatus = (value, source_name, slug, is_active) => {
     NewsSources.newsSourceStatus(value, source_name, slug, is_active);
 }
 
+const updateWithdrawReq = (value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at) => {
+    WithdrawRequest.updateWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at);
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id) => <p>{referred_id !== null ? created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : '' : ''}</p>;
@@ -227,6 +232,7 @@ const PipelineCell = (text) => <p>{text == 1 ? 'NEW' : text == 2 ? 'Waiting on C
 const AccountClassActionCell = (value, class_name) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteAccountClass(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editAccountClass(value, class_name)} /></Tooltip></div>;
 const TemplateActionCell = (value, name, content, note) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, content, note)} /></Tooltip></div>;
 const NewsSourceSwitchCell = (value, source_name, slug, is_active) => <Switch checked={is_active} onChange={() => { newsSourceStatus(value, source_name, slug, is_active) }} />
+const WithdrawActionCell = (value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at) => <div><Button style={{ marginRight: '15px' }} type="primary" onClick={() => updateWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at)} >Approve</Button><Button style={{ margingLeft: '15px' }} type="danger" onClick={() => updateWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at)} >Decline</Button></div>;
 
 export {
     IPCell,
@@ -284,5 +290,6 @@ export {
     UserDateCell,
     AccountClassActionCell,
     TemplateActionCell,
-    NewsSourceSwitchCell
+    NewsSourceSwitchCell,
+    WithdrawActionCell
 };
