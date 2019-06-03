@@ -13,8 +13,11 @@ import { palette } from 'styled-theme';
 import CountCard from '../Widgets/card/count-widget';
 import { Link } from 'react-router-dom';
 import authAction from '../../redux/auth/actions';
+import { DatePicker } from 'antd';
+import moment from 'moment';
 
 const { logout } = authAction;
+const { RangePicker } = DatePicker;
 
 const CardWrapper = styled(Card)`
     & .ant-card-body{
@@ -97,7 +100,10 @@ class Dashboard extends Component {
             total_kyc: 0,
             kyc_pending: 0,
             errMsg: false,
-            errMessage: ''
+            errMessage: '',
+            startDate: '',
+            endDate: '',
+            rangeDate: []
         }
     }
 
@@ -119,7 +125,7 @@ class Dashboard extends Component {
 
         ApiUtils.getAllCount(token)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res) {
                     if (res.status == 200) {
                         const {
@@ -150,12 +156,43 @@ class Dashboard extends Component {
             });
     }
 
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: moment(date[0]).toISOString(),
+            endDate: moment(date[1]).toISOString()
+        })
+    }
+
     render() {
         const { rowStyle, colStyle } = basicStyle;
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
             neutralCountries, employeeCount, jobsCount, withdrawReqCount,
-            kyc_approved, kyc_disapproved, total_kyc, kyc_pending
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate
         } = this.state;
 
         const data = {
@@ -213,6 +250,13 @@ class Dashboard extends Component {
                                 <ContentHolder>
                                     <b>Grand Total:</b> {total_kyc}
                                     <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                    <RangePicker
+                                        value={rangeDate}
+                                        disabledTime={this.disabledRangeTime}
+                                        onChange={this._changeDate}
+                                        format="YYYY-MM-DD"
+                                        style={{ marginLeft: '15px' }}
+                                    />
                                     <Pie data={kycData} />
                                 </ContentHolder>
                             </ChartWrapper>

@@ -54,13 +54,13 @@ const columns = [
         width: 100,
         render: object => renderCell(object, 'ApproveCell', 'is_approve')
     },
-    // {
-    //     title: <IntlMessages id="withdrawTable.title.approve" />,
-    //     key: 'action',
-    //     width: 100,
-    //     render: object => renderCell(object, 'WithdrawActionCell', 'id', 'email', 'source_address',
-    //         'destination_address', 'amount', 'is_approve', 'user_id', 'coin_id', 'status', 'created_at')
-    // },
+    {
+        title: <IntlMessages id="withdrawTable.title.approve" />,
+        key: 'action',
+        width: 100,
+        render: object => renderCell(object, 'WithdrawActionCell', 'id', 'email', 'source_address',
+            'destination_address', 'amount', 'is_approve', 'user_id', 'coin_id', 'created_at')
+    },
     {
         title: <IntlMessages id="withdrawTable.title.created_at" />,
         key: 'created_at',

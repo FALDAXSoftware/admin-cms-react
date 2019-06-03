@@ -37,24 +37,39 @@ class WithdrawRequest extends Component {
             rangeDate: []
         }
         self = this;
-        WithdrawRequest.updateWithdrawReq = WithdrawRequest.updateWithdrawReq.bind(this);
+        WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(this);
+        WithdrawRequest.declineWithdrawReq = WithdrawRequest.declineWithdrawReq.bind(this);
     }
 
-    static updateWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at) {
-        //console.log(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at)
+    static approveWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at) {
+        let requestData = {
+            value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at, status: true
+        }
+        self._updateWithdrawRequest(requestData);
+    }
+
+    static declineWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at) {
+        let requestData = {
+            value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at, status: false
+        }
+        self._updateWithdrawRequest(requestData);
+    }
+
+    _updateWithdrawRequest = (requestData) => {
+        console.log('>>', requestData)
         const { token } = this.props;
 
         let formData = {
-            status: false,
-            id: value,
-            amount,
-            destination_address,
-            coin_id,
-            user_id
+            status: requestData.status,
+            id: requestData.value,
+            amount: requestData.amount,
+            destination_address: requestData.destination_address,
+            coin_id: requestData.coin_id,
+            user_id: requestData.user_id
         };
 
         self.setState({ loader: true });
-        let message = true ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
+        let message = requestData.status ? 'Request has been approved successfully.' : 'Request has been declined successfully.'
         ApiUtils.changeWithdrawStaus(token, formData)
             .then((res) => res.json())
             .then((res) => {
@@ -68,7 +83,7 @@ class WithdrawRequest extends Component {
                         self.props.logout();
                     });
                 } else {
-                    self.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(() => {
