@@ -37,38 +37,51 @@ class WithdrawRequest extends Component {
             rangeDate: []
         }
         self = this;
-        WithdrawRequest.updateWithdrawReq = WithdrawRequest.updateWithdrawReq.bind(this);
+        WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(this);
+        WithdrawRequest.declineWithdrawReq = WithdrawRequest.declineWithdrawReq.bind(this);
     }
 
-    static updateWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at) {
-        //console.log(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, status, created_at)
+    static approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) {
+        let requestData = {
+            value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at, status: true
+        }
+        self._updateWithdrawRequest(requestData);
+    }
+
+    static declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) {
+        let requestData = {
+            value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at, status: false
+        }
+        self._updateWithdrawRequest(requestData);
+    }
+
+    _updateWithdrawRequest = (requestData) => {
         const { token } = this.props;
 
         let formData = {
-            status: false,
-            id: value,
-            amount,
-            destination_address,
-            coin_id,
-            user_id
+            status: requestData.status,
+            id: requestData.value,
+            amount: requestData.amount,
+            destination_address: requestData.destination_address,
+            coin_id: requestData.coin_id,
+            user_id: requestData.user_id
         };
 
         self.setState({ loader: true });
-        let message = true ? 'User has been inactivated successfully.' : 'User has been activated successfully.'
         ApiUtils.changeWithdrawStaus(token, formData)
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    self._getAllUsers();
+                    self._getAllWithdrawReqs();
                     self.setState({
-                        errMsg: true, errMessage: message, errType: 'Success', loader: false
+                        errMsg: true, errMessage: res.message, errType: 'Success', loader: false
                     })
                 } else if (res.status == 403) {
                     self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         self.props.logout();
                     });
                 } else {
-                    self.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errType: 'error', errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(() => {
@@ -90,7 +103,7 @@ class WithdrawRequest extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
                 } else if (res.status == 403) {
@@ -259,7 +272,7 @@ class WithdrawRequest extends Component {
                                     dataSource={allRequests}
                                     className="isoCustomizedTable"
                                     onChange={this._handleWithdrawTableChange}
-                                    expandedRowRender={record => <p style={{ margin: 0 }}>{<div><b>Email ID</b> - {record.email} <br />  <b>Fees</b> - {record.fees}% </div>}</p>}
+                                    expandedRowRender={record => <p style={{ margin: 0 }}>{<div><b>Email ID</b> - {record.email} <br />  <b>Fees</b> - {record.fees}% <br />  <b>Asset</b> - {record.coin_name} </div>}</p>}
                                 />
                                 {allReqCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}

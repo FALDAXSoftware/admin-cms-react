@@ -13,8 +13,12 @@ import { palette } from 'styled-theme';
 import CountCard from '../Widgets/card/count-widget';
 import { Link } from 'react-router-dom';
 import authAction from '../../redux/auth/actions';
+import { DatePicker } from 'antd';
+import moment from 'moment';
+import FaldaxLoader from './faldaxLoader';
 
 const { logout } = authAction;
+const { RangePicker } = DatePicker;
 
 const CardWrapper = styled(Card)`
     & .ant-card-body{
@@ -97,7 +101,11 @@ class Dashboard extends Component {
             total_kyc: 0,
             kyc_pending: 0,
             errMsg: false,
-            errMessage: ''
+            errMessage: '',
+            startDate: '',
+            endDate: '',
+            rangeDate: [],
+            loader: false
         }
     }
 
@@ -115,11 +123,13 @@ class Dashboard extends Component {
 
     _getAllCount = () => {
         const { token } = this.props;
+        const { startDate, endDate } = this.state;
         let _this = this;
 
-        ApiUtils.getAllCount(token)
+        _this.setState({ loader: true })
+        ApiUtils.getAllCount(token, startDate, endDate)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res) {
                     if (res.status == 200) {
                         const {
@@ -134,15 +144,15 @@ class Dashboard extends Component {
                             InactivePairs, legalCountries,
                             illegalCountries, neutralCountries, employeeCount,
                             jobsCount, withdrawReqCount,
-                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending
+                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false
                         });
                     } else if (res.status == 403) {
                         _this.props.logout();
                     } else {
-                        _this.setState({ errMsg: true, message: res.message });
+                        _this.setState({ errMsg: true, message: res.message, loader: false });
                     }
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message, loader: false });
                 }
             })
             .catch(err => {
@@ -150,12 +160,45 @@ class Dashboard extends Component {
             });
     }
 
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: moment(date[0]).startOf('d').toISOString(),
+            endDate: moment(date[1]).endOf('d').toISOString()
+        }, () => {
+            this._getAllCount();
+        })
+    }
+
     render() {
         const { rowStyle, colStyle } = basicStyle;
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
             neutralCountries, employeeCount, jobsCount, withdrawReqCount,
-            kyc_approved, kyc_disapproved, total_kyc, kyc_pending
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader
         } = this.state;
 
         const data = {
@@ -196,6 +239,7 @@ class Dashboard extends Component {
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
                 <Row style={rowStyle} gutter={0} justify="start">
                     <Col md={12} xs={24} style={colStyle}>
                         <CardWrapper title="Country" >
@@ -210,11 +254,19 @@ class Dashboard extends Component {
                     <Col md={12} xs={24} style={colStyle}>
                         <CardWrapper title="KYC">
                             <ChartWrapper>
-                                <ContentHolder>
-                                    <b>Grand Total:</b> {total_kyc}
-                                    <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                <RangePicker
+                                    value={rangeDate}
+                                    disabledTime={this.disabledRangeTime}
+                                    onChange={this._changeDate}
+                                    format="YYYY-MM-DD"
+                                    style={{ marginBottom: '15px' }}
+                                />
+                                <b>Grand Total:</b> {total_kyc}
+                                <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                {total_kyc > 0 ? <ContentHolder>
                                     <Pie data={kycData} />
                                 </ContentHolder>
+                                    : 'NO DATA FOUND'}
                             </ChartWrapper>
                         </CardWrapper>
                     </Col>

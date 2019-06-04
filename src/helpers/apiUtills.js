@@ -1,8 +1,8 @@
-//const API_URL = "http://192.168.1.211:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -55,9 +55,13 @@ const ApiUtils = {
     },
 
     //get all counts for dashboard api
-    getAllCount: function (token) {
+    getAllCount: function (token, startDate, endDate) {
+        let url = "/admin/dashboard/get-data";
+        if (startDate && endDate) {
+            url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+        }
         try {
-            return fetch(API_URL + "/admin/dashboard/get-data", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,

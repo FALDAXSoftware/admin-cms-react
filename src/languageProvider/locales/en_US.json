@@ -471,6 +471,7 @@
   "withdrawTable.title.destination_address": "Destination Address",
   "withdrawTable.title.amount": "Amount",
   "withdrawTable.title.approve": "Status",
+  "withdrawTable.title.transaction_type": "Transaction Type",
   "withdrawTable.title.created_at": "Created On",
   "orderTable.title.pair": "Pair",
   "orderTable.title.quantity": "Quantity",
