@@ -174,12 +174,12 @@ const newsSourceStatus = (value, source_name, slug, is_active) => {
     NewsSources.newsSourceStatus(value, source_name, slug, is_active);
 }
 
-const approveWithdrawReq = (value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at) => {
-    WithdrawRequest.approveWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at);
+const approveWithdrawReq = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => {
+    WithdrawRequest.approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at);
 }
 
-const declineWithdrawReq = (value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at) => {
-    WithdrawRequest.declineWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at);
+const declineWithdrawReq = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => {
+    WithdrawRequest.declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at);
 }
 
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
@@ -236,7 +236,8 @@ const PipelineCell = (text) => <p>{text == 1 ? 'NEW' : text == 2 ? 'Waiting on C
 const AccountClassActionCell = (value, class_name) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteAccountClass(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editAccountClass(value, class_name)} /></Tooltip></div>;
 const TemplateActionCell = (value, name, content, note) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, content, note)} /></Tooltip></div>;
 const NewsSourceSwitchCell = (value, source_name, slug, is_active) => <Switch checked={is_active} onChange={() => { newsSourceStatus(value, source_name, slug, is_active) }} />
-const WithdrawActionCell = (value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at) => <div><Button style={{ marginRight: '15px' }} type="primary" onClick={() => approveWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at)} >Approve</Button><Button style={{ margingLeft: '15px' }} type="danger" onClick={() => declineWithdrawReq(value, email, source_address, destination_address, amount, is_approve, user_id, coin_id, created_at)} >Decline</Button></div>;
+const WithdrawActionCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <div>{(!is_approve && !is_executed) || (is_approve && is_executed) ? <div><Button style={{ marginRight: '15px' }} type="primary" onClick={() => approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Approve</Button><Button style={{ margingLeft: '15px' }} type="danger" onClick={() => declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Decline</Button></div> : ''}</div>;
+const WithdrawStatusCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <p>{(!is_approve && !is_executed) ? 'Pending' : is_approve ? 'Approved' : 'Dis-Approved'}</p>;
 
 export {
     IPCell,
@@ -295,5 +296,6 @@ export {
     AccountClassActionCell,
     TemplateActionCell,
     NewsSourceSwitchCell,
-    WithdrawActionCell
+    WithdrawActionCell,
+    WithdrawStatusCell
 };

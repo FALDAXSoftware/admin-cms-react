@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import authAction from '../../redux/auth/actions';
 import { DatePicker } from 'antd';
 import moment from 'moment';
+import FaldaxLoader from './faldaxLoader';
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -103,7 +104,8 @@ class Dashboard extends Component {
             errMessage: '',
             startDate: '',
             endDate: '',
-            rangeDate: []
+            rangeDate: [],
+            loader: false
         }
     }
 
@@ -121,9 +123,11 @@ class Dashboard extends Component {
 
     _getAllCount = () => {
         const { token } = this.props;
+        const { startDate, endDate } = this.state;
         let _this = this;
 
-        ApiUtils.getAllCount(token)
+        _this.setState({ loader: true })
+        ApiUtils.getAllCount(token, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
@@ -140,15 +144,15 @@ class Dashboard extends Component {
                             InactivePairs, legalCountries,
                             illegalCountries, neutralCountries, employeeCount,
                             jobsCount, withdrawReqCount,
-                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending
+                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false
                         });
                     } else if (res.status == 403) {
                         _this.props.logout();
                     } else {
-                        _this.setState({ errMsg: true, message: res.message });
+                        _this.setState({ errMsg: true, message: res.message, loader: false });
                     }
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message, loader: false });
                 }
             })
             .catch(err => {
@@ -182,8 +186,10 @@ class Dashboard extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).toISOString(),
-            endDate: moment(date[1]).toISOString()
+            startDate: moment(date[0]).startOf('d').toISOString(),
+            endDate: moment(date[1]).endOf('d').toISOString()
+        }, () => {
+            this._getAllCount();
         })
     }
 
@@ -192,7 +198,7 @@ class Dashboard extends Component {
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
             neutralCountries, employeeCount, jobsCount, withdrawReqCount,
-            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader
         } = this.state;
 
         const data = {
@@ -233,6 +239,7 @@ class Dashboard extends Component {
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
                 <Row style={rowStyle} gutter={0} justify="start">
                     <Col md={12} xs={24} style={colStyle}>
                         <CardWrapper title="Country" >
@@ -247,18 +254,19 @@ class Dashboard extends Component {
                     <Col md={12} xs={24} style={colStyle}>
                         <CardWrapper title="KYC">
                             <ChartWrapper>
-                                <ContentHolder>
-                                    <b>Grand Total:</b> {total_kyc}
-                                    <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
-                                    <RangePicker
-                                        value={rangeDate}
-                                        disabledTime={this.disabledRangeTime}
-                                        onChange={this._changeDate}
-                                        format="YYYY-MM-DD"
-                                        style={{ marginLeft: '15px' }}
-                                    />
+                                <RangePicker
+                                    value={rangeDate}
+                                    disabledTime={this.disabledRangeTime}
+                                    onChange={this._changeDate}
+                                    format="YYYY-MM-DD"
+                                    style={{ marginBottom: '15px' }}
+                                />
+                                <b>Grand Total:</b> {total_kyc}
+                                <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                {total_kyc > 0 ? <ContentHolder>
                                     <Pie data={kycData} />
                                 </ContentHolder>
+                                    : 'NO DATA FOUND'}
                             </ChartWrapper>
                         </CardWrapper>
                     </Col>
