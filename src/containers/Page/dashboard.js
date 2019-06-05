@@ -186,8 +186,8 @@ class Dashboard extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).startOf('d').toISOString(),
-            endDate: moment(date[1]).endOf('d').toISOString()
+            startDate: date.length > 0 ? moment(date[0]).startOf('d').toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).endOf('d').toISOString() : ''
         }, () => {
             this._getAllCount();
         })
@@ -261,12 +261,17 @@ class Dashboard extends Component {
                                     format="YYYY-MM-DD"
                                     style={{ marginBottom: '15px' }}
                                 />
-                                <b>Grand Total:</b> {total_kyc}
-                                <a style={{ float: 'right' }} href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
-                                {total_kyc > 0 ? <ContentHolder>
-                                    <Pie data={kycData} />
+                                <Row style={{ width: "100%" }}>
+                                    <Col span={12}>
+                                        <b >Grand Total:{total_kyc}</b>
+                                    </Col>
+                                    <Col span={12} style={{ textAlign: "right" }}>
+                                        <a href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                    </Col>
+                                </Row>
+                                <ContentHolder>
+                                    {total_kyc > 0 ? <Pie data={kycData} /> : 'NO DATA FOUND'}
                                 </ContentHolder>
-                                    : 'NO DATA FOUND'}
                             </ChartWrapper>
                         </CardWrapper>
                     </Col>

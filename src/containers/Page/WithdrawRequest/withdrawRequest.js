@@ -67,25 +67,25 @@ class WithdrawRequest extends Component {
             user_id: requestData.user_id
         };
 
-        self.setState({ loader: true });
+        this.setState({ loader: true });
         ApiUtils.changeWithdrawStaus(token, formData)
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    self._getAllWithdrawReqs();
-                    self.setState({
+                    this._getAllWithdrawReqs();
+                    this.setState({
                         errMsg: true, errMessage: res.message, errType: 'Success', loader: false
                     })
                 } else if (res.status == 403) {
-                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        self.props.logout();
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
                     });
                 } else {
-                    self.setState({ errType: 'error', errMsg: true, errMessage: res.message, loader: false });
+                    this.setState({ errType: 'error', errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(() => {
-                self.setState({
+                this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
@@ -103,7 +103,7 @@ class WithdrawRequest extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
                 } else if (res.status == 403) {

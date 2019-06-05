@@ -1575,6 +1575,21 @@ const ApiUtils = {
         }
     },
 
+    updateEmailTemplate: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/emailTemplate/update", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     getAllNewsSources: function (token) {
         try {
             return fetch(API_URL + "/admin/all-new-source", {
@@ -1613,6 +1628,20 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getTemplateDetails: function (token, template_id) {
+        try {
+            return fetch(API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);
