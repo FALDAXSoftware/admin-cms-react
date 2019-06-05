@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { withRouter } from 'react-router';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -29,6 +30,7 @@ class EmailTemplates extends Component {
 
     static editTemplate(value, name, content, note) {
         console.log(value, name, content, note)
+        self.props.history.push('/dashboard/email-templates/edit-template/' + value);
     }
 
     componentDidMount = () => {
@@ -102,9 +104,9 @@ class EmailTemplates extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(EmailTemplates);
+    }), { logout })(EmailTemplates));
 
 export { EmailTemplates, templateTableinfos };

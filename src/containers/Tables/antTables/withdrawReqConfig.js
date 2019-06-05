@@ -72,7 +72,7 @@ const columns = [
             'is_executed', 'created_at')
     },
     {
-        title: <IntlMessages id="withdrawTable.title.approve" />,
+        title: <IntlMessages id="withdrawTable.title.action" />,
         key: 'action',
         width: 100,
         render: object => renderCell(object, 'WithdrawActionCell', 'id', 'email', 'source_address',

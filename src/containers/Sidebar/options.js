@@ -98,25 +98,25 @@ const options = [
   {
     key: "referral",
     label: "Affiliate Program & Referrals",
-    leftIcon: "fas fa-newspaper",
+    leftIcon: "fas fa-user-friends",
     module: "is_referral"
   },
   {
     key: "account-class",
     label: "Account Class Management",
-    leftIcon: "fas fa-newspaper",
+    leftIcon: "fas fa-file-invoice",
     module: "account_class"
   },
   {
     key: "email-templates",
     label: "Email Templates",
-    leftIcon: "fas fa-newspaper",
+    leftIcon: "fas fa-envelope",
     module: "email_templates"
   },
   {
     key: "news-source",
     label: "News Sources",
-    leftIcon: "fas fa-newspaper",
+    leftIcon: "fas fa-rss-square",
     module: "news_source"
   },
 ];

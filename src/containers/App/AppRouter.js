@@ -177,6 +177,10 @@ const mandatoryRoutes = [
         path: "assets/edit-asset/:id",
         component: asyncComponent(() => import("../Page/Assets/editAsset"))
     },
+    {
+        path: "email-templates/edit-template/:id",
+        component: asyncComponent(() => import("../Page/EmailTemplates/updateEmailTemplate"))
+    },
 ]
 
 class AppRouter extends Component {
