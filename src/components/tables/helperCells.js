@@ -22,6 +22,7 @@ import { NewsSources } from '../../containers/Page/NewsSource/newsSources';
 import { WithdrawRequest } from '../../containers/Page/WithdrawRequest/withdrawRequest';
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
+import { JobCategory } from '../../containers/Page/Jobs/jobsCategory';
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL = 'https://s3.us-east-2.amazonaws.com/production-static-asset/';
@@ -42,8 +43,8 @@ const userStatus = (value, profile_pic, first_name, last_name, email, city_town,
     Users.changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc);
 }
 
-const viewCoin = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => {
-    Assets.view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon);
+const viewCoin = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) => {
+    Assets.view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address);
 }
 
 const editCoin = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => {
@@ -182,6 +183,10 @@ const declineWithdrawReq = (value, email, source_address, destination_address, a
     WithdrawRequest.declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at);
 }
 
+const jobCategoryStatus = (value, category, is_active) => {
+    JobCategory.jobCategoryStatus(value, category, is_active);
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id) => <p>{referred_id !== null ? created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : '' : ''}</p>;
@@ -211,7 +216,7 @@ const NewsSwitchCell = (value, cover_image, title, link, posted_at, description,
 const NewsDescCell = (value) => <Tooltip title={value}><p>{value.slice(0, 35) + (value.length > 35 ? "..." : "")}</p></Tooltip>
 //const NewsActionsCell = (value, cover_image, title, link, posted_at, description, is_active, owner) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewNews(value, cover_image, title, link, posted_at, description, is_active, owner)} /></Tooltip></div>;
 const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state)} /></Tooltip></div>;
-const CoinActionCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon)} /></Tooltip></div>;
+const CoinActionCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip></div>;
 const RolesActionCell = (value, name, users, assets, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteRole(value, name, users, assets, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active)} /></Tooltip></div>;
 const CountryActionCell = (value, name, legality, color, stateCount, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCountry(value, name, legality, color, is_active)} /></Tooltip></div>;
 const StateActionCell = (value, name, legality, color, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editState(value, name, legality, color, is_active)} /></Tooltip></div>;
@@ -238,6 +243,7 @@ const TemplateActionCell = (value, name, content, note) => <div><Tooltip title="
 const NewsSourceSwitchCell = (value, source_name, slug, is_active) => <Switch checked={is_active} onChange={() => { newsSourceStatus(value, source_name, slug, is_active) }} />
 const WithdrawActionCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <div>{(is_approve == null && is_executed == null) ? <div><Button style={{ marginRight: '15px' }} type="primary" onClick={() => approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Approve</Button><Button style={{ margingLeft: '15px' }} type="danger" onClick={() => declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Decline</Button></div> : ''}</div>;
 const WithdrawStatusCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <p>{(is_approve == null && is_executed == null) ? 'Pending' : is_approve ? 'Approved' : 'Dis-Approved'}</p>;
+const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_active} onChange={() => { jobCategoryStatus(value, category, is_active) }} />
 
 export {
     IPCell,
@@ -297,5 +303,6 @@ export {
     TemplateActionCell,
     NewsSourceSwitchCell,
     WithdrawActionCell,
-    WithdrawStatusCell
+    WithdrawStatusCell,
+    JobCatSwitchCell
 };

@@ -262,23 +262,24 @@ class EditableTable extends React.Component {
         return (
             <div className="isoLayoutContent">
                 {
-                    allAssetLimit && allAssetLimit.map((asset) => {
-                        return (
-                            <div>
-                                <Divider orientation="left">Tier {asset.tier_step}</Divider>
-                                <EditableContext.Provider value={this.props.form}>
-                                    <Table
-                                        components={components}
-                                        bordered
-                                        dataSource={[{ ...asset }]}
-                                        columns={columns}
-                                        rowClassName="editable-row"
-                                        pagination={false}
-                                    />
-                                </EditableContext.Provider>
-                            </div>
-                        )
-                    })
+                    allAssetLimit.length > 0 ?
+                        allAssetLimit.map((asset) => {
+                            return (
+                                <div>
+                                    <Divider orientation="left">Tier {asset.tier_step}</Divider>
+                                    <EditableContext.Provider value={this.props.form}>
+                                        <Table
+                                            components={components}
+                                            bordered
+                                            dataSource={[{ ...asset }]}
+                                            columns={columns}
+                                            rowClassName="editable-row"
+                                            pagination={false}
+                                        />
+                                    </EditableContext.Provider>
+                                </div>
+                            )
+                        }) : 'NO DATA FOUND'
                 }
                 {loader && <FaldaxLoader />}
             </div>

@@ -1,0 +1,174 @@
+import React, { Component } from 'react';
+import { notification, Button } from 'antd';
+import { jobCategoryTableInfos } from "../../Tables/antTables";
+import ApiUtils from '../../../helpers/apiUtills';
+import TableWrapper from "../../Tables/antTables/antTable.style";
+import { connect } from 'react-redux';
+import AddJobCatModal from './addJobCategoryModal';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
+var self;
+
+class JobCategory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            errMessage: '',
+            errMsg: false,
+            errType: 'Success',
+            loader: false,
+            showAddJobCatModal: false,
+            categoryDetails: [],
+            showEditJobModal: false,
+            allJobCategories: []
+        }
+        self = this;
+        JobCategory.jobCategoryStatus = JobCategory.jobCategoryStatus.bind(this);
+        JobCategory.editJob = JobCategory.editJob.bind(this);
+    }
+
+    componentDidMount = () => {
+        this._getAllJobCategories();
+    }
+
+    static jobCategoryStatus(value, category, is_active) {
+        const { token } = self.props;
+
+        let formData = {
+            id: value,
+            category,
+            is_active: !is_active
+        };
+
+        self.setState({ loader: true })
+        let message = is_active ? 'Category has been inactivated successfully.' : 'Category has been activated successfully.'
+
+        ApiUtils.updateJobCategory(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    this.setState({
+                        errMsg: true, errMessage: message, loader: false,
+                        errType: 'Success', showError: false, isDisabled: false
+                    });
+                    this._getAllJobCategories();
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({ errMsg: true, errMessage: res.message });
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    loader: false, errType: 'error', showError: false, isDisabled: false
+                });
+            });
+    }
+
+    static editJob(value, category, is_active) {
+        let categoryDetails = {
+            value, category, is_active
+        }
+        self.setState({ showEditJobModal: true, categoryDetails });
+    }
+
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
+    _getAllJobCategories = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        ApiUtils.getAllJobCategories(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ allJobCategories: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _showAddJobCatModal = () => {
+        this.setState({ showAddJobCatModal: true });
+    }
+
+    _closeAddJobModal = () => {
+        this.setState({ showAddJobCatModal: false });
+    }
+
+    _closeEditJobModal = () => {
+        this.setState({ showEditJobModal: false });
+    }
+
+    render() {
+        const { errType, loader, errMsg, showAddJobCatModal, showEditJobModal,
+            categoryDetails, allJobCategories } = this.state;
+
+        if (errMsg) {
+            this.openNotificationWithIconError(errType.toLowerCase());
+        }
+
+        return (
+            <div>
+                {jobCategoryTableInfos.map(tableInfo => (
+                    <div>
+                        <div style={{ "display": "inline-block", "width": "100%" }}>
+                            <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}>Add Category</Button>
+                            <AddJobCatModal
+                                showAddJobCatModal={showAddJobCatModal}
+                                closeAddModal={this._closeAddJobModal}
+                                getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
+                            />
+                        </div>
+                        {loader && <FaldaxLoader />}
+                        <div>
+                            {/* <EditJobModal
+                                        fields={categoryDetails}
+                                        showEditJobModal={showEditJobModal}
+                                        closeEditJobModal={this._closeEditJobModal}
+                                        getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
+                                    /> */}
+                            <TableWrapper
+                                {...this.state}
+                                columns={tableInfo.columns}
+                                pagination={false}
+                                dataSource={allJobCategories}
+                                className="isoCustomizedTable"
+                                onChange={this._handleJobTableChange}
+                            />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+}
+
+export default connect(
+    state => ({
+        token: state.Auth.get('token')
+    }), { logout })(JobCategory);
+
+export { JobCategory, jobCategoryTableInfos };

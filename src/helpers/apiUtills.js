@@ -1648,6 +1648,37 @@ const ApiUtils = {
         }
     },
 
+    //edit job category api call
+    updateJobCategory: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-job-category", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    addJobCategory: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-job-category", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 export default ApiUtils;
