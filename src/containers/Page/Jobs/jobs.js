@@ -11,6 +11,7 @@ import ViewJobModal from './viewJobModal';
 import EditJobModal from './editJobModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import JobCategory from './jobsCategory';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -318,6 +319,9 @@ class Jobs extends Component {
                                 </div>
                             </TabPane>
                         ))}
+                        <TabPane tab="Job Category" key="2">
+                            <JobCategory />
+                        </TabPane>
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>

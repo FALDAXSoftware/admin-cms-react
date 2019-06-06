@@ -42,9 +42,11 @@ class Assets extends Component {
         Assets.changeStatus = Assets.changeStatus.bind(this);
     }
 
-    static view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
+    static view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC,
+        coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) {
         let coinDetails = {
-            value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon
+            value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon,
+            warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address
         }
         self.setState({ coinDetails, showViewCoinModal: true });
     }

@@ -492,6 +492,7 @@
   "jobTable.title.applied_at": "Applied On",
   "jobTable.title.app": "Applications",
   "jobTable.title.Actions": "Actions",
+  "jobTable.title.category": "Category Name",
   "accountTable.title.name": "Class Name",
   "accountTable.title.id": "ID",
   "accountTable.title.actions": "Actions",

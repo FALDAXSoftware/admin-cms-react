@@ -61,13 +61,24 @@ class ViewCoinModal extends Component {
                     {coinDetails.max_limit ? coinDetails.max_limit : 'N/A'}
                 </p>
 
-                {/* <span> <b>Description:</b> </span>
-                <p style={{ "marginBottom": "15px" }}
-                    dangerouslySetInnerHTML={{ __html: coinDetails.description ? coinDetails.description : 'N/A' }} /> */}
-
-                <span> <b>Wallet Address:</b> </span>
+                <span> <b>Warm Wallet Address:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {coinDetails.wallet_address ? coinDetails.wallet_address : 'N/A'}
+                    {coinDetails.warm_wallet_address ? coinDetails.warm_wallet_address : 'N/A'}
+                </p>
+
+                <span> <b>Hot Send Wallet Address: </b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {coinDetails.hot_send_wallet_address ? coinDetails.hot_send_wallet_address : 'N/A'}
+                </p>
+
+                <span> <b>Hot Receive Wallet Address:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {coinDetails.hot_receive_wallet_address ? coinDetails.hot_receive_wallet_address : 'N/A'}
+                </p>
+
+                <span> <b>Custody Wallet Address:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {coinDetails.custody_wallet_address ? coinDetails.custody_wallet_address : 'N/A'}
                 </p>
             </Modal>
         );

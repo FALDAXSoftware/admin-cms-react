@@ -131,6 +131,7 @@ class AccountClass extends Component {
     }
 
     render() {
+        console.log(this.props.is_twofactor)
         const { allAccountClasses, errType, errMsg, loader, showAddClassModal, accountClassDetails,
             showEditAccountClassModal, showDeleteAccountClassModal
         } = this.state;
@@ -178,12 +179,14 @@ class AccountClass extends Component {
                                             visible={showDeleteAccountClassModal}
                                             onCancel={this._closeDeleteClassModal}
                                             footer={[
-                                                <Button onClick={this._closeDeleteClassModal}>No</Button>,
-                                                <Button onClick={this._deleteAccountClass}>Yes</Button>,
+                                                <Button onClick={this._closeDeleteClassModal}>Cancel</Button>,
+                                                this.props.is_twofactor ? <Button onClick={this._deleteAccountClass}>Yes</Button> : '',
                                             ]}
                                         >
-                                            Are you sure you want to delete this class ?
-                                    </Modal>
+                                            {this.props.is_twofactor ?
+                                                <span>Are you sure you want to delete this class ?</span>
+                                                : <span>Enable two factor authentication to remove the account class</span>}
+                                        </Modal>
                                     }
                                 </div>
                             </TabPane>
@@ -197,7 +200,8 @@ class AccountClass extends Component {
 
 export default connect(
     state => ({
-        token: state.Auth.get('token')
+        token: state.Auth.get('token'),
+        user: state.Auth.get('user')
     }), { logout })(AccountClass);
 
 export { AccountClass, accountClassTableinfos };

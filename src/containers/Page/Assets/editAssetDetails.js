@@ -80,6 +80,10 @@ class EditAssetDetails extends Component {
         fields['coin_name'] = '';
         fields['min_limit'] = '';
         fields['max_limit'] = '';
+        fields['warm_wallet_address'] = '';
+        fields['hot_send_wallet_address'] = '';
+        fields['hot_receive_wallet_address'] = '';
+        fields['custody_wallet_address'] = '';
         this.setState({ fields, selectedToken: false });
     }
 
@@ -91,12 +95,17 @@ class EditAssetDetails extends Component {
         if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
 
-            let formData = new FormData();
-            formData.append('coin_id', coin_id);
-            formData.append('coin_name', fields['coin_name']);
-            formData.append('min_limit', fields['min_limit']);
-            formData.append('max_limit', fields['max_limit']);
-            formData.append('isERC', selectedToken);
+            let formData = {
+                coin_id,
+                coin_name: fields['coin_name'],
+                min_limit: fields['min_limit'],
+                max_limit: fields['max_limit'],
+                warm_wallet_address: fields['warm_wallet_address'],
+                hot_send_wallet_address: fields['hot_send_wallet_address'],
+                hot_receive_wallet_address: fields['hot_receive_wallet_address'],
+                custody_wallet_address: fields['custody_wallet_address'],
+                isERC: selectedToken
+            }
 
             ApiUtils.editCoin(token, formData)
                 .then((res) => res.json())
@@ -181,6 +190,42 @@ class EditAssetDetails extends Component {
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
+                            <span>Warm Wallet Address:</span>
+                            <Input placeholder="Warm Wallet Address" onChange={this._handleChange.bind(this, "warm_wallet_address")} value={fields["warm_wallet_address"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('warm wallet address', fields["warm_wallet_address"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Hot Send Wallet Address:</span>
+                            <Input placeholder="Hot Send Wallet Address" onChange={this._handleChange.bind(this, "hot_send_wallet_address")} value={fields["hot_send_wallet_address"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('hot send wallet address', fields["hot_send_wallet_address"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Hot Receive Wallet Address:</span>
+                            <Input placeholder="Hot Receive Wallet Address" onChange={this._handleChange.bind(this, "hot_receive_wallet_address")} value={fields["hot_receive_wallet_address"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('hot receive wallet address', fields["hot_receive_wallet_address"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Custody Wallet Address:</span>
+                            <Input placeholder="Custody Wallet Address" onChange={this._handleChange.bind(this, "custody_wallet_address")} value={fields["custody_wallet_address"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('custody wallet address', fields["custody_wallet_address"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
                             <span>Is ERC20 Token? :</span>
                             <Select
                                 style={{ width: 125, "marginLeft": "15px" }}
@@ -196,6 +241,12 @@ class EditAssetDetails extends Component {
                     <Row>
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
+                            <Button type="primary"
+                                onClick={() => { this.props.history.push('/dashboard/assets') }}
+                                className="user-btn"
+                                style={{ marginLeft: "15px" }}>
+                                Cancel
+                                </Button>
                         </Col>
                     </Row>
                 </Form>
