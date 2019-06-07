@@ -1,83 +1,110 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Modal, Button } from 'antd';
+import { Tabs, Pagination } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { referralInfos } from "../../Tables/antTables";
+import { userReferralInfos } from "../../Tables/antTables";
+import ApiUtils from '../../../helpers/apiUtills';
+import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import TableDemoStyle from '../../Tables/antTables/demo.style';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 
 class ReferralUsers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showReferralModal: this.props.showReferralModal,
             allReferral: this.props.allReferral,
             allReferralCount: this.props.allReferralCount,
-            userId: this.props.userId
+            userId: this.props.userId,
+            page: 1,
+            limit: 50,
         }
     }
 
-    static getDerivedStateFromProps = (nextProps, prevState) => {
-        if (nextProps !== this.props) {
-            return {
-                allReferral: nextProps.allReferral,
-                allReferralCount: nextProps.allReferralCount,
-                showReferralModal: nextProps.showReferralModal,
-                userId: nextProps.userId
-            }
-        }
-        return null;
+    componentDidMount = () => {
+        this._getAllUserReferral();
+    }
+
+    _getAllUserReferral = () => {
+        const { token, user_id } = this.props;
+        const { limit, page, sorterCol, sortOrder } = this.state;
+
+        let _this = this;
+
+        this.setState({ loader: true })
+        ApiUtils.getAllUserReferrals(page, limit, token, user_id, sorterCol, sortOrder)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({
+                        allReferral: res.data, allReferralCount: res.referralCount,
+                        showReferralModal: true, userId: user_id
+                    });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, message: res.message });
+                }
+                _this.setState({ loader: false })
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
     }
 
     _handleReferralPagination = (page) => {
-        this.props.getAllReferredUsers(page - 1, this.state.userId);
+        this.setState({ page }, () => {
+            this._getAllUserReferral();
+        })
     }
 
-    _closeReferralModal = () => {
-        this.setState({ showReferralModal: false })
-        this.props.closeReferalModal();
+    _handleReferralTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllUserReferral();
+        })
     }
 
     render() {
-        const { allReferral, allReferralCount, showReferralModal } = this.state;
+        const { allReferral, allReferralCount, loader, page } = this.state;
 
         return (
-            <Modal
-                title="View Referred Users"
-                visible={showReferralModal}
-                onCancel={this._closeReferralModal}
-                footer={[
-                    <Button onClick={this._closeReferralModal}>OK</Button>,
-                ]}
-            >
-                {
-                    allReferralCount > 0 ?
-                        <Tabs className="isoTableDisplayTab">
-                            {
-                                referralInfos.map(tableInfo => (
-                                    <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                        <TableWrapper
-                                            {...this.state}
-                                            columns={tableInfo.columns}
-                                            pagination={false}
-                                            dataSource={allReferral}
-                                            className="isoCustomizedTable"
-                                        />
+            <LayoutWrapper>
+                <TableDemoStyle className="isoLayoutContent">
+                    <Tabs className="isoTableDisplayTab">
+                        {
+                            userReferralInfos.map(tableInfo => (
+                                <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                    <TableWrapper
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allReferral}
+                                        className="isoCustomizedTable"
+                                        onChange={this._handleReferralTableChange}
+                                    />
+                                    {loader && <FaldaxLoader />}
+                                    {allReferralCount > 0 ?
                                         <Pagination
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={10}
-                                            defaultCurrent={1}
+                                            pageSize={50}
+                                            current={page}
                                             total={allReferralCount}
-                                        />
-                                    </TabPane>
-                                ))
-                            }
-                        </Tabs>
-                        : 'No Data'
-                }
-            </Modal>
+                                        /> : ''}
+                                </TabPane>
+                            ))
+                        }
+                    </Tabs>
+                </TableDemoStyle>
+            </LayoutWrapper>
         );
     }
 }
@@ -85,4 +112,4 @@ class ReferralUsers extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(ReferralUsers);
+    }), { logout })(ReferralUsers);

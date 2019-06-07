@@ -11,6 +11,14 @@ import ContentHolder from '../../components/utility/contentHolder';
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
 import CountCard from '../Widgets/card/count-widget';
+import { Link } from 'react-router-dom';
+import authAction from '../../redux/auth/actions';
+import { DatePicker } from 'antd';
+import moment from 'moment';
+import FaldaxLoader from './faldaxLoader';
+
+const { logout } = authAction;
+const { RangePicker } = DatePicker;
 
 const CardWrapper = styled(Card)`
     & .ant-card-body{
@@ -79,27 +87,25 @@ class Dashboard extends Component {
             inactiveUsers: 0,
             activeCoins: 0,
             InactiveCoins: 0,
-            pagesCount: 0,
             referralCount: 0,
             activePairs: 0,
             InactivePairs: 0,
             legalCountries: 0,
             illegalCountries: 0,
             neutralCountries: 0,
-            blogsCount: 0,
             employeeCount: 0,
             jobsCount: 0,
-            coinReqCount: 0,
-            subscriberCount: 0,
             withdrawReqCount: 0,
-            lastSevenInquiry: 0,
-            lastThirtyInquiry: 0,
             kyc_disapproved: 0,
             kyc_approved: 0,
             total_kyc: 0,
             kyc_pending: 0,
             errMsg: false,
-            errMessage: ''
+            errMessage: '',
+            startDate: '',
+            endDate: '',
+            rangeDate: [],
+            loader: false
         }
     }
 
@@ -117,30 +123,36 @@ class Dashboard extends Component {
 
     _getAllCount = () => {
         const { token } = this.props;
+        const { startDate, endDate } = this.state;
         let _this = this;
 
-        ApiUtils.getAllCount(token)
+        _this.setState({ loader: true })
+        ApiUtils.getAllCount(token, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    const {
-                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs, InactivePairs,
-                        legalCountries, illegalCountries,
-                        neutralCountries, blogsCount, employeeCount, jobsCount,
-                        coinReqCount, subscriberCount, withdrawReqCount, lastSevenInquiry,
-                        lastThirtyInquiry, kyc_disapproved, kyc_approved, total_kyc, kyc_pending
-
-                    } = res;
-                    _this.setState({
-                        activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                        InactivePairs, legalCountries,
-                        illegalCountries, neutralCountries, blogsCount, employeeCount,
-                        jobsCount, coinReqCount, subscriberCount, withdrawReqCount,
-                        lastSevenInquiry, lastThirtyInquiry, kyc_disapproved, kyc_approved,
-                        total_kyc, kyc_pending
-                    });
+                    if (res.status == 200) {
+                        const {
+                            activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                            InactivePairs, legalCountries, illegalCountries,
+                            neutralCountries, employeeCount, jobsCount,
+                            withdrawReqCount, kyc_disapproved, kyc_approved,
+                            total_kyc, kyc_pending
+                        } = res;
+                        _this.setState({
+                            activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
+                            InactivePairs, legalCountries,
+                            illegalCountries, neutralCountries, employeeCount,
+                            jobsCount, withdrawReqCount,
+                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false
+                        });
+                    } else if (res.status == 403) {
+                        _this.props.logout();
+                    } else {
+                        _this.setState({ errMsg: true, message: res.message, loader: false });
+                    }
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, message: res.message, loader: false });
                 }
             })
             .catch(err => {
@@ -148,13 +160,45 @@ class Dashboard extends Component {
             });
     }
 
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: date.length > 0 ? moment(date[0]).startOf('d').toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).endOf('d').toISOString() : ''
+        }, () => {
+            this._getAllCount();
+        })
+    }
+
     render() {
         const { rowStyle, colStyle } = basicStyle;
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
-            neutralCountries, blogsCount, employeeCount, jobsCount, coinReqCount,
-            subscriberCount, withdrawReqCount, lastSevenInquiry, lastThirtyInquiry,
-            kyc_approved, kyc_disapproved, total_kyc, kyc_pending
+            neutralCountries, employeeCount, jobsCount, withdrawReqCount,
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader
         } = this.state;
 
         const data = {
@@ -195,6 +239,7 @@ class Dashboard extends Component {
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
                 <Row style={rowStyle} gutter={0} justify="start">
                     <Col md={12} xs={24} style={colStyle}>
                         <CardWrapper title="Country" >
@@ -209,9 +254,23 @@ class Dashboard extends Component {
                     <Col md={12} xs={24} style={colStyle}>
                         <CardWrapper title="KYC">
                             <ChartWrapper>
+                                <RangePicker
+                                    value={rangeDate}
+                                    disabledTime={this.disabledRangeTime}
+                                    onChange={this._changeDate}
+                                    format="YYYY-MM-DD"
+                                    style={{ marginBottom: '15px' }}
+                                />
+                                <Row style={{ width: "100%" }}>
+                                    <Col span={12}>
+                                        <b >Grand Total:{total_kyc}</b>
+                                    </Col>
+                                    <Col span={12} style={{ textAlign: "right" }}>
+                                        <a href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                    </Col>
+                                </Row>
                                 <ContentHolder>
-                                    <b>Grand Total:</b> {total_kyc}
-                                    <Pie data={kycData} />
+                                    {total_kyc > 0 ? <Pie data={kycData} /> : 'NO DATA FOUND'}
                                 </ContentHolder>
                             </ChartWrapper>
                         </CardWrapper>
@@ -246,123 +305,86 @@ class Dashboard extends Component {
 
                 <Row style={rowStyle} gutter={0} justify="start" >
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <CountCard number={activeUsers}
-                            headColor={'#6455b9'}
-                            number2={inactiveUsers}
-                            bgColor={'#8478cc'}
-                            title={'Users'}
-                            text={'Active Users'}
-                            text2={'Inactive Users'}
-                            icon="fa fa-users"
-                            fontColor="#ffffff" />
+                        <Link to='/dashboard/users'>
+                            <CountCard number={activeUsers}
+                                headColor={'#6455b9'}
+                                number2={inactiveUsers}
+                                bgColor={'#8478cc'}
+                                title={'Users'}
+                                text={'Active Users'}
+                                text2={'Inactive Users'}
+                                icon="fa fa-users"
+                                fontColor="#ffffff" />
+                        </Link></Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <Link to='/dashboard/assets'>
+                            <CountCard number={activeCoins}
+                                headColor={'#EB4278'}
+                                number2={InactiveCoins}
+                                bgColor={'#F96E9B'}
+                                title={'Assets'}
+                                text={'Active Assets'}
+                                text2={'Inactive Assets'}
+                                icon="fa fa-coins"
+                                fontColor="#ffffff" />
+                        </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <CountCard number={activeCoins}
-                            headColor={'#EB4278'}
-                            number2={InactiveCoins}
-                            bgColor={'#F96E9B'}
-                            title={'Coins'}
-                            text={'Active Coins'}
-                            text2={'Inactive Coins'}
-                            icon="fa fa-coins"
-                            fontColor="#ffffff" />
+                        <Link to='/dashboard/pairs'>
+                            <CountCard number={activePairs}
+                                headColor={'#0F67BA'}
+                                number2={InactivePairs}
+                                bgColor={'#3B95EA'}
+                                title={'Pairs'}
+                                text={'Active Pairs'}
+                                text2={'Inactive Pairs'}
+                                icon="fa fa-coins"
+                                fontColor="#ffffff" />
+                        </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <CountCard number={activePairs}
-                            headColor={'#0F67BA'}
-                            number2={InactivePairs}
-                            bgColor={'#3B95EA'}
-                            title={'Pairs'}
-                            text={'Active Pairs'}
-                            text2={'Inactive Pairs'}
-                            icon="fa fa-coins"
-                            fontColor="#ffffff" />
+                        <Link to='/dashboard/employee'>
+                            <IsoWidgetsWrapper>
+                                <StickerWidget
+                                    number={employeeCount}
+                                    text={'Active Employees'}
+                                    icon="fas fa-user-tie"
+                                    fontColor="#ffffff"
+                                    bgColor="#E74C3C"
+                                />
+                            </IsoWidgetsWrapper>
+                        </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <CountCard number={lastSevenInquiry}
-                            headColor={'#E54D0B'}
-                            number2={lastThirtyInquiry}
-                            bgColor={'#E3703E'}
-                            title={'Inquiry'}
-                            text={'Last Seven Days Inquiry'}
-                            text2={'Last Thirty Days Inquiry'}
-                            icon="fas fa-comments"
-                            fontColor="#ffffff" />
+                        <Link to='/dashboard/jobs'>
+                            <IsoWidgetsWrapper>
+                                <StickerWidget
+                                    number={jobsCount}
+                                    text={'Total Open Jobs'}
+                                    icon="fas fa-suitcase-rolling"
+                                    fontColor="#ffffff"
+                                    bgColor="#F1C40F"
+                                />
+                            </IsoWidgetsWrapper>
+                        </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={blogsCount}
-                                text={'Blogs - Last 30 days'}
-                                icon="far fa-file-alt"
-                                fontColor="#ffffff"
-                                bgColor="#F75D81"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={employeeCount}
-                                text={'Active Employees'}
-                                icon="fas fa-user-tie"
-                                fontColor="#ffffff"
-                                bgColor="#E74C3C"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={jobsCount}
-                                text={'Total Open Jobs'}
-                                icon="fas fa-suitcase-rolling"
-                                fontColor="#ffffff"
-                                bgColor="#F1C40F"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={coinReqCount}
-                                text={'Last 30 Days Coin Requests'}
-                                icon="fas fa-coins"
-                                fontColor="#ffffff"
-                                bgColor="#5499C7"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={subscriberCount}
-                                text={'Total Subscribers'}
-                                icon="far fa-newspaper"
-                                fontColor="#ffffff"
-                                bgColor="#CD6155"
-                            />
-                        </IsoWidgetsWrapper>
-                    </Col>
-
-                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <StickerWidget
-                                number={withdrawReqCount}
-                                text={'Last 7 Days Withdraw Requests'}
-                                icon="fas fa-hand-holding-usd"
-                                fontColor="#ffffff"
-                                bgColor="#A569BD"
-                            />
-                        </IsoWidgetsWrapper>
+                        <Link to='/dashboard/withdraw-requests'>
+                            <IsoWidgetsWrapper>
+                                <StickerWidget
+                                    number={withdrawReqCount}
+                                    text={'Last 7 Days Withdraw Requests'}
+                                    icon="fas fa-hand-holding-usd"
+                                    fontColor="#ffffff"
+                                    bgColor="#A569BD"
+                                />
+                            </IsoWidgetsWrapper>
+                        </Link>
                     </Col>
                 </Row >
             </LayoutWrapper >
@@ -373,4 +395,4 @@ class Dashboard extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Dashboard);
+    }), { logout })(Dashboard);

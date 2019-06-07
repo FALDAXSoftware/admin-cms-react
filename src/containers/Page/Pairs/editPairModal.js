@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification, Button } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const { logout } = authAction;
 
 class EditPairModal extends Component {
     constructor(props) {
@@ -18,7 +20,22 @@ class EditPairModal extends Component {
             errType: 'Success',
             isDisabled: false
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            className: 'text-danger',
+            custom_between: {
+                message: 'The :attribute must be between 1 to 100 %.',
+                rule: function (val, params, validator) {
+                    if (isNaN(val)) {
+                        return false;
+                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true
+            }
+        });
     }
 
     openNotificationWithIconError = (type) => {
@@ -35,7 +52,22 @@ class EditPairModal extends Component {
                 showEditPairModal: nextProps.showEditPairModal,
                 fields: nextProps.fields
             });
-            this.validator = new SimpleReactValidator();
+            this.validator = new SimpleReactValidator({
+                className: 'text-danger',
+                custom_between: {
+                    message: 'The :attribute must be between 1 to 100 %.',
+                    rule: function (val, params, validator) {
+                        if (isNaN(val)) {
+                            return false;
+                        } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                    required: true
+                }
+            });
         }
     }
 
@@ -81,13 +113,21 @@ class EditPairModal extends Component {
             ApiUtils.updatePair(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this._closeEditPairModal();
-                    getAllPairs();
-                    this._resetEditForm();
-                    this.setState({
-                        errType: 'Success', errMsg: true, errMessage: res.message,
-                        isDisabled: false, loader: false
-                    })
+                    if (res.status == 200) {
+                        this._closeEditPairModal();
+                        getAllPairs();
+                        this._resetEditForm();
+                        this.setState({
+                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            isDisabled: false, loader: false
+                        })
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -129,7 +169,7 @@ class EditPairModal extends Component {
                     <span>Maker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('maker fee', fields["maker_fee"], 'required|decimal', 'text-danger')}
+                        {this.validator.message('maker fee', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
 
@@ -137,11 +177,10 @@ class EditPairModal extends Component {
                     <span>Taker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('taker fee', fields["taker_fee"], 'required|decimal', 'text-danger')}
+                        {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
-
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }
@@ -150,4 +189,4 @@ class EditPairModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditPairModal);
+    }), { logout })(EditPairModal);

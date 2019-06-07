@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Button, Select } from 'antd';
+import { Modal, Input, notification, Button, Select } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
+import authAction from '../../../redux/auth/actions';
 import striptags from 'striptags';
+import FaldaxLoader from '../faldaxLoader';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const { logout } = authAction;
 const Option = Select.Option;
 
 class EditJobModal extends Component {
@@ -122,13 +124,21 @@ class EditJobModal extends Component {
             ApiUtils.updateJob(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', showError: false, isDisabled: false
-                    });
-                    this._closeEditJobModal();
-                    getAllJobs();
-                    this._resetForm();
+                    if (res.status == 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', showError: false, isDisabled: false
+                        });
+                        this._closeEditJobModal();
+                        getAllJobs();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -223,7 +233,7 @@ class EditJobModal extends Component {
                             {this.validator.message('location', fields["location"], 'required|max:50', 'text-danger')}
                         </span>
                     </div>
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div >
         );
@@ -233,4 +243,4 @@ class EditJobModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditJobModal);
+    }), { logout })(EditJobModal);

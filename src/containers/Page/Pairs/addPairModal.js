@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, Select, notification, Button } from 'antd';
+import { Modal, Input, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const { logout } = authAction;
 const Option = Select.Option;
 
 class AddPairModal extends Component {
@@ -26,7 +28,22 @@ class AddPairModal extends Component {
             showCoin2Err: false,
             showError: false
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            className: 'text-danger',
+            custom_between: {
+                message: 'The :attribute must be between 1 to 100 %.',
+                rule: function (val, params, validator) {
+                    if (isNaN(val)) {
+                        return false;
+                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true
+            }
+        });
     }
 
     openNotificationWithIconError = (type) => {
@@ -43,7 +60,22 @@ class AddPairModal extends Component {
                 showAddPairsModal: nextProps.showAddPairsModal,
                 allCoins: nextProps.allCoins
             })
-            this.validator = new SimpleReactValidator();
+            this.validator = new SimpleReactValidator({
+                className: 'text-danger',
+                custom_between: {
+                    message: 'The :attribute must be between 1 to 100 %.',
+                    rule: function (val, params, validator) {
+                        if (isNaN(val)) {
+                            return false;
+                        } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                    required: true
+                }
+            });
         }
     }
 
@@ -92,13 +124,21 @@ class AddPairModal extends Component {
             ApiUtils.addPair(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this._closeAddPairsModal();
-                    getAllPairs();
-                    this._resetAddForm();
-                    this.setState({
-                        errType: 'Success', errMsg: true, errMessage: res.message,
-                        isDisabled: false, loader: false
-                    })
+                    if (res.status == 200) {
+                        this._closeAddPairsModal();
+                        getAllPairs();
+                        this._resetAddForm();
+                        this.setState({
+                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            isDisabled: false, loader: false
+                        })
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -150,7 +190,7 @@ class AddPairModal extends Component {
 
         let coinOptions = allCoins.map((coin) => {
             return (
-                <Option value={coin.coin_code}>{coin.coin_name}-{coin.coin_code}</Option>
+                <Option value={coin.coin}>{coin.coin_name}-{coin.coin}</Option>
             )
         });
 
@@ -175,41 +215,41 @@ class AddPairModal extends Component {
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin 1:</span>
+                    <span>Asset 1:</span>
                     <Select
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Coin"
+                        placeholder="Select a Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id1')}
                     >
                         {coinOptions}
                     </Select><br />
                     {showCoin1Err && <span style={{ "color": "red" }}>
-                        {'The coin 1 field is required.'}
+                        {'The asset 1 field is required.'}
                     </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Coin 2:</span>
+                    <span>Asset 2:</span>
                     <Select
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Coin"
+                        placeholder="Select a Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id2')}
                     >
                         {coinOptions}
                     </Select><br />
                     {showCoin2Err && <span style={{ "color": "red" }}>
-                        {'The coin 2 field is required.'}
+                        {'The asset 2 field is required.'}
                     </span>}
                 </div>
                 {showError && <span style={{ "color": "red" }}>
-                    {'The coin 1 & coin 2 field can not be same.'}
+                    {'The asset 1 & asset 2 field can not be same.'}
                 </span>}
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Maker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('maker fee', fields["maker_fee"], 'required|decimal', 'text-danger')}
+                        {this.validator.message('maker fee', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
 
@@ -217,11 +257,10 @@ class AddPairModal extends Component {
                     <span>Taker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('taker fee', fields["taker_fee"], 'required|decimal', 'text-danger')}
+                        {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
-
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }
@@ -230,4 +269,4 @@ class AddPairModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(AddPairModal);
+    }), { logout })(AddPairModal);

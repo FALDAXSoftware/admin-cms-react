@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Spin } from 'antd';
+import { Tabs, notification } from 'antd';
 import { limitTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -7,7 +7,10 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditLimitModal from './editLimitModal';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
+const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 var self;
 
@@ -24,13 +27,9 @@ class LimitManagement extends Component {
         LimitManagement.editLimit = LimitManagement.editLimit.bind(this);
     }
 
-    static editLimit(value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto,
-        monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto,
-        dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat) {
+    static editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) {
         let limitDetails = {
-            value, user, monthlyDepositCrypto, monthlyDepositFiat, monthlyWithdrawCrypto,
-            monthlyWithdrawFiat, dailyDepositCrypto, dailyDepositFiat, dailyWithdrawCrypto,
-            dailyWithdrawFiat, minWithdrawlCrypto, minWithdrawlFiat
+            value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat
         }
         self.setState({ limitDetails, showEditLimitModal: true });
     }
@@ -47,8 +46,12 @@ class LimitManagement extends Component {
         ApiUtils.getAllLimit(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allLimitData: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -56,8 +59,7 @@ class LimitManagement extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errType: 'error', errMsg: true,
-                    errMessage: 'Something went wrong', loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
             });
     }
@@ -66,10 +68,16 @@ class LimitManagement extends Component {
         this.setState({ showEditLimitModal: false })
     }
 
+    openNotificationWithIconError = (type) => {
+        notification[type]({
+            message: this.state.errType,
+            description: this.state.errMessage
+        });
+        this.setState({ errMsg: false });
+    };
+
     render() {
-        const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal,
-            loader
-        } = this.state;
+        const { allLimitData, errType, errMsg, limitDetails, showEditLimitModal, loader } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -88,9 +96,7 @@ class LimitManagement extends Component {
                                         closeEditModal={this._closeEditLimitModal}
                                         getAllLimits={this._getAllLimits}
                                     />
-                                    {loader && <span className="loader-class">
-                                        <Spin />
-                                    </span>}
+                                    {loader && <FaldaxLoader />}
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}
@@ -111,6 +117,6 @@ class LimitManagement extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(LimitManagement);
+    }), { logout })(LimitManagement);
 
 export { LimitManagement, limitTableInfos };

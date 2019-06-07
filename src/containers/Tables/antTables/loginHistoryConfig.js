@@ -1,15 +1,20 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateTimeCell, IPCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell, IPCell, LogoutDateCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key, created_date = null) => {
+const renderCell = (object, type, key, is_login = null, created_date = null,
+    updated_date = null) => {
     const value = object[key];
+    const is_logged_in = object[is_login];
     const created_at = object[created_date];
+    const updated_at = object[updated_date];
 
     switch (type) {
         case 'DateTimeCell':
-            return DateTimeCell(value, created_at);
+            return DateTimeCell(value, is_logged_in, created_at, updated_at);
+        case 'LogoutDateCell':
+            return LogoutDateCell(value, is_logged_in, created_at, updated_at);
         case 'IPCell':
             return IPCell(value);
         default:
@@ -27,6 +32,11 @@ const columns = [{
     key: 'created_at',
     width: 100,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
+}, {
+    title: <IntlMessages id="historyTable.title.logout_at" />,
+    key: 'action',
+    width: 100,
+    render: object => renderCell(object, 'LogoutDateCell', 'ip', 'is_logged_in', 'created_at', 'updated_at')
 }];
 
 const historyTableInfos = [

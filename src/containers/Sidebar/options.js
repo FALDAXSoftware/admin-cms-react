@@ -12,10 +12,10 @@ const options = [
     module: "users"
   },
   {
-    key: "coins",
+    key: "assets",
     label: "sidebar.coins",
     leftIcon: "fas fa-coins",
-    module: "coins"
+    module: "assets"
   },
   {
     key: "pairs",
@@ -30,24 +30,6 @@ const options = [
     module: "countries"
   },
   {
-    key: "announcement",
-    label: "sidebar.announce",
-    leftIcon: "fas fa-bullhorn",
-    module: "announcement"
-  },
-  {
-    key: "static-pages",
-    label: "sidebar.staticPages",
-    leftIcon: "fas fa-file",
-    module: "static_page"
-  },
-  // {
-  //   key: "blogs",
-  //   label: "sidebar.blogs",
-  //   leftIcon: "far fa-file-alt",
-  //   module: "blogs"
-  // },
-  {
     key: "roles",
     label: "sidebar.roles",
     leftIcon: "fas fa-tasks",
@@ -59,12 +41,6 @@ const options = [
     leftIcon: "fas fa-user-tie",
     module: "employee"
   },
-
-  // {
-  //   key: "send-coin-fee",
-  //   label: "sidebar.sendCoinFees",
-  //   leftIcon: "ion-filing"
-  // }
   {
     key: "limit-management",
     label: "sidebar.limit",
@@ -90,40 +66,58 @@ const options = [
     module: "withdraw_requests"
   },
   {
-    key: "coin-requests",
-    label: "sidebar.coinRequests",
-    leftIcon: "fas fa-coins",
-    module: "coin_requests"
-  },
-  {
-    key: "inquiries",
-    label: "sidebar.inquiries",
-    leftIcon: "fas fa-comments",
-    module: "inquiries"
-  },
-  {
     key: "jobs",
     label: "sidebar.jobs",
     leftIcon: "fas fa-suitcase-rolling",
     module: "jobs"
   },
   {
-    key: "contact-us",
-    label: "sidebar.contact",
-    leftIcon: "fas fa-user-cog",
-    module: "contact_setting"
-  },
-  {
-    key: "subscribe",
-    label: "sidebar.subscribe",
-    leftIcon: "far fa-newspaper",
-    module: "subscribe"
-  },
-  {
     key: "kyc",
     label: "sidebar.kyc",
     leftIcon: "fas fa-id-card",
     module: "kyc"
+  },
+  {
+    key: "fees",
+    label: "Fees",
+    leftIcon: "fas fa-percentage",
+    module: "fees"
+  },
+  {
+    key: "panic-button",
+    label: "Panic Button",
+    leftIcon: "fas fa-ban",
+    module: "panic_button"
+  },
+  {
+    key: "news",
+    label: "News",
+    leftIcon: "fas fa-newspaper",
+    module: "news"
+  },
+  {
+    key: "referral",
+    label: "Affiliate Program & Referrals",
+    leftIcon: "fas fa-user-friends",
+    module: "is_referral"
+  },
+  {
+    key: "account-class",
+    label: "Account Class Management",
+    leftIcon: "fas fa-file-invoice",
+    module: "account_class"
+  },
+  {
+    key: "email-templates",
+    label: "Email Templates",
+    leftIcon: "fas fa-envelope",
+    module: "email_templates"
+  },
+  {
+    key: "news-source",
+    label: "News Sources",
+    leftIcon: "fas fa-rss-square",
+    module: "news_source"
   },
 ];
 

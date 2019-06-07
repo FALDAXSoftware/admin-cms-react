@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Spin, Pagination } from 'antd';
+import { Tabs, notification, Pagination, Input } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -7,7 +7,14 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewKYCModal from './viewKYCModal';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+import ApprovedKYC from './approvedKYC';
+import ReviewKYC from './reviewKYC';
+import DeclinedKYC from './declinedKYC';
 
+const Search = Input.Search;
+const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 var self;
 
@@ -18,8 +25,8 @@ class KYC extends Component {
             allKYCData: [],
             showViewKYCModal: false,
             kycDetails: [],
-            notifyMsg: '',
-            notify: false,
+            errMessage: '',
+            errMsg: false,
             errType: '',
             loader: false,
             page: 1,
@@ -28,7 +35,6 @@ class KYC extends Component {
             allKYCCount: 0,
         }
         self = this;
-        KYC.rejectKYC = KYC.rejectKYC.bind(this);
         KYC.rejectKYC = KYC.rejectKYC.bind(this);
         KYC.viewKYC = KYC.viewKYC.bind(this);
     }
@@ -64,16 +70,20 @@ class KYC extends Component {
         ApiUtils.updateKYCStatus(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                self.setState({
-                    loader: false, errMsg: true, errMessage: res.message,
-                    errType: 'error',
-                });
-                self._getAllKYCData();
+                if (res.status == 200) {
+                    self.setState({ loader: false, errMsg: true, errMessage: res.message, errType: 'error' });
+                    self._getAllKYCData();
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -84,24 +94,27 @@ class KYC extends Component {
 
     _getAllKYCData = () => {
         const { token } = this.props;
-        const { page, limit, searchKYC } = this.state;
+        const { page, limit, searchKYC, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getKYCData(token, page, limit, searchKYC)
+        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allKYCData: res.data, allKYCCount: res.KYCCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
-                    _this.setState({ errMsg: true, message: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -109,9 +122,9 @@ class KYC extends Component {
     openNotificationWithIcon = (type) => {
         notification[type]({
             message: this.state.errType,
-            description: this.state.notifyMsg
+            description: this.state.errMessage
         });
-        this.setState({ notify: false });
+        this.setState({ errMsg: false });
     };
 
     _closeViewKYCModal = () => {
@@ -124,11 +137,22 @@ class KYC extends Component {
         })
     }
 
-    render() {
-        const { allKYCData, notify, errType, loader, kycDetails,
-            showViewKYCModal, page, allKYCCount } = this.state;
+    _handleKYCTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllKYCData();
+        })
+    }
 
-        if (notify) {
+    _searchKYC = (val) => {
+        this.setState({ searchKYC: val, page: 1 }, () => {
+            this._getAllKYCData();
+        });
+    }
+
+    render() {
+        const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount } = this.state;
+
+        if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
 
@@ -138,31 +162,55 @@ class KYC extends Component {
                     <Tabs className="isoTableDisplayTab">
                         {KYCInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
-                                <ViewKYCModal
-                                    kycDetails={kycDetails}
-                                    showViewKYCModal={showViewKYCModal}
-                                    closeViewModal={this._closeViewKYCModal}
-                                />
-                                <TableWrapper
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allKYCData}
-                                    className="isoCustomizedTable"
-                                />
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleKYCPagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allKYCCount}
-                                />
+                                <div style={{
+                                    "display": "flex", "width": "100%",
+                                    "justifyContent": "flex-end",
+                                    "alignItems": "center",
+                                }}>
+                                    <Search
+                                        placeholder="Search kyc"
+                                        onSearch={(value) => this._searchKYC(value)}
+                                        style={{ "width": "250px", "marginRight": "20px" }}
+                                        enterButton
+                                    />
+                                </div>
+                                {loader && <FaldaxLoader />}
+                                <div style={{ marginTop: "30px" }}>
+                                    <ViewKYCModal
+                                        kycDetails={kycDetails}
+                                        showViewKYCModal={showViewKYCModal}
+                                        closeViewModal={this._closeViewKYCModal}
+                                    />
+                                    <TableWrapper
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allKYCData}
+                                        className="isoCustomizedTable"
+                                        onChange={this._handleKYCTableChange}
+                                    />
+                                    {allKYCCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleKYCPagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={allKYCCount}
+                                        /> : ''}
+                                </div>
                             </TabPane>
                         ))}
+
+                        <TabPane tab="Approved KYC" key="2">
+                            <ApprovedKYC />
+                        </TabPane>
+                        <TabPane tab="Under Review KYC" key="3">
+                            <ReviewKYC />
+                        </TabPane>
+                        <TabPane tab="Declined KYC" key="4">
+                            <DeclinedKYC />
+                        </TabPane>
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
@@ -174,6 +222,6 @@ export default connect(
     state => ({
         user: state.Auth.get('user'),
         token: state.Auth.get('token')
-    }))(KYC);
+    }), { logout })(KYC);
 
 export { KYC }

@@ -4,29 +4,33 @@ import LayoutContentWrapper from '../../../components/utility/layoutWrapper.js';
 import TableDemoStyle from './demo.style';
 import fakeData from '../fakeData';
 import { tableinfos } from './usersConfig';
-import { coinTableInfos } from './coinsConfig';
-import { staticPagesInfos } from './staticPagesConfig';
-import { referralInfos } from './referralConfig';
-import { AnnounceInfos } from './announceConfig';
+import { assetTableInfos } from './coinsConfig';
+import { userReferralInfos } from './userReferralConfig';
 import { countryTableInfos } from './countriesConfig';
 import { rolesTableInfos } from './rolesConfig';
 import { stateTableInfos } from './stateConfig';
 import { employeeTableinfos } from './employeeConfig';
-import { blogsTableInfos } from './blogsConfig';
 import { historyTableInfos } from './loginHistoryConfig';
 import { pairsTableInfos } from './pairsConfig';
 import { limitTableInfos } from './limitConfig';
 import { transactionTableInfos } from './transactionConfig';
+import { userTransactionTableInfos } from './userTransactionConfig.js'
 import { tradeTableInfos } from './tradeConfig';
 import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
 import { buyOrderTableInfos } from './buyOrderConfig';
-import { coinReqTableInfos } from './coinRequestConfig';
-import { inquiryTableInfos } from './inquiryConfig';
 import { jobsTableInfos } from './jobsConfig';
 import { jobAppTableInfos } from './jobAppConfig';
-import { subscriberTableinfos } from './subscriberConfig';
 import { KYCInfos } from './kycConfig';
+import { FeesInfos } from './feesConfig';
+import { newsTableInfos } from './newsConfig';
+import { referralInfos } from './referralConfig';
+import { ticketsTableInfos } from './ticketsConfig';
+import { userWithdrawReqTableInfos } from './userWithdrawReqConfig';
+import { accountClassTableinfos } from './accountClassConfig';
+import { templateTableinfos } from './templateconfig';
+import { newsSourceTableInfos } from './newsSourceConfig';
+import { jobCategoryTableInfos } from './jobcategoryConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -73,10 +77,11 @@ export default class AntTable extends Component {
 }
 
 export {
-  TableViews, tableinfos, dataList, coinTableInfos, staticPagesInfos, referralInfos,
-  AnnounceInfos, countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
-  blogsTableInfos, historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
+  TableViews, tableinfos, dataList, assetTableInfos, referralInfos,
+  countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
+  historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
-  coinReqTableInfos, inquiryTableInfos, jobsTableInfos, jobAppTableInfos, subscriberTableinfos,
-  KYCInfos
+  jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
+  newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
+  accountClassTableinfos, templateTableinfos, newsSourceTableInfos, jobCategoryTableInfos
 };

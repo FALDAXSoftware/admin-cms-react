@@ -29,21 +29,25 @@ const columns = [{
     title: <IntlMessages id="feeTable.title.name" />,
     key: 'name',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'name')
 }, {
     title: <IntlMessages id="feeTable.title.maker_fee" />,
     key: 'maker_fee',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'maker_fee')
 }, {
     title: <IntlMessages id="feeTable.title.taker_fee" />,
     key: 'taker_fee',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'taker_fee')
 }, {
     title: <IntlMessages id="feeTable.title.created_at" />,
     key: 'created_at',
     width: 100,
+    sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="feeTable.title.status" />,

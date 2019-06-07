@@ -35,6 +35,7 @@ const columns = [
         title: <IntlMessages id="countryTable.title.name" />,
         key: 'name',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'name')
     },
     {

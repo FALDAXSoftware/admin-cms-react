@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Spin, Button, Modal } from 'antd';
+import { Input, Tabs, Pagination, notification, Button, Modal } from 'antd';
 import { jobsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,9 +9,13 @@ import { connect } from 'react-redux';
 import AddJobModal from './addJobModal';
 import ViewJobModal from './viewJobModal';
 import EditJobModal from './editJobModal';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
+import JobCategory from './jobsCategory';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Jobs extends Component {
@@ -66,11 +70,19 @@ class Jobs extends Component {
         ApiUtils.updateJob(token, formData)
             .then((res) => res.json())
             .then((res) => {
-                this.setState({
-                    errMsg: true, errMessage: message, loader: false,
-                    errType: 'Success', showError: false, isDisabled: false
-                });
-                this._getAllJobs();
+                if (res.status == 200) {
+                    this.setState({
+                        errMsg: true, errMessage: message, loader: false,
+                        errType: 'Success', showError: false, isDisabled: false
+                    });
+                    this._getAllJobs();
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({ errMsg: true, errMessage: res.message });
+                }
             })
             .catch(() => {
                 this.setState({
@@ -112,26 +124,27 @@ class Jobs extends Component {
 
     _getAllJobs = () => {
         const { token } = this.props;
-        const { limit, searchJob, page } = this.state;
+        const { limit, searchJob, page, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllJobs(page, limit, token, searchJob)
+        ApiUtils.getAllJobs(page, limit, token, searchJob, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allJobs: res.data, allJobsCount: res.allJobsCount, searchJob: ''
+                if (res.status == 200) {
+                    _this.setState({ allJobs: res.data, allJobsCount: res.allJobsCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchJob: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchJob: '', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -143,8 +156,12 @@ class Jobs extends Component {
         ApiUtils.getAllJobCategories(token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({ allJobCategories: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -152,8 +169,7 @@ class Jobs extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
@@ -166,7 +182,7 @@ class Jobs extends Component {
 
     _handleJobPagination = (page) => {
         this.setState({ page }, () => {
-            this._getAllJobs(page);
+            this._getAllJobs();
         })
     }
 
@@ -179,12 +195,16 @@ class Jobs extends Component {
         ApiUtils.deleteJob(deleteJobId, token)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     _this.setState({
                         deleteJobId: '', showDeleteJobModal: false,
                         errMessage: res.message, errMsg: true, page: 1
                     });
                     _this._getAllJobs();
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ deleteJobId: '', showDeleteJobModal: false });
                 }
@@ -215,11 +235,16 @@ class Jobs extends Component {
         this.setState({ showEditJobModal: false });
     }
 
+    _handleJobTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllJobs();
+        })
+    }
+
     render() {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
             jobDetails, allJobCategories } = this.state;
-        console.log('jobDetails', jobDetails)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -246,9 +271,7 @@ class Jobs extends Component {
                                         enterButton
                                     />
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <ViewJobModal
                                         jobDetails={jobDetails}
@@ -268,6 +291,7 @@ class Jobs extends Component {
                                         pagination={false}
                                         dataSource={allJobs}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleJobTableChange}
                                     />
                                     {
                                         showDeleteJobModal &&
@@ -283,7 +307,7 @@ class Jobs extends Component {
                                             Are you sure you want to delete this job ?
                                     </Modal>
                                     }
-                                    {allJobsCount.length > 0 ?
+                                    {allJobsCount > 0 ?
                                         <Pagination
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
@@ -291,11 +315,13 @@ class Jobs extends Component {
                                             pageSize={50}
                                             current={page}
                                             total={allJobsCount}
-                                        />
-                                        : ''}
+                                        /> : ''}
                                 </div>
                             </TabPane>
                         ))}
+                        <TabPane tab="Job Category" key="2">
+                            <JobCategory />
+                        </TabPane>
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
@@ -306,6 +332,6 @@ class Jobs extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Jobs);
+    }), { logout })(Jobs);
 
 export { Jobs, jobsTableInfos };

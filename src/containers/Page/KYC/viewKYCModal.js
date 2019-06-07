@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
-import { BUCKET_URL } from '../../../helpers/globals';
 
 class ViewKYCModal extends Component {
     constructor(props) {
@@ -49,12 +48,12 @@ class ViewKYCModal extends Component {
             >
                 <span> <b>First Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {kycDetails.first_name ? kycDetails.first_name : 'NA'}
+                    {kycDetails.first_name ? kycDetails.first_name : 'N/A'}
                 </p>
 
                 <span> <b>Last Name:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {kycDetails.last_name ? kycDetails.last_name : 'NA'}
+                    {kycDetails.last_name ? kycDetails.last_name : 'N/A'}
                 </p>
 
                 <span> <b>Address:</b> </span>
@@ -67,7 +66,7 @@ class ViewKYCModal extends Component {
                 </p>
                 <span> <b>Date of Birth:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
-                    {kycDetails.dob ? kycDetails.dob : 'NA'}
+                    {kycDetails.dob ? kycDetails.dob : 'N/A'}
                 </p>
 
                 {kycDetails.direct_response ?
@@ -106,11 +105,6 @@ class ViewKYCModal extends Component {
                             {idType}</p>
                     </div>
                     : ''}
-
-                <div style={{ marginBottom: '20px' }}>
-                    <a href={BUCKET_URL + kycDetails.front_doc} target="_blank" style={{ backgroundImage: "url('" + BUCKET_URL + kycDetails.front_doc + "')" }} class="front-doc"></a>
-                    <a href={BUCKET_URL + kycDetails.front_doc} target="_blank" style={{ backgroundImage: "url('" + BUCKET_URL + kycDetails.back_doc + "')" }} class="front-doc"></a>
-                </div>
             </Modal>
         );
     }

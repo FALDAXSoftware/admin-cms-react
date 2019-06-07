@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, TransactionTypeCell, TagsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, user = null, source = null, destination = null, amt = null,
     tras_type = null, createdOn = null, transactionID = null, coin = null) => {
@@ -19,6 +19,12 @@ const renderCell = (object, type, key, user = null, source = null, destination =
         case 'DateCell':
             return DateCell(value, email, source_address, destination_address,
                 amount, transaction_type, created_at, transaction_id, coin_id);
+        case 'TransactionTypeCell':
+            return TransactionTypeCell(value, email, source_address, destination_address,
+                amount, transaction_type, created_at, transaction_id, coin_id);
+        case 'TagsCell':
+            return TagsCell(value, email, source_address, destination_address,
+                amount, transaction_type, created_at, transaction_id, coin_id);
         default:
             return TextCell(value);
     }
@@ -29,12 +35,13 @@ const columns = [
         title: <IntlMessages id="transactionTable.title.transactionId" />,
         key: 'transaction_id',
         width: 200,
-        render: object => renderCell(object, 'TextCell', 'transaction_id')
+        render: object => renderCell(object, 'TagsCell', 'transaction_id')
     },
     {
         title: <IntlMessages id="transactionTable.title.email" />,
         key: 'email',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {
@@ -53,18 +60,20 @@ const columns = [
         title: <IntlMessages id="transactionTable.title.amount" />,
         key: 'amount',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'amount', 'coin_id')
     },
     {
         title: <IntlMessages id="transactionTable.title.transactionType" />,
         key: 'transaction_type',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'transaction_type')
+        render: object => renderCell(object, 'TransactionTypeCell', 'transaction_type')
     },
     {
         title: <IntlMessages id="transactionTable.title.created_at" />,
         key: 'created_at',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'DateCell', 'created_at')
     },
 ];

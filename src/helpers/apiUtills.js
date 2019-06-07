@@ -1,5 +1,6 @@
-//const API_URL = "http://18.203.31.131:8084"; // Local (Krina) URL
+//const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
 //const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
@@ -41,7 +42,7 @@ const ApiUtils = {
     //change admin password api
     changePassword: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/changePassword", {
+            return fetch(API_URL + "/admin/change-password", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -54,9 +55,13 @@ const ApiUtils = {
     },
 
     //get all counts for dashboard api
-    getAllCount: function (token) {
+    getAllCount: function (token, startDate, endDate) {
+        let url = "/admin/dashboard/get-data";
+        if (startDate && endDate) {
+            url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+        }
         try {
-            return fetch(API_URL + "/admin/dashboard/getData", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -68,10 +73,22 @@ const ApiUtils = {
     },
 
     //get all users api
-    getAllUsers: function (page, limit, token, searchUser) {
-        let url = "/admin/getUsers?page=" + page + "&limit=" + limit;
-        if (searchUser) {
-            url = url + "&data=" + searchUser;
+    getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
+        let url = "/admin/get-users?page=" + page + "&limit=" + limit;
+        if (sorterCol && sortOrder && searchUser && filterVal) {
+            url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && searchUser) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + searchUser;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (searchUser && filterVal) {
+            url += "&data=" + searchUser + "&country=" + filterVal;
+        } else if (filterVal) {
+            url += "&country=" + filterVal;
+        } else {
+            url += "&data=" + searchUser;
         }
         try {
             return fetch(API_URL + url, {
@@ -89,7 +106,7 @@ const ApiUtils = {
     //activate user api
     activateUser: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/userActivate", {
+            return fetch(API_URL + "/admin/user-activate", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -102,11 +119,16 @@ const ApiUtils = {
     },
 
     //get all coins api
-    getAllCoins: function (page, limit, token, search) {
-        let url = "/admin/getCoins?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+    getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
+        let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -144,7 +166,7 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Accept': 'application/json',
                 },
-                body: form,
+                body: JSON.stringify(form),
             });
         } catch (error) {
             console.error(error);
@@ -166,72 +188,10 @@ const ApiUtils = {
         }
     },
 
-    //get all static pages api
-    getStaticPages: function (token) {
-        try {
-            return fetch(API_URL + "/admin/static/getStaticPage", {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //add static pages api
-    addPage: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/static/create", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit static pages api
-    editPage: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/static/update", {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete static pages api
-    deleteStaticPage: function (token, pageId) {
-        try {
-            return fetch(API_URL + "/admin/static/delete?id=" + pageId, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //forgot password api
     forgotPassword: function (form) {
         try {
-            return fetch(API_URL + "/admin/forgotPassword", {
+            return fetch(API_URL + "/admin/forgot-password", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -247,7 +207,7 @@ const ApiUtils = {
     //reset password api
     resetPassword: function (form) {
         try {
-            return fetch(API_URL + "/admin/resetPassword", {
+            return fetch(API_URL + "/admin/reset-password", {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -256,14 +216,17 @@ const ApiUtils = {
                 body: JSON.stringify(form),
             });
         } catch (error) {
-            console.log('>>>>>>>>>>>>>>>>>>>>>>', error)
             console.error(error);
         }
     },
 
     //get all referrals api
-    getAllReferrals: function (page, limit, token, userId) {
-        let url = "/admin/referredUsers?id=" + userId + "&page=" + page + "&limit=" + limit;
+    getAllUserReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
+        let url = "/admin/referred-users?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (sorterCol, sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -277,10 +240,19 @@ const ApiUtils = {
         }
     },
 
-    //get all announcement emails api
-    getEmailTemplates: function (token) {
+    //get all referrals api
+    getAllReferrals: function (page, limit, token, searchReferral, sorterCol, sortOrder) {
+        let url = "/admin/referred-users?page=" + page + "&limit=" + limit;
+        if (sorterCol && sortOrder && searchReferral) {
+            url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url += "&data=" + searchReferral;
+        }
+
         try {
-            return fetch(API_URL + "/admin/announcement/getAnnouncementTemplate", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -292,59 +264,17 @@ const ApiUtils = {
         }
     },
 
-    //add announcement email api
-    addTemplate: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/announcement/create", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit announcement email api
-    editTemplate: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/announcement/update", {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete announcement  email api
-    deleteTemplate: function (token, templateId) {
-        try {
-            return fetch(API_URL + "/admin/announcement/delete?id=" + templateId, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //get all counties api
-    getAllCountries: function (page, limit, token, search) {
-        let url = "/admin/getCountriesData?page=" + page + "&limit=" + limit;
-        if (search) {
-            url += '&data=' + search;
+    getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
+        let url = "/admin/get-countries-data?page=" + page + "&limit=" + limit + '&legality=' + legality;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -361,7 +291,7 @@ const ApiUtils = {
     //Activate-deactivate country api 
     activateCountry: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/countryActivate", {
+            return fetch(API_URL + "/admin/country-activate", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -389,9 +319,14 @@ const ApiUtils = {
     },
 
     //get all roles api
-    getAllRoles: function (token) {
+    getAllRoles: function (token, sorterCol, sortOrder) {
+        let url = "/admin/role/get";
+        if (sorterCol && sortOrder) {
+            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        }
+
         try {
-            return fetch(API_URL + "/admin/role/get", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -406,7 +341,7 @@ const ApiUtils = {
     //edit country api call
     editCountry: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/countryUpdate", {
+            return fetch(API_URL + "/admin/country-update", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -419,11 +354,16 @@ const ApiUtils = {
     },
 
     //get all states api
-    getAllStates: function (token, countryId, search) {
-        let url = "/admin/getStateData?country_id=" + countryId;
-        if (search) {
+    getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
+        let url = "/admin/get-state-data?country_id=" + countryId;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
             url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -440,7 +380,7 @@ const ApiUtils = {
     //Activate-deactivate state api 
     activateState: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/stateActivate", {
+            return fetch(API_URL + "/admin/state-activate", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -455,7 +395,7 @@ const ApiUtils = {
     //edit state api call
     editState: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/stateUpdate", {
+            return fetch(API_URL + "/admin/state-update", {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -513,9 +453,17 @@ const ApiUtils = {
     },
 
     //get all employee api
-    getAllEmployee: function (token) {
+    getAllEmployee: function (token, sorterCol, sortOrder, search) {
+        let url = "/admin/get-employees";
+        if (sorterCol && sortOrder && search) {
+            url += "?data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "?data=" + search;
+        }
         try {
-            return fetch(API_URL + "/admin/get-employees", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -573,70 +521,19 @@ const ApiUtils = {
         }
     },
 
-    //get all blogs api
-    getAllBlogs: function (page, limit, token) {
-        try {
-            return fetch(API_URL + "/admin/all-blogs?page=" + page + "&limit=" + limit, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
+    //user login history api call
+    getUserHistory: function (token, user_id, page, limit, data, startDate, endDate) {
+        let url = "/admin/get-user-login-history?page=" + page + "&limit=" + limit;
+        if (data && startDate && endDate) {
+            url += "&data=" + data + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else {
+            url += "&data=" + data;
         }
-    },
 
-    //add blog api call
-    addBlog: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/create-blog", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-                body: form,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit blog api call
-    editBlog: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/edit-blog", {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + token
-                },
-                body: form,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete blog api call
-    deleteBlog: function (token, blogId) {
-        try {
-            return fetch(API_URL + "/admin/delete-blog", {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: blogId })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    getUserHistory: function (token, user_id) {
-        try {
-            return fetch(API_URL + "/admin/getUserloginHistory", {
+            return fetch(API_URL + url, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -649,9 +546,23 @@ const ApiUtils = {
         }
     },
 
-    getAllPairs: function (page, limit, token) {
+    getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder, selectedAsset) {
+        let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
+        if (sorterCol && sortOrder && searchPair && selectedAsset) {
+            url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
+        } else if (sorterCol && sortOrder && selectedAsset) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
+        } else if (searchPair && selectedAsset) {
+            url += "&data=" + searchPair + "&filter_val=" + selectedAsset;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (selectedAsset) {
+            url += "&filter_val=" + selectedAsset;
+        } else {
+            url += "&data=" + searchPair;
+        }
         try {
-            return fetch(API_URL + "/admin/all-pairs?page=" + page + "&limit=" + limit, {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -724,23 +635,36 @@ const ApiUtils = {
         }
     },
 
-    getAllTransaction: function (page, limit, token, search, filterVal, startDate, endDate) {
+    getAllTransaction: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
-        if (search && filterVal && startDate) {
-            url += "&search=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
+        if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder && startDate && endDate) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && search && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && startDate && endDate) {
-            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
-            url += "&search=" + search
+            url += "&data=" + search
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -754,65 +678,145 @@ const ApiUtils = {
         }
     },
 
-    getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate) {
+    //user wise transaction list api call
+    getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
+        let url = "/admin/all-transactions?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && sorterCol && sortOrder && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder && startDate && endDate) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && search && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
-        if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
-        } else if (search && filterVal) {
-            url += "&search=" + search + "&t_type=" + filterVal;
+        if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && filterVal && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && startDate && endDate) {
-            url += "&search=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (startDate && endDate) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (filterVal) {
-            url += "&t_type=" + filterVal;
-        } else {
-            url += "&search=" + search;
-        }
-
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    getUserTrades: function (page, limit, token, search, user_id) {
-        let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (search) {
-            url += "&data=" + search;
-        }
-
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate) {
-        let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit;
-        if (search && filterVal && startDate && endDate) {
-            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal;
-        } else if (filterVal && startDate && endDate) {
-            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search;
+        }
+
+        console.log('url', url)
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
+        let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && filterVal && sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && search) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
+        let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit;
+        if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (search && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (filterVal && startDate && endDate) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
@@ -835,97 +839,90 @@ const ApiUtils = {
         }
     },
 
-    getAllSellOrders: function (page, limit, token, search, userId) {
-        let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
-        if (search) {
-            url += "&data=" + search;
-        }
-        try {
-            return fetch(API_URL + url, {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    getAllBuyOrders: function (page, limit, token, search, userId) {
-        let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
-        if (search) {
-            url += "&data=" + search;
-        }
-        try {
-            return fetch(API_URL + url, {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //get all coins api
-    getAllCoinRequests: function (page, limit, token, search, startDate, endDate) {
-        let url = "/admin/coin-requests?page=" + page + "&limit=" + limit;
-        if (search && startDate && endDate) {
+    //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
+    getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
+        let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        if (search && startDate && endDate && filterVal && sorterCol && sortOrder) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + search + "&start_date=" + startDate + "&start_date=" + startDate + "&end_date=" + endDate;;
+        } else if (search && startDate && endDate && filterVal) {
             url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (startDate && endDate) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && sorterCol && sortOrder) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate) {
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (filterVal) {
+            url += "&t_type=" + filterVal;
+        } else {
+            url += "&data=" + search
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllSellOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
+        let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else {
             url += "&data=" + search;
         }
 
         try {
             return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //get all inquiry api
-    getAllInquiries: function (page, limit, token, search) {
-        let url = "/admin/get-all-inquiry?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
-        }
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //delete inquiry api call
-    deleteInquiry: function (token, inquiry_id) {
-        try {
-            return fetch(API_URL + "/admin/delete-inquiry", {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ inquiry_id })
+                body: JSON.stringify({ user_id })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllBuyOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
+        let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url += "&data=" + search;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id })
             });
         } catch (error) {
             console.error(error);
@@ -933,11 +930,16 @@ const ApiUtils = {
     },
 
     //get all jobs api
-    getAllJobs: function (page, limit, token, search) {
+    getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -1032,7 +1034,7 @@ const ApiUtils = {
     //get contact details api
     getContactDetails: function () {
         try {
-            return fetch(API_URL + "/get-contact-details", {
+            return fetch(API_URL + "/admin/get-contact-details", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1044,32 +1046,12 @@ const ApiUtils = {
     },
 
     //get all jobs api
-    getAllJobApplications: function (jobId, page, limit, token, search) {
-        let url = "/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
-        if (search) {
-            url = url + "&data=" + search;
-        }
-        try {
-            return fetch(API_URL + url, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //get all subscribers api
-    getAllSubscribers: function (page, limit, token, search, startDate, endDate) {
-        let url = "/admin/get-all-subscribers?page=" + page + "&limit=" + limit;
-
-        if (search && startDate && endDate) {
-            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (startDate && endDate) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
+    getAllJobApplications: function (jobId, page, limit, token, search, sorterCol, sortOrder) {
+        let url = "/admin/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else {
             url += "&data=" + search;
         }
@@ -1087,28 +1069,23 @@ const ApiUtils = {
         }
     },
 
-    //delete subscriber api call
-    deleteSubscriber: function (token, subscriber_id) {
-        try {
-            return fetch(API_URL + "/admin/delete-subscriber", {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ subscriber_id })
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     //get all kyc data api
-    getKYCData: function (token, page, limit, search) {
+    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, status) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
-        if (search) {
-            url = url + "&data=" + search;
+        if (sorterCol && sortOrder && search && status) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status
+        } else if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (search && status) {
+            url += "&data=" + search + "&status=" + status;
+        } else if (status) {
+            url += "&status=" + status;
+        } else {
+            url += "&data=" + search;
         }
+
         try {
             return fetch(API_URL + url, {
                 method: 'GET',
@@ -1138,10 +1115,86 @@ const ApiUtils = {
         }
     },
 
-    //set featured blog api
-    setFeatureBlog: function (token, form) {
+    //get all fees api
+    getFeesData: function (token) {
+        let url = "/admin/get-all-fee";
         try {
-            return fetch(API_URL + "/admin/set-featured-blog", {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit fees api
+    updateFees: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-fee", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //panic button api
+    panicBtn: function (token) {
+        try {
+            return fetch(API_URL + "/panic-button", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    // get user details api
+    getUserDetails: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    // get employee details api
+    getEmployeeDetails: function (token, emp_id) {
+        try {
+            return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    disableTwoFactor: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/disable-two-factor", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -1153,6 +1206,479 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    setupTwoFactor: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/setup-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    verifyOTP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/verify-two-factor", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAdminDetails: function (token, admin_id) {
+        try {
+            return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all news api
+    getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder) {
+        let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
+        if (searchNews && filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filter_val=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (searchNews && startDate && endDate && sorterCol && sortOrder) {
+            url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&filter_val=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && searchNews && sorterCol && sortOrder) {
+            url += "&filter_val=" + filterVal + "&data=" + searchNews + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && searchNews && startDate && endDate) {
+            url += "&filter_val=" + filterVal + "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (startDate && endDate && sorterCol && sortOrder) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&filter_val=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (filterVal && startDate && endDate) {
+            url += "&filter_val=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (searchNews && sorterCol && sortOrder) {
+            url += "&data=" + searchNews + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (searchNews && filterVal) {
+            url += "&data=" + searchNews + "&filter_val=" + filterVal;
+        } else if (filterVal) {
+            url += "&filter_val=" + filterVal;
+        } else {
+            url += "&data=" + searchNews;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    changeNewsStatus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/change-news-status", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getNewsDetails: function (token, news_id) {
+        try {
+            return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateReferral: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-user-referal", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getKYCDetails: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/get-kyc-detail?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getReferredAmounts: function (token, ref_id) {
+        try {
+            return fetch(API_URL + "/admin/get-referred-amount-details?id=" + ref_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateSendCoinFee: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-send-coin-fee", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //add user api call
+    addUser: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-user", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getWalletCoins: function (token) {
+        try {
+            return fetch(API_URL + "/coin-list", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getUserTickets: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/get-user-tickets", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllAccountClasses: function (token) {
+        try {
+            return fetch(API_URL + "/admin/get-all-account-classes", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    addAccountClass: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-account-class", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateAccountClass: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-account-class", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    deleteAccountClass: function (classId, token) {
+        try {
+            return fetch(API_URL + "/admin/delete-account-class?class_id=" + classId, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAssetDetails: function (token, coin_id) {
+        try {
+            return fetch(API_URL + "/admin/coin/get-coin-details?id=" + coin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAssetLimits: function (token, coin_id) {
+        try {
+            return fetch(API_URL + "/admin/all-limits?coin_id=" + coin_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateAssetLimits: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-limit", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getUserLimits: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/all-user-limits?user_id=" + user_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateUserLimits: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-user-limit", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllEmailTemplates: function (token) {
+        try {
+            return fetch(API_URL + "/admin/emailTemplate/get", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateEmailTemplate: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/emailTemplate/update", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllNewsSources: function (token) {
+        try {
+            return fetch(API_URL + "/admin/all-new-source", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateNewsSource: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/edit-news-source", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    changeWithdrawStaus: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getTemplateDetails: function (token, template_id) {
+        try {
+            return fetch(API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //edit job category api call
+    updateJobCategory: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-job-category", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    addJobCategory: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-job-category", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 export default ApiUtils;

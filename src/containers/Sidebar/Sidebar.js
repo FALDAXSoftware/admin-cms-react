@@ -167,7 +167,7 @@ class Sidebar extends Component {
           trigger={null}
           collapsible={true}
           collapsed={collapsed}
-          width="240"
+          width="265"
           className="isomorphicSidebar"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}

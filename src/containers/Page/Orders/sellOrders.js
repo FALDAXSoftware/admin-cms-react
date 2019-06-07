@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Breadcrumb } from 'antd';
+import { Input, Pagination, notification } from 'antd';
 import { sellOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 
 class SellOrders extends Component {
     constructor(props) {
@@ -21,12 +23,13 @@ class SellOrders extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
-            page: 0
+            page: 1,
+            loader: false
         }
     }
 
     componentDidMount = () => {
-        this._getAllOrders(0);
+        this._getAllOrders();
     }
 
     openNotificationWithIconError = (type) => {
@@ -38,46 +41,52 @@ class SellOrders extends Component {
     };
 
     _getAllOrders = () => {
-        const { token } = this.props;
-        const { searchOrder, page, limit } = this.state;
+        const { token, user_id } = this.props;
+        const { searchOrder, page, limit, sorterCol, sortOrder } = this.state;
         let _this = this;
-        let path = this.props.location.pathname.split('/');
-        let user_id = path[path.length - 1]
 
-        ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id)
+        _this.setState({ loader: true });
+        ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
-                    _this.setState({
-                        allOrders: res.data, allOrderCount: res.transactionCount,
-                        searchOrder: '', user_name: res.user_name.full_name
+                if (res.status == 200) {
+                    _this.setState({ allOrders: res.data, allOrderCount: res.sellBookCount });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, searchOrder: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message });
                 }
+                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    searchOrder: '', errType: 'error',
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
     }
 
     _searchOrder = (val) => {
-        this.setState({ searchOrder: val }, () => {
-            this._getAllOrders(0);
+        this.setState({ searchOrder: val, page: 1 }, () => {
+            this._getAllOrders();
         });
     }
 
     _handleOrderPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
-            this._getAllOrders(page - 1);
+        this.setState({ page }, () => {
+            this._getAllOrders();
+        })
+    }
+
+    _handleSellOrderChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllOrders();
         })
     }
 
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page, user_name } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page, loader } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -86,29 +95,26 @@ class SellOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Breadcrumb>
-                        <Breadcrumb.Item>Users</Breadcrumb.Item>
-                        <Breadcrumb.Item>{user_name}</Breadcrumb.Item>
-                        <Breadcrumb.Item>Sell Orders</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <Tabs className="isoTableDisplayTab">
-                        {sellOrderTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
-                                        placeholder="Search Orders"
-                                        onSearch={(value) => this._searchOrder(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                <TableWrapper
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allOrders}
-                                    className="isoCustomizedTable"
+                    {sellOrderTableInfos.map(tableInfo => (
+                        <div>
+                            <div style={{ "display": "inline-block", "width": "100%" }}>
+                                <Search
+                                    placeholder="Search Orders"
+                                    onSearch={(value) => this._searchOrder(value)}
+                                    style={{ "float": "right", "width": "250px" }}
+                                    enterButton
                                 />
+                            </div>
+                            <TableWrapper
+                                {...this.state}
+                                columns={tableInfo.columns}
+                                pagination={false}
+                                dataSource={allOrders}
+                                className="isoCustomizedTable"
+                                onChange={this._handleSellOrderChange}
+                            />
+                            {loader && <FaldaxLoader />}
+                            {allOrderCount > 0 ?
                                 <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
@@ -116,10 +122,10 @@ class SellOrders extends Component {
                                     pageSize={50}
                                     current={page}
                                     total={allOrderCount}
-                                />
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                                /> : ''
+                            }
+                        </div>
+                    ))}
                 </TableDemoStyle>
             </LayoutWrapper>
         );
@@ -129,6 +135,6 @@ class SellOrders extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(SellOrders);
+    }), { logout })(SellOrders);
 
 export { SellOrders, sellOrderTableInfos };

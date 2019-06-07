@@ -10,19 +10,9 @@ const routes = [
         module: "users"
     },
     {
-        path: "announcement",
-        component: asyncComponent(() => import("../Page/Announce/announce")),
-        module: "announcement"
-    },
-    {
-        path: "coins",
-        component: asyncComponent(() => import("../Page/Coins/coins")),
-        module: "coins"
-    },
-    {
-        path: "static-pages",
-        component: asyncComponent(() => import("../Page/StaticPages/staticPages")),
-        module: "static_page"
+        path: "assets",
+        component: asyncComponent(() => import("../Page/Assets/assets")),
+        module: "assets"
     },
     {
         path: "countries",
@@ -39,11 +29,6 @@ const routes = [
         component: asyncComponent(() => import("../Page/Employee/employee")),
         module: "employee"
     },
-    // {
-    //     path: "blogs",
-    //     component: asyncComponent(() => import("../Page/Blogs/blogs")),
-    //     module: "blogs"
-    // },
     {
         path: "pairs",
         component: asyncComponent(() => import("../Page/Pairs/pairs")),
@@ -75,35 +60,60 @@ const routes = [
         module: "withdraw_requests"
     },
     {
-        path: "coin-requests",
-        component: asyncComponent(() => import("../Page/Coins/coinRequests")),
-        module: "coin_requests"
-    },
-    {
-        path: "inquiries",
-        component: asyncComponent(() => import("../Page/Inquiry/inquiry")),
-        module: "inquiries"
-    },
-    {
         path: "jobs",
         component: asyncComponent(() => import("../Page/Jobs/jobs")),
         module: "jobs"
-    },
-    {
-        path: "contact-us",
-        component: asyncComponent(() => import("../Page/adminSetting")),
-        module: "contact_setting"
-    },
-    {
-        path: "subscribe",
-        component: asyncComponent(() => import("../Page/Subscribe/subscribers")),
-        module: "subscribe"
     },
     {
         path: "kyc",
         component: asyncComponent(() => import("../Page/KYC/kyc")),
         module: "kyc"
     },
+    {
+        path: "fees",
+        component: asyncComponent(() => import("../Page/Fees/fees")),
+        module: "fees"
+    },
+    {
+        path: "panic-button",
+        component: asyncComponent(() => import("../Page/panicButton")),
+        module: "panic_button"
+    },
+    {
+        path: "news",
+        component: asyncComponent(() => import("../Page/News/news")),
+        module: "news"
+    },
+    {
+        path: "referral",
+        component: asyncComponent(() => import("../Page/Referral/referral")),
+        module: "is_referral"
+    },
+    {
+        path: "users/add-user",
+        component: asyncComponent(() => import("../Page/Users/addUser")),
+        module: "add_user"
+    },
+    {
+        path: "account-class",
+        component: asyncComponent(() => import("../Page/AccountClass/accountClass")),
+        module: "account_class"
+    },
+    {
+        path: "email-templates",
+        component: asyncComponent(() => import("../Page/EmailTemplates/emailTemplates")),
+        module: "email_templates"
+    },
+    {
+        path: "news-source",
+        component: asyncComponent(() => import("../Page/NewsSource/newsSources")),
+        module: "news_source"
+    },
+    // {
+    //     path: "edit-asset",
+    //     component: asyncComponent(() => import("../Page/Assets/editAsset")),
+    //     module: "edit_asset"
+    // },
 ];
 
 const mandatoryRoutes = [
@@ -143,10 +153,33 @@ const mandatoryRoutes = [
         path: "country/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
-
     {
         path: "job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
+    },
+    {
+        path: "users/edit-user/:id",
+        component: asyncComponent(() => import("../Page/Users/editUser"))
+    },
+    {
+        path: "users/:id",
+        component: asyncComponent(() => import("../Page/Users/viewUser"))
+    },
+    {
+        path: "employee/:id",
+        component: asyncComponent(() => import("../Page/Employee/employeeProfile"))
+    },
+    {
+        path: "referral/:id",
+        component: asyncComponent(() => import("../Page/Referral/referredAmount"))
+    },
+    {
+        path: "assets/edit-asset/:id",
+        component: asyncComponent(() => import("../Page/Assets/editAsset"))
+    },
+    {
+        path: "email-templates/edit-template/:id",
+        component: asyncComponent(() => import("../Page/EmailTemplates/updateEmailTemplate"))
     },
 ]
 

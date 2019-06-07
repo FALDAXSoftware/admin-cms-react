@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Spin, Modal } from 'antd';
+import { Button, Tabs, notification, Modal } from 'antd';
 import { rolesTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,8 +8,11 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddRoleModal from './addRoleModal';
 import EditRoleModal from './editRoleModal';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
 const TabPane = Tabs.TabPane;
+const { logout } = authAction;
 var self;
 
 class Roles extends Component {
@@ -33,33 +36,30 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, coins, announcement, static_page, roles,
-        countries, employee, pairs, blogs, limit_management, transaction_history,
-        trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
-        contact_setting, kyc, is_active) {
+    static roleStatus(value, name, users, assets, countries,
+        roles, employee, pairs, limit_management, transaction_history, trade_history,
+        withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) {
         const { token } = self.props;
 
         let formData = {
             id: value,
             roles,
             users,
-            coins,
-            static_page,
-            announcement,
+            assets,
             countries,
             employee,
             name: name,
             withdraw_requests,
-            coin_requests,
-            inquiries,
             jobs,
             pairs,
             limit_management,
             transaction_history,
             trade_history,
-            subscribe,
-            contact_setting,
             kyc,
+            fees,
+            panic_button,
+            news,
+            referral,
             is_active: !is_active
         };
 
@@ -68,9 +68,13 @@ class Roles extends Component {
         ApiUtils.updateRole(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
+                if (res.status == 200) {
                     self._getAllRoles();
                     self.setState({ errMsg: true, errMessage: message, errType: 'Success' });
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
                 } else {
                     self.setState({ errMsg: true, errMessage: message });
                 }
@@ -83,17 +87,14 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, coins, announcement, static_page, roles,
-        countries, employee, pairs, limit_management, transaction_history,
-        trade_history, withdraw_requests, coin_requests, inquiries, jobs, subscribe,
-        contact_setting, kyc, is_active) {
+    static editRole(value, name, users, assets, countries,
+        roles, employee, pairs, limit_management, transaction_history, trade_history,
+        withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) {
         let roleDetails = {
-            value, name, users, coins, announcement, static_page, roles, countries,
-            employee, pairs, limit_management, transaction_history, trade_history,
-            withdraw_requests, coin_requests, inquiries, jobs, subscribe,
-            contact_setting, kyc, is_active
+            value, name, users, assets, countries,
+            roles, employee, pairs, limit_management, transaction_history, trade_history,
+            withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active
         }
-        console.log('>>>>>>>>', roleDetails)
         self.setState({ showEditRoleModal: true, roleDetails });
     }
 
@@ -115,14 +116,20 @@ class Roles extends Component {
 
     _getAllRoles = () => {
         const { token } = this.props;
+        const { sorterCol, sortOrder } = this.state;
+
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllRoles(token)
+        ApiUtils.getAllRoles(token, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
-                if (res) {
-                    _this.setState({ allRoles: res.roles });
+                if (res.status == 200) {
+                    _this.setState({ allRolesValue: res.roles[0], allRoles: res.roleName });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -146,15 +153,23 @@ class Roles extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    _this.setState({
-                        deleteRoleId: '', errType: 'Success', errMsg: true, errMessage: res.message
-                    });
-                    _this._closeDeleteRoleModal();
-                    _this._getAllRoles();
+                    if (res.status == 200) {
+                        _this.setState({
+                            deleteRoleId: '', errType: 'Success', errMsg: true, errMessage: res.message
+                        });
+                        _this._closeDeleteRoleModal();
+                        _this._getAllRoles();
+                    } else if (res.status == 403) {
+                        self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            self.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message });
+                    }
+                    _this.setState({ loader: false });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
-                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
@@ -179,9 +194,15 @@ class Roles extends Component {
         this.setState({ showDeleteRoleModal: false });
     }
 
+    _handleRoleChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+            this._getAllRoles();
+        })
+    }
+
     render() {
         const { allRoles, errType, errMsg, loader, showAddRoleModal,
-            showEditRoleModal, roleDetails, showDeleteRoleModal } = this.state;
+            showEditRoleModal, roleDetails, showDeleteRoleModal, allRolesValue } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -195,15 +216,14 @@ class Roles extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
-                                    <AddRoleModal
+                                    {showAddRoleModal && <AddRoleModal
+                                        allRolesValue={allRolesValue}
                                         showAddRoleModal={showAddRoleModal}
                                         closeAddModal={this._closeAddRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
-                                    />
+                                    />}
                                 </div>
-                                {loader && <span className="loader-class">
-                                    <Spin />
-                                </span>}
+                                {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
                                         {...this.state}
@@ -211,6 +231,7 @@ class Roles extends Component {
                                         pagination={false}
                                         dataSource={allRoles}
                                         className="isoCustomizedTable"
+                                        onChange={this._handleRoleChange}
                                     />
                                     {/* {showEditRoleModal && */}
                                     <EditRoleModal
@@ -246,7 +267,6 @@ class Roles extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(Roles);
+    }), { logout })(Roles);
 
 export { Roles, rolesTableInfos };
-

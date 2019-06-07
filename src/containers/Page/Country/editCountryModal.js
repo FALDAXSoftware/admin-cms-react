@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, notification, Icon, Spin, Select, Button } from 'antd';
+import { Modal, notification, Select, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ColorPicker from 'rc-color-picker';
 import 'rc-color-picker/assets/index.css';
+import FaldaxLoader from '../faldaxLoader';
+import authAction from '../../../redux/auth/actions';
 
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const { logout } = authAction;
 const Option = Select.Option;
 
 class EditCountryModal extends Component {
@@ -92,13 +94,21 @@ class EditCountryModal extends Component {
             ApiUtils.editCountry(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    this.setState({
-                        errMsg: true, errMessage: res.message, loader: false,
-                        errType: 'Success', isDisabled: false
-                    });
-                    this._closeEditCountryModal();
-                    getAllCountry();
-                    this._resetForm();
+                    if (res.status == 200) {
+                        this.setState({
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', isDisabled: false
+                        });
+                        this._closeEditCountryModal();
+                        getAllCountry();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
                 })
                 .catch(() => {
                     this.setState({
@@ -176,18 +186,17 @@ class EditCountryModal extends Component {
                         </Select>
                     </div>
 
-                    <div style={{ "marginBottom": "15px" }}>
+                    <div style={{ "marginBottom": "15px", display: 'flex' }}>
                         <span>Color Code:</span>
-                        <ColorPicker defaultColor={code} color={code} onChange={this._changeColor} />
-                        <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
-                            {color.color}
-                        </div>
+                        <ColorPicker className="color-picker" style={{ marginLeft: '10px' }} defaultColor={code} color={code} onChange={this._changeColor} />
                         <span style={{ "color": "red" }}>
                             {this.validator.message('color', fields["color"], 'required|max:7', 'text-danger')}
                         </span>
                     </div>
-
-                    {loader && <Spin indicator={loaderIcon} />}
+                    <div style={{ background: color.color, width: 100, height: 50, color: 'white' }}>
+                        {color.color}
+                    </div>
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div>
         );
@@ -197,4 +206,4 @@ class EditCountryModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(EditCountryModal);
+    }), { logout })(EditCountryModal);

@@ -36,12 +36,14 @@ const columns = [
         title: <IntlMessages id="jobTable.title.position" />,
         key: 'position',
         width: 100,
+        sorter: true,
         render: object => renderCell(object, 'TextCell', 'position')
     },
     {
         title: <IntlMessages id="jobTable.title.location" />,
         key: 'location',
         width: 200,
+        sorter: true,
         render: object => renderCell(object, 'ContentCell', 'location')
     },
     // {
@@ -59,6 +61,7 @@ const columns = [
     {
         title: <IntlMessages id="jobTable.title.created_at" />,
         key: 'created_at',
+        sorter: true,
         width: 200,
         render: object => renderCell(object, 'DateCell', 'created_at')
     }, {
@@ -73,7 +76,7 @@ const columns = [
         width: 200,
         render: object => renderCell(object, 'JobButtonCell', 'id')
     }, {
-        title: <IntlMessages id="blogTable.title.Actions" />,
+        title: <IntlMessages id="jobTable.title.Actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,

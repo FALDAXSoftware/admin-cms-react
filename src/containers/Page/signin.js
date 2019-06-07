@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Input, Checkbox, Icon, Spin, notification } from 'antd';
+import { Button, Input, Checkbox, notification } from 'antd';
 import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import logo from '../../image/Footer_logo.png';
+import FaldaxLoader from '../Page/faldaxLoader';
 
 const { login, storeToken, checkRoles } = authAction;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class SignIn extends Component {
   constructor(props) {
@@ -20,7 +20,8 @@ class SignIn extends Component {
       fields: {},
       errMsg: false,
       errMessage: '',
-      redirect: false
+      redirect: false,
+      isOtpRequired: false,
     };
     this.validator = new SimpleReactValidator();
   }
@@ -53,7 +54,8 @@ class SignIn extends Component {
     if (this.validator.allValid()) {
       let formData = {
         email: fields["email"],
-        password: fields["password"]
+        password: fields["password"],
+        otp: fields["otp"]
       };
 
       ApiUtils.adminSignIn(formData)
@@ -65,6 +67,10 @@ class SignIn extends Component {
             storeToken({ token: res.token });
             checkRoles({ roles: res.user.roles })
             _this.props.history.push('/dashboard');
+          } else if (res.status == 201) {
+            _this.setState({ isOtpRequired: true, loader: false });
+          } else if (res.status == 402) {
+            _this.setState({ errMsg: true, errMessage: res.err, loader: false });
           } else {
             _this.setState({ errMsg: true, errMessage: res.err, loader: false });
             login({ user: null });
@@ -117,6 +123,17 @@ class SignIn extends Component {
                 </span>
               </div>
 
+              {this.state.isOtpRequired &&
+                <div className="isoInputWrapper">
+                  <span>Two-Factor Authentication is enabled for this account. Please enter your 2FA code below to proceed.</span>
+                  <div>
+                    <Input size="large" type="text" placeholder="OTP" onChange={this._onChangeFields.bind(this, "otp")} />
+                    {this.validator.message('OTP', this.state.fields['otp'], 'required|numeric')}
+                  </div>
+                  <span className="otp_msg">{this.state.otp_msg}</span>
+                </div>
+              }
+
               <div className="isoInputWrapper isoLeftRightComponent">
                 {/* <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
@@ -131,8 +148,7 @@ class SignIn extends Component {
                   <IntlMessages id="page.signInForgotPass" />
                 </Link>
               </div>
-
-              {loader && <Spin indicator={loaderIcon} />}
+              {loader && <FaldaxLoader />}
             </div>
           </div>
         </div>
