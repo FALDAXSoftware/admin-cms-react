@@ -196,7 +196,7 @@ class TradeHistory extends Component {
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
                                                 >
-                                                    <Option value={' '}>All</Option>
+                                                    <Option value={''}>All</Option>
                                                     <Option value={'Sell'}>Sell</Option>
                                                     <Option value={'Buy'}>Buy</Option>
                                                 </Select>

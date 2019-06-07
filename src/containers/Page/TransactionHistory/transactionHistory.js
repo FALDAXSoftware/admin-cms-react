@@ -70,7 +70,9 @@ class Transactions extends Component {
 
     _searchTransaction = (e) => {
         e.preventDefault();
-        this._getAllTransactions();
+        this.setState({ page: 1 }, () => {
+            this._getAllTransactions();
+        });
     }
 
     _handleTransactionPagination = (page) => {
@@ -180,7 +182,7 @@ class Transactions extends Component {
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
                                                 >
-                                                    <Option value={' '}>All</Option>
+                                                    <Option value={''}>All</Option>
                                                     <Option value={'send'}>Send</Option>
                                                     <Option value={'receive'}>Receive</Option>
                                                 </Select>

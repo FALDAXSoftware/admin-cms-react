@@ -2,8 +2,8 @@
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
     //super admin sign in api
@@ -659,6 +659,8 @@ const ApiUtils = {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
