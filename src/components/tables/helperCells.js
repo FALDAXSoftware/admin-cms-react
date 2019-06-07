@@ -187,6 +187,10 @@ const jobCategoryStatus = (value, category, is_active) => {
     JobCategory.jobCategoryStatus(value, category, is_active);
 }
 
+const updateCategory = (value, category, is_active) => {
+    JobCategory.updateCategory(value, category, is_active);
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id) => <p>{referred_id !== null ? created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : '' : ''}</p>;
@@ -244,6 +248,7 @@ const NewsSourceSwitchCell = (value, source_name, slug, is_active) => <Switch ch
 const WithdrawActionCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <div>{(is_approve == null && is_executed == null) ? <div><Button style={{ marginRight: '15px' }} type="primary" onClick={() => approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Approve</Button><Button style={{ margingLeft: '15px' }} type="danger" onClick={() => declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Decline</Button></div> : ''}</div>;
 const WithdrawStatusCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <p>{(is_approve == null && is_executed == null) ? 'Pending' : is_approve ? 'Approved' : 'Dis-Approved'}</p>;
 const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_active} onChange={() => { jobCategoryStatus(value, category, is_active) }} />
+const JobCatActionCell = (value, category, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => updateCategory(value, category, is_active)} /></Tooltip></div>;
 
 export {
     IPCell,
@@ -304,5 +309,6 @@ export {
     NewsSourceSwitchCell,
     WithdrawActionCell,
     WithdrawStatusCell,
-    JobCatSwitchCell
+    JobCatSwitchCell,
+    JobCatActionCell
 };

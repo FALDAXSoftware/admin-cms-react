@@ -5,6 +5,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import AddJobCatModal from './addJobCategoryModal';
+import EditJobCatModal from './editCategory';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
@@ -21,12 +22,12 @@ class JobCategory extends Component {
             loader: false,
             showAddJobCatModal: false,
             categoryDetails: [],
-            showEditJobModal: false,
+            showEditJobCatModal: false,
             allJobCategories: []
         }
         self = this;
         JobCategory.jobCategoryStatus = JobCategory.jobCategoryStatus.bind(this);
-        JobCategory.editJob = JobCategory.editJob.bind(this);
+        JobCategory.updateCategory = JobCategory.updateCategory.bind(this);
     }
 
     componentDidMount = () => {
@@ -70,11 +71,11 @@ class JobCategory extends Component {
             });
     }
 
-    static editJob(value, category, is_active) {
+    static updateCategory(value, category, is_active) {
         let categoryDetails = {
             value, category, is_active
         }
-        self.setState({ showEditJobModal: true, categoryDetails });
+        self.setState({ showEditJobCatModal: true, categoryDetails });
     }
 
     openNotificationWithIconError = (type) => {
@@ -118,12 +119,12 @@ class JobCategory extends Component {
         this.setState({ showAddJobCatModal: false });
     }
 
-    _closeEditJobModal = () => {
-        this.setState({ showEditJobModal: false });
+    _closeEditJobCatModal = () => {
+        this.setState({ showEditJobCatModal: false });
     }
 
     render() {
-        const { errType, loader, errMsg, showAddJobCatModal, showEditJobModal,
+        const { errType, loader, errMsg, showAddJobCatModal, showEditJobCatModal,
             categoryDetails, allJobCategories } = this.state;
 
         if (errMsg) {
@@ -144,12 +145,12 @@ class JobCategory extends Component {
                         </div>
                         {loader && <FaldaxLoader />}
                         <div>
-                            {/* <EditJobModal
-                                        fields={categoryDetails}
-                                        showEditJobModal={showEditJobModal}
-                                        closeEditJobModal={this._closeEditJobModal}
-                                        getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
-                                    /> */}
+                            <EditJobCatModal
+                                fields={categoryDetails}
+                                showEditJobCatModal={showEditJobCatModal}
+                                closeEditJobCatModal={this._closeEditJobCatModal}
+                                getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
+                            />
                             <TableWrapper
                                 {...this.state}
                                 columns={tableInfo.columns}

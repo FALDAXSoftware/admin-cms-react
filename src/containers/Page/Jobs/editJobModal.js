@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Icon, Spin, Button, Select } from 'antd';
+import { Modal, Input, notification, Button, Select } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -9,9 +9,9 @@ import 'react-quill/dist/quill.core.css';
 import QuillEditor from '../../../components/uielements/styles/editor.style';
 import authAction from '../../../redux/auth/actions';
 import striptags from 'striptags';
+import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class EditJobModal extends Component {
@@ -233,7 +233,7 @@ class EditJobModal extends Component {
                             {this.validator.message('location', fields["location"], 'required|max:50', 'text-danger')}
                         </span>
                     </div>
-                    {loader && <Spin indicator={loaderIcon} />}
+                    {loader && <FaldaxLoader />}
                 </Modal>
             </div >
         );
