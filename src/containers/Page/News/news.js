@@ -224,6 +224,7 @@ class News extends Component {
                                             onChange={this._changeFilter}
                                             value={filterVal}
                                         >
+                                            <Option value={''}>{'All'}</Option>
                                             {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
                                         </Select>
 
