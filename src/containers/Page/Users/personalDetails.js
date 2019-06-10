@@ -180,16 +180,14 @@ class PersonalDetails extends Component {
                                 </Address>
                             </Col>
                         </Row>
-                        {userDetails.dob &&
-                            <Row>
-                                <Col>
-                                    <DateOfBirth>
-                                        <i class="fas fa-calendar-day"></i>
-                                        {userDetails.dob}
-                                    </DateOfBirth>
-                                </Col>
-                            </Row>
-                        }
+                        <Row>
+                            <Col>
+                                <DateOfBirth>
+                                    <i class="fas fa-calendar-day"></i>
+                                    {userDetails.dob && userDetails.dob !== null ? userDetails.dob : 'N/A'}
+                                </DateOfBirth>
+                            </Col>
+                        </Row>
                     </ParentDiv>
                 }
             </div>

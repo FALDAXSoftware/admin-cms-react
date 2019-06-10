@@ -199,7 +199,7 @@ class AddCoinModal extends Component {
                     <span>Asset Icon:</span>
                     <Input ref={(ref) => { this.uploadCoinInput = ref; }} type="file"
                         id="uploadCoinInput" name="uploadCoinInput"
-                        style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px" }}
+                        style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px", margin: "10px" }}
                         onChange={this._handleChange.bind(this, "coin_icon")} value={fields["coin_icon"]} />
                     <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
