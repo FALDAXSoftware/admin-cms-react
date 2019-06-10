@@ -42,12 +42,12 @@ class UserTickets extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    let tickets = [];
+                    var tickets = [];
                     let url = 'https://app.hubspot.com/contacts/';
                     for (var i = 0; i < res.tickets.length; i++) {
                         tickets.push({
                             'redirect_url': url + res.tickets[i].portalId + '/ticket/' + res.tickets[i].objectId,
-                            'created_by': res.tickets[i]['properties'].created_by.timestamp,
+                            'created_by': res.tickets[i]['properties'].subject.timestamp,
                             'pipeline_stage': res.tickets[i]['properties'].hs_pipeline_stage.value,
                             'subject': res.tickets[i]['properties'].subject.value,
                             'content': res.tickets[i]['properties'].content.value,

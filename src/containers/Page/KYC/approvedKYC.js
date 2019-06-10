@@ -152,7 +152,7 @@ class ApprovedKYC extends Component {
                                     "alignItems": "center",
                                 }}>
                                     <Search
-                                        placeholder="Search kyc"
+                                        placeholder="Search KYC"
                                         onSearch={(value) => this._searchKYC(value)}
                                         style={{ "width": "250px", "marginRight": "20px" }}
                                         enterButton
