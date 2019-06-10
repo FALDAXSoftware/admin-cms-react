@@ -105,10 +105,8 @@ class AddCoinModal extends Component {
 
         fields['coin_name'] = '';
         fields['coin_code'] = '';
-        //fields['description'] = '';
         fields['min_limit'] = '';
         fields['max_limit'] = '';
-        //fields['wallet_address'] = '';
         this.setState({ fields, editorContent: '', showError: false, selectedToken: false });
     }
 
@@ -126,6 +124,8 @@ class AddCoinModal extends Component {
             formData.append('min_limit', fields['min_limit']);
             formData.append('max_limit', fields['max_limit']);
             formData.append('isERC', selectedToken);
+            formData.append('deposit_method', ' ');
+            formData.append('kraken_coin_name', ' ');
             formData.append('coin_icon', this.uploadCoinInput.input.files[0]);
 
             ApiUtils.addCoin(token, formData)

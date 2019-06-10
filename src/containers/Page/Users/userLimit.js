@@ -148,6 +148,7 @@ class EditableUserLimitTable extends React.Component {
         form.validateFields((error, row) => {
             const newData = [...this.state.userAllLimits];
             const index = newData.findIndex(item => key === item.id);
+            console.log('newData', newData)
 
             let formData = {
                 id: newData[index].id,
@@ -161,28 +162,28 @@ class EditableUserLimitTable extends React.Component {
                 monthly_withdraw_fiat: parseInt(row.monthly_withdraw_fiat)
             }
 
-            _this.setState({ loader: true });
-            ApiUtils.updateUserLimits(token, formData)
-                .then((response) => response.json())
-                .then(function (res) {
-                    if (res.status == 200) {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
-                            _this._getUserLimit();
-                        });
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                    }
-                    _this.setState({ loader: false });
-                })
-                .catch(() => {
-                    _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                    });
-                });
+            // _this.setState({ loader: true });
+            // ApiUtils.updateUserLimits(token, formData)
+            //     .then((response) => response.json())
+            //     .then(function (res) {
+            //         if (res.status == 200) {
+            //             _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
+            //                 _this._getUserLimit();
+            //             });
+            //         } else if (res.status == 403) {
+            //             _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+            //                 _this.props.logout();
+            //             });
+            //         } else {
+            //             _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+            //         }
+            //         _this.setState({ loader: false });
+            //     })
+            //     .catch(() => {
+            //         _this.setState({
+            //             errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+            //         });
+            //     });
 
             if (index > -1) {
                 const item = newData[index];
