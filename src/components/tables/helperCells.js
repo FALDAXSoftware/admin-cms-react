@@ -115,20 +115,20 @@ const editLimit = (value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdr
     LimitManagement.editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat);
 }
 
-const editJob = (value, position, location, short_desc, job_desc, category_id, is_active) => {
-    Jobs.editJob(value, position, location, short_desc, job_desc, category_id, is_active);
+const editJob = (value, position, location, short_desc, job_desc, category_id, is_active, category) => {
+    Jobs.editJob(value, position, location, short_desc, job_desc, category_id, is_active, category);
 }
 
-const viewJob = (value, position, location, short_desc, job_desc, category_id, is_active) => {
-    Jobs.viewJob(value, position, location, short_desc, job_desc, category_id, is_active);
+const viewJob = (value, position, location, short_desc, job_desc, category_id, is_active, category) => {
+    Jobs.viewJob(value, position, location, short_desc, job_desc, category_id, is_active, category);
 }
 
 const deleteJob = (value) => {
     Jobs.deleteJob(value);
 }
 
-const jobStatus = (value, position, location, short_desc, job_desc, category_id, is_active) => {
-    Jobs.jobStatus(value, position, location, short_desc, job_desc, category_id, is_active);
+const jobStatus = (value, position, location, short_desc, job_desc, category_id, is_active, category) => {
+    Jobs.jobStatus(value, position, location, short_desc, job_desc, category_id, is_active, category);
 }
 
 const showApplicants = (value) => {
@@ -232,8 +232,8 @@ const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active)
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;
 const LimitActionCell = (value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat)} /></Tooltip></div>;
 const TagsCell = (value) => <Tooltip title={value}><p>{value.slice(0, 10) + (value.length > 10 ? "..." : "")}</p></Tooltip>
-const JobActionCell = (value, position, location, short_desc, job_desc, category_id, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteJob(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editJob(value, position, location, short_desc, job_desc, category_id, is_active)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJob(value, position, location, short_desc, job_desc, category_id, is_active)} /></Tooltip></div>;
-const JobSwitchCell = (value, position, location, short_desc, job_desc, category_id, is_active) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) }} />
+const JobActionCell = (value, position, location, short_desc, job_desc, category_id, is_active, category) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteJob(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editJob(value, position, location, short_desc, job_desc, category_id, is_active, category)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJob(value, position, location, short_desc, job_desc, category_id, is_active, category)} /></Tooltip></div>;
+const JobSwitchCell = (value, position, location, short_desc, job_desc, category_id, is_active, category) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, category_id, is_active, category) }} />
 const JobButtonCell = (value) => <Button type="primary" onClick={() => showApplicants(value)} >Show Applications</Button>;
 const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url)} /></Tooltip></div>;
 const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => { direct_response != 'ACCEPT' ? <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip><Tooltip title="Reject"><Icon type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details)} /></Tooltip></div> : 'b;la' };

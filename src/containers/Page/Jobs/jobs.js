@@ -52,7 +52,7 @@ class Jobs extends Component {
         this._getAllJobCategories();
     }
 
-    static jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) {
+    static jobStatus(value, position, location, short_desc, job_desc, category_id, is_active, category) {
         const { token } = self.props;
 
         let formData = {
@@ -96,16 +96,16 @@ class Jobs extends Component {
         self.props.history.push('/dashboard/job-applications/' + value);
     }
 
-    static editJob(value, position, location, short_desc, job_desc, category_id, is_active) {
+    static editJob(value, position, location, short_desc, job_desc, category_id, is_active, category) {
         let jobDetails = {
-            value, position, location, short_desc, job_desc, category_id, is_active
+            value, position, location, short_desc, job_desc, category_id, is_active, category
         }
         self.setState({ showEditJobModal: true, jobDetails });
     }
 
-    static viewJob(value, position, location, short_desc, job_desc, category_id, is_active) {
+    static viewJob(value, position, location, short_desc, job_desc, category_id, is_active, category) {
         let jobDetails = {
-            value, position, location, short_desc, job_desc, category_id, is_active
+            value, position, location, short_desc, job_desc, category_id, is_active, category
         }
         self.setState({ showViewJobModal: true, jobDetails });
     }

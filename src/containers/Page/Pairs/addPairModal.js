@@ -137,7 +137,7 @@ class AddPairModal extends Component {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.message });
+                        this.setState({ errMsg: true, errMessage: res.message, loader: false });
                     }
                 })
                 .catch(() => {

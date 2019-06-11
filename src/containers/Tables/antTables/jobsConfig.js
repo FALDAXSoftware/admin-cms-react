@@ -6,7 +6,7 @@ import {
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, title = null, loc = null, desc = null, jobDesc = null,
-    cat = null, active = null) => {
+    cat = null, active = null, categoryName = null) => {
     const value = object[key];
     const position = object[title];
     const location = object[loc];
@@ -14,6 +14,7 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
     const job_desc = object[jobDesc];
     const category_id = object[cat];
     const is_active = object[active]
+    const category = object[categoryName]
 
     switch (type) {
         case 'ContentCell':
@@ -23,9 +24,9 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
         case 'JobButtonCell':
             return JobButtonCell(value);
         case 'JobSwitchCell':
-            return JobSwitchCell(value, position, location, short_desc, job_desc, category_id, is_active);
+            return JobSwitchCell(value, position, location, short_desc, job_desc, category_id, is_active, category);
         case 'JobActionCell':
-            return JobActionCell(value, position, location, short_desc, job_desc, category_id, is_active);
+            return JobActionCell(value, position, location, short_desc, job_desc, category_id, is_active, category);
         default:
             return TextCell(value);
     }
@@ -69,7 +70,7 @@ const columns = [
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
-            'short_desc', 'job_desc', 'category_id', 'is_active')
+            'short_desc', 'job_desc', 'category_id', 'is_active', 'category')
     }, {
         title: <IntlMessages id="jobTable.title.app" />,
         key: 'button',
@@ -81,7 +82,7 @@ const columns = [
         width: 200,
         render: object => renderCell(object,
             'JobActionCell', 'id', 'position', 'location', 'short_desc', 'job_desc',
-            'category_id', 'is_active')
+            'category_id', 'is_active', 'category')
     }
 ];
 
