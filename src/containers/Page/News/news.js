@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form } from 'antd';
+import { Input, Tabs, Pagination, notification, Select, DatePicker, Button, Form, Row } from 'antd';
 import { newsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import ColWithPadding from '../common.style';
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -212,33 +213,43 @@ class News extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchNews}>
-                                        <Input
-                                            placeholder="Search news"
-                                            onChange={this._changeSearch.bind(this)}
-                                            style={{ "width": "200px" }}
-                                            value={searchNews}
-                                        />
-                                        <Select
-                                            style={{ width: 125, "marginLeft": "15px" }}
-                                            placeholder="Select a source"
-                                            onChange={this._changeFilter}
-                                            value={filterVal}
-                                        >
-                                            <Option value={''}>{'All'}</Option>
-                                            {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
-                                        </Select>
-
-                                        <RangePicker
-                                            value={rangeDate}
-                                            disabledTime={this.disabledRangeTime}
-                                            onChange={this._changeDate}
-                                            format="YYYY-MM-DD"
-                                            allowClear={false}
-                                            style={{ marginLeft: '15px' }}
-                                        />
-
-                                        <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                        <Row>
+                                            <ColWithPadding sm={5}>
+                                                <Input
+                                                    placeholder="Search news"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    style={{ "width": "200px" }}
+                                                    value={searchNews}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={3}>
+                                                <Select
+                                                    style={{ width: 125, "marginLeft": "15px" }}
+                                                    placeholder="Select a source"
+                                                    onChange={this._changeFilter}
+                                                    value={filterVal}
+                                                >
+                                                    <Option value={''}>{'All'}</Option>
+                                                    {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
+                                                </Select>
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={7}>
+                                                <RangePicker
+                                                    value={rangeDate}
+                                                    disabledTime={this.disabledRangeTime}
+                                                    onChange={this._changeDate}
+                                                    format="YYYY-MM-DD"
+                                                    allowClear={false}
+                                                    style={{ marginLeft: '15px' }}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                            </ColWithPadding>
+                                        </Row>
                                     </Form>
                                 </div>
                                 {loader && <FaldaxLoader />}

@@ -118,7 +118,7 @@ class EditJobModal extends Component {
                 location: fields["location"],
                 description: editorContent,
                 short_desc: fields["short_desc"],
-                category: selectedCategory
+                category_id: selectedCategory
             };
 
             ApiUtils.updateJob(token, formData)

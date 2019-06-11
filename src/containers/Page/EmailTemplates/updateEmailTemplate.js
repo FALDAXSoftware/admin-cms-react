@@ -3,15 +3,11 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Input, notification, Button, Form, Row, Col } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.core.css';
-import QuillEditor from '../../../components/uielements/styles/editor.style';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { Link } from 'react-router-dom';
+import CKEditor from "ckeditor4-react";
 
-const { TextArea } = Input;
 const { logout } = authAction;
 
 class UpdateEmailTemplate extends Component {
@@ -27,23 +23,6 @@ class UpdateEmailTemplate extends Component {
             showError: false,
         }
         this.validator = new SimpleReactValidator();
-
-        this.quillModules = {
-            toolbar: {
-                container: [
-                    [{ header: [1, 2, false] }, { font: [] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [
-                        { list: 'ordered' },
-                        { list: 'bullet' },
-                        { indent: '-1' },
-                        { indent: '+1' },
-                    ],
-                    ['link', 'image', 'video', 'button'],
-                    ['clean'],
-                ],
-            },
-        };
     }
 
     componentDidMount = () => {
@@ -88,10 +67,6 @@ class UpdateEmailTemplate extends Component {
         this.setState({ errMsg: false });
     };
 
-    _onChangeContent = (content, delta, source, editor) => {
-        this.setState({ editorContent: content })
-    }
-
     _handleChange = (field, e) => {
         let fields = this.state.fields;
         if (e.target.value.trim() == "") {
@@ -109,6 +84,10 @@ class UpdateEmailTemplate extends Component {
             fields, showError: false
         });
     }
+
+    onEditorChange = evt => {
+        this.setState({ editorContent: evt.editor.getData() });
+    };
 
     _updateTemplate = (e) => {
         e.preventDefault();
@@ -158,19 +137,11 @@ class UpdateEmailTemplate extends Component {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
-        const options = {
-            theme: 'snow',
-            placeholder: 'Write Something',
-            value: editorContent,
-            onChange: this._onChangeContent.bind(this),
-            modules: this.quillModules,
-        };
-
         return (
             <div className="isoLayoutContent">
                 <div style={{ "display": "inline-block", "width": "100%" }}>
                     <Link to="/dashboard/email-templates">
-                        <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <i style={{ marginRight: '15px', marginBottom: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
                         <a onClick={() => { this.props.history.push('/dashboard/email-templates') }}>Back</a>
                     </Link>
                 </div>
@@ -189,9 +160,35 @@ class UpdateEmailTemplate extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <strong>Email Content:</strong>
-                        <QuillEditor>
-                            <ReactQuill {...options} />
-                        </QuillEditor>
+                        <CKEditor
+                            data={editorContent}
+                            onChange={this.onEditorChange}
+                            config={{
+                                allowedContent: true,
+                                fullPage: true,
+                                toolbarGroups: [
+                                    { name: "clipboard", groups: ["clipboard", "undo"] },
+                                    {
+                                        name: "editing",
+                                        groups: ["find", "selection", "spellchecker"]
+                                    },
+                                    { name: "links" },
+                                    { name: "forms" },
+                                    { name: "tools" },
+                                    { name: "document", groups: ["mode", "document", "doctools"] },
+                                    { name: "others" },
+                                    "/",
+                                    { name: "basicstyles", groups: ["basicstyles", "cleanup"] },
+                                    {
+                                        name: "paragraph",
+                                        groups: ["list", "indent", "blocks", "align", "bidi"]
+                                    },
+                                    { name: "styles" },
+                                    { name: "colors" },
+                                    { name: "about" }
+                                ]
+                            }}
+                        />
                         {showError && <span style={{ "color": "red" }}>
                             {'The content field is required.'}
                         </span>}
