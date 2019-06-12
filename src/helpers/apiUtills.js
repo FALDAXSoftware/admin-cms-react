@@ -958,9 +958,9 @@ const ApiUtils = {
     },
 
     //get all job categories api
-    getAllJobCategories: function (token) {
+    getAllJobCategories: function (token, active) {
         try {
-            return fetch(API_URL + "/admin/job-categories", {
+            return fetch(API_URL + "/admin/job-categories?active=" + active, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
