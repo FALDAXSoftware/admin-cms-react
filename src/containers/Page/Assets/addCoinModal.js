@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification, Button, Select } from 'antd';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.core.css';
-import QuillEditor from '../../../components/uielements/styles/editor.style';
 import SimpleReactValidator from 'simple-react-validator';
-import striptags from 'striptags';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
@@ -25,28 +20,10 @@ class AddCoinModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            showError: false,
             isDisabled: false,
             selectedToken: false
         }
         this.validator = new SimpleReactValidator();
-
-        this.quillModules = {
-            toolbar: {
-                container: [
-                    [{ header: [1, 2, false] }, { font: [] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [
-                        { list: 'ordered' },
-                        { list: 'bullet' },
-                        { indent: '-1' },
-                        { indent: '+1' },
-                    ],
-                    ['link', 'image', 'video'],
-                    ['clean'],
-                ],
-            },
-        };
         this.validator = new SimpleReactValidator({
             space: {
                 message: 'The attribute must be a valid IP address.',
@@ -107,13 +84,12 @@ class AddCoinModal extends Component {
         fields['coin_code'] = '';
         fields['min_limit'] = '';
         fields['max_limit'] = '';
-        this.setState({ fields, editorContent: '', showError: false, selectedToken: false });
+        this.setState({ fields, selectedToken: false });
     }
 
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
-        let { fields, editorContent, selectedToken } = this.state;
-        let coinContent = striptags(editorContent);
+        let { fields, selectedToken } = this.state;
 
         if (this.validator.allValid() && this.uploadCoinInput.input.files.length > 0) {
             this.setState({ loader: true, isDisabled: true });
@@ -133,8 +109,8 @@ class AddCoinModal extends Component {
                 .then((res) => {
                     if (res.status == 200) {
                         this.setState({
-                            editorContent: '', errMsg: true, errMessage: res.message,
-                            loader: false, errType: 'Success', showError: false, isDisabled: false
+                            errMsg: true, errMessage: res.message,
+                            loader: false, errType: 'Success', isDisabled: false
                         })
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -143,7 +119,7 @@ class AddCoinModal extends Component {
                     } else {
                         this.setState({
                             editorContent: '', errMsg: true, errMessage: res.err,
-                            loader: false, errType: 'Error', showError: false, isDisabled: false
+                            loader: false, errType: 'Error', isDisabled: false
                         })
                     }
                     this._closeAddCoinModal();
@@ -153,7 +129,7 @@ class AddCoinModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
-                        loader: false, errType: 'error', showError: false, isDisabled: false
+                        loader: false, errType: 'error', isDisabled: false
                     });
                 });
         } else {
@@ -168,17 +144,9 @@ class AddCoinModal extends Component {
     }
 
     render() {
-        const { loader, showAddCoinModal, fields, editorContent, errMsg,
-            errType, showError, isDisabled, showCoinErr, selectedToken
+        const { loader, showAddCoinModal, fields, errMsg,
+            errType, isDisabled, showCoinErr, selectedToken
         } = this.state;
-
-        const options = {
-            theme: 'snow',
-            placeholder: 'Write Something',
-            value: editorContent,
-            onChange: this._onChangeContent,
-            modules: this.quillModules,
-        };
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -222,16 +190,6 @@ class AddCoinModal extends Component {
                         {this.validator.message('asset code', fields["coin_code"], 'required|max:10', 'text-danger')}
                     </span>
                 </div>
-
-                {/* <div style={{ "marginBottom": "15px" }}>
-                    <span>Description:</span>
-                    <QuillEditor>
-                        <ReactQuill {...options} />
-                    </QuillEditor>
-                    {showError && <span style={{ "color": "red" }}>
-                        {'The description field is required.'}
-                    </span>}
-                </div> */}
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Minimum Limit:</span>

@@ -90,7 +90,7 @@ class JobCategory extends Component {
         const { token } = this.props;
         let _this = this;
 
-        ApiUtils.getAllJobCategories(token)
+        ApiUtils.getAllJobCategories(token, false)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -121,6 +121,9 @@ class JobCategory extends Component {
 
     _closeEditJobCatModal = () => {
         this.setState({ showEditJobCatModal: false });
+    }
+    componentWillUnmount = () => {
+        console.log('componentWillUnmount call')
     }
 
     render() {

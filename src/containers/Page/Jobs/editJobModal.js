@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, notification, Button, Select } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.core.css';
-import QuillEditor from '../../../components/uielements/styles/editor.style';
+import CKEditor from "ckeditor4-react";
 import authAction from '../../../redux/auth/actions';
 import striptags from 'striptags';
 import FaldaxLoader from '../faldaxLoader';
@@ -24,29 +21,12 @@ class EditJobModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            editorContent: '',
+            editorContent: this.props.fields['job_desc'],
             showError: false,
             isDisabled: false,
             selectedCategory: parseInt(this.props.fields.category_id)
         }
         this.validator = new SimpleReactValidator();
-
-        this.quillModules = {
-            toolbar: {
-                container: [
-                    [{ header: [1, 2, false] }, { font: [] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [
-                        { list: 'ordered' },
-                        { list: 'bullet' },
-                        { indent: '-1' },
-                        { indent: '+1' },
-                    ],
-                    ['link', 'image', 'video'],
-                    ['clean'],
-                ],
-            },
-        };
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -54,7 +34,7 @@ class EditJobModal extends Component {
             this.setState({
                 showEditJobModal: nextProps.showEditJobModal,
                 fields: nextProps.fields,
-                editorContent: nextProps.fields.job_desc,
+                editorContent: nextProps.fields['job_desc'],
                 selectedCategory: parseInt(nextProps.fields.category_id),
             })
         }
@@ -67,10 +47,6 @@ class EditJobModal extends Component {
         });
         this.setState({ errMsg: false });
     };
-
-    _onChangeContent = (val) => {
-        this.setState({ editorContent: val })
-    }
 
     _handleChange = (field, e) => {
         let fields = this.state.fields;
@@ -116,7 +92,7 @@ class EditJobModal extends Component {
                 job_id: fields["value"],
                 position: fields["position"],
                 location: fields["location"],
-                description: editorContent,
+                job_desc: editorContent,
                 short_desc: fields["short_desc"],
                 category_id: selectedCategory
             };
@@ -137,7 +113,7 @@ class EditJobModal extends Component {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.message });
+                        this.setState({ errMsg: true, errMessage: res.message, loader: false });
                     }
                 })
                 .catch(() => {
@@ -153,22 +129,19 @@ class EditJobModal extends Component {
         }
     }
 
+    onEditorChange = evt => {
+        this.setState({ editorContent: evt.editor.getData() });
+    };
+
     render() {
         const { loader, showEditJobModal, fields, errMsg, errType, editorContent,
             showError, isDisabled, selectedCategory
         } = this.state;
+        console.log('editorContent', editorContent)
         const { allJobCategories } = this.props;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
-
-        const options = {
-            theme: 'snow',
-            placeholder: 'Write Something',
-            value: editorContent,
-            onChange: this._onChangeContent,
-            modules: this.quillModules,
-        };
 
         const catOptions = allJobCategories.map((category) => {
             return (
@@ -218,9 +191,35 @@ class EditJobModal extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Job Description:</span>
-                        <QuillEditor>
-                            <ReactQuill {...options} />
-                        </QuillEditor>
+                        <CKEditor
+                            data={editorContent}
+                            onChange={this.onEditorChange}
+                            config={{
+                                allowedContent: true,
+                                fullPage: true,
+                                toolbarGroups: [
+                                    { name: "clipboard", groups: ["clipboard", "undo"] },
+                                    {
+                                        name: "editing",
+                                        groups: ["find", "selection", "spellchecker"]
+                                    },
+                                    { name: "links" },
+                                    { name: "forms" },
+                                    { name: "tools" },
+                                    { name: "document", groups: ["mode", "document", "doctools"] },
+                                    { name: "others" },
+                                    "/",
+                                    { name: "basicstyles", groups: ["basicstyles", "cleanup"] },
+                                    {
+                                        name: "paragraph",
+                                        groups: ["list", "indent", "blocks", "align", "bidi"]
+                                    },
+                                    { name: "styles" },
+                                    { name: "colors" },
+                                    { name: "about" }
+                                ]
+                            }}
+                        />
                         {showError && <span style={{ "color": "red" }}>
                             {'The description field is required.'}
                         </span>}
