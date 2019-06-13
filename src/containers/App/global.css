@@ -315,7 +315,7 @@ html[dir='rtl'] .dz-hidden-input {
   margin-left: 10px;
 }
 .isoCustomizedTable .ant-table-row{
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .editable-cell {
   position: relative;
@@ -323,7 +323,7 @@ html[dir='rtl'] .dz-hidden-input {
 
 .editable-cell-value-wrap {
   padding: 5px 12px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .editable-row:hover.editable-cell-value-wrap {
