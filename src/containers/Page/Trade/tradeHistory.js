@@ -62,6 +62,7 @@ class TradeHistory extends Component {
                 _this.setState({ loader: false });
             })
             .catch(err => {
+                console.log('err', err)
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
