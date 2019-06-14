@@ -37,7 +37,8 @@ class Jobs extends Component {
             showViewJobModal: false,
             showDeleteJobModal: false,
             deleteJobId: '',
-            allJobCategories: []
+            allJobCategories: [],
+            activeTab: 1
         }
         self = this;
         Jobs.jobStatus = Jobs.jobStatus.bind(this);
@@ -52,7 +53,7 @@ class Jobs extends Component {
         this._getAllJobCategories();
     }
 
-    static jobStatus(value, position, location, short_desc, job_desc, category_id, is_active) {
+    static jobStatus(value, position, location, short_desc, job_desc, category_id, is_active, category) {
         const { token } = self.props;
 
         let formData = {
@@ -76,6 +77,7 @@ class Jobs extends Component {
                         errType: 'Success', showError: false, isDisabled: false
                     });
                     this._getAllJobs();
+                    this._getAllJobCategories();
                 } else if (res.status == 403) {
                     this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         this.props.logout();
@@ -96,16 +98,16 @@ class Jobs extends Component {
         self.props.history.push('/dashboard/job-applications/' + value);
     }
 
-    static editJob(value, position, location, short_desc, job_desc, category_id, is_active) {
+    static editJob(value, position, location, short_desc, job_desc, category_id, is_active, category) {
         let jobDetails = {
-            value, position, location, short_desc, job_desc, category_id, is_active
+            value, position, location, short_desc, job_desc, category_id, is_active, category
         }
         self.setState({ showEditJobModal: true, jobDetails });
     }
 
-    static viewJob(value, position, location, short_desc, job_desc, category_id, is_active) {
+    static viewJob(value, position, location, short_desc, job_desc, category_id, is_active, category) {
         let jobDetails = {
-            value, position, location, short_desc, job_desc, category_id, is_active
+            value, position, location, short_desc, job_desc, category_id, is_active, category
         }
         self.setState({ showViewJobModal: true, jobDetails });
     }
@@ -153,7 +155,7 @@ class Jobs extends Component {
         const { token } = this.props;
         let _this = this;
 
-        ApiUtils.getAllJobCategories(token)
+        ApiUtils.getAllJobCategories(token, true)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -241,10 +243,15 @@ class Jobs extends Component {
         })
     }
 
+    _changeTab = (value) => {
+        console.log('>>', value);
+        this.setState({ activeTab: value })
+    }
+
     render() {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
-            jobDetails, allJobCategories } = this.state;
+            jobDetails, allJobCategories, activeTab } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -253,7 +260,7 @@ class Jobs extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
+                    <Tabs className="isoTableDisplayTab" onChange={this._changeTab}>
                         {jobsTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
@@ -320,7 +327,7 @@ class Jobs extends Component {
                             </TabPane>
                         ))}
                         <TabPane tab="Job Category" key="2">
-                            <JobCategory />
+                            {activeTab == 2 && <JobCategory />}
                         </TabPane>
                     </Tabs>
                 </TableDemoStyle>

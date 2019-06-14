@@ -70,7 +70,9 @@ class Transactions extends Component {
 
     _searchTransaction = (e) => {
         e.preventDefault();
-        this._getAllTransactions();
+        this.setState({ page: 1 }, () => {
+            this._getAllTransactions();
+        });
     }
 
     _handleTransactionPagination = (page) => {
@@ -113,8 +115,8 @@ class Transactions extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).toISOString(),
-            endDate: moment(date[1]).toISOString()
+            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
         })
     }
 
@@ -180,7 +182,7 @@ class Transactions extends Component {
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
                                                 >
-                                                    <Option value={' '}>All</Option>
+                                                    <Option value={''}>All</Option>
                                                     <Option value={'send'}>Send</Option>
                                                     <Option value={'receive'}>Receive</Option>
                                                 </Select>

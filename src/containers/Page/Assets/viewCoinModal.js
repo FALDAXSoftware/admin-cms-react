@@ -51,6 +51,11 @@ class ViewCoinModal extends Component {
                     {coinDetails.coin_code ? coinDetails.coin_code : 'N/A'}
                 </p>
 
+                <span> <b>Is Asset ERC Token?:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {coinDetails.isERC ? 'YES' : 'NO'}
+                </p>
+
                 <span> <b>Minimum Limit:</b> </span>
                 <p style={{ "marginBottom": "15px" }}>
                     {coinDetails.min_limit ? coinDetails.min_limit : 'N/A'}

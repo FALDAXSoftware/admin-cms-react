@@ -6,6 +6,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import { BUCKET_URL } from '../../../helpers/globals';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { withRouter } from 'react-router'
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -39,7 +40,7 @@ class EditAssetDetails extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ fields: res.coin });
+                    _this.setState({ fields: res.coin, selectedToken: res.coin.isERC });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -75,16 +76,7 @@ class EditAssetDetails extends Component {
     }
 
     _resetForm = () => {
-        const { fields } = this.state;
-
-        fields['coin_name'] = '';
-        fields['min_limit'] = '';
-        fields['max_limit'] = '';
-        fields['warm_wallet_address'] = '';
-        fields['hot_send_wallet_address'] = '';
-        fields['hot_receive_wallet_address'] = '';
-        fields['custody_wallet_address'] = '';
-        this.setState({ fields, selectedToken: false });
+        this._getAssetDetails();
     }
 
     _editCoin = (e) => {
@@ -193,7 +185,7 @@ class EditAssetDetails extends Component {
                             <span>Warm Wallet Address:</span>
                             <Input placeholder="Warm Wallet Address" onChange={this._handleChange.bind(this, "warm_wallet_address")} value={fields["warm_wallet_address"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('warm wallet address', fields["warm_wallet_address"], 'required', 'text-danger')}
+                                {this.validator.message('warm wallet address', fields["warm_wallet_address"], 'required|max:100', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
@@ -202,7 +194,7 @@ class EditAssetDetails extends Component {
                             <span>Hot Send Wallet Address:</span>
                             <Input placeholder="Hot Send Wallet Address" onChange={this._handleChange.bind(this, "hot_send_wallet_address")} value={fields["hot_send_wallet_address"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('hot send wallet address', fields["hot_send_wallet_address"], 'required', 'text-danger')}
+                                {this.validator.message('hot send wallet address', fields["hot_send_wallet_address"], 'required|max:100', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
@@ -211,7 +203,7 @@ class EditAssetDetails extends Component {
                             <span>Hot Receive Wallet Address:</span>
                             <Input placeholder="Hot Receive Wallet Address" onChange={this._handleChange.bind(this, "hot_receive_wallet_address")} value={fields["hot_receive_wallet_address"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('hot receive wallet address', fields["hot_receive_wallet_address"], 'required', 'text-danger')}
+                                {this.validator.message('hot receive wallet address', fields["hot_receive_wallet_address"], 'required|max:100', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
@@ -220,7 +212,7 @@ class EditAssetDetails extends Component {
                             <span>Custody Wallet Address:</span>
                             <Input placeholder="Custody Wallet Address" onChange={this._handleChange.bind(this, "custody_wallet_address")} value={fields["custody_wallet_address"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('custody wallet address', fields["custody_wallet_address"], 'required', 'text-danger')}
+                                {this.validator.message('custody wallet address', fields["custody_wallet_address"], 'required|max:100', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
@@ -242,7 +234,7 @@ class EditAssetDetails extends Component {
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
                             <Button type="primary"
-                                onClick={() => { this.props.history.push('/dashboard/assets') }}
+                                onClick={() => this._resetForm()}
                                 className="user-btn"
                                 style={{ marginLeft: "15px" }}>
                                 Cancel
@@ -256,7 +248,7 @@ class EditAssetDetails extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(EditAssetDetails);
+    }), { logout })(EditAssetDetails));

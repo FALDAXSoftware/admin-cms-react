@@ -75,6 +75,7 @@ const ApiUtils = {
     //get all users api
     getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
         let url = "/admin/get-users?page=" + page + "&limit=" + limit;
+        searchUser = encodeURIComponent(searchUser);
         if (sorterCol && sortOrder && searchUser && filterVal) {
             url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
         } else if (sorterCol && sortOrder && filterVal) {
@@ -121,6 +122,7 @@ const ApiUtils = {
     //get all coins api
     getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -243,6 +245,7 @@ const ApiUtils = {
     //get all referrals api
     getAllReferrals: function (page, limit, token, searchReferral, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit;
+        searchReferral = encodeURIComponent(searchReferral);
         if (sorterCol && sortOrder && searchReferral) {
             url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -267,6 +270,7 @@ const ApiUtils = {
     //get all counties api
     getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
         let url = "/admin/get-countries-data?page=" + page + "&limit=" + limit + '&legality=' + legality;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -356,6 +360,7 @@ const ApiUtils = {
     //get all states api
     getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
         let url = "/admin/get-state-data?country_id=" + countryId;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -455,6 +460,7 @@ const ApiUtils = {
     //get all employee api
     getAllEmployee: function (token, sorterCol, sortOrder, search) {
         let url = "/admin/get-employees";
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "?data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -524,6 +530,7 @@ const ApiUtils = {
     //user login history api call
     getUserHistory: function (token, user_id, page, limit, data, startDate, endDate) {
         let url = "/admin/get-user-login-history?page=" + page + "&limit=" + limit;
+        data = encodeURIComponent(data);
         if (data && startDate && endDate) {
             url += "&data=" + data + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (startDate && endDate) {
@@ -548,6 +555,7 @@ const ApiUtils = {
 
     getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder, selectedAsset) {
         let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
+        searchPair = encodeURIComponent(searchPair);
         if (sorterCol && sortOrder && searchPair && selectedAsset) {
             url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
         } else if (sorterCol && sortOrder && selectedAsset) {
@@ -637,12 +645,15 @@ const ApiUtils = {
 
     getAllTransaction: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
             url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && sorterCol && sortOrder && startDate && endDate) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && sorterCol && sortOrder && startDate && endDate) {
             url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&t_type=" + filterVal;
         } else if (sorterCol && sortOrder && startDate && endDate) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && startDate && endDate) {
@@ -659,6 +670,8 @@ const ApiUtils = {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
@@ -681,6 +694,7 @@ const ApiUtils = {
     //user wise transaction list api call
     getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        search = encodeURIComponent(search);
         if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
             url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && sorterCol && sortOrder && startDate && endDate) {
@@ -723,7 +737,8 @@ const ApiUtils = {
     },
 
     getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
-        let url = "/admin/all-trades?page=" + page + "&limit=" + limit;
+        let url = "page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && startDate && endDate && sorterCol && sortOrder) {
@@ -756,10 +771,8 @@ const ApiUtils = {
             url += "&data=" + search;
         }
 
-        console.log('url', url)
-
         try {
-            return fetch(API_URL + url, {
+            return fetch(API_URL + "/admin/all-trades?" + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -773,6 +786,7 @@ const ApiUtils = {
 
     getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        search = encodeURIComponent(search);
         if (search && filterVal && sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
         } else if (sorterCol && sortOrder && filterVal) {
@@ -802,6 +816,7 @@ const ApiUtils = {
 
     getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
@@ -842,6 +857,7 @@ const ApiUtils = {
     //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
     getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
+        search = encodeURIComponent(search);
         if (search && startDate && endDate && filterVal && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
@@ -884,6 +900,7 @@ const ApiUtils = {
 
     getAllSellOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -908,6 +925,7 @@ const ApiUtils = {
 
     getAllBuyOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -932,6 +950,7 @@ const ApiUtils = {
     //get all jobs api
     getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -954,9 +973,9 @@ const ApiUtils = {
     },
 
     //get all job categories api
-    getAllJobCategories: function (token) {
+    getAllJobCategories: function (token, active) {
         try {
-            return fetch(API_URL + "/admin/job-categories", {
+            return fetch(API_URL + "/admin/job-categories?active=" + active, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -1048,6 +1067,7 @@ const ApiUtils = {
     //get all jobs api
     getAllJobApplications: function (jobId, page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
@@ -1072,6 +1092,7 @@ const ApiUtils = {
     //get all kyc data api
     getKYCData: function (token, page, limit, search, sorterCol, sortOrder, status) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search && status) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status
         } else if (sorterCol && sortOrder && search) {
@@ -1254,6 +1275,7 @@ const ApiUtils = {
     //get all news api
     getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
+        searchNews = encodeURIComponent(searchNews);
         if (searchNews && filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + searchNews + "&start_date=" + startDate + "&end_date=" + endDate + "&filter_val=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (searchNews && startDate && endDate && sorterCol && sortOrder) {
@@ -1475,14 +1497,15 @@ const ApiUtils = {
         }
     },
 
-    deleteAccountClass: function (classId, token) {
+    deleteAccountClass: function (token, form) {
         try {
-            return fetch(API_URL + "/admin/delete-account-class?class_id=" + classId, {
-                method: 'DELETE',
+            return fetch(API_URL + "/admin/delete-account-class", {
+                method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify(form)
             });
         } catch (error) {
             console.error(error);

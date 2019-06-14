@@ -42,15 +42,16 @@ class UserTickets extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    let tickets = [];
                     let url = 'https://app.hubspot.com/contacts/';
-                    for (var i = 0; i < res.tickets.length; i++) {
+                    var tickets = [];
+                    for (let i = 0; i < res.tickets.length; i++) {
+                        const element = res.tickets[i]
                         tickets.push({
-                            'redirect_url': url + res.tickets[i].portalId + '/ticket/' + res.tickets[i].objectId,
-                            'created_by': res.tickets[i]['properties'].created_by.timestamp,
-                            'pipeline_stage': res.tickets[i]['properties'].hs_pipeline_stage.value,
-                            'subject': res.tickets[i]['properties'].subject.value,
-                            'content': res.tickets[i]['properties'].content.value,
+                            'redirect_url': url + element.portalId + '/ticket/' + element.objectId,
+                            'created_by': element['properties'].subject.timestamp,
+                            'pipeline_stage': element['properties'].hs_pipeline_stage.value,
+                            'subject': element['properties'].subject ? element['properties'].subject.value : '',
+                            'content': element['properties'].content ? element['properties'].content.value : '',
                         });
                     }
                     _this.setState({ allTickets: tickets, loader: false });
@@ -63,6 +64,7 @@ class UserTickets extends Component {
                 }
             })
             .catch((err) => {
+                console.log("errror", err);
                 _this.setState({ loader: false })
             });
     }

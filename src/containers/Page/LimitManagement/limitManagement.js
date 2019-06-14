@@ -31,7 +31,12 @@ class LimitManagement extends Component {
         let limitDetails = {
             value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat
         }
-        self.setState({ limitDetails, showEditLimitModal: true });
+        self._onEditLimit(limitDetails);
+    }
+
+    _onEditLimit = (limitDetails) => {
+        console.log('limitDetails', limitDetails)
+        this.setState({ limitDetails, showEditLimitModal: true });
     }
 
     componentDidMount = () => {
@@ -98,6 +103,11 @@ class LimitManagement extends Component {
                                     />
                                     {loader && <FaldaxLoader />}
                                     <TableWrapper
+                                        onRow={(record, rowIndex) => {
+                                            return {
+                                                onClick: () => { this._onEditLimit(record) },
+                                            };
+                                        }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

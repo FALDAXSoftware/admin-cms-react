@@ -62,6 +62,7 @@ class TradeHistory extends Component {
                 _this.setState({ loader: false });
             })
             .catch(err => {
+                console.log('err', err)
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
@@ -196,7 +197,7 @@ class TradeHistory extends Component {
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
                                                 >
-                                                    <Option value={' '}>All</Option>
+                                                    <Option value={''}>All</Option>
                                                     <Option value={'Sell'}>Sell</Option>
                                                     <Option value={'Buy'}>Buy</Option>
                                                 </Select>

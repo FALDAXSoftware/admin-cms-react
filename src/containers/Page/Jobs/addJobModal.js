@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import { Modal, Input, Icon, Spin, notification, Button, Select } from 'antd';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.core.css';
-import QuillEditor from '../../../components/uielements/styles/editor.style';
+import CKEditor from "ckeditor4-react";
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
 import authAction from '../../../redux/auth/actions';
@@ -30,23 +27,6 @@ class AddJobModal extends Component {
             selectedCategory: ''
         }
         this.validator = new SimpleReactValidator();
-
-        this.quillModules = {
-            toolbar: {
-                container: [
-                    [{ header: [1, 2, false] }, { font: [] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [
-                        { list: 'ordered' },
-                        { list: 'bullet' },
-                        { indent: '-1' },
-                        { indent: '+1' },
-                    ],
-                    ['link', 'image', 'video'],
-                    ['clean'],
-                ],
-            },
-        };
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -63,10 +43,6 @@ class AddJobModal extends Component {
         });
         this.setState({ errMsg: false });
     };
-
-    _onChangeContent = (val) => {
-        this.setState({ editorContent: val })
-    }
 
     _closeAddJobModal = () => {
         this.setState({ showAddJobModal: false })
@@ -105,6 +81,7 @@ class AddJobModal extends Component {
                 location: fields["location"],
                 job_desc: editorContent,
                 category: selectedCategory,
+                is_active: true,
                 short_desc: fields["short_desc"],
                 wallet_address: fields["wallet_address"],
             };
@@ -125,7 +102,7 @@ class AddJobModal extends Component {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.message });
+                        this.setState({ errMsg: true, errMessage: res.message, loader: false });
                     }
                 })
                 .catch(() => {
@@ -146,19 +123,15 @@ class AddJobModal extends Component {
         this.setState({ selectedCategory: value });
     }
 
+    onEditorChange = evt => {
+        this.setState({ editorContent: evt.editor.getData() });
+    };
+
     render() {
         const { loader, showAddJobModal, fields, editorContent, errMsg,
-            errType, showError, isDisabled
+            errType, showError, isDisabled, selectedCategory
         } = this.state;
         const { allJobCategories } = this.props;
-
-        const options = {
-            theme: 'snow',
-            placeholder: 'Write Something',
-            value: editorContent,
-            onChange: this._onChangeContent,
-            modules: this.quillModules,
-        };
 
         const catOptions = allJobCategories.map((category) => {
             return (
@@ -187,6 +160,7 @@ class AddJobModal extends Component {
                         style={{ width: 200, "marginLeft": "15px" }}
                         placeholder="Select a Category"
                         onChange={this._changeCategory}
+                        value={selectedCategory}
                     >
                         {catOptions}
                     </Select>
@@ -210,9 +184,35 @@ class AddJobModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Job Description:</span>
-                    <QuillEditor>
-                        <ReactQuill {...options} />
-                    </QuillEditor>
+                    <CKEditor
+                        data={editorContent}
+                        onChange={this.onEditorChange}
+                        config={{
+                            allowedContent: true,
+                            fullPage: true,
+                            toolbarGroups: [
+                                { name: "clipboard", groups: ["clipboard", "undo"] },
+                                {
+                                    name: "editing",
+                                    groups: ["find", "selection", "spellchecker"]
+                                },
+                                { name: "links" },
+                                { name: "forms" },
+                                { name: "tools" },
+                                { name: "document", groups: ["mode", "document", "doctools"] },
+                                { name: "others" },
+                                "/",
+                                { name: "basicstyles", groups: ["basicstyles", "cleanup"] },
+                                {
+                                    name: "paragraph",
+                                    groups: ["list", "indent", "blocks", "align", "bidi"]
+                                },
+                                { name: "styles" },
+                                { name: "colors" },
+                                { name: "about" }
+                            ]
+                        }}
+                    />
                     {showError && <span style={{ "color": "red" }}>
                         {'The description field is required.'}
                     </span>}
