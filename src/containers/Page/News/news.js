@@ -15,7 +15,7 @@ const Option = Select.Option;
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
-var self = this;
+var self;
 
 class News extends Component {
     constructor(props) {
@@ -35,6 +35,7 @@ class News extends Component {
             endDate: '',
             rangeDate: []
         }
+        self = this;
         News.newsStatus = News.newsStatus.bind(this);
     }
 

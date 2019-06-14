@@ -244,7 +244,6 @@ class Jobs extends Component {
     }
 
     _changeTab = (value) => {
-        console.log('>>', value);
         this.setState({ activeTab: value })
     }
 
@@ -285,13 +284,14 @@ class Jobs extends Component {
                                         showViewJobModal={showViewJobModal}
                                         closeViewJobModal={this._closeViewJobModal}
                                     />
-                                    <EditJobModal
-                                        fields={jobDetails}
-                                        showEditJobModal={showEditJobModal}
-                                        closeEditJobModal={this._closeEditJobModal}
-                                        getAllJobs={this._getAllJobs.bind(this, 1)}
-                                        allJobCategories={allJobCategories}
-                                    />
+                                    {showEditJobModal &&
+                                        <EditJobModal
+                                            fields={jobDetails}
+                                            showEditJobModal={showEditJobModal}
+                                            closeEditJobModal={this._closeEditJobModal}
+                                            getAllJobs={this._getAllJobs.bind(this, 1)}
+                                            allJobCategories={allJobCategories}
+                                        />}
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}
