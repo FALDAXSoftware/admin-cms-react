@@ -24,7 +24,7 @@ class EditJobModal extends Component {
             editorContent: this.props.fields['job_desc'],
             showError: false,
             isDisabled: false,
-            selectedCategory: parseInt(this.props.fields.category_id)
+            selectedCategory: parseInt(this.props.fields['category_id'])
         }
         this.validator = new SimpleReactValidator();
     }
@@ -35,7 +35,7 @@ class EditJobModal extends Component {
                 showEditJobModal: nextProps.showEditJobModal,
                 fields: nextProps.fields,
                 editorContent: nextProps.fields['job_desc'],
-                selectedCategory: parseInt(nextProps.fields.category_id),
+                selectedCategory: parseInt(nextProps.fields['category_id']),
             })
         }
     }
@@ -137,7 +137,6 @@ class EditJobModal extends Component {
         const { loader, showEditJobModal, fields, errMsg, errType, editorContent,
             showError, isDisabled, selectedCategory
         } = this.state;
-        console.log('editorContent', editorContent)
         const { allJobCategories } = this.props;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -167,7 +166,7 @@ class EditJobModal extends Component {
                             style={{ width: 200, "marginLeft": "15px" }}
                             placeholder="Select a Category"
                             onChange={this._changeCategory}
-                            defaultValue={selectedCategory}
+                            value={selectedCategory}
                         >
                             {catOptions}
                         </Select>
