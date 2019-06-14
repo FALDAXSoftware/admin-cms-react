@@ -218,17 +218,15 @@ class WithdrawRequest extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchReq}>
                                         <Row>
-                                            <ColWithPadding sm={8}>
+                                            <ColWithPadding sm={5}>
                                                 <Input
                                                     placeholder="Search Requests"
-                                                    style={{ "width": "200px" }}
                                                     onChange={this._changeSearch.bind(this)}
                                                     value={searchReq}
                                                 />
                                             </ColWithPadding>
-                                            <ColWithPadding sm={8}>
+                                            <ColWithPadding sm={3}>
                                                 <Select
-                                                    style={{ width: 125, "marginLeft": "15px" }}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -238,7 +236,7 @@ class WithdrawRequest extends Component {
                                                     <Option value={'false'}>Declined</Option>
                                                 </Select>
                                             </ColWithPadding>
-                                            <ColWithPadding sm={8}>
+                                            <ColWithPadding sm={7}>
                                                 <RangePicker
                                                     value={rangeDate}
                                                     disabledTime={this.disabledRangeTime}

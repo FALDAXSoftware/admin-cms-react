@@ -98,7 +98,10 @@ class AccountClass extends Component {
     }
 
     _closeDeleteClassModal = () => {
-        this.setState({ showDeleteAccountClassModal: false });
+        const { fields } = this.state;
+
+        fields['otp'] = '';
+        this.setState({ showDeleteAccountClassModal: false, fields, deleteClassId: '' });
         this.validator = new SimpleReactValidator();
     }
 
@@ -121,7 +124,7 @@ class AccountClass extends Component {
                     if (res) {
                         if (res.status == 200) {
                             _this.setState({
-                                deleteClassId: '', showDeleteAccountClassModal: false, errMessage: res.message, errMsg: true
+                                showDeleteAccountClassModal: false, errMessage: res.message, errMsg: true, errType: 'Success'
                             }, () => {
                                 _this._getAllAccountClasses();
                             });
@@ -133,11 +136,11 @@ class AccountClass extends Component {
                             _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                         }
                     } else {
-                        _this.setState({ deleteClassId: '', showDeleteAccountClassModal: false });
+                        _this.setState({ showDeleteAccountClassModal: false });
                     }
                     this.setState({ loader: false })
                 }).catch(() => {
-                    _this.setState({ deleteClassId: '', showDeleteCoinModal: false, loader: false });
+                    _this.setState({ showDeleteCoinModal: false, loader: false });
                 });
         } else {
             this.validator.showMessages();
@@ -215,7 +218,7 @@ class AccountClass extends Component {
                                                             onChange={this._onChangeFields.bind(this, "otp")} />
                                                     </div>
                                                     <span className="field-error">
-                                                        {this.validator.message('OTP', fields['otp'], 'required')}
+                                                        {this.validator.message('OTP', fields['otp'], 'required|numeric')}
                                                     </span>
                                                     <Button type="primary" style={{ marginTop: "20px", marginBottom: "20px" }}
                                                         onClick={this._deleteAccountClass}>Delete Account Class</Button>
