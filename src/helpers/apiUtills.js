@@ -2,12 +2,12 @@
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
     //super admin sign in api
-    adminSignIn: function (form) {
+    adminSignIn: function(form) {
         try {
             return fetch(API_URL + "/admin/login", {
                 method: 'POST',
@@ -23,7 +23,7 @@ const ApiUtils = {
     },
 
     //edit profile api
-    editProfile: function (token, form) {
+    editProfile: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update", {
                 method: 'PUT',
@@ -40,7 +40,7 @@ const ApiUtils = {
     },
 
     //change admin password api
-    changePassword: function (token, form) {
+    changePassword: function(token, form) {
         try {
             return fetch(API_URL + "/admin/change-password", {
                 method: 'POST',
@@ -55,7 +55,7 @@ const ApiUtils = {
     },
 
     //get all counts for dashboard api
-    getAllCount: function (token, startDate, endDate) {
+    getAllCount: function(token, startDate, endDate) {
         let url = "/admin/dashboard/get-data";
         if (startDate && endDate) {
             url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
@@ -73,7 +73,7 @@ const ApiUtils = {
     },
 
     //get all users api
-    getAllUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
+    getAllUsers: function(page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
         let url = "/admin/get-users?page=" + page + "&limit=" + limit;
         searchUser = encodeURIComponent(searchUser);
         if (sorterCol && sortOrder && searchUser && filterVal) {
@@ -105,7 +105,7 @@ const ApiUtils = {
     },
 
     //activate user api
-    activateUser: function (token, form) {
+    activateUser: function(token, form) {
         try {
             return fetch(API_URL + "/admin/user-activate", {
                 method: 'POST',
@@ -120,7 +120,7 @@ const ApiUtils = {
     },
 
     //get all coins api
-    getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
+    getAllCoins: function(page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -145,7 +145,7 @@ const ApiUtils = {
     },
 
     //add coin api
-    addCoin: function (token, form) {
+    addCoin: function(token, form) {
         try {
             return fetch(API_URL + "/admin/coins/create", {
                 method: 'POST',
@@ -160,7 +160,7 @@ const ApiUtils = {
     },
 
     //edit coin api
-    editCoin: function (token, form) {
+    editCoin: function(token, form) {
         try {
             return fetch(API_URL + "/admin/coins/update", {
                 method: 'PUT',
@@ -176,7 +176,7 @@ const ApiUtils = {
     },
 
     //delete coin api
-    deleteCoin: function (coinId, token) {
+    deleteCoin: function(coinId, token) {
         try {
             return fetch(API_URL + "/admin/coins/delete?id=" + coinId, {
                 method: 'DELETE',
@@ -191,7 +191,7 @@ const ApiUtils = {
     },
 
     //forgot password api
-    forgotPassword: function (form) {
+    forgotPassword: function(form) {
         try {
             return fetch(API_URL + "/admin/forgot-password", {
                 method: 'POST',
@@ -207,7 +207,7 @@ const ApiUtils = {
     },
 
     //reset password api
-    resetPassword: function (form) {
+    resetPassword: function(form) {
         try {
             return fetch(API_URL + "/admin/reset-password", {
                 method: 'PUT',
@@ -223,7 +223,7 @@ const ApiUtils = {
     },
 
     //get all referrals api
-    getAllUserReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
+    getAllUserReferrals: function(page, limit, token, user_id, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         if (sorterCol, sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -243,7 +243,7 @@ const ApiUtils = {
     },
 
     //get all referrals api
-    getAllReferrals: function (page, limit, token, searchReferral, sorterCol, sortOrder) {
+    getAllReferrals: function(page, limit, token, searchReferral, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit;
         searchReferral = encodeURIComponent(searchReferral);
         if (sorterCol && sortOrder && searchReferral) {
@@ -268,7 +268,7 @@ const ApiUtils = {
     },
 
     //get all counties api
-    getAllCountries: function (page, limit, token, search, legality, sorterCol, sortOrder) {
+    getAllCountries: function(page, limit, token, search, legality, sorterCol, sortOrder) {
         let url = "/admin/get-countries-data?page=" + page + "&limit=" + limit + '&legality=' + legality;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -293,7 +293,7 @@ const ApiUtils = {
     },
 
     //Activate-deactivate country api 
-    activateCountry: function (token, form) {
+    activateCountry: function(token, form) {
         try {
             return fetch(API_URL + "/admin/country-activate", {
                 method: 'PUT',
@@ -308,7 +308,7 @@ const ApiUtils = {
     },
 
     //Announce to users api 
-    announceUser: function (token, form) {
+    announceUser: function(token, form) {
         try {
             return fetch(API_URL + "/admin/email-send", {
                 method: 'POST',
@@ -323,7 +323,7 @@ const ApiUtils = {
     },
 
     //get all roles api
-    getAllRoles: function (token, sorterCol, sortOrder) {
+    getAllRoles: function(token, sorterCol, sortOrder) {
         let url = "/admin/role/get";
         if (sorterCol && sortOrder) {
             url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
@@ -343,7 +343,7 @@ const ApiUtils = {
     },
 
     //edit country api call
-    editCountry: function (token, form) {
+    editCountry: function(token, form) {
         try {
             return fetch(API_URL + "/admin/country-update", {
                 method: 'PUT',
@@ -358,7 +358,7 @@ const ApiUtils = {
     },
 
     //get all states api
-    getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
+    getAllStates: function(token, countryId, search, sorterCol, sortOrder) {
         let url = "/admin/get-state-data?country_id=" + countryId;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -383,7 +383,7 @@ const ApiUtils = {
     },
 
     //Activate-deactivate state api 
-    activateState: function (token, form) {
+    activateState: function(token, form) {
         try {
             return fetch(API_URL + "/admin/state-activate", {
                 method: 'PUT',
@@ -398,7 +398,7 @@ const ApiUtils = {
     },
 
     //edit state api call
-    editState: function (token, form) {
+    editState: function(token, form) {
         try {
             return fetch(API_URL + "/admin/state-update", {
                 method: 'PUT',
@@ -413,7 +413,7 @@ const ApiUtils = {
     },
 
     //add role api call
-    addRole: function (token, form) {
+    addRole: function(token, form) {
         try {
             return fetch(API_URL + "/admin/role/create", {
                 method: 'POST',
@@ -428,7 +428,7 @@ const ApiUtils = {
     },
 
     //edit role api call
-    updateRole: function (token, form) {
+    updateRole: function(token, form) {
         try {
             return fetch(API_URL + "/admin/role/update", {
                 method: 'PUT',
@@ -442,7 +442,7 @@ const ApiUtils = {
         }
     },
 
-    deleteRole: function (token, roleId) {
+    deleteRole: function(token, roleId) {
         try {
             return fetch(API_URL + "/admin/role/delete", {
                 method: 'DELETE',
@@ -458,7 +458,7 @@ const ApiUtils = {
     },
 
     //get all employee api
-    getAllEmployee: function (token, sorterCol, sortOrder, search) {
+    getAllEmployee: function(token, sorterCol, sortOrder, search) {
         let url = "/admin/get-employees";
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -482,7 +482,7 @@ const ApiUtils = {
     },
 
     //add employee api call
-    addEmployee: function (token, form) {
+    addEmployee: function(token, form) {
         try {
             return fetch(API_URL + "/admin/add-employee", {
                 method: 'POST',
@@ -497,7 +497,7 @@ const ApiUtils = {
     },
 
     //delete employee api call
-    deleteEmployee: function (token, roleId) {
+    deleteEmployee: function(token, roleId) {
         try {
             return fetch(API_URL + "/admin/delete-employee", {
                 method: 'DELETE',
@@ -513,7 +513,7 @@ const ApiUtils = {
     },
 
     //edit employee api call
-    editEmployee: function (token, form) {
+    editEmployee: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update-employee", {
                 method: 'PUT',
@@ -528,7 +528,7 @@ const ApiUtils = {
     },
 
     //user login history api call
-    getUserHistory: function (token, user_id, page, limit, data, startDate, endDate) {
+    getUserHistory: function(token, user_id, page, limit, data, startDate, endDate) {
         let url = "/admin/get-user-login-history?page=" + page + "&limit=" + limit;
         data = encodeURIComponent(data);
         if (data && startDate && endDate) {
@@ -553,7 +553,7 @@ const ApiUtils = {
         }
     },
 
-    getAllPairs: function (page, limit, token, searchPair, sorterCol, sortOrder, selectedAsset) {
+    getAllPairs: function(page, limit, token, searchPair, sorterCol, sortOrder, selectedAsset) {
         let url = "/admin/all-pairs?page=" + page + "&limit=" + limit;
         searchPair = encodeURIComponent(searchPair);
         if (sorterCol && sortOrder && searchPair && selectedAsset) {
@@ -583,7 +583,7 @@ const ApiUtils = {
     },
 
     //add fees api call
-    addPair: function (token, form) {
+    addPair: function(token, form) {
         try {
             return fetch(API_URL + "/admin/add-pair", {
                 method: 'POST',
@@ -598,7 +598,7 @@ const ApiUtils = {
     },
 
     //edit pair api call
-    updatePair: function (token, form) {
+    updatePair: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-pair", {
                 method: 'PUT',
@@ -613,7 +613,7 @@ const ApiUtils = {
         }
     },
 
-    getAllLimit: function (token) {
+    getAllLimit: function(token) {
         try {
             return fetch(API_URL + "/admin/all-limits", {
                 method: 'GET',
@@ -628,7 +628,7 @@ const ApiUtils = {
     },
 
     //edit limit api call
-    updateLimit: function (token, form) {
+    updateLimit: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-limit", {
                 method: 'PUT',
@@ -643,7 +643,7 @@ const ApiUtils = {
         }
     },
 
-    getAllTransaction: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
+    getAllTransaction: function(page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
@@ -692,7 +692,7 @@ const ApiUtils = {
     },
 
     //user wise transaction list api call
-    getUserTransaction: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
+    getUserTransaction: function(page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-transactions?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         search = encodeURIComponent(search);
         if (search && filterVal && sorterCol && sortOrder && startDate && endDate) {
@@ -736,7 +736,7 @@ const ApiUtils = {
         }
     },
 
-    getAllTrades: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
+    getAllTrades: function(page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
@@ -784,7 +784,7 @@ const ApiUtils = {
         }
     },
 
-    getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
+    getUserTrades: function(page, limit, token, search, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         search = encodeURIComponent(search);
         if (search && filterVal && sorterCol && sortOrder) {
@@ -814,7 +814,7 @@ const ApiUtils = {
         }
     },
 
-    getAllWithdrawRequests: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
+    getAllWithdrawRequests: function(page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
@@ -859,7 +859,7 @@ const ApiUtils = {
     },
 
     //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
-    getUserWithdrawReq: function (page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
+    getUserWithdrawReq: function(page, limit, token, search, startDate, endDate, user_id, filterVal, sorterCol, sortOrder) {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         search = encodeURIComponent(search);
         if (search && startDate && endDate && filterVal && sorterCol && sortOrder) {
@@ -902,7 +902,7 @@ const ApiUtils = {
         }
     },
 
-    getAllSellOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
+    getAllSellOrders: function(page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-sell-orders?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -927,7 +927,7 @@ const ApiUtils = {
         }
     },
 
-    getAllBuyOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
+    getAllBuyOrders: function(page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -952,7 +952,7 @@ const ApiUtils = {
     },
 
     //get all jobs api
-    getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
+    getAllJobs: function(page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -977,7 +977,7 @@ const ApiUtils = {
     },
 
     //get all job categories api
-    getAllJobCategories: function (token, active) {
+    getAllJobCategories: function(token, active) {
         try {
             return fetch(API_URL + "/admin/job-categories?active=" + active, {
                 method: 'GET',
@@ -992,7 +992,7 @@ const ApiUtils = {
     },
 
     //add job api
-    addJob: function (token, form) {
+    addJob: function(token, form) {
         try {
             return fetch(API_URL + "/admin/add-job", {
                 method: 'POST',
@@ -1008,7 +1008,7 @@ const ApiUtils = {
     },
 
     //edit job api call
-    updateJob: function (token, form) {
+    updateJob: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-job", {
                 method: 'PUT',
@@ -1024,7 +1024,7 @@ const ApiUtils = {
     },
 
     //delete job api call
-    deleteJob: function (jobId, token) {
+    deleteJob: function(jobId, token) {
         try {
             return fetch(API_URL + "/admin/delete-job?job_id=" + jobId, {
                 method: 'DELETE',
@@ -1039,7 +1039,7 @@ const ApiUtils = {
     },
 
     //edit contact details api
-    editContact: function (token, form) {
+    editContact: function(token, form) {
         try {
             return fetch(API_URL + "/edit-contact-details", {
                 method: 'POST',
@@ -1055,7 +1055,7 @@ const ApiUtils = {
     },
 
     //get contact details api
-    getContactDetails: function () {
+    getContactDetails: function() {
         try {
             return fetch(API_URL + "/admin/get-contact-details", {
                 method: 'GET',
@@ -1069,7 +1069,7 @@ const ApiUtils = {
     },
 
     //get all jobs api
-    getAllJobApplications: function (jobId, page, limit, token, search, sorterCol, sortOrder) {
+    getAllJobApplications: function(jobId, page, limit, token, search, sorterCol, sortOrder) {
         let url = "/admin/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
@@ -1094,7 +1094,7 @@ const ApiUtils = {
     },
 
     //get all kyc data api
-    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, status) {
+    getKYCData: function(token, page, limit, search, sorterCol, sortOrder, status) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search && status) {
@@ -1125,7 +1125,7 @@ const ApiUtils = {
     },
 
     //edit kyc status api
-    updateKYCStatus: function (token, form) {
+    updateKYCStatus: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update-kyc-status", {
                 method: 'POST',
@@ -1141,7 +1141,7 @@ const ApiUtils = {
     },
 
     //get all fees api
-    getFeesData: function (token) {
+    getFeesData: function(token) {
         let url = "/admin/get-all-fee";
         try {
             return fetch(API_URL + url, {
@@ -1157,7 +1157,7 @@ const ApiUtils = {
     },
 
     //edit fees api
-    updateFees: function (token, form) {
+    updateFees: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-fee", {
                 method: 'PUT',
@@ -1173,7 +1173,7 @@ const ApiUtils = {
     },
 
     //panic button api
-    panicBtn: function (token) {
+    panicBtn: function(token) {
         try {
             return fetch(API_URL + "/panic-button", {
                 method: 'GET',
@@ -1188,7 +1188,7 @@ const ApiUtils = {
     },
 
     // get user details api
-    getUserDetails: function (token, user_id) {
+    getUserDetails: function(token, user_id) {
         try {
             return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
                 method: 'GET',
@@ -1203,7 +1203,7 @@ const ApiUtils = {
     },
 
     // get employee details api
-    getEmployeeDetails: function (token, emp_id) {
+    getEmployeeDetails: function(token, emp_id) {
         try {
             return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
                 method: 'GET',
@@ -1217,7 +1217,7 @@ const ApiUtils = {
         }
     },
 
-    disableTwoFactor: function (token, form) {
+    disableTwoFactor: function(token, form) {
         try {
             return fetch(API_URL + "/admin/disable-two-factor", {
                 method: 'POST',
@@ -1232,7 +1232,7 @@ const ApiUtils = {
         }
     },
 
-    setupTwoFactor: function (token, form) {
+    setupTwoFactor: function(token, form) {
         try {
             return fetch(API_URL + "/admin/setup-two-factor", {
                 method: 'POST',
@@ -1247,7 +1247,7 @@ const ApiUtils = {
         }
     },
 
-    verifyOTP: function (token, form) {
+    verifyOTP: function(token, form) {
         try {
             return fetch(API_URL + "/admin/verify-two-factor", {
                 method: 'POST',
@@ -1262,7 +1262,7 @@ const ApiUtils = {
         }
     },
 
-    getAdminDetails: function (token, admin_id) {
+    getAdminDetails: function(token, admin_id) {
         try {
             return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
                 method: 'GET',
@@ -1277,7 +1277,7 @@ const ApiUtils = {
     },
 
     //get all news api
-    getAllNews: function (page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder) {
+    getAllNews: function(page, limit, token, searchNews, filterVal, startDate, endDate, sorterCol, sortOrder) {
         let url = "/admin/get-all-news?page=" + page + "&limit=" + limit;
         searchNews = encodeURIComponent(searchNews);
         if (searchNews && filterVal && startDate && endDate && sorterCol && sortOrder) {
@@ -1325,7 +1325,7 @@ const ApiUtils = {
         }
     },
 
-    changeNewsStatus: function (token, form) {
+    changeNewsStatus: function(token, form) {
         try {
             return fetch(API_URL + "/admin/change-news-status", {
                 method: 'POST',
@@ -1340,7 +1340,7 @@ const ApiUtils = {
         }
     },
 
-    getNewsDetails: function (token, news_id) {
+    getNewsDetails: function(token, news_id) {
         try {
             return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
                 method: 'GET',
@@ -1354,7 +1354,7 @@ const ApiUtils = {
         }
     },
 
-    updateReferral: function (token, form) {
+    updateReferral: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update-user-referal", {
                 method: 'POST',
@@ -1369,7 +1369,7 @@ const ApiUtils = {
         }
     },
 
-    getKYCDetails: function (token, user_id) {
+    getKYCDetails: function(token, user_id) {
         try {
             return fetch(API_URL + "/admin/get-kyc-detail?user_id=" + user_id, {
                 method: 'GET',
@@ -1383,7 +1383,7 @@ const ApiUtils = {
         }
     },
 
-    getReferredAmounts: function (token, ref_id) {
+    getReferredAmounts: function(token, ref_id) {
         try {
             return fetch(API_URL + "/admin/get-referred-amount-details?id=" + ref_id, {
                 method: 'GET',
@@ -1397,7 +1397,7 @@ const ApiUtils = {
         }
     },
 
-    updateSendCoinFee: function (token, form) {
+    updateSendCoinFee: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update-send-coin-fee", {
                 method: 'POST',
@@ -1413,7 +1413,7 @@ const ApiUtils = {
     },
 
     //add user api call
-    addUser: function (token, form) {
+    addUser: function(token, form) {
         try {
             return fetch(API_URL + "/admin/add-user", {
                 method: 'POST',
@@ -1428,7 +1428,7 @@ const ApiUtils = {
         }
     },
 
-    getWalletCoins: function (token) {
+    getWalletCoins: function(token) {
         try {
             return fetch(API_URL + "/coin-list", {
                 method: 'GET',
@@ -1442,7 +1442,7 @@ const ApiUtils = {
         }
     },
 
-    getUserTickets: function (token, form) {
+    getUserTickets: function(token, form) {
         try {
             return fetch(API_URL + "/admin/get-user-tickets", {
                 method: 'POST',
@@ -1457,7 +1457,7 @@ const ApiUtils = {
         }
     },
 
-    getAllAccountClasses: function (token) {
+    getAllAccountClasses: function(token) {
         try {
             return fetch(API_URL + "/admin/get-all-account-classes", {
                 method: 'GET',
@@ -1471,7 +1471,7 @@ const ApiUtils = {
         }
     },
 
-    addAccountClass: function (token, form) {
+    addAccountClass: function(token, form) {
         try {
             return fetch(API_URL + "/admin/add-account-class", {
                 method: 'POST',
@@ -1486,7 +1486,7 @@ const ApiUtils = {
         }
     },
 
-    updateAccountClass: function (token, form) {
+    updateAccountClass: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update-account-class", {
                 method: 'POST',
@@ -1501,7 +1501,7 @@ const ApiUtils = {
         }
     },
 
-    deleteAccountClass: function (token, form) {
+    deleteAccountClass: function(token, form) {
         try {
             return fetch(API_URL + "/admin/delete-account-class", {
                 method: 'POST',
@@ -1516,7 +1516,7 @@ const ApiUtils = {
         }
     },
 
-    getAssetDetails: function (token, coin_id) {
+    getAssetDetails: function(token, coin_id) {
         try {
             return fetch(API_URL + "/admin/coin/get-coin-details?id=" + coin_id, {
                 method: 'GET',
@@ -1530,7 +1530,7 @@ const ApiUtils = {
         }
     },
 
-    getAssetLimits: function (token, coin_id) {
+    getAssetLimits: function(token, coin_id) {
         try {
             return fetch(API_URL + "/admin/all-limits?coin_id=" + coin_id, {
                 method: 'GET',
@@ -1544,7 +1544,7 @@ const ApiUtils = {
         }
     },
 
-    updateAssetLimits: function (token, form) {
+    updateAssetLimits: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-limit", {
                 method: 'PUT',
@@ -1559,7 +1559,7 @@ const ApiUtils = {
         }
     },
 
-    getUserLimits: function (token, user_id) {
+    getUserLimits: function(token, user_id) {
         try {
             return fetch(API_URL + "/admin/all-user-limits?user_id=" + user_id, {
                 method: 'GET',
@@ -1573,7 +1573,7 @@ const ApiUtils = {
         }
     },
 
-    updateUserLimits: function (token, form) {
+    updateUserLimits: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-user-limit", {
                 method: 'PUT',
@@ -1588,7 +1588,7 @@ const ApiUtils = {
         }
     },
 
-    getAllEmailTemplates: function (token) {
+    getAllEmailTemplates: function(token) {
         try {
             return fetch(API_URL + "/admin/emailTemplate/get", {
                 method: 'GET',
@@ -1602,7 +1602,7 @@ const ApiUtils = {
         }
     },
 
-    updateEmailTemplate: function (token, form) {
+    updateEmailTemplate: function(token, form) {
         try {
             return fetch(API_URL + "/admin/emailTemplate/update", {
                 method: 'PUT',
@@ -1617,7 +1617,7 @@ const ApiUtils = {
         }
     },
 
-    getAllNewsSources: function (token) {
+    getAllNewsSources: function(token) {
         try {
             return fetch(API_URL + "/admin/all-new-source", {
                 method: 'GET',
@@ -1631,7 +1631,7 @@ const ApiUtils = {
         }
     },
 
-    updateNewsSource: function (token, form) {
+    updateNewsSource: function(token, form) {
         try {
             return fetch(API_URL + "/admin/edit-news-source", {
                 method: 'PUT',
@@ -1646,7 +1646,7 @@ const ApiUtils = {
         }
     },
 
-    changeWithdrawStaus: function (token, form) {
+    changeWithdrawStaus: function(token, form) {
         try {
             return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
                 method: 'POST',
@@ -1661,7 +1661,7 @@ const ApiUtils = {
         }
     },
 
-    getTemplateDetails: function (token, template_id) {
+    getTemplateDetails: function(token, template_id) {
         try {
             return fetch(API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
                 method: 'GET',
@@ -1676,7 +1676,7 @@ const ApiUtils = {
     },
 
     //edit job category api call
-    updateJobCategory: function (token, form) {
+    updateJobCategory: function(token, form) {
         try {
             return fetch(API_URL + "/admin/update-job-category", {
                 method: 'PUT',
@@ -1691,7 +1691,7 @@ const ApiUtils = {
         }
     },
 
-    addJobCategory: function (token, form) {
+    addJobCategory: function(token, form) {
         try {
             return fetch(API_URL + "/admin/add-job-category", {
                 method: 'POST',
