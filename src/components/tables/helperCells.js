@@ -209,7 +209,7 @@ const referralActionCell = value => <div><Tooltip title="View"><Icon type="right
 const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text.toPrecision(2) + '%' }}></p>;
 const ApproveCell = text => <p>{text == true ? 'Approved' : 'Dis-Approved'}</p>;
 const IPCell = text => <p>{(text.split(":").length > 1) ? text.split(':')[3] : text}</p>;
-const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : 'Neutral'}</p>;
+const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : text == 3 ? 'Neutral' : 'Partial Services Available'}</p>;
 const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Referred Users</Button>;
 const SwitchCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) }} />
 const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
@@ -246,7 +246,7 @@ const AccountClassActionCell = (value, class_name) => <div><Tooltip title="Delet
 const TemplateActionCell = (value, name, content, note) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTemplate(value, name, content, note)} /></Tooltip></div>;
 const NewsSourceSwitchCell = (value, source_name, slug, is_active) => <Switch checked={is_active} onChange={() => { newsSourceStatus(value, source_name, slug, is_active) }} />
 const WithdrawActionCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <div>{(is_approve == null && is_executed == null) ? <div><Button style={{ marginRight: '15px' }} type="primary" onClick={() => approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Approve</Button><Button style={{ margingLeft: '15px' }} type="danger" onClick={() => declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at)} >Decline</Button></div> : ''}</div>;
-const WithdrawStatusCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <p>{(is_approve == null && is_executed == null) ? 'Pending' : is_approve ? 'Approved' : 'Dis-Approved'}</p>;
+const WithdrawStatusCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <p>{is_approve == null ? 'Pending' : is_approve == true ? 'Approved' : 'Dis-Approved'}</p>;
 const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_active} onChange={() => { jobCategoryStatus(value, category, is_active) }} />
 const JobCatActionCell = (value, category, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => updateCategory(value, category, is_active)} /></Tooltip></div>;
 

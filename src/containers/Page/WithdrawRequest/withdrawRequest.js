@@ -103,7 +103,7 @@ class WithdrawRequest extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
                 } else if (res.status == 403) {
@@ -232,6 +232,7 @@ class WithdrawRequest extends Component {
                                                     value={filterVal}
                                                 >
                                                     <Option value={''}>All</Option>
+                                                    <Option value={'null'}>Pending</Option>
                                                     <Option value={'true'}>Approved</Option>
                                                     <Option value={'false'}>Declined</Option>
                                                 </Select>
