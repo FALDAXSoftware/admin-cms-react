@@ -175,7 +175,7 @@ class Countries extends Component {
                                         />
 
                                         <Select
-                                            style={{ width: 125, "marginLeft": "15px" }}
+                                            style={{ width: 200, "marginLeft": "15px" }}
                                             placeholder="Select a locality"
                                             onChange={this._changeLocality}
                                             value={localityVal}
