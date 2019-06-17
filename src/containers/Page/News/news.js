@@ -219,13 +219,11 @@ class News extends Component {
                                                 <Input
                                                     placeholder="Search news"
                                                     onChange={this._changeSearch.bind(this)}
-                                                    style={{ "width": "200px" }}
                                                     value={searchNews}
                                                 />
                                             </ColWithPadding>
-                                            <ColWithPadding sm={3}>
+                                            <ColWithPadding sm={5}>
                                                 <Select
-                                                    style={{ width: 125, "marginLeft": "15px" }}
                                                     placeholder="Select a source"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -234,14 +232,13 @@ class News extends Component {
                                                     {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
                                                 </Select>
                                             </ColWithPadding>
-                                            <ColWithPadding sm={7}>
+                                            <ColWithPadding sm={8}>
                                                 <RangePicker
                                                     value={rangeDate}
                                                     disabledTime={this.disabledRangeTime}
                                                     onChange={this._changeDate}
                                                     format="YYYY-MM-DD"
                                                     allowClear={false}
-                                                    style={{ marginLeft: '15px' }}
                                                 />
                                             </ColWithPadding>
                                             <ColWithPadding xs={12} sm={3}>

@@ -820,21 +820,25 @@ const ApiUtils = {
         if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
-            url += "&data=" + search + "&t_type=" + filterVal;
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && startDate && endDate && sorterCol && sortOrder) {
-            url += "&data=" + search + "&t_type=" + filterVal;
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate && sorterCol && sortOrder) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && startDate && endDate) {
-            url += "&data=" + search + "&t_type=" + filterVal;
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && startDate && endDate) {
-            url += "&data=" + search + "&t_type=" + filterVal;
-        } else if (filterVal && sorterCol && sortOrder) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (filterVal && sorterCol && sortOrder) {
+            url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && sorterCol && sortOrder) {
-            url += "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (search && filterVal) {
+            url += "&data=" + search + "&t_type=" + filterVal;;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
@@ -859,11 +863,11 @@ const ApiUtils = {
         let url = "/admin/all-withdraw-requests?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
         search = encodeURIComponent(search);
         if (search && startDate && endDate && filterVal && sorterCol && sortOrder) {
-            url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
-            url += "&data=" + search + "&start_date=" + startDate + "&start_date=" + startDate + "&end_date=" + endDate;;
+            url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && startDate && endDate && filterVal) {
-            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && sorterCol && sortOrder && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate && sorterCol && sortOrder) {
@@ -1069,9 +1073,9 @@ const ApiUtils = {
         let url = "/admin/job-applicants?page=" + page + "&limit=" + limit + "&job_id=" + jobId;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
-            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else {
             url += "&data=" + search;
         }
