@@ -184,14 +184,14 @@ class TradeHistory extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchTrade}>
                                         <Row>
-                                            <ColWithPadding sm={8}>
+                                            <ColWithPadding sm={5}>
                                                 <Input
                                                     placeholder="Search trades"
                                                     onChange={this._changeSearch.bind(this)}
                                                     value={searchTrade}
                                                 />
                                             </ColWithPadding>
-                                            <ColWithPadding sm={7}>
+                                            <ColWithPadding sm={3}>
                                                 <Select
                                                     placeholder="Select type"
                                                     onChange={this._changeFilter}
@@ -202,7 +202,7 @@ class TradeHistory extends Component {
                                                     <Option value={'Buy'}>Buy</Option>
                                                 </Select>
                                             </ColWithPadding>
-                                            <ColWithPadding sm={8}>
+                                            <ColWithPadding sm={7}>
                                                 <RangePicker
                                                     value={rangeDate}
                                                     disabledTime={this.disabledRangeTime}
@@ -212,14 +212,20 @@ class TradeHistory extends Component {
                                                     style={{ width: "100%" }}
                                                 />
                                             </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                {allTrades && allTrades.length > 0 ?
+                                                    <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                                        <Button className="search-btn" type="primary">Export</Button>
+                                                    </CSVLink>
+                                                    : ''}
+                                            </ColWithPadding>
                                         </Row>
-                                        <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                        {allTrades && allTrades.length > 0 ?
-                                            <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                                <Button className="search-btn" type="primary">Export</Button>
-                                            </CSVLink>
-                                            : ''}
                                     </Form>
                                 </div>
                                 {loader && <FaldaxLoader />}
