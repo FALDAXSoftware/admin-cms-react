@@ -413,6 +413,7 @@
   "antTable.title.numReferral": "Number Of Referrals",
   "antTable.title.zip": "Postal Code",
   "antTable.title.referral_by_email": "Referred User",
+  "antTable.title.refered_by": "Referred By",
   "antTable.title.state": "State",
   "countryTable.title.name": "Country Name",
   "countryTable.title.legality": "Legality",
