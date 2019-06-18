@@ -72,22 +72,22 @@ class Jobs extends Component {
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    this.setState({
+                    self.setState({
                         errMsg: true, errMessage: message, loader: false,
                         errType: 'Success', showError: false, isDisabled: false
                     });
-                    this._getAllJobs();
-                    this._getAllJobCategories();
+                    self._getAllJobs();
+                    self._getAllJobCategories();
                 } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
                     });
                 } else {
-                    this.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: res.message });
                 }
             })
             .catch(() => {
-                this.setState({
+                self.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
                     loader: false, errType: 'error', showError: false, isDisabled: false
                 });
