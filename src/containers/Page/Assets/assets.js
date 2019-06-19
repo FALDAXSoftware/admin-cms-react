@@ -56,7 +56,6 @@ class Assets extends Component {
     }
 
     static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
-        console.log('status')
         const { token } = this.props;
 
         let formData = {
