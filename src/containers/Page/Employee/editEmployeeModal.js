@@ -45,7 +45,7 @@ class EditEmployeeModal extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    let roles = res.roles.map((role) => ({ key: role.id, value: role.name }));
+                    let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
                     _this.setState({ allRoles: roles });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -150,6 +150,7 @@ class EditEmployeeModal extends Component {
     render() {
         const { loader, showEditEmpModal, fields, errMsg, errType,
             allRoles, selectedRole, isDisabled } = this.state;
+        console.log(allRoles)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
