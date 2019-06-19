@@ -106,7 +106,7 @@ class UserTickets extends Component {
                                         pagination={false}
                                         dataSource={allTickets}
                                         className="isoCustomizedTable"
-                                        expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}
+                                        expandedRowRender={record => <p style={{ margin: 0, whiteSpace: 'pre-line' }}>{record.content}</p>}
                                     />
                                     {loader && <FaldaxLoader />}
                                 </div>

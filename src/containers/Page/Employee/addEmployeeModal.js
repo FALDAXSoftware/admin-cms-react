@@ -145,7 +145,7 @@ class AddEmployeeModal extends Component {
 
     render() {
         const { loader, showAddEmpModal, fields, allRoles, errType, errMsg,
-            isDisabled, showRoleErr } = this.state;
+            isDisabled, showRoleErr, selectedRole } = this.state;
 
         let options = allRoles.map((role) => {
             return (
@@ -214,6 +214,7 @@ class AddEmployeeModal extends Component {
                         style={{ width: 200 }}
                         placeholder="Select a role"
                         onChange={this._changeRole}
+                        value={selectedRole}
                     >
                         {options}
                     </Select><br />
