@@ -103,7 +103,7 @@ class WithdrawRequest extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq, filterVal, startDate, endDate, sorterCol, sortOrder)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
                 } else if (res.status == 403) {
@@ -124,7 +124,9 @@ class WithdrawRequest extends Component {
 
     _searchReq = (e) => {
         e.preventDefault();
-        this._getAllWithdrawReqs();
+        this.setState({ page: 1 }, () => {
+            this._getAllWithdrawReqs();
+        })
     }
 
     _handleReqPagination = (page) => {

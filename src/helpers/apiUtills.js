@@ -1172,15 +1172,30 @@ const ApiUtils = {
         }
     },
 
-    //panic button api
-    panicBtn: function (token) {
+    getPanicBtnDetails: function (token) {
         try {
-            return fetch(API_URL + "/panic-button", {
+            return fetch(API_URL + "/get-panic-status", {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //panic button api
+    panicBtn: function (token, form) {
+        try {
+            return fetch(API_URL + "/panic-button", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
             });
         } catch (error) {
             console.error(error);

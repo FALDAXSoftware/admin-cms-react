@@ -132,7 +132,9 @@ class News extends Component {
 
     _searchNews = (e) => {
         e.preventDefault();
-        this._getAllNews();
+        this.setState({ page: 1 }, () => {
+            this._getAllNews();
+        });
     }
 
     _changeFilter = (val) => {
