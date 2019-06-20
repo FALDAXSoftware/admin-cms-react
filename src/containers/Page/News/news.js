@@ -171,8 +171,8 @@ class News extends Component {
     _changeDate = (date, dateString) => {
         this.setState({
             rangeDate: date,
-            startDate: moment(date[0]).toISOString(),
-            endDate: moment(date[1]).toISOString()
+            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
         })
     }
 

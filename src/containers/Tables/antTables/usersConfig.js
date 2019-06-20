@@ -2,11 +2,11 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    ImageCell,
+    UserImageCell,
     LinkCell,
     TextCell,
     ActionCell,
-    UserDateCell,
+    DateCell,
     ButtonCell,
     TierCell,
     ReferralCell
@@ -37,12 +37,10 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const created_at = object[created]
 
     switch (type) {
-        case 'ImageCell':
-            return ImageCell(value);
-        case 'UserDateCell':
-            return UserDateCell(value, profile_pic, first_name, last_name, email, city_town,
-                street_address, street_address_2, phone_number, country, dob, is_active, kyc,
-                date_format, account_tier, account_class, state, no_of_referrals, created_at);
+        case 'UserImageCell':
+            return UserImageCell(value);
+        case 'DateCell':
+            return DateCell(value);
         case 'LinkCell':
             return LinkCell(value);
         case 'ButtonCell':
@@ -68,7 +66,7 @@ const columns = [{
     key: 'profile_pic',
     width: '1%',
     className: 'isoImageCell',
-    render: object => renderCell(object, 'ImageCell', 'profile_pic')
+    render: object => renderCell(object, 'UserImageCell', 'profile_pic')
 }, {
     title: <IntlMessages id="antTable.title.firstName" />,
     key: 'first_name',
@@ -97,6 +95,7 @@ const columns = [{
     title: <IntlMessages id="antTable.title.state" />,
     key: 'state',
     width: 200,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'state')
 }, {
     title: <IntlMessages id="antTable.title.tier" />,
@@ -114,14 +113,12 @@ const columns = [{
     width: 200,
     render: object => renderCell(object, 'TextCell', 'postal_code')
 }, {
-    title: <IntlMessages id="antTable.title.created_at" />,
+    title: <IntlMessages id="userTable.title.created_at" />,
     key: 'created_at',
     width: 200,
-    render: object => renderCell(object, 'UserDateCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
-        'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
-        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at')
-},
-{
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="antTable.title.details" />,
     key: 'action',
     width: 200,

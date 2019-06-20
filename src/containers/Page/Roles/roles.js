@@ -36,9 +36,9 @@ class Roles extends Component {
         Roles.deleteRole = Roles.deleteRole.bind(this);
     }
 
-    static roleStatus(value, name, users, assets, countries,
-        roles, employee, pairs, limit_management, transaction_history, trade_history,
-        withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) {
+    static roleStatus(value, name, users, assets, countries, roles, employee, pairs, limit_management,
+        transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
+        news, is_referral, add_user, is_active) {
         const { token } = self.props;
 
         let formData = {
@@ -59,7 +59,8 @@ class Roles extends Component {
             fees,
             panic_button,
             news,
-            referral,
+            is_referral,
+            add_user,
             is_active: !is_active
         };
 
@@ -87,13 +88,13 @@ class Roles extends Component {
             });
     }
 
-    static editRole(value, name, users, assets, countries,
-        roles, employee, pairs, limit_management, transaction_history, trade_history,
-        withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active) {
+    static editRole(value, name, users, assets, countries, roles, employee, pairs, limit_management,
+        transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
+        news, is_referral, add_user, is_active) {
         let roleDetails = {
-            value, name, users, assets, countries,
-            roles, employee, pairs, limit_management, transaction_history, trade_history,
-            withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active
+            value, name, users, assets, countries, roles, employee, pairs, limit_management,
+            transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
+            news, is_referral, add_user, is_active
         }
         self.setState({ showEditRoleModal: true, roleDetails });
     }
@@ -203,6 +204,7 @@ class Roles extends Component {
     render() {
         const { allRoles, errType, errMsg, loader, showAddRoleModal,
             showEditRoleModal, roleDetails, showDeleteRoleModal, allRolesValue } = this.state;
+        console.log(allRolesValue)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

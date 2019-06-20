@@ -7,7 +7,9 @@ const CardWrapper = styled(Card)`
 background-color: ${props => props.bgColor} !important;
 border-radius: 10px !important;
 overflow: hidden;
+min-height: 200px;
 color: white;
+box-shadow: 0px 3px 4px 0px rgba(45, 52, 70,0.5);
 
   & .ant-card-head{
     background-color: ${props => props.headColor} !important;
@@ -16,16 +18,17 @@ color: white;
 
   & .ant-card-head-title{
     color: white;
+    white-space: pre-line !important;
   }
 
   & .isoLabel {
-    color: white;
+    color: #2d3446;
   }
 
   & .count{
     padding: 5px;
     font-size: 20px;
-    color: aliceblue;
+    color:#2d3446;
     font-weight: bold;
     width: 50px;
     display: inline-block;
@@ -35,7 +38,7 @@ color: white;
     .isoStatNumber {
         padding: 5px;
         font-size: 20px;
-        color: aliceblue;
+        color:#2d3446;
         font-weight: bold;
     }   
   }

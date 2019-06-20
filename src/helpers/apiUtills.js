@@ -560,6 +560,8 @@ const ApiUtils = {
             url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
         } else if (sorterCol && sortOrder && selectedAsset) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&filter_val=" + selectedAsset;
+        } else if (searchPair && sorterCol && sortOrder) {
+            url += "&data=" + searchPair + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (searchPair && selectedAsset) {
             url += "&data=" + searchPair + "&filter_val=" + selectedAsset;
         } else if (sorterCol && sortOrder) {

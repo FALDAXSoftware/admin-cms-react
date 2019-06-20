@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, notification, Card, Progress } from 'antd';
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
-import StickerWidget from "../Widgets/sticker/sticker-widget";
 import IsoWidgetsWrapper from "../Widgets/widgets-wrapper";
 import basicStyle from "../../settings/basicStyle";
 import ApiUtils from '../../helpers/apiUtills';
@@ -252,7 +251,7 @@ class Dashboard extends Component {
                     </Col>
 
                     <Col md={12} xs={24} style={colStyle}>
-                        <CardWrapper title="KYC">
+                        <CardWrapper title="Pending Identity Verifications">
                             <ChartWrapper>
                                 <RangePicker
                                     value={rangeDate}
@@ -263,10 +262,10 @@ class Dashboard extends Component {
                                 />
                                 <Row style={{ width: "100%" }}>
                                     <Col span={12}>
-                                        <b >Grand Total:{total_kyc}</b>
+                                        <b >Total: {total_kyc}</b>
                                     </Col>
                                     <Col span={12} style={{ textAlign: "right" }}>
-                                        <a href="https://edna.identitymind.com/merchantedna/" target="_blank">View all KYC</a>
+                                        <a href="https://edna.identitymind.com/merchantedna/" target="_blank">View all Applications</a>
                                     </Col>
                                 </Row>
                                 <ContentHolder>
@@ -307,22 +306,24 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/users'>
                             <CountCard number={activeUsers}
-                                headColor={'#6455b9'}
+                                headColor={'#1f2431'}
                                 number2={inactiveUsers}
-                                bgColor={'#8478cc'}
+                                bgColor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Users'}
                                 text={'Active Users'}
                                 text2={'Inactive Users'}
                                 icon="fa fa-users"
-                                fontColor="#ffffff" />
+                                fontColor="#2d3446" />
                         </Link></Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/assets'>
                             <CountCard number={activeCoins}
-                                headColor={'#EB4278'}
+                                headColor={'#1f2431'}
                                 number2={InactiveCoins}
-                                bgColor={'#F96E9B'}
+                                bgColor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Assets'}
                                 text={'Active Assets'}
                                 text2={'Inactive Assets'}
@@ -334,9 +335,10 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/pairs'>
                             <CountCard number={activePairs}
-                                headColor={'#0F67BA'}
+                                headColor={'#1f2431'}
                                 number2={InactivePairs}
-                                bgColor={'#3B95EA'}
+                                bgColor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Pairs'}
                                 text={'Active Pairs'}
                                 text2={'Inactive Pairs'}
@@ -348,12 +350,15 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/employee'>
                             <IsoWidgetsWrapper>
-                                <StickerWidget
+                                <CountCard
+                                    headColor={'#1f2431'}
+                                    title={'Employees'}
                                     number={employeeCount}
                                     text={'Active Employees'}
                                     icon="fas fa-user-tie"
                                     fontColor="#ffffff"
-                                    bgColor="#E74C3C"
+                                    bgColor={'#fff'}
+                                    style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 />
                             </IsoWidgetsWrapper>
                         </Link>
@@ -362,12 +367,15 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/jobs'>
                             <IsoWidgetsWrapper>
-                                <StickerWidget
+                                <CountCard
+                                    headColor={'#1f2431'}
+                                    bgColor={'#fff'}
+                                    style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
+                                    title={'Pending Job Applications'}
                                     number={jobsCount}
-                                    text={'Total Open Jobs'}
+                                    text={'Pending Job Applications'}
                                     icon="fas fa-suitcase-rolling"
                                     fontColor="#ffffff"
-                                    bgColor="#F1C40F"
                                 />
                             </IsoWidgetsWrapper>
                         </Link>
@@ -376,12 +384,15 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/withdraw-requests'>
                             <IsoWidgetsWrapper>
-                                <StickerWidget
+                                <CountCard
+                                    headColor={'#1f2431'}
+                                    title={'Last 7 Days Withdraw Requests'}
                                     number={withdrawReqCount}
                                     text={'Last 7 Days Withdraw Requests'}
                                     icon="fas fa-hand-holding-usd"
                                     fontColor="#ffffff"
-                                    bgColor="#A569BD"
+                                    bgColor={'#fff'}
+                                    style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 />
                             </IsoWidgetsWrapper>
                         </Link>

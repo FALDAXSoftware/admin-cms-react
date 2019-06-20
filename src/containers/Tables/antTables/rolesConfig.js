@@ -7,11 +7,11 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     isCountry = null, isEmp = null, isRole = null,
     isPair = null, isLimit = null, isTransaction = null, isTrade = null,
     isWithdraw = null, isJobs = null, isKyc = null, fee = null, panic = null,
-    isNews = null, isReferral = null, active = false) => {
+    isNews = null, isReferral = null, addUser = null, active = false) => {
     const value = object[key];
     const name = object[first_name];
     const users = object[isUser];
-    const coins = object[isCoin];
+    const assets = object[isCoin];
     const roles = object[isRole];
     const countries = object[isCountry];
     const employee = object[isEmp];
@@ -25,18 +25,19 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
     const fees = object[fee];
     const panic_button = object[panic];
     const news = object[isNews];
-    const referral = object[isReferral];
+    const is_referral = object[isReferral];
+    const add_user = object[addUser]
     const is_active = object[active];
 
     switch (type) {
         case 'RoleSwitchCell':
-            return RoleSwitchCell(value, name, users, coins, countries,
+            return RoleSwitchCell(value, name, users, assets, countries,
                 roles, employee, pairs, limit_management, transaction_history, trade_history,
-                withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active);
+                withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active);
         case 'RolesActionCell':
-            return RolesActionCell(value, name, users, coins, countries,
+            return RolesActionCell(value, name, users, assets, countries,
                 roles, employee, pairs, limit_management, transaction_history, trade_history,
-                withdraw_requests, jobs, kyc, fees, panic_button, news, referral, is_active);
+                withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active);
         default:
             return TextCell(value);
     }
@@ -53,19 +54,19 @@ const columns = [
         title: <IntlMessages id="roleTable.title.status" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'coins',
-            'countries', 'roles', 'employee', 'pairs',
-            'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news', 'referral', 'is_active')
+        render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
+            'countries', 'roles', 'employee', 'pairs', 'limit_management', 'transaction_history',
+            'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
+            'is_referral', 'add_user', 'is_active')
     }, {
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object,
-            'RolesActionCell', 'id', 'name', 'users', 'coins',
-            'countries', 'roles', 'employee', 'pairs',
-            'limit_management', 'transaction_history', 'trade_history',
-            'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news', 'referral', 'is_active')
+            'RolesActionCell', 'id', 'name', 'users', 'assets',
+            'countries', 'roles', 'employee', 'pairs', 'limit_management', 'transaction_history',
+            'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
+            'is_referral', 'add_user', 'is_active')
     }
 ];
 
