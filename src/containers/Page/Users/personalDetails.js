@@ -147,7 +147,7 @@ class PersonalDetails extends Component {
                         </Row>
                         <Row>
                             <Col>
-                                <UserPic style={{ backgroundImage: `url(${BUCKET_URL + userDetails.profile_pic})` }} />
+                                <UserPic style={{ backgroundImage: `url(${(!userDetails.profile_pic || userDetails.profile_pic == null) ? BUCKET_URL + 'profile/def_profile.jpg' : BUCKET_URL + userDetails.profile_pic})` }} />
                             </Col>
                         </Row>
                         <Row>

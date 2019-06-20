@@ -146,7 +146,7 @@ class Users extends Component {
     }
 
     _changeCountry = (val) => {
-        this.setState({ filterVal: val.name });
+        this.setState({ filterVal: val });
     }
 
     _resetFilters = () => {
@@ -215,7 +215,9 @@ class Users extends Component {
                                                         onChange={this._changeCountry}
                                                         value={filterVal}
                                                     >
-                                                        {allCountries && allCountries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
+                                                        {allCountries && allCountries.map((country, index) => {
+                                                            return <Option key={country.id} value={country.name} >{country.name}</Option>
+                                                        })}
                                                     </Select>
                                                 </ColWithPadding>
                                                 <ColWithPadding xs={12} sm={3}>

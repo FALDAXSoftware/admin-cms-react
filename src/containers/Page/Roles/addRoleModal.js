@@ -12,10 +12,11 @@ const CheckboxGroup = Checkbox.Group;
 class AddRoleModal extends Component {
     constructor(props) {
         super(props)
+        let roles = Object.keys(this.props.allRolesValue)
         this.state = {
             showAddRoleModal: this.props.showAddRoleModal,
             loader: false,
-            allRoles: this.props.allRolesValue,
+            allRoles: roles,
             fields: {},
             errMessage: '',
             errMsg: false,
@@ -30,7 +31,11 @@ class AddRoleModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            this.setState({ showAddRoleModal: nextProps.showAddRoleModal, allRoles: nextProps.allRolesValue });
+            let roles = Object.keys(nextProps.allRolesValue)
+            this.setState({
+                showAddRoleModal: nextProps.showAddRoleModal,
+                allRoles: roles
+            });
 
             this.validator = new SimpleReactValidator();
         }
@@ -65,12 +70,13 @@ class AddRoleModal extends Component {
         const { fields } = this.state;
 
         fields['name'] = '';
-        this.setState({ fields, showError: false });
+        this.setState({ fields, showError: false, checkedList: [] });
     }
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
-        let { fields, showError } = this.state;
+        let { fields, showError, checkedList } = this.state;
+        console.log('checkedList', checkedList)
 
         if (this.validator.allValid() && !showError) {
             this.setState({ loader: true, isDisabled: true });
@@ -111,7 +117,7 @@ class AddRoleModal extends Component {
 
     _onRolesCheck = (e) => {
         this.setState({
-            checkedList: e.target.checked ? this.state.allCoins : [],
+            checkedList: e.target.checked ? this.state.allRoles : [],
             indeterminate: false,
             checkAll: e.target.checked,
         });
@@ -120,7 +126,7 @@ class AddRoleModal extends Component {
     onChange = (checkedList) => {
         this.setState({
             checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < this.state.allCoins.length),
+            indeterminate: !!checkedList.length && (checkedList.length < this.state.allRoles.length),
             checkAll: checkedList.length === this.state.allRoles.length,
         });
     }
@@ -129,8 +135,6 @@ class AddRoleModal extends Component {
         const {
             loader, showAddRoleModal, fields, errMsg, errType, isDisabled, showError, allRoles
         } = this.state;
-        console.log('allRoles', allRoles)
-        console.log('>>>>', Object.keys(allRoles))
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -161,7 +165,7 @@ class AddRoleModal extends Component {
                             <span>Modules:</span><br />
                             <Checkbox
                                 indeterminate={this.state.indeterminate}
-                                onChange={this.onCheckAllChange}
+                                onChange={this._onRolesCheck}
                                 checked={this.state.checkAll}
                             >
                                 Check all

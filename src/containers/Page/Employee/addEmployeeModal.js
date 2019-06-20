@@ -117,11 +117,17 @@ class AddEmployeeModal extends Component {
                             errType: 'Success', loader: false, isDisabled: false
                         })
                     } else if (res.status == 403) {
-                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.setState({
+                            errMsg: true, errMessage: res.err, errType: 'error',
+                            loader: false, isDisabled: false
+                        }, () => {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.message });
+                        this.setState({
+                            errMsg: true, errMessage: res.message, errType: 'error',
+                            loader: false, isDisabled: false
+                        });
                     }
                 })
                 .catch(() => {
