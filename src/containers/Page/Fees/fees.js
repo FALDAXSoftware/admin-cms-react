@@ -78,9 +78,9 @@ class Fees extends Component {
                             self.props.logout();
                         });
                     } else {
-                        self.setState({ errMsg: true, errMessage: res.message });
+                        self.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                     }
-                    _this.setState({ loader: false });
+                    self.setState({ loader: false });
                 }
             })
             .catch(() => {

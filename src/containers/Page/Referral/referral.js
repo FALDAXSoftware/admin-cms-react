@@ -60,13 +60,13 @@ class Referral extends Component {
                 if (res.status == 200) {
                     let fields = _this.state.fields;
                     fields['percentage'] = res.data.default_referral_percentage;
-                    _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage });
+                    _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage, loader: false });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error', loader: false });
                 }
                 _this.setState({ loader: false });
             })
