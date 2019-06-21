@@ -20,6 +20,7 @@ const { logout } = authAction;
 const { RangePicker } = DatePicker;
 
 const CardWrapper = styled(Card)`
+    width:100%;
     & .ant-card-body{
         min-height: 219px;
     }
@@ -349,52 +350,46 @@ class Dashboard extends Component {
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/employee'>
-                            <IsoWidgetsWrapper>
-                                <CountCard
-                                    headColor={'#1f2431'}
-                                    title={'Employees'}
-                                    number={employeeCount}
-                                    text={'Active Employees'}
-                                    icon="fas fa-user-tie"
-                                    fontColor="#ffffff"
-                                    bgColor={'#fff'}
-                                    style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
-                                />
-                            </IsoWidgetsWrapper>
+                            <CountCard
+                                headColor={'#1f2431'}
+                                title={'Employees'}
+                                number={employeeCount}
+                                text={'Active Employees'}
+                                icon="fas fa-user-tie"
+                                fontColor="#ffffff"
+                                bgColor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
+                            />
                         </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/jobs'>
-                            <IsoWidgetsWrapper>
-                                <CountCard
-                                    headColor={'#1f2431'}
-                                    bgColor={'#fff'}
-                                    style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
-                                    title={'Pending Job Applications'}
-                                    number={jobsCount}
-                                    text={'Pending Job Applications'}
-                                    icon="fas fa-suitcase-rolling"
-                                    fontColor="#ffffff"
-                                />
-                            </IsoWidgetsWrapper>
+                            <CountCard
+                                headColor={'#1f2431'}
+                                bgColor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
+                                title={'Pending Job Applications'}
+                                number={jobsCount}
+                                text={'Pending Job Applications'}
+                                icon="fas fa-suitcase-rolling"
+                                fontColor="#ffffff"
+                            />
                         </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/withdraw-requests'>
-                            <IsoWidgetsWrapper>
-                                <CountCard
-                                    headColor={'#1f2431'}
-                                    title={'Last 7 Days Withdraw Requests'}
-                                    number={withdrawReqCount}
-                                    text={'Last 7 Days Withdraw Requests'}
-                                    icon="fas fa-hand-holding-usd"
-                                    fontColor="#ffffff"
-                                    bgColor={'#fff'}
-                                    style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
-                                />
-                            </IsoWidgetsWrapper>
+                            <CountCard
+                                headColor={'#1f2431'}
+                                title={'Last 7 Days Withdraw Requests'}
+                                number={withdrawReqCount}
+                                text={'Last 7 Days Withdraw Requests'}
+                                icon="fas fa-hand-holding-usd"
+                                fontColor="#ffffff"
+                                bgColor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
+                            />
                         </Link>
                     </Col>
                 </Row >

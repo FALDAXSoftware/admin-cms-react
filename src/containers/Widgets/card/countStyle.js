@@ -9,6 +9,7 @@ border-radius: 10px !important;
 overflow: hidden;
 min-height: 200px;
 color: white;
+width: 100%;
 box-shadow: 0px 3px 4px 0px rgba(45, 52, 70,0.5);
 
   & .ant-card-head{

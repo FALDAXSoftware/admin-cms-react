@@ -28,7 +28,6 @@ class PasswordGenerator extends Component {
 
     _generatePassword = () => {
         const { numbers, symbols, uppercase, fields } = this.state;
-        console.log('fields', fields)
 
         if (this.validator.allValid()) {
             var password = generator.generate({

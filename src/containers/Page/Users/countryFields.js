@@ -87,10 +87,19 @@ export default class CountryFields extends Component {
     }
 
     _changeCountry = (value, position) => {
-        var newPosition = Number(position.key) - 1;
-        var states = CountryData.getStatesOfCountry(newPosition + 1);
-        this.setState({ selectedCountry: value.name, countryID: newPosition, states, countryCode: value.sortname });
-        this.props.onCountryChange(value.name, null, null, null, null, value.sortname);
+        this.state.countries.filter((country) => {
+            if (country.name == value) {
+                this.setState({ changedCountry: country }, () => {
+                    var newPosition = Number(position.key) - 1;
+                    var states = CountryData.getStatesOfCountry(newPosition + 1);
+                    this.setState({
+                        selectedCountry: country.name, countryID: newPosition, states,
+                        countryCode: country.sortname
+                    });
+                    this.props.onCountryChange(country.name, null, null, null, null, country.sortname);
+                })
+            }
+        })
     }
 
     _changeState = (value, position) => {
@@ -135,7 +144,7 @@ export default class CountryFields extends Component {
                             onBlur={this._handleBlur}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                            {countries.map((country, index) => <Option key={country.id} value={country}>{country.name}</Option>)}
+                            {countries.map((country, index) => <Option key={country.id} value={country.name}>{country.name}</Option>)}
                         </SelectS>
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
