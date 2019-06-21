@@ -73,7 +73,7 @@ class UserKYCDetails extends Component {
                             </p>
                         </div>
                     </div>
-                    : 'No KYC data'
+                    : <h2 style={{ textAlign: 'center', width: '100 %' }}>KYC data not submitted</h2>
             }
             </div >
         );

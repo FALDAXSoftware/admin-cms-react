@@ -55,14 +55,17 @@ class ReferredAmount extends Component {
                     title={userData.full_name}
                     style={{ width: 300 }}
                 >
-                    {referredAmounts.length > 0 && referredAmounts.map((referral) => {
-                        return (
-                            <p>
-                                <span className="amount-span">{referral.amount}</span>
-                                <span>{referral.coin_name}</span>
-                            </p>
-                        )
-                    })}
+                    {referredAmounts.length > 0 ?
+                        referredAmounts.map((referral) => {
+                            return (
+                                <p>
+                                    <span className="amount-span">{referral.amount}</span>
+                                    <span>{referral.coin_name}</span>
+                                </p>
+                            )
+                        })
+                        : ' No Referral Earning'
+                    }
                 </Card>
                 {loader && <FaldaxLoader />}
             </div>
