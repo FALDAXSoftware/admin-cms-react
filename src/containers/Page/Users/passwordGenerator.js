@@ -37,6 +37,7 @@ class PasswordGenerator extends Component {
                 uppercase: uppercase
             });
             this.setState({ password }, () => {
+                console.log('CALL')
                 this.props.getPassword(password);
             })
         } else {
@@ -47,6 +48,7 @@ class PasswordGenerator extends Component {
 
     render() {
         const { password, fields, numbers, symbols, uppercase } = this.state;
+        console.log('password', password)
 
         return (
             <React.Fragment>

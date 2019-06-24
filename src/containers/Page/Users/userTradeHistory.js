@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Form, Row, Col } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form, Row, Col, Tabs } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,6 +11,7 @@ import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 
+const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { logout } = authAction;
 
@@ -133,66 +134,69 @@ class UserTradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {tradeTableInfos.map(tableInfo => (
-                        <div>
-                            <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Form onSubmit={this._searchTrade}>
-                                    <Row>
-                                        <ColWithPadding sm={8}>
-                                            <Input
-                                                placeholder="Search trades"
-                                                onChange={this._changeSearch.bind(this)}
-                                                value={searchTrade}
-                                            />
-                                        </ColWithPadding>
-                                        <ColWithPadding sm={7}>
-                                            <Select
-                                                placeholder="Select a type"
-                                                onChange={this._changeFilter}
-                                                value={filterVal}
-                                            >
-                                                <Option value={' '}>All</Option>
-                                                <Option value={'Buy'}>Buy</Option>
-                                                <Option value={'Sell'}>Sell</Option>
-                                            </Select>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0px" }} >Search</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            <Button className="search-btn" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            {allTrades && allTrades.length > 0 ?
-                                                <CSVLink filename={'user_trade_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                                    <Button type="primary" className="search-btn" style={{ margin: "0px" }}>Export</Button>
-                                                </CSVLink>
-                                                : ''}
-                                        </ColWithPadding>
-                                    </Row>
-                                </Form>
-                            </div>
-                            {loader && <FaldaxLoader />}
-                            < TableWrapper
-                                style={{ marginTop: '20px' }}
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allTrades}
-                                className="isoCustomizedTable"
-                                onChange={this._handleUserTradeChange}
-                            />
-                            {allTradeCount > 0 ?
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleTradePagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allTradeCount}
-                                /> : ''}
-                        </div>
-                    ))}
+                    <Tabs className="isoTableDisplayTab">
+                        {tradeTableInfos.map(tableInfo => (
+                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Form onSubmit={this._searchTrade}>
+                                        <Row>
+                                            <ColWithPadding sm={8}>
+                                                <Input
+                                                    placeholder="Search trades"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    value={searchTrade}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={7}>
+                                                <Select
+                                                    placeholder="Select a type"
+                                                    onChange={this._changeFilter}
+                                                    value={filterVal}
+                                                >
+                                                    <Option value={''}>All</Option>
+                                                    <Option value={'Buy'}>Buy</Option>
+                                                    <Option value={'Sell'}>Sell</Option>
+                                                </Select>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0px" }} >Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                {allTrades && allTrades.length > 0 ?
+                                                    <CSVLink filename={'user_trade_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                                        <Button type="primary" className="search-btn" style={{ margin: "0px" }}>Export</Button>
+                                                    </CSVLink>
+                                                    : ''}
+                                            </ColWithPadding>
+                                        </Row>
+                                    </Form>
+
+                                </div>
+                                {loader && <FaldaxLoader />}
+                                < TableWrapper
+                                    style={{ marginTop: '20px' }}
+                                    {...this.state}
+                                    columns={tableInfo.columns}
+                                    pagination={false}
+                                    dataSource={allTrades}
+                                    className="isoCustomizedTable"
+                                    onChange={this._handleUserTradeChange}
+                                />
+                                {allTradeCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleTradePagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allTradeCount}
+                                    /> : ''}
+                            </TabPane>
+                        ))}
+                    </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

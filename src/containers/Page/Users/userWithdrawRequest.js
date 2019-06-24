@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Row, Form } from 'antd';
+import { Input, Pagination, notification, Select, Button, Row, Form, Tabs } from 'antd';
 import { userWithdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -12,6 +12,7 @@ import ColWithPadding from '../common.style';
 import { CSVLink } from "react-csv";
 
 const Option = Select.Option;
+const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class UserWithdrawRequest extends Component {
@@ -124,69 +125,69 @@ class UserWithdrawRequest extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {userWithdrawReqTableInfos.map(tableInfo => (
-                        <div>
-                            <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Form onSubmit={this._searchReq}>
-                                    <Row>
-                                        <ColWithPadding sm={8}>
-                                            <Input
-                                                placeholder="Search requests"
-                                                onChange={this._changeSearch.bind(this)}
-                                                style={{ "width": "200px" }}
-                                                value={searchReq}
-                                            />
-                                        </ColWithPadding>
-                                        <ColWithPadding sm={7}>
-                                            <Select
-                                                style={{ width: 125, "marginLeft": "15px" }}
-                                                placeholder="Select a type"
-                                                onChange={this._changeFilter}
-                                                value={filterVal}
-                                            >
-                                                <Option value={' '}>All</Option>
-                                                <Option value={'true'}>Approve</Option>
-                                                <Option value={'false'}>Dis-Approve</Option>
-                                            </Select>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            {allRequests && allRequests.length > 0 ?
-                                                <CSVLink filename={'user_withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
-                                                    <Button className="search-btn" type="primary">Export</Button>
-                                                </CSVLink>
-                                                : ''}
-                                        </ColWithPadding>
-                                    </Row>
-                                </Form>
-                            </div>
-                            {loader && <FaldaxLoader />}
-                            < TableWrapper
-                                style={{ marginTop: '20px' }}
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allRequests}
-                                className="isoCustomizedTable"
-                                onChange={this._handleUserWithdrawReqChange}
-                            />
-                            {allReqCount > 0 ?
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleWithdrawPagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allReqCount}
-                                /> : ''
-                            }
-                        </div>
-                    ))}
+                    <Tabs className="isoTableDisplayTab">
+                        {userWithdrawReqTableInfos.map(tableInfo => (
+                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Form onSubmit={this._searchReq}>
+                                        <Row>
+                                            <ColWithPadding sm={8}>
+                                                <Input
+                                                    placeholder="Search requests"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    value={searchReq}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={7}>
+                                                <Select
+                                                    placeholder="Select a type"
+                                                    onChange={this._changeFilter}
+                                                    value={filterVal}
+                                                >
+                                                    <Option value={''}>All</Option>
+                                                    <Option value={'true'}>Approve</Option>
+                                                    <Option value={'false'}>Dis-Approve</Option>
+                                                </Select>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                {allRequests && allRequests.length > 0 ?
+                                                    <CSVLink filename={'user_withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
+                                                        <Button className="search-btn" type="primary">Export</Button>
+                                                    </CSVLink>
+                                                    : ''}
+                                            </ColWithPadding>
+                                        </Row>
+                                    </Form>
+                                </div>
+                                {loader && <FaldaxLoader />}
+                                < TableWrapper
+                                    style={{ marginTop: '20px' }}
+                                    {...this.state}
+                                    columns={tableInfo.columns}
+                                    pagination={false}
+                                    dataSource={allRequests}
+                                    className="isoCustomizedTable"
+                                    onChange={this._handleUserWithdrawReqChange}
+                                />
+                                {allReqCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleWithdrawPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allReqCount}
+                                    /> : ''
+                                }
+                            </TabPane>
+                        ))}
+                    </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

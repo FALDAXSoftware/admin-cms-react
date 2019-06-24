@@ -210,6 +210,7 @@ class Users extends Component {
                                                 </ColWithPadding>
                                                 <ColWithPadding sm={5}>
                                                     <Select
+                                                        getPopupContainer={trigger => trigger.parentNode}
                                                         style={{ width: '100%', "marginLeft": "15px" }}
                                                         placeholder="Select a country"
                                                         onChange={this._changeCountry}
