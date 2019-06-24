@@ -19,12 +19,14 @@ const columns = [{
     title: <IntlMessages id="accountTable.title.id" />,
     key: 'id',
     width: 200,
+    sorter:true, 
     render: object => renderCell(object, 'TextCell', 'id')
 },
 {
     title: <IntlMessages id="accountTable.title.name" />,
     key: 'class_name',
     width: 200,
+    sorter:true, 
     render: object => renderCell(object, 'TextCell', 'class_name')
 },
 {

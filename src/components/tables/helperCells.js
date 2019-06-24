@@ -91,12 +91,12 @@ const roleStatus = (value, name, users, assets, countries, roles, employee, pair
     Roles.roleStatus(value, name, users, assets, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active);
 }
 
-const employeeStatus = (value, first_name, last_name, email, phone_number, address, role, is_active) => {
-    Employees.employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active);
+const employeeStatus = (value, first_name, last_name, email, phone_number, address, role, role_id, is_active) => {
+    Employees.employeeStatus(value, first_name, last_name, email, phone_number, address, role, role_id, is_active);
 }
 
-const editEmployee = (value, first_name, last_name, email, phone_number, address, role, is_active) => {
-    Employees.editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active);
+const editEmployee = (value, first_name, last_name, email, phone_number, address, role, role_id, is_active) => {
+    Employees.editEmployee(value, first_name, last_name, email, phone_number, address, role, role_id, is_active);
 }
 
 const deleteEmployee = (value) => {
@@ -205,6 +205,7 @@ const NewsLinkCell = (link, href) => <a href={link ? link : '#'} target="_blank"
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const TicketSubjectCell = text => <p style={{ cursor: 'pointer' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TierCell = text => <p>Tier {text}</p>;
 const referralActionCell = value => <div><Tooltip title="View"><Icon type="right-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} /></Tooltip></div>
 const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text.toPrecision(2) + '%' }}></p>;
@@ -227,8 +228,8 @@ const CountryActionCell = (value, name, legality, color, stateCount, is_active) 
 const StateActionCell = (value, name, legality, color, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editState(value, name, legality, color, is_active)} /></Tooltip></div>;
 const CountryButtonCell = (value, stateCount) => <Button type="primary" onClick={() => showStates(value)} disabled={stateCount > 0 ? false : true} >Show States</Button>;
 const RoleSwitchCell = (value, name, users, assets, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active) => <Switch checked={is_active} onChange={() => { roleStatus(value, name, users, assets, countries, roles, employee, pairs, limit_management, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active) }} />
-const EmployeeSwitchCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active) }} />
-const EmployeeActionCell = (value, first_name, last_name, email, phone_number, address, role, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active)} /></Tooltip></div>;
+const EmployeeSwitchCell = (value, first_name, last_name, email, phone_number, address, role, role_id, is_active) => <Switch checked={is_active} onChange={() => { employeeStatus(value, first_name, last_name, email, phone_number, address, role, role_id, is_active) }} />
+const EmployeeActionCell = (value, first_name, last_name, email, phone_number, address, role, role_id, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteEmployee(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editEmployee(value, first_name, last_name, email, phone_number, address, role, role_id, is_active)} /></Tooltip></div>;
 const FeeSwitchCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <Switch checked={is_active} onChange={() => { pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) }} />
 const FeeActionCell = (value, name, maker_fee, taker_fee, created_at, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editPair(value, name, maker_fee, taker_fee, created_at, is_active)} /></Tooltip></div>;
 const LimitActionCell = (value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editLimit(value, daily_withdraw_crypto, daily_withdraw_fiat, min_withdrawl_crypto, min_withdrawl_fiat)} /></Tooltip></div>;
@@ -312,5 +313,6 @@ export {
     WithdrawStatusCell,
     JobCatSwitchCell,
     JobCatActionCell,
-    UserImageCell
+    UserImageCell,
+    TicketSubjectCell
 };

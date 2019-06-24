@@ -29,6 +29,8 @@ class AccountClass extends Component {
             showAddClassModal: false,
             showEditAccountClassModal: false,
             showDeleteAccountClassModal: false,
+            sorterCol: 'id',
+            sortOrder: 'ASC'
         }
         self = this;
         AccountClass.editAccountClass = AccountClass.editAccountClass.bind(this);
@@ -61,10 +63,11 @@ class AccountClass extends Component {
 
     _getAllAccountClasses = () => {
         const { token } = this.props;
+        const { sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllAccountClasses(token)
+        ApiUtils.getAllAccountClasses(token, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -158,6 +161,12 @@ class AccountClass extends Component {
         this.setState({ fields });
     }
 
+    _handleClassTableChange = (pagination, filters, sorter) => {
+        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
+            this._getAllAccountClasses();
+        })
+    }
+
     render() {
         const { allAccountClasses, errType, errMsg, loader, showAddClassModal, accountClassDetails,
             showEditAccountClassModal, showDeleteAccountClassModal, fields
@@ -197,7 +206,7 @@ class AccountClass extends Component {
                                         pagination={false}
                                         dataSource={allAccountClasses}
                                         className="isoCustomizedTable"
-                                        onChange={this._handleEmployeeChange}
+                                        onChange={this._handleClassTableChange}
                                     />
                                     {
                                         showDeleteAccountClassModal &&

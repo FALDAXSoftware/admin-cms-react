@@ -16,7 +16,7 @@ class AddEmployeeModal extends Component {
             showAddEmpModal: this.props.showAddEmpModal,
             loader: false,
             fields: {},
-            allRoles: [],
+            allRoles: this.props.allRoles,
             selectedRole: '',
             isDisabled: false,
             showRoleErr: false
@@ -24,32 +24,11 @@ class AddEmployeeModal extends Component {
         this.validator = new SimpleReactValidator();
     }
 
-    _getAllRoles = () => {
-        const { token } = this.props;
-        let _this = this;
-
-        ApiUtils.getAllRoles(token)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
-                    _this.setState({ allRoles: roles });
-                } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
-                    });
-                } else {
-                    this.setState({ errMsg: true, errMessage: res.message });
-                }
-            })
-            .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
-            });
-    }
-
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            this.setState({ showAddEmpModal: nextProps.showAddEmpModal });
+            this.setState({
+                showAddEmpModal: nextProps.showAddEmpModal, allRoles: nextProps.allRoles
+            });
             this._getAllRoles();
             this.validator = new SimpleReactValidator();
         }
@@ -194,7 +173,7 @@ class AddEmployeeModal extends Component {
                     <span>Email:</span>
                     <Input placeholder="Email" onChange={this._handleChange.bind(this, "email")} value={fields["email"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('email', fields["email"], 'required|email', 'text-danger')}
+                        {this.validator.message('email', fields["email"], 'required|email|max:30', 'text-danger')}
                     </span>
                 </div>
 

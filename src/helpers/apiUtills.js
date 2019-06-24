@@ -1474,9 +1474,14 @@ const ApiUtils = {
         }
     },
 
-    getAllAccountClasses: function (token) {
+    getAllAccountClasses: function (token, sorterCol, sortOrder) {
+        let url = "/admin/get-all-account-classes";
+        if (sorterCol && sortOrder) {
+            url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        }
+
         try {
-            return fetch(API_URL + "/admin/get-all-account-classes", {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
