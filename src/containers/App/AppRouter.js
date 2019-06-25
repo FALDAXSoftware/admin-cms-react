@@ -39,11 +39,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/CoinFee/sendCoinFee")),
         module: "send_coin_fee"
     },
-    {
-        path: "limit-management",
-        component: asyncComponent(() => import("../Page/LimitManagement/limitManagement")),
-        module: "limit_management"
-    },
+    // {
+    //     path: "limit-management",
+    //     component: asyncComponent(() => import("../Page/LimitManagement/limitManagement")),
+    //     module: "limit_management"
+    // },
     {
         path: "transaction-history",
         component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistory")),

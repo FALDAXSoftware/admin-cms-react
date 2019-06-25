@@ -7,6 +7,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
+const { TextArea } = Input;
 const Option = Select.Option;
 
 class AddEmployeeModal extends Component {
@@ -16,7 +17,7 @@ class AddEmployeeModal extends Component {
             showAddEmpModal: this.props.showAddEmpModal,
             loader: false,
             fields: {},
-            allRoles: [],
+            allRoles: this.props.allRoles,
             selectedRole: '',
             isDisabled: false,
             showRoleErr: false
@@ -24,32 +25,11 @@ class AddEmployeeModal extends Component {
         this.validator = new SimpleReactValidator();
     }
 
-    _getAllRoles = () => {
-        const { token } = this.props;
-        let _this = this;
-
-        ApiUtils.getAllRoles(token)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
-                    _this.setState({ allRoles: roles });
-                } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
-                    });
-                } else {
-                    this.setState({ errMsg: true, errMessage: res.message });
-                }
-            })
-            .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
-            });
-    }
-
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            this.setState({ showAddEmpModal: nextProps.showAddEmpModal });
+            this.setState({
+                showAddEmpModal: nextProps.showAddEmpModal, allRoles: nextProps.allRoles
+            });
             this._getAllRoles();
             this.validator = new SimpleReactValidator();
         }
@@ -153,7 +133,7 @@ class AddEmployeeModal extends Component {
         const { loader, showAddEmpModal, fields, allRoles, errType, errMsg,
             isDisabled, showRoleErr, selectedRole } = this.state;
 
-        let options = allRoles.map((role) => {
+        let roleOptions = allRoles.map((role) => {
             return (
                 <Option value={role.key}>{role.value}</Option>
             )
@@ -194,7 +174,7 @@ class AddEmployeeModal extends Component {
                     <span>Email:</span>
                     <Input placeholder="Email" onChange={this._handleChange.bind(this, "email")} value={fields["email"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('email', fields["email"], 'required|email', 'text-danger')}
+                        {this.validator.message('email', fields["email"], 'required|email|max:50', 'text-danger')}
                     </span>
                 </div>
 
@@ -202,15 +182,15 @@ class AddEmployeeModal extends Component {
                     <span>Phone Number:</span>
                     <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone_number")} value={fields["phone_number"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('phone number', fields["phone_number"], 'required|numeric', 'text-danger')}
+                        {this.validator.message('phone number', fields["phone_number"], 'required|numeric|max:12', 'text-danger')}
                     </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Address:</span>
-                    <Input placeholder="Address" onChange={this._handleChange.bind(this, "address")} value={fields["address"]} />
+                    <TextArea placeholder="Address" onChange={this._handleChange.bind(this, "address")} value={fields["address"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('address', fields["address"], 'required', 'text-danger')}
+                        {this.validator.message('address', fields["address"], 'required|max:100', 'text-danger')}
                     </span>
                 </div>
 
@@ -222,7 +202,7 @@ class AddEmployeeModal extends Component {
                         onChange={this._changeRole}
                         value={selectedRole}
                     >
-                        {options}
+                        {roleOptions}
                     </Select><br />
                     {showRoleErr && <span style={{ "color": "red" }}>
                         {'The role field is required.'}

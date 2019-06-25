@@ -38,7 +38,7 @@ class Employees extends Component {
         Employees.deleteEmployee = Employees.deleteEmployee.bind(this);
     }
 
-    static employeeStatus(value, first_name, last_name, email, phone_number, address, role, is_active) {
+    static employeeStatus(value, first_name, last_name, email, phone_number, address, role, role_id, is_active) {
         const { token } = self.props;
 
         let message = is_active ? 'Employee has been inactivated successfully.' : 'Employee has been activated successfully.'
@@ -73,9 +73,9 @@ class Employees extends Component {
             });
     }
 
-    static editEmployee(value, first_name, last_name, email, phone_number, address, role, is_active) {
+    static editEmployee(value, first_name, last_name, email, phone_number, address, role, role_id, is_active) {
         let empDetails = {
-            value, first_name, last_name, email, phone_number, address, role, is_active
+            value, first_name, last_name, email, phone_number, address, role, role_id, is_active
         }
         self.setState({ showEditEmpModal: true, empDetails });
     }
@@ -86,6 +86,7 @@ class Employees extends Component {
 
     componentDidMount = () => {
         this._getAllEmployees();
+        this._getAllRoles();
     }
 
     openNotificationWithIconError = (type) => {
@@ -120,6 +121,29 @@ class Employees extends Component {
                 _this.setState({
                     errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
+            });
+    }
+
+    _getAllRoles = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        ApiUtils.getAllRoles(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
+                    _this.setState({ allRoles: roles });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+            })
+            .catch(err => {
+                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
             });
     }
 
@@ -188,7 +212,7 @@ class Employees extends Component {
 
     render() {
         const { allEmployee, errType, errMsg, loader, showAddEmpModal,
-            showEditEmpModal, empDetails, showDeleteEmpModal } = this.state;
+            showEditEmpModal, empDetails, showDeleteEmpModal, allRoles } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -208,33 +232,33 @@ class Employees extends Component {
                                         enterButton
                                     />
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddEmpModal}>Add Employee</Button>
-                                    <AddEmployeeModal
+                                    {showAddEmpModal && <AddEmployeeModal
                                         showAddEmpModal={showAddEmpModal}
+                                        allRoles={allRoles}
                                         closeAddModal={this._closeAddEmpModal}
                                         getAllEmployee={this._getAllEmployees.bind(this, 0)}
-                                    />
+                                    />}
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
-                                        // onRow={(record, rowIndex) => {
-                                        //     return {
-                                        //         onClick: (event) => { this._changeRow(record) },
-                                        //     };
-                                        // }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
                                         dataSource={allEmployee}
                                         className="isoCustomizedTable"
+                                        expandedRowRender={record => <div><b>Address</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.address}</span></div>}
                                         onChange={this._handleEmployeeChange}
                                     />
-                                    <EditEmployeeModal
-                                        fields={empDetails}
-                                        showEditEmpModal={showEditEmpModal}
-                                        closeEditEmpModal={this._closeEditEmpModal}
-                                        getAllEmployee={this._getAllEmployees.bind(this)}
-                                    />
+                                    {showEditEmpModal &&
+                                        <EditEmployeeModal
+                                            fields={empDetails}
+                                            allRoles={allRoles}
+                                            showEditEmpModal={showEditEmpModal}
+                                            closeEditEmpModal={this._closeEditEmpModal}
+                                            getAllEmployee={this._getAllEmployees.bind(this)}
+                                        />
+                                    }
                                     {showDeleteEmpModal &&
                                         <Modal
                                             title="Delete Employee"

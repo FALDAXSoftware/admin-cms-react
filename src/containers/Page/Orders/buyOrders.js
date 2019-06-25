@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification } from 'antd';
+import { Input, Pagination, notification, Tabs } from 'antd';
 import { buyOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -10,6 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
 const Search = Input.Search;
+const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class BuyOrders extends Component {
@@ -95,37 +96,39 @@ class BuyOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {buyOrderTableInfos.map(tableInfo => (
-                        <div>
-                            <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Search
-                                    placeholder="Search Orders"
-                                    onSearch={(value) => this._searchOrder(value)}
-                                    style={{ "float": "right", "width": "250px" }}
-                                    enterButton
+                    <Tabs className="isoTableDisplayTab">
+                        {buyOrderTableInfos.map(tableInfo => (
+                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Search
+                                        placeholder="Search Orders"
+                                        onSearch={(value) => this._searchOrder(value)}
+                                        style={{ "float": "right", "width": "250px" }}
+                                        enterButton
+                                    />
+                                </div>
+                                <TableWrapper
+                                    {...this.state}
+                                    columns={tableInfo.columns}
+                                    pagination={false}
+                                    dataSource={allOrders}
+                                    className="isoCustomizedTable"
+                                    onChange={this._handleBuyOrderChange}
                                 />
-                            </div>
-                            <TableWrapper
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allOrders}
-                                className="isoCustomizedTable"
-                                onChange={this._handleBuyOrderChange}
-                            />
-                            {loader && <FaldaxLoader />}
-                            {allOrderCount > 0 ?
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleOrderPagination.bind(this)}
-                                    pageSize={50}
-                                    current={page}
-                                    total={allOrderCount}
-                                />
-                                : ''}
-                        </div>
-                    ))}
+                                {loader && <FaldaxLoader />}
+                                {allOrderCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleOrderPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allOrderCount}
+                                    />
+                                    : ''}
+                            </TabPane>
+                        ))}
+                    </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

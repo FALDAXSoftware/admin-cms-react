@@ -235,6 +235,7 @@ class AddUser extends Component {
     }
 
     _getPassword = (value) => {
+        console.log('value', value, value.length)
         this.setState({ password: value });
     }
 

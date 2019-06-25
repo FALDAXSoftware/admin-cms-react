@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Image from '../../image/rob.png';
 import IntlMessages from '../../components/utility/intlMessages';
 import FourZeroFourStyleWrapper from './404.style';
@@ -18,10 +17,8 @@ export default class extends Component {
           <p>
             <IntlMessages id="page404.description" />
           </p>
-          <button type="button">
-            <Link to="/dashboard">
-              <IntlMessages id="page404.backButton" />
-            </Link>
+          <button type="button" onClick={() => { this.props.history.push('/dashboard') }}>
+            <IntlMessages id="page404.backButton" />
           </button>
         </div>
 

@@ -8,7 +8,7 @@ import {
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailID = null,
-    phone = null, s_address = null, roles = null, status = null,
+    phone = null, s_address = null, roles = null, roleID = null, status = null,
 
 ) => {
     const value = object[key];
@@ -18,15 +18,16 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
     const phone_number = object[phone];
     const address = object[s_address];
     const role = object[roles];
+    const role_id = object[roleID];
     const is_active = object[status];
 
     switch (type) {
         case 'EmployeeSwitchCell':
             return EmployeeSwitchCell(value, first_name, last_name, email, phone_number, address,
-                role, is_active);
+                role, role_id, is_active);
         case 'EmployeeActionCell':
             return EmployeeActionCell(value, first_name, last_name, email, phone_number, address,
-                role, is_active);
+                role, role_id, is_active);
         default:
             return TextCell(value);
     }
@@ -58,14 +59,14 @@ const columns = [
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'first_name', 'last_name',
-            'email', 'phone_number', 'address', 'role', 'is_active')
+            'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     },
     {
         title: <IntlMessages id="antTable.title.details" />,
         key: 'action',
         width: 200,
         render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
-            'email', 'phone_number', 'address', 'role', 'is_active')
+            'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     }
 ];
 
