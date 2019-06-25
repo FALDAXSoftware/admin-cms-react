@@ -7,6 +7,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
+const { TextArea } = Input;
 const Option = Select.Option;
 
 class EditEmployeeModal extends Component {
@@ -86,7 +87,7 @@ class EditEmployeeModal extends Component {
                 address: fields["address"],
                 roles: selectedRole,
                 phone_number: fields["phone_number"],
-                role_id: fields["role_id"]
+                role_id: selectedRole
             };
 
             ApiUtils.editEmployee(token, formData)
@@ -131,7 +132,7 @@ class EditEmployeeModal extends Component {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
-        let options = allRoles.map((role) => {
+        let roleOptions = allRoles.map((role) => {
             return (
                 <Option value={role.key}>{role.value}</Option>
             )
@@ -169,7 +170,7 @@ class EditEmployeeModal extends Component {
                         <span>Email:</span>
                         <Input placeholder="Email" onChange={this._handleChange.bind(this, "email")} value={fields["email"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('email', fields["email"], 'required|email|max:30', 'text-danger')}
+                            {this.validator.message('email', fields["email"], 'required|email|max:50', 'text-danger')}
                         </span>
                     </div>
 
@@ -177,15 +178,15 @@ class EditEmployeeModal extends Component {
                         <span>Phone Number:</span>
                         <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone_number")} value={fields["phone_number"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('phone number', fields["phone_number"], 'required|numeric', 'text-danger')}
+                            {this.validator.message('phone number', fields["phone_number"], 'required|numeric|max:12', 'text-danger')}
                         </span>
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Address:</span>
-                        <Input placeholder="Address" onChange={this._handleChange.bind(this, "address")} value={fields["address"]} />
+                        <TextArea placeholder="Address" onChange={this._handleChange.bind(this, "address")} value={fields["address"]} />
                         <span style={{ "color": "red" }}>
-                            {this.validator.message('address', fields["address"], 'required', 'text-danger')}
+                            {this.validator.message('address', fields["address"], 'required|max:100', 'text-danger')}
                         </span>
                     </div>
 
@@ -197,7 +198,7 @@ class EditEmployeeModal extends Component {
                             onChange={this._changeRole}
                             value={selectedRole}
                         >
-                            {options}
+                            {roleOptions}
                         </Select>
                     </div>
                     {loader && <FaldaxLoader />}

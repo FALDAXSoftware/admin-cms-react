@@ -24,7 +24,6 @@ class EditRoleModal extends Component {
             countries: this.props.fields['countries'],
             employee: this.props.fields['employee'],
             pairs: this.props.fields['pairs'],
-            limit_management: this.props.fields['limit_management'],
             trade_history: this.props.fields['trade_history'],
             transaction_history: this.props.fields['transaction_history'],
             jobs: this.props.fields['jobs'],
@@ -34,10 +33,9 @@ class EditRoleModal extends Component {
             panic_button: this.props.fields['panic_button'],
             all: this.props.fields['employee'] && this.props.fields['assets'] && this.props.fields['users'] &&
                 this.props.fields['roles'] && this.props.fields['countries'] && this.props.fields['pairs'] &&
-                this.props.fields['limit_management'] && this.props.fields['trade_history'] &&
-                this.props.fields['transaction_history'] && this.props.fields['jobs'] &&
-                this.props.fields['withdraw_requests'] && this.props.fields['kyc'] && this.props.fields['fees'] &&
-                this.props.fields['panic_button'],
+                this.props.fields['trade_history'] && this.props.fields['transaction_history'] &&
+                this.props.fields['jobs'] && this.props.fields['withdraw_requests'] &&
+                this.props.fields['kyc'] && this.props.fields['fees'] && this.props.fields['panic_button'],
             isDisabled: false,
             showError: false
         }
@@ -55,7 +53,6 @@ class EditRoleModal extends Component {
                 roles: nextProps.fields['roles'],
                 employee: nextProps.fields['employee'],
                 pairs: nextProps.fields['pairs'],
-                limit_management: nextProps.fields['limit_management'],
                 transaction_history: nextProps.fields['transaction_history'],
                 trade_history: nextProps.fields['trade_history'],
                 withdraw_requests: nextProps.fields['withdraw_requests'],
@@ -68,7 +65,7 @@ class EditRoleModal extends Component {
                     && nextProps.fields['countries'] && nextProps.fields['pairs'] &&
                     nextProps.fields['withdraw_requests'] && nextProps.fields['kyc'] &&
                     nextProps.fields['jobs'] &&
-                    nextProps.fields['trade_history'] && nextProps.fields['limit_management'] && nextProps.fields['transaction_history'] &&
+                    nextProps.fields['trade_history'] && nextProps.fields['transaction_history'] &&
                     nextProps.fields['fees'] && nextProps.fields['panic_button'] &&
                     nextProps.fields['withdraw_requests']
                     ? true : false
@@ -111,11 +108,11 @@ class EditRoleModal extends Component {
     _editRole = () => {
         const { token, getAllRoles } = this.props;
         const { fields, users, assets, countries,
-            roles, employee, pairs, showError, limit_management, trade_history,
+            roles, employee, pairs, showError, trade_history,
             transaction_history, jobs, withdraw_requests, kyc, fees, panic_button
         } = this.state;
         if (users || assets | roles || countries ||
-            employee || pairs || limit_management || trade_history ||
+            employee || pairs || trade_history ||
             transaction_history || jobs || withdraw_requests || kyc || fees ||
             panic_button) {
 
@@ -131,7 +128,6 @@ class EditRoleModal extends Component {
                     countries,
                     employee,
                     pairs,
-                    limit_management,
                     trade_history,
                     transaction_history,
                     jobs,
@@ -181,7 +177,7 @@ class EditRoleModal extends Component {
         if (all == false && field == 'all') {
             this.setState({
                 all: true, assets: true, users: true,
-                countries: true, roles: true, employee: true, pairs: true, limit_management: true, trade_history: true, transaction_history: true,
+                countries: true, roles: true, employee: true, pairs: true, trade_history: true, transaction_history: true,
                 jobs: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
             })
         } else {
@@ -189,7 +185,7 @@ class EditRoleModal extends Component {
                 this.setState({
                     all: false, assets: false, users: false,
                     countries: false, roles: false, employee: false, pairs: false,
-                    limit_management: false, trade_history: false, transaction_history: false,
+                    trade_history: false, transaction_history: false,
                     jobs: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
                 })
             } else {
@@ -201,7 +197,7 @@ class EditRoleModal extends Component {
     render() {
         const { loader, showEditRoleModal, fields, errMsg, errType, assets, users,
             countries, roles, employee, all, isDisabled,
-            pairs, showError, limit_management, trade_history, transaction_history,
+            pairs, showError, trade_history, transaction_history,
             withdraw_requests, jobs, kyc, fees, panic_button
         } = this.state;
 
@@ -238,7 +234,6 @@ class EditRoleModal extends Component {
                         <Checkbox checked={roles} onChange={this._onChangeRole.bind(this, 'roles')}>Roles Module</Checkbox><br />
                         <Checkbox checked={employee} onChange={this._onChangeRole.bind(this, 'employee')}>Employee Module</Checkbox><br />
                         <Checkbox checked={pairs} onChange={this._onChangeRole.bind(this, 'pairs')}>Pairs Module</Checkbox><br />
-                        <Checkbox checked={limit_management} onChange={this._onChangeRole.bind(this, 'limit_management')}>Limit Management Module</Checkbox><br />
                         <Checkbox checked={transaction_history} onChange={this._onChangeRole.bind(this, 'transaction_history')}>Transaction History Module</Checkbox><br />
                         <Checkbox checked={trade_history} onChange={this._onChangeRole.bind(this, 'trade_history')}>Trade History Module</Checkbox><br />
                         <Checkbox checked={withdraw_requests} onChange={this._onChangeRole.bind(this, 'withdraw_requests')}>Withdraw Request Module</Checkbox><br />
@@ -249,8 +244,7 @@ class EditRoleModal extends Component {
                     </div>
                     {showError && <span style={{ "color": "red" }}>
                         {'The module field is required.'}
-                    </span>
-                    }
+                    </span>}
                     {loader && <FaldaxLoader />}
                 </Modal>
             </div>
