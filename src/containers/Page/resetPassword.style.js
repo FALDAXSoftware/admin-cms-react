@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import bgImage from '../../image/faldax.jpg';
+import bgImage from '../../image/faldax.jpeg';
 import WithDirection from '../../settings/withDirection';
 
 const ResetPasswordStyleWrapper = styled.div`

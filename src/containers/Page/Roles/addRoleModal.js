@@ -36,7 +36,6 @@ class AddRoleModal extends Component {
                 showAddRoleModal: nextProps.showAddRoleModal,
                 allRoles: roles
             });
-
             this.validator = new SimpleReactValidator();
         }
     }
@@ -76,13 +75,17 @@ class AddRoleModal extends Component {
     _addRole = () => {
         const { token, getAllRoles } = this.props;
         let { fields, showError, checkedList } = this.state;
-        console.log('checkedList', checkedList)
+        const roles = checkedList.reduce((o, key) => Object.assign(o, { [key]: true }), {});
 
         if (this.validator.allValid() && !showError) {
             this.setState({ loader: true, isDisabled: true });
+
             let formData = {
                 name: fields["name"],
             };
+            Object.keys(roles).forEach(function (key) {
+                formData[key] = roles[key]
+            });
 
             ApiUtils.addRole(token, formData)
                 .then((res) => res.json())
@@ -99,12 +102,13 @@ class AddRoleModal extends Component {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.message });
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                     }
+                    this.setState({ loader: false, isDisabled: false });
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true, errMessage: 'Something went wrong', isDisabled: false
+                        loader: false, errType: 'error', errMsg: true, errMessage: 'Something went wrong', isDisabled: false
                     });
                     this._resetAddForm();
                 });

@@ -52,7 +52,6 @@ class Roles extends Component {
             withdraw_requests,
             jobs,
             pairs,
-            // limit_management,
             transaction_history,
             trade_history,
             kyc,
@@ -147,33 +146,32 @@ class Roles extends Component {
     _deleteRole = () => {
         const { token } = this.props;
         const { deleteRoleId } = this.state;
-        let _this = this;
 
-        _this.setState({ loader: true });
+        self.setState({ loader: true });
         ApiUtils.deleteRole(token, deleteRoleId)
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
                     if (res.status == 200) {
-                        _this.setState({
+                        self.setState({
                             deleteRoleId: '', errType: 'Success', errMsg: true, errMessage: res.message
                         });
-                        _this._closeDeleteRoleModal();
-                        _this._getAllRoles();
+                        self._closeDeleteRoleModal();
+                        self._getAllRoles();
                     } else if (res.status == 403) {
                         self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                             self.props.logout();
                         });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message });
+                        self.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                     }
-                    _this.setState({ loader: false });
+                    self.setState({ loader: false });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(() => {
-                _this.setState({
+                self.setState({
                     errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
                 });
             });
@@ -204,7 +202,6 @@ class Roles extends Component {
     render() {
         const { allRoles, errType, errMsg, loader, showAddRoleModal,
             showEditRoleModal, roleDetails, showDeleteRoleModal, allRolesValue } = this.state;
-        console.log(allRolesValue)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

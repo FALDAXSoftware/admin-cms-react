@@ -242,16 +242,12 @@ class Employees extends Component {
                                 {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
-                                        // onRow={(record, rowIndex) => {
-                                        //     return {
-                                        //         onClick: (event) => { this._changeRow(record) },
-                                        //     };
-                                        // }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}
                                         dataSource={allEmployee}
                                         className="isoCustomizedTable"
+                                        expandedRowRender={record => <div><b>Address</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.address}</span></div>}
                                         onChange={this._handleEmployeeChange}
                                     />
                                     {showEditEmpModal &&
