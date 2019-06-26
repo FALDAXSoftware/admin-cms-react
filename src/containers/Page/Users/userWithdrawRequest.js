@@ -113,9 +113,10 @@ class UserWithdrawRequest extends Component {
         const requestHeaders = [
             { label: "Source Address", key: "source_address" },
             { label: "Destination Address", key: "destination_address" },
-            { label: "Status", key: "is_approve" },
+            { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
+            { label: "Created On", key: "created_at" }
         ];
 
         if (errMsg) {

@@ -144,11 +144,13 @@ class UserTransactionHistory extends Component {
         const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
             searchTransaction } = this.state;
         const transactionsHeaders = [
+            { label: "Transaction Hash", key: "transaction_id" },
             { label: "Source Address", key: "source_address" },
             { label: "Destination Address", key: "destination_address" },
             { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
+            { label: "Created On", key: "craeted_at" },
         ];
 
         if (errMsg) {

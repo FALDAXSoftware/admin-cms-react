@@ -110,20 +110,13 @@ class UserTradeHistory extends Component {
         const tradeHeaders = [
             { label: "Currency", key: "currency" },
             { label: "Settle Currency", key: "settle_currency" },
-            { label: "Order Type", key: "order_type" },
             { label: "Type", key: "side" },
             { label: "Pair", key: "symbol" },
             { label: "Quantity", key: "quantity" },
             { label: "Price", key: "price" },
-            { label: "Stop Price", key: "stop_price" },
-            { label: "Limit Price", key: "limit_price" },
             { label: "Fill Price", key: "fill_price" },
-            { label: "Average Price", key: "average_price" },
             { label: "Maker Fee", key: "maker_fee" },
             { label: "Taker Fee", key: "taker_fee" },
-            { label: "Status", key: "order_status" },
-            { label: "Requested Fee", key: "requested_fee" },
-            { label: "Requested Asset", key: "requested_coin" },
             { label: "Created On", key: "created_at" }
         ];
 

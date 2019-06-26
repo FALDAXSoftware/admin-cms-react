@@ -202,9 +202,10 @@ class WithdrawRequest extends Component {
         const requestHeaders = [
             { label: "Source Address", key: "source_address" },
             { label: "Destination Address", key: "destination_address" },
-            { label: "Status", key: "is_approve" },
+            { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
+            { label: "Created On", key: "created_at" }
         ];
 
         if (errMsg) {
@@ -256,7 +257,7 @@ class WithdrawRequest extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding xs={12} sm={3}>
                                                 {allRequests && allRequests.length > 0 ?
-                                                    <CSVLink filename={'user_trade_history.csv'} data={allRequests} headers={requestHeaders}>
+                                                    <CSVLink filename={'withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
                                                         <Button type="primary" className="search-btn" style={{ margin: "0px" }}>Export</Button>
                                                     </CSVLink>
                                                     : ''}
