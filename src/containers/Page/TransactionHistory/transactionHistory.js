@@ -147,11 +147,13 @@ class Transactions extends Component {
             loader, searchTransaction, rangeDate, filterVal
         } = this.state;
         const transactionsHeaders = [
+            { label: "Transaction Hash", key: "transaction_id" },
             { label: "Source Address", key: "source_address" },
             { label: "Destination Address", key: "destination_address" },
             { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
+            { label: "Created On", key: "craeted_at" },
         ];
 
         if (errMsg) {
@@ -171,13 +173,11 @@ class Transactions extends Component {
                                                 <Input
                                                     placeholder="Search transactions"
                                                     onChange={this._changeSearch.bind(this)}
-                                                    style={{ "width": "100%" }}
                                                     value={searchTransaction}
                                                 />
                                             </ColWithPadding>
                                             <ColWithPadding sm={3}>
                                                 <Select
-                                                    style={{ width: '100%', "marginLeft": "15px" }}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}

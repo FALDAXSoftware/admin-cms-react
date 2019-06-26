@@ -468,6 +468,7 @@
   "tradeTable.title.taker_fee": "Taker Fee",
   "tradeTable.title.volume": "Volume",
   "tradeTable.title.created_at": "Created On",
+  "tradeTable.title.price": "Price",
   "withdrawTable.title.email": "Email",
   "withdrawTable.title.source_address": "Source Address",
   "withdrawTable.title.destination_address": "Destination Address",
