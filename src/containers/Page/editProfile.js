@@ -60,7 +60,7 @@ class EditProfile extends Component {
             _this.setState({ loader: true });
 
             const formData = {
-                name: fields['name'],
+                first_name: fields['first_name'],
                 email: user.email
             }
 

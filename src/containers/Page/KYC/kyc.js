@@ -201,7 +201,6 @@ class KYC extends Component {
                                 </div>
                             </TabPane>
                         ))}
-
                         <TabPane tab="Approved KYC" key="2">
                             <ApprovedKYC />
                         </TabPane>

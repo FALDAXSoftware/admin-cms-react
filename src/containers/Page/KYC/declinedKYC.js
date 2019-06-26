@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { notification, Pagination, Input } from 'antd';
-import { KYCInfos } from "../../Tables/antTables";
+import { ApprovedKYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -143,7 +143,7 @@ class DeclinedKYC extends Component {
             <LayoutWrapper>
                 <TableDemoStyle>
                     <div className="isoTableDisplayTab">
-                        {KYCInfos.map(tableInfo => (
+                        {ApprovedKYCInfos.map(tableInfo => (
                             <div>
                                 <div style={{
                                     "display": "flex", "width": "100%",
