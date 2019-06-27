@@ -55,7 +55,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'ActionCell':
             return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
                 street_address, street_address_2, phone_number, country, dob, is_active, kyc,
-                date_format, account_tier, account_class, state, no_of_referrals);
+                date_format, account_tier, account_class, state, no_of_referrals, created_at);
         default:
             return TextCell(value);
     }

@@ -66,6 +66,7 @@ class PasswordGenerator extends Component {
 
                     <Button type="primary" className="user-btn" style={{ marginLeft: "0px" }} onClick={this._generatePassword} >Generate</Button><br />
                     {password.length > 0 && <span>Generated Password is <b>{password}</b></span>}
+                    {password.length < 0 && <span>Password is required.</span>}
                 </Card>
             </React.Fragment>
         )

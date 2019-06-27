@@ -225,7 +225,7 @@ const ApiUtils = {
     //get all referrals api
     getAllUserReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (sorterCol, sortOrder) {
+        if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         }
 

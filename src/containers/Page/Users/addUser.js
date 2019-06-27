@@ -71,7 +71,7 @@ class AddUser extends Component {
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllAccountClasses(token)
+        ApiUtils.getAllAccountClasses(token, 'id', 'ASC')
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {

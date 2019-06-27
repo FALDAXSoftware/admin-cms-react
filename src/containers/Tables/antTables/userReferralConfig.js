@@ -9,6 +9,8 @@ const renderCell = (object, type, key) => {
     switch (type) {
         case 'TextCell':
             return TextCell(value);
+        default:
+            return TextCell(value);
     }
 };
 

@@ -21,6 +21,7 @@ class EditEmployeeModal extends Component {
             errMessage: '',
             errType: 'Success',
             selectedRole: this.props.fields['role'],
+            selectedRoleId: this.props.fields['role_id'],
             allRoles: this.props.allRoles,
             isDisabled: false
         }
@@ -33,7 +34,8 @@ class EditEmployeeModal extends Component {
                 showEditEmpModal: nextProps.showEditEmpModal,
                 fields: nextProps.fields,
                 allRoles: nextProps.allRoles,
-                selectedRole: nextProps.fields['role']
+                selectedRole: nextProps.fields['role'],
+                selectedRoleId: nextProps.fields['role_id']
             });
         }
     }
@@ -74,7 +76,7 @@ class EditEmployeeModal extends Component {
 
     _editEmployee = () => {
         const { token, getAllEmployee } = this.props;
-        const { fields, selectedRole } = this.state;
+        const { fields, selectedRole, selectedRoleId } = this.state;
 
         if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true });
@@ -85,9 +87,8 @@ class EditEmployeeModal extends Component {
                 last_name: fields["last_name"],
                 email: fields["email"],
                 address: fields["address"],
-                roles: selectedRole,
                 phone_number: fields["phone_number"],
-                role_id: selectedRole
+                role_id: selectedRoleId,
             };
 
             ApiUtils.editEmployee(token, formData)
@@ -95,19 +96,19 @@ class EditEmployeeModal extends Component {
                 .then((res) => {
                     if (res.status == 200) {
                         this.setState({
-                            errMsg: true, errMessage: res.message, loader: false,
-                            errType: 'Success', isDisabled: false
+                            errMsg: true, errMessage: res.message, errType: 'Success'
                         });
                         this._closeEditEmpModal();
                         getAllEmployee();
                         this._resetForm();
                     } else if (res.status == 403) {
-                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false, }, () => {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                     }
+                    this.setState({ isDisabled: false, loader: false })
                 })
                 .catch(() => {
                     this.setState({
@@ -122,7 +123,7 @@ class EditEmployeeModal extends Component {
     }
 
     _changeRole = (value) => {
-        this.setState({ selectedRole: value })
+        this.setState({ selectedRole: value, selectedRoleId: value })
     }
 
     render() {
