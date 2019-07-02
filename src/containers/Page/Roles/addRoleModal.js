@@ -12,11 +12,11 @@ const CheckboxGroup = Checkbox.Group;
 class AddRoleModal extends Component {
     constructor(props) {
         super(props)
-        let roles = Object.keys(this.props.allRolesValue)
+        // let roles = Object.keys(this.props.allRolesValue)
         this.state = {
             showAddRoleModal: this.props.showAddRoleModal,
             loader: false,
-            allRoles: roles,
+            allRoles: this.props.allRoles,
             fields: {},
             errMessage: '',
             errMsg: false,
@@ -31,10 +31,10 @@ class AddRoleModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            let roles = Object.keys(nextProps.allRolesValue)
+            //let roles = Object.keys(nextProps.allRoles)
             this.setState({
                 showAddRoleModal: nextProps.showAddRoleModal,
-                allRoles: roles
+                allRoles: nextProps.allRoles
             });
             this.validator = new SimpleReactValidator();
         }

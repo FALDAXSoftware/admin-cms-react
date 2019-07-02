@@ -135,7 +135,7 @@ class AddEmployeeModal extends Component {
 
         let roleOptions = allRoles.map((role) => {
             return (
-                <Option value={role.key}>{role.value}</Option>
+                <Option value={role.id}>{role.name}</Option>
             )
         });
 

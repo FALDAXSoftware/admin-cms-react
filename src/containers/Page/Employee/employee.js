@@ -127,14 +127,15 @@ class Employees extends Component {
 
     _getAllRoles = () => {
         const { token } = this.props;
+        const { sorterCol, sortOrder } = this.state;
         let _this = this;
 
-        ApiUtils.getAllRoles(token)
+        ApiUtils.getAllRoles(token, sorterCol, sortOrder, true)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
-                    _this.setState({ allRoles: roles });
+                    //let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
+                    _this.setState({ allRoles: res.roles });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -144,6 +145,7 @@ class Employees extends Component {
                 }
             })
             .catch(err => {
+                console.log('>>>err', err)
                 _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
             });
     }

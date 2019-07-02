@@ -71,6 +71,8 @@ class SignIn extends Component {
             _this.setState({ isOtpRequired: true, loader: false });
           } else if (res.status == 402) {
             _this.setState({ errMsg: true, errMessage: res.err, loader: false });
+          } else if (res.status == 403) {
+            _this.setState({ errMsg: true, errMessage: res.err, loader: false });
           } else {
             _this.setState({ errMsg: true, errMessage: res.err, loader: false });
             login({ user: null });

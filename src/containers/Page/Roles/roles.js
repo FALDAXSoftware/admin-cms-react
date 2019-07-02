@@ -39,9 +39,7 @@ class Roles extends Component {
     static roleStatus(value, name, users, assets, countries, roles, employee, pairs,
         transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
         news, is_referral, add_user, is_active) {
-        console.log('>>>>>', value, name, users, assets, countries, roles, employee, pairs,
-            transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
-            news, is_referral, add_user, is_active)
+
         const { token } = self.props;
 
         let formData = {
@@ -124,11 +122,11 @@ class Roles extends Component {
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllRoles(token, sorterCol, sortOrder)
+        ApiUtils.getAllRoles(token, sorterCol, sortOrder, '')
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allRolesValue: res.roles[0], allRoles: res.roleName });
+                    _this.setState({ allRoles: res.roles });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -219,7 +217,7 @@ class Roles extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
                                     {showAddRoleModal && <AddRoleModal
-                                        allRolesValue={allRolesValue}
+                                        allRolesValue={allRoles}
                                         showAddRoleModal={showAddRoleModal}
                                         closeAddModal={this._closeAddRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
