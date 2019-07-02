@@ -39,6 +39,9 @@ class Roles extends Component {
     static roleStatus(value, name, users, assets, countries, roles, employee, pairs,
         transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
         news, is_referral, add_user, is_active) {
+        console.log('>>>>>', value, name, users, assets, countries, roles, employee, pairs,
+            transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button,
+            news, is_referral, add_user, is_active)
         const { token } = self.props;
 
         let formData = {

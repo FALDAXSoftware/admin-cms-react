@@ -161,6 +161,8 @@ class TradeHistory extends Component {
             { label: "Fill Price", key: "fill_price" },
             { label: "Maker Fee", key: "maker_fee" },
             { label: "Taker Fee", key: "taker_fee" },
+            { label: "Maker Email", key: "reqested_user_email" },
+            { label: "Taker Email", key: "email" },
             { label: "Created On", key: "created_at" }
         ];
 

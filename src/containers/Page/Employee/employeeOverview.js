@@ -4,8 +4,15 @@ import { connect } from 'react-redux';
 import { Divider, Input, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
+import styled from 'styled-components';
 
 const { logout } = authAction;
+
+const ParentDiv = styled.div`
+padding: 20px;
+background-color: white;
+margin: 30px !important;
+`
 
 class PersonalDetails extends Component {
     constructor(props) {
@@ -105,7 +112,7 @@ class PersonalDetails extends Component {
         const { employeeDetails, fields, errors } = this.state;
 
         return (
-            <div className="kyc-div">
+            <ParentDiv className="kyc-div">
                 <Divider>Personal Information</Divider>
                 <div className="">
                     <p style={{ "marginBottom": "10px" }}>
@@ -183,7 +190,7 @@ class PersonalDetails extends Component {
                         <Button type="primary" onClick={this._changePassword}> Change </Button>
                     </div> 
                 </div>*/}
-            </div >
+            </ParentDiv>
         );
     }
 }

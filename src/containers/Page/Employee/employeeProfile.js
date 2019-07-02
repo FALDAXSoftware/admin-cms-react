@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import EmployeeOverview from './employeeOverview';
+import EmployeeWhitelist from './employeeWhitelist';
 
 const { TabPane } = Tabs;
 
@@ -19,6 +20,7 @@ class EmployeeProfile extends Component {
         return (
             <Tabs defaultActiveKey="1" size={'large'}>
                 <TabPane tab="Overview" key="1"><EmployeeOverview emp_id={emp_id} /></TabPane>
+                <TabPane tab="IP Whitelist" key="2"><EmployeeWhitelist emp_id={emp_id} /></TabPane>
                 {/* <TabPane tab="Logs & Activities" key="2">Content of tab 3</TabPane> */}
             </Tabs>
         );

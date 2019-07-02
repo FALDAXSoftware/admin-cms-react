@@ -180,6 +180,8 @@ class Users extends Component {
             { label: "Verified/Non Verified", key: "is_verified" },
             { label: "Fiat Currency", key: "fiat" },
             { label: "Referral Percentage", key: "referal_percentage" },
+            { label: "No Of Referrals", key: "no_of_referrals" },
+            { label: "Account Tier", key: "account_tier" },
             { label: "Created On", key: "created_at" }
         ];
 
@@ -204,14 +206,12 @@ class Users extends Component {
                                                     <Input
                                                         placeholder="Search users"
                                                         onChange={this._changeSearch.bind(this)}
-                                                        style={{ "width": "100%" }}
                                                         value={searchUser}
                                                     />
                                                 </ColWithPadding>
                                                 <ColWithPadding sm={5}>
                                                     <Select
                                                         getPopupContainer={trigger => trigger.parentNode}
-                                                        style={{ width: '100%', "marginLeft": "15px" }}
                                                         placeholder="Select a country"
                                                         onChange={this._changeCountry}
                                                         value={filterVal}

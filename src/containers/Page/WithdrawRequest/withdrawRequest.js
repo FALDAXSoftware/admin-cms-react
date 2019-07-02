@@ -205,6 +205,8 @@ class WithdrawRequest extends Component {
             { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
+            { label: "Asset", key: "coin_name" },
+            { label: "Fees", key: "fees" },
             { label: "Created On", key: "created_at" }
         ];
 

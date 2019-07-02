@@ -74,10 +74,11 @@ class Employees extends Component {
     }
 
     static editEmployee(value, first_name, last_name, email, phone_number, address, role, role_id, is_active) {
-        let empDetails = {
-            value, first_name, last_name, email, phone_number, address, role, role_id, is_active
-        }
-        self.setState({ showEditEmpModal: true, empDetails });
+        self.props.history.push('/dashboard/employee/' + value)
+        // let empDetails = {
+        //     value, first_name, last_name, email, phone_number, address, role, role_id, is_active
+        // }
+        // self.setState({ showEditEmpModal: true, empDetails });
     }
 
     static deleteEmployee(value) {
