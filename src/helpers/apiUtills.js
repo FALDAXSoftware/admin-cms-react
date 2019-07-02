@@ -68,7 +68,7 @@ const ApiUtils = {
                 }
             });
         } catch (error) {
-            console.error(error);
+            console.error('dashbiard', error);
         }
     },
 
@@ -1729,6 +1729,35 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    addWhitelistIP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-whitelist-ip", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllWhitelistIP: function (token, id) {
+        try {
+            return fetch(API_URL + "/admin/get-all-whitelist-ip?admin_id=" + id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 };
 

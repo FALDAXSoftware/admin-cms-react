@@ -17,8 +17,7 @@ const renderCell = (object, type, key, user = null, source = null, destination =
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address,
-                amount, transaction_type, created_at, transaction_id, coin_id);
+            return DateCell(value);
         case 'TransactionTypeCell':
             return TransactionTypeCell(value, email, source_address, destination_address,
                 amount, transaction_type, created_at, transaction_id, coin_id);
