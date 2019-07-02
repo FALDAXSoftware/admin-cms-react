@@ -18,8 +18,7 @@ class EmployeeWhitelist extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            employeeDetails: [],
-            ipAddress: {},
+            ipAddress: '',
         }
         this.validator = new SimpleReactValidator();
     }
@@ -122,7 +121,7 @@ class EmployeeWhitelist extends Component {
                         <Input
                             type="text"
                             placeholder="IP Address"
-                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                            style={{ "marginBottom": "15px", "width": "50%", "display": "inherit" }}
                             onChange={this._onChangeFields.bind(this, "ipAddress")}
                             value={ipAddress}
                         />

@@ -1,3 +1,5 @@
+import { stat } from "fs";
+
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
@@ -323,10 +325,10 @@ const ApiUtils = {
     },
 
     //get all roles api
-    getAllRoles: function (token, sorterCol, sortOrder) {
-        let url = "/admin/role/get";
+    getAllRoles: function (token, sorterCol, sortOrder, status) {
+        let url = "/admin/role/get?status=" + status;
         if (sorterCol && sortOrder) {
-            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         }
 
         try {
