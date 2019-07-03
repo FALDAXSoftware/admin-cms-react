@@ -12,7 +12,6 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 
-const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const Option = Select.Option;
@@ -222,13 +221,12 @@ class Pairs extends Component {
                                                 <Input
                                                     placeholder="Search pairs"
                                                     onChange={this._changeSearch.bind(this)}
-                                                    style={{ "width": "100%" }}
                                                     value={searchPair}
                                                 />
                                             </ColWithPadding>
                                             <ColWithPadding sm={5}>
                                                 <Select
-                                                    style={{ width: '100%' }}
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a asset"
                                                     onChange={this._changeAsset}
                                                     value={selectedAsset}

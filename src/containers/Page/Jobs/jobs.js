@@ -251,6 +251,7 @@ class Jobs extends Component {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
             jobDetails, allJobCategories, activeTab } = this.state;
+        console.log('call job render')
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -278,52 +279,50 @@ class Jobs extends Component {
                                     />
                                 </div>
                                 {loader && <FaldaxLoader />}
-                                <div>
-                                    <ViewJobModal
-                                        jobDetails={jobDetails}
-                                        showViewJobModal={showViewJobModal}
-                                        closeViewJobModal={this._closeViewJobModal}
-                                    />
-                                    {showEditJobModal &&
-                                        <EditJobModal
-                                            fields={jobDetails}
-                                            showEditJobModal={showEditJobModal}
-                                            closeEditJobModal={this._closeEditJobModal}
-                                            getAllJobs={this._getAllJobs.bind(this, 1)}
-                                            allJobCategories={allJobCategories}
-                                        />}
-                                    <TableWrapper
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allJobs}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleJobTableChange}
-                                    />
-                                    {
-                                        showDeleteJobModal &&
-                                        <Modal
-                                            title="Delete Job"
-                                            visible={showDeleteJobModal}
-                                            onCancel={this._closeDeleteJobModal}
-                                            footer={[
-                                                <Button onClick={this._closeDeleteJobModal}>No</Button>,
-                                                <Button onClick={this._deleteJob}>Yes</Button>,
-                                            ]}
-                                        >
-                                            Are you sure you want to delete this job ?
+                                <ViewJobModal
+                                    jobDetails={jobDetails}
+                                    showViewJobModal={showViewJobModal}
+                                    closeViewJobModal={this._closeViewJobModal}
+                                />
+                                {showEditJobModal &&
+                                    <EditJobModal
+                                        fields={jobDetails}
+                                        showEditJobModal={showEditJobModal}
+                                        closeEditJobModal={this._closeEditJobModal}
+                                        getAllJobs={this._getAllJobs.bind(this, 1)}
+                                        allJobCategories={allJobCategories}
+                                    />}
+                                <TableWrapper
+                                    {...this.state}
+                                    columns={tableInfo.columns}
+                                    pagination={false}
+                                    dataSource={allJobs}
+                                    className="isoCustomizedTable"
+                                    onChange={this._handleJobTableChange}
+                                />
+                                {
+                                    showDeleteJobModal &&
+                                    <Modal
+                                        title="Delete Job"
+                                        visible={showDeleteJobModal}
+                                        onCancel={this._closeDeleteJobModal}
+                                        footer={[
+                                            <Button onClick={this._closeDeleteJobModal}>No</Button>,
+                                            <Button onClick={this._deleteJob}>Yes</Button>,
+                                        ]}
+                                    >
+                                        Are you sure you want to delete this job ?
                                     </Modal>
-                                    }
-                                    {allJobsCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleJobPagination.bind(this)}
-                                            pageSize={50}
-                                            current={page}
-                                            total={allJobsCount}
-                                        /> : ''}
-                                </div>
+                                }
+                                {allJobsCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleJobPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allJobsCount}
+                                    /> : ''}
                             </TabPane>
                         ))}
                         <TabPane tab="Job Category" key="2">

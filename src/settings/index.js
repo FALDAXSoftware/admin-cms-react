@@ -49,14 +49,6 @@ const Auth0Config = {
     }
   }
 };
-const firebaseConfig = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: 'abc',
-  storageBucket: '',
-  messagingSenderId: ''
-};
 const googleConfig = {
   apiKey: '' //
 };
@@ -72,7 +64,6 @@ export {
   language,
   AlgoliaSearchConfig,
   Auth0Config,
-  firebaseConfig,
   googleConfig,
   mapboxConfig,
 };
