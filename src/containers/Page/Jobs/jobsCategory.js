@@ -50,21 +50,21 @@ class JobCategory extends Component {
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    this.setState({
+                    self.setState({
                         errMsg: true, errMessage: message, loader: false,
                         errType: 'Success', showError: false, isDisabled: false
                     });
-                    this._getAllJobCategories();
+                    self._getAllJobCategories();
                 } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
                     });
                 } else {
-                    this.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: res.message });
                 }
             })
             .catch(() => {
-                this.setState({
+                self.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
                     loader: false, errType: 'error', showError: false, isDisabled: false
                 });
@@ -122,9 +122,6 @@ class JobCategory extends Component {
     _closeEditJobCatModal = () => {
         this.setState({ showEditJobCatModal: false });
     }
-    componentWillUnmount = () => {
-        console.log('componentWillUnmount call')
-    }
 
     render() {
         const { errType, loader, errMsg, showAddJobCatModal, showEditJobCatModal,
@@ -137,7 +134,7 @@ class JobCategory extends Component {
         return (
             <div>
                 {jobCategoryTableInfos.map(tableInfo => (
-                    <div>
+                    <div key={tableInfo.value}>
                         <div style={{ "display": "inline-block", "width": "100%" }}>
                             <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}>Add Category</Button>
                             <AddJobCatModal
@@ -147,22 +144,20 @@ class JobCategory extends Component {
                             />
                         </div>
                         {loader && <FaldaxLoader />}
-                        <div>
-                            <EditJobCatModal
-                                fields={categoryDetails}
-                                showEditJobCatModal={showEditJobCatModal}
-                                closeEditJobCatModal={this._closeEditJobCatModal}
-                                getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
-                            />
-                            <TableWrapper
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allJobCategories}
-                                className="isoCustomizedTable"
-                                onChange={this._handleJobTableChange}
-                            />
-                        </div>
+                        <EditJobCatModal
+                            fields={categoryDetails}
+                            showEditJobCatModal={showEditJobCatModal}
+                            closeEditJobCatModal={this._closeEditJobCatModal}
+                            getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
+                        />
+                        <TableWrapper
+                            {...this.state}
+                            columns={tableInfo.columns}
+                            pagination={false}
+                            dataSource={allJobCategories}
+                            className="isoCustomizedTable"
+                            onChange={this._handleJobTableChange}
+                        />
                     </div>
                 ))}
             </div>

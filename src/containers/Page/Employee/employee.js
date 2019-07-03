@@ -141,11 +141,10 @@ class Employees extends Component {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errType: 'error', errMsg: true, errMessage: res.err });
                 }
             })
             .catch(err => {
-                console.log('>>>err', err)
                 _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
             });
     }
