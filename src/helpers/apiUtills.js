@@ -1099,17 +1099,29 @@ const ApiUtils = {
     },
 
     //get all kyc data api
-    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, status) {
+    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, startDate, endDate, status) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
-        if (sorterCol && sortOrder && search && status) {
-            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status
+        if (sorterCol && sortOrder && search && startDate && endDate && status) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder && search && startDate && endDate) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
-        } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (startDate && endDate && search) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder && startDate && endDate) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && status && startDate && endDate) {
+            url += "&data=" + search + "&status=" + status + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (status && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && status) {
             url += "&data=" + search + "&status=" + status;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (status) {
             url += "&status=" + status;
         } else {
@@ -1123,22 +1135,6 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit kyc status api
-    updateKYCStatus: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/update-kyc-status", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
             });
         } catch (error) {
             console.error(error);

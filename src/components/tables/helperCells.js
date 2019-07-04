@@ -22,6 +22,7 @@ import { WithdrawRequest } from '../../containers/Page/WithdrawRequest/withdrawR
 import { Icon, Switch, Button, Tooltip } from 'antd';
 import moment from 'moment';
 import { JobCategory } from '../../containers/Page/Jobs/jobsCategory';
+import create from 'antd/lib/icon/IconFont';
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL = 'https://s3.us-east-2.amazonaws.com/production-static-asset/';
@@ -138,16 +139,8 @@ const viewJobApplication = (value, first_name, last_name, email, phone_number, c
     JobApplications.viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url);
 }
 
-const rejectKYC = (value, first_name, last_name, email, direct_response, kycDoc_details) => {
-    KYC.rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details);
-}
-
-const approveKYC = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => {
-    KYC.approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type);
-}
-
-const viewKYC = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => {
-    KYC.viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type);
+const viewKYC = (value, mtid, first_name, last_name, email, direct_response, kycDoc_details, webhook_response, address, country, city, zip, dob, id_type, created_at) => {
+    KYC.viewKYC(value, mtid, first_name, last_name, email, direct_response, kycDoc_details, webhook_response, address, country, city, zip, dob, id_type, created_at);
 }
 
 const editFees = (value, trade_volume, maker_fee, taker_fee) => {
@@ -237,8 +230,7 @@ const JobActionCell = (value, position, location, short_desc, job_desc, category
 const JobSwitchCell = (value, position, location, short_desc, job_desc, category_id, is_active, category) => <Switch checked={is_active} onChange={() => { jobStatus(value, position, location, short_desc, job_desc, category_id, is_active, category) }} />
 const JobButtonCell = (value) => <Button type="primary" onClick={() => showApplicants(value)} >Show Applications</Button>;
 const JobAppActionCell = (value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewJobApplication(value, first_name, last_name, email, phone_number, created_at, resume, cover_letter, linkedin_profile, website_url)} /></Tooltip></div>;
-const KYCStatusCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div>{direct_response !== 'ACCEPT' ? <div><Tooltip title="Approve"><Icon type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer", "fontSize": "20px" }} onClick={() => approveKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip></div> : ''}</div>;
-const KYCActionCell = (value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details, front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type)} /></Tooltip></div>;
+const KYCActionCell = (value, mtid, first_name, last_name, email, direct_response, kycDoc_details, webhook_response, address, country, city, zip, dob, id_type, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewKYC(value, mtid, first_name, last_name, email, direct_response, kycDoc_details, webhook_response, address, country, city, zip, dob, id_type, created_at)} /></Tooltip></div>;
 const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => <p> {is_logged_in == false ? updated_at ? moment.utc(updated_at).local().format("DD MMM, YYYY HH:mm") : '' : ''}</p>;
 const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editFees(value, trade_volume, maker_fee, taker_fee)} /></Tooltip></div>;
 const ReferralCell = (value) => <p>{value !== null ? value : 0}</p>
@@ -288,7 +280,6 @@ export {
     JobSwitchCell,
     JobButtonCell,
     JobAppActionCell,
-    KYCStatusCell,
     KYCActionCell,
     LogoutDateCell,
     FeesActionCell,

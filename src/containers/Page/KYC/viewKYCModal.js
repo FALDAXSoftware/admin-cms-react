@@ -89,15 +89,6 @@ class ViewKYCModal extends Component {
                     </div>
                     : ''}
 
-                {kycDetails.ssn ?
-                    <div>
-                        <span> <b>SSN:</b> </span>
-                        <p style={{ "marginBottom": "15px" }}>
-                            {kycDetails.ssn}</p>
-                    </div>
-                    : ''}
-
-
                 {idType != '' ?
                     <div>
                         <span> <b>Document Type:</b> </span>

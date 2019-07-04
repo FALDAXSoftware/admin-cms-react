@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { notification, Pagination, Input } from 'antd';
+import { notification, Pagination, Input, DatePicker, Row, Button, Form } from 'antd';
 import { ApprovedKYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import moment from 'moment';
+import ColWithPadding from '../common.style';
 
-const Search = Input.Search;
+const { RangePicker } = DatePicker;
 const { logout } = authAction;
 var self;
 
@@ -29,47 +30,22 @@ class ApprovedKYC extends Component {
             limit: 50,
             searchKYC: '',
             allKYCCount: 0,
-            status: 'ACCEPT'
+            status: 'ACCEPT',
+            startDate: '',
+            endDate: '',
+            rangeDate: []
         }
         self = this;
+        ApprovedKYC.viewKYC = ApprovedKYC.viewKYC.bind(this);
     }
 
-    static viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
-        front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) {
+    static viewKYC(value, mtid, first_name, last_name, email, direct_response, kycDoc_details,
+        webhook_response, address, country, city, zip, dob, id_type, created_at) {
         let kycDetails = {
-            value, first_name, last_name, email, direct_response, kycDoc_details, front_doc,
-            back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type
+            value, mtid, first_name, last_name, email, direct_response, kycDoc_details,
+            webhook_response, address, country, city, zip, dob, id_type, created_at
         }
         self.setState({ kycDetails, showViewKYCModal: true })
-    }
-
-    _updateStatusKYC = (value, isApprove) => {
-        const { token } = this.props;
-
-        let formData = {
-            isApprove,
-            id: value
-        }
-
-        ApiUtils.updateKYCStatus(token, formData)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    self.setState({ loader: false, errMsg: true, errMessage: res.message, errType: 'error' });
-                    self._getAllKYCData();
-                } else if (res.status == 403) {
-                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        self.props.logout();
-                    });
-                } else {
-                    self.setState({ errMsg: true, errMessage: res.message });
-                }
-            })
-            .catch(() => {
-                self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
     }
 
     componentDidMount = () => {
@@ -78,15 +54,15 @@ class ApprovedKYC extends Component {
 
     _getAllKYCData = () => {
         const { token } = this.props;
-        const { page, limit, searchKYC, sorterCol, sortOrder, status } = this.state;
+        const { page, limit, searchKYC, sorterCol, sortOrder, status, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, status)
+        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate, status)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allKYCData: res.data, allKYCCount: res.KYCCount });
+                    _this.setState({ allKYCData: res.data, allKYCCount: parseInt(res.KYCCount) });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -127,67 +103,126 @@ class ApprovedKYC extends Component {
         })
     }
 
-    _searchKYC = (val) => {
-        this.setState({ searchKYC: val, page: 1 }, () => {
+    _searchKYC = (e) => {
+        e.preventDefault();
+        this.setState({ page: 1 }, () => {
             this._getAllKYCData();
-        });
+        })
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
+        })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchKYC: '', startDate: '', endDate: '',
+            rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
+        }, () => {
+            this._getAllKYCData();
+        })
+    }
+
+    _changeSearch = (field, e) => {
+        this.setState({ searchKYC: field.target.value })
     }
 
     render() {
-        const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount } = this.state;
+        const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,
+            allKYCCount, searchKYC, rangeDate } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
 
         return (
-            <LayoutWrapper>
-                <TableDemoStyle>
-                    <div className="isoTableDisplayTab">
-                        {ApprovedKYCInfos.map(tableInfo => (
-                            <div>
-                                <div style={{
-                                    "display": "flex", "width": "100%",
-                                    "justifyContent": "flex-end",
-                                    "alignItems": "center",
-                                }}>
-                                    <Search
-                                        placeholder="Search KYC"
-                                        onSearch={(value) => this._searchKYC(value)}
-                                        style={{ "width": "250px", "marginRight": "20px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <div style={{ marginTop: "30px" }}>
-                                    <ViewKYCModal
-                                        kycDetails={kycDetails}
-                                        showViewKYCModal={showViewKYCModal}
-                                        closeViewModal={this._closeViewKYCModal}
-                                    />
-                                    <TableWrapper
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allKYCData}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleKYCTableChange}
-                                    />
-                                    {allKYCCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleKYCPagination.bind(this)}
-                                            pageSize={50}
-                                            current={page}
-                                            total={allKYCCount}
-                                        /> : ''}
-                                </div>
+            <TableDemoStyle>
+                <div className="isoTableDisplayTab">
+                    {ApprovedKYCInfos.map(tableInfo => (
+                        <div key={tableInfo.value}>
+                            <Form onSubmit={this._searchKYC}>
+                                <Row type="flex" justify="end">
+                                    <ColWithPadding sm={5}>
+                                        <Input
+                                            placeholder="Search KYC"
+                                            onChange={this._changeSearch.bind(this)}
+                                            value={searchKYC}
+                                        />
+                                    </ColWithPadding>
+                                    <ColWithPadding sm={7}>
+                                        <RangePicker
+                                            value={rangeDate}
+                                            disabledTime={this.disabledRangeTime}
+                                            onChange={this._changeDate}
+                                            format="YYYY-MM-DD"
+                                            allowClear={false}
+                                            style={{ width: "100%" }}
+                                        />
+                                    </ColWithPadding>
+                                    <ColWithPadding xs={12} sm={3}>
+                                        <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
+                                    </ColWithPadding>
+                                    <ColWithPadding xs={12} sm={3}>
+                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                    </ColWithPadding>
+                                </Row>
+                            </Form>
+                            {loader && <FaldaxLoader />}
+                            <div style={{ marginTop: "30px" }}>
+                                <ViewKYCModal
+                                    kycDetails={kycDetails}
+                                    showViewKYCModal={showViewKYCModal}
+                                    closeViewModal={this._closeViewKYCModal}
+                                />
+                                <TableWrapper
+                                    {...this.state}
+                                    columns={tableInfo.columns}
+                                    pagination={false}
+                                    dataSource={allKYCData}
+                                    className="isoCustomizedTable"
+                                    onChange={this._handleKYCTableChange}
+                                />
+                                {allKYCCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleKYCPagination.bind(this)}
+                                        pageSize={50}
+                                        current={page}
+                                        total={allKYCCount}
+                                    /> : ''}
                             </div>
-                        ))}
-                    </div>
-                </TableDemoStyle>
-            </LayoutWrapper>
+                        </div>
+                    ))}
+                </div>
+            </TableDemoStyle>
         );
     }
 }
