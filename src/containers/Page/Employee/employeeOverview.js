@@ -59,6 +59,7 @@ class PersonalDetails extends Component {
 
     _changePassword = () => {
         const { token, user } = this.props;
+        console.log(user)
         let { fields, errors } = this.state;
         let _this = this;
 
@@ -197,6 +198,7 @@ class PersonalDetails extends Component {
 
 export default connect(
     state => ({
-        token: state.Auth.get('token')
+        token: state.Auth.get('token'),
+        user: state.Auth.get('user')
     }), { logout })(PersonalDetails);
 

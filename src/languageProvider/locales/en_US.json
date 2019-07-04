@@ -498,6 +498,7 @@
   "accountTable.title.name": "Class Name",
   "accountTable.title.id": "ID",
   "accountTable.title.actions": "Actions",
+  "kycTable.title.mtid": "IDM ID",
   "kycTable.title.created_at": "Created On",
   "kycTable.title.kycDoc_details": "Doc Result",
   "kycTable.title.name": "First Name",

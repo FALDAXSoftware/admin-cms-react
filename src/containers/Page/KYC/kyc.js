@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Pagination, Input } from 'antd';
+import { Tabs, notification, Pagination, Input, DatePicker, Row, Form, Button } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -12,9 +12,11 @@ import authAction from '../../../redux/auth/actions';
 import ApprovedKYC from './approvedKYC';
 import ReviewKYC from './reviewKYC';
 import DeclinedKYC from './declinedKYC';
+import moment from 'moment';
+import ColWithPadding from '../common.style';
 
-const Search = Input.Search;
 const { logout } = authAction;
+const { RangePicker } = DatePicker;
 const TabPane = Tabs.TabPane;
 var self;
 
@@ -33,59 +35,21 @@ class KYC extends Component {
             limit: 50,
             searchKYC: '',
             allKYCCount: 0,
+            startDate: '',
+            endDate: '',
+            rangeDate: []
         }
         self = this;
-        KYC.rejectKYC = KYC.rejectKYC.bind(this);
         KYC.viewKYC = KYC.viewKYC.bind(this);
     }
 
-    static viewKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
-        front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) {
+    static viewKYC(value, mtid, first_name, last_name, email, direct_response, kycDoc_details,
+        webhook_response, address, country, city, zip, dob, id_type, created_at) {
         let kycDetails = {
-            value, first_name, last_name, email, direct_response, kycDoc_details, front_doc,
-            back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type
+            value, mtid, first_name, last_name, email, direct_response, kycDoc_details,
+            webhook_response, address, country, city, zip, dob, id_type, created_at
         }
         self.setState({ kycDetails, showViewKYCModal: true })
-    }
-
-    static rejectKYC(value, first_name, last_name, email, direct_response, kycDoc_details,
-        front_doc, back_doc, ssn, webhook_response, address, country, city, zip, dob, id_type) {
-        self._updateStatusKYC(value, false);
-    }
-
-    static approveKYC(value, first_name, last_name, email, direct_response,
-        kycDoc_details, front_doc, back_doc, ssn, webhook_response, address,
-        country, city, zip, dob, id_type) {
-        self._updateStatusKYC(value, true);
-    }
-
-    _updateStatusKYC = (value, isApprove) => {
-        const { token } = this.props;
-
-        let formData = {
-            isApprove,
-            id: value
-        }
-
-        ApiUtils.updateKYCStatus(token, formData)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    self.setState({ loader: false, errMsg: true, errMessage: res.message, errType: 'error' });
-                    self._getAllKYCData();
-                } else if (res.status == 403) {
-                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        self.props.logout();
-                    });
-                } else {
-                    self.setState({ errMsg: true, errMessage: res.message });
-                }
-            })
-            .catch(() => {
-                self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
     }
 
     componentDidMount = () => {
@@ -94,15 +58,15 @@ class KYC extends Component {
 
     _getAllKYCData = () => {
         const { token } = this.props;
-        const { page, limit, searchKYC, sorterCol, sortOrder } = this.state;
+        const { page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder)
+        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allKYCData: res.data, allKYCCount: res.KYCCount });
+                    _this.setState({ allKYCData: res.data, allKYCCount: parseInt(res.KYCCount) });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -117,6 +81,37 @@ class KYC extends Component {
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
+        })
     }
 
     openNotificationWithIcon = (type) => {
@@ -143,14 +138,29 @@ class KYC extends Component {
         })
     }
 
-    _searchKYC = (val) => {
-        this.setState({ searchKYC: val, page: 1 }, () => {
+    _searchKYC = (e) => {
+        e.preventDefault();
+        this.setState({ page: 1 }, () => {
             this._getAllKYCData();
-        });
+        })
+    }
+
+    _changeSearch = (field, e) => {
+        this.setState({ searchKYC: field.target.value })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchKYC: '', startDate: '', endDate: '',
+            rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
+        }, () => {
+            this._getAllKYCData();
+        })
     }
 
     render() {
-        const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount } = this.state;
+        const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,
+            allKYCCount, rangeDate, searchKYC } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -162,17 +172,34 @@ class KYC extends Component {
                     <Tabs className="isoTableDisplayTab">
                         {KYCInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{
-                                    "display": "flex", "width": "100%",
-                                    "justifyContent": "flex-end",
-                                    "alignItems": "center",
-                                }}>
-                                    <Search
-                                        placeholder="Search KYC"
-                                        onSearch={(value) => this._searchKYC(value)}
-                                        style={{ "width": "250px", "marginRight": "20px" }}
-                                        enterButton
-                                    />
+                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Form onSubmit={this._searchKYC}>
+                                        <Row type="flex" justify="end">
+                                            <ColWithPadding sm={5}>
+                                                <Input
+                                                    placeholder="Search KYC"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    value={searchKYC}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={7}>
+                                                <RangePicker
+                                                    value={rangeDate}
+                                                    disabledTime={this.disabledRangeTime}
+                                                    onChange={this._changeDate}
+                                                    format="YYYY-MM-DD"
+                                                    allowClear={false}
+                                                    style={{ width: "100%" }}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                            </ColWithPadding>
+                                        </Row>
+                                    </Form>
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div style={{ marginTop: "30px" }}>

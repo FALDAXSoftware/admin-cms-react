@@ -188,6 +188,14 @@ class PersonalDetails extends Component {
                                 </DateOfBirth>
                             </Col>
                         </Row>
+                        {(userDetails.deleted_by == 1 || userDetails.deleted_by == 2) ? < Row >
+                            <Col>
+                                <DateOfBirth>
+                                    <i class="fas fa-trash"></i>
+                                    {userDetails.deleted_by == 1 ? <span>Deleted By User</span> : <span>Deleted By Admin</span>}
+                                </DateOfBirth>
+                            </Col>
+                        </Row> : ''}
                     </ParentDiv>
                 }
             </div>
