@@ -36,12 +36,17 @@ class Users extends Component {
         }
         self = this;
         Users.view = Users.view.bind(this);
+        Users.deleteUser = Users.deleteUser.bind(this);
         Users.changeStatus = Users.changeStatus.bind(this);
     }
 
     static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
         street_address_2, phone_number, country, dob, is_active, kyc) {
         self.props.history.push('/dashboard/users/' + value)
+    }
+
+    static deleteUser(value) {
+        //self.props.history.push('/dashboard/users/' + value)
     }
 
     static changeStatus(value, profile_pic, first_name, last_name, email, city_town,

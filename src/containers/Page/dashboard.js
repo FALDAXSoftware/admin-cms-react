@@ -309,7 +309,7 @@ class Dashboard extends Component {
                             <CountCard number={activeUsers}
                                 headColor={'#1f2431'}
                                 number2={inactiveUsers}
-                                bgColor={'#fff'}
+                                bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Users'}
                                 text={'Active Users'}
@@ -323,7 +323,7 @@ class Dashboard extends Component {
                             <CountCard number={activeCoins}
                                 headColor={'#1f2431'}
                                 number2={InactiveCoins}
-                                bgColor={'#fff'}
+                                bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Assets'}
                                 text={'Active Assets'}
@@ -338,7 +338,7 @@ class Dashboard extends Component {
                             <CountCard number={activePairs}
                                 headColor={'#1f2431'}
                                 number2={InactivePairs}
-                                bgColor={'#fff'}
+                                bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Pairs'}
                                 text={'Active Pairs'}
@@ -357,7 +357,7 @@ class Dashboard extends Component {
                                 text={'Active Employees'}
                                 icon="fas fa-user-tie"
                                 fontColor="#ffffff"
-                                bgColor={'#fff'}
+                                bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                             />
                         </Link>
@@ -367,7 +367,7 @@ class Dashboard extends Component {
                         <Link to='/dashboard/jobs'>
                             <CountCard
                                 headColor={'#1f2431'}
-                                bgColor={'#fff'}
+                                bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                                 title={'Pending Job Applications'}
                                 number={jobsCount}
@@ -387,7 +387,7 @@ class Dashboard extends Component {
                                 text={'Last 7 Days Withdraw Requests'}
                                 icon="fas fa-hand-holding-usd"
                                 fontColor="#ffffff"
-                                bgColor={'#fff'}
+                                bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
                             />
                         </Link>
