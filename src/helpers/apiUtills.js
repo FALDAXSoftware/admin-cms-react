@@ -1190,7 +1190,7 @@ const ApiUtils = {
     //panic button api
     panicBtn: function (token, form) {
         try {
-            return fetch(API_URL + "/panic-button", {
+            return fetch(API_URL + "/toggle-panic-status", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
