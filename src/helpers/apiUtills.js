@@ -1,6 +1,6 @@
 import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.1.6:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://18.191.87.133:8084"; //Live URL
 const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -114,6 +114,21 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token
                 },
                 body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete user api
+    deleteUser: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/delete-user?user_id=" + user_id, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);
