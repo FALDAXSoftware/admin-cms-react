@@ -8,7 +8,7 @@
     "auth0-lock": "^11.1.2",
     "card-react": "^1.2.7",
     "chart.js": "^2.5.0",
-    "ckeditor4-react": "^1.0.0-beta",
+    "ckeditor4-react": "^1.0.0-beta.2",
     "classnames": "^2.2.5",
     "clone": "^2.1.1",
     "country-state-city": "0.0.5",
