@@ -139,6 +139,7 @@ class AddRoleModal extends Component {
         const {
             loader, showAddRoleModal, fields, errMsg, errType, isDisabled, showError, allRoles
         } = this.state;
+        console.log('allRoles', allRoles)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

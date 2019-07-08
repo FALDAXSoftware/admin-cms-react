@@ -58,18 +58,18 @@ class Employees extends Component {
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    this.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
-                    this._getAllEmployees();
+                    self.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
+                    self._getAllEmployees();
                 } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
                     });
                 } else {
-                    this.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(error => {
-                this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
             });
     }
 

@@ -217,7 +217,7 @@ class Roles extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
                                     {showAddRoleModal && <AddRoleModal
-                                        allRolesValue={allRoles}
+                                        allRoles={allRoles}
                                         showAddRoleModal={showAddRoleModal}
                                         closeAddModal={this._closeAddRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
