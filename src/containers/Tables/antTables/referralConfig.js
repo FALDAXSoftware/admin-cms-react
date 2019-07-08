@@ -53,6 +53,7 @@ const columns = [{
     title: <IntlMessages id="antTable.title.created_at" />,
     key: 'created_at',
     width: 200,
+    sorter: true,
     render: object => renderCell(object, 'ReferralDateCell', 'id', 'full_name', 'email', 'created_at', 'referral_by_email',
         'referred_id', 'refered_by', 'total_referal')
 }, {

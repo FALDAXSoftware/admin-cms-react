@@ -110,6 +110,10 @@ class ReviewKYC extends Component {
         });
     }
 
+    _changeSearch = (field, e) => {
+        this.setState({ searchKYC: field.target.value })
+    }
+
     render() {
         const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount,
             rangeDate, searchKYC } = this.state;
