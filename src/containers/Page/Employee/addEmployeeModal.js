@@ -5,6 +5,7 @@ import { Modal, Input, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import PhoneInput from 'react-phone-number-input'
 
 const { logout } = authAction;
 const { TextArea } = Input;
@@ -131,7 +132,7 @@ class AddEmployeeModal extends Component {
 
     render() {
         const { loader, showAddEmpModal, fields, allRoles, errType, errMsg,
-            isDisabled, showRoleErr, selectedRole } = this.state;
+            isDisabled, showRoleErr, selectedRole, phone_number } = this.state;
 
         let roleOptions = allRoles.map((role) => {
             return (
@@ -181,6 +182,10 @@ class AddEmployeeModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Phone Number:</span>
                     <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone_number")} value={fields["phone_number"]} />
+                    <PhoneInput
+                        displayInitialValueAsLocalNumber
+                        value={phone_number}
+                        onChange={value => this.setState({ phone_number: value })} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('phone number', fields["phone_number"], 'required|numeric|max:12', 'text-danger')}
                     </span>

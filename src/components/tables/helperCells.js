@@ -203,7 +203,7 @@ const ContentCell = text => <p style={{ display: 'block', width: '290px', overfl
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TicketSubjectCell = text => <p style={{ cursor: 'pointer' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TierCell = text => <p>Tier {text}</p>;
-const referralActionCell = value => <Tooltip title="View"><Icon type="right-circle" style={{ "marginLeft": "10px", "cursor": "pointer", fontSize: '20px' }} /></Tooltip>
+const referralActionCell = value => <Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} /></Tooltip>
 const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text.toPrecision(2) + '%' }}></p>;
 const ApproveCell = text => <p>{text == true ? 'Approved' : 'Dis-Approved'}</p>;
 const IPCell = text => <p>{(text.split(":").length > 1) ? text.split(':')[3] : text}</p>;
