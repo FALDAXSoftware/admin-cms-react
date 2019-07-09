@@ -46,7 +46,7 @@
     "react-instantsearch": "^4.0.7",
     "react-intl": "^2.3.0",
     "react-motion-drawer": "^2.1.7",
-    "react-phone-number-input": "^2.3.19",
+    "react-phone-input-2": "^2.9.4",
     "react-placeholder": "^2.0.0",
     "react-redux": "^5.0.4",
     "react-router": "^4.1.1",

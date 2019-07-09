@@ -4,13 +4,16 @@ import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import FaldaxLoader from '../Page/faldaxLoader';
+import authAction from '../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class ChangePassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
             fields: {},
-            errors: {},
+            pwdError: false,
             loader: false,
             errMsg: false,
             errMessage: '',
@@ -40,9 +43,10 @@ class ChangePassword extends Component {
 
     _changePassword = () => {
         const { token, user } = this.props;
-        let { fields, errors } = this.state;
+        let { fields } = this.state;
         let _this = this;
 
+        _this.setState({ pwdError: false });
         if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
             _this.setState({ loader: true });
 
@@ -66,10 +70,13 @@ class ChangePassword extends Component {
                             fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
                             errMessage: res.err ? res.err : res.message
                         });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
                     } else {
                         _this.setState({
-                            loader: false, errMsg: true, errType: 'Error',
-                            errMessage: res.message
+                            loader: false, errMsg: true, errType: 'Error', errMessage: res.message
                         });
                     }
                 })
@@ -78,8 +85,7 @@ class ChangePassword extends Component {
                 });
         } else {
             if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
-                this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
-                this.setState({ errors, loader: false })
+                this.setState({ pwdError: true, loader: false })
             }
             this.validator.showMessages();
             this.forceUpdate();
@@ -87,7 +93,7 @@ class ChangePassword extends Component {
     }
 
     render() {
-        const { fields, loader, errors, errMsg, errType } = this.state;
+        const { fields, loader, pwdError, errMsg, errType } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -138,7 +144,7 @@ class ChangePassword extends Component {
                     />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
-                        {errors["main"]}
+                        {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
                     </span>
                     <br />
                     <Button type="primary" onClick={this._changePassword}> Change </Button>
@@ -153,4 +159,4 @@ export default connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }))(ChangePassword);
+    }), { logout })(ChangePassword);
