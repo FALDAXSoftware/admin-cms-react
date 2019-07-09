@@ -65,7 +65,7 @@ class Employees extends Component {
                         self.props.logout();
                     });
                 } else {
-                    self.setState({ errMsg: true, errMessage: res.message, loader: false });
+                    self.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                 }
             })
             .catch(error => {
