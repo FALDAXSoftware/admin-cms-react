@@ -58,15 +58,17 @@ class ViewJobAppModal extends Component {
                 </p>
 
                 <span> <b>LinkedIn Profile:</b> </span>
-                <a style={{ "marginBottom": "15px" }} href={applicationDetails.linkedin_profile ? applicationDetails.linkedin_profile : '#'} target="_blank">
-                    {applicationDetails.linkedin_profile ? applicationDetails.linkedin_profile : 'N/A'}
-                </a>
+                {applicationDetails.linkedin_profile ?
+                    <a style={{ "marginBottom": "15px" }} href={applicationDetails.linkedin_profile ? applicationDetails.linkedin_profile : '#'} target="_blank">
+                        {applicationDetails.linkedin_profile}
+                    </a> : 'N/A'}
                 <br />
 
                 <span> <b>Website URL:</b> </span>
-                <a style={{ "marginBottom": "15px" }} href={applicationDetails.website_url ? applicationDetails.website_url : '#'} target="_blank" >
-                    {applicationDetails.website_url ? applicationDetails.website_url : 'N/A'}
-                </a>
+                {applicationDetails.website_url ?
+                    <a style={{ "marginBottom": "15px" }} href={applicationDetails.website_url ? applicationDetails.website_url : '#'} target="_blank" >
+                        {applicationDetails.website_url}
+                    </a> : 'N/A'}
                 <br />
 
                 <span> <b>Resume:</b> </span>
