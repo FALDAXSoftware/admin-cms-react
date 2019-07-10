@@ -103,19 +103,19 @@ class EditableUserLimitTable extends React.Component {
                                 {form => (
                                     <a
                                         href="javascript:;"
-                                        onClick={() => this.save(form, record.id)}
+                                        onClick={() => this.save(form, record.key)}
                                         style={{ marginRight: 8 }}
                                     >
                                         Save
                                     </a>
                                 )}
                             </EditableContext.Consumer>
-                            <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>
+                            <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.key)}>
                                 <a>Cancel</a>
                             </Popconfirm>
                         </span>
                     ) : (
-                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.id)}>
+                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
                                 Edit
                     </a>
                         );
@@ -136,7 +136,7 @@ class EditableUserLimitTable extends React.Component {
         this.setState({ errMsg: false });
     };
 
-    isEditing = record => record.id === this.state.editingKey;
+    isEditing = record => record.key === this.state.editingKey;
 
     cancel = () => {
         this.setState({ editingKey: '' });
@@ -147,12 +147,11 @@ class EditableUserLimitTable extends React.Component {
         let _this = this;
         form.validateFields((error, row) => {
             const newData = [...this.state.userAllLimits];
-            const index = newData.findIndex(item => key === item.id);
-            console.log('newData', newData)
+            const index = newData.findIndex(item => key === item.key);
 
             let formData = {
-                id: newData[index].id,
-                coin_id: newData[index].coin_id,
+                // id: newData[index].id,
+                coin_id: newData[index].coin_table_id,
                 user_id: user_id,
                 daily_withdraw_crypto: parseInt(row.daily_withdraw_crypto),
                 daily_withdraw_fiat: parseInt(row.daily_withdraw_fiat),
@@ -162,28 +161,28 @@ class EditableUserLimitTable extends React.Component {
                 monthly_withdraw_fiat: parseInt(row.monthly_withdraw_fiat)
             }
 
-            // _this.setState({ loader: true });
-            // ApiUtils.updateUserLimits(token, formData)
-            //     .then((response) => response.json())
-            //     .then(function (res) {
-            //         if (res.status == 200) {
-            //             _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
-            //                 _this._getUserLimit();
-            //             });
-            //         } else if (res.status == 403) {
-            //             _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-            //                 _this.props.logout();
-            //             });
-            //         } else {
-            //             _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-            //         }
-            //         _this.setState({ loader: false });
-            //     })
-            //     .catch(() => {
-            //         _this.setState({
-            //             errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-            //         });
-            //     });
+            _this.setState({ loader: true });
+            ApiUtils.updateUserLimits(token, formData)
+                .then((response) => response.json())
+                .then(function (res) {
+                    if (res.status == 200) {
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
+                            _this._getUserLimit();
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    }
+                    _this.setState({ loader: false });
+                })
+                .catch(() => {
+                    _this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    });
+                });
 
             if (index > -1) {
                 const item = newData[index];
@@ -208,7 +207,16 @@ class EditableUserLimitTable extends React.Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ userAllLimits: res.data });
+                    let data = [];
+                    for (let index = 0; index < res.data.length; index++) {
+                        let element = res.data[index];
+                        data.push({
+                            key: parseInt(index + 1).toString(),
+                            ...element
+                        })
+                    }
+                    _this.setState({ userAllLimits: data });
+
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -229,7 +237,7 @@ class EditableUserLimitTable extends React.Component {
         this._getUserLimit();
     }
 
-    edit(key) {
+    edit = (key) => {
         this.setState({ editingKey: key });
     }
 
