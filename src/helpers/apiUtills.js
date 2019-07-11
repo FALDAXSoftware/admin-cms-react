@@ -55,6 +55,21 @@ const ApiUtils = {
         }
     },
 
+    //change employee password api
+    changeEmployeePassword: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/employee-change-password", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     //get all counts for dashboard api
     getAllCount: function (token, startDate, endDate) {
         let url = "/admin/dashboard/get-data";

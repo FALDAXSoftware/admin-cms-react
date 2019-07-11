@@ -293,7 +293,6 @@ class Users extends Component {
                                             //         onClick: () => { this._goToUserDetails(record) },
                                             //     };
                                             // }}
-                                            style={{ cursor: 'pointer' }}
                                             {...this.state}
                                             columns={tableInfo.columns}
                                             pagination={false}

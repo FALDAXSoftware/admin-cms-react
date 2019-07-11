@@ -9,6 +9,7 @@ const { logout } = authAction;
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
+
     getInput = () => {
         if (this.props.inputType === 'number') {
             return <InputNumber />;
@@ -17,6 +18,7 @@ class EditableCell extends React.Component {
     };
 
     renderCell = ({ getFieldDecorator }) => {
+        console.log('>>>getFieldDecorator', getFieldDecorator)
         const {
             editing,
             dataIndex,
@@ -27,6 +29,7 @@ class EditableCell extends React.Component {
             children,
             ...restProps
         } = this.props;
+        console.log('>>>', record)
         return (
             <td {...restProps}>
                 {editing ? (
@@ -35,6 +38,7 @@ class EditableCell extends React.Component {
                             rules: [
                                 {
                                     required: true,
+                                    max: 100,
                                     message: `Please Input ${title}!`,
                                 },
                             ],
@@ -146,6 +150,10 @@ class EditableUserLimitTable extends React.Component {
         const { token, user_id } = this.props;
         let _this = this;
         form.validateFields((error, row) => {
+            console.log('error', error, row)
+            if (error) {
+                return;
+            }
             const newData = [...this.state.userAllLimits];
             const index = newData.findIndex(item => key === item.key);
 
@@ -237,7 +245,7 @@ class EditableUserLimitTable extends React.Component {
         this._getUserLimit();
     }
 
-    edit = (key) => {
+    edit(key) {
         this.setState({ editingKey: key });
     }
 

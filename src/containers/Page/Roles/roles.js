@@ -126,7 +126,8 @@ class Roles extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allRoles: res.roles });
+                    //_this.setState({ allRoles: res.roles });
+                    _this.setState({ allRolesValue: res.roles[0], allRoles: res.roleName });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -217,7 +218,7 @@ class Roles extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
                                     {showAddRoleModal && <AddRoleModal
-                                        allRoles={allRoles}
+                                        allRolesValue={allRolesValue}
                                         showAddRoleModal={showAddRoleModal}
                                         closeAddModal={this._closeAddRoleModal}
                                         getAllRoles={this._getAllRoles.bind(this, 0)}
