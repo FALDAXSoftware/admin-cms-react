@@ -32,7 +32,6 @@ class AddEmployeeModal extends Component {
             this.setState({
                 showAddEmpModal: nextProps.showAddEmpModal, allRoles: nextProps.allRoles
             });
-            this._getAllRoles();
             this.validator = new SimpleReactValidator();
         }
     }
@@ -139,7 +138,7 @@ class AddEmployeeModal extends Component {
 
         let roleOptions = allRoles.map((role) => {
             return (
-                <Option value={role.id}>{role.name}</Option>
+                <Option value={role.key}>{role.value}</Option>
             )
         });
 

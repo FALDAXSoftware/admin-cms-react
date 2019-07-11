@@ -134,8 +134,8 @@ class Employees extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    //let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
-                    _this.setState({ allRoles: res.roles });
+                    let roles = res.roleName.map((role) => ({ key: role.id, value: role.name }));
+                    _this.setState({ allRoles: roles });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
