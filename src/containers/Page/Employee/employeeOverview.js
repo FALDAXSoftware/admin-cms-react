@@ -227,10 +227,12 @@ class PersonalDetails extends Component {
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Email:</span>
-                        <Input placeholder="Email" onChange={this._onChangeFields.bind(this, "email")} value={fields["email"]} disabled />
-                        <span style={{ "color": "red" }}>
-                            {this.validator.message('email', fields["email"], 'required|email|max:50', 'text-danger')}
-                        </span>
+                        <Input placeholder="Email" value={fields["email"]} disabled />
+                    </div>
+
+                    <div style={{ "marginBottom": "15px" }}>
+                        <span>Phone Number:</span>
+                        <Input placeholder="Phone Number" value={fields["phone_number"]} disabled />
                     </div>
 
                     <div style={{ "marginBottom": "15px" }}>
