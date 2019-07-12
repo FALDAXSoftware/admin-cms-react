@@ -20,7 +20,7 @@ class BuyOrders extends Component {
             allOrders: [],
             allOrderCount: 0,
             searchOrder: '',
-            limit: 50,
+            limit: 5,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -121,7 +121,7 @@ class BuyOrders extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleOrderPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={5}
                                         current={page}
                                         total={allOrderCount}
                                     />
