@@ -172,15 +172,6 @@ const SignInStyleWrapper = styled.div`
               background-color: darken(#e14615, 5%);
             }
           }
-
-          &.btnFirebase {
-            background-color: ${palette('color', 5)};
-            margin-top: 15px;
-
-            &:hover {
-              background-color: ${palette('color', 6)};
-            }
-          }
         }
       }
 

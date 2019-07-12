@@ -15,7 +15,7 @@ const renderCell = (object, type, key, fee_name = null, maker = null, taker = nu
 
     switch (type) {
         case 'DateCell':
-            return DateCell(created_at);
+            return DateCell(value, name, maker_fee, taker_fee, created_at, is_active);
         case 'FeeSwitchCell':
             return FeeSwitchCell(value, name, maker_fee, taker_fee, created_at, is_active);
         case 'FeeActionCell':

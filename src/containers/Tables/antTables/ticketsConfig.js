@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, DateTimeCell, LogoutDateCell, PipelineCell, TagsCell, TicketSubjectCell
+    TextCell, DateTimeCell, LogoutDateCell, PipelineCell, ContentCell, TicketSubjectCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, title = null, created_date = null,
@@ -20,8 +20,8 @@ const renderCell = (object, type, key, title = null, created_date = null,
             return LogoutDateCell(value, content, created_by, pipeline_stage, subject);
         case 'PipelineCell':
             return PipelineCell(value, content, created_by, pipeline_stage, subject);
-        case 'TagsCell':
-            return TagsCell(value, content, created_by, pipeline_stage, subject);
+        case 'ContentCell':
+            return ContentCell(value, content, created_by, pipeline_stage, subject);
         case 'TicketSubjectCell':
             return TicketSubjectCell(value, content, created_by, pipeline_stage, subject);
         default:
@@ -38,7 +38,7 @@ const columns = [{
     title: <IntlMessages id="ticketTable.title.content" />,
     key: 'content',
     width: 100,
-    render: object => renderCell(object, 'TagsCell', 'content')
+    render: object => renderCell(object, 'ContentCell', 'content')
 }, {
     title: <IntlMessages id="ticketTable.title.created_at" />,
     key: 'created_by',

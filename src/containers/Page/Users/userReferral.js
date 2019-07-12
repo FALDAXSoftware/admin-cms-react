@@ -19,7 +19,22 @@ class Referral extends Component {
             errType: 'Success',
             prevReferral: ''
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+            className: 'text-danger',
+            custom_between: {
+                message: 'The :attribute must be between 1 to 100 %.',
+                rule: function (val, params, validator) {
+                    if (isNaN(val)) {
+                        return false;
+                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true
+            }
+        });
     }
 
     componentDidMount = () => {
@@ -74,46 +89,68 @@ class Referral extends Component {
         const { userDetails } = this.state;
         let fields = this.state.fields;
         let _this = this;
-        _this.setState({ loader: true });
 
-        const formData = {
-            percentage: fields['percentage'],
-            user_id: user_id,
-            email: userDetails.email
-            //days: fields['days'],
-        }
+        if (_this.validator.allValid()) {
+            _this.setState({ loader: true });
+            const formData = {
+                percentage: fields['percentage'],
+                user_id: user_id,
+                email: userDetails.email
+                //days: fields['days'],
+            }
 
-        ApiUtils.updateReferral(token, formData)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    if (res.status == 200) {
-                        _this.setState({
-                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
-                        }, () => {
-                            _this._getUserDetails();
-                        })
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
+            ApiUtils.updateReferral(token, formData)
+                .then((response) => response.json())
+                .then(function (res) {
+                    if (res) {
+                        if (res.status == 200) {
+                            _this.setState({
+                                errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                            }, () => {
+                                _this._getUserDetails();
+                            })
+                        } else if (res.status == 403) {
+                            _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                                _this.props.logout();
+                            });
+                        } else {
+                            _this.setState({ errMsg: true, errMessage: res.message });
+                        }
+                        _this.setState({ loader: false });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message });
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
+                }).catch(() => {
                     _this.setState({ loader: false });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
-                }
-            }).catch(() => {
-                _this.setState({ loader: false });
-            });
+                });
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
     }
 
     _cancelReferral = () => {
         let _this = this;
         let fields = _this.state.fields;
-        fields["percentage"] = this.state.prevReferral;
-        _this.setState({ fields });
+        fields["percentage"] = _this.state.prevReferral;
+        _this.setState({ fields }, () => {
+            _this.validator = new SimpleReactValidator({
+                className: 'text-danger',
+                custom_between: {
+                    message: 'The :attribute must be between 1 to 100 %.',
+                    rule: function (val, params, validator) {
+                        if (isNaN(val)) {
+                            return false;
+                        } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                    required: true
+                }
+            });
+        });
     }
 
     render() {
@@ -130,6 +167,9 @@ class Referral extends Component {
                     </span>
                     <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
+                    <span className="field-error">
+                        {this.validator.message('percentage', fields['percentage'], 'required|custom_between:0,100|max:10')}
+                    </span>
                     {/* <span>
                         <b>Referral Days</b>
                     </span>

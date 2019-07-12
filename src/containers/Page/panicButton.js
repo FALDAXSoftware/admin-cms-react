@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Button, Modal, Switch, Input } from 'antd';
+import { notification, Button, Modal, Switch, Input, Card } from 'antd';
 import ApiUtils from '../../helpers/apiUtills';
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
@@ -13,7 +13,7 @@ class PanicButton extends Component {
         super(props);
         this.state = {
             fields: {},
-            notifyMsg: '',
+            errMessage: '',
             notify: false,
             errType: '',
             loader: false,
@@ -34,50 +34,55 @@ class PanicButton extends Component {
         ApiUtils.getPanicBtnDetails(token)
             .then((response) => response.json())
             .then(function (res) {
-                console.log(res.status.value, (res.status.value == 'true'))
                 if (res.status == 200) {
-                    _this.setState({ isPanic: (res.status.value == 'true') ? true : false });
+                    _this.setState({ isPanic: res.panicStatus.value == 'true' ? true : false });
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                    _this.setState({ notify: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ notify: true, errMessage: res.err, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(err => {
                 _this.setState({
-                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                    errType: 'error', notify: true, errMessage: 'Something went wrong', loader: false
                 });
             });
     }
 
     _panicButton = () => {
-        const { token, user } = this.props;
-        const { fields } = this.state;
+        const { token } = this.props;
+        const { fields, isPanic } = this.state;
         let _this = this;
 
         const formData = {
             otp: fields["otp"],
-            is_panic: true
+            status: !isPanic
         }
 
-        _this.setState({ isPanic: true });
         ApiUtils.panicBtn(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('res', res)
-                _this.setState({
-                    notify: true, errType: 'Success', isPanic: false,
-                    message: res.message
-                });
                 _this._closeConfirmModal();
+                if (res.status == 200) {
+                    _this.setState({
+                        notify: true, errType: 'Success', errMessage: res.message
+                    }, () => {
+                        _this._getPanicBtnDetails()
+                    });
+                } else if (res.status == 403) {
+                    _this.setState({ notify: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ notify: true, errMessage: res.err, errType: 'error' });
+                }
             })
             .catch(() => {
                 _this.setState({
-                    notify: true, message: 'Something went wrong!!',
-                    errType: 'error', isPanic: false
+                    notify: true, errMessage: 'Something went wrong!!', errType: 'error'
                 });
                 _this._closeConfirmModal();
             });
@@ -86,13 +91,16 @@ class PanicButton extends Component {
     openNotificationWithIcon = (type) => {
         notification[type]({
             message: this.state.errType,
-            description: this.state.message
+            description: this.state.errMessage
         });
         this.setState({ notify: false });
     };
 
     _closeConfirmModal = () => {
-        this.setState({ panicConfirmModal: false })
+        const { fields } = this.state;
+
+        fields['otp'] = '';
+        this.setState({ panicConfirmModal: false, fields })
     }
 
     _onChangeFields(field, e) {
@@ -111,18 +119,19 @@ class PanicButton extends Component {
 
     render() {
         const { notify, errType, isPanic, panicConfirmModal, fields } = this.state;
+        console.log(isPanic)
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
-        console.log(isPanic)
 
         return (
             <LayoutWrapper>
                 <div className="isoLayoutContent">
-                    <span>Panic Button: </span>
-                    <Switch checked={isPanic} checkedChildren="ON" unCheckedChildren="OFF" size="large" onChange={this._showConfirmPanicModal} />
-                    {/* <Button type="primary" onClick={this._showConfirmPanicModal} disabled={isPanic}>Panic Button</Button> */}
+                    <Card title="Panic Button" bordered={false} style={{ width: 300 }}>
+                        <p>Panic buttons can be added to security systems to increase safety and security.</p>
+                        <Switch checked={isPanic} checkedChildren="ON" unCheckedChildren="OFF" size="large" onChange={this._showConfirmPanicModal} />
+                    </Card>
                     <Modal
                         title="Confirm Panic"
                         onCancel={this._closeConfirmModal}

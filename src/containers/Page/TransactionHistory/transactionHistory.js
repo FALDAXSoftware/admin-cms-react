@@ -153,7 +153,7 @@ class Transactions extends Component {
             { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
-            { label: "Created On", key: "craeted_at" },
+            { label: "Created On", key: "created_at" },
         ];
 
         if (errMsg) {

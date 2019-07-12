@@ -1,3 +1,4 @@
+import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
@@ -54,6 +55,21 @@ const ApiUtils = {
         }
     },
 
+    //change employee password api
+    changeEmployeePassword: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/employee-change-password", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+                body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     //get all counts for dashboard api
     getAllCount: function (token, startDate, endDate) {
         let url = "/admin/dashboard/get-data";
@@ -68,7 +84,7 @@ const ApiUtils = {
                 }
             });
         } catch (error) {
-            console.error(error);
+            console.error('dashbiard', error);
         }
     },
 
@@ -113,6 +129,21 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token
                 },
                 body: JSON.stringify(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //delete user api
+    deleteUser: function (token, user_id) {
+        try {
+            return fetch(API_URL + "/admin/delete-user?user_id=" + user_id, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);
@@ -225,7 +256,7 @@ const ApiUtils = {
     //get all referrals api
     getAllUserReferrals: function (page, limit, token, user_id, sorterCol, sortOrder) {
         let url = "/admin/referred-users?page=" + page + "&limit=" + limit + "&user_id=" + user_id;
-        if (sorterCol, sortOrder) {
+        if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         }
 
@@ -323,10 +354,10 @@ const ApiUtils = {
     },
 
     //get all roles api
-    getAllRoles: function (token, sorterCol, sortOrder) {
-        let url = "/admin/role/get";
+    getAllRoles: function (token, sorterCol, sortOrder, status) {
+        let url = "/admin/role/get?status=" + status;
         if (sorterCol && sortOrder) {
-            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         }
 
         try {
@@ -1098,17 +1129,29 @@ const ApiUtils = {
     },
 
     //get all kyc data api
-    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, status) {
+    getKYCData: function (token, page, limit, search, sorterCol, sortOrder, startDate, endDate, status) {
         let url = "/admin/get-all-kyc-data?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
-        if (sorterCol && sortOrder && search && status) {
-            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status
+        if (sorterCol && sortOrder && search && startDate && endDate && status) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&status=" + status + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder && search && startDate && endDate) {
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (sorterCol && sortOrder && search) {
             url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
-        } else if (sorterCol && sortOrder) {
-            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+        } else if (startDate && endDate && search) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder && startDate && endDate) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (search && status && startDate && endDate) {
+            url += "&data=" + search + "&status=" + status + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (status && startDate && endDate) {
+            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && status) {
             url += "&data=" + search + "&status=" + status;
+        } else if (startDate && endDate) {
+            url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (sorterCol && sortOrder) {
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (status) {
             url += "&status=" + status;
         } else {
@@ -1122,22 +1165,6 @@ const ApiUtils = {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    //edit kyc status api
-    updateKYCStatus: function (token, form) {
-        try {
-            return fetch(API_URL + "/admin/update-kyc-status", {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
             });
         } catch (error) {
             console.error(error);
@@ -1193,7 +1220,7 @@ const ApiUtils = {
     //panic button api
     panicBtn: function (token, form) {
         try {
-            return fetch(API_URL + "/panic-button", {
+            return fetch(API_URL + "/toggle-panic-status", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -1729,6 +1756,35 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    addWhitelistIP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-whitelist-ip", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllWhitelistIP: function (token, id) {
+        try {
+            return fetch(API_URL + "/admin/get-all-whitelist-ip?admin_id=" + id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 };
 

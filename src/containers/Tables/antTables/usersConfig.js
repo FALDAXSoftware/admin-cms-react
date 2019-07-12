@@ -15,7 +15,7 @@ import {
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
     emailID = null, city = null, street = null, street_1 = null, phone = null,
     countryName = null, bdate = null, status = null, isKyc = null, format = null, tier = null,
-    aClass = null, stateName = null, referrals = null, created = null) => {
+    aClass = null, stateName = null, referrals = null, created = null, deleted = null) => {
     const value = object[key];
     const profile_pic = object[image];
     const first_name = object[fname];
@@ -35,6 +35,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
     const state = object[stateName];
     const no_of_referrals = object[referrals]
     const created_at = object[created]
+    const deleted_at = object[deleted];
 
     switch (type) {
         case 'UserImageCell':
@@ -55,7 +56,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'ActionCell':
             return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
                 street_address, street_address_2, phone_number, country, dob, is_active, kyc,
-                date_format, account_tier, account_class, state, no_of_referrals);
+                date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
         default:
             return TextCell(value);
     }
@@ -125,7 +126,8 @@ const columns = [{
     render: object => renderCell(object,
         'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
-        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at')
+        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
+        'deleted_at')
 }];
 
 const tableinfos = [

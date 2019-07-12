@@ -5,6 +5,8 @@ import { Modal, Input, Select, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import ReactPhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/dist/style.css'
 
 const { logout } = authAction;
 const { TextArea } = Input;
@@ -30,7 +32,6 @@ class AddEmployeeModal extends Component {
             this.setState({
                 showAddEmpModal: nextProps.showAddEmpModal, allRoles: nextProps.allRoles
             });
-            this._getAllRoles();
             this.validator = new SimpleReactValidator();
         }
     }
@@ -65,23 +66,22 @@ class AddEmployeeModal extends Component {
         fields['first_name'] = '';
         fields['last_name'] = '';
         fields['email'] = '';
-        fields['phone_number'] = '';
         fields['address'] = '';
         this.setState({ fields, selectedRole: '', showRoleErr: false });
     }
 
     _addEmployee = () => {
         const { token, getAllEmployee } = this.props;
-        let { fields, selectedRole } = this.state;
+        let { fields, selectedRole, phone_number } = this.state;
 
-        if (this.validator.allValid() && selectedRole) {
+        if (this.validator.allValid() && selectedRole && phone_number) {
             let formData = {
                 first_name: fields["first_name"],
                 last_name: fields["last_name"],
                 email: fields["email"],
                 address: fields["address"],
                 roles: selectedRole,
-                phone_number: fields["phone_number"],
+                phone_number,
             };
 
             this.setState({ loader: true, isDisabled: true })
@@ -117,7 +117,10 @@ class AddEmployeeModal extends Component {
                     });
                 });
         } else {
-            this.setState({ showRoleErr: selectedRole ? false : true })
+            this.setState({
+                showRoleErr: selectedRole ? false : true,
+                showPhoneErr: this.state.phone_number ? false : true
+            })
             this.validator.showMessages();
             this.forceUpdate();
         }
@@ -131,7 +134,7 @@ class AddEmployeeModal extends Component {
 
     render() {
         const { loader, showAddEmpModal, fields, allRoles, errType, errMsg,
-            isDisabled, showRoleErr, selectedRole } = this.state;
+            isDisabled, showRoleErr, selectedRole, phone_number, showPhoneErr } = this.state;
 
         let roleOptions = allRoles.map((role) => {
             return (
@@ -180,10 +183,17 @@ class AddEmployeeModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Phone Number:</span>
-                    <Input placeholder="Phone Number" onChange={this._handleChange.bind(this, "phone_number")} value={fields["phone_number"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('phone number', fields["phone_number"], 'required|numeric|max:12', 'text-danger')}
-                    </span>
+                    <ReactPhoneInput
+                        inputExtraProps={{
+                            name: 'phone',
+                            required: true,
+                            autoFocus: true
+                        }}
+                        value={phone_number}
+                        onChange={value => this.setState({ phone_number: value })} />
+                    {showPhoneErr && <span style={{ "color": "red" }}>
+                        {'The phone number field is required.'}
+                    </span>}
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

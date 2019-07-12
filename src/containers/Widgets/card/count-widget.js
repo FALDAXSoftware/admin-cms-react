@@ -3,11 +3,7 @@ import CardWrapper from './countStyle';
 
 export default class extends Component {
     render() {
-        const { icon, iconcolor, number, text, number2, text2, bgColor, title,
-            headColor } = this.props;
-        const iconStyle = {
-            color: iconcolor
-        };
+        const { icon, number, text, number2, text2, bgColor, title, headColor } = this.props;
 
         return (
             <CardWrapper headColor={headColor} bgColor={bgColor}

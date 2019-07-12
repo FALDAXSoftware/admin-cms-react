@@ -85,7 +85,8 @@ class AddJobCatModal extends Component {
                             this.props.logout();
                         });
                     } else {
-                        this.setState({ errMsg: true, errMessage: res.message });
+                        this._closeAddCatJobModal();
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                     }
                 })
                 .catch(() => {
@@ -113,6 +114,7 @@ class AddJobCatModal extends Component {
                 visible={showAddJobCatModal}
                 confirmLoading={loader}
                 onCancel={this._closeAddCatJobModal}
+                key="add_job"
                 footer={[
                     <Button onClick={this._closeAddCatJobModal}>Cancel</Button>,
                     <Button onClick={this._addJob}>Add</Button>,

@@ -58,26 +58,27 @@ class Employees extends Component {
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    this.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
-                    this._getAllEmployees();
+                    self.setState({ errMsg: true, errMessage: message, loader: false, errType: 'Success' });
+                    self._getAllEmployees();
                 } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
                     });
                 } else {
-                    this.setState({ errMsg: true, errMessage: res.message });
+                    self.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                 }
             })
             .catch(error => {
-                this.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
+                self.setState({ errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error' });
             });
     }
 
     static editEmployee(value, first_name, last_name, email, phone_number, address, role, role_id, is_active) {
-        let empDetails = {
-            value, first_name, last_name, email, phone_number, address, role, role_id, is_active
-        }
-        self.setState({ showEditEmpModal: true, empDetails });
+        self.props.history.push('/dashboard/employee/' + value)
+        // let empDetails = {
+        //     value, first_name, last_name, email, phone_number, address, role, role_id, is_active
+        // }
+        // self.setState({ showEditEmpModal: true, empDetails });
     }
 
     static deleteEmployee(value) {
@@ -126,9 +127,10 @@ class Employees extends Component {
 
     _getAllRoles = () => {
         const { token } = this.props;
+        const { sorterCol, sortOrder } = this.state;
         let _this = this;
 
-        ApiUtils.getAllRoles(token)
+        ApiUtils.getAllRoles(token, sorterCol, sortOrder, true)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -139,7 +141,7 @@ class Employees extends Component {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errType: 'error', errMsg: true, errMessage: res.err });
                 }
             })
             .catch(err => {
@@ -247,7 +249,7 @@ class Employees extends Component {
                                         pagination={false}
                                         dataSource={allEmployee}
                                         className="isoCustomizedTable"
-                                        expandedRowRender={record => <div><b>Address</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.address}</span></div>}
+                                        expandedRowRender={record => <div><b>Address</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.address}</span><b>Phone Number</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.phone_number}</span></div>}
                                         onChange={this._handleEmployeeChange}
                                     />
                                     {showEditEmpModal &&

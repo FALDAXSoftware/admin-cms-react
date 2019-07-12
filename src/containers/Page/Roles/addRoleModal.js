@@ -31,10 +31,10 @@ class AddRoleModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            let roles = Object.keys(nextProps.allRolesValue)
+            let roles = Object.keys(nextProps.allRoles)
             this.setState({
                 showAddRoleModal: nextProps.showAddRoleModal,
-                allRoles: roles
+                allRoles: nextProps.roles
             });
             this.validator = new SimpleReactValidator();
         }
@@ -75,10 +75,12 @@ class AddRoleModal extends Component {
     _addRole = () => {
         const { token, getAllRoles } = this.props;
         let { fields, showError, checkedList } = this.state;
-        const roles = checkedList.reduce((o, key) => Object.assign(o, { [key]: true }), {});
+        let roles = {}
+        roles = checkedList && checkedList.reduce((o, key) => Object.assign(o, { [key]: true }), {});
+        let _this = this;
 
-        if (this.validator.allValid() && !showError) {
-            this.setState({ loader: true, isDisabled: true });
+        if (this.validator.allValid() && (roles !== undefined || Object.entries(roles).length !== 0)) {
+            this.setState({ loader: true, isDisabled: true, showError: false });
 
             let formData = {
                 name: fields["name"],
@@ -113,10 +115,10 @@ class AddRoleModal extends Component {
                     this._resetAddForm();
                 });
         } else {
-            this.validator.showMessages();
-            this.forceUpdate();
+            _this.setState({ showError: (roles == undefined || Object.entries(roles).length == 0) ? true : false })
+            _this.validator.showMessages();
+            _this.forceUpdate();
         }
-        this.setState({ showError: false })
     }
 
     _onRolesCheck = (e) => {
@@ -139,6 +141,13 @@ class AddRoleModal extends Component {
         const {
             loader, showAddRoleModal, fields, errMsg, errType, isDisabled, showError, allRoles
         } = this.state;
+        let allRoleOptions = []
+
+        allRoles && allRoles.map((role) => {
+            return (
+                allRoleOptions.push({ value: role, label: role })
+            )
+        })
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -175,7 +184,7 @@ class AddRoleModal extends Component {
                                 Check all
           </Checkbox>
                             <br />
-                            <CheckboxGroup options={allRoles} value={this.state.checkedList} onChange={this.onChange} />
+                            <CheckboxGroup options={allRoleOptions} value={this.state.checkedList} onChange={this.onChange} />
                         </Col>
                     </Row>
                     {showError && <span style={{ "color": "red" }}>

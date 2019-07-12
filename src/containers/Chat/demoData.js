@@ -135,39 +135,5 @@ const demoUsers = [
       'https://thumb1.shutterstock.com/display_pic_with_logo/270058/116922589/stock-photo-peaceful-african-american-businessman-in-office-116922589.jpg'
   }
 ];
-/*
-const createDemoUsers = () => {
-  demoUsers.forEach(user => fsProps.usersCollections.add(user));
-};
-const createDemoChatrooms = users => {
-  for (let i = 0; i < users.length; i++) {
-    for (let j = i + 1; j < users.length; j++) {
-      const key = firebase
-        .database()
-        .ref()
-        .push().key;
-      const revKey = reverseString(key);
-      const docI = fsProps.chatroomCollections.doc(key);
-      const docJ = fsProps.chatroomCollections.doc(revKey);
-      docI.set({
-        id: key,
-        userId: users[i].id,
-        otherUserId: users[j].id,
-        otherUserInfo: users[j],
-        lastMessage: '',
-        lastMessageTime: 0
-      });
-      docJ.set({
-        id: key,
-        reverse: true,
-        userId: users[j].id,
-        otherUserId: users[i].id,
-        otherUserInfo: users[i],
-        lastMessage: '',
-        lastMessageTime: 0
-      });
-    }
-  }
-}
-*/
+
 export { demoUsers };
