@@ -39,6 +39,7 @@ class Users extends Component {
         self = this;
         Users.view = Users.view.bind(this);
         Users.deleteUser = Users.deleteUser.bind(this);
+        Users.editUser = Users.editUser.bind(this);
         Users.changeStatus = Users.changeStatus.bind(this);
     }
 
@@ -48,8 +49,11 @@ class Users extends Component {
     }
 
     static deleteUser(value) {
-        console.log(value)
         self.setState({ showDeleteUserModal: true, deleteUserId: value });
+    }
+
+    static editUser(value) {
+        self.props.history.push('/dashboard/users/edit-user/' + value)
     }
 
     static changeStatus(value, profile_pic, first_name, last_name, email, city_town,
@@ -101,7 +105,7 @@ class Users extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else if (res.status == 403) {
@@ -128,7 +132,7 @@ class Users extends Component {
         _this.setState({ loader: true })
         ApiUtils.deleteUser(token, deleteUserId)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({
                         deleteUserId: '', errMsg: true, errMessage: res.message, errType: 'Success'
