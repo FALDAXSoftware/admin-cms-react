@@ -105,7 +105,7 @@ class Users extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else if (res.status == 403) {
@@ -132,7 +132,7 @@ class Users extends Component {
         _this.setState({ loader: true })
         ApiUtils.deleteUser(token, deleteUserId)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({
                         deleteUserId: '', errMsg: true, errMessage: res.message, errType: 'Success'

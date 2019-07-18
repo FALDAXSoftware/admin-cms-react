@@ -251,7 +251,7 @@ class AddUser extends Component {
             <div className="isoLayoutContent">
                 <div style={{ "display": "inline-block", "width": "100%" }}>
                     <Link to="/dashboard/users">
-                        <i style={{ marginRight: '10px', marginBottom: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <i style={{ marginRight: '10px', marginBottom: '10px' }} className="fa fa-arrow-left" aria-hidden="true"></i>
                         <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
                     </Link>
                 </div>

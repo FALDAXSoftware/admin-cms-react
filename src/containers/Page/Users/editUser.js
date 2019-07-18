@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Form, Col, Row, Input, Select, Button, DatePicker, Checkbox, notification } from 'antd';
+import { Form, Col, Row, Input, Select, Button, DatePicker, notification } from 'antd';
 import CountryFields from './countryFields';
 import authAction from '../../../redux/auth/actions';
 import SimpleReactValidator from 'simple-react-validator';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+import FaldaxLoader from '../faldaxLoader';
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -35,9 +37,12 @@ class EditUser extends Component {
             .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({
-                        fields: res.data[0],
+                        fields: res.data[0], dob: moment(res.data[0].dob, "MM-DD-YYYY"),
                         selectedClass: res.data[0].account_class,
                         selectedTier: res.data[0].account_tier,
+                        countrySelected: res.data[0].country,
+                        stateSelected: res.data[0].state,
+                        citySelected: res.data[0].city_town,
                     });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -119,6 +124,7 @@ class EditUser extends Component {
 
         if (this.validator.allValid() && selectedTier && selectedClass) {
             let formData = {
+                user_id: fields["id"],
                 first_name: fields["first_name"],
                 last_name: fields["last_name"],
                 middle_name: fields["middle_name"],
@@ -133,34 +139,37 @@ class EditUser extends Component {
                 country_code: countryCode,
                 kyc_done: isKYC,
                 gender: selectedGender,
-                dob
+                dob: moment(dob).format('DD-MM-YYYY')
             };
 
-            // this.setState({ loader: true, isDisabled: true })
-            // ApiUtils.addUser(token, formData)
-            //     .then((res) => res.json())
-            //     .then((res) => {
-            //         if (res.status == 200) {
-            //             _this._resetAddForm();
-            //             _this.setState({
-            //                 errMsg: true, errMessage: res.message, errType: 'Success'
-            //             }, () => {
-            //                 _this.props.history.push('/dashboard/users');
-            //             })
-            //         } else if (res.status == 403) {
-            //             _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-            //                 _this.props.logout();
-            //             });
-            //         } else {
-            //             _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
-            //         }
-            //         _this.setState({ loader: false })
-            //     })
-            //     .catch(() => {
-            //         _this.setState({
-            //             errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
-            //         });
-            //     });
+            this.setState({ loader: true, isDisabled: true })
+            ApiUtils.updateUser(token, formData)
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log('res', res)
+                    if (res.status == 200) {
+                        console.log('ifff')
+                        _this.setState({
+                            errMsg: true, errMessage: res.message, errType: 'Success'
+                        }, () => {
+                            _this.props.history.push('/dashboard/users');
+                        })
+                    } else if (res.status == 403) {
+                        console.log('ifffdfgdfg')
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        console.log('elseee')
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
+                    }
+                    _this.setState({ loader: false })
+                })
+                .catch(() => {
+                    _this.setState({
+                        errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                    });
+                });
         } else {
             this.setState({
                 showTierError: selectedTier ? false : true,
@@ -172,12 +181,26 @@ class EditUser extends Component {
         }
     }
 
+    onCountryChange(country, state, city, stateID, countryID, countryCode) {
+        this.setState({
+            countrySelected: country, stateSelected: state, citySelected: city, countryCode
+        })
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({ dob: date })
+    }
+
+    _changeGender = (val) => {
+        this.setState({ selectedGender: val });
+    }
+
     render() {
         const {
-            userDetails, fields, allAccountClasses, showClassError, isKYC, selectedGender,
-            showTierError, showDOBErr, errMsg, errType, selectedClass, selectedTier
+            fields, allAccountClasses, showClassError, selectedGender,
+            showTierError, showDOBErr, errMsg, errType, selectedClass, selectedTier, countrySelected,
+            stateSelected, citySelected, dob, loader
         } = this.state;
-        console.log('>>>>>fields', fields)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -187,7 +210,7 @@ class EditUser extends Component {
             <div className="isoLayoutContent">
                 <div style={{ "display": "inline-block", "width": "100%" }}>
                     <Link to="/dashboard/users">
-                        <i style={{ marginRight: '10px', marginBottom: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <i style={{ marginRight: '10px', marginBottom: '10px' }} className="fa fa-arrow-left" aria-hidden="true"></i>
                         <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
                     </Link>
                 </div>
@@ -255,7 +278,7 @@ class EditUser extends Component {
                             <span>Date of Birth:</span>
                         </Col>
                         <Col>
-                            <DatePicker disabledDate={this._disabledDate} onChange={this._changeDate} /><br />
+                            <DatePicker disabledDate={this._disabledDate} onChange={this._changeDate} value={dob} /><br />
                             {showDOBErr && <span style={{ "color": "red" }}>
                                 {'The date of birth field is required.'}
                             </span>}
@@ -280,6 +303,9 @@ class EditUser extends Component {
                     <Row>
                         <Col sm={24}>
                             <CountryFields
+                                countryName={countrySelected}
+                                stateName={stateSelected}
+                                cityName={citySelected}
                                 {...this.props}
                                 onCountryChange={(country, state, city, stateID, countryID, countryCode) => this.onCountryChange(country, state, city, stateID, countryID, countryCode)} />
                         </Col>
@@ -332,17 +358,13 @@ class EditUser extends Component {
                             </span>}
                         </Col>
                     </Row>
-                    <Row style={{ "marginBottom": "15px" }}>
-                        <Col>
-                            <Checkbox checked={isKYC} onChange={this._isKYCCompleted} /> <span>Do you want to accept KYC ?</span><br />
-                        </Col>
-                    </Row>
                     <Row>
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
                         </Col>
                     </Row>
                 </Form>
+                {loader && <FaldaxLoader />}
             </div>
         )
     }

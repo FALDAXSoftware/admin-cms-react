@@ -15,6 +15,9 @@ import authAction from '../../redux/auth/actions';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import FaldaxLoader from './faldaxLoader';
+import CardView from './cardView';
+import FeeChart from './feeChart';
+import TransactionMapChart from './transactionMapChart';
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -132,19 +135,33 @@ class Dashboard extends Component {
             .then(function (res) {
                 if (res) {
                     if (res.status == 200) {
+                        let feeSymbols = [];
+                        let feeSum = [];
+                        let transactionSymbols = [];
+                        let transactionCount = [];
+                        res.feesTransactionValue && res.feesTransactionValue.forEach(function (value, key) {
+                            feeSymbols.push(value.symbol);
+                            feeSum.push(value.sum);
+                        });
+                        res.transactionValue && res.transactionValue.forEach(function (value, key) {
+                            transactionSymbols.push(value.symbol);
+                            transactionCount.push(value.count);
+                        });
                         const {
                             activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
                             InactivePairs, legalCountries, illegalCountries,
                             neutralCountries, employeeCount, jobsCount,
                             withdrawReqCount, kyc_disapproved, kyc_approved,
-                            total_kyc, kyc_pending
+                            total_kyc, kyc_pending, withdrawReqCountValue, userSignUpCountValue,
                         } = res;
                         _this.setState({
                             activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
                             InactivePairs, legalCountries,
                             illegalCountries, neutralCountries, employeeCount,
                             jobsCount, withdrawReqCount,
-                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false
+                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false,
+                            withdrawReqCountValue, userSignUpCountValue, feeSymbols, feeSum,
+                            transactionSymbols, transactionCount
                         });
                     } else if (res.status == 403) {
                         _this.props.logout();
@@ -198,8 +215,11 @@ class Dashboard extends Component {
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
             InactivePairs, legalCountries, illegalCountries,
             neutralCountries, employeeCount, jobsCount, withdrawReqCount,
-            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader
+            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader,
+            withdrawReqCountValue, userSignUpCountValue, feeSymbols, feeSum, transactionSymbols,
+            transactionCount
         } = this.state;
+
 
         const data = {
             labels: ['Legal', 'Illegal', 'Neutral'],
@@ -277,8 +297,8 @@ class Dashboard extends Component {
                     </Col>
                 </Row>
 
-                {/* <Row style={rowStyle} gutter={0} justify="start">
-                    <Col md={12} xs={24} style={colStyle}>
+                <Row style={rowStyle} gutter={0} justify="start">
+                    {/* <Col md={12} xs={24} style={colStyle}>
                         <Card title="KYC">
                             <span>Grand Total</span>
                             <Progress percent={30} size="small" format={percent => `${percent}`} />
@@ -289,25 +309,45 @@ class Dashboard extends Component {
                             <span>Total Dis-Approved</span>
                             <Progress percent={kyc_disapproved} size="small" format={percent => `${percent}`} />
                         </Card>
+                    </Col> */}
+
+                    <Col md={12} xs={24} style={colStyle}>
+                        <CardWrapper>
+                            <span><b>Fees collected in last 30 days:</b></span>
+                            <ChartWrapper>
+                                <FeeChart feeSymbols={feeSymbols} feeSum={feeSum} />
+                            </ChartWrapper>
+                        </CardWrapper>
                     </Col>
 
-                    {/* <Col md={12} xs={24} style={colStyle}>
-                        <IsoWidgetsWrapper>
-                            <span><b>Trade History:</b></span>
+                    <Col md={12} xs={24} style={colStyle}>
+                        <CardWrapper>
+                            <span><b>Transactions</b></span>
                             <ChartWrapper>
-                                <ContentHolder>
-                                    <Pie data={tradeData} />
-                                </ContentHolder>
+                                <TransactionMapChart transactionSymbols={transactionSymbols}
+                                    transactionCount={transactionCount} />
+                            </ChartWrapper>
+                        </CardWrapper>
+                    </Col>
+                </Row>
+
+                {/* <Row style={rowStyle} gutter={0} justify="start">
+                    <Col md={12} xs={24} style={colStyle}>
+                        <IsoWidgetsWrapper>
+                            <span><b>Transactions</b></span>
+                            <ChartWrapper>
+                                <TransactionMapChart transactionSymbols={transactionSymbols}
+                                    transactionCount={transactionCount} />
                             </ChartWrapper>
                         </IsoWidgetsWrapper>
-                    </Col> */}
-                {/* </Row>  */}
+                    </Col>
+                </Row> */}
 
                 <Row style={rowStyle} gutter={0} justify="start" >
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/users'>
                             <CountCard number={activeUsers}
-                                headColor={'#1f2431'}
+                                headcolor={'#1f2431'}
                                 number2={inactiveUsers}
                                 bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
@@ -316,12 +356,13 @@ class Dashboard extends Component {
                                 text2={'Inactive Users'}
                                 icon="fa fa-users"
                                 fontColor="#2d3446" />
+
                         </Link></Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/assets'>
                             <CountCard number={activeCoins}
-                                headColor={'#1f2431'}
+                                headcolor={'#1f2431'}
                                 number2={InactiveCoins}
                                 bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
@@ -336,7 +377,7 @@ class Dashboard extends Component {
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/pairs'>
                             <CountCard number={activePairs}
-                                headColor={'#1f2431'}
+                                headcolor={'#1f2431'}
                                 number2={InactivePairs}
                                 bgcolor={'#fff'}
                                 style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
@@ -350,46 +391,41 @@ class Dashboard extends Component {
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/employee'>
-                            <CountCard
-                                headColor={'#1f2431'}
-                                title={'Employees'}
-                                number={employeeCount}
-                                text={'Active Employees'}
-                                icon="fas fa-user-tie"
-                                fontColor="#ffffff"
-                                bgcolor={'#fff'}
-                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
-                            />
+                            <CardView cardText={'Active Employees'}
+                                cardTitle={'Employees'}
+                                countNumber={employeeCount} />
                         </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/jobs'>
-                            <CountCard
-                                headColor={'#1f2431'}
-                                bgcolor={'#fff'}
-                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
-                                title={'Pending Job Applications'}
-                                number={jobsCount}
-                                text={'Pending Job Applications'}
-                                icon="fas fa-suitcase-rolling"
-                                fontColor="#ffffff"
-                            />
+                            <CardView cardText={'Pending Job Applications'}
+                                cardTitle={'Pending Job Applications'}
+                                countNumber={jobsCount} />
                         </Link>
                     </Col>
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/withdraw-requests'>
-                            <CountCard
-                                headColor={'#1f2431'}
-                                title={'Last 7 Days Withdraw Requests'}
-                                number={withdrawReqCount}
-                                text={'Last 7 Days Withdraw Requests'}
-                                icon="fas fa-hand-holding-usd"
-                                fontColor="#ffffff"
-                                bgcolor={'#fff'}
-                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
-                            />
+                            <CardView cardText={'Last 7 Days Withdraw Requests'}
+                                cardTitle={'Withdraw Requests'}
+                                countNumber={withdrawReqCount} />
+                        </Link>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <Link to='/dashboard/withdraw-requests'>
+                            <CardView cardText={'Pending Withdraw Requests'}
+                                cardTitle={'Withdraw Requests'}
+                                countNumber={withdrawReqCountValue} />
+                        </Link>
+                    </Col>
+
+                    <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                        <Link to='/dashboard/users'>
+                            <CardView cardText={'Signed up Users'}
+                                cardTitle={'24 hours Signed up Users'}
+                                countNumber={userSignUpCountValue} />
                         </Link>
                     </Col>
                 </Row >

@@ -1858,7 +1858,20 @@ const ApiUtils = {
         }
     },
 
-
+    updateUser: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-user", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 export default ApiUtils;
