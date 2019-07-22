@@ -158,9 +158,16 @@ class KYC extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllKYCData();
+        });
+    }
+
     render() {
         const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,
-            allKYCCount, rangeDate, searchKYC } = this.state;
+            allKYCCount, rangeDate, searchKYC, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -221,9 +228,12 @@ class KYC extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleKYCPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allKYCCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </div>
                             </TabPane>

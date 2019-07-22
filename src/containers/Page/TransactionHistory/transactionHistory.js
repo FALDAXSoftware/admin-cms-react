@@ -142,9 +142,15 @@ class Transactions extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllTransactions();
+        });
+    }
+
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
-            loader, searchTransaction, rangeDate, filterVal
+            loader, searchTransaction, rangeDate, filterVal, limit
         } = this.state;
         const transactionsHeaders = [
             { label: "Transaction Hash", key: "transaction_id" },
@@ -155,6 +161,7 @@ class Transactions extends Component {
             { label: "Email", key: "email" },
             { label: "Created On", key: "created_at" },
         ];
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -226,9 +233,12 @@ class Transactions extends Component {
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
                                     onChange={this._handleTransactionPagination.bind(this)}
-                                    pageSize={50}
+                                    pageSize={limit}
                                     current={page}
                                     total={allTransactionCount}
+                                    showSizeChanger
+                                    onShowSizeChange={this._changePaginationSize}
+                                    pageSizeOptions={pageSizeOptions}
                                 /> : ''}
                             </TabPane>
                         ))}

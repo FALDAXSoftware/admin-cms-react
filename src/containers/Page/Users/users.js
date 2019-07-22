@@ -209,9 +209,16 @@ class Users extends Component {
         this.setState({ showDeleteUserModal: false });
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllUsers();
+        });
+    }
+
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal,
-            allCountries, showDeleteUserModal } = this.state;
+            allCountries, showDeleteUserModal, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         const headers = [
             { label: "First Name", key: "first_name" },
@@ -292,11 +299,6 @@ class Users extends Component {
                                     {loader && <FaldaxLoader />}
                                     <div style={{ marginTop: "30px" }}>
                                         <TableWrapper
-                                            // onRow={(record, rowIndex) => {
-                                            //     return {
-                                            //         onClick: () => { this._goToUserDetails(record) },
-                                            //     };
-                                            // }}
                                             {...this.state}
                                             columns={tableInfo.columns}
                                             pagination={false}
@@ -308,9 +310,12 @@ class Users extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleUserPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allUserCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                         {showDeleteUserModal &&
                                             <Modal

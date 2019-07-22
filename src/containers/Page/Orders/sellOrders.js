@@ -86,8 +86,15 @@ class SellOrders extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllOrders();
+        });
+    }
+
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page, loader } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page, loader, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -121,9 +128,12 @@ class SellOrders extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleOrderPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allOrderCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''
                                 }
                             </TabPane>

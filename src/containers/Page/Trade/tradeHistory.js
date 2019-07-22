@@ -148,8 +148,14 @@ class TradeHistory extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllTrades();
+        });
+    }
+
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader,
+        const { allTrades, allTradeCount, errType, errMsg, page, loader, limit,
             searchTrade, rangeDate, filterVal } = this.state;
         const tradeHeaders = [
             { label: "Currency", key: "currency" },
@@ -165,7 +171,7 @@ class TradeHistory extends Component {
             { label: "Taker Email", key: "email" },
             { label: "Created On", key: "created_at" }
         ];
-
+        let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -238,9 +244,12 @@ class TradeHistory extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleTradePagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allTradeCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </TabPane>
                         ))}

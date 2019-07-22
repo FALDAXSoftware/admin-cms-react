@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Form, Row, Col, Tabs } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form, Row, Tabs } from 'antd';
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -104,9 +104,16 @@ class UserTradeHistory extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getUserAllTrades();
+        });
+    }
+
     render() {
         const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
-            searchTrade } = this.state;
+            searchTrade, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         const tradeHeaders = [
             { label: "Currency", key: "currency" },
             { label: "Settle Currency", key: "settle_currency" },
@@ -186,6 +193,9 @@ class UserTradeHistory extends Component {
                                         pageSize={50}
                                         current={page}
                                         total={allTradeCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </TabPane>
                         ))}
