@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Input, notification, Col, Row } from 'antd';
+import { Button, Input, notification, Col, Row, Divider } from 'antd';
 import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import authAction from '../../redux/auth/actions';
 import FaldaxLoader from '../Page/faldaxLoader';
+import ProfileWhitelist from './profileWhitelist';
 
 const { login, logout } = authAction;
 
@@ -244,11 +245,8 @@ class EditProfile extends Component {
 
         return (
             <div style={{ "paddingLeft": "50px", "paddingTop": "50px", paddingRight: "50px" }}>
-                <h2>
-                    <b> Edit Profile </b>
-                </h2>
-
-                <div style={{ "marginTop": "10px" }}>
+                <Divider>Edit Profile</Divider>
+                <div className="isoLayoutContent" style={{ "marginTop": "10px" }}>
                     <span>
                         <b>Name</b>
                     </span>
@@ -263,11 +261,8 @@ class EditProfile extends Component {
                     <Input disabled style={{ "marginBottom": "15px", "width": "25%", "display": "inherit", "readonly": "readonly" }} value={fields["email"]} />
                     <Button type="primary" onClick={this._editProfile}> Update </Button>
                 </div>
-                <hr />
-                <div style={{ marginTop: "50px" }}>
-                    <h2>
-                        <b> Two-Factor Authentication </b>
-                    </h2>
+                <div className="isoLayoutContent" style={{ marginTop: "50px" }}>
+                    <Divider>Two-Factor Authentication</Divider>
                     <div style={{ "marginTop": "10px" }}>
                         <div style={{ marginTop: '20px', textAlign: "center" }}>
                             {isEnabled == 'DISABLED' ?
@@ -320,6 +315,10 @@ class EditProfile extends Component {
                             </div>
                             : ''}
                     </div>
+                </div>
+                <div>
+                    <Divider>Whitelist IP Address</Divider>
+                    <ProfileWhitelist />
                 </div>
                 {loader && <FaldaxLoader />}
             </div >

@@ -204,10 +204,17 @@ class Assets extends Component {
         e.preventDefault();
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllCoins();
+        });
+    }
+
     render() {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
-            showViewCoinModal, showDeleteCoinModal, errMsg, page
+            showViewCoinModal, showDeleteCoinModal, errMsg, page, limit
         } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -272,9 +279,12 @@ class Assets extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleCoinPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allCoinCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </div>
                             </TabPane>

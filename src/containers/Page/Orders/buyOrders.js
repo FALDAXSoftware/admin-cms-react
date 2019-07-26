@@ -20,7 +20,7 @@ class BuyOrders extends Component {
             allOrders: [],
             allOrderCount: 0,
             searchOrder: '',
-            limit: 5,
+            limit: 50,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -86,8 +86,15 @@ class BuyOrders extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllOrders();
+        });
+    }
+
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page, loader } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page, loader, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -121,9 +128,12 @@ class BuyOrders extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleOrderPagination.bind(this)}
-                                        pageSize={5}
+                                        pageSize={limit}
                                         current={page}
                                         total={allOrderCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     />
                                     : ''}
                             </TabPane>

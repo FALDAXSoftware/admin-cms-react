@@ -126,9 +126,16 @@ class LoginHistory extends Component {
         this.setState({ searchHistory: field.target.value })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllLoginHistory();
+        });
+    }
+
     render() {
         const { allHistory, loader, allHistoryCount, page, rangeDate, searchHistory,
-            errMsg, errType } = this.state;
+            errMsg, errType, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -175,9 +182,12 @@ class LoginHistory extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleHistoryPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allHistoryCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </div>
                             </TabPane>

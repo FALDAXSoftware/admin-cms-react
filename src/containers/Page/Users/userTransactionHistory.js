@@ -140,9 +140,16 @@ class UserTransactionHistory extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getUserTransactions();
+        });
+    }
+
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
-            searchTransaction } = this.state;
+            searchTransaction, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         const transactionsHeaders = [
             { label: "Transaction Hash", key: "transaction_id" },
             { label: "Source Address", key: "source_address" },
@@ -175,6 +182,7 @@ class UserTransactionHistory extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={7}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -200,26 +208,31 @@ class UserTransactionHistory extends Component {
                                         </Row>
                                     </Form>
                                 </div>
-                                {loader && <FaldaxLoader />}
-                                < TableWrapper
-                                    style={{ marginTop: '20px' }}
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allTransactions}
-                                    className="isoCustomizedTable"
-                                    onChange={this._handleUserTransactionChange}
-                                />
-                                {allTransactionCount > 0 ?
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleTransactionPagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allTransactionCount}
-                                    /> : ''
-                                }
+                                <div className="scroll-table">
+                                    {loader && <FaldaxLoader />}
+                                    < TableWrapper
+                                        style={{ marginTop: '20px' }}
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allTransactions}
+                                        className="isoCustomizedTable"
+                                        onChange={this._handleUserTransactionChange}
+                                    />
+                                    {allTransactionCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleTransactionPagination.bind(this)}
+                                            pageSize={limit}
+                                            current={page}
+                                            total={allTransactionCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
+                                        /> : ''
+                                    }
+                                </div>
                             </TabPane>
                         ))}
                     </Tabs>

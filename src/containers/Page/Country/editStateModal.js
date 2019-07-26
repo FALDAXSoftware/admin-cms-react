@@ -161,6 +161,7 @@ class EditStateModal extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span>State Legality:</span><br />
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200 }}
                             placeholder="Select Legality"
                             onChange={this._changeLegality}

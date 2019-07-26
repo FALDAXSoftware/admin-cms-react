@@ -246,6 +246,7 @@ class PersonalDetails extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span style={{ "marginRight": "15px" }}>Role:</span>
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200 }}
                             placeholder="Select a role"
                             onChange={this._changeRole}

@@ -154,13 +154,19 @@ class DeclinedKYC extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllKYCData();
+        });
+    }
 
     render() {
         const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,
-            allKYCCount, searchKYC, rangeDate } = this.state;
+            allKYCCount, searchKYC, rangeDate, limit } = this.state;
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         return (
             <TableDemoStyle>
@@ -214,9 +220,12 @@ class DeclinedKYC extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleKYCPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allKYCCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </div>
                         </div>

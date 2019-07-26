@@ -187,10 +187,16 @@ class Pairs extends Component {
         this.setState({ searchPair: field.target.value })
     }
 
-    render() {
-        const { allPairs, errType, errMsg, page, pairsCount, loader, allCoins, searchPair,
-            showAddPairsModal, pairDetails, showEditPairModal, allAssets, selectedAsset } = this.state;
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllPairs();
+        });
+    }
 
+    render() {
+        const { allPairs, errType, errMsg, page, pairsCount, loader, allCoins, searchPair, limit,
+            showAddPairsModal, pairDetails, showEditPairModal, allAssets, selectedAsset } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -266,9 +272,12 @@ class Pairs extends Component {
                                                 style={{ marginTop: '15px' }}
                                                 className="ant-users-pagination"
                                                 onChange={this._handleFeesPagination.bind(this)}
-                                                pageSize={50}
+                                                pageSize={limit}
                                                 current={page}
                                                 total={pairsCount}
+                                                showSizeChanger
+                                                onShowSizeChange={this._changePaginationSize}
+                                                pageSizeOptions={pageSizeOptions}
                                             /> : ''
                                     }
                                 </div>

@@ -151,9 +151,16 @@ class Countries extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllCountries();
+        });
+    }
+
     render() {
-        const { allCountries, allCountryCount, errType, errMsg, loader,
+        const { allCountries, allCountryCount, errType, errMsg, loader, limit,
             page, showEditCountryModal, countryDetails, searchCountry, localityVal } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -173,8 +180,8 @@ class Countries extends Component {
                                             style={{ "width": "200px" }}
                                             value={searchCountry}
                                         />
-
                                         <Select
+                                            getPopupContainer={trigger => trigger.parentNode}
                                             style={{ width: 200, "marginLeft": "15px" }}
                                             placeholder="Select a locality"
                                             onChange={this._changeLocality}
@@ -186,7 +193,6 @@ class Countries extends Component {
                                             <Option value={3}>Neutral</Option>
                                             <Option value={4}>Partial Services Available</Option>
                                         </Select>
-
                                         <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
                                         <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                     </Form>
@@ -214,9 +220,12 @@ class Countries extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleCountryPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allCountryCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </div>
                             </TabPane>

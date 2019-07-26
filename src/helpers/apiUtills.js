@@ -2,7 +2,7 @@ import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
-//const API_URL = "http://18.191.87.133:8084"; //Live URL
+//const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
 const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
@@ -1772,9 +1772,9 @@ const ApiUtils = {
         }
     },
 
-    getAllWhitelistIP: function (token, id) {
+    getAllWhitelistIP: function (token, page, limit) {
         try {
-            return fetch(API_URL + "/admin/get-all-whitelist-ip?admin_id=" + id, {
+            return fetch(API_URL + "/admin/get-all-whitelist-ip?page=" + page + "&limit=" + limit, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -1784,8 +1784,126 @@ const ApiUtils = {
         } catch (error) {
             console.error(error);
         }
-    }
+    },
+
+    deleteProfileWhitelistIP: function (token, id) {
+        try {
+            return fetch(API_URL + "/admin/delete-whitelist-ip?id=" + id, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    addProfileWhitelistIP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-whitelist-ip", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllWhitelistIP: function (token, user_id, page, limit) {
+        try {
+            return fetch(API_URL + "/admin/get-user-whitelist-ip?user_id=" + user_id + "&page=" + page + "&limit=" + limit, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    deleteEmpWhitelistIP: function (token, id) {
+        try {
+            return fetch(API_URL + "/admin/delete-user-whitelist-ip?id=" + id, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    addEmpWhitelistIP: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-user-ip-whitelist", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    updateUser: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/update-user", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    enableWhitelist: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/user-whitelist-ip-status-change", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    enableProfileWhitelist: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/whitelist-ip-status-change", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 
 };
+
 
 export default ApiUtils;

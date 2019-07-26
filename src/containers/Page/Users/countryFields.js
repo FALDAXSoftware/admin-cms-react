@@ -73,7 +73,7 @@ export default class CountryFields extends Component {
         super(props);
         this.state = {
             countries: [],
-            selectedCountry: null,
+            selectedCountry: this.props.countryName,
             selectedState: null,
             selectedCity: null,
             countryID: "",
@@ -84,6 +84,13 @@ export default class CountryFields extends Component {
         this._changeCountry = this._changeCountry.bind(this);
         this._changeState = this._changeState.bind(this);
         this._changeCity = this._changeCity.bind(this);
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            selectedCountry: nextProps.countryName, selectedState: nextProps.stateName,
+            selectedCity: nextProps.cityName
+        })
     }
 
     _changeCountry = (value, position) => {

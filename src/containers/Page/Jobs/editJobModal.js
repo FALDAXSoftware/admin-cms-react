@@ -163,6 +163,7 @@ class EditJobModal extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Category:</span>
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200, "marginLeft": "15px" }}
                             placeholder="Select a Category"
                             onChange={this._changeCategory}

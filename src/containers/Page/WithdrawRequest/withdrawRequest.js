@@ -196,8 +196,14 @@ class WithdrawRequest extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllWithdrawReqs();
+        });
+    }
+
     render() {
-        const { allRequests, allReqCount, errType, errMsg, page, loader,
+        const { allRequests, allReqCount, errType, errMsg, page, loader, limit,
             searchReq, rangeDate, filterVal } = this.state;
         const requestHeaders = [
             { label: "Source Address", key: "source_address" },
@@ -209,6 +215,7 @@ class WithdrawRequest extends Component {
             { label: "Fees", key: "fees" },
             { label: "Created On", key: "created_at" }
         ];
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -232,6 +239,7 @@ class WithdrawRequest extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={3}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -282,9 +290,12 @@ class WithdrawRequest extends Component {
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
                                     onChange={this._handleReqPagination.bind(this)}
-                                    pageSize={50}
+                                    pageSize={limit}
                                     current={page}
                                     total={allReqCount}
+                                    showSizeChanger
+                                    onShowSizeChange={this._changePaginationSize}
+                                    pageSizeOptions={pageSizeOptions}
                                 /> : ''}
                             </TabPane>
                         ))}

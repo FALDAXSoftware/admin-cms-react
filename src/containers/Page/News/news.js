@@ -201,12 +201,19 @@ class News extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllNews();
+        });
+    }
+
     render() {
         const { allNews, allNewsCount, errType, errMsg, page, loader,
-            searchNews, rangeDate, filterVal, allNewsSources } = this.state;
+            searchNews, rangeDate, filterVal, allNewsSources, limit } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         return (
             <LayoutWrapper>
@@ -226,6 +233,7 @@ class News extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={5}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a source"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -267,9 +275,12 @@ class News extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleNewsPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allNewsCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </TabPane>
                         ))}

@@ -247,12 +247,17 @@ class Jobs extends Component {
         this.setState({ activeTab: value })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllJobs();
+        });
+    }
+
     render() {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
-            jobDetails, allJobCategories, activeTab } = this.state;
-        console.log('call job render')
-
+            jobDetails, allJobCategories, activeTab, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -319,9 +324,12 @@ class Jobs extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleJobPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allJobsCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </TabPane>
                         ))}

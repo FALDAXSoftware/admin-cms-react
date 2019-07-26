@@ -32,6 +32,8 @@ import { templateTableinfos } from './templateconfig';
 import { newsSourceTableInfos } from './newsSourceConfig';
 import { jobCategoryTableInfos } from './jobcategoryConfig';
 import { ApprovedKYCInfos } from './approvedKYCConfig';
+import { whitelistTableInfos } from './whitelistConfig';
+import { profileWhitelistTableInfos } from './profileWhitelistConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -85,5 +87,5 @@ export {
   jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
   newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
   accountClassTableinfos, templateTableinfos, newsSourceTableInfos, jobCategoryTableInfos,
-  ApprovedKYCInfos
+  ApprovedKYCInfos, whitelistTableInfos, profileWhitelistTableInfos
 };

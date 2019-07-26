@@ -106,9 +106,16 @@ class UserWithdrawRequest extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getUserRequests();
+        });
+    }
+
     render() {
         const { allRequests, allReqCount, errType, errMsg, page, loader, filterVal,
-            searchReq } = this.state;
+            searchReq, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         const requestHeaders = [
             { label: "Source Address", key: "source_address" },
@@ -141,6 +148,7 @@ class UserWithdrawRequest extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={7}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -181,9 +189,12 @@ class UserWithdrawRequest extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleWithdrawPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allReqCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''
                                 }
                             </TabPane>

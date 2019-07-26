@@ -71,8 +71,15 @@ class ReferralUsers extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllUserReferral();
+        });
+    }
+
     render() {
-        const { allReferral, allReferralCount, loader, page } = this.state;
+        const { allReferral, allReferralCount, loader, page, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
 
         return (
             <LayoutWrapper>
@@ -95,9 +102,12 @@ class ReferralUsers extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allReferralCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </TabPane>
                             ))

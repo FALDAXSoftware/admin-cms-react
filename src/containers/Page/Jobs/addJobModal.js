@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Icon, Spin, notification, Button, Select } from 'antd';
+import { Modal, Input, notification, Button, Select } from 'antd';
 import CKEditor from "ckeditor4-react";
 import SimpleReactValidator from 'simple-react-validator';
 import striptags from 'striptags';
 import authAction from '../../../redux/auth/actions';
+import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
-const loaderIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const Option = Select.Option;
 
 class AddJobModal extends Component {
@@ -157,6 +157,7 @@ class AddJobModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Category:</span>
                     <Select
+                        getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
                         placeholder="Select a Category"
                         onChange={this._changeCategory}
@@ -225,7 +226,7 @@ class AddJobModal extends Component {
                         {this.validator.message('location', fields["location"], 'required|max:50', 'text-danger')}
                     </span>
                 </div>
-                {loader && <Spin indicator={loaderIcon} />}
+                {loader && <FaldaxLoader />}
             </Modal>
         );
     }

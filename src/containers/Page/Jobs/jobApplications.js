@@ -110,10 +110,16 @@ class JobApplications extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllJobApplicants();
+        });
+    }
+
     render() {
         const { allApplications, allApplicationsCount, errType, loader, errMsg, page,
-            showViewJobAppModal, applicationDetails } = this.state;
-
+            showViewJobAppModal, applicationDetails, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -157,9 +163,12 @@ class JobApplications extends Component {
                                             style={{ marginTop: '15px' }}
                                             className="ant-users-pagination"
                                             onChange={this._handleJobPagination.bind(this)}
-                                            pageSize={50}
+                                            pageSize={limit}
                                             current={page}
                                             total={allApplicationsCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </div>
                             </TabPane>
