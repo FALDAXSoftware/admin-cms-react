@@ -297,7 +297,7 @@ class Users extends Component {
                                         </Form>
                                     </div>
                                     {loader && <FaldaxLoader />}
-                                    <div style={{ marginTop: "30px" }}>
+                                    <div style={{ marginTop: "30px" }} className="scroll-table">
                                         <TableWrapper
                                             {...this.state}
                                             columns={tableInfo.columns}

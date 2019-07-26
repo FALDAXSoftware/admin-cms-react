@@ -219,6 +219,7 @@ class AddPairModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Asset 1:</span>
                     <Select
+                        getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
                         placeholder="Select a Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id1')}
@@ -233,6 +234,7 @@ class AddPairModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Asset 2:</span>
                     <Select
+                        getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
                         placeholder="Select a Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id2')}

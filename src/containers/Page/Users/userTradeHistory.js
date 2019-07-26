@@ -149,6 +149,7 @@ class UserTradeHistory extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={7}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -176,27 +177,29 @@ class UserTradeHistory extends Component {
 
                                 </div>
                                 {loader && <FaldaxLoader />}
-                                < TableWrapper
-                                    style={{ marginTop: '20px' }}
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allTrades}
-                                    className="isoCustomizedTable"
-                                    onChange={this._handleUserTradeChange}
-                                />
-                                {allTradeCount > 0 ?
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleTradePagination.bind(this)}
-                                        pageSize={50}
-                                        current={page}
-                                        total={allTradeCount}
-                                        showSizeChanger
-                                        onShowSizeChange={this._changePaginationSize}
-                                        pageSizeOptions={pageSizeOptions}
-                                    /> : ''}
+                                <div className="scroll-table">
+                                    < TableWrapper
+                                        style={{ marginTop: '20px' }}
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allTrades}
+                                        className="isoCustomizedTable"
+                                        onChange={this._handleUserTradeChange}
+                                    />
+                                    {allTradeCount > 0 ?
+                                        <Pagination
+                                            style={{ marginTop: '15px' }}
+                                            className="ant-users-pagination"
+                                            onChange={this._handleTradePagination.bind(this)}
+                                            pageSize={50}
+                                            current={page}
+                                            total={allTradeCount}
+                                            showSizeChanger
+                                            onShowSizeChange={this._changePaginationSize}
+                                            pageSizeOptions={pageSizeOptions}
+                                        /> : ''}
+                                </div>
                             </TabPane>
                         ))}
                     </Tabs>

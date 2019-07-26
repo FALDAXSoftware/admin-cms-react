@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../helpers/apiUtills';
-import { Modal, Input, notification, Button, Select } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
 import FaldaxLoader from './faldaxLoader';
 
 const { logout } = authAction;
-const Option = Select.Option;
 
 class AddProfileIPModal extends Component {
     constructor(props) {
@@ -19,7 +18,6 @@ class AddProfileIPModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            selectedTime: '',
             showIPError: false
         }
         this.validator = new SimpleReactValidator();
@@ -85,18 +83,19 @@ class AddProfileIPModal extends Component {
         const { fields } = this.state;
 
         fields['ip'] = '';
-        this.setState({ fields, selectedTime: '' });
+        fields['days'] = '';
+        this.setState({ fields });
     }
 
     _addIPAddress = () => {
         const { token, getAllWhitelistIP } = this.props;
-        let { fields, selectedTime, showIPError } = this.state;
+        let { fields, showIPError } = this.state;
 
         if (this.validator.allValid() && !showIPError) {
-            this.setState({ loader: true, isDisabled: true });
+            this.setState({ loader: true });
             let formData = {
                 ip: fields["ip"],
-                days: selectedTime,
+                days: fields["days"],
             };
 
             ApiUtils.addProfileWhitelistIP(token, formData)
@@ -104,8 +103,7 @@ class AddProfileIPModal extends Component {
                 .then((res) => {
                     if (res.status == 200) {
                         this.setState({
-                            errMsg: true, errMessage: res.message,
-                            loader: false, errType: 'Success', isDisabled: false
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
                         }, () => {
                             getAllWhitelistIP();
                             this._resetAddForm();
@@ -123,7 +121,7 @@ class AddProfileIPModal extends Component {
                     this._resetAddForm();
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
-                        loader: false, errType: 'error', isDisabled: false
+                        loader: false, errType: 'error'
                     });
                 });
         } else {
@@ -137,8 +135,7 @@ class AddProfileIPModal extends Component {
     }
 
     render() {
-        const { loader, showAddProfileIPModal, fields, errMsg, errType, isDisabled, selectedTime,
-            showIPError } = this.state;
+        const { loader, showAddProfileIPModal, fields, errMsg, errType, showIPError } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -152,7 +149,7 @@ class AddProfileIPModal extends Component {
                 onCancel={this._closeAddIPModal}
                 footer={[
                     <Button onClick={this._closeAddIPModal}>Cancel</Button>,
-                    <Button disabled={isDisabled} onClick={this._addIPAddress}>Add</Button>,
+                    <Button onClick={this._addIPAddress}>Add</Button>,
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
@@ -165,17 +162,11 @@ class AddProfileIPModal extends Component {
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Time:</span>
-                    <Select
-                        style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Time"
-                        onChange={this._changeTime}
-                        value={selectedTime}
-                    >
-                        <Option value={1}>{'1 Day'}</Option>
-                        <Option value={2}>{'2 Days'}</Option>
-                        <Option value={7}>{'1 Week'}</Option>
-                    </Select>
+                    <span>Days:</span>
+                    <Input placeholder="Time Period" onChange={this._handleChange.bind(this, "days")} value={fields["days"]} />
+                    <span style={{ "color": "red" }}>
+                        {this.validator.message('days', fields["days"], 'required|max:3', 'text-danger')}
+                    </span>
                 </div>
                 {loader && <FaldaxLoader />}
             </Modal>

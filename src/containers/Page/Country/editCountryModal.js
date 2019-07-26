@@ -172,6 +172,7 @@ class EditCountryModal extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Country Legality:</span><br />
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200 }}
                             placeholder="Select Legality"
                             onChange={this._changeLegality}

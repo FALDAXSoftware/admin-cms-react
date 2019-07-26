@@ -8,11 +8,11 @@ import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
 
-class AddIPModal extends Component {
+class AddPermanentIPModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showAddIPModal: this.props.showAddIPModal,
+            showAddPermanentIPModal: this.props.showAddPermanentIPModal,
             loader: false,
             fields: {},
             errMsg: false,
@@ -25,7 +25,7 @@ class AddIPModal extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps !== this.props) {
-            this.setState({ showAddIPModal: nextProps.showAddIPModal });
+            this.setState({ showAddPermanentIPModal: nextProps.showAddPermanentIPModal });
             this.validator = new SimpleReactValidator();
         }
     }
@@ -83,7 +83,6 @@ class AddIPModal extends Component {
         const { fields } = this.state;
 
         fields['ip'] = '';
-        fields['time'] = '';
         this.setState({ fields });
     }
 
@@ -93,12 +92,12 @@ class AddIPModal extends Component {
         let _this = this;
 
         if (this.validator.allValid() && !showIPError) {
-            _this.setState({ loader: true, isDisabled: true });
+            _this.setState({ loader: true });
             let formData = {
                 ip: fields["ip"],
-                days: fields["time"],
                 user_type: 2,
-                user_id: emp_id
+                user_id: emp_id,
+                is_permanent: true
             };
 
             ApiUtils.addEmpWhitelistIP(token, formData)
@@ -106,7 +105,8 @@ class AddIPModal extends Component {
                 .then((res) => {
                     if (res.status == 200) {
                         _this.setState({
-                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                            errMsg: true, errMessage: res.message,
+                            loader: false, errType: 'Success'
                         }, () => {
                             getAllWhitelistIP();
                             _this._resetAddForm();
@@ -116,7 +116,7 @@ class AddIPModal extends Component {
                             _this.props.logout();
                         });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+                        _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
                     }
                     _this._closeAddIPModal();
                 })
@@ -134,20 +134,18 @@ class AddIPModal extends Component {
     }
 
     render() {
-        const { loader, showAddIPModal, fields, errMsg, errType, showIPError } = this.state;
-
+        const { loader, showAddPermanentIPModal, fields, errMsg, errType, showIPError } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
             <Modal
-                title="Add IP Address"
-                visible={showAddIPModal}
+                title="Add Permanent IP Address"
+                visible={showAddPermanentIPModal}
                 confirmLoading={loader}
-                onCancel={this._closeAddIPModal}
+                closable={false}
                 footer={[
-                    <Button onClick={this._closeAddIPModal}>Cancel</Button>,
                     <Button onClick={this._addIPAddress}>Add</Button>,
                 ]}
             >
@@ -159,14 +157,6 @@ class AddIPModal extends Component {
                         {showIPError && <span>The IP Address is not valid.</span>}
                     </span>
                 </div>
-
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>Time:</span>
-                    <Input placeholder="Time Period" onChange={this._handleChange.bind(this, "time")} value={fields["time"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('time', fields["time"], 'required|max:3', 'text-danger')}
-                    </span>
-                </div>
                 {loader && <FaldaxLoader />}
             </Modal>
         );
@@ -176,4 +166,4 @@ class AddIPModal extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(AddIPModal);
+    }), { logout })(AddPermanentIPModal);

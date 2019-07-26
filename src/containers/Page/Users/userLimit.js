@@ -277,7 +277,7 @@ class EditableUserLimitTable extends React.Component {
         });
 
         return (
-            <div className="isoLayoutContent">
+            <div className="isoLayoutContent scroll-table">
                 <EditableContext.Provider value={this.props.form}>
                     <Table
                         components={components}

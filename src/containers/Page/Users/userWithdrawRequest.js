@@ -148,6 +148,7 @@ class UserWithdrawRequest extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={7}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}

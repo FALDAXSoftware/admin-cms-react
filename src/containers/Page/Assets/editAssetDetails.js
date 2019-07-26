@@ -220,6 +220,7 @@ class EditAssetDetails extends Component {
                         <Col>
                             <span>Is ERC20 Token? :</span>
                             <Select
+                                getPopupContainer={trigger => trigger.parentNode}
                                 style={{ width: 125, "marginLeft": "15px" }}
                                 placeholder="Select a type"
                                 onChange={this._changeFilter}

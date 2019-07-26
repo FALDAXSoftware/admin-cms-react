@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Button, notification, Modal, Pagination } from 'antd';
+import { Button, notification, Modal, Pagination, Switch } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
 import { profileWhitelistTableInfos } from "../Tables/antTables";
@@ -9,9 +9,22 @@ import TableDemoStyle from '../Tables/antTables/demo.style';
 import TableWrapper from "../Tables/antTables/antTable.style";
 import AddProfileIPModal from './addProfileIPModal';
 import FaldaxLoader from './faldaxLoader';
+import styled from 'styled-components';
+import AddProfilePermanentIPModal from './addProfilePermanentIPModal';
 
 const { logout } = authAction;
 var self;
+const StatusSwitch = styled(Switch)`
+width: 67px;
+text-align: center;
+height: 30px !important;
+line-height: 26px !important;
+margin-left: 11px !important;
+&::after{
+    width: 26px !important;
+    height: 26px !important;
+}
+`
 
 class ProfileWhitelist extends Component {
     constructor(props) {
@@ -31,6 +44,7 @@ class ProfileWhitelist extends Component {
 
     componentDidMount = () => {
         this._getAllWhitelistIP();
+        this.setState({ isWhitelistEnabled: this.props.user.is_whitelist_ip })
     }
 
     _getAllWhitelistIP = () => {
@@ -54,6 +68,11 @@ class ProfileWhitelist extends Component {
             .catch((err) => {
                 console.log(err)
             });
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        //console.log('>>.call', nextProps.userData)
+        //this.setState({isWhitelistEnabled: userData})
     }
 
     static deleteProfileWhitelistIP(value) {
@@ -122,6 +141,10 @@ class ProfileWhitelist extends Component {
         this.setState({ showAddProfileIPModal: false });
     }
 
+    _closeAddPermanentIPModal = () => {
+        this.setState({ showAddProfilePermanentIPModal: false, isWhitelistEnabled: true });
+    }
+
     _updateIPs = () => {
         const { token, user, emp_id } = this.props;
         let { ipAddress } = this.state;
@@ -170,10 +193,46 @@ class ProfileWhitelist extends Component {
         });
     }
 
+    _enableWhitelist = (checked) => {
+        const { token, user } = this.props;
+        let formData = {
+            status: checked,
+            user_id: user.id
+        }
+        let _this = this;
+
+        this.setState({ loader: true });
+        ApiUtils.enableProfileWhitelist(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    if (res.status == 200) {
+                        _this.setState({
+                            showAddProfilePermanentIPModal: checked ? true : false, isWhitelistEnabled: !checked ? false : true
+                        });
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    }
+                    _this.setState({ loader: false });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+                }
+            })
+            .catch(() => {
+                _this.setState({
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                });
+            });
+    }
+
     render() {
         const {
             allIPAddresses, errMsg, errType, loader, showDeleteIPModal,
-            showAddProfileIPModal, page, IPCount
+            showAddProfileIPModal, page, IPCount, isWhitelistEnabled, showAddProfilePermanentIPModal
         } = this.state;
 
         if (errMsg) {
@@ -182,51 +241,61 @@ class ProfileWhitelist extends Component {
 
         return (
             <TableDemoStyle className="isoLayoutContent">
-                {profileWhitelistTableInfos.map(tableInfo => (
-                    <div tab={tableInfo.title} key={tableInfo.value}>
-                        <div style={{ "display": "inline-block", "width": "100%" }}>
-                            <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._showAddProfileIPModal}>Add IP Address</Button>
-                        </div>
-                        <AddProfileIPModal
-                            showAddProfileIPModal={showAddProfileIPModal}
-                            closeAddModal={this._closeAddIPModal}
-                            getAllWhitelistIP={this._getAllWhitelistIP.bind(this, 1)}
-                        />
-                        {loader && <FaldaxLoader />}
-                        <TableWrapper
-                            {...this.state}
-                            columns={tableInfo.columns}
-                            pagination={false}
-                            dataSource={allIPAddresses}
-                            className="isoCustomizedTable"
-                        />
-                        {
-                            IPCount > 0 ?
-                                <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleProfileIPPagination.bind(this)}
-                                    pageSize={5}
-                                    current={page}
-                                    total={IPCount}
-                                /> : ''
-                        }
-                        {
-                            showDeleteIPModal &&
-                            <Modal
-                                title="Delete IP"
-                                visible={showDeleteIPModal}
-                                onCancel={this._closeDeleteIPModal}
-                                footer={[
-                                    <Button onClick={this._closeDeleteIPModal}>No</Button>,
-                                    <Button onClick={this._deleteWhitelistIP}>Yes</Button>,
-                                ]}
-                            >
-                                Are you sure you want to remove this IP Address ?
+                <span>Whitelist:</span>
+                <StatusSwitch checked={isWhitelistEnabled} onChange={this._enableWhitelist} />
+                {showAddProfilePermanentIPModal &&
+                    <AddProfilePermanentIPModal
+                        showAddProfilePermanentIPModal={showAddProfilePermanentIPModal}
+                        closeAddPermanentModal={this._closeAddPermanentIPModal}
+                        getAllWhitelistIP={this._getAllWhitelistIP.bind(this)}
+                    />
+                }
+                {isWhitelistEnabled && !showAddProfilePermanentIPModal &&
+                    profileWhitelistTableInfos.map(tableInfo => (
+                        <div tab={tableInfo.title} key={tableInfo.value} style={{ marginTop: '20px' }}>
+                            <div style={{ "display": "inline-block", "width": "100%" }}>
+                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._showAddProfileIPModal}>Add IP Address</Button>
+                            </div>
+                            <AddProfileIPModal
+                                showAddProfileIPModal={showAddProfileIPModal}
+                                closeAddModal={this._closeAddIPModal}
+                                getAllWhitelistIP={this._getAllWhitelistIP.bind(this, 1)}
+                            />
+                            {loader && <FaldaxLoader />}
+                            <TableWrapper
+                                {...this.state}
+                                columns={tableInfo.columns}
+                                pagination={false}
+                                dataSource={allIPAddresses}
+                                className="isoCustomizedTable"
+                            />
+                            {
+                                IPCount > 0 ?
+                                    <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleProfileIPPagination.bind(this)}
+                                        pageSize={5}
+                                        current={page}
+                                        total={IPCount}
+                                    /> : ''
+                            }
+                            {
+                                showDeleteIPModal &&
+                                <Modal
+                                    title="Delete IP"
+                                    visible={showDeleteIPModal}
+                                    onCancel={this._closeDeleteIPModal}
+                                    footer={[
+                                        <Button onClick={this._closeDeleteIPModal}>No</Button>,
+                                        <Button onClick={this._deleteWhitelistIP}>Yes</Button>,
+                                    ]}
+                                >
+                                    Are you sure you want to remove this IP Address ?
                                     </Modal>
-                        }
-                    </div>
-                ))}
+                            }
+                        </div>
+                    ))}
             </TableDemoStyle>
         );
     }

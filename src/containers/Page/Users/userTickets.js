@@ -93,7 +93,7 @@ class UserTickets extends Component {
                     <Tabs className="isoTableDisplayTab">
                         {ticketsTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div>
+                                <div className="scroll-table">
                                     <TableWrapper
                                         onRow={(record, rowIndex) => {
                                             return {

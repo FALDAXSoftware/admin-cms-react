@@ -4,7 +4,7 @@ import CountCard from '../Widgets/card/count-widget';
 function CardView(props) {
     return (
         <CountCard
-            headColor={'#1f2431'}
+            headcolor={'#1f2431'}
             title={props.cardTitle}
             number={props.countNumber}
             text={props.cardText}

@@ -328,6 +328,7 @@ class AddUser extends Component {
                         </Col>
                         <Col>
                             <Select
+                                getPopupContainer={trigger => trigger.parentNode}
                                 style={{ width: 125 }}
                                 placeholder="Select a type"
                                 onChange={this._changeGender}
@@ -360,6 +361,7 @@ class AddUser extends Component {
                         </Col>
                         <Col>
                             <Select
+                                getPopupContainer={trigger => trigger.parentNode}
                                 style={{ width: 300, "marginLeft": "15px" }}
                                 placeholder="Select an Account Tier"
                                 onChange={this._changeAccountTier.bind(this, 'tier')}
@@ -380,6 +382,7 @@ class AddUser extends Component {
                         </Col>
                         <Col>
                             <Select
+                                getPopupContainer={trigger => trigger.parentNode}
                                 style={{ width: 300, "marginLeft": "15px" }}
                                 placeholder="Select an Account Class"
                                 onChange={this._changeAccountClass.bind(this, 'acc_class')}

@@ -194,6 +194,7 @@ class TradeHistory extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={3}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}

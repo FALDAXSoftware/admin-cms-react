@@ -201,7 +201,7 @@ class ApprovedKYC extends Component {
                                 </Row>
                             </Form>
                             {loader && <FaldaxLoader />}
-                            <div style={{ marginTop: "30px" }}>
+                            <div style={{ marginTop: "30px" }} className="scroll-table">
                                 <ViewKYCModal
                                     kycDetails={kycDetails}
                                     showViewKYCModal={showViewKYCModal}

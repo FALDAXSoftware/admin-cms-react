@@ -78,8 +78,6 @@
   "feedback.alert.popConfirm.BR": "BR",
   "feedback.alert.spin": "Spin",
   "feedback.alert.spin.basicTitle": "Size Spin",
-  "feedback.alert.spin.background": "Spin With Background",
-  "feedback.alert.spin.backgroundDescription": "Spin With Background description",
   "feedback.alert.spin.loadingState": "Loading State",
   "feedback.alert.spin.alertTitle": "Alert message title",
   "feedback.alert.spin.alertDescription": "Further details about the context of this alert.",

@@ -1872,6 +1872,38 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    enableWhitelist: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/user-whitelist-ip-status-change", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    enableProfileWhitelist: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/whitelist-ip-status-change", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
+
 
 export default ApiUtils;

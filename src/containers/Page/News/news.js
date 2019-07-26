@@ -233,6 +233,7 @@ class News extends Component {
                                             </ColWithPadding>
                                             <ColWithPadding sm={5}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a source"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}

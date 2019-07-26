@@ -181,6 +181,7 @@ class Countries extends Component {
                                             value={searchCountry}
                                         />
                                         <Select
+                                            getPopupContainer={trigger => trigger.parentNode}
                                             style={{ width: 200, "marginLeft": "15px" }}
                                             placeholder="Select a locality"
                                             onChange={this._changeLocality}

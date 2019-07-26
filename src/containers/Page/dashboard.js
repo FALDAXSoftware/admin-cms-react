@@ -30,6 +30,7 @@ const CardWrapper = styled(Card)`
 `
 
 const ChartWrapper = styled.div`
+  height: 219px;
   display: flex;
   flex-direction: column;
   align-items: center;
