@@ -152,6 +152,15 @@ class AddProfileIPModal extends Component {
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
+                    <span>
+                        <b>NOTE:</b>
+                    </span>
+                    <span>
+                        Please note that you're about to add permanent IP address which will be whitelisted to access the system.
+                        After this,You'll be able to add temporary addresses.
+                    </span>
+                </div>
+                <div style={{ "marginBottom": "15px" }}>
                     <span>IP Address:</span>
                     <Input placeholder="IP Address" onChange={this._handleChange.bind(this, "ip")} value={fields["ip"]} />
                     <span style={{ "color": "red" }}>

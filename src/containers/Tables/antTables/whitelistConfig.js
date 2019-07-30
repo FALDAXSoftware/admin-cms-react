@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, WhiteListActionCell } from '../../../components/tables/helperCells';
+import { TextCell, WhiteListActionCell, DaysCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, ip_address = null, selected_time = null, permanent = null) => {
     const value = object[key];
@@ -12,6 +12,8 @@ const renderCell = (object, type, key, ip_address = null, selected_time = null, 
     switch (type) {
         case 'WhiteListActionCell':
             return WhiteListActionCell(value, ip, days, is_permanent);
+        case 'DaysCell':
+            return DaysCell(value, ip, days, is_permanent);
         default:
             return TextCell(value);
     }
@@ -26,7 +28,7 @@ const columns = [{
     title: <IntlMessages id="whitelistTable.title.time" />,
     key: 'days',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'days')
+    render: object => renderCell(object, 'DaysCell', 'days')
 }, {
     title: <IntlMessages id="whitelistTable.title.Actions" />,
     key: 'action',
