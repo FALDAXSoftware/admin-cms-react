@@ -104,8 +104,9 @@ class ReviewKYC extends Component {
         })
     }
 
-    _searchKYC = (val) => {
-        this.setState({ searchKYC: val, page: 1 }, () => {
+    _searchKYC = (e) => {
+        e.preventDefault();
+        this.setState({ page: 1, status: 'REVIEW' }, () => {
             this._getAllKYCData();
         });
     }
@@ -114,9 +115,56 @@ class ReviewKYC extends Component {
         this.setState({ searchKYC: field.target.value })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllKYCData();
+        });
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
+        })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchKYC: '', startDate: '', endDate: '',
+            rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
+        }, () => {
+            this._getAllKYCData();
+        })
+    }
+
     render() {
         const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount,
-            rangeDate, searchKYC } = this.state;
+            rangeDate, searchKYC, limit } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
@@ -173,9 +221,12 @@ class ReviewKYC extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleKYCPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allKYCCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </div>
                         </div>

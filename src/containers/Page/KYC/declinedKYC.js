@@ -136,7 +136,7 @@ class DeclinedKYC extends Component {
 
     _searchKYC = (e) => {
         e.preventDefault();
-        this.setState({ page: 1 }, () => {
+        this.setState({ page: 1, status: 'DENY' }, () => {
             this._getAllKYCData();
         })
     }

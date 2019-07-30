@@ -211,6 +211,7 @@ const NewsLinkCell = (link, href) => <a href={link ? link : '#'} target="_blank"
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const DaysCell = text => <p>{text == 0 ? 'Permanent' : text + ' Days'}</p>;
 const TicketSubjectCell = text => <p style={{ cursor: 'pointer' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TierCell = text => <p>Tier {text}</p>;
 const referralActionCell = value => <Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} /></Tooltip>
@@ -256,8 +257,8 @@ const WithdrawActionCell = (value, email, source_address, destination_address, a
 const WithdrawStatusCell = (value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) => <p>{is_approve == null ? 'Pending' : is_approve == true ? 'Approved' : 'Dis-Approved'}</p>;
 const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_active} onChange={() => { jobCategoryStatus(value, category, is_active) }} />
 const JobCatActionCell = (value, category, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => updateCategory(value, category, is_active)} /></Tooltip></div>;
-const WhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : ''}</div>;
-const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteProfileWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : ''}</div>;
+const WhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
+const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteProfileWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
 
 export {
     IPCell,
@@ -322,5 +323,6 @@ export {
     UserImageCell,
     TicketSubjectCell,
     WhiteListActionCell,
-    ProfileWhiteListActionCell
+    ProfileWhiteListActionCell,
+    DaysCell
 };

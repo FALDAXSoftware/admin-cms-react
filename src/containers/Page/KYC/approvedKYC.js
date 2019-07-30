@@ -105,7 +105,7 @@ class ApprovedKYC extends Component {
 
     _searchKYC = (e) => {
         e.preventDefault();
-        this.setState({ page: 1 }, () => {
+        this.setState({ page: 1, status: 'ACCEPT' }, () => {
             this._getAllKYCData();
         })
     }

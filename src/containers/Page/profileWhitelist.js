@@ -44,6 +44,7 @@ class ProfileWhitelist extends Component {
 
     componentDidMount = () => {
         this._getAllWhitelistIP();
+        this._getAdminDetails()
         this.setState({ isWhitelistEnabled: this.props.user.is_whitelist_ip })
     }
 
@@ -70,9 +71,23 @@ class ProfileWhitelist extends Component {
             });
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        //console.log('>>.call', nextProps.userData)
-        //this.setState({isWhitelistEnabled: userData})
+    _getAdminDetails = () => {
+        const { token, user, login } = this.props;
+        let _this = this;
+
+        ApiUtils.getAdminDetails(token, user.id)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res) {
+                    login({ user: res.data });
+                    _this.setState({
+                        isWhitelistEnabled: res.data.is_whitelist_ip
+                    })
+                }
+            })
+            .catch(() => {
+                _this.setState({ loader: false });
+            });
     }
 
     static deleteProfileWhitelistIP(value) {
@@ -229,11 +244,18 @@ class ProfileWhitelist extends Component {
             });
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllWhitelistIP();
+        });
+    }
+
     render() {
         const {
-            allIPAddresses, errMsg, errType, loader, showDeleteIPModal,
+            allIPAddresses, errMsg, errType, loader, showDeleteIPModal, limit,
             showAddProfileIPModal, page, IPCount, isWhitelistEnabled, showAddProfilePermanentIPModal
         } = this.state;
+        let pageSizeOptions = ['5', '10', '20']
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -275,9 +297,12 @@ class ProfileWhitelist extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleProfileIPPagination.bind(this)}
-                                        pageSize={5}
+                                        pageSize={limit}
                                         current={page}
                                         total={IPCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''
                             }
                             {

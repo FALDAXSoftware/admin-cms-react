@@ -1145,7 +1145,7 @@ const ApiUtils = {
         } else if (search && status && startDate && endDate) {
             url += "&data=" + search + "&status=" + status + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (status && startDate && endDate) {
-            url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+            url += "&status=" + status + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && status) {
             url += "&data=" + search + "&status=" + status;
         } else if (startDate && endDate) {
