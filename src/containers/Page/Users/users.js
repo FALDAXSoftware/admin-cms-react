@@ -155,7 +155,6 @@ class Users extends Component {
             });
     }
 
-
     _searchUser = (e) => {
         e.preventDefault();
         this._getAllUsers();

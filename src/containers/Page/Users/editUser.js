@@ -37,7 +37,8 @@ class EditUser extends Component {
             .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({
-                        fields: res.data[0], dob: moment(res.data[0].dob, "MM-DD-YYYY"),
+                        fields: res.data[0],
+                        dob: res.data[0].dob ? moment(res.data[0].dob, "MM-DD-YYYY") : '',
                         selectedClass: res.data[0].account_class,
                         selectedTier: res.data[0].account_tier,
                         countrySelected: res.data[0].country,
@@ -146,21 +147,17 @@ class EditUser extends Component {
             ApiUtils.updateUser(token, formData)
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log('res', res)
                     if (res.status == 200) {
-                        console.log('ifff')
                         _this.setState({
                             errMsg: true, errMessage: res.message, errType: 'Success'
                         }, () => {
                             _this.props.history.push('/dashboard/users');
                         })
                     } else if (res.status == 403) {
-                        console.log('ifffdfgdfg')
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                             _this.props.logout();
                         });
                     } else {
-                        console.log('elseee')
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                     }
                     _this.setState({ loader: false })
@@ -278,7 +275,10 @@ class EditUser extends Component {
                             <span>Date of Birth:</span>
                         </Col>
                         <Col>
-                            <DatePicker disabledDate={this._disabledDate} onChange={this._changeDate} value={dob} /><br />
+                            <DatePicker
+                                disabledDate={this._disabledDate}
+                                onChange={this._changeDate}
+                                value={dob} /><br />
                             {showDOBErr && <span style={{ "color": "red" }}>
                                 {'The date of birth field is required.'}
                             </span>}

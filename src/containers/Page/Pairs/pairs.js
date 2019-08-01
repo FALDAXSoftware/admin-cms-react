@@ -33,7 +33,6 @@ class Pairs extends Component {
             showAddPairsModal: false,
             showEditPairModal: false,
             searchPair: '',
-            selectedAsset: '',
             sorterCol: '',
             sortOrder: ''
         }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Modal, Input } from 'antd';
+import { Button, Tabs, notification, Modal, Input, Pagination } from 'antd';
 import { employeeTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -21,6 +21,7 @@ class Employees extends Component {
         super(props);
         this.state = {
             allEmployee: [],
+            employeeCount: 0,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -30,7 +31,9 @@ class Employees extends Component {
             showDeleteEmpModal: false,
             empDetails: [],
             deleteEmpId: '',
-            searchEmp: ''
+            searchEmp: '',
+            page: 1,
+            limit: 50,
         }
         self = this;
         Employees.employeeStatus = Employees.employeeStatus.bind(this);
@@ -75,10 +78,6 @@ class Employees extends Component {
 
     static editEmployee(value, first_name, last_name, email, phone_number, address, role, role_id, is_active) {
         self.props.history.push('/dashboard/employee/' + value)
-        // let empDetails = {
-        //     value, first_name, last_name, email, phone_number, address, role, role_id, is_active
-        // }
-        // self.setState({ showEditEmpModal: true, empDetails });
     }
 
     static deleteEmployee(value) {
@@ -100,15 +99,15 @@ class Employees extends Component {
 
     _getAllEmployees = () => {
         const { token } = this.props;
-        const { searchEmp, sorterCol, sortOrder } = this.state;
+        const { searchEmp, sorterCol, sortOrder, page, limit } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllEmployee(token, sorterCol, sortOrder, searchEmp)
+        ApiUtils.getAllEmployee(page, limit, token, sorterCol, sortOrder, searchEmp)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allEmployee: res.data.employees });
+                    _this.setState({ allEmployee: res.data.employees, employeeCount: res.data.employeeCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -206,16 +205,28 @@ class Employees extends Component {
         })
     }
 
+    _handleEmployeePagination = (page) => {
+        this.setState({ page }, () => {
+            this._getAllEmployees();
+        });
+    }
+
     _searchEmpoyee = (val) => {
         this.setState({ searchEmp: val, page: 1 }, () => {
             this._getAllEmployees();
         });
     }
 
-    render() {
-        const { allEmployee, errType, errMsg, loader, showAddEmpModal,
-            showEditEmpModal, empDetails, showDeleteEmpModal, allRoles } = this.state;
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllEmployees();
+        });
+    }
 
+    render() {
+        const { allEmployee, errType, errMsg, loader, showAddEmpModal, employeeCount, page, limit,
+            showEditEmpModal, empDetails, showDeleteEmpModal, allRoles } = this.state;
+        let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -261,6 +272,17 @@ class Employees extends Component {
                                             getAllEmployee={this._getAllEmployees.bind(this)}
                                         />
                                     }
+                                    {employeeCount > 0 ? <Pagination
+                                        style={{ marginTop: '15px' }}
+                                        className="ant-users-pagination"
+                                        onChange={this._handleEmployeePagination.bind(this)}
+                                        pageSize={limit}
+                                        current={page}
+                                        total={employeeCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
+                                    /> : ''}
                                     {showDeleteEmpModal &&
                                         <Modal
                                             title="Delete Employee"

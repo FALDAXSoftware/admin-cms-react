@@ -303,9 +303,9 @@ const ApiUtils = {
         let url = "/admin/get-countries-data?page=" + page + "&limit=" + limit + '&legality=' + legality;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
-            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else {
             url += "&data=" + search;
         }
@@ -489,15 +489,15 @@ const ApiUtils = {
     },
 
     //get all employee api
-    getAllEmployee: function (token, sorterCol, sortOrder, search) {
-        let url = "/admin/get-employees";
+    getAllEmployee: function (page, limit, token, sorterCol, sortOrder, search) {
+        let url = "/admin/get-employees?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
         if (sorterCol && sortOrder && search) {
-            url += "?data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&data=" + search + "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else if (sorterCol && sortOrder) {
-            url += "?sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
+            url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
         } else {
-            url += "?data=" + search;
+            url += "&data=" + search;
         }
         try {
             return fetch(API_URL + url, {

@@ -15,7 +15,7 @@ margin: 30px !important;
 const UserPic = styled.div`
 height: 150px;
 width: 150px;
-background-size: cover;
+background-size: contain;
 background-position: center;
 background-repeat: no-repeat;
 border-radius:5px;

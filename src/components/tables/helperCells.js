@@ -213,6 +213,7 @@ const ContentCell = text => <p style={{ display: 'block', width: '290px', overfl
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
 const DaysCell = text => <p>{text == 0 ? 'Permanent' : text + ' Days'}</p>;
 const TicketSubjectCell = text => <p style={{ cursor: 'pointer' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
+const LocationCell = text => <Tooltip title={text}><p style={{ display: 'block', width: '100px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p></Tooltip>;
 const TierCell = text => <p>Tier {text}</p>;
 const referralActionCell = value => <Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} /></Tooltip>
 const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text.toPrecision(2) + '%' }}></p>;
@@ -324,5 +325,6 @@ export {
     TicketSubjectCell,
     WhiteListActionCell,
     ProfileWhiteListActionCell,
-    DaysCell
+    DaysCell,
+    LocationCell
 };

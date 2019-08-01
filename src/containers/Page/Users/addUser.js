@@ -235,7 +235,6 @@ class AddUser extends Component {
     }
 
     _getPassword = (value) => {
-        console.log('value', value, value.length)
         this.setState({ password: value });
     }
 
@@ -349,9 +348,9 @@ class AddUser extends Component {
                     <Row style={{ "marginBottom": "15px", "paddingTop": "78px" }}>
                         <Col>
                             <span>Postal Code:</span>
-                            <Input placeholder="Postal Code" onChange={this._handleChange.bind(this, "postal")} value={fields["postal"]} />
+                            <Input placeholder="Postal Code" onChange={this._handleChange.bind(this, "postal_code")} value={fields["postal_code"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('postal', fields["postal"], 'required|numeric', 'text-danger')}
+                                {this.validator.message('postal_code', fields["postal_code"], 'required|numeric', 'text-danger')}
                             </span>
                         </Col>
                     </Row>

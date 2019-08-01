@@ -8,7 +8,7 @@ function CardView(props) {
             title={props.cardTitle}
             number={props.countNumber}
             text={props.cardText}
-            icon="fas fa-hand-holding-usd"
+            icon={props.icon}
             fontColor="#ffffff"
             bgcolor={'#fff'}
             style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
