@@ -393,6 +393,7 @@ class Dashboard extends Component {
                         <Link to='/dashboard/employee'>
                             <CardView cardText={'Active Employees'}
                                 cardTitle={'Employees'}
+                                icon={'fas fa-user-friends'}
                                 countNumber={employeeCount} />
                         </Link>
                     </Col>
@@ -401,6 +402,7 @@ class Dashboard extends Component {
                         <Link to='/dashboard/jobs'>
                             <CardView cardText={'Pending Job Applications'}
                                 cardTitle={'Pending Job Applications'}
+                                icon={'fa fa-tasks'}
                                 countNumber={jobsCount} />
                         </Link>
                     </Col>
@@ -409,6 +411,7 @@ class Dashboard extends Component {
                         <Link to='/dashboard/withdraw-requests'>
                             <CardView cardText={'Last 7 Days Withdraw Requests'}
                                 cardTitle={'Withdraw Requests'}
+                                icon={'fa fa-server'}
                                 countNumber={withdrawReqCount} />
                         </Link>
                     </Col>
@@ -417,6 +420,7 @@ class Dashboard extends Component {
                         <Link to='/dashboard/withdraw-requests'>
                             <CardView cardText={'Pending Withdraw Requests'}
                                 cardTitle={'Withdraw Requests'}
+                                icon={'fa fa-server'}
                                 countNumber={withdrawReqCountValue} />
                         </Link>
                     </Col>
@@ -425,6 +429,7 @@ class Dashboard extends Component {
                         <Link to='/dashboard/users'>
                             <CardView cardText={'Signed up Users'}
                                 cardTitle={'24 hours Signed up Users'}
+                                icon={'fa fa-users'}
                                 countNumber={userSignUpCountValue} />
                         </Link>
                     </Col>

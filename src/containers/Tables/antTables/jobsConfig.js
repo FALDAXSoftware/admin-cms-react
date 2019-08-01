@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, ContentCell, DateCell, JobActionCell, JobSwitchCell, JobButtonCell
+    TextCell, ContentCell, DateCell, JobActionCell, JobSwitchCell, JobButtonCell, LocationCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, title = null, loc = null, desc = null, jobDesc = null,
@@ -21,6 +21,8 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
             return ContentCell(value);
         case 'DateCell':
             return DateCell(value);
+        case 'LocationCell':
+            return LocationCell(value);
         case 'JobButtonCell':
             return JobButtonCell(value);
         case 'JobSwitchCell':
@@ -45,7 +47,7 @@ const columns = [
         key: 'location',
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'ContentCell', 'location')
+        render: object => renderCell(object, 'LocationCell', 'location')
     },
     // {
     //     title: <IntlMessages id="jobTable.title.short_desc" />,

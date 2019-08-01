@@ -216,6 +216,8 @@ class ProfileWhitelist extends Component {
         }
         let _this = this;
 
+        //allIPAddresses
+
         this.setState({ loader: true });
         ApiUtils.enableProfileWhitelist(token, formData)
             .then((response) => response.json())
