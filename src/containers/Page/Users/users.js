@@ -157,7 +157,9 @@ class Users extends Component {
 
     _searchUser = (e) => {
         e.preventDefault();
-        this._getAllUsers();
+        this.setState({ page: 1 }, () => {
+            this._getAllUsers();
+        });
     }
 
     _handleUserPagination = (page) => {

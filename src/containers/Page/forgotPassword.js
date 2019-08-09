@@ -7,7 +7,6 @@ import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
 import logo from '../../image/Footer_logo.png';
 import FaldaxLoader from '../Page/faldaxLoader';
-import SignInStyleWrapper from './signin.style';
 
 export default class extends Component {
   constructor(props) {

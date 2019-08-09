@@ -150,15 +150,15 @@ class Dashboard extends Component {
                         });
                         const {
                             activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                            InactivePairs, legalCountries, illegalCountries,
-                            neutralCountries, employeeCount, jobsCount,
+                            InactivePairs, legalCountries, illegalCountries, PartialCountries,
+                            neutralCountries, activeEmployeeCount, jobsCount, inactiveEmployeeCount,
                             withdrawReqCount, kyc_disapproved, kyc_approved,
                             total_kyc, kyc_pending, withdrawReqCountValue, userSignUpCountValue,
                         } = res;
                         _this.setState({
                             activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                            InactivePairs, legalCountries,
-                            illegalCountries, neutralCountries, employeeCount,
+                            InactivePairs, legalCountries, PartialCountries,
+                            illegalCountries, neutralCountries, activeEmployeeCount, inactiveEmployeeCount,
                             jobsCount, withdrawReqCount,
                             kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false,
                             withdrawReqCountValue, userSignUpCountValue, feeSymbols, feeSum,
@@ -214,8 +214,8 @@ class Dashboard extends Component {
     render() {
         const { rowStyle, colStyle } = basicStyle;
         const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-            InactivePairs, legalCountries, illegalCountries,
-            neutralCountries, employeeCount, jobsCount, withdrawReqCount,
+            InactivePairs, legalCountries, illegalCountries, PartialCountries,
+            neutralCountries, activeEmployeeCount, inactiveEmployeeCount, jobsCount, withdrawReqCount,
             kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader,
             withdrawReqCountValue, userSignUpCountValue, feeSymbols, feeSum, transactionSymbols,
             transactionCount
@@ -223,11 +223,11 @@ class Dashboard extends Component {
 
 
         const data = {
-            labels: ['Legal', 'Illegal', 'Neutral'],
+            labels: ['Legal', 'Illegal', 'Neutral', 'Partial Services'],
             datasets: [{
-                data: [legalCountries, illegalCountries, neutralCountries],
-                backgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa'],
-                hoverBackgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa']
+                data: [legalCountries, illegalCountries, neutralCountries, PartialCountries],
+                backgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa', '#BA55D3'],
+                hoverBackgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa', '#BA55D3']
             }]
         };
 
@@ -391,10 +391,16 @@ class Dashboard extends Component {
 
                     <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
                         <Link to='/dashboard/employee'>
-                            <CardView cardText={'Active Employees'}
-                                cardTitle={'Employees'}
-                                icon={'fas fa-user-friends'}
-                                countNumber={employeeCount} />
+                            <CountCard number={activeEmployeeCount}
+                                headcolor={'#1f2431'}
+                                number2={inactiveEmployeeCount}
+                                bgcolor={'#fff'}
+                                style={{ boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);" }}
+                                title={'Employees'}
+                                text={'Active Employees'}
+                                text2={'Inactive Employees'}
+                                icon="fa fa-coins"
+                                fontColor="#ffffff" />
                         </Link>
                     </Col>
 
