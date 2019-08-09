@@ -115,7 +115,7 @@ class ChangePassword extends Component {
                         value={fields["oldPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('Current Password', fields["oldPwd"], 'required', 'text-danger')}
+                        {this.validator.message('Current Password', fields["oldPwd"], 'required|min:6', 'text-danger')}
                     </span>
 
                     <span>
@@ -129,7 +129,7 @@ class ChangePassword extends Component {
                         value={fields["newPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
+                        {this.validator.message('New Password', fields["newPwd"], 'required|min:6', 'text-danger')}
                     </span>
 
                     <span>
@@ -143,7 +143,7 @@ class ChangePassword extends Component {
                         value={fields["confirmPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
+                        {this.validator.message('Confirm Password', fields["confirmPwd"], 'required|min:6', 'text-danger')}
                         {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
                     </span>
                     <br />

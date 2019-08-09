@@ -101,7 +101,24 @@ class EditUser extends Component {
         if (e.target.value.trim() == "") {
             fields[field] = "";
         } else {
-            fields[field] = e.target.value;
+            console.log('fields[field]', field, e.target.value)
+            if (field == 'postal_code') {
+                var reg = /^(?=.*[0-9A-Za-z])[- ()0-9A-Za-z]{3,25}$/
+                var bool = reg.test(e.target.value)
+                console.log('if', bool)
+                if (bool === true) {
+
+                } else {
+                    console.log('else')
+                    if (e.target.value.length < 3 || e.target.value.length > 25)
+                        this.setState({ postalmsg: "Postal code should have min. 3 and max. 25 characters." })
+                    else
+                        this.setState({ postalmsg: "Postal code should only contain alphabets , numbers , hyphen and space ." })
+                }
+                fields[field] = e.target.value;
+            } else {
+                fields[field] = e.target.value;
+            }
         }
         this.setState({ fields });
     }
@@ -198,6 +215,7 @@ class EditUser extends Component {
             showTierError, showDOBErr, errMsg, errType, selectedClass, selectedTier, countrySelected,
             stateSelected, citySelected, dob, loader
         } = this.state;
+        console.log('postalmsg', this.state.postalmsg)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -265,9 +283,6 @@ class EditUser extends Component {
                         <Col>
                             <span>Street Address 2:</span>
                             <Input placeholder="Street Address 2" onChange={this._handleChange.bind(this, "street_address_2")} value={fields["street_address_2"]} />
-                            <span style={{ "color": "red" }}>
-                                {this.validator.message('address 2', fields["street_address_2"], 'required', 'text-danger')}
-                            </span>
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
@@ -317,6 +332,7 @@ class EditUser extends Component {
                             <Input placeholder="Postal Code" onChange={this._handleChange.bind(this, "postal_code")} value={fields["postal_code"]} />
                             <span style={{ "color": "red" }}>
                                 {this.validator.message('postal', fields["postal_code"], 'required|numeric', 'text-danger')}
+                                {this.state.postalmsg}
                             </span>
                         </Col>
                     </Row>
@@ -349,7 +365,7 @@ class EditUser extends Component {
                         <Col>
                             <Select
                                 getPopupContainer={trigger => trigger.parentNode}
-                                style={{ width: 300, "marginLeft": "15px" }}
+                                style={{ width: 450, "marginLeft": "15px" }}
                                 placeholder="Select an Account Class"
                                 onChange={this._changeAccountClass.bind(this, 'acc_class')}
                                 value={selectedClass}

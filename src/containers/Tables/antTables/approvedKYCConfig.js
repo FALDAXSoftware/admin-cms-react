@@ -57,7 +57,7 @@ const columns = [{
     title: <IntlMessages id="kycTable.title.email" />,
     key: 'email',
     width: 100,
-    sorter: true,
+    //sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="kycTable.title.country" />,

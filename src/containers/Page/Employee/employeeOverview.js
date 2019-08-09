@@ -23,7 +23,7 @@ class PersonalDetails extends Component {
         this.state = {
             selectedRole: '',
             fields: {},
-            errors: {},
+            pwdError: false,
         }
         this.validator = new SimpleReactValidator();
         this.PasswordValidator = new SimpleReactValidator();
@@ -125,7 +125,7 @@ class PersonalDetails extends Component {
                         _this.PasswordValidator = new SimpleReactValidator();
                         _this.setState({
                             fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
-                            errMessage: res.err ? res.err : res.message
+                            errMessage: res.err ? res.err : res.message, pwdError: false
                         });
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -142,8 +142,7 @@ class PersonalDetails extends Component {
                 });
         } else {
             if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
-                this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
-                this.setState({ errors, loader: false })
+                this.setState({ pwdError: true, loader: false })
             }
             this.PasswordValidator.showMessages();
             this.forceUpdate();
@@ -194,7 +193,7 @@ class PersonalDetails extends Component {
     }
 
     render() {
-        const { fields, errors, selectedRole, allRoles, errMsg, errType, loader } = this.state;
+        const { fields, errors, selectedRole, allRoles, errMsg, errType, loader, pwdError } = this.state;
         let roleOptions = allRoles && allRoles.map((role) => {
             return (
                 <Option value={role.key}>{role.value}</Option>
@@ -272,7 +271,7 @@ class PersonalDetails extends Component {
                             value={fields["newPwd"]}
                         />
                         <span style={{ "color": "red" }}>
-                            {this.PasswordValidator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
+                            {this.PasswordValidator.message('New Password', fields["newPwd"], 'required|min:6', 'text-danger')}
                         </span>
 
                         <span>
@@ -286,8 +285,8 @@ class PersonalDetails extends Component {
                             value={fields["confirmPwd"]}
                         />
                         <span style={{ "color": "red" }}>
-                            {this.PasswordValidator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
-                            {errors["main"]}
+                            {this.PasswordValidator.message('Confirm Password', fields["confirmPwd"], 'required|min:6', 'text-danger')}
+                            {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
                         </span>
                         <br />
                         <Button type="primary" onClick={this._changePassword}> Change </Button>

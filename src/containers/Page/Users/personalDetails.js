@@ -8,17 +8,13 @@ import styled from 'styled-components';
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
-padding: 20px;
-background-color: white;
-margin: 30px !important;
+    padding: 20px;
+    background-color: white;
+    margin: 30px !important;
 `
-const UserPic = styled.div`
-height: 150px;
-width: 150px;
-background-size: contain;
-background-position: center;
-background-repeat: no-repeat;
-border-radius:5px;
+const UserPic = styled.img`
+    height: 160px;
+    width: 160px;
 `
 const UserName = styled.h2`
     padding-top:10px;
@@ -147,7 +143,7 @@ class PersonalDetails extends Component {
                         </Row>
                         <Row>
                             <Col>
-                                <UserPic style={{ backgroundImage: `url(${(!userDetails.profile_pic || userDetails.profile_pic == null) ? BUCKET_URL + 'profile/def_profile.jpg' : BUCKET_URL + userDetails.profile_pic})` }} />
+                                <UserPic src={(!userDetails.profile_pic || userDetails.profile_pic == null) ? BUCKET_URL + 'profile/def_profile.jpg' : BUCKET_URL + userDetails.profile_pic} />
                             </Col>
                         </Row>
                         <Row>

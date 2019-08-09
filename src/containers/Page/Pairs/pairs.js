@@ -232,7 +232,7 @@ class Pairs extends Component {
                                             <ColWithPadding sm={5}>
                                                 <Select
                                                     getPopupContainer={trigger => trigger.parentNode}
-                                                    placeholder="Select a asset"
+                                                    placeholder="Select an asset"
                                                     onChange={this._changeAsset}
                                                     value={selectedAsset}
                                                 >
