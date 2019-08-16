@@ -1903,6 +1903,50 @@ const ApiUtils = {
         }
     },
 
+    getAll2FARequests: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/get-twofactors-requests", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    approve2FARequest: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/approve-twofactors-request-status", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    rejectRequest: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/reject-twofactors-request-status", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 
