@@ -119,6 +119,12 @@ const options = [
     leftIcon: "fas fa-rss-square",
     module: "news_source"
   },
+  {
+    key: "two-factor-requests",
+    label: "Two-Factor Requests",
+    leftIcon: "fas fa-rss-square",
+    module: "two_factor_requests"
+  },
 ];
 
 export default options;
