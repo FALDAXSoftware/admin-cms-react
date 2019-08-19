@@ -38,7 +38,7 @@ class EditUser extends Component {
                 if (res.status == 200) {
                     _this.setState({
                         fields: res.data[0],
-                        dob: res.data[0].dob ? moment(res.data[0].dob, "MM-DD-YYYY") : '',
+                        dob: res.data[0].dob ? moment(res.data[0].dob, "DD-MM-YYYY").local() : '',
                         selectedClass: res.data[0].account_class,
                         selectedTier: res.data[0].account_tier,
                         countrySelected: res.data[0].country,
@@ -215,7 +215,6 @@ class EditUser extends Component {
             showTierError, showDOBErr, errMsg, errType, selectedClass, selectedTier, countrySelected,
             stateSelected, citySelected, dob, loader
         } = this.state;
-        console.log('postalmsg', this.state.postalmsg)
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

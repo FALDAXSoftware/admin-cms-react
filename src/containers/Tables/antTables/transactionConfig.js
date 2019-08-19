@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, TransactionTypeCell, TagsCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell, TransactionTypeCell, TagsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, user = null, source = null, destination = null, amt = null,
     tras_type = null, createdOn = null, transactionID = null, coin = null) => {
@@ -16,8 +16,8 @@ const renderCell = (object, type, key, user = null, source = null, destination =
     const coin_id = object[coin];
 
     switch (type) {
-        case 'DateCell':
-            return DateCell(value);
+        case 'DateTimeCell':
+            return DateTimeCell(value);
         case 'TransactionTypeCell':
             return TransactionTypeCell(value, email, source_address, destination_address,
                 amount, transaction_type, created_at, transaction_id, coin_id);
@@ -73,7 +73,7 @@ const columns = [
         key: 'created_at',
         width: 100,
         sorter: true,
-        render: object => renderCell(object, 'DateCell', 'created_at')
+        render: object => renderCell(object, 'DateTimeCell', 'created_at')
     },
 ];
 

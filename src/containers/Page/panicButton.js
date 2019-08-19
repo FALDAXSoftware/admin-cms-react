@@ -119,7 +119,6 @@ class PanicButton extends Component {
 
     render() {
         const { notify, errType, isPanic, panicConfirmModal, fields } = this.state;
-        console.log(isPanic)
 
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
