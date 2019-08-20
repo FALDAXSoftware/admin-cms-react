@@ -382,7 +382,7 @@ class AddUser extends Component {
                         <Col>
                             <Select
                                 getPopupContainer={trigger => trigger.parentNode}
-                                style={{ width: 300, "marginLeft": "15px" }}
+                                style={{ width: 450, "marginLeft": "15px" }}
                                 placeholder="Select an Account Class"
                                 onChange={this._changeAccountClass.bind(this, 'acc_class')}
                             >

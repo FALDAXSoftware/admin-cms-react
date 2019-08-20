@@ -33,7 +33,7 @@ class EmployeeWhitelist extends Component {
         super(props)
         this.state = {
             page: 1,
-            limit: 10,
+            limit: 20,
             EmpIPCount: 0,
             allIPAddresses: '',
             showDeleteIPModal: false,

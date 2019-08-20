@@ -260,7 +260,7 @@ class Employees extends Component {
                                         pagination={false}
                                         dataSource={allEmployee}
                                         className="isoCustomizedTable"
-                                        expandedRowRender={record => <div><b>Address</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.address}</span><b>Phone Number</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.phone_number}</span></div>}
+                                        expandedRowRender={record => <div><b>Address</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.address}</span><br /><b>Phone Number</b> - <span style={{ whiteSpace: 'pre-line' }}>{record.phone_number}</span></div>}
                                         onChange={this._handleEmployeeChange}
                                     />
                                     {showEditEmpModal &&
