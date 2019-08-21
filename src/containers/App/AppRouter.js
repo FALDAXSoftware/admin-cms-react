@@ -183,6 +183,10 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Assets/editAsset"))
     },
     {
+        path: "assets/wallet/:id",
+        component: asyncComponent(() => import("../Page/Assets/assetWallet"))
+    },
+    {
         path: "email-templates/edit-template/:id",
         component: asyncComponent(() => import("../Page/EmailTemplates/updateEmailTemplate"))
     },

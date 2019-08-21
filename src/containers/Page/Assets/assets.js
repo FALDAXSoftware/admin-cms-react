@@ -40,6 +40,7 @@ class Assets extends Component {
         Assets.edit = Assets.edit.bind(this);
         Assets.deleteCoin = Assets.deleteCoin.bind(this);
         Assets.changeStatus = Assets.changeStatus.bind(this);
+        Assets.assetWallet = Assets.assetWallet.bind(this);
     }
 
     static view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC,
@@ -51,11 +52,11 @@ class Assets extends Component {
         self.setState({ coinDetails, showViewCoinModal: true });
     }
 
-    static edit(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
+    static edit(value) {
         self.props.history.push('/dashboard/assets/edit-asset/' + value);
     }
 
-    static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
+    static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active) {
         const { token } = this.props;
 
         let formData = {
@@ -92,6 +93,10 @@ class Assets extends Component {
 
     static deleteCoin(value) {
         self.setState({ showDeleteCoinModal: true, deleteCoinId: value });
+    }
+
+    static assetWallet(value, coin_name, coin_code) {
+        self.props.history.push('/dashboard/assets/wallet/' + coin_code);
     }
 
     componentDidMount = () => {

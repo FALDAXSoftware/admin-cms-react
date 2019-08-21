@@ -1,9 +1,9 @@
 import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -1903,15 +1903,14 @@ const ApiUtils = {
         }
     },
 
-    getAll2FARequests: function (token, form) {
+    getAll2FARequests: function (token, page, limit) {
         try {
-            return fetch(API_URL + "/admin/get-twofactors-requests", {
+            return fetch(API_URL + "/admin/get-twofactors-requests?page=" + page + "&limit=" + limit, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
+                }
             });
         } catch (error) {
             console.error(error);
@@ -1942,6 +1941,35 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getWalletDetails: function (token, form) {
+        try {
+            return fetch(API_URL + "/wallet-details", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    generateWalletAddress: function (token, code) {
+        try {
+            return fetch(API_URL + "/users/create-wallet/" + code, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);
