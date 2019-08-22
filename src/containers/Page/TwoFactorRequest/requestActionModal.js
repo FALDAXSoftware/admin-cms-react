@@ -64,7 +64,7 @@ class ViewRequestModal extends Component {
                             errMsg: true, errMessage: res.message,
                             errType: 'Success'
                         });
-                        this._getAll2FARequests();
+                        this.props.getAll2FARequests();
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                             this.props.logout();
@@ -76,6 +76,7 @@ class ViewRequestModal extends Component {
                     this._closeRejectForm();
                 })
                 .catch(() => {
+                    console.log('else')
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
                         loader: false, errType: 'error'

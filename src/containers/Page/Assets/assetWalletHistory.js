@@ -64,6 +64,7 @@ class AssetWalletHistory extends Component {
 
     render() {
         const { walletHistoryData, errType, errMsg, loader } = this.state;
+        console.log('walletHistoryData', walletHistoryData)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

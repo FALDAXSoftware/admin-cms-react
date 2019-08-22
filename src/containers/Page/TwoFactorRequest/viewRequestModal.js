@@ -48,10 +48,18 @@ class ViewRequestModal extends Component {
                     {twoFactorReqDetails.full_name ? twoFactorReqDetails.full_name : 'N/A'}
                 </p>
 
-                <span><b>Uploaded Image:</b> </span><br />
                 {twoFactorReqDetails.uploaded_file ?
-                    <RequestImg alt="" src={BUCKET_URL + twoFactorReqDetails.uploaded_file} />
+                    <div>
+                        <span><b>Uploaded Image:</b> </span><br />
+                        <RequestImg alt="" src={BUCKET_URL + twoFactorReqDetails.uploaded_file} />
+                    </div>
                     : 'N/A'}
+
+                {twoFactorReqDetails.reason ?
+                    <div>
+                        <span><b>Reason:</b> </span><br />
+                        <p style={{ "marginBottom": "15px" }}>{twoFactorReqDetails.reason}</p>
+                    </div> : ''}
             </Modal>
         );
     }

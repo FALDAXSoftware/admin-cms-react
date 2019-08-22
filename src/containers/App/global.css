@@ -275,7 +275,7 @@ html[dir='rtl'] .dz-hidden-input {
   margin-left: 10px;
 }
 .kyc-div{
-  padding: 15px;
+  padding: 15px !important;
 }
 .faldax-loader {
   width: 70px !important;

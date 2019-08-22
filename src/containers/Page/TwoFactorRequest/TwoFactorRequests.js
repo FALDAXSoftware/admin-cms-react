@@ -80,16 +80,16 @@ class TwoFactorRequests extends Component {
             });
     }
 
-    static reject2FA(value, full_name, email, uploaded_file, status, created_at) {
+    static reject2FA(value, full_name, email, uploaded_file, status, reason, created_at) {
         let twoFactorReqDetails = {
-            value, full_name, email, uploaded_file, status, created_at
+            value, full_name, email, uploaded_file, status, reason, created_at
         }
         self.setState({ showRejectForm: true, twoFactorReqDetails })
     }
 
-    static viewRequest(value, full_name, email, uploaded_file, status, created_at) {
+    static viewRequest(value, full_name, email, uploaded_file, status, reason, created_at) {
         let twoFactorReqDetails = {
-            value, full_name, email, uploaded_file, status, created_at
+            value, full_name, email, uploaded_file, status, reason, created_at
         }
         self.setState({ showViewRequestModal: true, twoFactorReqDetails })
     }
@@ -205,6 +205,7 @@ class TwoFactorRequests extends Component {
                                     showRejectForm={showRejectForm}
                                     twoFactorReqDetails={twoFactorReqDetails}
                                     closeActionReqModal={this._closeRejectForm}
+                                    getAll2FARequests={this._getAll2FARequests}
                                 />
                             </TabPane>
                         ))}

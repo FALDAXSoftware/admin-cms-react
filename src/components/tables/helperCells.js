@@ -202,16 +202,16 @@ const deleteWhitelistIP = (value) => {
     Whitelist.deleteWhitelistIP(value);
 }
 
-const approve2FA = (value, full_name, uploaded_file, status, created_at) => {
-    TwoFactorRequests.approve2FA(value, full_name, uploaded_file, status, created_at)
+const approve2FA = (value, full_name, uploaded_file, status, reason, created_at) => {
+    TwoFactorRequests.approve2FA(value, full_name, uploaded_file, status, reason, created_at)
 }
 
-const reject2FA = (value, full_name, email, uploaded_file, status, created_at) => {
-    TwoFactorRequests.reject2FA(value, full_name, email, uploaded_file, status, created_at)
+const reject2FA = (value, full_name, email, uploaded_file, status, reason, created_at) => {
+    TwoFactorRequests.reject2FA(value, full_name, email, uploaded_file, status, reason, created_at)
 }
 
-const viewRequest = (value, full_name, email, uploaded_file, status, created_at) => {
-    TwoFactorRequests.viewRequest(value, full_name, email, uploaded_file, status, created_at)
+const viewRequest = (value, full_name, email, uploaded_file, status, reason, created_at) => {
+    TwoFactorRequests.viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)
 }
 
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
@@ -277,7 +277,7 @@ const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_act
 const JobCatActionCell = (value, category, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => updateCategory(value, category, is_active)} /></Tooltip></div>;
 const WhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
 const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteProfileWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
-const TwoFAActionCell = (value, full_name, email, uploaded_file, status, created_at) => <div>{status}<Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewRequest(value, full_name, email, uploaded_file, status, created_at)} /></Tooltip>{status != 'open' ? 'asd' : <div><Icon theme="twoTone" type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => approve2FA(value, full_name, email, uploaded_file, status, created_at)} /><Icon theme="twoTone" twoToneColor="#FF0000" type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => reject2FA(value, full_name, email, uploaded_file, status, created_at)} /></div>}</div>;
+const TwoFAActionCell = (value, full_name, email, uploaded_file, status, reason, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)} /></Tooltip>{status.trim() !== 'open' ? '' : <React.Fragment><Icon theme="twoTone" type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => approve2FA(value, full_name, email, uploaded_file, status, created_at)} /><Icon theme="twoTone" twoToneColor="#FF0000" type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => reject2FA(value, full_name, email, uploaded_file, status, created_at)} /></React.Fragment>}</div>;
 
 export {
     IPCell,

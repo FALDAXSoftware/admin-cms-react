@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Divider, Button, notification } from 'antd';
+import { Divider, Button, notification, Row, Card, Col } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import styled from 'styled-components';
@@ -10,7 +10,6 @@ import FaldaxLoader from '../faldaxLoader';
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
-    padding: 20px;
     background-color: white;
     margin: 30px !important;
 `
@@ -67,6 +66,7 @@ class WalletOverview extends Component {
         let code = this.state.walletUserData.coin;
 
         this.setState({ loader: true });
+        let _this = this;
 
         ApiUtils.generateWalletAddress(token, code)
             .then((res) => res.json())
@@ -75,11 +75,11 @@ class WalletOverview extends Component {
                     this.setState({
                         errMsg: true, errMessage: res.message, errType: 'Success'
                     }, () => {
-                        this.props.history.push('/dashboard/assets');
+                        _this.props.history.push('/dashboard/assets');
                     });
                 } else if (res.status == 403) {
                     this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
+                        _this.props.logout();
                     });
                 } else {
                     this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
@@ -102,25 +102,36 @@ class WalletOverview extends Component {
         }
 
         return (
-            <ParentDiv className="kyc-div">
+            <ParentDiv>
                 <Divider>{walletUserData.coin} Wallet</Divider>
                 {
-                    Object.keys(walletUserData).length > 0 ? walletUserData.flag == 0 ?
-                        <div>
-                            <div>
-                                Send Address:
-                                <b style={{ color: "black" }}>{Object.keys(walletUserData).length > 0 ? walletUserData.receive_address : ""}</b>
-                                <br />
-                                Receive Address :
-                                <b style={{ color: "black" }}>{Object.keys(walletUserData).length > 0 ? walletUserData.send_address : ""}</b>
-                            </div>
-                            <div>
-                                {Object.keys(walletUserData).length > 0 ? <span>Balance : {walletUserData.balance}  {walletUserData.coin_code}</span> : ""}
-                            </div>
+                    Object.keys(walletUserData).length > 0 ? (walletUserData.is_admin && walletUserData.flag == 0) ?
+                        <div style={{ background: '#ECECEC' }}>
+                            <Row gutter={16}>
+                                <Col span={8}>
+                                    <Card title="HOT Send Wallet Address" bordered={false}>
+                                        <span style={{ wordWrap: 'break-word' }}>
+                                            {Object.keys(walletUserData).length > 0 ? walletUserData.send_address : ""}
+                                        </span>
+                                    </Card>
+                                </Col>
+                                <Col span={8}>
+                                    <Card title="HOT Receive Wallet Address" bordered={false}>
+                                        <span style={{ wordWrap: 'break-word' }}>
+                                            {Object.keys(walletUserData).length > 0 ? walletUserData.receive_address : ""}
+                                        </span>
+                                    </Card>
+                                </Col>
+                                <Col span={8}>
+                                    <Card title="Balance" bordered={false}>
+                                        {walletUserData.balance}  {walletUserData.coin_code}
+                                    </Card>
+                                </Col>
+                            </Row>
                         </div>
                         :
                         walletUserData && walletUserData.flag == 1 ?
-                            <div>
+                            <div className="kyc-div">
                                 <div>
                                     <div>
                                         <p>Please wait for some time.As soon as your wallet is created , we'll let you know.</p>
@@ -129,10 +140,10 @@ class WalletOverview extends Component {
                             </div>
                             :
                             walletUserData && walletUserData.flag == 2 ?
-                                <React.Fragment>
+                                <div className="kyc-div">
                                     <p>Your wallet is not created yet. Please click on the button below to create your wallet for {walletUserData.coin_name}.</p>
                                     <Button type='primary' onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
-                                </React.Fragment>
+                                </div>
                                 : 'testing'
                         : ''
                 }
