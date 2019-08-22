@@ -114,6 +114,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/TwoFactorRequest/TwoFactorRequests")),
         module: "two_factor_requests"
     },
+    {
+        path: "notifications",
+        component: asyncComponent(() => import("../Page//Notifications/notifications")),
+        module: "notifications"
+    },
     // {
     //     path: "edit-asset",
     //     component: asyncComponent(() => import("../Page/Assets/editAsset")),
