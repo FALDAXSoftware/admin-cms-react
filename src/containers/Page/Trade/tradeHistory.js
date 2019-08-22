@@ -84,10 +84,6 @@ class TradeHistory extends Component {
         })
     }
 
-    _changeFilter = (val) => {
-        this.setState({ filterVal: val });
-    }
-
     _changeSearch = (field, e) => {
         this.setState({ searchTrade: field.target.value })
     }

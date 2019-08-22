@@ -6,10 +6,6 @@ const PTag = styled.p`
 `
 
 class DetailDiv extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         const { title, value } = this.props;
 

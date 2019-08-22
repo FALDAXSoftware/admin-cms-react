@@ -66,6 +66,10 @@ const deleteCoin = (value) => {
     Assets.deleteCoin(value);
 }
 
+const assetWallet = (value, coin_name, coin_code) => {
+    Assets.assetWallet(value, coin_name, coin_code);
+}
+
 const countryStatus = (value, name, legality, color, stateCount, is_active) => {
     Countries.countryStatus(value, name, legality, color, stateCount, is_active);
 }
@@ -198,16 +202,16 @@ const deleteWhitelistIP = (value) => {
     Whitelist.deleteWhitelistIP(value);
 }
 
-const approve2FA = (value, full_name, uploaded_file, created_at) => {
-    TwoFactorRequests.approve2FA(value, full_name, uploaded_file, created_at)
+const approve2FA = (value, full_name, uploaded_file, status, reason, created_at) => {
+    TwoFactorRequests.approve2FA(value, full_name, uploaded_file, status, reason, created_at)
 }
 
-const reject2FA = (value, full_name, email, uploaded_file, created_at) => {
-    TwoFactorRequests.reject2FA(value, full_name, email, uploaded_file, created_at)
+const reject2FA = (value, full_name, email, uploaded_file, status, reason, created_at) => {
+    TwoFactorRequests.reject2FA(value, full_name, email, uploaded_file, status, reason, created_at)
 }
 
-const viewRequest = (value, full_name, email, uploaded_file, created_at) => {
-    TwoFactorRequests.viewRequest(value, full_name, email, uploaded_file, created_at)
+const viewRequest = (value, full_name, email, uploaded_file, status, reason, created_at) => {
+    TwoFactorRequests.viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)
 }
 
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
@@ -243,7 +247,7 @@ const NewsSwitchCell = (value, cover_image, title, link, posted_at, description,
 const NewsDescCell = (value) => <Tooltip title={value}><p>{value.slice(0, 35) + (value.length > 35 ? "..." : "")}</p></Tooltip>
 //const NewsActionsCell = (value, cover_image, title, link, posted_at, description, is_active, owner) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewNews(value, cover_image, title, link, posted_at, description, is_active, owner)} /></Tooltip></div>;
 const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at)} /></Tooltip>{!deleted_at ? <React.Fragment><Tooltip title="View"><Icon type="delete" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => deleteUser(value)} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at)} /></Tooltip></React.Fragment> : ''}</div>;
-const CoinActionCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip></div>;
+const CoinActionCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip><Tooltip><Icon type="wallet" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => assetWallet(value, coin_name, coin_code)} /></Tooltip></div>;
 const RolesActionCell = (value, name, users, assets, countries, roles, employee, pairs, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteRole(value, name, users, assets, countries, roles, employee, pairs, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active)} /></Tooltip></div>;
 const CountryActionCell = (value, name, legality, color, stateCount, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCountry(value, name, legality, color, is_active)} /></Tooltip></div>;
 const StateActionCell = (value, name, legality, color, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editState(value, name, legality, color, is_active)} /></Tooltip></div>;
@@ -273,7 +277,7 @@ const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_act
 const JobCatActionCell = (value, category, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => updateCategory(value, category, is_active)} /></Tooltip></div>;
 const WhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
 const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteProfileWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
-const TwoFAActionCell = (value, full_name, email, uploaded_file, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewRequest(value, full_name, email, uploaded_file, created_at)} /></Tooltip><Icon theme="twoTone" type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => approve2FA(value, full_name, email, uploaded_file, created_at)} /><Icon theme="twoTone" twoToneColor="#FF0000" type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => reject2FA(value, full_name, email, uploaded_file, created_at)} /></div>;
+const TwoFAActionCell = (value, full_name, email, uploaded_file, status, reason, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)} /></Tooltip>{status.trim() !== 'open' ? '' : <React.Fragment><Icon theme="twoTone" type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => approve2FA(value, full_name, email, uploaded_file, status, created_at)} /><Icon theme="twoTone" twoToneColor="#FF0000" type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => reject2FA(value, full_name, email, uploaded_file, status, created_at)} /></React.Fragment>}</div>;
 
 export {
     IPCell,

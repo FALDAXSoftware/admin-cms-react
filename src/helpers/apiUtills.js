@@ -1903,15 +1903,14 @@ const ApiUtils = {
         }
     },
 
-    getAll2FARequests: function (token, form) {
+    getAll2FARequests: function (token, page, limit) {
         try {
-            return fetch(API_URL + "/admin/get-twofactors-requests", {
+            return fetch(API_URL + "/admin/get-twofactors-requests?page=" + page + "&limit=" + limit, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(form)
+                }
             });
         } catch (error) {
             console.error(error);
@@ -1942,6 +1941,35 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getWalletDetails: function (token, form) {
+        try {
+            return fetch(API_URL + "/wallet-details", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    generateWalletAddress: function (token, code) {
+        try {
+            return fetch(API_URL + "/users/create-wallet/" + code, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
             });
         } catch (error) {
             console.error(error);

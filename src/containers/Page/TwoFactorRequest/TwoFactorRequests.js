@@ -80,16 +80,16 @@ class TwoFactorRequests extends Component {
             });
     }
 
-    static reject2FA(value, full_name, email, uploaded_file, created_at) {
+    static reject2FA(value, full_name, email, uploaded_file, status, reason, created_at) {
         let twoFactorReqDetails = {
-            value, full_name, email, uploaded_file, created_at
+            value, full_name, email, uploaded_file, status, reason, created_at
         }
         self.setState({ showRejectForm: true, twoFactorReqDetails })
     }
 
-    static viewRequest(value, full_name, email, uploaded_file, created_at) {
+    static viewRequest(value, full_name, email, uploaded_file, status, reason, created_at) {
         let twoFactorReqDetails = {
-            value, full_name, email, uploaded_file, created_at
+            value, full_name, email, uploaded_file, status, reason, created_at
         }
         self.setState({ showViewRequestModal: true, twoFactorReqDetails })
     }
@@ -108,7 +108,7 @@ class TwoFactorRequests extends Component {
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAll2FARequests(token)
+        ApiUtils.getAll2FARequests(token, page, limit)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -163,7 +163,7 @@ class TwoFactorRequests extends Component {
 
     render() {
         const { all2FARequests, allJobsCount, errType, loader, errMsg, page, limit,
-            showRejectForm, twoFactorReqDetails, showViewRequestModal, fields } = this.state;
+            showRejectForm, twoFactorReqDetails, showViewRequestModal } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -205,6 +205,7 @@ class TwoFactorRequests extends Component {
                                     showRejectForm={showRejectForm}
                                     twoFactorReqDetails={twoFactorReqDetails}
                                     closeActionReqModal={this._closeRejectForm}
+                                    getAll2FARequests={this._getAll2FARequests}
                                 />
                             </TabPane>
                         ))}
