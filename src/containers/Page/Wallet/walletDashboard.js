@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { notification, Card } from 'antd';
-import { dashboardTableinfos, walletFeeTableinfos } from "../../Tables/antTables";
+import { notification, Tabs } from 'antd';
+import { dashboardTableinfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
+import TableDemoStyle from '../../Tables/antTables/demo.style';
 
 const { logout } = authAction;
+const TabPane = Tabs.TabPane;
 
 class WalletDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             allWallets: [],
-            allWalletFee: [],
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -44,7 +46,7 @@ class WalletDashboard extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allWallets: res.data, allWalletFee: res.FeeData });
+                    _this.setState({ allWallets: res.data });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -75,39 +77,26 @@ class WalletDashboard extends Component {
 
         return (
             <LayoutWrapper>
-                {loader && <FaldaxLoader />}
-                <Card title="Wallet Dashboard">
-                    <Card type="inner" title="FALDAX Wallets">
-                        {dashboardTableinfos.map(tableInfo => (
-                            <TableWrapper
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allWallets}
-                                className="isoCustomizedTable"
-                                onChange={this._handleWalletChange}
-                            />
-                        )
-                        )}
-                    </Card>
-                    <Card
-                        style={{ marginTop: 16 }}
-                        type="inner"
-                        title="Asset Fees"
-                    >
-                        {walletFeeTableinfos.map(tableInfo => (
-                            <TableWrapper
-                                {...this.state}
-                                columns={tableInfo.columns}
-                                pagination={false}
-                                dataSource={allWalletFee}
-                                className="isoCustomizedTable"
-                                onChange={this._handleWalletChange}
-                            />
-                        )
-                        )}
-                    </Card>
-                </Card>
+                <LayoutContentWrapper>
+                    <TableDemoStyle className="isoLayoutContent">
+                        <Tabs className="isoTableDisplayTab">
+                            {loader && <FaldaxLoader />}
+                            {dashboardTableinfos.map(tableInfo => (
+                                <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                    <TableWrapper
+                                        {...this.state}
+                                        columns={tableInfo.columns}
+                                        pagination={false}
+                                        dataSource={allWallets}
+                                        className="isoCustomizedTable"
+                                        onChange={this._handleWalletChange}
+                                    />
+                                </TabPane>
+                            )
+                            )}
+                        </Tabs>
+                    </TableDemoStyle>
+                </LayoutContentWrapper>
             </LayoutWrapper>
         );
     }

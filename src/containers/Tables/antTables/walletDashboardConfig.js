@@ -17,9 +17,9 @@ const renderCell = (object, type, key) => {
 const columns = [
     {
         title: <IntlMessages id="walletTable.title.coin_id" />,
-        key: 'coin_id',
+        key: 'coin',
         width: 100,
-        render: object => renderCell(object, 'TextCell', 'coin_id')
+        render: object => renderCell(object, 'TextCell', 'coin')
     },
     {
         title: <IntlMessages id="walletTable.title.send_address" />,
@@ -38,6 +38,12 @@ const columns = [
         key: 'balance',
         width: 200,
         render: object => renderCell(object, 'TextCell', 'balance')
+    },
+    {
+        title: <IntlMessages id="walletTable.title.fee" />,
+        key: 'fee',
+        width: 200,
+        render: object => renderCell(object, 'TextCell', 'fee')
     }
 ];
 
