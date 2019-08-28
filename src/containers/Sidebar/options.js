@@ -122,8 +122,20 @@ const options = [
   {
     key: "two-factor-requests",
     label: "Two-Factor Requests",
-    leftIcon: "fas fa-rss-square",
+    leftIcon: "fas fa-address-card",
     module: "two_factor_requests"
+  },
+  {
+    key: "notifications",
+    label: "Notifications",
+    leftIcon: "fas fa-bell",
+    module: "notifications"
+  },
+  {
+    key: "wallet-dashboard",
+    label: "Wallet Dashboard",
+    leftIcon: "fas fa-wallet",
+    module: "wallet_dashboard"
   },
 ];
 

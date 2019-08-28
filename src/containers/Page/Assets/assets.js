@@ -205,7 +205,6 @@ class Assets extends Component {
     }
 
     _changeRow = (e) => {
-        console.log('>>>>>>>>>>.', e);
         e.preventDefault();
     }
 

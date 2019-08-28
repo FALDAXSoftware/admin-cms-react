@@ -3,19 +3,20 @@ import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, DateTimeCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, key, createdOn = null, type = null, source = null,
+const renderCell = (object, type, key, createdOn = null, t_type = null, source = null,
     destination = null, Amount = null) => {
     const value = object[key];
     const created_at = object[createdOn];
-    const transaction_type = object[type];
+    const transaction_type = object[t_type];
     const source_address = object[source];
     const destination_address = object[destination];
     const amount = object[Amount];
-
     switch (type) {
         case 'DateTimeCell':
             return DateTimeCell(value, created_at, transaction_type, source_address,
                 destination_address, amount);
+        case 'TextCell':
+            return TextCell(value);
         default:
             return TextCell(value);
     }

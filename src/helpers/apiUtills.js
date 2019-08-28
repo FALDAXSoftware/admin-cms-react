@@ -1975,6 +1975,78 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getAdminThresholds: function (token, code) {
+        try {
+            return fetch(API_URL + "/admin/get-admin-thresholds", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAdminContactDetails: function (token, code) {
+        try {
+            return fetch(API_URL + "/admin/get-admin-thresholds-contacts", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    storeContactDetails: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-admin-thresholds-contacts", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    saveAllNotification: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-admin-thresholds", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllWallets: function (token, code) {
+        try {
+            return fetch(API_URL + "/admin-wallet-fees-details", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 

@@ -16,7 +16,7 @@ class AssetWalletHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allWalletHistory: [],
+            walletHistoryData: [],
             limit: 50,
             errMessage: '',
             errMsg: false,
@@ -32,7 +32,8 @@ class AssetWalletHistory extends Component {
     _getAllWalletHistory = () => {
         const { token, asset_id } = this.props;
         let formData = {
-            coinReceive: asset_id
+            coinReceive: asset_id,
+            is_admin: true
         }
         let _this = this;
 
@@ -64,7 +65,6 @@ class AssetWalletHistory extends Component {
 
     render() {
         const { walletHistoryData, errType, errMsg, loader } = this.state;
-        console.log('walletHistoryData', walletHistoryData)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -83,7 +83,6 @@ class AssetWalletHistory extends Component {
                                     pagination={false}
                                     dataSource={walletHistoryData}
                                     className="isoCustomizedTable"
-                                    onChange={this._handleHistoryTableChange}
                                 />
                             </TabPane>
                         ))}

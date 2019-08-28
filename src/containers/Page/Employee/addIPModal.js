@@ -39,7 +39,7 @@ class AddIPModal extends Component {
     };
 
     _closeAddIPModal = () => {
-        this.setState({ showAddIPModal: false })
+        this.setState({ showAddIPModal: false, showIPError: false })
         this.props.closeAddModal();
         this._resetAddForm()
     }

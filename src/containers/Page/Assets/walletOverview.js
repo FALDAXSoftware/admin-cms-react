@@ -6,6 +6,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import styled from 'styled-components';
 import FaldaxLoader from '../faldaxLoader';
+import { withRouter } from 'react-router';
 
 const { logout } = authAction;
 
@@ -72,22 +73,22 @@ class WalletOverview extends Component {
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
-                    this.setState({
+                    _this.setState({
                         errMsg: true, errMessage: res.message, errType: 'Success'
                     }, () => {
                         _this.props.history.push('/dashboard/assets');
                     });
                 } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                 }
-                this.setState({ loader: false })
+                _this.setState({ loader: false })
             })
             .catch(() => {
-                this.setState({
+                _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!',
                     loader: false, errType: 'error'
                 });
@@ -134,17 +135,15 @@ class WalletOverview extends Component {
                             <div className="kyc-div">
                                 <div>
                                     <div>
-                                        <p>Please wait for some time.As soon as your wallet is created , we'll let you know.</p>
+                                        <p>Please wait for some time. As soon as your wallet is created , we'll let you know.</p>
                                     </div>
                                 </div>
                             </div>
                             :
-                            walletUserData && walletUserData.flag == 2 ?
-                                <div className="kyc-div">
-                                    <p>Your wallet is not created yet. Please click on the button below to create your wallet for {walletUserData.coin_name}.</p>
-                                    <Button type='primary' onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
-                                </div>
-                                : 'testing'
+                            <div className="kyc-div">
+                                <p>Your wallet is not created yet. Please click on the button below to create your wallet for {walletUserData.coin_name}.</p>
+                                <Button type='primary' onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
+                            </div>
                         : ''
                 }
                 {loader && <FaldaxLoader />}
@@ -153,8 +152,8 @@ class WalletOverview extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user')
-    }), { logout })(WalletOverview);
+    }), { logout })(WalletOverview));
