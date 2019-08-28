@@ -336,3 +336,8 @@ html[dir='rtl'] .dz-hidden-input {
   overflow-x: auto;
   max-width: 100%;
 }
+.save-all-btn{
+  border-radius: 5px !important;
+  margin-top: 15px;
+  float: right;
+}

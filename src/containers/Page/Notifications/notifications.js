@@ -1,130 +1,242 @@
 import React from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Divider, notification } from 'antd';
+import { Table, Input, Form, Button, Checkbox, notification, Divider } from 'antd';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
+import styled from 'styled-components';
+import SimpleReactValidator from 'simple-react-validator';
 
-const { logout } = authAction;
+const SaveBtn = styled(Button)`
+    float: right;
+    margin: 10px !important;
+`
+
 const EditableContext = React.createContext();
+const { logout } = authAction;
+
+const EditableRow = ({ form, index, ...props }) => (
+    <EditableContext.Provider value={form}>
+        <tr {...props} />
+    </EditableContext.Provider>
+);
+
+const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
-    getInput = () => {
-        if (this.props.inputType === 'number') {
-            return <InputNumber />;
-        }
-        return <Input />;
+    state = {
+        editing: false,
     };
 
-    renderCell = ({ getFieldDecorator }) => {
+    toggleEdit = () => {
+        const editing = !this.state.editing;
+        this.setState({ editing }, () => {
+            if (editing) {
+                this.input.focus();
+            }
+        });
+    };
+
+    save = (e, data) => {
+        const { record, handleSave } = this.props;
+        this.form.validateFields((error, values) => {
+            if (error && error[e.currentTarget.id]) {
+                return;
+            }
+            this.toggleEdit();
+            handleSave({ ...record, ...values });
+        });
+    };
+
+    renderCell = form => {
+        this.form = form;
+        const { children, dataIndex, record, title } = this.props;
+        const { editing } = this.state;
+        return editing ? (
+            <Form.Item style={{ margin: 0 }}>
+                {form.getFieldDecorator(dataIndex, {
+                    rules: [
+                        {
+                            required: true,
+                            message: `${title} is required.`,
+                        },
+                    ],
+                    initialValue: record[dataIndex],
+                })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+            </Form.Item>
+        ) : (
+                <div
+                    className="editable-cell-value-wrap"
+                    style={{ paddingRight: 24 }}
+                    onClick={this.toggleEdit}
+                >
+                    {children}
+                </div>
+            );
+    };
+
+    render() {
         const {
-            editing,
+            editable,
             dataIndex,
             title,
-            inputType,
             record,
             index,
+            handleSave,
             children,
             ...restProps
         } = this.props;
         return (
             <td {...restProps}>
-                {editing ? (
-                    <Form.Item style={{ margin: 0 }}>
-                        {getFieldDecorator(dataIndex, {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: `Please Input ${title}!`,
-                                },
-                            ],
-                            initialValue: record[dataIndex],
-                        })(this.getInput())}
-                    </Form.Item>
+                {editable ? (
+                    <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
                 ) : (
                         children
                     )}
             </td>
         );
-    };
-
-    render() {
-        return <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>;
     }
 }
 
-class EditableNotificationTable extends React.Component {
+class EditableTable extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            dataSource: [],
+            fields: {}
+        }
         this.columns = [
             {
                 title: 'Asset',
-                dataIndex: 'coin_name',
+                dataIndex: 'coin',
+            },
+            {
+                title: 'First Limit',
+                dataIndex: 'fist_limit',
                 editable: true,
             },
             {
-                title: 'Daily Withdraw Fiat',
-                dataIndex: 'daily_withdraw_fiat',
+                title: 'Second Limit',
+                dataIndex: 'second_limit',
                 editable: true,
             },
             {
-                title: 'Monthly Withdraw Crypto',
-                dataIndex: 'monthly_withdraw_crypto',
+                title: 'Third Limit',
+                dataIndex: 'third_limit',
                 editable: true,
             },
             {
-                title: 'Monthly Withdraw Fiat',
-                dataIndex: 'monthly_withdraw_fiat',
-                editable: true,
-            },
-            {
-                title: 'Min Withdrawl Crypto',
-                dataIndex: 'min_withdrawl_crypto',
-                editable: true,
-            },
-            {
-                title: 'Min Withdrawl Fiat',
-                dataIndex: 'min_withdrawl_fiat',
-                editable: true,
-            },
-            {
-                title: 'Actions',
-                dataIndex: 'operation',
+                title: 'Email Notification',
+                dataIndex: 'is_email_notification',
                 render: (text, record) => {
-                    const { editingKey } = this.state;
-                    const editable = this.isEditing(record);
-                    return editable ? (
-                        <span>
-                            <EditableContext.Consumer>
-                                {form => (
-                                    <a
-                                        href="javascript:;"
-                                        onClick={() => this.save(form, record.id)}
-                                        style={{ marginRight: 8 }}
-                                    >
-                                        Save
-                                    </a>
-                                )}
-                            </EditableContext.Consumer>
-                            <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>
-                                <a>Cancel</a>
-                            </Popconfirm>
-                        </span>
-                    ) : (
-                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.id)}>
-                                Edit
-                    </a>
-                        );
-                },
+                    return (
+                        this.state.dataSource.length >= 1 ?
+                            <Checkbox key={record.coin_id} checked={record.is_email_notification} onChange={this._checkEmail.bind(this, record)}>Email{text}</Checkbox>
+                            : null
+                    )
+                }
+            },
+            {
+                title: 'SMS Notification',
+                dataIndex: 'is_sms_notification',
+                render: (text, record) =>
+                    this.state.dataSource.length >= 1 ? (
+                        <Checkbox key={record.coin_id} checked={record.is_sms_notification} onChange={this._checkSMS.bind(this, record)}>SMS</Checkbox>
+                    ) : null,
             },
         ];
-        this.state = {
-            allNotifications: [],
-            editingKey: ''
-        };
+        this.validator = new SimpleReactValidator();
     }
 
-    openNotificationWithIconError = (type) => {
+    _checkEmail = (e, data) => {
+        this.state.dataSource.map((value) => {
+            if (value.coin_id == e.coin_id) {
+                let tempObj = value;
+                Object.assign(tempObj, { is_email_notification: data.target.checked })
+                this.setState({ is_email_notification: data.target.checked })
+            }
+        })
+    }
+
+    _checkSMS = (e, data) => {
+        this.state.dataSource.map((value) => {
+            if (value.coin_id == e.coin_id) {
+                let tempObj = value;
+                Object.assign(tempObj, { is_sms_notification: data.target.checked })
+                this.setState({ is_sms_notification: data.target.checked })
+            }
+        })
+    }
+
+    handleSave = row => {
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex(item => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, {
+            ...item,
+            ...row,
+        });
+        this.setState({ dataSource: newData });
+    };
+
+    componentDidMount = () => {
+        this._getAllNotificationValues();
+        this._getAdminContactDetails();
+    }
+
+    _getAllNotificationValues = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getAdminThresholds(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ dataSource: res.data });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _getAdminContactDetails = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getAdminContactDetails(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ fields: res.data.value });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    openNotificationWithIcon = (type) => {
         notification[type]({
             message: this.state.errType,
             description: this.state.errMessage
@@ -132,115 +244,98 @@ class EditableNotificationTable extends React.Component {
         this.setState({ errMsg: false });
     };
 
-    isEditing = record => record.id === this.state.editingKey;
-
-    cancel = () => {
-        this.setState({ editingKey: '' });
-    };
-
-    save = (form, key) => {
+    _storeContactDetails = () => {
         const { token } = this.props;
-        let _this = this;
-        form.validateFields((error, row) => {
-            // if (error) {
-            //     return;
-            // }
-            const newData = [...this.state.allNotifications];
-            const index = newData.findIndex(item => key === item.id);
+        let { fields } = this.state;
 
+        if (this.validator.allValid()) {
+            this.setState({ loader: true });
             let formData = {
-                id: newData[index].id,
-                daily_withdraw_crypto: parseInt(row.daily_withdraw_crypto),
-                daily_withdraw_fiat: parseInt(row.daily_withdraw_fiat),
-                min_withdrawl_crypto: parseInt(row.min_withdrawl_crypto),
-                min_withdrawl_fiat: parseInt(row.min_withdrawl_fiat),
-                monthly_withdraw_crypto: parseInt(row.monthly_withdraw_crypto),
-                monthly_withdraw_fiat: parseInt(row.monthly_withdraw_fiat)
-            }
+                email: fields['email'],
+                phone: fields['phone']
+            };
 
-            _this.setState({ loader: true });
-            ApiUtils.updateAssetLimits(token, formData)
-                .then((response) => response.json())
-                .then(function (res) {
+            ApiUtils.storeContactDetails(token, formData)
+                .then((res) => res.json())
+                .then((res) => {
                     if (res.status == 200) {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
-                            _this._getAllNotificationValues();
-                        });
+                        this.setState({
+                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            loader: false
+                        })
                     } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
                         });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                        this.setState({
+                            errMsg: true, errMessage: res.err, loader: false, errType: 'error', isDisabled: false
+                        });
                     }
-                    _this.setState({ loader: false });
                 })
                 .catch(() => {
-                    _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    this.setState({
+                        errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                        loader: false
                     });
                 });
-
-
-            if (index > -1) {
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-                this.setState({ allNotifications: newData, editingKey: '' });
-            } else {
-                newData.push(row);
-                this.setState({ allNotifications: newData, editingKey: '' });
-            }
-        });
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
     }
 
-    _getAllNotificationValues = () => {
+    _handleChange = (field, e) => {
+        let fields = this.state.fields;
+        if (e.target.value.trim() == "") {
+            fields[field] = "";
+        } else {
+            fields[field] = e.target.value;
+        }
+        this.setState({ fields });
+    }
+
+    _saveAll = () => {
         const { token } = this.props;
-        let _this = this;
 
-        // _this.setState({ loader: true });
-        // ApiUtils.getAssetLimits(token, coin_id)
-        //     .then((response) => response.json())
-        //     .then(function (res) {
-        //         if (res.status == 200) {
-        //             _this.setState({ allNotifications: res.data });
-        //         } else if (res.status == 403) {
-        //             _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-        //                 _this.props.logout();
-        //             });
-        //         } else {
-        //             _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-        //         }
-        //         _this.setState({ loader: false });
-        //     })
-        //     .catch(() => {
-        //         _this.setState({
-        //             errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-        //         });
-        //     });
-    }
-
-    componentDidMount = () => {
-        this._getAllNotificationValues();
-    }
-
-    edit(key) {
-        this.setState({ editingKey: key });
+        this.setState({ loader: true });
+        ApiUtils.saveAllNotification(token, this.state.dataSource)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    this.setState({
+                        errType: 'Success', errMsg: true, errMessage: res.message,
+                        loader: false
+                    })
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({
+                        errMsg: true, errMessage: res.err, loader: false, errType: 'error', isDisabled: false
+                    });
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                    loader: false
+                });
+            });
     }
 
     render() {
-        const { allNotifications, loader, errMsg, errType } = this.state;
+        const { dataSource, loader, fields, errMsg, errType } = this.state;
         if (errMsg) {
-            this.openNotificationWithIconError(errType.toLowerCase());
+            this.openNotificationWithIcon(errType.toLowerCase());
         }
         const components = {
             body: {
+                row: EditableFormRow,
                 cell: EditableCell,
             },
         };
-
         const columns = this.columns.map(col => {
             if (!col.editable) {
                 return col;
@@ -249,45 +344,65 @@ class EditableNotificationTable extends React.Component {
                 ...col,
                 onCell: record => ({
                     record,
-                    inputType: col.dataIndex === 'number',
+                    editable: col.editable,
                     dataIndex: col.dataIndex,
                     title: col.title,
-                    editing: this.isEditing(record),
+                    handleSave: this.handleSave,
                 }),
             };
         });
 
         return (
-            <div className="isoLayoutContent">
-                {
-                    allNotifications.length > 0 ?
-                        allNotifications.map((notifications) => {
-                            return (
-                                <div>
-                                    <Divider orientation="left">{notifications.coin_name}</Divider>
-                                    <EditableContext.Provider value={this.props.form}>
-                                        <Table
-                                            components={components}
-                                            bordered
-                                            dataSource={[{ ...notifications }]}
-                                            columns={columns}
-                                            rowClassName="editable-row"
-                                            pagination={false}
-                                        />
-                                    </EditableContext.Provider>
-                                </div>
-                            )
-                        }) : 'NO DATA FOUND'
-                }
+            <div>
+                <Divider orientation="left">Contact Information</Divider>
+                <div className="isoLayoutContent" style={{ "marginTop": "10px" }}>
+                    <span>
+                        <b>Email Address</b>
+                    </span>
+                    <Input
+                        placeholder="Email Address"
+                        style={{ "marginBottom": "15px", "display": "inherit" }}
+                        onChange={this._handleChange.bind(this, 'email')}
+                        value={fields['email']}
+                    />
+                    <span className="field-error">
+                        {this.validator.message('Email Address', fields['email'], 'required')}
+                    </span>
+
+                    <span>
+                        <b>Phone Number</b>
+                    </span>
+                    <Input
+                        placeholder="Phone Number"
+                        style={{ "marginBottom": "15px", "display": "inherit" }}
+                        onChange={this._handleChange.bind(this, 'phone')}
+                        value={fields['phone']}
+                    />
+                    <span className="field-error">
+                        {this.validator.message('Phone Number', fields['phone'], 'required')}
+                    </span>
+                    <Button onClick={this._storeContactDetails} htmlType="submit" type="primary">Submit</Button>
+                </div>
+
+                <Divider orientation="left">Notification Thresholds</Divider>
+                {/* <Tooltip title="Click this button and it will store all values."> */}
+                <SaveBtn className="save-all-btn" htmlType="submit" type="primary" onClick={this._saveAll}>Save ALL</SaveBtn>
+                {/* </Tooltip> */}
+                <Table
+                    className="isoLayoutContent"
+                    components={components}
+                    bordered
+                    dataSource={dataSource}
+                    columns={columns}
+                    pagination={false}
+                />
                 {loader && <FaldaxLoader />}
             </div>
         );
     }
 }
 
-const Notifications = Form.create()(EditableNotificationTable);
-
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(Notifications);
+    }), { logout })(EditableTable);

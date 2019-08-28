@@ -131,6 +131,12 @@ const options = [
     leftIcon: "fas fa-bell",
     module: "notifications"
   },
+  {
+    key: "wallet-dashboard",
+    label: "Wallet Dashboard",
+    leftIcon: "fas fa-wallet",
+    module: "wallet_dashboard"
+  },
 ];
 
 export default options;

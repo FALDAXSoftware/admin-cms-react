@@ -1,9 +1,9 @@
 import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
-const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -1965,6 +1965,78 @@ const ApiUtils = {
     generateWalletAddress: function (token, code) {
         try {
             return fetch(API_URL + "/users/create-wallet/" + code, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAdminThresholds: function (token, code) {
+        try {
+            return fetch(API_URL + "/admin/get-admin-thresholds", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAdminContactDetails: function (token, code) {
+        try {
+            return fetch(API_URL + "/admin/get-admin-thresholds-contacts", {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    storeContactDetails: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-admin-thresholds-contacts", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    saveAllNotification: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/add-admin-thresholds", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllWallets: function (token, code) {
+        try {
+            return fetch(API_URL + "/admin-wallet-fees-details", {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,

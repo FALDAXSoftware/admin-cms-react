@@ -116,8 +116,13 @@ const routes = [
     },
     {
         path: "notifications",
-        component: asyncComponent(() => import("../Page//Notifications/notifications")),
+        component: asyncComponent(() => import("../Page/Notifications/notifications")),
         module: "notifications"
+    },
+    {
+        path: "wallet-dashboard",
+        component: asyncComponent(() => import("../Page/Wallet/walletDashboard")),
+        module: "wallet_dashboard"
     },
     // {
     //     path: "edit-asset",
