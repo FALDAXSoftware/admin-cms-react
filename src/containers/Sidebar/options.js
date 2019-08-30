@@ -137,6 +137,12 @@ const options = [
     leftIcon: "fas fa-wallet",
     module: "wallet_dashboard"
   },
+  {
+    key: "batch-and-balance",
+    label: "Batch & Balance",
+    leftIcon: "fas fa-wallet",
+    module: "batch_and_balance"
+  },
 ];
 
 export default options;

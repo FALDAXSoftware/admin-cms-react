@@ -1,9 +1,9 @@
 import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
-//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -2034,9 +2034,43 @@ const ApiUtils = {
         }
     },
 
-    getAllWallets: function (token, code) {
+    getAllWallets: function (token, search) {
+        let url = "/admin-wallet-fees-details";
+        if (search) {
+            url += "?search=" + search;
+        }
         try {
-            return fetch(API_URL + "/admin-wallet-fees-details", {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    sendWalletBalance: function (token, form) {
+        try {
+            return fetch(API_URL + "/wallet/send", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllBatches: function (token) {
+        let url = "/admin-wallet-fees-details";
+        try {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,

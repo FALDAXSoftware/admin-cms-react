@@ -411,6 +411,7 @@ class AddUser extends Component {
                             <br />
                             <CheckboxGroup options={allCoins} value={this.state.checkedList} onChange={this.onChange} />
                         </Col>
+                        {/* <PasswordGenerator /> */}
                     </Row>
                     <br /><br />
                     <PasswordGenerator getPassword={this._getPassword.bind(this)} />
