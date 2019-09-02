@@ -5,9 +5,11 @@ import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
+import LayoutWrapper from "../../../components/utility/layoutWrapper";
 
 const EditableContext = React.createContext();
 const { logout } = authAction;
+const Search = Input.Search;
 
 const EditableRow = ({ form, index, ...props }) => (
     <EditableContext.Provider value={form}>
@@ -231,6 +233,12 @@ class BatchBalance extends React.Component {
         this.setState({ errMsg: false });
     };
 
+    _searchBatch = (val) => {
+        this.setState({ searchBatch: val, page: 1 }, () => {
+            this._getAllBatches();
+        });
+    }
+
     render() {
         const { allBatches, loader, errMsg, errType } = this.state;
         if (errMsg) {
@@ -259,7 +267,15 @@ class BatchBalance extends React.Component {
         });
 
         return (
-            <div>
+            <LayoutWrapper>
+                <div style={{ "display": "inline-block", "width": "100%" }}>
+                    <Search
+                        placeholder="Search batches"
+                        onSearch={(value) => this._searchBatch(value)}
+                        style={{ "float": "right", "width": "250px" }}
+                        enterButton
+                    />
+                </div>
                 <Table
                     className="isoLayoutContent"
                     components={components}
@@ -269,7 +285,7 @@ class BatchBalance extends React.Component {
                     pagination={false}
                 />
                 {loader && <FaldaxLoader />}
-            </div>
+            </LayoutWrapper>
         );
     }
 }

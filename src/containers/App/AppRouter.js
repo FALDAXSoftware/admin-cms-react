@@ -126,7 +126,7 @@ const routes = [
     },
     {
         path: "batch-and-balance",
-        component: asyncComponent(() => import("../Page/Batch/batchBalance")),
+        component: asyncComponent(() => import("../Page/Batch/batch")),
         module: "batch_and_balance"
     },
     // {

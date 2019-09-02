@@ -1,9 +1,9 @@
 import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
-const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
+//const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -1697,7 +1697,7 @@ const ApiUtils = {
         }
     },
 
-    changeWithdrawStaus: function (token, form) {
+    changeWithdrawStatus: function (token, form) {
         try {
             return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
                 method: 'POST',
@@ -1903,9 +1903,25 @@ const ApiUtils = {
         }
     },
 
-    getAll2FARequests: function (token, page, limit) {
+    getAll2FARequests: function (token, page, limit, search, type, sort_col, sort_order) {
+        let url = "/admin/get-twofactors-requests?page=" + page + "&limit=" + limit;
+        if (type && search && sort_col && sort_order) {
+            url += "&r_type=" + type + "&data=" + search + "&sort_col=" + sort_col + "&sort_order=" + sort_order;;
+        } else if (type && sort_col && sort_order) {
+            url += "&r_type=" + type + "&sort_col=" + sort_col + "&sort_order=" + sort_order;;
+        } else if (search && sort_col && sort_order) {
+            url += "&data=" + search + "&sort_col=" + sort_col + "&sort_order=" + sort_order;
+        } else if (sort_col && sort_order) {
+            url += "&sort_col=" + sort_col + "&sort_order=" + sort_order;
+        } else if (type && search) {
+            url += "&r_type=" + type + "&data=" + search;
+        } else if (type) {
+            url += "&r_type=" + type;
+        } else {
+            url += "&data=" + search;
+        }
         try {
-            return fetch(API_URL + "/admin/get-twofactors-requests?page=" + page + "&limit=" + limit, {
+            return fetch(API_URL + url, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
