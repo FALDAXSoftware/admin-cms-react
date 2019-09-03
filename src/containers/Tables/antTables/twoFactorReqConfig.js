@@ -26,23 +26,28 @@ const columns = [{
     title: "Name",
     key: 'full_name',
     width: 100,
-    //sorter: true,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'full_name')
 }, {
     title: "Email",
     key: 'email',
     width: 200,
-    //sorter: true,
+    sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: "Requested On",
     key: 'created_at',
     width: 200,
-    //sorter: true,
+    sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: "Status",
     key: 'status',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'status')
+}, {
+    title: "Actions",
+    key: 'actions',
     width: 200,
     render: object => renderCell(object, 'TwoFAActionCell', 'id', 'full_name', 'email',
         'uploaded_file', 'status', 'reason', 'created_at')

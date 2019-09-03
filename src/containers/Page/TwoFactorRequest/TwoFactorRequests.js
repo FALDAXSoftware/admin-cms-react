@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification } from 'antd';
+import { Input, Tabs, Pagination, notification, Form, Row, Button, Select } from 'antd';
 import { twoFactorReqInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,10 +11,11 @@ import authAction from '../../../redux/auth/actions';
 import SimpleReactValidator from 'simple-react-validator';
 import ViewRequestModal from './viewRequestModal';
 import RequestActionModal from './requestActionModal';
+import ColWithPadding from '../common.style';
 
-const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
+const Option = Select.Option;
 var self;
 
 class TwoFactorRequests extends Component {
@@ -22,8 +23,8 @@ class TwoFactorRequests extends Component {
         super(props);
         this.state = {
             all2FARequests: [],
-            allJobsCount: 0,
-            searchJob: '',
+            allRequestsCount: 0,
+            searchReq: '',
             limit: 50,
             errMessage: '',
             errMsg: false,
@@ -32,7 +33,8 @@ class TwoFactorRequests extends Component {
             loader: false,
             showRejectForm: false,
             showViewRequestModal: false,
-            twoFactorReqDetails: []
+            twoFactorReqDetails: [],
+            filterVal: '',
         }
         this.validator = new SimpleReactValidator();
         self = this;
@@ -104,15 +106,15 @@ class TwoFactorRequests extends Component {
 
     _getAll2FARequests = () => {
         const { token } = this.props;
-        const { limit, searchJob, page, sorterCol, sortOrder } = this.state;
+        const { limit, searchReq, page, filterVal, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAll2FARequests(token, page, limit)
+        ApiUtils.getAll2FARequests(token, page, limit, searchReq, filterVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ all2FARequests: res.data, allJobsCount: res.allJobsCount });
+                    _this.setState({ all2FARequests: res.data, allRequestsCount: res.requests_counts });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -129,19 +131,20 @@ class TwoFactorRequests extends Component {
             });
     }
 
-    _searchRequest = (val) => {
-        this.setState({ searchJob: val, page: 1 }, () => {
+    _searchRequest = (e) => {
+        e.preventDefault();
+        this.setState({ page: 1 }, () => {
             this._getAll2FARequests();
-        });
+        })
     }
 
-    _handleJobPagination = (page) => {
+    _handleRequestPagination = (page) => {
         this.setState({ page }, () => {
             this._getAll2FARequests();
         })
     }
 
-    _handleJobTableChange = (pagination, filters, sorter) => {
+    _handleRequestTableChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAll2FARequests();
         })
@@ -161,9 +164,23 @@ class TwoFactorRequests extends Component {
         this.setState({ showViewRequestModal: false })
     }
 
+    _changeSearch = (field, e) => {
+        this.setState({ searchReq: field.target.value })
+    }
+
+    _changeFilter = (val) => {
+        this.setState({ filterVal: val });
+    }
+
+    _resetFilters = () => {
+        this.setState({ filterVal: '', searchReq: '', sorterCol: '', sortOrder: '' }, () => {
+            this._getAll2FARequests();
+        })
+    }
+
     render() {
-        const { all2FARequests, allJobsCount, errType, loader, errMsg, page, limit,
-            showRejectForm, twoFactorReqDetails, showViewRequestModal } = this.state;
+        const { all2FARequests, allRequestsCount, errType, loader, errMsg, page, limit,
+            showRejectForm, twoFactorReqDetails, showViewRequestModal, searchReq, filterVal } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -175,6 +192,38 @@ class TwoFactorRequests extends Component {
                     <Tabs className="isoTableDisplayTab" onChange={this._changeTab}>
                         {twoFactorReqInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                                    <Form onSubmit={this._searchRequest}>
+                                        <Row>
+                                            <ColWithPadding sm={5}>
+                                                <Input
+                                                    placeholder="Search Requests"
+                                                    onChange={this._changeSearch.bind(this)}
+                                                    value={searchReq}
+                                                />
+                                            </ColWithPadding>
+                                            <ColWithPadding sm={5}>
+                                                <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
+                                                    placeholder="Select a type"
+                                                    onChange={this._changeFilter}
+                                                    value={filterVal}
+                                                >
+                                                    <Option value={''}>All</Option>
+                                                    <Option value={'open'}>Open</Option>
+                                                    <Option value={'closed'}>Closed</Option>
+                                                    <Option value={'rejected'}>Rejected</Option>
+                                                </Select>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
+                                            </ColWithPadding>
+                                            <ColWithPadding xs={12} sm={3}>
+                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                            </ColWithPadding>
+                                        </Row>
+                                    </Form>
+                                </div>
                                 {loader && <FaldaxLoader />}
                                 <TableWrapper
                                     {...this.state}
@@ -182,21 +231,21 @@ class TwoFactorRequests extends Component {
                                     pagination={false}
                                     dataSource={all2FARequests}
                                     className="isoCustomizedTable"
-                                    onChange={this._handleJobTableChange}
+                                    onChange={this._handleRequestTableChange}
                                 />
                                 <ViewRequestModal
                                     twoFactorReqDetails={twoFactorReqDetails}
                                     showViewRequestModal={showViewRequestModal}
                                     closeViewRequestModal={this._closeViewReqModal}
                                 />
-                                {allJobsCount > 0 ?
+                                {allRequestsCount > 0 ?
                                     <Pagination
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
-                                        onChange={this._handleJobPagination.bind(this)}
+                                        onChange={this._handleRequestPagination.bind(this)}
                                         pageSize={limit}
                                         current={page}
-                                        total={allJobsCount}
+                                        total={allRequestsCount}
                                         showSizeChanger
                                         onShowSizeChange={this._changePaginationSize}
                                         pageSizeOptions={pageSizeOptions}

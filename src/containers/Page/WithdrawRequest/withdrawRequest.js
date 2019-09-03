@@ -11,6 +11,8 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { CSVLink } from "react-csv";
 import ColWithPadding from '../common.style';
+import DeclineActionModal from './declineModal'
+import { Record } from 'immutable';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -34,7 +36,9 @@ class WithdrawRequest extends Component {
             startDate: '',
             endDate: '',
             filterVal: '',
-            rangeDate: []
+            rangeDate: [],
+            showDeclineModal: false,
+            withdrawReqDetails: []
         }
         self = this;
         WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(this);
@@ -52,7 +56,7 @@ class WithdrawRequest extends Component {
         let requestData = {
             value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at, status: false
         }
-        self._updateWithdrawRequest(requestData);
+        self.setState({ showDeclineModal: true, withdrawReqDetails: requestData })
     }
 
     _updateWithdrawRequest = (requestData) => {
@@ -68,7 +72,7 @@ class WithdrawRequest extends Component {
         };
 
         this.setState({ loader: true });
-        ApiUtils.changeWithdrawStaus(token, formData)
+        ApiUtils.changeWithdrawStatus(token, formData)
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
@@ -202,9 +206,13 @@ class WithdrawRequest extends Component {
         });
     }
 
+    _closeDeclineModal = () => {
+        this.setState({ showDeclineModal: false })
+    }
+
     render() {
         const { allRequests, allReqCount, errType, errMsg, page, loader, limit,
-            searchReq, rangeDate, filterVal } = this.state;
+            searchReq, rangeDate, filterVal, showDeclineModal, withdrawReqDetails } = this.state;
         const requestHeaders = [
             { label: "Source Address", key: "source_address" },
             { label: "Destination Address", key: "destination_address" },
@@ -284,7 +292,7 @@ class WithdrawRequest extends Component {
                                     dataSource={allRequests}
                                     className="isoCustomizedTable"
                                     onChange={this._handleWithdrawTableChange}
-                                    expandedRowRender={record => <p style={{ margin: 0 }}>{<div><b>Email ID</b> - {record.email} <br />  <b>Fees</b> - {record.fees}% <br />  <b>Asset</b> - {record.coin_name} </div>}</p>}
+                                    expandedRowRender={record => <p style={{ margin: 0 }}>{<div><b>Email ID</b> - {record.email} <br />  <b>Fees</b> - {record.fees}% <br />  <b>Asset</b> - {record.coin_name} {record.reason ? <React.Fragment><br /><b> Reason</b> - <span>{record.reason}</span> </React.Fragment> : ''}</div>}</p>}
                                 />
                                 {allReqCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}
@@ -297,6 +305,12 @@ class WithdrawRequest extends Component {
                                     onShowSizeChange={this._changePaginationSize}
                                     pageSizeOptions={pageSizeOptions}
                                 /> : ''}
+                                <DeclineActionModal
+                                    showDeclineModal={showDeclineModal}
+                                    withdrawReqDetails={withdrawReqDetails}
+                                    closeDeclineModal={this._closeDeclineModal}
+                                    getAllWithdrawReqs={this._getAllWithdrawReqs}
+                                />
                             </TabPane>
                         ))}
                     </Tabs>

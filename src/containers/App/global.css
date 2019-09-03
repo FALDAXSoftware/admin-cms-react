@@ -341,3 +341,18 @@ html[dir='rtl'] .dz-hidden-input {
   margin-top: 15px;
   float: right;
 }
+
+.wallet-div{
+  word-break: break-all;
+  margin-bottom: 10px;
+}
+.custom-spacing{
+  margin-right: 8px;
+}
+.wallet-card .ant-card-head {
+  background-color: #5dade2  ;
+} 
+.wallet-card{
+  min-width: 245;
+  max-width: 245;
+}

@@ -1697,7 +1697,7 @@ const ApiUtils = {
         }
     },
 
-    changeWithdrawStaus: function (token, form) {
+    changeWithdrawStatus: function (token, form) {
         try {
             return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
                 method: 'POST',
@@ -1903,9 +1903,25 @@ const ApiUtils = {
         }
     },
 
-    getAll2FARequests: function (token, page, limit) {
+    getAll2FARequests: function (token, page, limit, search, type, sort_col, sort_order) {
+        let url = "/admin/get-twofactors-requests?page=" + page + "&limit=" + limit;
+        if (type && search && sort_col && sort_order) {
+            url += "&r_type=" + type + "&data=" + search + "&sort_col=" + sort_col + "&sort_order=" + sort_order;;
+        } else if (type && sort_col && sort_order) {
+            url += "&r_type=" + type + "&sort_col=" + sort_col + "&sort_order=" + sort_order;;
+        } else if (search && sort_col && sort_order) {
+            url += "&data=" + search + "&sort_col=" + sort_col + "&sort_order=" + sort_order;
+        } else if (sort_col && sort_order) {
+            url += "&sort_col=" + sort_col + "&sort_order=" + sort_order;
+        } else if (type && search) {
+            url += "&r_type=" + type + "&data=" + search;
+        } else if (type) {
+            url += "&r_type=" + type;
+        } else {
+            url += "&data=" + search;
+        }
         try {
-            return fetch(API_URL + "/admin/get-twofactors-requests?page=" + page + "&limit=" + limit, {
+            return fetch(API_URL + url, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -2034,9 +2050,43 @@ const ApiUtils = {
         }
     },
 
-    getAllWallets: function (token, code) {
+    getAllWallets: function (token, search) {
+        let url = "/admin-wallet-fees-details";
+        if (search) {
+            url += "?search=" + search;
+        }
         try {
-            return fetch(API_URL + "/admin-wallet-fees-details", {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    sendWalletBalance: function (token, form) {
+        try {
+            return fetch(API_URL + "/send-coin-admin", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllBatches: function (token) {
+        let url = "/admin-wallet-fees-details";
+        try {
+            return fetch(API_URL + url, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
