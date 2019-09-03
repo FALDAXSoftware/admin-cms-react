@@ -2070,7 +2070,7 @@ const ApiUtils = {
 
     sendWalletBalance: function (token, form) {
         try {
-            return fetch(API_URL + "/wallet/send", {
+            return fetch(API_URL + "/send-coin-admin", {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,

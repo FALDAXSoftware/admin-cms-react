@@ -37,7 +37,8 @@ class WalletDashboard extends Component {
             loader: false,
             sendModal: false,
             fields: {},
-            walletDetails: []
+            walletDetails: [],
+            defaultFee: 0
         }
         this.validator = new SimpleReactValidator({
             gtzero: {
@@ -76,7 +77,7 @@ class WalletDashboard extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allWallets: res.data });
+                    _this.setState({ allWallets: res.data, defaultFee: res.default_send_Coin_fee });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -136,11 +137,18 @@ class WalletDashboard extends Component {
 
     _sendWalletBal = () => {
         const { token } = this.props;
+        const { fields, walletDetails } = this.state;
         let _this = this;
+
+        let formData = {
+            amount: fields['amount'],
+            destination_address: fields['dest_address'],
+            coin_code: walletDetails.coin_code
+        };
 
         if (this.validator.allValid()) {
             _this.setState({ loader: true });
-            ApiUtils.sendWalletBalance(token)
+            ApiUtils.sendWalletBalance(token, formData)
                 .then((response) => response.json())
                 .then(function (res) {
                     if (res.status == 200) {
@@ -153,6 +161,7 @@ class WalletDashboard extends Component {
                         _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                     }
                     _this.setState({ loader: false });
+                    _this._closeSendModal();
                 })
                 .catch(err => {
                     _this.setState({
@@ -172,7 +181,7 @@ class WalletDashboard extends Component {
     }
 
     render() {
-        const { allWallets, errType, errMsg, loader, sendModal, fields, walletDetails } = this.state;
+        const { allWallets, errType, errMsg, loader, sendModal, fields, walletDetails, defaultFee } = this.state;
         let subtotal = fields["amount"] + fields["amount"] * ((walletDetails.fee) / (100));
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -180,85 +189,85 @@ class WalletDashboard extends Component {
 
         return (
             <LayoutWrapper>
-                <LayoutContentWrapper>
-                    <TableDemoStyle className="isoLayoutContent">
-                        <div style={{ "display": "inline-block", "width": "100%" }}>
-                            <Search
-                                placeholder="Search assets"
-                                onSearch={(value) => this._searchWalletData(value)}
-                                style={{ "float": "right", "width": "250px" }}
-                                enterButton
-                            />
-                        </div>
-                        <div className="isoTableDisplayTab">
-                            {loader && <FaldaxLoader />}
-                            <Row>
-                                {allWallets.length > 0 ? allWallets.map(wallet => (
-                                    <Col xs={{ span: 5 }} lg={{ span: 6, offset: 1 }}>
-                                        <Card className="wallet-card" title={wallet.coin}
-                                            extra={<Button style={{ borderRadius: '5px' }} onClick={this._openSendModal.bind(this, wallet)}>Send</Button>}>
-                                            <div className="wallet-div">
-                                                <div >
-                                                    <b className="custom-spacing">HOT Send Address</b><br />
-                                                    <CopyToClipboard style={{ cursor: 'pointer' }}
-                                                        text={wallet.send_address}
-                                                        onCopy={this._copyNotification}>
-                                                        <span>{wallet.send_address}</span>
-                                                    </CopyToClipboard>
-                                                </div>
-                                                <div>
-                                                    <b className="custom-spacing">HOT Receive Address</b><br />
-                                                    <CopyToClipboard style={{ cursor: 'pointer' }}
-                                                        text={wallet.receive_address}
-                                                        onCopy={this._copyNotification}>
-                                                        <span>{wallet.receive_address}</span>
-                                                    </CopyToClipboard>
-                                                </div>
+
+                <TableDemoStyle className="isoLayoutContent">
+                    <div style={{ "display": "inline-block", "width": "100%" }}>
+                        <Search
+                            placeholder="Search assets"
+                            onSearch={(value) => this._searchWalletData(value)}
+                            style={{ "float": "right", "width": "250px" }}
+                            enterButton
+                        />
+                    </div>
+                    <div className="isoTableDisplayTab">
+                        {loader && <FaldaxLoader />}
+                        <Row>
+                            {allWallets.length > 0 ? allWallets.map(wallet => (
+                                <Col xs={{ span: 5 }} lg={{ span: 6 }}>
+                                    <Card className="wallet-card" title={wallet.coin}
+                                        extra={<Button style={{ borderRadius: '5px' }} onClick={this._openSendModal.bind(this, wallet)}>Send</Button>}>
+                                        <div className="wallet-div">
+                                            <div>
+                                                <b className="custom-spacing">HOT Send Address</b><br />
+                                                <CopyToClipboard style={{ cursor: 'pointer' }}
+                                                    text={wallet.send_address}
+                                                    onCopy={this._copyNotification}>
+                                                    <span>{wallet.send_address}</span>
+                                                </CopyToClipboard>
                                             </div>
-                                            <BalanceDiv><span>Total Balance : {wallet.balance}</span></BalanceDiv>
-                                            <FeeDiv><span>Total Fees : {wallet.fee} %</span></FeeDiv>
-                                        </Card>
-                                    </Col>
-                                )) : "No Data Found!!"
-                                }
-                            </Row>
-                            <Modal
-                                title="Send"
-                                visible={sendModal}
-                                onOk={this._closeSendModal}
-                                onCancel={this._closeSendModal}
-                                footer={[
-                                    <Button type="primary" onClick={this._sendWalletBal}>Send {walletDetails.coin}</Button>
-                                ]}
-                            >
-                                <Form onSubmit={this._sendWalletBal}>
-                                    <div style={{ "marginBottom": "15px" }}>
-                                        <span>Destination Address:</span>
-                                        <Input placeholder="Destination Address" onChange={this._handleChange.bind(this, "dest_address")} value={fields["dest_address"]} />
-                                        <span style={{ "color": "red" }}>
-                                            {this.validator.message('destination address', fields["dest_address"], 'required', 'text-danger-validation')}
-                                        </span>
-                                    </div>
-                                    <div style={{ "marginBottom": "15px" }}>
-                                        <span>Amount:</span>
-                                        <Input placeholder="Amount" onChange={this._handleChange.bind(this, "amount")} value={fields["amount"]} />
-                                        <span style={{ "color": "red" }}>
-                                            {this.validator.message('amount', fields["amount"], 'required|numeric|gtzero', 'text-danger')}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span>
-                                            <b>Fee : {walletDetails.fee ? walletDetails.fee + '%' : ''}</b>
-                                        </span>
-                                        <span style={{ float: 'right' }}>
-                                            <b>Total Payout : {subtotal ? subtotal : ''} {walletDetails.coin}</b>
-                                        </span>
-                                    </div>
-                                </Form>
-                            </Modal>
-                        </div>
-                    </TableDemoStyle>
-                </LayoutContentWrapper>
+                                            <div>
+                                                <b className="custom-spacing">HOT Receive Address</b><br />
+                                                <CopyToClipboard style={{ cursor: 'pointer' }}
+                                                    text={wallet.receive_address}
+                                                    onCopy={this._copyNotification}>
+                                                    <span>{wallet.receive_address}</span>
+                                                </CopyToClipboard>
+                                            </div>
+                                        </div>
+                                        <BalanceDiv><span>Total Balance : {wallet.balance}</span></BalanceDiv>
+                                        <FeeDiv><span>Total Fees : {wallet.fee} %</span></FeeDiv>
+                                    </Card>
+                                </Col>
+                            )) : "No Data Found!!"
+                            }
+                        </Row>
+                        <Modal
+                            title="Send"
+                            visible={sendModal}
+                            onOk={this._closeSendModal}
+                            onCancel={this._closeSendModal}
+                            footer={[
+                                <Button type="primary" onClick={this._sendWalletBal}>Send {walletDetails.coin}</Button>
+                            ]}
+                        >
+                            <Form onSubmit={this._sendWalletBal}>
+                                <div style={{ "marginBottom": "15px" }}>
+                                    <span>Destination Address:</span>
+                                    <Input placeholder="Destination Address" onChange={this._handleChange.bind(this, "dest_address")} value={fields["dest_address"]} />
+                                    <span style={{ "color": "red" }}>
+                                        {this.validator.message('destination address', fields["dest_address"], 'required', 'text-danger-validation')}
+                                    </span>
+                                </div>
+                                <div style={{ "marginBottom": "15px" }}>
+                                    <span>Amount:</span>
+                                    <Input placeholder="Amount" onChange={this._handleChange.bind(this, "amount")} value={fields["amount"]} />
+                                    <span style={{ "color": "red" }}>
+                                        {this.validator.message('amount', fields["amount"], 'required|numeric|gtzero', 'text-danger')}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span>
+                                        <b>Fee : {defaultFee + '%'}</b>
+                                    </span>
+                                    <span style={{ float: 'right' }}>
+                                        <b>Total Payout : {subtotal ? subtotal : ''} {walletDetails.coin}</b>
+                                    </span>
+                                </div>
+                            </Form>
+                        </Modal>
+                    </div>
+                </TableDemoStyle>
+
             </LayoutWrapper>
         );
     }

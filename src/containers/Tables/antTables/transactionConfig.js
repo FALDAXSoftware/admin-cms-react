@@ -60,7 +60,13 @@ const columns = [
         key: 'amount',
         width: 100,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'amount', 'coin_id')
+        render: object => renderCell(object, 'TextCell', 'amount')
+    },
+    {
+        title: <IntlMessages id="transactionTable.title.coin" />,
+        key: 'coin',
+        width: 100,
+        render: object => renderCell(object, 'TextCell', 'coin')
     },
     {
         title: <IntlMessages id="transactionTable.title.transactionType" />,

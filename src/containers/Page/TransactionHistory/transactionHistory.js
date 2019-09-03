@@ -11,6 +11,7 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -51,7 +52,10 @@ class Transactions extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allTransactions: res.data, allTransactionCount: res.transactionCount });
+                    _this.setState({
+                        allTransactions: res.data, allTransactionCount: res.transactionCount,
+                        fees: res.default_send_Coin_fee
+                    });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -148,9 +152,13 @@ class Transactions extends Component {
         });
     }
 
+    _copyNotification = () => {
+        this.setState({ errMsg: true, errType: 'info', errMessage: 'Copied to Clipboard!!' });
+    }
+
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page,
-            loader, searchTransaction, rangeDate, filterVal, limit
+            loader, searchTransaction, rangeDate, filterVal, limit, fees
         } = this.state;
         const transactionsHeaders = [
             { label: "Transaction Hash", key: "transaction_id" },
@@ -229,7 +237,20 @@ class Transactions extends Component {
                                     dataSource={allTransactions}
                                     onChange={this._handleTransactionTableChange}
                                     className="isoCustomizedTable"
+                                    expandedRowRender={record => {
+                                        return (
+                                            <div>
+                                                <span><b>Transaction Hash: </b></span>
+                                                <CopyToClipboard style={{ cursor: 'pointer' }}
+                                                    text={record.transaction_id}
+                                                    onCopy={this._copyNotification}>
+                                                    <span>{record.transaction_id}</span>
+                                                </CopyToClipboard><br />
+                                                <span> <b>Fees: </b></span> {fees}
+                                            </div>)
+                                    }}
                                 />
+
                                 {allTransactionCount > 0 ? <Pagination
                                     style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"

@@ -464,6 +464,7 @@
   "transactionTable.title.destination_address": "Destination Address",
   "transactionTable.title.amount": "Amount",
   "transactionTable.title.transactionType": "Transaction Type",
+  "transactionTable.title.coin": "Asset",
   "transactionTable.title.created_at": "Created On",
   "tradeTable.title.currency": "Currency",
   "tradeTable.title.settle_currency": "Currency",
