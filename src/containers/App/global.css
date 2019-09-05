@@ -356,3 +356,8 @@ html[dir='rtl'] .dz-hidden-input {
   min-width: 245;
   max-width: 245;
 }
+.orders-tab .ant-tabs-nav-wrap{
+  margin-left: 20px;
+  background-color: white;
+  margin-right: 20px;
+}

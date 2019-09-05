@@ -225,7 +225,7 @@ class WalletDashboard extends Component {
                                             </div>
                                         </div>
                                         <BalanceDiv><span>Total Balance : {wallet.balance}</span></BalanceDiv>
-                                        <FeeDiv><span>Total Fees : {wallet.fee} %</span></FeeDiv>
+                                        <FeeDiv><span>Total Fees : {wallet.fee ? wallet.fee + '%' : ''}</span></FeeDiv>
                                     </Card>
                                 </Col>
                             )) : "No Data Found!!"

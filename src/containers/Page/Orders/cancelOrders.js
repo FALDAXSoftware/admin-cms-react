@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Pagination, notification } from 'antd';
-import { sellOrderTableInfos } from "../../Tables/antTables";
+import { cancelOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -12,7 +12,7 @@ import authAction from '../../../redux/auth/actions';
 const Search = Input.Search;
 const { logout } = authAction;
 
-class SellOrders extends Component {
+class CancelOrders extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,12 +45,12 @@ class SellOrders extends Component {
         const { searchOrder, page, limit, sorterCol, sortOrder } = this.state;
         let _this = this;
 
-        _this.setState({ loader: true });
-        ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder)
+        _this.setState({ loader: true })
+        ApiUtils.getAllCancelledOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allOrders: res.data, allOrderCount: res.sellBookCount });
+                    _this.setState({ allOrders: res.data, allOrderCount: res.cancelledOrderCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -79,7 +79,7 @@ class SellOrders extends Component {
         })
     }
 
-    _handleSellOrderChange = (pagination, filters, sorter) => {
+    _handleCancelOrderChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllOrders();
         })
@@ -102,7 +102,7 @@ class SellOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {sellOrderTableInfos.map(tableInfo => (
+                    {cancelOrderTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Search
@@ -118,7 +118,7 @@ class SellOrders extends Component {
                                 pagination={false}
                                 dataSource={allOrders}
                                 className="isoCustomizedTable"
-                                onChange={this._handleSellOrderChange}
+                                onChange={this._handleCancelOrderChange}
                             />
                             {loader && <FaldaxLoader />}
                             {allOrderCount > 0 ?
@@ -132,8 +132,8 @@ class SellOrders extends Component {
                                     showSizeChanger
                                     onShowSizeChange={this._changePaginationSize}
                                     pageSizeOptions={pageSizeOptions}
-                                /> : ''
-                            }
+                                />
+                                : ''}
                         </div>
                     ))}
                 </TableDemoStyle>
@@ -145,6 +145,6 @@ class SellOrders extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(SellOrders);
+    }), { logout })(CancelOrders);
 
-export { SellOrders, sellOrderTableInfos };
+export { CancelOrders, cancelOrderTableInfos };

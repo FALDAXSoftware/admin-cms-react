@@ -29,7 +29,10 @@ class DeclineRequestModal extends Component {
     }
 
     _closeDeclineForm = () => {
-        this.setState({ showDeclineModal: false });
+        const { fields } = this.state;
+
+        fields['reason'] = '';
+        this.setState({ fields, showDeclineModal: false });
         this.props.closeDeclineModal();
     }
 

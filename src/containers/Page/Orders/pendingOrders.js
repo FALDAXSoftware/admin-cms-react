@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Pagination, notification } from 'antd';
-import { sellOrderTableInfos } from "../../Tables/antTables";
+import { pendingOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -12,7 +12,7 @@ import authAction from '../../../redux/auth/actions';
 const Search = Input.Search;
 const { logout } = authAction;
 
-class SellOrders extends Component {
+class PendingOrders extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +29,7 @@ class SellOrders extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllOrders();
+        this._getAllPendingOrders();
     }
 
     openNotificationWithIconError = (type) => {
@@ -40,17 +40,17 @@ class SellOrders extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllOrders = () => {
+    _getAllPendingOrders = () => {
         const { token, user_id } = this.props;
         const { searchOrder, page, limit, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllSellOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder)
+        ApiUtils.getAllPendingOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allOrders: res.data, allOrderCount: res.sellBookCount });
+                    _this.setState({ allOrders: res.data, allOrderCount: res.pendingDataCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -69,25 +69,25 @@ class SellOrders extends Component {
 
     _searchOrder = (val) => {
         this.setState({ searchOrder: val, page: 1 }, () => {
-            this._getAllOrders();
+            this._getAllPendingOrders();
         });
     }
 
     _handleOrderPagination = (page) => {
         this.setState({ page }, () => {
-            this._getAllOrders();
+            this._getAllPendingOrders();
         })
     }
 
-    _handleSellOrderChange = (pagination, filters, sorter) => {
+    _handlePendingOrderChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
-            this._getAllOrders();
+            this._getAllPendingOrders();
         })
     }
 
     _changePaginationSize = (current, pageSize) => {
         this.setState({ page: current, limit: pageSize }, () => {
-            this._getAllOrders();
+            this._getAllPendingOrders();
         });
     }
 
@@ -102,7 +102,7 @@ class SellOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {sellOrderTableInfos.map(tableInfo => (
+                    {pendingOrderTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Search
@@ -145,6 +145,6 @@ class SellOrders extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(SellOrders);
+    }), { logout })(PendingOrders);
 
-export { SellOrders, sellOrderTableInfos };
+export { PendingOrders, pendingOrderTableInfos };

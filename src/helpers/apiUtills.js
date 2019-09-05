@@ -962,6 +962,57 @@ const ApiUtils = {
         }
     },
 
+    getAllPendingOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
+        let url = "/admin/all-pending-orders?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url += "&data=" + search;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllCancelledOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
+        let url = "/admin/all-cancelled-orders?page=" + page + "&limit=" + limit;
+        search = encodeURIComponent(search);
+        if (sorterCol && sortOrder && search) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url += "&data=" + search;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+
     getAllBuyOrders: function (page, limit, token, search, user_id, sorterCol, sortOrder) {
         let url = "/admin/all-buy-orders?page=" + page + "&limit=" + limit;
         search = encodeURIComponent(search);
@@ -2083,11 +2134,11 @@ const ApiUtils = {
         }
     },
 
-    getAllBatches: function (token) {
-        let url = "/admin-wallet-fees-details";
+    getAllBatches: function (token, page, limit) {
+        let url = "/admin/batches/list?page=" + page + "&limit=" + limit;
         try {
             return fetch(API_URL + url, {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + token,
                     'Content-Type': 'application/json'
@@ -2097,6 +2148,8 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+
 };
 
 
