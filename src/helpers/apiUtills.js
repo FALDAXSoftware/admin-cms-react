@@ -1,9 +1,9 @@
 import { stat } from "fs";
-//const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
-const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -2149,7 +2149,80 @@ const ApiUtils = {
         }
     },
 
+    createBatch: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/batches/create", {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 
+    updateBatch: function (token, form) {
+        try {
+            return fetch(API_URL + "/admin/batches/update", {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllTiers: function (token) {
+        let url = "/admin/get-tier-details";
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getSummaryOfBatch: function (token, transactionStart, transactionEnd) {
+        let url = "/admin/get-batch-value?transaction_start=" + transactionStart + "&transaction_end=" + transactionEnd;
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getPurchaseOfBatch: function (token, transactionStart, transactionEnd) {
+        let url = "/admin/get-each-transaction-value?transaction_start=" + transactionStart + "&transaction_end=" + transactionEnd;
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, Form, Button, Checkbox, notification, Pagination } from 'antd';
+import { Table, Input, Form, Button, Checkbox, notification, Pagination, Row } from 'antd';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
@@ -7,6 +7,9 @@ import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import moment from "moment";
+import ColWithPadding from '../common.style';
+import { Link } from 'react-router-dom';
+import { buffers } from 'redux-saga';
 
 const EditableContext = React.createContext();
 const { logout } = authAction;
@@ -103,12 +106,17 @@ class BatchBalance extends React.Component {
             fields: {},
             page: 1,
             limit: 50,
-            batchCount: 0
+            batchCount: 0,
+            transactionID: ''
         }
         this.columns = [
             {
                 title: 'Batch',
                 dataIndex: 'batch_number',
+                render: (text, record) =>
+                    this.state.allBatches.length >= 1 ? (
+                        <Button onClick={() => { this.props.history.push(`/dashboard/batch-and-balance/${record.batch_number}`) }}>{record.batch_number}</Button>
+                    ) : null,
             },
             {
                 title: 'Transactions',
@@ -128,7 +136,7 @@ class BatchBalance extends React.Component {
                 dataIndex: 'is_purchased',
                 render: (text, record) =>
                     this.state.allBatches.length >= 1 ? (
-                        <Checkbox key={record.id} checked={record.is_purchase} onChange={this._checkSMS.bind(this, record)}>Purchase</Checkbox>
+                        <Checkbox key={record.id} checked={record.is_purchased} onChange={this._checkBatch.bind(this, 'is_purchased', record)}>Purchase</Checkbox>
                     ) : null,
             },
             {
@@ -136,7 +144,7 @@ class BatchBalance extends React.Component {
                 dataIndex: 'is_withdrawled',
                 render: (text, record) =>
                     this.state.allBatches.length >= 1 ? (
-                        <Checkbox key={record.id} checked={record.is_withdrawals} onChange={this._checkSMS.bind(this, record)}>Withdrawals</Checkbox>
+                        <Checkbox key={record.id} checked={record.is_withdrawled} onChange={this._checkBatch.bind(this, 'is_withdrawled', record)}>Withdrawals</Checkbox>
                     ) : null,
             },
             {
@@ -144,7 +152,7 @@ class BatchBalance extends React.Component {
                 dataIndex: 'is_manual_withdrawled',
                 render: (text, record) =>
                     this.state.allBatches.length >= 1 ? (
-                        <Checkbox key={record.id} checked={record.is_manual} onChange={this._checkSMS.bind(this, record)}>Manual Withdraw</Checkbox>
+                        <Checkbox key={record.id} checked={record.is_manual_withdrawled} onChange={this._checkBatch.bind(this, 'is_manual_withdrawled', record)}>Manual Withdraw</Checkbox>
                     ) : null,
             },
             {
@@ -165,7 +173,15 @@ class BatchBalance extends React.Component {
                 dataIndex: 'upload',
                 render: (text, record) => {
                     return (
-                        <Button type="primary" icon="upload">Upload</Button>
+                        <div>
+                            <input id="myInput"
+                                type="file"
+                                ref={(ref) => this.upload = ref}
+                                style={{ display: 'none' }}
+                                onChange={this.onChangeFile.bind(this)}
+                            />
+                            <Button type="primary" icon="upload" onClick={() => this.upload.click(this, record)}>Upload</Button>
+                        </div >
                     )
                 }
             }
@@ -173,24 +189,60 @@ class BatchBalance extends React.Component {
         this.validator = new SimpleReactValidator();
     }
 
-    _checkEmail = (e, data) => {
-        this.state.allBatches.map((value) => {
-            if (value.coin_id == e.coin_id) {
-                let tempObj = value;
-                Object.assign(tempObj, { is_email_notification: data.target.checked })
-                this.setState({ is_email_notification: data.target.checked })
-            }
-        })
+    onChangeFile = (e, data) => {
+        e.stopPropagation();
+        e.preventDefault();
+        var file = e.target.files[0];
+
+        this.setState({ file });
     }
 
-    _checkSMS = (e, data) => {
-        this.state.allBatches.map((value) => {
-            if (value.coin_id == e.coin_id) {
-                let tempObj = value;
-                Object.assign(tempObj, { is_sms_notification: data.target.checked })
-                this.setState({ is_sms_notification: data.target.checked })
+    _checkBatch = (e, data, val) => {
+        let updatedBatch;
+        this.state.allBatches.map((batch) => {
+            if (batch.batch_number == data.batch_number) {
+                batch[e] = !data[e];
+                updatedBatch = batch;
             }
         })
+        // console.log('updatedBatch', updatedBatch)
+        const { token } = this.props;
+        let _this = this;
+        let formData = {
+            batch_id: updatedBatch.batch_number,
+            is_purchased: updatedBatch.is_purchased,
+            is_withdrawled: updatedBatch.is_withdrawled,
+            is_manual_withdrawled: updatedBatch.is_manual_withdrawled
+        }
+
+        _this.setState({ loader: true });
+        ApiUtils.updateBatch(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                console.log('res', res)
+                if (res.status == 200) {
+                    _this.setState({
+                        errMsg: true, errMessage: res.message, errType: 'Success',
+                        allBatches: [
+                            ...this.state.allBatches.slice(0, updatedBatch.batch_number),
+                            updatedBatch,
+                            ...this.state.allBatches.slice(updatedBatch.batch_number + 1)
+                        ]
+                    })
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
     }
 
     handleSave = row => {
@@ -249,14 +301,49 @@ class BatchBalance extends React.Component {
         });
     }
 
-    _handleCoinPagination = (page) => {
+    _handleBatchPagination = (page) => {
         this.setState({ page }, () => {
             this._getAllBatches();
         })
     }
 
+    _createBatch = () => {
+        const { token } = this.props;
+        const { transactionID } = this.state;
+        let _this = this;
+        let formData = {
+            last_transaction_id: transactionID
+        }
+
+        _this.setState({ loader: true });
+        ApiUtils.createBatch(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success', transactionID: '' });
+                    _this._getAllBatches();
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _changeTransID = (field, e) => {
+        this.setState({ transactionID: field.target.value })
+    }
+
     render() {
-        const { allBatches, loader, errMsg, errType, batchCount, page, limit } = this.state;
+        const { allBatches, loader, errMsg, errType, batchCount, page, limit, transactionID } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -285,17 +372,27 @@ class BatchBalance extends React.Component {
 
         return (
             <LayoutWrapper>
-                <div className="isoLayoutContent">
+                <div className="isoLayoutContent scroll-table">
                     <div style={{ "display": "inline-block", "width": "100%" }}>
-                        <Search
-                            placeholder="Search batches"
-                            onSearch={(value) => this._searchBatch(value)}
-                            style={{ "float": "right", "width": "250px" }}
-                            enterButton
-                        />
+                        <Form layout="inline" onSubmit={this._createBatch}>
+                            <Row type="flex" justify="end">
+                                <ColWithPadding sm={6}>
+                                    <label>Last Transaction ID</label>
+                                </ColWithPadding>
+                                <ColWithPadding sm={7}>
+                                    <Input
+                                        placeholder="Enter Last Transaction ID"
+                                        onChange={this._changeTransID.bind(this)}
+                                        value={transactionID}
+                                    />
+                                </ColWithPadding>
+                                <ColWithPadding sm={5}>
+                                    <Button className="search-btn" type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._createBatch}>Create Batch</Button>
+                                </ColWithPadding>
+                            </Row>
+                        </Form>
                     </div>
                     <Table
-                        // className="isoLayoutContent"
                         components={components}
                         bordered
                         dataSource={allBatches}
@@ -306,7 +403,7 @@ class BatchBalance extends React.Component {
                         <Pagination
                             style={{ marginTop: '15px' }}
                             className="ant-users-pagination"
-                            onChange={this._handleCoinPagination.bind(this)}
+                            onChange={this._handleBatchPagination.bind(this)}
                             pageSize={limit}
                             current={page}
                             total={batchCount}
