@@ -140,8 +140,14 @@ const options = [
   {
     key: "batch-and-balance",
     label: "Batch & Balance",
-    leftIcon: "fas fa-wallet",
+    leftIcon: "fas fa-balance-scale",
     module: "batch_and_balance"
+  },
+  {
+    key: "account-tier",
+    label: "Account Tier Management",
+    leftIcon: "fas fa-file-invoice",
+    module: "tiers"
   },
 ];
 

@@ -5,7 +5,6 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styled from 'styled-components';
@@ -38,7 +37,6 @@ class WalletDashboard extends Component {
             sendModal: false,
             fields: {},
             walletDetails: [],
-            defaultFee: 0
         }
         this.validator = new SimpleReactValidator({
             gtzero: {
@@ -77,7 +75,7 @@ class WalletDashboard extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allWallets: res.data, defaultFee: res.default_send_Coin_fee });
+                    _this.setState({ allWallets: res.data });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -181,7 +179,7 @@ class WalletDashboard extends Component {
     }
 
     render() {
-        const { allWallets, errType, errMsg, loader, sendModal, fields, walletDetails, defaultFee } = this.state;
+        const { allWallets, errType, errMsg, loader, sendModal, fields, walletDetails } = this.state;
         let subtotal = fields["amount"] + fields["amount"] * ((walletDetails.fee) / (100));
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -225,7 +223,7 @@ class WalletDashboard extends Component {
                                             </div>
                                         </div>
                                         <BalanceDiv><span>Total Balance : {wallet.balance}</span></BalanceDiv>
-                                        <FeeDiv><span>Total Fees : {wallet.fee} %</span></FeeDiv>
+                                        <FeeDiv><span>Total Fees : {wallet.fee ? wallet.fee + '%' : ''}</span></FeeDiv>
                                     </Card>
                                 </Col>
                             )) : "No Data Found!!"
@@ -256,9 +254,6 @@ class WalletDashboard extends Component {
                                     </span>
                                 </div>
                                 <div>
-                                    <span>
-                                        <b>Fee : {defaultFee + '%'}</b>
-                                    </span>
                                     <span style={{ float: 'right' }}>
                                         <b>Total Payout : {subtotal ? subtotal : ''} {walletDetails.coin}</b>
                                     </span>

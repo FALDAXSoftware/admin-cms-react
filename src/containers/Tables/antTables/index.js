@@ -38,6 +38,9 @@ import { twoFactorReqInfos } from './twoFactorReqConfig';
 import { walletTableInfos } from './walletHistoryConfig';
 import { dashboardTableinfos } from './walletDashboardConfig';
 import { walletFeeTableinfos } from './walletFeeConfig';
+import { pendingOrderTableInfos } from './pendingOrderConfig';
+import { cancelOrderTableInfos } from './cancelOrderConfig';
+import { tierTableInfos } from './tierConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -92,5 +95,6 @@ export {
   newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
   accountClassTableinfos, templateTableinfos, newsSourceTableInfos, jobCategoryTableInfos,
   ApprovedKYCInfos, whitelistTableInfos, profileWhitelistTableInfos, twoFactorReqInfos,
-  walletTableInfos, dashboardTableinfos, walletFeeTableinfos
+  walletTableInfos, dashboardTableinfos, walletFeeTableinfos, pendingOrderTableInfos,
+  cancelOrderTableInfos, tierTableInfos
 };

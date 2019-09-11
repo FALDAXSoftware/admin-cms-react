@@ -113,7 +113,7 @@ class Employees extends Component {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMsg: true, errMessage: res.message });
                 }
                 _this.setState({ loader: false });
             })

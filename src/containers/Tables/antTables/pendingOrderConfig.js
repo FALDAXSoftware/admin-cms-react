@@ -43,24 +43,11 @@ const columns = [
         render: object => renderCell(object, 'TextCell', 'limit_price')
     },
     {
-        title: <IntlMessages id="orderTable.title.volume" />,
-        key: 'stop_price',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'stop_price')
-    },
-    {
         title: <IntlMessages id="orderTable.title.fill_price" />,
         key: 'fill_price',
         width: 100,
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'fill_price')
-    },
-    {
-        title: <IntlMessages id="orderTable.title.order_status" />,
-        key: 'order_status',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'order_status')
     },
     {
         title: <IntlMessages id="orderTable.title.created_at" />,
@@ -71,12 +58,12 @@ const columns = [
     },
 ];
 
-const sellOrderTableInfos = [
+const pendingOrderTableInfos = [
     {
-        title: 'User Sell Orders',
+        title: 'User Pending Orders',
         value: 'userOrderTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, sellOrderTableInfos };
+export { columns, pendingOrderTableInfos };

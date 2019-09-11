@@ -71,12 +71,12 @@ const columns = [
     },
 ];
 
-const sellOrderTableInfos = [
+const cancelOrderTableInfos = [
     {
-        title: 'User Sell Orders',
+        title: 'User Cancel Orders',
         value: 'userOrderTable',
         columns: clone(columns)
     }
 ];
 
-export { columns, sellOrderTableInfos };
+export { columns, cancelOrderTableInfos };

@@ -30,7 +30,10 @@ class ViewRequestModal extends Component {
     }
 
     _closeRejectForm = () => {
-        this.setState({ showRejectForm: false });
+        const { fields } = this.state;
+
+        fields['reason'] = '';
+        this.setState({ fields, showRejectForm: false });
         this.props.closeActionReqModal();
     }
 

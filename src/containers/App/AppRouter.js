@@ -134,6 +134,11 @@ const routes = [
     //     component: asyncComponent(() => import("../Page/Assets/editAsset")),
     //     module: "edit_asset"
     // },
+    {
+        path: "account-tier",
+        component: asyncComponent(() => import("../Page/Tiers/tiers")),
+        module: "tiers"
+    },
 ];
 
 const mandatoryRoutes = [
@@ -204,6 +209,14 @@ const mandatoryRoutes = [
     {
         path: "email-templates/edit-template/:id",
         component: asyncComponent(() => import("../Page/EmailTemplates/updateEmailTemplate"))
+    },
+    {
+        path: "batch-and-balance/:id",
+        component: asyncComponent(() => import("../Page/Batch/batchDetails"))
+    },
+    {
+        path: "account-tier/:id",
+        component: asyncComponent(() => import("../Page/Tiers/editTier"))
     },
 ]
 

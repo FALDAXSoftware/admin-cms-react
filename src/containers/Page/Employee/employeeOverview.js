@@ -48,11 +48,11 @@ class PersonalDetails extends Component {
                         _this.props.logout();
                     });
                 } else {
-
+                    console.log('elseeee')
                 }
             })
             .catch((err) => {
-                console.log(err)
+                console.log('firsrt', err)
             });
     }
 
@@ -75,6 +75,7 @@ class PersonalDetails extends Component {
                 }
             })
             .catch(err => {
+                console.log('err', err)
                 _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
             });
     }

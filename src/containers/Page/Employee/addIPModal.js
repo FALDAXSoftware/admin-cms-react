@@ -153,7 +153,7 @@ class AddIPModal extends Component {
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>IP Address:</span>
-                    <Input placeholder="IP Address" onChange={this._handleChange.bind(this, "ip")} value={fields["ip"]} />
+                    <Input placeholder="192.168.0.0" onChange={this._handleChange.bind(this, "ip")} value={fields["ip"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('ip', fields["ip"], 'required|max:50', 'text-danger')}
                         {showIPError && <span>The IP Address is not valid.</span>}

@@ -25,6 +25,7 @@ import { JobCategory } from '../../containers/Page/Jobs/jobsCategory';
 import ProfileWhitelist from '../../containers/Page/profileWhitelist';
 import Whitelist from '../../containers/Page/Employee/employeeWhitelist';
 import TwoFactorRequests from '../../containers/Page/TwoFactorRequest/TwoFactorRequests';
+import Tier from '../../containers/Page/Tiers/tiers';
 import create from 'antd/lib/icon/IconFont';
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
@@ -214,12 +215,17 @@ const viewRequest = (value, full_name, email, uploaded_file, status, reason, cre
     TwoFactorRequests.viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)
 }
 
+const editTier = (value) => {
+    Tier.editTier(value);
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id, refered_by, total_referal) => <p>{created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const TransactionTypeCell = data => <p>{data == 'send' ? 'Send' : 'Receive'}</p>
 const VolumeCell = (value, currency, settle_currency, reqested_user_email, email, side, quantity, price, fill_price, maker_fee, taker_fee, volume, created_at) => <p>{quantity * fill_price}</p>;
 const DateTimeCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : '' : ''}</p>;
+const DateTimeSecCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY HH:mm:ss")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm:ss") : '' : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
 const UserImageCell = src => <img style={{ width: '40px', height: '40px' }} src={(!src || src == null) ? S3BucketImageURL + 'profile/def_profile.jpg' : S3BucketImageURL + src} />;
 const StaticImageCell = src => <img style={{ width: '40px', height: '40px' }} src={src} />;
@@ -277,7 +283,10 @@ const JobCatSwitchCell = (value, category, is_active) => <Switch checked={is_act
 const JobCatActionCell = (value, category, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => updateCategory(value, category, is_active)} /></Tooltip></div>;
 const WhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
 const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => <div>{!is_permanent ? <Tooltip title="Delete"><Icon type="delete" onClick={() => deleteProfileWhitelistIP(value)} style={{ "cursor": "pointer" }} /></Tooltip> : '-'}</div>;
-const TwoFAActionCell = (value, full_name, email, uploaded_file, status, reason, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)} /></Tooltip>{status.trim() !== 'open' ? '' : <React.Fragment><Icon theme="twoTone" type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => approve2FA(value, full_name, email, uploaded_file, status, created_at)} /><Icon theme="twoTone" twoToneColor="#FF0000" type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => reject2FA(value, full_name, email, uploaded_file, status, created_at)} /></React.Fragment>}</div>;
+const TwoFAActionCell = (value, full_name, email, uploaded_file, status, reason, created_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewRequest(value, full_name, email, uploaded_file, status, reason, created_at)} /></Tooltip>{status.trim() !== 'open' ? '' : <React.Fragment><Tooltip title="Approve"><Icon theme="twoTone" type="check-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => approve2FA(value, full_name, email, uploaded_file, status, created_at)} /></Tooltip><Tooltip title="Reject"><Icon theme="twoTone" twoToneColor="#FF0000" type="close-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => reject2FA(value, full_name, email, uploaded_file, status, created_at)} /></Tooltip></React.Fragment>}</div>;
+const TierReqCell = (value, tier_step, daily_withdraw_limit, monthly_withdraw_limit, minimum_activity_thresold, requirements) => <div>{Object.keys(requirements).map((req) => <span>{requirements[req]}<br /></span>)}</div>
+const TierThresholdCell = (value, tier_step, daily_withdraw_limit, monthly_withdraw_limit, minimum_activity_thresold, requirements) => <div>{Object.keys(minimum_activity_thresold).map((threshold) => <span>{minimum_activity_thresold[threshold]}<br /></span>)}</div>
+const TierActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTier(value)} /></Tooltip></div>
 
 export {
     IPCell,
@@ -309,6 +318,7 @@ export {
     EmployeeActionCell,
     FeeSwitchCell,
     DateTimeCell,
+    DateTimeSecCell,
     FeeActionCell,
     LimitActionCell,
     TagsCell,
@@ -346,4 +356,7 @@ export {
     DaysCell,
     LocationCell,
     TwoFAActionCell,
+    TierReqCell,
+    TierThresholdCell,
+    TierActionCell
 };
