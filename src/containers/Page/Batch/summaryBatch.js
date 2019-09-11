@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import authAction from '../../../redux/auth/actions';
+import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
 
@@ -10,7 +11,8 @@ class SummaryBatch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            summaryBatchData: []
+            summaryBatchData: [],
+            batchDetails: this.props.batchDetails
         }
         this.columns = [
             {
@@ -60,23 +62,32 @@ class SummaryBatch extends Component {
                 key: 'faldax_fees',
             },
             {
+
                 title: 'Network Fee Value',
+
                 dataIndex: 'faldax_usd_fees',
+
                 key: 'faldax_usd_fees',
             },
         ];
     }
 
-    componentDidMount = () => {
-        this._getSummaryOfBatch();
+
+    componentWillReceiveProps = (nextProps) => {
+        if (this.props != nextProps) {
+            this.setState({ batchDetails: nextProps.batchDetails }, () => {
+                this._getSummaryOfBatch();
+            });
+        }
     }
 
     _getSummaryOfBatch = () => {
         const { token } = this.props;
+        const { batchDetails: { transaction_end, transaction_start } } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getSummaryOfBatch(token, 900, 915)
+        ApiUtils.getSummaryOfBatch(token, transaction_start, transaction_end)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -98,18 +109,20 @@ class SummaryBatch extends Component {
     }
 
     render() {
+        const { loader } = this.state;
         const columns = this.columns.map(col => {
             return col;
         });
 
         return (
-            <div>
+            <div className="isoLayoutContent">
                 <Table
                     columns={columns}
                     dataSource={this.state.summaryBatchData}
                     bordered
                     pagination={false}
                 />
+                {loader && <FaldaxLoader />}
             </div>
         )
     }

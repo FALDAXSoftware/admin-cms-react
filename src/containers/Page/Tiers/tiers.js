@@ -6,7 +6,6 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
-import EditTierModal from './editTierModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
@@ -23,19 +22,15 @@ class Tiers extends Component {
             errMsg: false,
             errType: 'Success',
             tierDetails: [],
-            showEditPairModal: false,
             sorterCol: '',
             sortOrder: ''
         }
         self = this;
-        Tiers.editPair = Tiers.editPair.bind(this);
+        Tiers.editTier = Tiers.editTier.bind(this);
     }
 
-    static editPair(value, name, maker_fee, taker_fee, created_at, is_active) {
-        let tierDetails = {
-            value, name, maker_fee, taker_fee, created_at, is_active
-        }
-        self.setState({ tierDetails, showEditPairModal: true });
+    static editTier(value) {
+        self.props.history.push('/dashboard/account-tier/' + value)
     }
 
     componentDidMount = () => {
@@ -82,7 +77,7 @@ class Tiers extends Component {
     }
 
     render() {
-        const { allTiers, errType, errMsg, loader, tierDetails, showEditPairModal } = this.state;
+        const { allTiers, errType, errMsg, loader } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -94,12 +89,6 @@ class Tiers extends Component {
                         {tierTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 {loader && <FaldaxLoader />}
-                                {showEditPairModal && <EditTierModal
-                                    fields={tierDetails}
-                                    showEditPairModal={showEditPairModal}
-                                    closeEditModal={this._closeEditPairModal}
-                                    getAllTiers={this._getAllTiers}
-                                />}
                                 <TableWrapper
                                     {...this.state}
                                     columns={tableInfo.columns}

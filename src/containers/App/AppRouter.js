@@ -214,6 +214,10 @@ const mandatoryRoutes = [
         path: "batch-and-balance/:id",
         component: asyncComponent(() => import("../Page/Batch/batchDetails"))
     },
+    {
+        path: "account-tier/:id",
+        component: asyncComponent(() => import("../Page/Tiers/editTier"))
+    },
 ]
 
 class AppRouter extends Component {

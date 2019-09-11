@@ -320,16 +320,16 @@ class BatchBalance extends React.Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success', transactionID: '' });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' });
                     _this._getAllBatches();
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                 }
-                _this.setState({ loader: false });
+                _this.setState({ loader: false, transactionID: '' });
             })
             .catch(() => {
                 _this.setState({

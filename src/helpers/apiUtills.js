@@ -1,9 +1,9 @@
 import { stat } from "fs";
-const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+//const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
-//const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
+const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -2223,6 +2223,37 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getBatchDetails: function (token, batchId) {
+        let url = "/admin/get-batch-detail?id=" + batchId;
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getTierDetails: function (token, tierId) {
+        let url = "/admin/get-tier-data?id=" + tierId;
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
 };
 
 

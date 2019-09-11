@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import authAction from '../../../redux/auth/actions';
+import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
 
@@ -10,7 +11,8 @@ class PurchaseBatch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            purchaseBatchData: []
+            purchaseBatchData: [],
+            batchDetails: this.props.batchDetails
         }
         this.columns = [
             {
@@ -85,12 +87,21 @@ class PurchaseBatch extends Component {
         this._getPurchaseOfBatch();
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        if (this.props != nextProps) {
+            this.setState({ batchDetails: nextProps.batchDetails }, () => {
+                this._getPurchaseOfBatch();
+            });
+        }
+    }
+
     _getPurchaseOfBatch = () => {
         const { token } = this.props;
+        const { batchDetails: { transaction_end, transaction_start } } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getPurchaseOfBatch(token, 900, 915)
+        ApiUtils.getPurchaseOfBatch(token, transaction_start, transaction_end)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -112,17 +123,21 @@ class PurchaseBatch extends Component {
     }
 
     render() {
+        const { loader } = this.state;
         const columns = this.columns.map(col => {
             return col;
         });
 
         return (
-            <Table
-                columns={columns}
-                dataSource={this.state.purchaseBatchData}
-                bordered
-                pagination={false}
-            />
+            <div className="isoLayoutContent">
+                <Table
+                    columns={columns}
+                    dataSource={this.state.purchaseBatchData}
+                    bordered
+                    pagination={false}
+                />
+                {loader && <FaldaxLoader />}
+            </div>
         )
     }
 }
