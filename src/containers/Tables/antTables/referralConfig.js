@@ -11,7 +11,7 @@ const renderCell = (object, type, key, fullName, emailID, createdAt, referralEma
     const referral_by_email = object[referralEmail];
     const referred_id = object[referredId]
     const refered_by = object[referredBy];
-    const total_referal = object[totalReferral]
+    const no_of_referral = object[totalReferral]
 
     switch (type) {
         case 'TextCell':
@@ -19,13 +19,18 @@ const renderCell = (object, type, key, fullName, emailID, createdAt, referralEma
         case 'ReferralCell':
             return ReferralCell(value);
         case 'ReferralDateCell':
-            return ReferralDateCell(value, full_name, email, created_at, referral_by_email, referred_id, refered_by, total_referal);
+            return ReferralDateCell(value, full_name, email, created_at, referral_by_email, referred_id, refered_by, no_of_referral);
         case 'referralActionCell':
             return referralActionCell(value);
     }
 };
 
 const columns = [{
+    title: <IntlMessages id="antTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object, 'referralActionCell', 'id')
+}, {
     title: <IntlMessages id="antTable.title.Name" />,
     key: 'full_name',
     width: 100,
@@ -38,29 +43,11 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
-    title: <IntlMessages id="antTable.title.refered_by" />,
-    key: 'refered_by',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'refered_by')
-}, {
     title: <IntlMessages id="antTable.title.numReferral" />,
-    key: 'total_referal',
+    key: 'no_of_referral',
     width: 100,
     sorter: true,
-    render: object => renderCell(object, 'ReferralCell', 'total_referal')
-}, {
-    title: <IntlMessages id="antTable.title.created_at" />,
-    key: 'created_at',
-    width: 200,
-    sorter: true,
-    render: object => renderCell(object, 'ReferralDateCell', 'id', 'full_name', 'email', 'created_at', 'referral_by_email',
-        'referred_id', 'refered_by', 'total_referal')
-}, {
-    title: <IntlMessages id="antTable.title.Actions" />,
-    key: 'action',
-    width: 200,
-    render: object => renderCell(object, 'referralActionCell', 'id')
+    render: object => renderCell(object, 'ReferralCell', 'no_of_referral')
 }];
 
 const referralInfos = [

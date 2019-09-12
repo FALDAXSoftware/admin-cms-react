@@ -44,6 +44,16 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
 
 const columns = [
     {
+        title: <IntlMessages id="roleTable.title.actions" />,
+        key: 'action',
+        width: 200,
+        render: object => renderCell(object,
+            'RolesActionCell', 'id', 'name', 'users', 'assets',
+            'countries', 'roles', 'employee', 'pairs', 'transaction_history',
+            'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
+            'is_referral', 'add_user', 'is_active')
+    },
+    {
         title: <IntlMessages id="roleTable.title.name" />,
         key: 'name',
         width: 200,
@@ -54,15 +64,6 @@ const columns = [
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
-            'countries', 'roles', 'employee', 'pairs', 'transaction_history',
-            'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
-            'is_referral', 'add_user', 'is_active')
-    }, {
-        title: <IntlMessages id="roleTable.title.actions" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object,
-            'RolesActionCell', 'id', 'name', 'users', 'assets',
             'countries', 'roles', 'employee', 'pairs', 'transaction_history',
             'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
             'is_referral', 'add_user', 'is_active')

@@ -498,6 +498,7 @@
   "tierTable.title.monthly_withdraw_limit": "Monthly Withdraw Limit",
   "tierTable.title.minimum_activity_thresold": "Threshold",
   "tierTable.title.requirements": "Requirements",
+  "tierTable.title.actions": "Actions",
   "jobTable.title.position": "Position",
   "jobTable.title.short_desc": "Short Description",
   "jobTable.title.job_desc": "Job Description",

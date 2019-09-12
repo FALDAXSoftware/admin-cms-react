@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, TierThresholdCell, DateCell, TierReqCell
+    TextCell, TierThresholdCell, TierActionCell, TierReqCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, tier = null, dailyLimit = null, monthlyLimit = null,
@@ -15,9 +15,8 @@ const renderCell = (object, type, key, tier = null, dailyLimit = null, monthlyLi
     const requirements = object[req];
 
     switch (type) {
-        case 'DateCell':
-            return DateCell(value, tier_step, daily_withdraw_limit, monthly_withdraw_limit,
-                minimum_activity_thresold, requirements);
+        case 'TierActionCell':
+            return TierActionCell(value);
         case 'TierReqCell':
             return TierReqCell(value, tier_step, daily_withdraw_limit, monthly_withdraw_limit,
                 minimum_activity_thresold, requirements);
@@ -30,6 +29,11 @@ const renderCell = (object, type, key, tier = null, dailyLimit = null, monthlyLi
 };
 
 const columns = [{
+    title: <IntlMessages id="tierTable.title.actions" />,
+    key: 'actions',
+    width: 100,
+    render: object => renderCell(object, 'TierActionCell', 'id')
+}, {
     title: <IntlMessages id="tierTable.title.tier_step" />,
     key: 'tier_step',
     width: 100,

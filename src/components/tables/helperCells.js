@@ -221,7 +221,7 @@ const editTier = (value) => {
 
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
-const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id, refered_by, total_referal) => <p>{created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
+const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id, refered_by, no_of_referral) => <p>{created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const TransactionTypeCell = data => <p>{data == 'send' ? 'Send' : 'Receive'}</p>
 const VolumeCell = (value, currency, settle_currency, reqested_user_email, email, side, quantity, price, fill_price, maker_fee, taker_fee, volume, created_at) => <p>{quantity * fill_price}</p>;
 const DateTimeCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : '' : ''}</p>;

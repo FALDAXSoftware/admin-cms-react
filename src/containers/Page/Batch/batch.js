@@ -205,7 +205,6 @@ class BatchBalance extends React.Component {
                 updatedBatch = batch;
             }
         })
-        // console.log('updatedBatch', updatedBatch)
         const { token } = this.props;
         let _this = this;
         let formData = {
@@ -219,23 +218,25 @@ class BatchBalance extends React.Component {
         ApiUtils.updateBatch(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('res', res)
                 if (res.status == 200) {
-                    _this.setState({
+                    _this.setState((prevState) => ({
                         errMsg: true, errMessage: res.message, errType: 'Success',
-                    })
+                        allBatches: [
+                            ...prevState.allBatches.slice(0, updatedBatch.batch_number),
+                            updatedBatch,
+                            ...prevState.allBatches.slice(updatedBatch.batch_number + 1)
+                        ]
+                    }))
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    console.log('else')
                     _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch((err) => {
-                console.log('efflse', err)
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });

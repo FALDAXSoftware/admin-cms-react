@@ -32,6 +32,13 @@ const renderCell = (object, type, key, c_name = null, legal = null, colorCode = 
 
 const columns = [
     {
+        title: <IntlMessages id="countryTable.title.actions" />,
+        key: 'action',
+        width: 200,
+        render: object => renderCell(object, 'CountryActionCell', 'id', 'name', 'legality',
+            'color', 'stateCount', 'is_active')
+    },
+    {
         title: <IntlMessages id="countryTable.title.name" />,
         key: 'name',
         width: 100,
@@ -62,14 +69,7 @@ const columns = [
         key: 'button',
         width: 200,
         render: object => renderCell(object, 'CountryButtonCell', 'id', 'stateCount')
-    },
-    {
-        title: <IntlMessages id="countryTable.title.actions" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object, 'CountryActionCell', 'id', 'name', 'legality',
-            'color', 'stateCount', 'is_active')
-    },
+    }
 ];
 
 const countryTableInfos = [

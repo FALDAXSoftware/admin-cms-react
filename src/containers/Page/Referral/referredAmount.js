@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { Card } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
+import authAction from '../../../redux/auth/actions';
+
+const { logout } = authAction;
 
 class ReferredAmount extends Component {
     constructor(props) {
@@ -76,4 +79,4 @@ class ReferredAmount extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }))(ReferredAmount);
+    }), { logout })(ReferredAmount);

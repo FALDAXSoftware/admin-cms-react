@@ -20,6 +20,12 @@ const renderCell = (object, type, key, volume = null, maker = null, taker = null
 };
 
 const columns = [{
+    title: <IntlMessages id="feeTable.title.actions" />,
+    key: 'action',
+    width: 100,
+    render: object => renderCell(object, 'FeesActionCell', 'id', 'trade_volume', 'maker_fee'
+        , 'taker_fee')
+}, {
     title: <IntlMessages id="feeTable.title.trade" />,
     key: 'trade_volume',
     width: 100,
@@ -34,12 +40,6 @@ const columns = [{
     key: 'taker_fee',
     width: 100,
     render: object => renderCell(object, 'FeesCell', 'taker_fee')
-}, {
-    title: <IntlMessages id="feeTable.title.actions" />,
-    key: 'action',
-    width: 100,
-    render: object => renderCell(object, 'FeesActionCell', 'id', 'trade_volume', 'maker_fee'
-        , 'taker_fee')
 }];
 
 const FeesInfos = [

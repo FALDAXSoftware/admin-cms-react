@@ -22,40 +22,34 @@ const renderCell = (object, type, key, DailyWithCrypto = null, DailyWithFiat = n
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="limitTable.title.dailyWithdrawCrypto" />,
-        key: 'daily_withdraw_crypto',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'daily_withdraw_crypto')
-    },
-    {
-        title: <IntlMessages id="limitTable.title.dailyWithdrawFiat" />,
-        key: 'daily_withdraw_fiat',
-        maxWidth: 200,
-        render: object => renderCell(object, 'TextCell', 'daily_withdraw_fiat')
-    },
-    {
-        title: <IntlMessages id="limitTable.title.minWithdrawCrypto" />,
-        key: 'min_withdrawl_crypto',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'min_withdrawl_crypto')
-    },
-    {
-        title: <IntlMessages id="limitTable.title.minWithdrawlFiat" />,
-        key: 'min_withdrawl_fiat',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'min_withdrawl_fiat')
-    },
-    {
-        title: <IntlMessages id="limitTable.title.Actions" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object,
-            'LimitActionCell', 'id', 'daily_withdraw_crypto', 'daily_withdraw_fiat',
-            'min_withdrawl_crypto', 'min_withdrawl_fiat')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="limitTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object,
+        'LimitActionCell', 'id', 'daily_withdraw_crypto', 'daily_withdraw_fiat',
+        'min_withdrawl_crypto', 'min_withdrawl_fiat')
+}, {
+    title: <IntlMessages id="limitTable.title.dailyWithdrawCrypto" />,
+    key: 'daily_withdraw_crypto',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'daily_withdraw_crypto')
+}, {
+    title: <IntlMessages id="limitTable.title.dailyWithdrawFiat" />,
+    key: 'daily_withdraw_fiat',
+    maxWidth: 200,
+    render: object => renderCell(object, 'TextCell', 'daily_withdraw_fiat')
+}, {
+    title: <IntlMessages id="limitTable.title.minWithdrawCrypto" />,
+    key: 'min_withdrawl_crypto',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'min_withdrawl_crypto')
+}, {
+    title: <IntlMessages id="limitTable.title.minWithdrawlFiat" />,
+    key: 'min_withdrawl_fiat',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'min_withdrawl_fiat')
+}];
 
 const limitTableInfos = [
     {

@@ -37,6 +37,14 @@ const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null
 };
 
 const columns = [{
+    title: <IntlMessages id="kycTable.title.actions" />,
+    key: 'action',
+    width: 100,
+    render: object => renderCell(object, 'KYCActionCell', 'id', 'mtid', 'first_name'
+        , 'last_name', 'email', 'direct_response', 'kycDoc_details', 'webhook_response', 'address',
+        'country', 'city', 'zip', 'dob', 'id_type', 'created_at'
+    )
+}, {
     title: <IntlMessages id="kycTable.title.mtid" />,
     key: 'mtid',
     width: 100,
@@ -82,14 +90,6 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
-    title: <IntlMessages id="kycTable.title.actions" />,
-    key: 'action',
-    width: 100,
-    render: object => renderCell(object, 'KYCActionCell', 'id', 'mtid', 'first_name'
-        , 'last_name', 'email', 'direct_response', 'kycDoc_details', 'webhook_response', 'address',
-        'country', 'city', 'zip', 'dob', 'id_type', 'created_at'
-    )
 }];
 
 const ApprovedKYCInfos = [
