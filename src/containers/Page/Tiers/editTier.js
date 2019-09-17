@@ -76,14 +76,6 @@ class EditTier extends Component {
         this.setState({ fields });
     }
 
-    _resetForm = () => {
-        const { fields } = this.state;
-
-        fields['daily_withdraw_limit'] = '';
-        fields['monthly_withdraw_limit'] = '';
-        this.setState({ fields });
-    }
-
     _updateTier = (e) => {
         e.preventDefault();
         const { token } = this.props;
@@ -92,6 +84,7 @@ class EditTier extends Component {
 
         if (this.validator.allValid()) {
             let formData = {
+                id: fields["id"],
                 daily_withdraw_limit: fields["daily_withdraw_limit"],
                 monthly_withdraw_limit: fields["monthly_withdraw_limit"],
                 minimum_activity_thresold: {
@@ -107,11 +100,10 @@ class EditTier extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        _this._resetForm();
                         _this.setState({
                             errMsg: true, errMessage: res.message, errType: 'Success'
                         }, () => {
-                            //_this.props.history.push('/dashboard/account-tier');
+                            _this.props.history.push('/dashboard/account-tier');
                         })
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

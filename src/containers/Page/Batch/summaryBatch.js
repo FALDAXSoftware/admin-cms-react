@@ -4,6 +4,8 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
+import { BUCKET_URL } from '../../../helpers/globals';
+import { Card } from 'antd';
 
 const { logout } = authAction;
 
@@ -62,11 +64,8 @@ class SummaryBatch extends Component {
                 key: 'faldax_fees',
             },
             {
-
-                title: 'Network Fee Value',
-
+                title: 'FALDAX Fee Value',
                 dataIndex: 'faldax_usd_fees',
-
                 key: 'faldax_usd_fees',
             },
         ];
@@ -109,13 +108,20 @@ class SummaryBatch extends Component {
     }
 
     render() {
-        const { loader } = this.state;
+        const { loader, batchDetails } = this.state;
         const columns = this.columns.map(col => {
             return col;
         });
 
         return (
             <div className="isoLayoutContent">
+                {batchDetails.uploaded_file &&
+                    <div style={{ marginBottom: '10px' }}>
+                        <Card title="Uploaded File">
+                            <a target="_" href={`${BUCKET_URL}${batchDetails.uploaded_file}`}>{`${BUCKET_URL}${batchDetails.uploaded_file}`}</a>
+                        </Card>
+                    </div>
+                }
                 <Table
                     columns={columns}
                     dataSource={this.state.summaryBatchData}

@@ -148,6 +148,7 @@ class AddCoinModal extends Component {
             errType, isDisabled, showCoinErr, selectedToken
         } = this.state;
 
+
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

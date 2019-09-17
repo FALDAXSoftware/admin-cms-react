@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import AllRequests from './tierRequests';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -99,6 +100,7 @@ class Tiers extends Component {
                                 />
                             </TabPane>
                         ))}
+                        <TabPane tab="Tier Requests" key="2"><AllRequests /></TabPane>
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper >

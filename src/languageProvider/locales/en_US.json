@@ -452,6 +452,8 @@
   "feeTable.title.actions": "Actions",
   "feeTable.title.name": "Pair Name",
   "feeTable.title.Actions": "Actions",
+  "tierTable.title.first_name": "Name",
+  "tierTable.title.email": "Email",
   "limitTable.title.user": "User",
   "limitTable.title.dailyWithdrawCrypto": "Daily Withdraw Crypto",
   "limitTable.title.dailyWithdrawFiat": "Daily Withdraw Fiat",

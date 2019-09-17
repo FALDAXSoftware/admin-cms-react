@@ -53,27 +53,25 @@ class Referral extends Component {
     _getContactDetails = () => {
         let _this = this;
 
-        _this.setState({ loader: true });
+        //_this.setState({ loader: true });
         ApiUtils.getContactDetails()
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
                     let fields = _this.state.fields;
                     fields['percentage'] = res.data.default_referral_percentage;
-                    _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage, loader: false });
+                    _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error', loader: false });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
-                _this.setState({ loader: false });
+                // _this.setState({ loader: false });
             })
             .catch(() => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
+                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
             });
     }
 
@@ -261,7 +259,6 @@ class Referral extends Component {
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateDefaultReferral}> Update </Button>
                                 <Button type="primary" className="cancel-btn" onClick={this._cancelDefaultReferral}> Cancel </Button>
                             </div>
-                            {loader && <FaldaxLoader />}
                         </TabPane>
                     </Tabs>
                 </TableDemoStyle>

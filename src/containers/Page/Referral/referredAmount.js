@@ -13,7 +13,6 @@ class ReferredAmount extends Component {
         super(props)
         this.state = {
             referredAmounts: [],
-            userData: [],
             loader: false
         }
     }
@@ -29,7 +28,7 @@ class ReferredAmount extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ referredAmounts: res.data, userData: res.userData[0], loader: false });
+                    _this.setState({ referredAmounts: res.data, loader: false });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -43,8 +42,23 @@ class ReferredAmount extends Component {
             });
     }
 
+    groupBy(array, f) {
+        var groups = {};
+        array.forEach(function (o) {
+            var group = JSON.stringify(f(o));
+            groups[group] = groups[group] || [];
+            groups[group].push(o);
+        });
+        return Object.keys(groups).map(function (group) {
+            return groups[group];
+        })
+    }
+
     render() {
-        const { referredAmounts, userData, loader } = this.state;
+        const { referredAmounts, loader } = this.state;
+        let result = this.groupBy(referredAmounts, function (item) {
+            return [item.userid];
+        });
 
         return (
             <div className="referral-div">
@@ -54,17 +68,23 @@ class ReferredAmount extends Component {
                         <a onClick={() => { this.props.history.push('/dashboard/referral') }}>Back</a>
                     </Link>
                 </div>
-                <Card
-                    title={userData.full_name}
-                    style={{ width: 300 }}
-                >
-                    {referredAmounts.length > 0 ?
-                        referredAmounts.map((referral) => {
+                <Card style={{ width: 300 }}                >
+                    {result.length > 0 ?
+                        result.map((referral) => {
                             return (
-                                <p>
-                                    <span className="amount-span">{referral.amount}</span>
-                                    <span>{referral.coin_name}</span>
-                                </p>
+                                <div>
+                                    <span>{referral[0].firstname} {referral[0].lastname}</span><br />
+                                    <span>{referral[0].email}</span><br />
+                                    {
+                                        referral && referral.map(function (ref) {
+                                            return (
+                                                <p>
+                                                    <span className="amount-span">{ref.earned} {ref.coinname}</span>
+                                                </p>
+                                            );
+                                        })
+                                    }
+                                </div>
                             )
                         })
                         : ' No Referral Earning'

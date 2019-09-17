@@ -26,6 +26,7 @@ import ProfileWhitelist from '../../containers/Page/profileWhitelist';
 import Whitelist from '../../containers/Page/Employee/employeeWhitelist';
 import TwoFactorRequests from '../../containers/Page/TwoFactorRequest/TwoFactorRequests';
 import Tier from '../../containers/Page/Tiers/tiers';
+import PendingRequests from '../../containers/Page/Tiers/pendingTierRequests';
 import create from 'antd/lib/icon/IconFont';
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
@@ -219,6 +220,14 @@ const editTier = (value) => {
     Tier.editTier(value);
 }
 
+const viewPendingReq = (value, first_name, last_name, tier_step, is_approved, user_id) => {
+    PendingRequests.viewPendingReq(value, first_name, last_name, tier_step, is_approved, user_id);
+}
+
+const approvePendingReq = (value, first_name, last_name, tier_step, is_approved, user_id) => {
+    PendingRequests.approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id);
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id, refered_by, no_of_referral) => <p>{created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
@@ -234,6 +243,7 @@ const NewsLinkCell = (link, href) => <a href={link ? link : '#'} target="_blank"
 const ColorCell = (color) => <div style={{ background: color }} >{color}</div >;
 const ContentCell = text => <p style={{ display: 'block', width: '290px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const TextCell = text => <p dangerouslySetInnerHTML={{ __html: text }}></p>;
+const FullNameTextCell = (value, fname, lname) => <p>{fname} {lname}</p>;
 const DaysCell = text => <p>{text == 0 ? 'Permanent' : text + ' Days'}</p>;
 const TicketSubjectCell = text => <p style={{ cursor: 'pointer' }} dangerouslySetInnerHTML={{ __html: text }}></p>;
 const LocationCell = text => <Tooltip title={text}><p style={{ display: 'block', width: '100px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: text }}></p></Tooltip>;
@@ -287,6 +297,8 @@ const TwoFAActionCell = (value, full_name, email, uploaded_file, status, reason,
 const TierReqCell = (value, tier_step, daily_withdraw_limit, monthly_withdraw_limit, minimum_activity_thresold, requirements) => <div>{Object.keys(requirements).map((req) => <span>{requirements[req]}<br /></span>)}</div>
 const TierThresholdCell = (value, tier_step, daily_withdraw_limit, monthly_withdraw_limit, minimum_activity_thresold, requirements) => <div>{Object.keys(minimum_activity_thresold).map((threshold) => <span>{minimum_activity_thresold[threshold]}<br /></span>)}</div>
 const TierActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTier(value)} /></Tooltip></div>
+const TierReqActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTier(value)} /></Tooltip></div>
+const PendingTierReqActionCell = (value, first_name, last_name, tier_step, is_approved, user_id) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPendingReq(value, first_name, last_name, tier_step, is_approved, user_id)} /></Tooltip><Switch style={{ "marginLeft": "10px" }} checked={is_approved} onChange={() => { approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id) }} /></div>
 
 export {
     IPCell,
@@ -358,5 +370,8 @@ export {
     TwoFAActionCell,
     TierReqCell,
     TierThresholdCell,
-    TierActionCell
+    TierActionCell,
+    FullNameTextCell,
+    TierReqActionCell,
+    PendingTierReqActionCell
 };
