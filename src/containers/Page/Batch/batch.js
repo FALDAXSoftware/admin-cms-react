@@ -11,6 +11,9 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import moment from "moment";
 import ColWithPadding from '../common.style';
 import { CSVLink } from "react-csv";
+import jsPDF from 'jspdf';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import BatchView from './batchView';
 import { Document, Page } from 'react-pdf';
 
 const EditableContext = React.createContext();
@@ -111,7 +114,8 @@ class BatchBalance extends React.Component {
             transactionID: '',
             showDownloadPopup: false,
             selectedExport: ['PDF'],
-            downloadData: []
+            downloadData: [],
+            selectedOptions: [0]
         }
         this.columns = [{
             title: 'Batch',
@@ -386,6 +390,7 @@ class BatchBalance extends React.Component {
     _downloadBatch = () => {
         const { token } = this.props;
         const { selectedBatch, selectedOptions } = this.state;
+        console.log('selectedOptions', selectedOptions)
         let _this = this;
         let formData = {
             batch_id: selectedBatch.batch_number,
@@ -397,7 +402,11 @@ class BatchBalance extends React.Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ downloadData: res.data.purchases, errMsg: true, errMessage: res.message, errType: 'Success' });
+                    _this.setState({
+                        purchaseDownloadData: res.data.purchases,
+                        summaryDownloadData: res.data.summary,
+                        errMsg: true, errMessage: res.message, errType: 'Success'
+                    });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -414,9 +423,17 @@ class BatchBalance extends React.Component {
             });
     }
 
+    _convertPDF = () => {
+        let pdf = new jsPDF();
+        pdf.text(this.state.allBatches, 1, 1);
+        pdf.save("download.pdf");
+    }
+
     render() {
         const { allBatches, loader, errMsg, errType, batchCount, page, limit,
-            transactionID, showDownloadPopup, selectedExport, downloadData } = this.state;
+            transactionID, showDownloadPopup, selectedExport, purchaseDownloadData, summaryDownloadData,
+
+        } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -444,11 +461,11 @@ class BatchBalance extends React.Component {
         });
 
         const downloadOptions = [
-            { label: 'Summary', value: '1' },
-            { label: 'Purchases', value: '2' },
+            { label: 'Summary', value: 1 },
+            { label: 'Purchases', value: 2 },
             // { label: 'Auto Withdrawal', value: 'Auto Withdrawal' },
             // { label: 'Manual Withdrawal', value: 'Manual Withdrawal' },
-            { label: 'All', value: '0' },
+            { label: 'All', value: 0 },
         ];
 
         const exportOptions = [
@@ -459,6 +476,18 @@ class BatchBalance extends React.Component {
         return (
             <LayoutWrapper>
                 <div className="isoLayoutContent scroll-table">
+                    {/* <div>{
+                        <PDFDownloadLink
+                            document={<BatchView data={allBatches} columns={columns} />}
+                            fileName="test.pdf"
+                        >
+                            {({ blob, url, loading, error }) =>
+                                loading ? "Loading document..." :
+                                    <Button> Download</Button>
+                            }
+                        </PDFDownloadLink>
+                    }
+                    </div> */}
                     <div style={{ "display": "inline-block", "width": "100%" }}>
                         <Form layout="inline" onSubmit={this._createBatch}>
                             <Row type="flex" justify="end">
@@ -479,20 +508,18 @@ class BatchBalance extends React.Component {
                         </Form>
                     </div>
                     {
-                        selectedExport.includes('XLSX') &&
-                        <CSVLink
-                            data={downloadData}
-                            filename={'batch.csv'}
-                        />
+                        selectedExport.map((exportFile) => {
+                            selectedExport.includes('XLSX') &&
+                                <CSVLink
+                                    data={purchaseDownloadData}
+                                    filename={'batch.csv'}
+                                />
+                        })
                     }
-                    {
+                    {/* {
                         selectedExport.includes('PDF') &&
-                        <Document
-                            file="somefile.pdf"
-                        >
-                            <Page pageNumber={1} />
-                        </Document>
-                    }
+                        this._convertPDF()
+                    } */}
                     {showDownloadPopup &&
                         <Modal
                             title="Download Batch"
@@ -501,14 +528,26 @@ class BatchBalance extends React.Component {
                             onCancel={this._closeDownloadBatch}
                             footer={[
                                 <Button onClick={this._closeDownloadBatch}>Cancel</Button>,
-                                <Button onClick={this._downloadBatch}>Download</Button>,
+                                <div>{
+                                    selectedExport.includes('XLSX') && <PDFDownloadLink
+                                        document={<BatchView data={allBatches} columns={columns} />}
+                                        fileName="test.pdf"
+                                    >
+                                        {({ blob, url, loading, error }) =>
+                                            loading ? "Loading document..." :
+                                                <Button onClick={this._downloadBatch} > Download</Button>
+                                        }
+                                    </PDFDownloadLink>
+                                }
+                                </div>
+                                // < Button onClick = { this._downloadBatch } > Download</Button>,
                             ]}
                         >
                             <div style={{ "marginBottom": "15px" }}>
                                 <span><b>Which parts of the batch would you like to download? </b></span>
                                 <Checkbox.Group
                                     options={downloadOptions}
-                                    defaultValue={['0']}
+                                    defaultValue={[0]}
                                     onChange={this._onChangeList}
                                 />
                             </div>
@@ -522,6 +561,23 @@ class BatchBalance extends React.Component {
                             </div>
                         </Modal>
                     }
+                    <div>
+                        <Document
+                            file="somefile.pdf"
+                        >
+                            <Page pageNumber={2} />
+                        </Document>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div>
+                                <h3>ID</h3>
+                                <p>34sdf</p>
+                            </div>
+                            <div>
+                                <h3>Name</h3>
+                                <p>Test</p>
+                            </div>
+                        </div>
+                    </div>
                     <Table
                         components={components}
                         bordered
@@ -543,7 +599,7 @@ class BatchBalance extends React.Component {
                         /> : ''}
                     {loader && <FaldaxLoader />}
                 </div>
-            </LayoutWrapper>
+            </LayoutWrapper >
         );
     }
 }
