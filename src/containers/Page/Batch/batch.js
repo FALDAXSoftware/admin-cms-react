@@ -540,7 +540,7 @@ class BatchBalance extends React.Component {
                                     </PDFDownloadLink>
                                 }
                                 </div>
-                                // < Button onClick = { this._downloadBatch } > Download</Button>,
+                                // < Button onClick={this._downloadBatch} > Download</Button>,
                             ]}
                         >
                             <div style={{ "marginBottom": "15px" }}>
@@ -561,7 +561,7 @@ class BatchBalance extends React.Component {
                             </div>
                         </Modal>
                     }
-                    <div>
+                    {/* <div>
                         <Document
                             file="somefile.pdf"
                         >
@@ -577,7 +577,7 @@ class BatchBalance extends React.Component {
                                 <p>Test</p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <Table
                         components={components}
                         bordered
