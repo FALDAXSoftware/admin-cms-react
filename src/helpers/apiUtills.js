@@ -2,7 +2,7 @@ import { stat } from "fs";
 //const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
-//const API_URL = "http://192.168.1.96:7878"; //Local Jagdish URL
+//const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
 const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
@@ -275,15 +275,15 @@ const ApiUtils = {
 
     //get all referrals api
     getAllReferrals: function (page, limit, token, searchReferral, sorterCol, sortOrder) {
-        let url = "/admin/referred-users?page=" + page + "&limit=" + limit;
+        let url = "/admin/get-referal-list";
         searchReferral = encodeURIComponent(searchReferral);
-        if (sorterCol && sortOrder && searchReferral) {
-            url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-        } else if (sorterCol && sortOrder) {
-            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-        } else {
-            url += "&data=" + searchReferral;
-        }
+        // if (sorterCol && sortOrder && searchReferral) {
+        //     url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        // } else if (sorterCol && sortOrder) {
+        //     url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        // } else {
+        //     url += "&data=" + searchReferral;
+        // }
 
         try {
             return fetch(API_URL + url, {
@@ -1482,7 +1482,7 @@ const ApiUtils = {
 
     getReferredAmounts: function (token, ref_id) {
         try {
-            return fetch(API_URL + "/admin/get-referred-amount-details?id=" + ref_id, {
+            return fetch(API_URL + "/admin/get-referred-id-data?id=" + ref_id, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -2254,6 +2254,71 @@ const ApiUtils = {
         }
     },
 
+
+    updateTier: function (token, form) {
+        let url = "/admin/update-tier-list";
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    getAllTierRequests: function (token, id, status) {
+        let url = "/admin/user-tier-request";
+        if (id && status) {
+            url += "?id=" + id + "&status=" + status;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    uploadBatchDoc: function (token, form) {
+        let url = "/admin/batches/upload";
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+                body: form
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    downloadBatch: function (token, form) {
+        let url = "/admin/batches/download";
+        try {
+            return fetch(API_URL + url, {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+                body: JSON.stringify(form)
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 };
 
 

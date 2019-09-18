@@ -63,6 +63,15 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
 };
 
 const columns = [{
+    title: <IntlMessages id="antTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object,
+        'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
+        'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
+        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
+        'deleted_at')
+}, {
     title: "",
     key: 'profile_pic',
     width: '1%',
@@ -119,15 +128,6 @@ const columns = [{
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
-    title: <IntlMessages id="antTable.title.details" />,
-    key: 'action',
-    width: 200,
-    render: object => renderCell(object,
-        'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
-        'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
-        'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
-        'deleted_at')
 }];
 
 const tableinfos = [

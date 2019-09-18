@@ -23,6 +23,12 @@ const renderCell = (object, type, key, name = null, Email = null, file = null,
 };
 
 const columns = [{
+    title: "Actions",
+    key: 'actions',
+    width: 200,
+    render: object => renderCell(object, 'TwoFAActionCell', 'id', 'full_name', 'email',
+        'uploaded_file', 'status', 'reason', 'created_at')
+}, {
     title: "Name",
     key: 'full_name',
     width: 100,
@@ -45,12 +51,6 @@ const columns = [{
     key: 'status',
     width: 200,
     render: object => renderCell(object, 'TextCell', 'status')
-}, {
-    title: "Actions",
-    key: 'actions',
-    width: 200,
-    render: object => renderCell(object, 'TwoFAActionCell', 'id', 'full_name', 'email',
-        'uploaded_file', 'status', 'reason', 'created_at')
 }];
 
 const twoFactorReqInfos = [

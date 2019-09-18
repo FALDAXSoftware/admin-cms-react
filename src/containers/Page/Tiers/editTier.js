@@ -36,9 +36,12 @@ class EditTier extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    //let fields;
-                    //fields['account_age'] = res.data.minimum_activity_thresold[0];
-                    _this.setState({ fields: res.data });
+                    let fields = res.data;
+                    let { Account_Age, Minimum_Total_Transactions, Minimum_Total_Value_of_All_Transactions } = res.data.minimum_activity_thresold;
+                    fields['account_age'] = Account_Age;
+                    fields['total_tras'] = Minimum_Total_Transactions;
+                    fields['total_value'] = Minimum_Total_Value_of_All_Transactions;
+                    _this.setState({ fields });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -73,14 +76,6 @@ class EditTier extends Component {
         this.setState({ fields });
     }
 
-    _resetForm = () => {
-        const { fields } = this.state;
-
-        fields['daily_withdraw_limit'] = '';
-        fields['monthly_withdraw_limit'] = '';
-        this.setState({ fields });
-    }
-
     _updateTier = (e) => {
         e.preventDefault();
         const { token } = this.props;
@@ -89,9 +84,15 @@ class EditTier extends Component {
 
         if (this.validator.allValid()) {
             let formData = {
+                id: fields["id"],
                 daily_withdraw_limit: fields["daily_withdraw_limit"],
                 monthly_withdraw_limit: fields["monthly_withdraw_limit"],
-
+                minimum_activity_thresold: {
+                    Account_Age: fields['account_age'],
+                    Minimum_Total_Transactions: fields['total_tras'],
+                    Minimum_Total_Value_of_All_Transactions: fields['total_value']
+                },
+                requirements: fields.requirements
             };
 
             this.setState({ loader: true, isDisabled: true })
@@ -99,11 +100,10 @@ class EditTier extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        _this._resetForm();
                         _this.setState({
                             errMsg: true, errMessage: res.message, errType: 'Success'
                         }, () => {
-                            _this.props.history.push('/dashboard/users');
+                            _this.props.history.push('/dashboard/account-tier');
                         })
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -147,7 +147,7 @@ class EditTier extends Component {
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
                             <span>Tier:</span>
-                            <Input placeholder="tier_step" value={fields["tier_step"]} />
+                            <Input placeholder="Tier" value={fields["tier_step"]} disabled />
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
@@ -165,15 +165,33 @@ class EditTier extends Component {
                             </span>
                         </Col>
                     </Row>
-                    {/* <Row style={{ "marginBottom": "15px" }}>
+                    <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Minimum Activity Thresold:</span>
-                            <Input placeholder="Minimum Activity Thresold" onChange={this._handleChange.bind(this, "monthly_withdraw_limit")} value={fields["monthly_withdraw_limit"]} />
+                            <span>Account Age:</span>
+                            <Input placeholder="Account Age" onChange={this._handleChange.bind(this, "account_age")} value={fields["account_age"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('monthly_withdraw_limit', fields["monthly_withdraw_limit"], 'required', 'text-danger')}
+                                {this.validator.message('account_age', fields["account_age"], 'required', 'text-danger')}
                             </span>
                         </Col>
-                    </Row> */}
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Minimum Total Transactions:</span>
+                            <Input placeholder="Minimum Total Transactions" onChange={this._handleChange.bind(this, "total_tras")} value={fields["total_tras"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('total_tras', fields["total_tras"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Minimum Total Value of All Transactions:</span>
+                            <Input placeholder="Minimum Total Value of All Transactions" onChange={this._handleChange.bind(this, "total_value")} value={fields["total_value"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('total_value', fields["total_value"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col>
                             <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>

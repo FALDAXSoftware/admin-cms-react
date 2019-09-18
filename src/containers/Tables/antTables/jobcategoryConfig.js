@@ -18,26 +18,22 @@ const renderCell = (object, type, key, jobCat = null, active = null) => {
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="jobTable.title.category" />,
-        key: 'category',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'category')
-    },
-    {
-        title: <IntlMessages id="jobTable.title.active" />,
-        key: 'is_active',
-        width: 200,
-        render: object => renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
-    },
-    {
-        title: <IntlMessages id="jobTable.title.Actions" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object, 'JobCatActionCell', 'id', 'category', 'is_active')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="jobTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object, 'JobCatActionCell', 'id', 'category', 'is_active')
+}, {
+    title: <IntlMessages id="jobTable.title.category" />,
+    key: 'category',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'category')
+}, {
+    title: <IntlMessages id="jobTable.title.active" />,
+    key: 'is_active',
+    width: 200,
+    render: object => renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
+}];
 
 const jobCategoryTableInfos = [
     {

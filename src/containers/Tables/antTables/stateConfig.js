@@ -26,40 +26,34 @@ const renderCell = (object, type, key, s_name = null, legal = null, colorCode = 
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="stateTable.title.name" />,
-        key: 'name',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'name')
-    },
-    {
-        title: <IntlMessages id="countryTable.title.legality" />,
-        key: 'legality',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'LegalityCell', 'legality')
-    },
-    {
-        title: <IntlMessages id="countryTable.title.color" />,
-        key: 'color',
-        width: 100,
-        render: object => renderCell(object, 'ColorCell', 'color')
-    },
-    {
-        title: <IntlMessages id="countryTable.title.status" />,
-        key: 'is_active',
-        width: 200,
-        render: object => renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
-    },
-    {
-        title: <IntlMessages id="countryTable.title.actions" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object, 'StateActionCell', 'id', 'name', 'legality', 'color', 'is_active')
-    },
-];
+const columns = [{
+    title: <IntlMessages id="countryTable.title.actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object, 'StateActionCell', 'id', 'name', 'legality', 'color', 'is_active')
+}, {
+    title: <IntlMessages id="stateTable.title.name" />,
+    key: 'name',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'name')
+}, {
+    title: <IntlMessages id="countryTable.title.legality" />,
+    key: 'legality',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'LegalityCell', 'legality')
+}, {
+    title: <IntlMessages id="countryTable.title.color" />,
+    key: 'color',
+    width: 100,
+    render: object => renderCell(object, 'ColorCell', 'color')
+}, {
+    title: <IntlMessages id="countryTable.title.status" />,
+    key: 'is_active',
+    width: 200,
+    render: object => renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
+}];
 
 const stateTableInfos = [
     {

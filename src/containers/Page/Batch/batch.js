@@ -1,5 +1,7 @@
 import React from 'react';
-import { Table, Input, Form, Button, Checkbox, notification, Pagination, Row } from 'antd';
+import {
+    Table, Input, Form, Button, Checkbox, notification, Pagination, Row, Modal
+} from 'antd';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
@@ -8,12 +10,14 @@ import SimpleReactValidator from 'simple-react-validator';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import moment from "moment";
 import ColWithPadding from '../common.style';
-import { Link } from 'react-router-dom';
-import { buffers } from 'redux-saga';
+import { CSVLink } from "react-csv";
+import jsPDF from 'jspdf';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import BatchView from './batchView';
+import { Document, Page } from 'react-pdf';
 
 const EditableContext = React.createContext();
 const { logout } = authAction;
-const Search = Input.Search;
 
 const EditableRow = ({ form, index, ...props }) => (
     <EditableContext.Provider value={form}>
@@ -107,94 +111,120 @@ class BatchBalance extends React.Component {
             page: 1,
             limit: 50,
             batchCount: 0,
-            transactionID: ''
+            transactionID: '',
+            showDownloadPopup: false,
+            selectedExport: ['PDF'],
+            downloadData: [],
+            selectedOptions: [0]
         }
-        this.columns = [
-            {
-                title: 'Batch',
-                dataIndex: 'batch_number',
-                render: (text, record) =>
-                    this.state.allBatches.length >= 1 ? (
-                        <Button onClick={() => { this.props.history.push(`/dashboard/batch-and-balance/${record.batch_number}`) }}>{record.batch_number}</Button>
-                    ) : null,
-            },
-            {
-                title: 'Transactions',
-                dataIndex: 'transaction_start',
-                render: (text, record) =>
-                    this.state.allBatches.length >= 1 ? (
-                        <span>{record.transaction_start} - {record.transaction_end}</span>
-                    ) : null,
-            },
-            {
-                title: 'Batch Date',
-                dataIndex: 'batch_date',
-                render: (text, record) => (<span>{moment.utc(record.batch_date).local().format("DD MMM YYYY HH:mm:ss")}</span>)
-            },
-            {
-                title: 'Purchases',
-                dataIndex: 'is_purchased',
-                render: (text, record) =>
-                    this.state.allBatches.length >= 1 ? (
-                        <Checkbox key={record.id} checked={record.is_purchased} onChange={this._checkBatch.bind(this, 'is_purchased', record)}>Purchase</Checkbox>
-                    ) : null,
-            },
-            {
-                title: 'Withdrawals',
-                dataIndex: 'is_withdrawled',
-                render: (text, record) =>
-                    this.state.allBatches.length >= 1 ? (
-                        <Checkbox key={record.id} checked={record.is_withdrawled} onChange={this._checkBatch.bind(this, 'is_withdrawled', record)}>Withdrawals</Checkbox>
-                    ) : null,
-            },
-            {
-                title: 'Manual Withdrawals',
-                dataIndex: 'is_manual_withdrawled',
-                render: (text, record) =>
-                    this.state.allBatches.length >= 1 ? (
-                        <Checkbox key={record.id} checked={record.is_manual_withdrawled} onChange={this._checkBatch.bind(this, 'is_manual_withdrawled', record)}>Manual Withdraw</Checkbox>
-                    ) : null,
-            },
-            {
-                title: 'Net Profit',
-                dataIndex: 'net_profit',
-            },
-            {
-                title: 'Download',
-                dataIndex: 'download',
-                render: (text, record) => {
-                    return (
-                        <Button type="primary" icon="download">Download</Button>
-                    )
-                }
-            },
-            {
-                title: 'Upload',
-                dataIndex: 'upload',
-                render: (text, record) => {
-                    return (
-                        <div>
-                            <input id="myInput"
-                                type="file"
-                                ref={(ref) => this.upload = ref}
-                                style={{ display: 'none' }}
-                                onChange={this.onChangeFile.bind(this)}
-                            />
-                            <Button type="primary" icon="upload" onClick={() => this.upload.click(this, record)}>Upload</Button>
-                        </div >
-                    )
-                }
+        this.columns = [{
+            title: 'Batch',
+            dataIndex: 'batch_number',
+            render: (text, record) =>
+                this.state.allBatches.length >= 1 ? (
+                    <Button onClick={() => { this.props.history.push(`/dashboard/batch-and-balance/${record.batch_number}`) }}>{record.batch_number}</Button>
+                ) : null,
+        }, {
+            title: 'Transactions',
+            dataIndex: 'transaction_start',
+            render: (text, record) =>
+                this.state.allBatches.length >= 1 ? (
+                    <span>{record.transaction_start} - {record.transaction_end}</span>
+                ) : null,
+        }, {
+            title: 'Batch Date',
+            dataIndex: 'batch_date',
+            render: (text, record) => (<span>{moment.utc(record.batch_date).local().format("DD MMM YYYY HH:mm:ss")}</span>)
+        }, {
+            title: 'Purchases',
+            dataIndex: 'is_purchased',
+            render: (text, record) =>
+                this.state.allBatches.length >= 1 ? (
+                    <Checkbox key={record.id} checked={record.is_purchased} onChange={this._checkBatch.bind(this, 'is_purchased', record)}>Purchase</Checkbox>
+                ) : null,
+        }, {
+            title: 'Withdrawals',
+            dataIndex: 'is_withdrawled',
+            render: (text, record) =>
+                this.state.allBatches.length >= 1 ? (
+                    <Checkbox key={record.id} checked={record.is_withdrawled} onChange={this._checkBatch.bind(this, 'is_withdrawled', record)}>Withdrawals</Checkbox>
+                ) : null,
+        }, {
+            title: 'Manual Withdrawals',
+            dataIndex: 'is_manual_withdrawled',
+            render: (text, record) =>
+                this.state.allBatches.length >= 1 ? (
+                    <Checkbox key={record.id} checked={record.is_manual_withdrawled} onChange={this._checkBatch.bind(this, 'is_manual_withdrawled', record)}>Manual Withdraw</Checkbox>
+                ) : null,
+        }, {
+            title: 'Net Profit',
+            dataIndex: 'net_profit',
+        }, {
+            title: 'Download',
+            dataIndex: 'download',
+            render: (text, record) => {
+                return (
+                    <Button type="primary" icon="download" onClick={this._downloadModal.bind(this, record)}>Download</Button>
+                )
             }
-        ];
+        }, {
+            title: 'Upload',
+            dataIndex: 'upload',
+            render: (text, record) => {
+                return (
+                    <div>
+                        <input id="myInput"
+                            type="file"
+                            ref={(ref) => this.upload = ref}
+                            style={{ display: 'none' }}
+                            onChange={this.onChangeFile.bind(this, record)}
+                        />
+                        <Button type="primary" icon="upload"
+                            onClick={() => this.upload.click(this, record)}
+                            disabled={record.uploaded_file !== null ? true : false}
+                        >Upload</Button>
+                    </div >
+                )
+            }
+        }];
         this.validator = new SimpleReactValidator();
     }
 
-    onChangeFile = (e, data) => {
-        e.stopPropagation();
-        e.preventDefault();
-        var file = e.target.files[0];
+    onChangeFile = (e, data, value) => {
+        data.stopPropagation();
+        data.preventDefault();
 
-        this.setState({ file });
+        const { token } = this.props;
+        this.setState({ loader: true });
+
+        let formData = new FormData();
+        formData.append('batch_id', e.batch_number);
+        formData.append('batch_upload', data.target.files[0]);
+
+        ApiUtils.uploadBatchDoc(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    this.setState({
+                        errMsg: true, errMessage: res.message,
+                        loader: false, errType: 'Success'
+                    })
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({
+                        errMsg: true, errMessage: res.err,
+                        loader: false, errType: 'Error'
+                    })
+                }
+            }).catch((err) => {
+                this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    loader: false, errType: 'error'
+                });
+            });
     }
 
     _checkBatch = (e, data, val) => {
@@ -205,7 +235,6 @@ class BatchBalance extends React.Component {
                 updatedBatch = batch;
             }
         })
-        // console.log('updatedBatch', updatedBatch)
         const { token } = this.props;
         let _this = this;
         let formData = {
@@ -219,27 +248,38 @@ class BatchBalance extends React.Component {
         ApiUtils.updateBatch(token, formData)
             .then((response) => response.json())
             .then(function (res) {
-                console.log('res', res)
                 if (res.status == 200) {
-                    _this.setState({
+                    _this.setState((prevState) => ({
                         errMsg: true, errMessage: res.message, errType: 'Success',
-                    })
+                        allBatches: [
+                            ...prevState.allBatches.slice(0, updatedBatch.batch_number),
+                            updatedBatch,
+                            ...prevState.allBatches.slice(updatedBatch.batch_number + 1)
+                        ]
+                    }))
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    console.log('else')
                     _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch((err) => {
-                console.log('efflse', err)
                 _this.setState({
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
+    }
+
+    _downloadModal = (values) => {
+        console.log('values', values)
+        this.setState({ showDownloadPopup: true, selectedBatch: values })
+    }
+
+    _closeDownloadBatch = () => {
+        this.setState({ showDownloadPopup: false })
     }
 
     handleSave = row => {
@@ -339,8 +379,61 @@ class BatchBalance extends React.Component {
         this.setState({ transactionID: field.target.value })
     }
 
+    _onChangeList = (checkedList) => {
+        this.setState({ selectedOptions: checkedList })
+    }
+
+    _onChangeExportVal = (value) => {
+        this.setState({ selectedExport: value })
+    }
+
+    _downloadBatch = () => {
+        const { token } = this.props;
+        const { selectedBatch, selectedOptions } = this.state;
+        console.log('selectedOptions', selectedOptions)
+        let _this = this;
+        let formData = {
+            batch_id: selectedBatch.batch_number,
+            options: selectedOptions
+        }
+
+        _this.setState({ loader: true });
+        ApiUtils.downloadBatch(token, formData)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({
+                        purchaseDownloadData: res.data.purchases,
+                        summaryDownloadData: res.data.summary,
+                        errMsg: true, errMessage: res.message, errType: 'Success'
+                    });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _convertPDF = () => {
+        let pdf = new jsPDF();
+        pdf.text(this.state.allBatches, 1, 1);
+        pdf.save("download.pdf");
+    }
+
     render() {
-        const { allBatches, loader, errMsg, errType, batchCount, page, limit, transactionID } = this.state;
+        const { allBatches, loader, errMsg, errType, batchCount, page, limit,
+            transactionID, showDownloadPopup, selectedExport, purchaseDownloadData, summaryDownloadData,
+
+        } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -367,9 +460,34 @@ class BatchBalance extends React.Component {
             };
         });
 
+        const downloadOptions = [
+            { label: 'Summary', value: 1 },
+            { label: 'Purchases', value: 2 },
+            // { label: 'Auto Withdrawal', value: 'Auto Withdrawal' },
+            // { label: 'Manual Withdrawal', value: 'Manual Withdrawal' },
+            { label: 'All', value: 0 },
+        ];
+
+        const exportOptions = [
+            { label: '.PDF', value: 'PDF' },
+            { label: '.XLSX', value: 'XLSX' },
+        ];
+
         return (
             <LayoutWrapper>
                 <div className="isoLayoutContent scroll-table">
+                    {/* <div>{
+                        <PDFDownloadLink
+                            document={<BatchView data={allBatches} columns={columns} />}
+                            fileName="test.pdf"
+                        >
+                            {({ blob, url, loading, error }) =>
+                                loading ? "Loading document..." :
+                                    <Button> Download</Button>
+                            }
+                        </PDFDownloadLink>
+                    }
+                    </div> */}
                     <div style={{ "display": "inline-block", "width": "100%" }}>
                         <Form layout="inline" onSubmit={this._createBatch}>
                             <Row type="flex" justify="end">
@@ -389,6 +507,77 @@ class BatchBalance extends React.Component {
                             </Row>
                         </Form>
                     </div>
+                    {
+                        selectedExport.map((exportFile) => {
+                            selectedExport.includes('XLSX') &&
+                                <CSVLink
+                                    data={purchaseDownloadData}
+                                    filename={'batch.csv'}
+                                />
+                        })
+                    }
+                    {/* {
+                        selectedExport.includes('PDF') &&
+                        this._convertPDF()
+                    } */}
+                    {showDownloadPopup &&
+                        <Modal
+                            title="Download Batch"
+                            visible={showDownloadPopup}
+                            confirmLoading={loader}
+                            onCancel={this._closeDownloadBatch}
+                            footer={[
+                                <Button onClick={this._closeDownloadBatch}>Cancel</Button>,
+                                <div>{
+                                    selectedExport.includes('XLSX') && <PDFDownloadLink
+                                        document={<BatchView data={allBatches} columns={columns} />}
+                                        fileName="test.pdf"
+                                    >
+                                        {({ blob, url, loading, error }) =>
+                                            loading ? "Loading document..." :
+                                                <Button onClick={this._downloadBatch} > Download</Button>
+                                        }
+                                    </PDFDownloadLink>
+                                }
+                                </div>
+                                // < Button onClick = { this._downloadBatch } > Download</Button>,
+                            ]}
+                        >
+                            <div style={{ "marginBottom": "15px" }}>
+                                <span><b>Which parts of the batch would you like to download? </b></span>
+                                <Checkbox.Group
+                                    options={downloadOptions}
+                                    defaultValue={[0]}
+                                    onChange={this._onChangeList}
+                                />
+                            </div>
+                            <div style={{ "marginBottom": "15px" }}>
+                                <span><b>Export as? </b></span><br />
+                                <Checkbox.Group
+                                    options={exportOptions}
+                                    defaultValue={['PDF']}
+                                    onChange={this._onChangeExportVal}
+                                />
+                            </div>
+                        </Modal>
+                    }
+                    <div>
+                        <Document
+                            file="somefile.pdf"
+                        >
+                            <Page pageNumber={2} />
+                        </Document>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div>
+                                <h3>ID</h3>
+                                <p>34sdf</p>
+                            </div>
+                            <div>
+                                <h3>Name</h3>
+                                <p>Test</p>
+                            </div>
+                        </div>
+                    </div>
                     <Table
                         components={components}
                         bordered
@@ -403,14 +592,14 @@ class BatchBalance extends React.Component {
                             onChange={this._handleBatchPagination.bind(this)}
                             pageSize={limit}
                             current={page}
-                            total={batchCount}
+                            total={Number(batchCount)}
                             showSizeChanger
                             onShowSizeChange={this._changePaginationSize}
                             pageSizeOptions={pageSizeOptions}
                         /> : ''}
                     {loader && <FaldaxLoader />}
                 </div>
-            </LayoutWrapper>
+            </LayoutWrapper >
         );
     }
 }

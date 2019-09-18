@@ -35,6 +35,13 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
 
 const columns = [
     {
+        title: <IntlMessages id="antTable.title.details" />,
+        key: 'action',
+        width: 200,
+        render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
+            'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
+    },
+    {
         title: <IntlMessages id="antTable.title.name" />,
         key: 'first_name',
         width: 100,
@@ -59,13 +66,6 @@ const columns = [
         key: 'is_active',
         width: 200,
         render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'first_name', 'last_name',
-            'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
-    },
-    {
-        title: <IntlMessages id="antTable.title.details" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
             'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     }
 ];

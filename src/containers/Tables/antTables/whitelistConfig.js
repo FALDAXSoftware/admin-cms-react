@@ -20,6 +20,11 @@ const renderCell = (object, type, key, ip_address = null, selected_time = null, 
 };
 
 const columns = [{
+    title: <IntlMessages id="whitelistTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object, 'WhiteListActionCell', 'id', 'ip', 'time', 'is_permanent')
+}, {
     title: <IntlMessages id="whitelistTable.title.ip" />,
     key: 'ip',
     width: 100,
@@ -29,11 +34,6 @@ const columns = [{
     key: 'days',
     width: 100,
     render: object => renderCell(object, 'DaysCell', 'days')
-}, {
-    title: <IntlMessages id="whitelistTable.title.Actions" />,
-    key: 'action',
-    width: 200,
-    render: object => renderCell(object, 'WhiteListActionCell', 'id', 'ip', 'time', 'is_permanent')
 }];
 
 const whitelistTableInfos = [

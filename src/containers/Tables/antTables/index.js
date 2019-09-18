@@ -41,6 +41,8 @@ import { walletFeeTableinfos } from './walletFeeConfig';
 import { pendingOrderTableInfos } from './pendingOrderConfig';
 import { cancelOrderTableInfos } from './cancelOrderConfig';
 import { tierTableInfos } from './tierConfig';
+import { tierReqTableInfos } from './tierRequestConfig';
+import { tierPendingReqTableInfos } from './pendingTierReqConfig';
 import * as TableViews from './tableViews/';
 
 const dataList = new fakeData(10);
@@ -96,5 +98,5 @@ export {
   accountClassTableinfos, templateTableinfos, newsSourceTableInfos, jobCategoryTableInfos,
   ApprovedKYCInfos, whitelistTableInfos, profileWhitelistTableInfos, twoFactorReqInfos,
   walletTableInfos, dashboardTableinfos, walletFeeTableinfos, pendingOrderTableInfos,
-  cancelOrderTableInfos, tierTableInfos
+  cancelOrderTableInfos, tierTableInfos, tierReqTableInfos, tierPendingReqTableInfos
 };

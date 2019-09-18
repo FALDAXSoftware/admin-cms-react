@@ -39,53 +39,46 @@ const renderCell = (object, type, key, name = null, code = null, minlimit = null
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="coinTable.title.coin" />,
-        key: 'coin_name',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'coin_name')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.code" />,
-        key: 'coin_code',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'coin_code')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.limit" />,
-        key: 'min_limit',
-        width: 200,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'min_limit')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.maxlimit" />,
-        key: 'max_limit',
-        width: 200,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'max_limit')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.active" />,
-        key: 'is_active',
-        width: 200,
-        render: object => renderCell(object, 'SwitchCell', 'id', 'coin_name', 'coin_code',
-            'min_limit', 'max_limit', 'wallet_address', 'created_at', 'is_active', 'isERC', 'coin_icon',
-            'warm_wallet_address', 'hot_send_wallet_address', 'hot_receive_wallet_address', 'custody_wallet_address')
-    },
-    {
-        title: <IntlMessages id="coinTable.title.Actions" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object,
-            'CoinActionCell', 'id', 'coin_name', 'coin_code',
-            'min_limit', 'max_limit', 'wallet_address', 'created_at', 'is_active', 'isERC', 'coin_icon',
-            'warm_wallet_address', 'hot_send_wallet_address', 'hot_receive_wallet_address', 'custody_wallet_address')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="coinTable.title.Actions" />,
+    key: 'action',
+    width: 200,
+    render: object => renderCell(object,
+        'CoinActionCell', 'id', 'coin_name', 'coin_code',
+        'min_limit', 'max_limit', 'wallet_address', 'created_at', 'is_active', 'isERC', 'coin_icon',
+        'warm_wallet_address', 'hot_send_wallet_address', 'hot_receive_wallet_address', 'custody_wallet_address')
+}, {
+    title: <IntlMessages id="coinTable.title.coin" />,
+    key: 'coin_name',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'coin_name')
+}, {
+    title: <IntlMessages id="coinTable.title.code" />,
+    key: 'coin_code',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'coin_code')
+}, {
+    title: <IntlMessages id="coinTable.title.limit" />,
+    key: 'min_limit',
+    width: 200,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'min_limit')
+}, {
+    title: <IntlMessages id="coinTable.title.maxlimit" />,
+    key: 'max_limit',
+    width: 200,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'max_limit')
+}, {
+    title: <IntlMessages id="coinTable.title.active" />,
+    key: 'is_active',
+    width: 200,
+    render: object => renderCell(object, 'SwitchCell', 'id', 'coin_name', 'coin_code',
+        'min_limit', 'max_limit', 'wallet_address', 'created_at', 'is_active', 'isERC', 'coin_icon',
+        'warm_wallet_address', 'hot_send_wallet_address', 'hot_receive_wallet_address', 'custody_wallet_address')
+}];
 
 const assetTableInfos = [
     {
