@@ -11,10 +11,6 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import moment from "moment";
 import ColWithPadding from '../common.style';
 import { CSVLink } from "react-csv";
-import jsPDF from 'jspdf';
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import BatchView from './batchView';
-import { Document, Page } from 'react-pdf';
 
 const EditableContext = React.createContext();
 const { logout } = authAction;
@@ -390,7 +386,7 @@ class BatchBalance extends React.Component {
     _downloadBatch = () => {
         const { token } = this.props;
         const { selectedBatch, selectedOptions } = this.state;
-        console.log('selectedOptions', selectedOptions)
+        // console.log('selectedOptions', selectedOptions)
         let _this = this;
         let formData = {
             batch_id: selectedBatch.batch_number,
@@ -421,12 +417,6 @@ class BatchBalance extends React.Component {
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
-    }
-
-    _convertPDF = () => {
-        let pdf = new jsPDF();
-        pdf.text(this.state.allBatches, 1, 1);
-        pdf.save("download.pdf");
     }
 
     render() {
@@ -528,19 +518,7 @@ class BatchBalance extends React.Component {
                             onCancel={this._closeDownloadBatch}
                             footer={[
                                 <Button onClick={this._closeDownloadBatch}>Cancel</Button>,
-                                <div>{
-                                    selectedExport.includes('XLSX') && <PDFDownloadLink
-                                        document={<BatchView data={allBatches} columns={columns} />}
-                                        fileName="test.pdf"
-                                    >
-                                        {({ blob, url, loading, error }) =>
-                                            loading ? "Loading document..." :
-                                                <Button onClick={this._downloadBatch} > Download</Button>
-                                        }
-                                    </PDFDownloadLink>
-                                }
-                                </div>
-                                // < Button onClick={this._downloadBatch} > Download</Button>,
+                                < Button onClick={this._downloadBatch} > Download</Button>,
                             ]}
                         >
                             <div style={{ "marginBottom": "15px" }}>
