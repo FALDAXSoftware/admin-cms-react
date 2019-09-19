@@ -167,60 +167,73 @@ class BatchBalance extends React.Component {
             title: 'Upload',
             dataIndex: 'upload',
             render: (text, record) => {
+                //console.log('record', record)
                 return (
                     <div>
-                        <input id="myInput"
+                        {/* <input id="myInput"
                             type="file"
                             ref={(ref) => this.upload = ref}
                             style={{ display: 'none' }}
                             onChange={this.onChangeFile.bind(this, record)}
-                        />
-                        <Button type="primary" icon="upload"
-                            onClick={() => this.upload.click(this, record)}
-                            disabled={record.uploaded_file !== null ? true : false}
+                        /> */}
+                        <Button
+                            label="Open File"
+                            type="primary"
+                            onClick={this._uploadClick.bind(this, record)}
                         >Upload</Button>
-                    </div >
+                    </div>
                 )
             }
         }];
         this.validator = new SimpleReactValidator();
     }
 
+    _uploadClick = (values) => {
+        console.log('>>>upload click', values)
+        let temp = document.getElementById('myInput').onclick = this.onChangeFile();
+        console.log('>>>temp', temp)
+        this.setState({ uploadDocId: values.id })
+        // this.refs.upload.click();
+    }
+
     onChangeFile = (e, data, value) => {
-        data.stopPropagation();
-        data.preventDefault();
+        console.log('e, data, value', e, data, value)
+        // data.stopPropagation();
+        // data.preventDefault();
+        console.log('>>>>>upload', this.state.uploadDocId)
 
-        const { token } = this.props;
-        this.setState({ loader: true });
+        // const { token } = this.props;
+        // //this.setState({ loader: true });
 
-        let formData = new FormData();
-        formData.append('batch_id', e.batch_number);
-        formData.append('batch_upload', data.target.files[0]);
+        // let formData = new FormData();
+        // formData.append('batch_id', e.id);
+        // formData.append('batch_upload', data.target.files[0]);
 
-        ApiUtils.uploadBatchDoc(token, formData)
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.status == 200) {
-                    this.setState({
-                        errMsg: true, errMessage: res.message,
-                        loader: false, errType: 'Success'
-                    })
-                } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
-                    });
-                } else {
-                    this.setState({
-                        errMsg: true, errMessage: res.err,
-                        loader: false, errType: 'Error'
-                    })
-                }
-            }).catch((err) => {
-                this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    loader: false, errType: 'error'
-                });
-            });
+        // ApiUtils.uploadBatchDoc(token, formData)
+        //     .then((res) => res.json())
+        //     .then((res) => {
+        //         if (res.status == 200) {
+        //             this.setState({
+        //                 errMsg: true, errMessage: res.message,
+        //                 loader: false, errType: 'Success'
+        //             })
+        //             this._getAllBatches();
+        //         } else if (res.status == 403) {
+        //             this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+        //                 this.props.logout();
+        //             });
+        //         } else {
+        //             this.setState({
+        //                 errMsg: true, errMessage: res.err,
+        //                 loader: false, errType: 'Error'
+        //             })
+        //         }
+        //     }).catch((err) => {
+        //         this.setState({
+        //             errMsg: true, errMessage: 'Something went wrong!!',
+        //             loader: false, errType: 'error'
+        //         });
+        //     });
     }
 
     _checkBatch = (e, data, val) => {
@@ -466,18 +479,6 @@ class BatchBalance extends React.Component {
         return (
             <LayoutWrapper>
                 <div className="isoLayoutContent scroll-table">
-                    {/* <div>{
-                        <PDFDownloadLink
-                            document={<BatchView data={allBatches} columns={columns} />}
-                            fileName="test.pdf"
-                        >
-                            {({ blob, url, loading, error }) =>
-                                loading ? "Loading document..." :
-                                    <Button> Download</Button>
-                            }
-                        </PDFDownloadLink>
-                    }
-                    </div> */}
                     <div style={{ "display": "inline-block", "width": "100%" }}>
                         <Form layout="inline" onSubmit={this._createBatch}>
                             <Row type="flex" justify="end">
@@ -506,10 +507,6 @@ class BatchBalance extends React.Component {
                                 />
                         })
                     }
-                    {/* {
-                        selectedExport.includes('PDF') &&
-                        this._convertPDF()
-                    } */}
                     {showDownloadPopup &&
                         <Modal
                             title="Download Batch"
@@ -539,23 +536,12 @@ class BatchBalance extends React.Component {
                             </div>
                         </Modal>
                     }
-                    {/* <div>
-                        <Document
-                            file="somefile.pdf"
-                        >
-                            <Page pageNumber={2} />
-                        </Document>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div>
-                                <h3>ID</h3>
-                                <p>34sdf</p>
-                            </div>
-                            <div>
-                                <h3>Name</h3>
-                                <p>Test</p>
-                            </div>
-                        </div>
-                    </div> */}
+                    <input id="myInput"
+                        type="file"
+                        ref={(ref) => this.upload = ref}
+                        style={{ display: 'none' }}
+                        onChange={this.onChangeFile.bind(this)}
+                    />
                     <Table
                         components={components}
                         bordered
