@@ -172,7 +172,7 @@ class BatchBalance extends React.Component {
                 return (
                     <div>
                         <div className="upload-btn-wrapper">
-                            <Button type="primary" className="btn"
+                            <Button type="primary" icon="upload"
                                 disabled={record.uploaded_file !== null ? true : false}>
                                 Upload</Button>
                             <input type="file" name="myfile"
