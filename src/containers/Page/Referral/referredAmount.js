@@ -68,28 +68,26 @@ class ReferredAmount extends Component {
                         <a onClick={() => { this.props.history.push('/dashboard/referral') }}>Back</a>
                     </Link>
                 </div>
-                <Card style={{ width: 300 }}                >
-                    {result.length > 0 ?
-                        result.map((referral) => {
-                            return (
-                                <div>
-                                    <span>{referral[0].firstname} {referral[0].lastname}</span><br />
-                                    <span>{referral[0].email}</span><br />
-                                    {
-                                        referral && referral.map(function (ref) {
-                                            return (
-                                                <p>
-                                                    <span className="amount-span">{ref.earned} {ref.coinname}</span>
-                                                </p>
-                                            );
-                                        })
-                                    }
-                                </div>
-                            )
-                        })
-                        : ' No Referral Earning'
-                    }
-                </Card>
+                {result.length > 0 ?
+                    result.map((referral) => {
+                        return (
+                            <Card style={{ width: 300, padding: '5px' }}>
+                                <span>{referral[0].firstname} {referral[0].lastname}</span> <br />
+                                <span>{referral[0].email}</span> <br />
+                                {
+                                    referral && referral.map(function (ref) {
+                                        return (
+                                            <p>
+                                                <span className="amount-span">{ref.earned} {ref.coinname}</span>
+                                            </p>
+                                        );
+                                    })
+                                }
+                            </Card>
+                        )
+                    })
+                    : ' No Referral Earning'
+                }
                 {loader && <FaldaxLoader />}
             </div>
         );

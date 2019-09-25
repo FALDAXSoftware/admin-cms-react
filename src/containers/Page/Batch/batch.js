@@ -28,6 +28,8 @@ class EditableCell extends React.Component {
         editing: false,
     };
 
+    triggerInputFile = () => this.fileInput.click()
+
     toggleEdit = () => {
         const editing = !this.state.editing;
         this.setState({ editing }, () => {
@@ -167,20 +169,15 @@ class BatchBalance extends React.Component {
             title: 'Upload',
             dataIndex: 'upload',
             render: (text, record) => {
-                //console.log('record', record)
                 return (
                     <div>
-                        {/* <input id="myInput"
-                            type="file"
-                            ref={(ref) => this.upload = ref}
-                            style={{ display: 'none' }}
-                            onChange={this.onChangeFile.bind(this, record)}
-                        /> */}
-                        <Button
-                            label="Open File"
-                            type="primary"
-                            onClick={this._uploadClick.bind(this, record)}
-                        >Upload</Button>
+                        <div className="upload-btn-wrapper">
+                            <Button type="primary" className="btn"
+                                disabled={record.uploaded_file !== null ? true : false}>
+                                Upload</Button>
+                            <input type="file" name="myfile"
+                                onChange={this.onChangeFile.bind(this, record)} />
+                        </div>
                     </div>
                 )
             }
@@ -188,52 +185,42 @@ class BatchBalance extends React.Component {
         this.validator = new SimpleReactValidator();
     }
 
-    _uploadClick = (values) => {
-        console.log('>>>upload click', values)
-        let temp = document.getElementById('myInput').onclick = this.onChangeFile();
-        console.log('>>>temp', temp)
-        this.setState({ uploadDocId: values.id })
-        // this.refs.upload.click();
-    }
-
     onChangeFile = (e, data, value) => {
-        console.log('e, data, value', e, data, value)
-        // data.stopPropagation();
-        // data.preventDefault();
-        console.log('>>>>>upload', this.state.uploadDocId)
+        data.stopPropagation();
+        data.preventDefault();
 
-        // const { token } = this.props;
-        // //this.setState({ loader: true });
+        const { token } = this.props;
+        this.setState({ loader: true });
 
-        // let formData = new FormData();
-        // formData.append('batch_id', e.id);
-        // formData.append('batch_upload', data.target.files[0]);
+        let formData = new FormData();
+        formData.append('batch_id', e.id);
+        formData.append('batch_upload', data.target.files[0]);
 
-        // ApiUtils.uploadBatchDoc(token, formData)
-        //     .then((res) => res.json())
-        //     .then((res) => {
-        //         if (res.status == 200) {
-        //             this.setState({
-        //                 errMsg: true, errMessage: res.message,
-        //                 loader: false, errType: 'Success'
-        //             })
-        //             this._getAllBatches();
-        //         } else if (res.status == 403) {
-        //             this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-        //                 this.props.logout();
-        //             });
-        //         } else {
-        //             this.setState({
-        //                 errMsg: true, errMessage: res.err,
-        //                 loader: false, errType: 'Error'
-        //             })
-        //         }
-        //     }).catch((err) => {
-        //         this.setState({
-        //             errMsg: true, errMessage: 'Something went wrong!!',
-        //             loader: false, errType: 'error'
-        //         });
-        //     });
+        ApiUtils.uploadBatchDoc(token, formData)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status == 200) {
+                    this.setState({
+                        errMsg: true, errMessage: res.message,
+                        loader: false, errType: 'Success'
+                    })
+                    this._getAllBatches();
+                } else if (res.status == 403) {
+                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        this.props.logout();
+                    });
+                } else {
+                    this.setState({
+                        errMsg: true, errMessage: res.err,
+                        loader: false, errType: 'Error'
+                    })
+                }
+            }).catch((err) => {
+                this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!',
+                    loader: false, errType: 'error'
+                });
+            });
     }
 
     _checkBatch = (e, data, val) => {
@@ -283,7 +270,6 @@ class BatchBalance extends React.Component {
     }
 
     _downloadModal = (values) => {
-        console.log('values', values)
         this.setState({ showDownloadPopup: true, selectedBatch: values })
     }
 
