@@ -149,6 +149,12 @@ const options = [
     leftIcon: "fas fa-file-invoice",
     module: "tiers"
   },
+  {
+    key: "simplex-token",
+    label: "Simplex Token",
+    leftIcon: "fas fa-file-invoice",
+    module: "simplex_token"
+  },
 ];
 
 export default options;

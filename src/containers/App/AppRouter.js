@@ -51,7 +51,7 @@ const routes = [
     },
     {
         path: "trade-history",
-        component: asyncComponent(() => import("../Page/Trade/tradeHistory")),
+        component: asyncComponent(() => import("../Page/Trade/allHistory")),
         module: "trade_history"
     },
     {
@@ -139,6 +139,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/Tiers/tiers")),
         module: "tiers"
     },
+    {
+        path: "simplex-token",
+        component: asyncComponent(() => import("../Page/SimplexToken/simplexToken")),
+        module: "simplex_token"
+    },
 ];
 
 const mandatoryRoutes = [
@@ -172,7 +177,7 @@ const mandatoryRoutes = [
     },
     {
         path: "users/trade-history/:id",
-        component: asyncComponent(() => import("../Page/Users/userTradeHistory"))
+        component: asyncComponent(() => import("../Page/Users/userTrades"))
     },
     {
         path: "country/:id/states",

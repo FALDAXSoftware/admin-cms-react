@@ -17,7 +17,7 @@ const BalanceDiv = styled.div`
     border: gray solid 2px;
     padding: 6px;
     border-radius: 7px;
-    margin: 5px;
+    margin: 5px 0px;
 `
 const FeeDiv = styled.div`
     border: gray solid 2px;
@@ -201,7 +201,7 @@ class WalletDashboard extends Component {
                         {loader && <FaldaxLoader />}
                         <Row>
                             {allWallets.length > 0 ? allWallets.map(wallet => (
-                                <Col xs={{ span: 5 }} lg={{ span: 6 }}>
+                                <Col xs={{ span: 5 }} lg={{ span: 8 }}>
                                     <Card className="wallet-card" title={wallet.coin}
                                         extra={<Button style={{ borderRadius: '5px' }} onClick={this._openSendModal.bind(this, wallet)}>Send</Button>}>
                                         <div className="wallet-div">
