@@ -32,7 +32,6 @@ class EditAssetDetails extends Component {
 
     _getAssetDetails = () => {
         const { token, coin_id } = this.props;
-        const { } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });

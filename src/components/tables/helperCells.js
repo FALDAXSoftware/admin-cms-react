@@ -299,6 +299,7 @@ const TierThresholdCell = (value, tier_step, daily_withdraw_limit, monthly_withd
 const TierActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTier(value)} /></Tooltip></div>
 const TierReqActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTier(value)} /></Tooltip></div>
 const PendingTierReqActionCell = (value, first_name, last_name, tier_step, is_approved, user_id) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPendingReq(value, first_name, last_name, tier_step, is_approved, user_id)} /></Tooltip><Switch style={{ "marginLeft": "10px" }} checked={is_approved} onChange={() => { approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id) }} /></div>
+const SimplexStatusCell = (value, payment_id, quote_id, currency, settle_currency, email, side, quantity, fill_price, simplex_payment_status, created_at) => <div>{simplex_payment_status == 1 ? 'Under Approval' : simplex_payment_status == 2 ? 'Approved' : 'Cancelled'}</div>
 
 export {
     IPCell,
@@ -373,5 +374,6 @@ export {
     TierActionCell,
     FullNameTextCell,
     TierReqActionCell,
-    PendingTierReqActionCell
+    PendingTierReqActionCell,
+    SimplexStatusCell
 };

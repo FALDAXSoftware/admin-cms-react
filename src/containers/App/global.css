@@ -351,6 +351,7 @@ html[dir='rtl'] .dz-hidden-input {
 }
 .wallet-card .ant-card-head {
   background-color: #5dade2  ;
+  line-height: 2.2;
 } 
 .wallet-card{
   min-width: 245;
@@ -386,4 +387,12 @@ html[dir='rtl'] .dz-hidden-input {
   left: 0;
   top: 0;
   opacity: 0;
+}
+
+.wallet-card.ant-card-bordered{
+  min-height: 332px;
+}
+
+.hCWqGk .ant-row > div{
+  padding: 5px;
 }
