@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Pagination, notification, Select, DatePicker, Button, Form, Row } from 'antd';
-import { tradeTableInfos } from "../../Tables/antTables";
+import { simplexTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -16,11 +16,11 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
 
-class TradeHistory extends Component {
+class SimplexHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allTrades: [],
+            allSimplexTrades: [],
             allTradeCount: 0,
             searchTrade: '',
             limit: 50,
@@ -33,25 +33,25 @@ class TradeHistory extends Component {
             startDate: '',
             endDate: '',
             rangeDate: [],
-            trade_type: 1
+            trade_type: 2
         }
     }
 
     componentDidMount = () => {
-        this._getAllTrades();
+        this._getAllSimplexTrades();
     }
 
-    _getAllTrades = () => {
+    _getAllSimplexTrades = () => {
         const { token } = this.props;
         const { searchTrade, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTrades(page, limit, token, searchTrade, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type)
+        ApiUtils.getAllSimplexTrades(page, limit, token, searchTrade, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allTrades: res.data, allTradeCount: res.tradeCount });
+                    _this.setState({ allSimplexTrades: res.data, allTradeCount: res.tradeCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -79,7 +79,7 @@ class TradeHistory extends Component {
     _searchTrade = (e) => {
         e.preventDefault();
         this.setState({ page: 1 }, () => {
-            this._getAllTrades();
+            this._getAllSimplexTrades();
         })
     }
 
@@ -123,7 +123,7 @@ class TradeHistory extends Component {
             filterVal: '', searchTrade: '', startDate: '', endDate: '',
             rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
         }, () => {
-            this._getAllTrades();
+            this._getAllSimplexTrades();
         })
     }
 
@@ -133,37 +133,35 @@ class TradeHistory extends Component {
 
     _handleTradePagination = (page) => {
         this.setState({ page }, () => {
-            this._getAllTrades();
+            this._getAllSimplexTrades();
         })
     }
 
     _handleTradeTableChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
-            this._getAllTrades();
+            this._getAllSimplexTrades();
         })
     }
 
     _changePaginationSize = (current, pageSize) => {
         this.setState({ page: current, limit: pageSize }, () => {
-            this._getAllTrades();
+            this._getAllSimplexTrades();
         });
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader, limit,
+        const { allSimplexTrades, allTradeCount, errType, errMsg, page, loader, limit,
             searchTrade, rangeDate, filterVal } = this.state;
         const tradeHeaders = [
+            { label: "Payment ID", key: "payment_id" },
+            { label: "Quote ID", key: "quote_id" },
             { label: "Currency", key: "currency" },
-            { label: "Settle Currency", key: "settle_currency" },
+            { label: "Crypto", key: "settle_currency" },
             { label: "Type", key: "side" },
             { label: "Pair", key: "symbol" },
             { label: "Quantity", key: "quantity" },
-            { label: "Price", key: "price" },
             { label: "Fill Price", key: "fill_price" },
-            { label: "Maker Fee", key: "maker_fee" },
-            { label: "Taker Fee", key: "taker_fee" },
-            { label: "Maker Email", key: "reqested_user_email" },
-            { label: "Taker Email", key: "email" },
+            { label: "Simplex Status", key: "simplex_payment_status" },
             { label: "Created On", key: "created_at" }
         ];
         let pageSizeOptions = ['20', '30', '40', '50']
@@ -174,7 +172,7 @@ class TradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {tradeTableInfos.map(tableInfo => (
+                    {simplexTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Form onSubmit={this._searchTrade}>
@@ -215,8 +213,8 @@ class TradeHistory extends Component {
                                             <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                         </ColWithPadding>
                                         <ColWithPadding xs={12} sm={3}>
-                                            {allTrades && allTrades.length > 0 ?
-                                                <CSVLink filename={'trade_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                            {allSimplexTrades && allSimplexTrades.length > 0 ?
+                                                <CSVLink filename={'simplex_history.csv'} data={allSimplexTrades} headers={tradeHeaders}>
                                                     <Button className="search-btn" type="primary">Export</Button>
                                                 </CSVLink>
                                                 : ''}
@@ -225,12 +223,12 @@ class TradeHistory extends Component {
                                 </Form>
                             </div>
                             {loader && <FaldaxLoader />}
-                            < TableWrapper
+                            <TableWrapper
                                 style={{ marginTop: '20px' }}
                                 {...this.state}
                                 columns={tableInfo.columns}
                                 pagination={false}
-                                dataSource={allTrades}
+                                dataSource={allSimplexTrades}
                                 className="isoCustomizedTable"
                                 onChange={this._handleTradeTableChange}
                             />
@@ -257,6 +255,6 @@ class TradeHistory extends Component {
 export default connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(TradeHistory);
+    }), { logout })(SimplexHistory);
 
-export { TradeHistory, tradeTableInfos };
+export { SimplexHistory, simplexTableInfos };

@@ -29,6 +29,7 @@ class UserTradeHistory extends Component {
             page: 1,
             loader: false,
             filterVal: '',
+            trade_type: 1
         }
     }
 
@@ -54,11 +55,11 @@ class UserTradeHistory extends Component {
 
     _getUserAllTrades = () => {
         const { token, user_id } = this.props;
-        const { searchTrade, page, limit, filterVal, sorterCol, sortOrder } = this.state;
+        const { searchTrade, page, limit, filterVal, sorterCol, sortOrder, trade_type } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal, sorterCol, sortOrder)
+        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal, sorterCol, sortOrder, trade_type)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -134,9 +135,9 @@ class UserTradeHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
+                    <div className="isoTableDisplayTab">
                         {tradeTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                            <div>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchTrade}>
                                         <Row>
@@ -178,7 +179,7 @@ class UserTradeHistory extends Component {
                                 </div>
                                 {loader && <FaldaxLoader />}
                                 <div className="scroll-table">
-                                    < TableWrapper
+                                    <TableWrapper
                                         style={{ marginTop: '20px' }}
                                         {...this.state}
                                         columns={tableInfo.columns}
@@ -200,9 +201,9 @@ class UserTradeHistory extends Component {
                                             pageSizeOptions={pageSizeOptions}
                                         /> : ''}
                                 </div>
-                            </TabPane>
+                            </div>
                         ))}
-                    </Tabs>
+                    </div>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

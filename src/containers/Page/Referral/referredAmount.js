@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
-import { Card } from 'antd';
+import { Card, Row, Col } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
@@ -71,19 +71,23 @@ class ReferredAmount extends Component {
                 {result.length > 0 ?
                     result.map((referral) => {
                         return (
-                            <Card style={{ width: 300, padding: '5px' }}>
-                                <span>{referral[0].firstname} {referral[0].lastname}</span> <br />
-                                <span>{referral[0].email}</span> <br />
-                                {
-                                    referral && referral.map(function (ref) {
-                                        return (
-                                            <p>
-                                                <span className="amount-span">{ref.earned} {ref.coinname}</span>
-                                            </p>
-                                        );
-                                    })
-                                }
-                            </Card>
+                            <Row>
+                                <Col xs={{ span: 5 }} lg={{ span: 8 }}>
+                                    <Card style={{ width: 300, padding: '5px' }}>
+                                        <span>{referral[0].firstname} {referral[0].lastname}</span> <br />
+                                        <span>{referral[0].email}</span> <br />
+                                        {
+                                            referral && referral.map(function (ref) {
+                                                return (
+                                                    <p>
+                                                        <span className="amount-span">{ref.earned} {ref.coinname}</span>
+                                                    </p>
+                                                );
+                                            })
+                                        }
+                                    </Card>
+                                </Col>
+                            </Row>
                         )
                     })
                     : ' No Referral Earning'

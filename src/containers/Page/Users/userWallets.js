@@ -11,7 +11,6 @@ const { logout } = authAction;
 
 const ParentDiv = styled.div`
     padding: 20px;
-    background-color: white;
     margin: 30px !important;
 `
 const Image = styled.img`
@@ -44,7 +43,9 @@ class UserWallets extends Component {
                 if (res.status == 200) {
                     _this.setState({ userWallets: res.data });
                 } else if (res.status == 403) {
-                    _this.props.logout();
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
@@ -55,19 +56,20 @@ class UserWallets extends Component {
     }
 
     _createUserWallet = (asset) => {
-        const { token } = this.props;
-        let code = asset.coin_code;
+        const { token, user_id } = this.props;
+        let code = asset.coin;
 
         this.setState({ loader: true });
         let _this = this;
 
-        ApiUtils.generateWalletAddress(token, code)
+        ApiUtils.generateUserWalletAddress(token, code, user_id)
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {
                     _this.setState({
                         errMsg: true, errMessage: res.message, errType: 'Success'
                     });
+                    _this._getUserWallets();
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -100,8 +102,8 @@ class UserWallets extends Component {
         }
 
         return (
-            <div>
-                <ParentDiv className="parent-div">
+            <ParentDiv>
+                <Row>
                     {userWallets && userWallets.length > 0 &&
                         userWallets.map((wallet) => {
                             let coinTitle = <div>
@@ -109,25 +111,23 @@ class UserWallets extends Component {
                                 <span>{wallet.coin_code}</span>
                             </div>
                             return (
-                                <Row>
-                                    <Col>
-                                        <Card title={coinTitle} style={{ width: 500 }}
-                                            actions={[
-                                                wallet.send_address == '' && wallet.send_address == '' ?
-                                                    <Button type="primary" onClick={this._createUserWallet.bind(this, wallet)}>Create Wallet</Button>
-                                                    : ''
-                                            ]}>
-                                            <p><b>HOT Send Address : </b> <span>{wallet.send_address}</span></p>
-                                            <p><b>HOT Receive Address : </b><span>{wallet.receive_address}</span></p>
-                                        </Card>
-                                    </Col>
-                                </Row>
+                                <Col xs={{ span: 7 }} lg={{ span: 12 }}>
+                                    <Card title={coinTitle}
+                                        actions={[
+                                            wallet.send_address == '' && wallet.send_address == '' ?
+                                                <Button type="primary" onClick={this._createUserWallet.bind(this, wallet)}>Create Wallet</Button>
+                                                : ''
+                                        ]}>
+                                        <p><b>HOT Send Address : </b> <span>{wallet.send_address}</span></p>
+                                        <p><b>HOT Receive Address : </b><span>{wallet.receive_address}</span></p>
+                                    </Card>
+                                </Col>
                             )
                         })
                     }
                     {loader && <FaldaxLoader />}
-                </ParentDiv>
-            </div>
+                </Row>
+            </ParentDiv>
         );
     }
 }

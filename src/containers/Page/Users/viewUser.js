@@ -4,7 +4,7 @@ import LoginHistory from './loginHistory';
 import PersonalDetails from './personalDetails';
 import AllOrders from './allOrders';
 import Referral from './userReferral';
-import UserTradeHistory from './userTradeHistory';
+import AllTrades from './userTrades';
 import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';
 import UserWithdrawRequest from './userWithdrawRequest';
@@ -36,7 +36,7 @@ class ViewUser extends Component {
                     <TabPane tab="Wallets" key="3"><UserWallets user_id={user_id} /></TabPane>
                     <TabPane tab="Orders" key="4"><AllOrders user_id={user_id} /></TabPane>
                     <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
-                    <TabPane tab="Trade History" key="6"><UserTradeHistory user_id={user_id} /></TabPane>
+                    <TabPane tab="Trade History" key="6"><AllTrades user_id={user_id} /></TabPane>
                     <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
                     <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
                     <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
