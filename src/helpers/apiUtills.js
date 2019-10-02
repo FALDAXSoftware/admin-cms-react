@@ -373,6 +373,21 @@ const ApiUtils = {
         }
     },
 
+    getAllPermissions: function (token) {
+        let url = "/get-all-permissions";
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     //edit country api call
     editCountry: function (token, form) {
         try {
