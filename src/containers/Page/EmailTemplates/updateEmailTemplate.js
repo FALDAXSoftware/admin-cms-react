@@ -110,6 +110,10 @@ class UpdateEmailTemplate extends Component {
                             errMsg: true, errMessage: res.err, loader: false,
                             errType: 'Error', showError: false
                         });
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
                     } else {
                         this.setState({
                             errMsg: true, errMessage: res.message, loader: false,
