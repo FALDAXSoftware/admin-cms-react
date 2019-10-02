@@ -105,6 +105,7 @@ class Roles extends Component {
 
     componentDidMount = () => {
         this._getAllRoles();
+        //this._getAllPermissions();
     }
 
     openNotificationWithIconError = (type) => {
@@ -128,6 +129,33 @@ class Roles extends Component {
                 if (res.status == 200) {
                     //_this.setState({ allRoles: res.roles });
                     _this.setState({ allRolesValue: res.roles[0], allRoles: res.roleName });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({
+                    errType: 'error', errMsg: true,
+                    errMessage: 'Something went wrong', loader: false
+                });
+            });
+    }
+
+    _getAllPermissions = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getAllPermissions(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    _this.setState({ allPermissions: res.data });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
