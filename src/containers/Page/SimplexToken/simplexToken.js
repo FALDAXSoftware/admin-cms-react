@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Input, Button } from 'antd';
+import { Tabs, notification, Input, Button, Icon } from 'antd';
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -21,7 +21,8 @@ class SimplexToken extends Component {
             errType: '',
             loader: false,
             fields: {},
-            prevToken: ''
+            prevToken: '',
+            enableInput: true
         }
         this.validator = new SimpleReactValidator();
     }
@@ -87,7 +88,7 @@ class SimplexToken extends Component {
                 .then(function (res) {
                     if (res.status == 200) {
                         _this.setState({
-                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success', enableInput: true
                         })
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -117,11 +118,11 @@ class SimplexToken extends Component {
     _cancelAccessToken = () => {
         let fields = this.state.fields;
         fields['access_token'] = this.state.prevToken;
-        this.setState({ fields });
+        this.setState({ fields, enableInput: true });
     }
 
     render() {
-        const { errMsg, errType, loader, fields } = this.state;
+        const { errMsg, errType, loader, fields, enableInput } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -136,8 +137,9 @@ class SimplexToken extends Component {
                                 <span>
                                     <b>Simplex Access Token</b>
                                 </span>
-                                <TextArea placeholder="Simplex Access Token" style={{ "marginTop": "15px", "marginBottom": "15px", "display": "inherit" }}
+                                <TextArea disabled={enableInput} placeholder="Simplex Access Token" style={{ width: "80%", "marginTop": "15px", "marginBottom": "15px" }}
                                     onChange={this._onChangeFields.bind(this, "access_token")} value={fields["access_token"]} />
+                                <Icon type="edit" theme="twoTone" onClick={() => { this.setState({ enableInput: false }) }} />
                                 <span className="field-error">
                                     {this.validator.message('Simplex Access Token', fields['access_token'], 'required')}
                                 </span>

@@ -4,6 +4,7 @@ import LayoutContentWrapper from '../../../components/utility/layoutWrapper.js';
 import TableDemoStyle from './demo.style';
 import fakeData from '../fakeData';
 import { tableinfos } from './usersConfig';
+import { inActiveUserinfos } from './inActiveUserConfig';
 import { assetTableInfos } from './coinsConfig';
 import { userReferralInfos } from './userReferralConfig';
 import { countryTableInfos } from './countriesConfig';
@@ -100,5 +101,5 @@ export {
   ApprovedKYCInfos, whitelistTableInfos, profileWhitelistTableInfos, twoFactorReqInfos,
   walletTableInfos, dashboardTableinfos, walletFeeTableinfos, pendingOrderTableInfos,
   cancelOrderTableInfos, tierTableInfos, tierReqTableInfos, tierPendingReqTableInfos,
-  simplexTableInfos
+  simplexTableInfos, inActiveUserinfos
 };

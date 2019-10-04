@@ -119,7 +119,6 @@ class PanicButton extends Component {
 
     render() {
         const { notify, errType, isPanic, panicConfirmModal, fields } = this.state;
-
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
@@ -152,7 +151,9 @@ class PanicButton extends Component {
                             </div>
                             : <div>
                                 <span>Enable two factor authentication to Enable Panic Button.</span><br />
-                                <Button type="primary" onClick={() => { this.props.history.push('/dashboard/edit-profile') }}>Enable Now</Button>
+                                <Button type="primary" onClick={() => { this.props.history.push('/dashboard/edit-profile') }}>
+                                    {!isPanic ? 'Enable Now' : 'Disable'}
+                                </Button>
                             </div>}
                     </Modal>
                 </div>

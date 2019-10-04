@@ -120,6 +120,38 @@ const ApiUtils = {
         }
     },
 
+    //get all in-active users api
+    getAllInActiveUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
+        let url = "/admin/get-inactive-users?page=" + page + "&limit=" + limit;
+        searchUser = encodeURIComponent(searchUser);
+        if (sorterCol && sortOrder && searchUser && filterVal) {
+            url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && searchUser) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + searchUser;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (searchUser && filterVal) {
+            url += "&data=" + searchUser + "&country=" + filterVal;
+        } else if (filterVal) {
+            url += "&country=" + filterVal;
+        } else {
+            url += "&data=" + searchUser;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
     //activate user api
     activateUser: function (token, form) {
         try {
