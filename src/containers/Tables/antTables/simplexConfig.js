@@ -31,6 +31,12 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
 };
 
 const columns = [{
+    title: <IntlMessages id="tradeTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="tradeTable.title.payment_id" />,
     key: 'payment_id',
     width: 200,
@@ -54,6 +60,12 @@ const columns = [{
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'settle_currency')
+}, {
+    title: <IntlMessages id="tradeTable.title.address" />,
+    key: 'address',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'address')
 }, {
     title: <IntlMessages id="tradeTable.title.taker_email" />,
     key: 'email',
@@ -86,12 +98,6 @@ const columns = [{
     render: object => renderCell(object, 'SimplexStatusCell', 'id', 'payment_id', 'quote_id',
         'currency', 'settle_currency', 'email', 'side', 'quantity', 'fill_price',
         'simplex_payment_status', 'created_at')
-}, {
-    title: <IntlMessages id="tradeTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }];
 
 const simplexTableInfos = [

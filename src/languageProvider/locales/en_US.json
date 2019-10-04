@@ -470,6 +470,7 @@
   "transactionTable.title.created_at": "Created On",
   "tradeTable.title.payment_id": "Payment ID",
   "tradeTable.title.quote_id": "Quote ID",
+  "tradeTable.title.address": "Wallet Address",
   "tradeTable.title.crypto": "Crypto",
   "tradeTable.title.simplex_payment_status": "Simplex Status",
   "tradeTable.title.currency": "Currency",

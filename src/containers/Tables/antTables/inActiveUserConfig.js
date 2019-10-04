@@ -5,7 +5,7 @@ import {
     UserImageCell,
     LinkCell,
     TextCell,
-    ActiveUserActionCell,
+    ActionCell,
     DateCell,
     TierCell,
     ReferralCell
@@ -47,8 +47,8 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
             return TierCell(value);
         case 'ReferralCell':
             return ReferralCell(value);
-        case 'ActiveUserActionCell':
-            return ActiveUserActionCell(value, profile_pic, first_name, last_name, email, city_town,
+        case 'ActionCell':
+            return ActionCell(value, profile_pic, first_name, last_name, email, city_town,
                 street_address, street_address_2, phone_number, country, dob, is_active, kyc,
                 date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
         default:
@@ -61,7 +61,7 @@ const columns = [{
     key: 'action',
     width: 200,
     render: object => renderCell(object,
-        'ActiveUserActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
+        'ActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
         'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
         'deleted_at')
@@ -124,7 +124,7 @@ const columns = [{
     render: object => renderCell(object, 'DateCell', 'created_at')
 }];
 
-const tableinfos = [
+const inActiveUserinfos = [
     {
         title: 'Users',
         value: 'UsersTable',
@@ -132,4 +132,4 @@ const tableinfos = [
     }
 ];
 
-export { columns, tableinfos };
+export { columns, inActiveUserinfos };

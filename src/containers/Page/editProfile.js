@@ -244,9 +244,9 @@ class EditProfile extends Component {
         }
 
         return (
-            <div style={{ "paddingLeft": "50px", "paddingTop": "50px", paddingRight: "50px" }}>
+            <div className="profile-div" style={{ "paddingLeft": "50px", "paddingTop": "50px", paddingRight: "50px" }}>
                 <Divider>Edit Profile</Divider>
-                <div className="isoLayoutContent" style={{ "marginTop": "10px" }}>
+                <div style={{ "marginTop": "10px" }}>
                     <span>
                         <b>Name</b>
                     </span>
@@ -261,7 +261,7 @@ class EditProfile extends Component {
                     <Input disabled style={{ "marginBottom": "15px", "width": "25%", "display": "inherit", "readonly": "readonly" }} value={fields["email"]} />
                     <Button type="primary" onClick={this._editProfile}> Update </Button>
                 </div>
-                <div className="isoLayoutContent" style={{ marginTop: "50px" }}>
+                <div style={{ marginTop: "50px" }}>
                     <Divider>Two-Factor Authentication</Divider>
                     <div style={{ "marginTop": "10px" }}>
                         <div style={{ marginTop: '20px', textAlign: "center" }}>
