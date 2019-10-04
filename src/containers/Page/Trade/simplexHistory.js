@@ -33,7 +33,9 @@ class SimplexHistory extends Component {
             startDate: '',
             endDate: '',
             rangeDate: [],
-            trade_type: 2
+            trade_type: 2,
+            sorterCol: 'created_at',
+            sortOrder: 'descend'
         }
     }
 

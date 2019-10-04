@@ -29,7 +29,9 @@ class UserTradeHistory extends Component {
             page: 1,
             loader: false,
             filterVal: '',
-            trade_type: 1
+            trade_type: 1,
+            sorterCol: 'created_at',
+            sortOrder: 'descend'
         }
     }
 

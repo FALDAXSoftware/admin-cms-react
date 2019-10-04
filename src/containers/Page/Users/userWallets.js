@@ -1,61 +1,101 @@
-import React, { Component } from 'react';
-import ApiUtils from '../../../helpers/apiUtills';
-import { connect } from 'react-redux';
-import { Row, Col, notification, Card, Button } from 'antd';
-import authAction from '../../../redux/auth/actions';
-import styled from 'styled-components';
-import { BUCKET_URL } from '../../../helpers/globals';
-import FaldaxLoader from '../faldaxLoader';
+import React, { Component } from "react";
+import ApiUtils from "../../../helpers/apiUtills";
+import { connect } from "react-redux";
+import { Row, Col, notification, Card, Button } from "antd";
+import authAction from "../../../redux/auth/actions";
+import styled from "styled-components";
+import { BUCKET_URL } from "../../../helpers/globals";
+import FaldaxLoader from "../faldaxLoader";
 
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
-    padding: 20px;
-    margin: 30px !important;
-`
+  padding: 20px;
+  margin: 30px !important;
+`;
 const Image = styled.img`
-    width: 25px;
-    height: 25px;
-    margin-right: 10px
-`
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+`;
+const WalletRow = styled(Row)`
+    display: flex !important;
+    flex-wrap: wrap;
+`;
+const WalletCol = styled(Col)`
+  display: flex !important;
+  width: 50% !important;
+  flex-wrap: nowrap;
+  > .ant-card {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    > .ant-card-head {
+      display: flex;
+      width: 100%;
+      align-self: flex-start;
+    }
+    > .ant-card-body {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      > p {
+        display: flex;
+        width: 100%;
+      }
+    }
+    > .ant-card-actions {
+      display: flex;
+      width: 100%;
+      align-self: flex-end;
+      > li {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+`;
 
 class UserWallets extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             userWallets: [],
-            errType: 'error',
+            errType: "error",
             loader: false
-        }
+        };
     }
 
     componentDidMount = () => {
         this._getUserWallets();
-    }
+    };
 
     _getUserWallets = () => {
         const { token, user_id } = this.props;
         let _this = this;
 
         ApiUtils.getUserWallets(token, user_id)
-            .then((response) => response.json())
+            .then(response => response.json())
             .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({ userWallets: res.data });
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
+                    _this.setState(
+                        { errMsg: true, errMessage: res.err, errType: "error" },
+                        () => {
+                            _this.props.logout();
+                        }
+                    );
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.message });
                 }
             })
-            .catch((err) => {
-                console.log(err)
+            .catch(err => {
+                console.log(err);
             });
-    }
+    };
 
-    _createUserWallet = (asset) => {
+    _createUserWallet = asset => {
         const { token, user_id } = this.props;
         let code = asset.coin;
 
@@ -63,31 +103,42 @@ class UserWallets extends Component {
         let _this = this;
 
         ApiUtils.generateUserWalletAddress(token, code, user_id)
-            .then((res) => res.json())
-            .then((res) => {
+            .then(res => res.json())
+            .then(res => {
                 if (res.status == 200) {
                     _this.setState({
-                        errMsg: true, errMessage: res.message, errType: 'Success'
+                        errMsg: true,
+                        errMessage: res.message,
+                        errType: "Success"
                     });
                     _this._getUserWallets();
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
+                    _this.setState(
+                        { errMsg: true, errMessage: res.err, errType: "error" },
+                        () => {
+                            _this.props.logout();
+                        }
+                    );
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
+                    _this.setState({
+                        errMsg: true,
+                        errMessage: res.err,
+                        errType: "error"
+                    });
                 }
-                _this.setState({ loader: false })
+                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
-                    loader: false, errType: 'error'
+                    errMsg: true,
+                    errMessage: "Something went wrong!!",
+                    loader: false,
+                    errType: "error"
                 });
             });
-    }
+    };
 
-    openNotificationWithIconError = (type) => {
+    openNotificationWithIconError = type => {
         notification[type]({
             message: this.state.errType,
             description: this.state.errMessage
@@ -103,30 +154,47 @@ class UserWallets extends Component {
 
         return (
             <ParentDiv>
-                <Row>
-                    {userWallets && userWallets.length > 0 &&
-                        userWallets.map((wallet) => {
-                            let coinTitle = <div>
-                                <Image src={BUCKET_URL + wallet.coin_icon} />
-                                <span>{wallet.coin_code}</span>
-                            </div>
+                <WalletRow class="main_wallet_row">
+                    {userWallets &&
+                        userWallets.length > 0 &&
+                        userWallets.map(wallet => {
+                            let coinTitle = (
+                                <div>
+                                    <Image src={BUCKET_URL + wallet.coin_icon} />
+                                    <span>{wallet.coin_code}</span>
+                                </div>
+                            );
                             return (
-                                <Col xs={{ span: 7 }} lg={{ span: 12 }}>
-                                    <Card title={coinTitle}
+                                <WalletCol xs={{ span: 7 }} lg={{ span: 12 }}>
+                                    <Card
+                                        title={coinTitle}
                                         actions={[
-                                            wallet.send_address == '' && wallet.send_address == '' ?
-                                                <Button type="primary" onClick={this._createUserWallet.bind(this, wallet)}>Create Wallet</Button>
-                                                : ''
-                                        ]}>
-                                        <p><b>HOT Send Address : </b> <span>{wallet.send_address}</span></p>
-                                        <p><b>HOT Receive Address : </b><span>{wallet.receive_address}</span></p>
+                                            wallet.send_address == "" && wallet.send_address == "" ? (
+                                                <Button
+                                                    type="primary"
+                                                    onClick={this._createUserWallet.bind(this, wallet)}
+                                                >
+                                                    Create Wallet
+                        </Button>
+                                            ) : (
+                                                    ""
+                                                )
+                                        ]}
+                                    >
+                                        <p>
+                                            <b>HOT Send Address : </b>{" "}
+                                            <span>{wallet.send_address}</span>
+                                        </p>
+                                        <p>
+                                            <b>HOT Receive Address : </b>
+                                            <span>{wallet.receive_address}</span>
+                                        </p>
                                     </Card>
-                                </Col>
-                            )
-                        })
-                    }
+                                </WalletCol>
+                            );
+                        })}
                     {loader && <FaldaxLoader />}
-                </Row>
+                </WalletRow>
             </ParentDiv>
         );
     }
@@ -134,6 +202,8 @@ class UserWallets extends Component {
 
 export default connect(
     state => ({
-        token: state.Auth.get('token'),
-        user: state.Auth.get('user')
-    }), { logout })(UserWallets);
+        token: state.Auth.get("token"),
+        user: state.Auth.get("user")
+    }),
+    { logout }
+)(UserWallets);

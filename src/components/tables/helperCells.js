@@ -2,7 +2,8 @@ import React from 'react';
 import DeleteCell from './deleteCell';
 import EditableCell from './editableCell';
 import FilterDropdown from './filterDropdown';
-import { Users } from '../../containers/Page/Users/users';
+import { ActiveUsers } from '../../containers/Page/Users/activeUsers';
+import { InActiveUsers } from '../../containers/Page/Users/inActiveUsers';
 import { Assets } from '../../containers/Page/Assets/assets';
 import { Countries } from '../../containers/Page/Country/countries';
 import { StateList } from '../../containers/Page/Country/StateList';
@@ -32,24 +33,28 @@ import create from 'antd/lib/icon/IconFont';
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL = 'https://s3.us-east-2.amazonaws.com/production-static-asset/';
 
+const viewActiveUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state) => {
+    ActiveUsers.view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state);
+}
+
+const editActiveUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at) => {
+    ActiveUsers.editUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
+}
+
+const deleteActiveUser = (value) => {
+    ActiveUsers.deleteUser(value);
+}
+
 const viewUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state) => {
-    Users.view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state);
+    InActiveUsers.view(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state);
 }
 
 const editUser = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at) => {
-    Users.editUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
+    InActiveUsers.editUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
 }
 
 const deleteUser = (value) => {
-    Users.deleteUser(value);
-}
-
-const showReferrals = (value) => {
-    Users.showReferrals(value);
-}
-
-const userStatus = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) => {
-    Users.changeStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc);
+    InActiveUsers.deleteUser(value);
 }
 
 const viewCoin = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) => {
@@ -228,6 +233,27 @@ const approvePendingReq = (value, first_name, last_name, tier_step, is_approved,
     PendingRequests.approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id);
 }
 
+const transactionDetails = (value, email, source_address, destination_address, amount, transaction_type, created_at, transaction_id, coin_id, coin_code) => {
+    let url = '';
+    switch (coin_id) {
+        case 'tbtc':
+            url = "https://blockstream.info/testnet/tx/" + created_at;
+            break;
+        case 'txrp':
+            url = "https://test.bithomp.com/explorer/" + created_at;
+            break;
+        case 'tltc':
+            url = "https://blockexplorer.one/litecoin/testnet/tx/" + created_at;
+            break;
+        case 'tbch':
+            url = "https://explorer.bitcoin.com/tbch/tx/" + created_at;
+            break;
+        default:
+            url = '';
+    }
+    return url !== '' ? <a target="_blank" href={url}>{created_at}</a> : <span>{created_at}</span>;
+}
+
 const DateCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY")) ? moment.utc(data).local().format("DD MMM YYYY") : '' : ''}</p>;
 const UserDateCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at) => <p>{no_of_referrals && no_of_referrals > 0 ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id, refered_by, no_of_referral) => <p>{created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
@@ -253,16 +279,15 @@ const FeesCell = text => <p dangerouslySetInnerHTML={{ __html: text.toPrecision(
 const ApproveCell = text => <p>{text == true ? 'Approved' : 'Dis-Approved'}</p>;
 const IPCell = text => <p>{(text.split(":").length > 1) ? text.split(':')[3] : text}</p>;
 const LegalityCell = text => <p >{text == 1 ? 'Legal' : text == 2 ? 'Illegal' : text == 3 ? 'Neutral' : 'Partial Services Available'}</p>;
-const ButtonCell = (value) => <Button type="primary" onClick={() => showReferrals(value)} >Referred Users</Button>;
 const SwitchCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) }} />
 const StaticSwitchCell = (value, coin_name, coin_code, limit, wallet_address, created_at, is_active) => <Switch checked={is_active} onChange={() => { coinstatus(value, coin_name, coin_code, limit, wallet_address, created_at, is_active) }} />
-const UserSwitchCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) => <Switch checked={is_active} onChange={() => { userStatus(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc) }} />
 const CountrySwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { countryStatus(value, name, legality, color, is_active) }} />
 const StateSwitchCell = (value, name, legality, color, is_active) => <Switch checked={is_active} onChange={() => { stateStatus(value, name, legality, color, is_active) }} />
 const NewsSwitchCell = (value, cover_image, title, link, posted_at, description, is_active, owner) => <Switch checked={is_active} onChange={() => { newsStatus(value, cover_image, title, link, posted_at, description, is_active, owner) }} />
 const NewsDescCell = (value) => <Tooltip title={value}><p>{value.slice(0, 35) + (value.length > 35 ? "..." : "")}</p></Tooltip>
 //const NewsActionsCell = (value, cover_image, title, link, posted_at, description, is_active, owner) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewNews(value, cover_image, title, link, posted_at, description, is_active, owner)} /></Tooltip></div>;
 const ActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at)} /></Tooltip>{!deleted_at ? <React.Fragment><Tooltip title="View"><Icon type="delete" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => deleteUser(value)} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at)} /></Tooltip></React.Fragment> : ''}</div>;
+const ActiveUserActionCell = (value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewActiveUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at)} /></Tooltip>{!deleted_at ? <React.Fragment><Tooltip title="View"><Icon type="delete" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => deleteActiveUser(value)} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editActiveUser(value, profile_pic, first_name, last_name, email, city_town, street_address, street_address_2, phone_number, country, dob, is_active, kyc, date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at)} /></Tooltip></React.Fragment> : ''}</div>;
 const CoinActionCell = (value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteCoin(value)} style={{ "cursor": "pointer" }} /></Tooltip><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewCoin(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address)} /></Tooltip><Tooltip><Icon type="wallet" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => assetWallet(value, coin_name, coin_code)} /></Tooltip></div>;
 const RolesActionCell = (value, name, users, assets, countries, roles, employee, pairs, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active) => <div><Tooltip title="Delete"><Icon type="delete" onClick={() => deleteRole(value, name, users, assets, countries, roles, employee, pairs, transaction_history, trade_history, withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active)} /></Tooltip></div>;
 const CountryActionCell = (value, name, legality, color, stateCount, is_active) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editCountry(value, name, legality, color, is_active)} /></Tooltip></div>;
@@ -300,6 +325,7 @@ const TierActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" s
 const TierReqActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => editTier(value)} /></Tooltip></div>
 const PendingTierReqActionCell = (value, first_name, last_name, tier_step, is_approved, user_id) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPendingReq(value, first_name, last_name, tier_step, is_approved, user_id)} /></Tooltip><Switch style={{ "marginLeft": "10px" }} checked={is_approved} onChange={() => { approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id) }} /></div>
 const SimplexStatusCell = (value, payment_id, quote_id, currency, settle_currency, email, side, quantity, fill_price, simplex_payment_status, created_at) => <div>{simplex_payment_status == 1 ? 'Under Approval' : simplex_payment_status == 2 ? 'Approved' : 'Cancelled'}</div>
+const TransactionHashCell = (value, email, source_address, destination_address, amount, transaction_type, created_at, transaction_id, coin_id, coin_code) => <div>{transactionDetails(value, email, source_address, destination_address, amount, transaction_type, created_at, transaction_id, coin_id, coin_code)}</div>
 
 export {
     IPCell,
@@ -312,11 +338,10 @@ export {
     DeleteCell,
     FilterDropdown,
     ActionCell,
+    ActiveUserActionCell,
     SwitchCell,
     CoinActionCell,
     StaticSwitchCell,
-    ButtonCell,
-    UserSwitchCell,
     CountrySwitchCell,
     ContentCell,
     RolesActionCell,
@@ -375,5 +400,6 @@ export {
     FullNameTextCell,
     TierReqActionCell,
     PendingTierReqActionCell,
-    SimplexStatusCell
+    SimplexStatusCell,
+    TransactionHashCell
 };

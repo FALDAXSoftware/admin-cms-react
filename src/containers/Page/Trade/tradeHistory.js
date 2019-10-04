@@ -33,7 +33,9 @@ class TradeHistory extends Component {
             startDate: '',
             endDate: '',
             rangeDate: [],
-            trade_type: 1
+            trade_type: 1,
+            sorterCol: 'created_at',
+            sortOrder: 'descend'
         }
     }
 
