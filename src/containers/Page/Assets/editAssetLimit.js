@@ -27,6 +27,7 @@ class EditableCell extends React.Component {
             children,
             ...restProps
         } = this.props;
+        //console.log('dataIndex', record && record[dataIndex], dataIndex)
         return (
             <td {...restProps}>
                 {editing ? (

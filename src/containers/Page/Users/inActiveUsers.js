@@ -149,10 +149,6 @@ class InActiveUsers extends Component {
         this.setState({ searchUser: field.target.value })
     }
 
-    _addUser = () => {
-        this.props.history.push('/dashboard/users/add-user')
-    }
-
     _changeCountry = (val) => {
         this.setState({ filterVal: val });
     }
@@ -219,17 +215,14 @@ class InActiveUsers extends Component {
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Form onSubmit={this._searchUser}>
                                             <Row type="flex" justify="end">
-                                                {/* <ColWithPadding sm={5}>
-                                                    <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._addUser}>Add User</Button>
-                                                </ColWithPadding> */}
-                                                <ColWithPadding sm={5}>
+                                                <ColWithPadding sm={8}>
                                                     <Input
                                                         placeholder="Search users"
                                                         onChange={this._changeSearch.bind(this)}
                                                         value={searchUser}
                                                     />
                                                 </ColWithPadding>
-                                                <ColWithPadding sm={5}>
+                                                <ColWithPadding sm={6}>
                                                     <Select
                                                         getPopupContainer={trigger => trigger.parentNode}
                                                         placeholder="Select a country"
@@ -254,7 +247,7 @@ class InActiveUsers extends Component {
                                                             filename={'users.csv'}
                                                             headers={headers}
                                                         >
-                                                            <Button style={{}} className="search-btn" type="primary">Export</Button>
+                                                            <Button className="search-btn" type="primary">Export</Button>
                                                         </CSVLink> : ''}
                                                 </ColWithPadding>
                                             </Row>

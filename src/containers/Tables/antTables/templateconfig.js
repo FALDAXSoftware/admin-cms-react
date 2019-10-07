@@ -21,7 +21,7 @@ const renderCell = (object, type, key, fname = null, emailContent = null, emailN
 };
 
 const columns = [{
-    title: <IntlMessages id="antTable.title.details" />,
+    title: <IntlMessages id="emailTable.title.actions" />,
     key: 'action',
     width: 200,
     render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',

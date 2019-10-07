@@ -69,7 +69,7 @@ class ActiveUsers extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else if (res.status == 403) {
@@ -96,7 +96,7 @@ class ActiveUsers extends Component {
         _this.setState({ loader: true })
         ApiUtils.deleteUser(token, deleteUserId)
             .then((response) => response.json())
-            .then(function (res) {
+            .then(function(res) {
                 if (res.status == 200) {
                     _this.setState({
                         deleteUserId: '', errMsg: true, errMessage: res.message, errType: 'Success'
@@ -148,10 +148,6 @@ class ActiveUsers extends Component {
 
     _changeSearch = (field, e) => {
         this.setState({ searchUser: field.target.value })
-    }
-
-    _addUser = () => {
-        this.props.history.push('/dashboard/users/add-user')
     }
 
     _changeCountry = (val) => {
@@ -228,17 +224,14 @@ class ActiveUsers extends Component {
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchUser}>
                                         <Row type="flex" justify="end">
-                                            {/* <ColWithPadding sm={5}>
-                                                    <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._addUser}>Add User</Button>
-                                                </ColWithPadding> */}
-                                            <ColWithPadding sm={5}>
+                                            <ColWithPadding sm={7}>
                                                 <Input
                                                     placeholder="Search users"
                                                     onChange={this._changeSearch.bind(this)}
                                                     value={searchUser}
                                                 />
                                             </ColWithPadding>
-                                            <ColWithPadding sm={5}>
+                                            <ColWithPadding sm={6}>
                                                 <Select
                                                     getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a country"
@@ -250,10 +243,10 @@ class ActiveUsers extends Component {
                                                     })}
                                                 </Select>
                                             </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
+                                            <ColWithPadding xs={12} sm={4}>
                                                 <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
                                             </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
+                                            <ColWithPadding xs={12} sm={4}>
                                                 <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                             </ColWithPadding>
                                             <ColWithPadding sm={3}>
@@ -263,7 +256,7 @@ class ActiveUsers extends Component {
                                                         filename={'users.csv'}
                                                         headers={headers}
                                                     >
-                                                        <Button style={{}} className="search-btn" type="primary">Export</Button>
+                                                        <Button className="search-btn" type="primary">Export</Button>
                                                     </CSVLink> : ''}
                                             </ColWithPadding>
                                         </Row>

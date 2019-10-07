@@ -10,7 +10,7 @@ class Users extends Component {
         return (
             <div className="isoLayoutContent">
                 <div style={{ float: 'right', backgroundColor: 'white', marginRight: '20px' }}>
-                    <Button icon="plus" type="primary">Add User</Button>
+                    <Button icon="plus" onClick={() => this.props.history.push('/dashboard/users/add-user')} type="primary">Add User</Button>
                 </div>
                 <Tabs defaultActiveKey="1" size={'large'}>
                     <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
