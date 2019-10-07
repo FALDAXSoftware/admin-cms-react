@@ -1,14 +1,16 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell } from '../../../components/tables/helperCells';
+import { TextCell, ReferralNameCell } from '../../../components/tables/helperCells';
 
-const renderCell = (object, type, key) => {
+const renderCell = (object, type, key, Name = null, isDeleted = null) => {
     const value = object[key];
+    const full_name = object[Name];
+    const deleted_at = object[isDeleted]
 
     switch (type) {
-        case 'TextCell':
-            return TextCell(value);
+        case 'ReferralNameCell':
+            return ReferralNameCell(value, full_name, deleted_at);
         default:
             return TextCell(value);
     }
@@ -19,7 +21,7 @@ const columns = [{
     key: 'full_name',
     width: 100,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'full_name')
+    render: object => renderCell(object, 'ReferralNameCell', 'id', 'full_name', 'deleted_at')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
     key: 'email',
