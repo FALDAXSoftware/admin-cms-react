@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination } from 'antd';
+import { Pagination } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { userReferralInfos } from "../../Tables/antTables";
@@ -9,7 +9,6 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
-const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class ReferralUsers extends Component {
@@ -84,10 +83,10 @@ class ReferralUsers extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
+                    <div className="isoTableDisplayTab">
                         {
                             userReferralInfos.map(tableInfo => (
-                                <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                                <div tab={tableInfo.title} key={tableInfo.value}>
                                     <TableWrapper
                                         {...this.state}
                                         columns={tableInfo.columns}
@@ -109,10 +108,10 @@ class ReferralUsers extends Component {
                                             onShowSizeChange={this._changePaginationSize}
                                             pageSizeOptions={pageSizeOptions}
                                         /> : ''}
-                                </TabPane>
+                                </div>
                             ))
                         }
-                    </Tabs>
+                    </div>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

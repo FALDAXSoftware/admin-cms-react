@@ -326,6 +326,7 @@ const TierReqActionCell = (value) => <div><Tooltip title="Edit"><Icon type="edit
 const PendingTierReqActionCell = (value, first_name, last_name, tier_step, is_approved, user_id) => <div><Tooltip title="View"><Icon type="info-circle" style={{ "marginLeft": "10px", "cursor": "pointer" }} onClick={() => viewPendingReq(value, first_name, last_name, tier_step, is_approved, user_id)} /></Tooltip><Switch style={{ "marginLeft": "10px" }} checked={is_approved} onChange={() => { approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id) }} /></div>
 const SimplexStatusCell = (value, payment_id, quote_id, currency, settle_currency, email, side, quantity, fill_price, simplex_payment_status, created_at) => <div>{simplex_payment_status == 1 ? 'Under Approval' : simplex_payment_status == 2 ? 'Approved' : 'Cancelled'}</div>
 const TransactionHashCell = (value, email, source_address, destination_address, amount, transaction_type, created_at, transaction_id, coin_id, coin_code) => <div>{transactionDetails(value, email, source_address, destination_address, amount, transaction_type, created_at, transaction_id, coin_id, coin_code)}</div>
+const ReferralNameCell = (value, full_name, deleted_at) => <div>{deleted_at !== null ? <Tooltip title={`${full_name} has been deleted`}><Icon type="info-circle" style={{ "margin": "0 10px 0 10px", "cursor": "pointer" }} />{full_name}</Tooltip> : full_name}</div>
 
 export {
     IPCell,
@@ -401,5 +402,6 @@ export {
     TierReqActionCell,
     PendingTierReqActionCell,
     SimplexStatusCell,
-    TransactionHashCell
+    TransactionHashCell,
+    ReferralNameCell
 };

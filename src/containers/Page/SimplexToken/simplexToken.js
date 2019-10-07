@@ -121,6 +121,14 @@ class SimplexToken extends Component {
         this.setState({ fields, enableInput: true });
     }
 
+    _showInputEditable = () => {
+        this.setState((prevState) => {
+            return {
+                enableInput: !prevState.enableInput
+            }
+        })
+    }
+
     render() {
         const { errMsg, errType, loader, fields, enableInput } = this.state;
 
@@ -139,7 +147,7 @@ class SimplexToken extends Component {
                                 </span>
                                 <TextArea disabled={enableInput} placeholder="Simplex Access Token" style={{ width: "80%", "marginTop": "15px", "marginBottom": "15px" }}
                                     onChange={this._onChangeFields.bind(this, "access_token")} value={fields["access_token"]} />
-                                <Icon type="edit" theme="twoTone" onClick={() => { this.setState({ enableInput: false }) }} />
+                                <Icon type="edit" theme="twoTone" onClick={this._showInputEditable} />
                                 <span className="field-error">
                                     {this.validator.message('Simplex Access Token', fields['access_token'], 'required')}
                                 </span>
