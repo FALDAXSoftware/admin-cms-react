@@ -29,6 +29,12 @@ const columns = [{
     render: object => renderCell(object, 'TwoFAActionCell', 'id', 'full_name', 'email',
         'uploaded_file', 'status', 'reason', 'created_at')
 }, {
+    title: "Requested On",
+    key: 'created_at',
+    width: 200,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: "Name",
     key: 'full_name',
     width: 100,
@@ -40,12 +46,6 @@ const columns = [{
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
-}, {
-    title: "Requested On",
-    key: 'created_at',
-    width: 200,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: "Status",
     key: 'status',

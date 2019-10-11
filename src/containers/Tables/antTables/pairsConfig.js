@@ -32,6 +32,12 @@ const columns = [{
     render: object => renderCell(object,
         'FeeActionCell', 'id', 'name', 'maker_fee', 'taker_fee', 'created_at', 'is_active')
 }, {
+    title: <IntlMessages id="feeTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="feeTable.title.name" />,
     key: 'name',
     width: 100,
@@ -49,12 +55,6 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'taker_fee')
-}, {
-    title: <IntlMessages id="feeTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="feeTable.title.status" />,
     key: 'is_active',

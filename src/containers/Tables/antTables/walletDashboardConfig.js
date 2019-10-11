@@ -14,38 +14,32 @@ const renderCell = (object, type, key) => {
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="walletTable.title.coin_id" />,
-        key: 'coin',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'coin')
-    },
-    {
-        title: <IntlMessages id="walletTable.title.send_address" />,
-        key: 'send_address',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'send_address')
-    },
-    {
-        title: <IntlMessages id="walletTable.title.receive_address" />,
-        key: 'receive_address',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'receive_address')
-    },
-    {
-        title: <IntlMessages id="walletTable.title.balance" />,
-        key: 'balance',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'balance')
-    },
-    {
-        title: <IntlMessages id="walletTable.title.fee" />,
-        key: 'fee',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'fee')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="walletTable.title.coin_id" />,
+    key: 'coin',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'coin')
+}, {
+    title: <IntlMessages id="walletTable.title.send_address" />,
+    key: 'send_address',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'send_address')
+}, {
+    title: <IntlMessages id="walletTable.title.receive_address" />,
+    key: 'receive_address',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'receive_address')
+}, {
+    title: <IntlMessages id="walletTable.title.balance" />,
+    key: 'balance',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'balance')
+}, {
+    title: <IntlMessages id="walletTable.title.fee" />,
+    key: 'fee',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'fee')
+}];
 
 const dashboardTableinfos = [
     {
