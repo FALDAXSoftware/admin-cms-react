@@ -45,6 +45,12 @@ const columns = [{
         'country', 'city', 'zip', 'dob', 'id_type', 'created_at'
     )
 }, {
+    title: <IntlMessages id="kycTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="kycTable.title.mtid" />,
     key: 'mtid',
     width: 100,
@@ -84,12 +90,6 @@ const columns = [{
     key: 'webhook_response',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'webhook_response')
-}, {
-    title: <IntlMessages id="kycTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }];
 
 const ApprovedKYCInfos = [

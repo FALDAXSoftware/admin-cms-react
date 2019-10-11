@@ -35,6 +35,12 @@ const columns = [{
         'JobAppActionCell', 'id', 'first_name', 'last_name', 'email', 'phone_number',
         'created_at', 'resume', 'cover_letter', 'linkedin_profile', 'website_url')
 }, {
+    title: <IntlMessages id="jobTable.title.applied_at" />,
+    key: 'created_at',
+    sorter: true,
+    width: 200,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="jobTable.title.first_name" />,
     key: 'first_name',
     width: 100,
@@ -58,12 +64,6 @@ const columns = [{
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'phone_number')
-}, {
-    title: <IntlMessages id="jobTable.title.applied_at" />,
-    key: 'created_at',
-    sorter: true,
-    width: 200,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }];
 
 const jobAppTableInfos = [

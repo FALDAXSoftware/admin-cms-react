@@ -295,7 +295,7 @@ class EditProfile extends Component {
                                     </Col>
                                     <Col sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12 }}>
                                         <ul style={{ listStyleType: "lower-roman" }}>
-                                            <li>Install an authenticator app on your mobile device. We suggest Google Authenticator or Authy. </li>
+                                            <li>Install an authenticator app on your mobile device. We suggest Google Authenticator. </li>
                                             <li>Scan the QR code when prompted by your Authenticator.</li>
                                             <li>In case your phone gets stolen or erased, you will need this code to link FALDAX with a new app.</li>
                                             <li>Do not share the code with anyone. FALDAX will never ask you for this code.</li>

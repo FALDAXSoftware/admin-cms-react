@@ -29,6 +29,11 @@ const columns = [{
     width: 200,
     render: object => renderCell(object, 'WhiteListActionCell', 'id', 'ip', 'time', 'is_permanent')
 }, {
+    title: <IntlMessages id="whitelistTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    render: object => renderCell(object, 'DateTimeCell', 'created_at')
+}, {
     title: <IntlMessages id="whitelistTable.title.ip" />,
     key: 'ip',
     width: 100,
@@ -38,11 +43,6 @@ const columns = [{
     key: 'days',
     width: 100,
     render: object => renderCell(object, 'DaysCell', 'days')
-}, {
-    title: <IntlMessages id="whitelistTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    render: object => renderCell(object, 'DateTimeCell', 'created_at')
 }];
 
 const whitelistTableInfos = [

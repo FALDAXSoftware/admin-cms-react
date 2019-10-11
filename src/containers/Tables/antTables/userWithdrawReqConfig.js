@@ -23,46 +23,39 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="withdrawTable.title.email" />,
-        key: 'email',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'email')
-    },
-    {
-        title: <IntlMessages id="withdrawTable.title.source_address" />,
-        key: 'source_address',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'source_address')
-    },
-    {
-        title: <IntlMessages id="withdrawTable.title.destination_address" />,
-        key: 'destination_address',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'destination_address')
-    },
-    {
-        title: <IntlMessages id="withdrawTable.title.amount" />,
-        key: 'amount',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'amount')
-    },
-    {
-        title: <IntlMessages id="withdrawTable.title.approve" />,
-        key: 'is_approve',
-        width: 100,
-        render: object => renderCell(object, 'ApproveCell', 'is_approve')
-    },
-    {
-        title: <IntlMessages id="withdrawTable.title.created_at" />,
-        key: 'created_at',
-        width: 100,
-        sorter: true,
-        render: object => renderCell(object, 'DateCell', 'created_at')
-    },
-];
+const columns = [{
+    title: <IntlMessages id="withdrawTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
+    title: <IntlMessages id="withdrawTable.title.email" />,
+    key: 'email',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'email')
+}, {
+    title: <IntlMessages id="withdrawTable.title.source_address" />,
+    key: 'source_address',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'source_address')
+}, {
+    title: <IntlMessages id="withdrawTable.title.destination_address" />,
+    key: 'destination_address',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'destination_address')
+}, {
+    title: <IntlMessages id="withdrawTable.title.amount" />,
+    key: 'amount',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'amount')
+}, {
+    title: <IntlMessages id="withdrawTable.title.approve" />,
+    key: 'is_approve',
+    width: 100,
+    render: object => renderCell(object, 'ApproveCell', 'is_approve')
+}];
 
 const userWithdrawReqTableInfos = [
     {

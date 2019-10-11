@@ -14,20 +14,17 @@ const renderCell = (object, type, key) => {
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="walletTable.title.user_coin" />,
-        key: 'user_coin',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'user_coin')
-    },
-    {
-        title: <IntlMessages id="walletTable.title.fee" />,
-        key: 'fee',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'fee')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="walletTable.title.user_coin" />,
+    key: 'user_coin',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'user_coin')
+}, {
+    title: <IntlMessages id="walletTable.title.fee" />,
+    key: 'fee',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'fee')
+}];
 
 const walletFeeTableinfos = [
     {
