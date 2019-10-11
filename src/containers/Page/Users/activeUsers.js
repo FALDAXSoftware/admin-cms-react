@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Input, Pagination, notification, Button, Row, Select, Form, Modal } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import ApiUtils from '../../../helpers/apiUtills';
@@ -69,7 +68,7 @@ class ActiveUsers extends Component {
         _this.setState({ loader: true });
         ApiUtils.getAllUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({ allUsers: res.data, allUserCount: res.userCount });
                 } else if (res.status == 403) {
@@ -96,7 +95,7 @@ class ActiveUsers extends Component {
         _this.setState({ loader: true })
         ApiUtils.deleteUser(token, deleteUserId)
             .then((response) => response.json())
-            .then(function(res) {
+            .then(function (res) {
                 if (res.status == 200) {
                     _this.setState({
                         deleteUserId: '', errMsg: true, errMessage: res.message, errType: 'Success'

@@ -40,6 +40,12 @@ const columns = [{
         'JobActionCell', 'id', 'position', 'location', 'short_desc', 'job_desc',
         'category_id', 'is_active', 'category')
 }, {
+    title: <IntlMessages id="jobTable.title.created_at" />,
+    key: 'created_at',
+    sorter: true,
+    width: 200,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="jobTable.title.position" />,
     key: 'position',
     width: 100,
@@ -52,12 +58,6 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'LocationCell', 'location')
 }, {
-    title: <IntlMessages id="jobTable.title.created_at" />,
-    key: 'created_at',
-    sorter: true,
-    width: 200,
-    render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
     width: 200,
@@ -68,8 +68,7 @@ const columns = [{
     key: 'button',
     width: 200,
     render: object => renderCell(object, 'JobButtonCell', 'id')
-}
-];
+}];
 
 const jobsTableInfos = [
     {

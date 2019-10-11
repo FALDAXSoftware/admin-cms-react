@@ -38,6 +38,12 @@ const columns = [{
         'destination_address', 'amount', 'transaction_type', 'is_approve', 'user_id', 'coin_id',
         'is_executed', 'created_at')
 }, {
+    title: <IntlMessages id="withdrawTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: <IntlMessages id="withdrawTable.title.source_address" />,
     key: 'source_address',
     width: 100,
@@ -59,20 +65,13 @@ const columns = [{
     width: 100,
     render: object => renderCell(object, 'TextCell', 'transaction_type')
 }, {
-    title: <IntlMessages id="withdrawTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
     title: <IntlMessages id="withdrawTable.title.status" />,
     key: 'status',
     width: 100,
     render: object => renderCell(object, 'WithdrawStatusCell', 'id', 'email', 'source_address',
         'destination_address', 'amount', 'transaction_type', 'is_approve', 'user_id', 'coin_id',
         'is_executed', 'created_at')
-}
-];
+}];
 
 const withdrawReqTableInfos = [
     {

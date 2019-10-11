@@ -28,15 +28,15 @@ const columns = [{
     width: 100,
     render: object => renderCell(object, 'LogoutDateCell', 'ip', 'is_logged_in', 'created_at', 'updated_at')
 }, {
-    title: <IntlMessages id="historyTable.title.ip" />,
-    key: 'ip',
-    width: 100,
-    render: object => renderCell(object, 'IPCell', 'ip')
-}, {
     title: <IntlMessages id="historyTable.title.created_at" />,
     key: 'created_at',
     width: 100,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
+}, {
+    title: <IntlMessages id="historyTable.title.ip" />,
+    key: 'ip',
+    width: 100,
+    render: object => renderCell(object, 'IPCell', 'ip')
 }];
 
 const historyTableInfos = [

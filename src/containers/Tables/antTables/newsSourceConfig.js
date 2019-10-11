@@ -17,26 +17,22 @@ const renderCell = (object, type, key, source = null, news_slug = null, active =
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="newsTable.title.source_name" />,
-        key: 'source_name',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'source_name')
-    },
-    {
-        title: <IntlMessages id="newsTable.title.slug" />,
-        key: 'slug',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'slug')
-    },
-    {
-        title: <IntlMessages id="newsTable.title.active" />,
-        key: 'is_active',
-        width: 100,
-        render: object => renderCell(object, 'NewsSourceSwitchCell', 'id', 'source_name', 'slug', 'is_active')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="newsTable.title.source_name" />,
+    key: 'source_name',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'source_name')
+}, {
+    title: <IntlMessages id="newsTable.title.slug" />,
+    key: 'slug',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'slug')
+}, {
+    title: <IntlMessages id="newsTable.title.active" />,
+    key: 'is_active',
+    width: 100,
+    render: object => renderCell(object, 'NewsSourceSwitchCell', 'id', 'source_name', 'slug', 'is_active')
+}];
 
 const newsSourceTableInfos = [
     {

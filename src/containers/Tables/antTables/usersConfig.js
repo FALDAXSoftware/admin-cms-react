@@ -66,6 +66,12 @@ const columns = [{
         'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
         'deleted_at')
 }, {
+    title: <IntlMessages id="userTable.title.created_at" />,
+    key: 'created_at',
+    width: 200,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
     title: "",
     key: 'profile_pic',
     width: '1%',
@@ -116,12 +122,6 @@ const columns = [{
     key: 'postal_code',
     width: 200,
     render: object => renderCell(object, 'TextCell', 'postal_code')
-}, {
-    title: <IntlMessages id="userTable.title.created_at" />,
-    key: 'created_at',
-    width: 200,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }];
 
 const tableinfos = [

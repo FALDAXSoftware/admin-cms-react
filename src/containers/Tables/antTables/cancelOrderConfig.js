@@ -21,6 +21,12 @@ const renderCell = (object, type, key, coin_pair = null, Quantity = null, price 
 };
 
 const columns = [{
+    title: <IntlMessages id="orderTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateTimeSecCell', 'created_at')
+}, {
     title: <IntlMessages id="orderTable.title.pair" />,
     key: 'symbol',
     width: 200,
@@ -55,12 +61,6 @@ const columns = [{
     key: 'order_status',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'order_status')
-}, {
-    title: <IntlMessages id="orderTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateTimeSecCell', 'created_at')
 }];
 
 const cancelOrderTableInfos = [
