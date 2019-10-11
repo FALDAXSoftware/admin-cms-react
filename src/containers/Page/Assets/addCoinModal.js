@@ -89,9 +89,9 @@ class AddCoinModal extends Component {
 
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
-        let { fields, selectedToken } = this.state;
+        let { fields, selectedToken, showCoinErr } = this.state;
 
-        if (this.validator.allValid() && this.uploadCoinInput.input.files.length > 0) {
+        if (this.validator.allValid() && !showCoinErr && this.refs.uploadImg.files[0] !== undefined) {
             this.setState({ loader: true, isDisabled: true });
 
             let formData = new FormData();
@@ -102,7 +102,7 @@ class AddCoinModal extends Component {
             formData.append('isERC', selectedToken);
             formData.append('deposit_method', ' ');
             formData.append('kraken_coin_name', ' ');
-            formData.append('coin_icon', this.uploadCoinInput.input.files[0]);
+            formData.append('coin_icon', this.refs.uploadImg.files[0] ? this.refs.uploadImg.files[0] : fields['image']);
 
             ApiUtils.addCoin(token, formData)
                 .then((res) => res.json())
@@ -135,7 +135,10 @@ class AddCoinModal extends Component {
         } else {
             this.validator.showMessages();
             this.forceUpdate();
-            this.setState({ showCoinErr: this.uploadCoinInput.input.files.length > 0 ? false : true })
+            this.setState({
+                showIamgeMessage: "Image is required.",
+                showCoinErr: true
+            });
         }
     }
 
@@ -143,12 +146,55 @@ class AddCoinModal extends Component {
         this.setState({ selectedToken: val });
     }
 
+    _onChangeImg = e => {
+        const { fields } = this.state;
+        const file = this.refs.uploadImg.files[0];
+        let size = file.size / 1024 / 1024;
+        let type = file.type;
+        if (type == "image/jpeg" || type == "image/png" || type == "image/jpg") {
+            if (size <= 10) {
+                const reader = new FileReader();
+
+                reader.onloadend = () => {
+                    fields["image"] = reader.result
+                    this.setState({
+                        imageUrl: reader.result
+                    });
+                };
+                if (file) {
+                    reader.readAsDataURL(file);
+                    this.setState({
+                        imageUrl: reader.result,
+                        showIamgeMessage: "",
+                        showCoinErr: false
+                    });
+                } else {
+                    this.setState({
+                        imageUrl: "/images/user-dummy.png",
+                        showIamgeMessage: "",
+                        showCoinErr: false
+                    });
+                }
+            } else {
+                this.setState({
+                    imageUrl: "/images/user-dummy.png",
+                    showIamgeMessage: "Please select image of less than 10MB in size.",
+                    showCoinErr: true
+                });
+            }
+        } else {
+            this.setState({
+                imageUrl: "/images/user-dummy.png",
+                showIamgeMessage: "Please select image of .png, .jpg, .jpeg type.",
+                showCoinErr: true
+            });
+        }
+    };
+
     render() {
-        const { loader, showAddCoinModal, fields, errMsg,
+        const { loader, showAddCoinModal, fields, errMsg, showIamgeMessage,
             errType, isDisabled, showCoinErr, selectedToken
         } = this.state;
-
-
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -165,15 +211,18 @@ class AddCoinModal extends Component {
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Asset Icon:</span>
-                    <Input ref={(ref) => { this.uploadCoinInput = ref; }} type="file"
-                        id="uploadCoinInput" name="uploadCoinInput"
-                        style={{ "borderColor": "#fff", "padding": "10px 0px 0px 0px", margin: "10px" }}
-                        onChange={this._handleChange.bind(this, "coin_icon")} value={fields["coin_icon"]} />
+                    <span>Asset Icon:</span><br />
+                    <input
+                        ref="uploadImg"
+                        type="file"
+                        name="selectedFile"
+                        onChange={this._onChangeImg}
+                        accept="image/x-png,image/jpg,image/jpeg"
+                    /><br />
                     <span className="image-note">Supported format : .jpg , .png , .jpeg.</span>
                 </div>
                 {showCoinErr && <span style={{ "color": "red" }}>
-                    {'The asset icon is required.'}
+                    {showIamgeMessage}
                 </span>}
 
                 <div style={{ "marginBottom": "15px" }}>
@@ -221,14 +270,6 @@ class AddCoinModal extends Component {
                         <Option value={false}>No</Option>
                     </Select>
                 </div>
-
-                {/* <div style={{ "marginBottom": "15px" }}>
-                    <span>Wallet Address:</span>
-                    <Input placeholder="Wallet Address" onChange={this._handleChange.bind(this, "wallet_address")} value={fields["wallet_address"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('wallet address', fields["wallet_address"], 'max:45', 'text-danger')}
-                    </span>
-                </div> */}
                 {loader && <FaldaxLoader />}
             </Modal>
         );
