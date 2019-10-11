@@ -111,7 +111,7 @@ class BatchBalance extends React.Component {
             batchCount: 0,
             transactionID: '',
             showDownloadPopup: false,
-            selectedExport: ['PDF'],
+            selectedExport: ['XLSX'],
             downloadData: [],
             selectedOptions: [0]
         }
@@ -399,8 +399,8 @@ class BatchBalance extends React.Component {
                 if (res.status == 200) {
                     _this.setState({
                         purchaseDownloadData: res.data.purchases,
-                        summaryDownloadData: res.data.summary,
-                        errMsg: true, errMessage: res.message, errType: 'Success'
+                        summaryDownloadData: res.data.summary.data,
+                        errMsg: true, errMessage: res.message, errType: 'Success',
                     });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -409,7 +409,7 @@ class BatchBalance extends React.Component {
                 } else {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
                 }
-                _this.setState({ loader: false });
+                _this.setState({ loader: false, showDownloadPopup: false });
             })
             .catch(() => {
                 _this.setState({
@@ -421,8 +421,8 @@ class BatchBalance extends React.Component {
     render() {
         const { allBatches, loader, errMsg, errType, batchCount, page, limit,
             transactionID, showDownloadPopup, selectedExport, purchaseDownloadData, summaryDownloadData,
-
         } = this.state;
+        console.log('summaryDownloadData', summaryDownloadData, selectedExport)
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
@@ -461,6 +461,12 @@ class BatchBalance extends React.Component {
             { label: '.PDF', value: 'PDF' },
             { label: '.XLSX', value: 'XLSX' },
         ];
+        const headers = [
+            { label: "Asset", key: "coin" },
+            { label: "faldax_fees", key: "faldax_fees" },
+            { label: "faldax_usd_fees", key: "faldax_usd_fees" },
+            { label: "asset_net", key: "asset_net" }
+        ];
 
         return (
             <LayoutWrapper>
@@ -484,14 +490,22 @@ class BatchBalance extends React.Component {
                             </Row>
                         </Form>
                     </div>
-                    {
-                        selectedExport.map((exportFile) => {
+                    {/* {
+                        summaryDownloadData && selectedExport.map((exportFile) => {
                             selectedExport.includes('XLSX') &&
                                 <CSVLink
-                                    data={purchaseDownloadData}
+                                    data={summaryDownloadData}
                                     filename={'batch.csv'}
                                 />
                         })
+                    } */}
+                    {
+                        summaryDownloadData && summaryDownloadData.length > 0 && selectedExport[0] == 'XLSX' &&
+                        <CSVLink
+                            data={summaryDownloadData}
+                            headers={headers}
+                            filename={'batch.csv'}
+                        />
                     }
                     {showDownloadPopup &&
                         <Modal
@@ -516,7 +530,7 @@ class BatchBalance extends React.Component {
                                 <span><b>Export as? </b></span><br />
                                 <Checkbox.Group
                                     options={exportOptions}
-                                    defaultValue={['PDF']}
+                                    defaultValue={['XLSX']}
                                     onChange={this._onChangeExportVal}
                                 />
                             </div>
