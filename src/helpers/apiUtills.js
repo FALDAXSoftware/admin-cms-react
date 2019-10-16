@@ -864,13 +864,13 @@ const ApiUtils = {
         }
     },
 
-    getAllSimplexTrades: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type) {
+    getAllSimplexTrades: function (page, limit, token, search, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type, simplex_payment_status) {
         let url = "page=" + page + "&limit=" + limit + "&trade_type=" + trade_type;
         search = encodeURIComponent(search);
         if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
-        } else if (search && startDate && endDate && sorterCol && sortOrder) {
-            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (Number.isInteger(simplex_payment_status) && search && startDate && endDate && sorterCol && sortOrder) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
             url += "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate && sorterCol && sortOrder) {
@@ -879,6 +879,10 @@ const ApiUtils = {
             url += "&data=" + search + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && filterVal && sorterCol && sortOrder) {
             url += "&data=" + search + "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (Number.isInteger(simplex_payment_status) && filterVal && startDate && endDate && sorterCol && sortOrder) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&t_type=" + filterVal + "&start_date=" + startDate + "&end_date=" + endDate + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (Number.isInteger(simplex_payment_status) && startDate && endDate && sorterCol && sortOrder) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (filterVal && sorterCol && sortOrder) {
             url += "&t_type=" + filterVal + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && startDate && endDate) {
@@ -887,12 +891,22 @@ const ApiUtils = {
             url += "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
         } else if (search && sorterCol && sortOrder) {
             url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (Number.isInteger(simplex_payment_status) && startDate && endDate) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (Number.isInteger(simplex_payment_status) && sorterCol && sortOrder) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (search && filterVal) {
             url += "&data=" + search + "&t_type=" + filterVal;
         } else if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (startDate && endDate) {
             url += "&start_date=" + startDate + "&end_date=" + endDate;
+        } else if (Number.isInteger(simplex_payment_status) && filterVal) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&t_type=" + filterVal;
+        } else if (Number.isInteger(simplex_payment_status) && search) {
+            url += "&simplex_payment_status=" + simplex_payment_status + "&data=" + search;
+        } else if (Number.isInteger(simplex_payment_status)) {
+            url += "&simplex_payment_status=" + simplex_payment_status;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {
@@ -912,19 +926,31 @@ const ApiUtils = {
         }
     },
 
-    getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder, trade_type) {
+    getUserTrades: function (page, limit, token, search, user_id, filterVal, sorterCol, sortOrder, trade_type, simplex_payment_status) {
         let url = "/admin/all-trades?page=" + page + "&limit=" + limit + "&user_id=" + user_id + "&trade_type=" + trade_type;
         search = encodeURIComponent(search);
-        if (search && filterVal && sorterCol && sortOrder) {
-            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search + "&t_type=" + filterVal;
-        } else if (sorterCol && sortOrder && filterVal) {
-            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&t_type=" + filterVal;
+        if (search && filterVal && sorterCol && sortOrder && simplex_payment_status) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search + "&t_type=" + filterVal + "&simplex_payment_status=" + simplex_payment_status;
+        } else if (search && sorterCol && sortOrder && filterVal) {
+            url += "&data=" + search + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&t_type=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal && simplex_payment_status) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&t_type=" + filterVal + "&simplex_payment_status=" + simplex_payment_status;
         } else if (sorterCol && sortOrder && search) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + search;
+        } else if (sorterCol && sortOrder && simplex_payment_status) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&simplex_payment_status=" + simplex_payment_status;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&t_type=" + filterVal;
+        } else if (search && simplex_payment_status) {
+            url += "&data=" + search + "&simplex_payment_status=" + simplex_payment_status;
+        } else if (filterVal && simplex_payment_status) {
+            url += "&t_type=" + filterVal + "&simplex_payment_status=" + simplex_payment_status;
         } else if (sorterCol && sortOrder) {
             url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
         } else if (filterVal && search) {
             url += "&data=" + search + "&t_type=" + filterVal;
+        } else if (simplex_payment_status) {
+            url += "&simplex_payment_status=" + simplex_payment_status;
         } else if (filterVal) {
             url += "&t_type=" + filterVal;
         } else {

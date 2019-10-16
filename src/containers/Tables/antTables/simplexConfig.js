@@ -31,23 +31,11 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
 };
 
 const columns = [{
-    title: <IntlMessages id="tradeTable.title.created_at" />,
-    key: 'created_at',
+    title: <IntlMessages id="tradeTable.title.taker_email" />,
+    key: 'email',
     width: 100,
     sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
-    title: <IntlMessages id="tradeTable.title.payment_id" />,
-    key: 'payment_id',
-    width: 200,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'payment_id')
-}, {
-    title: <IntlMessages id="tradeTable.title.quote_id" />,
-    key: 'quote_id',
-    width: 200,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'quote_id')
+    render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="tradeTable.title.crypto" />,
     key: 'currency',
@@ -61,17 +49,35 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'settle_currency')
 }, {
+    title: <IntlMessages id="tradeTable.title.created_at" />,
+    key: 'created_at',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
+    title: <IntlMessages id="tradeTable.title.fill_price" />,
+    key: 'fill_price',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'fill_price')
+}, {
+    title: <IntlMessages id="tradeTable.title.payment_id" />,
+    key: 'payment_id',
+    width: 200,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'payment_id')
+}, {
+    title: <IntlMessages id="tradeTable.title.quote_id" />,
+    key: 'quote_id',
+    width: 200,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'quote_id')
+}, {
     title: <IntlMessages id="tradeTable.title.address" />,
     key: 'address',
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'address')
-}, {
-    title: <IntlMessages id="tradeTable.title.taker_email" />,
-    key: 'email',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="tradeTable.title.side" />,
     key: 'side',
@@ -84,12 +90,6 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'quantity')
-}, {
-    title: <IntlMessages id="tradeTable.title.fill_price" />,
-    key: 'fill_price',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'fill_price')
 }, {
     title: <IntlMessages id="tradeTable.title.simplex_payment_status" />,
     key: 'simplex_payment_status',
