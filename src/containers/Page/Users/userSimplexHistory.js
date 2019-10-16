@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Form, Row, Tabs } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form, Row } from 'antd';
 import { simplexTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,7 +11,6 @@ import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 
-const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { logout } = authAction;
 
@@ -31,7 +30,8 @@ class UserSimplexHistory extends Component {
             filterVal: '',
             trade_type: 2,
             sorterCol: 'created_at',
-            sortOrder: 'descend'
+            sortOrder: 'descend',
+            simplex_payment_status: ''
         }
     }
 
@@ -57,11 +57,11 @@ class UserSimplexHistory extends Component {
 
     _getUserSimplexTrades = () => {
         const { token, user_id } = this.props;
-        const { searchTrade, page, limit, filterVal, sorterCol, sortOrder, trade_type } = this.state;
+        const { searchTrade, page, limit, filterVal, sorterCol, sortOrder, trade_type, simplex_payment_status } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal, sorterCol, sortOrder, trade_type)
+        ApiUtils.getUserTrades(page, limit, token, searchTrade, user_id, filterVal, sorterCol, sortOrder, trade_type, simplex_payment_status)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -87,6 +87,10 @@ class UserSimplexHistory extends Component {
         this.setState({ page: 1 }, () => {
             this._getUserSimplexTrades();
         })
+    }
+
+    _changeStatus = (val) => {
+        this.setState({ simplex_payment_status: val });
     }
 
     _handleTradePagination = (page) => {
@@ -115,7 +119,7 @@ class UserSimplexHistory extends Component {
 
     render() {
         const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
-            searchTrade, limit } = this.state;
+            searchTrade, limit, simplex_payment_status } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         const tradeHeaders = [
             { label: "Payment ID", key: "payment_id" },
@@ -149,7 +153,7 @@ class UserSimplexHistory extends Component {
                                                 value={searchTrade}
                                             />
                                         </ColWithPadding>
-                                        <ColWithPadding sm={7}>
+                                        <ColWithPadding sm={5}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select a type"
@@ -159,6 +163,19 @@ class UserSimplexHistory extends Component {
                                                 <Option value={''}>All</Option>
                                                 <Option value={'Buy'}>Buy</Option>
                                                 <Option value={'Sell'}>Sell</Option>
+                                            </Select>
+                                        </ColWithPadding>
+                                        <ColWithPadding sm={5}>
+                                            <Select
+                                                getPopupContainer={trigger => trigger.parentNode}
+                                                placeholder="Select Status"
+                                                onChange={this._changeStatus}
+                                                value={simplex_payment_status}
+                                            >
+                                                <Option value={''}>All</Option>
+                                                <Option value={1}>Under Approval</Option>
+                                                <Option value={2}>Approved</Option>
+                                                <Option value={3}>Cancelled</Option>
                                             </Select>
                                         </ColWithPadding>
                                         <ColWithPadding xs={12} sm={3}>
@@ -194,7 +211,7 @@ class UserSimplexHistory extends Component {
                                         style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleTradePagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allTradeCount}
                                         showSizeChanger
