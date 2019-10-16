@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, SimplexStatusCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell, SimplexStatusCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = null,
     pair1 = null, emailID = null, buy = null, quant = null, fillPrice = null,
@@ -19,8 +19,8 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
     const created_at = object[createdOn];
 
     switch (type) {
-        case 'DateCell':
-            return DateCell(value, payment_id, quote_id, currency, settle_currency,
+        case 'DateTimeCell':
+            return DateTimeCell(value, payment_id, quote_id, currency, settle_currency,
                 email, side, quantity, fill_price, simplex_payment_status, created_at);
         case 'SimplexStatusCell':
             return SimplexStatusCell(value, payment_id, quote_id, currency, settle_currency,
@@ -31,12 +31,6 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
 };
 
 const columns = [{
-    title: <IntlMessages id="tradeTable.title.taker_email" />,
-    key: 'email',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
-}, {
     title: <IntlMessages id="tradeTable.title.crypto" />,
     key: 'currency',
     width: 200,
@@ -53,7 +47,7 @@ const columns = [{
     key: 'created_at',
     width: 100,
     sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
+    render: object => renderCell(object, 'DateTimeCell', 'created_at')
 }, {
     title: <IntlMessages id="tradeTable.title.fill_price" />,
     key: 'fill_price',
@@ -78,12 +72,6 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'address')
-}, {
-    title: <IntlMessages id="tradeTable.title.side" />,
-    key: 'side',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'side')
 }, {
     title: <IntlMessages id="tradeTable.title.quantity" />,
     key: 'quantity',

@@ -122,16 +122,15 @@ class UserSimplexHistory extends Component {
             searchTrade, limit, simplex_payment_status } = this.state;
         let pageSizeOptions = ['20', '30', '40', '50']
         const tradeHeaders = [
+            { label: "Email", key: "email" },
+            { label: "Coin", key: "currency" },
+            { label: "Date", key: "created_at" },
+            { label: "Filled Price", key: "fill_price" },
+            { label: "amount", key: "quantity" },
+            { label: "Wallet Address", key: "address" },
             { label: "Payment ID", key: "payment_id" },
             { label: "Quote ID", key: "quote_id" },
-            { label: "Currency", key: "currency" },
-            { label: "Crypto", key: "settle_currency" },
-            { label: "Type", key: "side" },
-            { label: "Pair", key: "symbol" },
-            { label: "Quantity", key: "quantity" },
-            { label: "Fill Price", key: "fill_price" },
-            { label: "Simplex Status", key: "simplex_payment_status" },
-            { label: "Created On", key: "created_at" }
+            { label: "Simplex Payment Status", key: "simplex_payment_status" },
         ];
 
         if (errMsg) {
