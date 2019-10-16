@@ -35,7 +35,8 @@ class SimplexHistory extends Component {
             rangeDate: [],
             trade_type: 2,
             sorterCol: 'created_at',
-            sortOrder: 'descend'
+            sortOrder: 'descend',
+            simplex_payment_status: ''
         }
     }
 
@@ -45,11 +46,11 @@ class SimplexHistory extends Component {
 
     _getAllSimplexTrades = () => {
         const { token } = this.props;
-        const { searchTrade, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type } = this.state;
+        const { searchTrade, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type, simplex_payment_status } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllSimplexTrades(page, limit, token, searchTrade, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type)
+        ApiUtils.getAllSimplexTrades(page, limit, token, searchTrade, filterVal, startDate, endDate, sorterCol, sortOrder, trade_type, simplex_payment_status)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -59,7 +60,7 @@ class SimplexHistory extends Component {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
                 }
                 _this.setState({ loader: false });
             })
@@ -133,6 +134,10 @@ class SimplexHistory extends Component {
         this.setState({ filterVal: val });
     }
 
+    _changeStatus = (val) => {
+        this.setState({ simplex_payment_status: val });
+    }
+
     _handleTradePagination = (page) => {
         this.setState({ page }, () => {
             this._getAllSimplexTrades();
@@ -153,7 +158,7 @@ class SimplexHistory extends Component {
 
     render() {
         const { allSimplexTrades, allTradeCount, errType, errMsg, page, loader, limit,
-            searchTrade, rangeDate, filterVal } = this.state;
+            searchTrade, rangeDate, filterVal, simplex_payment_status } = this.state;
         const tradeHeaders = [
             { label: "Payment ID", key: "payment_id" },
             { label: "Quote ID", key: "quote_id" },
@@ -196,6 +201,19 @@ class SimplexHistory extends Component {
                                                 <Option value={''}>All</Option>
                                                 <Option value={'Sell'}>Sell</Option>
                                                 <Option value={'Buy'}>Buy</Option>
+                                            </Select>
+                                        </ColWithPadding>
+                                        <ColWithPadding sm={3}>
+                                            <Select
+                                                getPopupContainer={trigger => trigger.parentNode}
+                                                placeholder="Select Status"
+                                                onChange={this._changeStatus}
+                                                value={simplex_payment_status}
+                                            >
+                                                <Option value={''}>All</Option>
+                                                <Option value={1}>Under Approval</Option>
+                                                <Option value={2}>Approved</Option>
+                                                <Option value={3}>Cancelled</Option>
                                             </Select>
                                         </ColWithPadding>
                                         <ColWithPadding sm={7}>
