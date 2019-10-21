@@ -45,6 +45,11 @@ volumes: [
                         s3Delete(bucket:'admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'admin.faldax.com', path:'')
                 }
+                }else if (env.BRANCH_NAME == 'pre-prod') {
+                        withAWS(credentials:'jenkins_s3_upload') {
+                        s3Delete(bucket:'admin.faldax.com', path:'')
+                        s3Upload(file:'build', bucket:'preprod-admin.faldax.com', path:'')
+                }
                 }
                 
               
@@ -65,6 +70,7 @@ def getNamespace(branch){
     switch(branch){
         case 'master' : return "prod";
         case 'development' :  return "dev";
+        case 'preprod' :  return "preprod";
         default : return null;
     }
 }
