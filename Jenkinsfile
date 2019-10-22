@@ -45,7 +45,7 @@ volumes: [
                         s3Delete(bucket:'admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'admin.faldax.com', path:'')
                 }
-                }else if (env.BRANCH_NAME == 'pre-prod') {
+                }else if (env.BRANCH_NAME == 'preprod') {
                         withAWS(credentials:'jenkins_s3_upload') {
                         s3Delete(bucket:'admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'preprod-admin.faldax.com', path:'')
