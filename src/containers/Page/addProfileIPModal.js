@@ -115,7 +115,7 @@ class AddProfileIPModal extends Component {
                     } else {
                         this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
                     }
-                    this._closeAddJobModal();
+                    this._closeAddIPModal();
                 })
                 .catch(() => {
                     this._resetAddForm();
