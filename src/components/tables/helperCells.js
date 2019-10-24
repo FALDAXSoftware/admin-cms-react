@@ -259,6 +259,7 @@ const UserDateCell = (value, profile_pic, first_name, last_name, email, city_tow
 const ReferralDateCell = (value, full_name, email, created_at, referral_by_email, referred_id, refered_by, no_of_referral) => <p>{created_at ? (moment.utc(created_at).local().format("DD MMM YYYY")) ? moment.utc(created_at).local().format("DD MMM YYYY") : '' : ''}</p>;
 const TransactionTypeCell = data => <p>{data == 'send' ? 'Send' : 'Receive'}</p>
 const VolumeCell = (value, currency, settle_currency, reqested_user_email, email, side, quantity, price, fill_price, maker_fee, taker_fee, volume, created_at) => <p>{quantity * fill_price}</p>;
+const ObjectCell = (value,execution_report) => <span>{JSON.stringify(execution_report)}</span>;
 const DateTimeCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY HH:mm")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm") : '' : ''}</p>;
 const DateTimeSecCell = data => <p>{data ? (moment.utc(data).local().format("DD MMM YYYY HH:mm:ss")) ? moment.utc(data).local().format("DD MMM, YYYY HH:mm:ss") : '' : ''}</p>;
 const ImageCell = src => <img style={{ width: '40px', height: '40px' }} src={S3BucketImageURL + src} />;
@@ -403,5 +404,6 @@ export {
     PendingTierReqActionCell,
     SimplexStatusCell,
     TransactionHashCell,
-    ReferralNameCell
+    ReferralNameCell,
+    ObjectCell
 };

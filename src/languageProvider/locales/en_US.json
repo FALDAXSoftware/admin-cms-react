@@ -478,6 +478,8 @@
   "tradeTable.title.settle_currency": "Currency",
   "tradeTable.title.maker_email": "Maker Email",
   "tradeTable.title.taker_email": "Taker Email",
+  "tradeTable.title.execution_report": "Execution Report",
+  "tradeTable.title.email": "Email",
   "tradeTable.title.side": "Buy/Sell",
   "tradeTable.title.quantity": "Quantity",
   "tradeTable.title.fill_price": "Fill Price",
