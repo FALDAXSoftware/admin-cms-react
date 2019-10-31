@@ -20,7 +20,7 @@ class AllHistory extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        <TabPane tab="Trade History" key="1"><TradeHistory /></TabPane>
+                        <TabPane tab="Brokerage History" key="1"><TradeHistory /></TabPane>
                         <TabPane tab="Simplex History" key="2"><SimplexHistory /></TabPane>
                     </Tabs>
                 </TableDemoStyle>

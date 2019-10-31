@@ -1,10 +1,10 @@
 import { stat } from "fs";
-//const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://pre-prod-backend.faldax.com"; //Live Client URL
+const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -124,6 +124,38 @@ const ApiUtils = {
     //get all in-active users api
     getAllInActiveUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
         let url = "/admin/get-inactive-users?page=" + page + "&limit=" + limit;
+        searchUser = encodeURIComponent(searchUser);
+        if (sorterCol && sortOrder && searchUser && filterVal) {
+            url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && filterVal) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
+        } else if (sorterCol && sortOrder && searchUser) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&data=" + searchUser;
+        } else if (sorterCol && sortOrder) {
+            url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (searchUser && filterVal) {
+            url += "&data=" + searchUser + "&country=" + filterVal;
+        } else if (filterVal) {
+            url += "&country=" + filterVal;
+        } else {
+            url += "&data=" + searchUser;
+        }
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //get all in-active users api
+    getAllDeletedUsers: function (page, limit, token, searchUser, sorterCol, sortOrder, filterVal) {
+        let url = "/admin/get-deleted-users?page=" + page + "&limit=" + limit;
         searchUser = encodeURIComponent(searchUser);
         if (sorterCol && sortOrder && searchUser && filterVal) {
             url += "&data=" + searchUser + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder + "&country=" + filterVal;
@@ -626,6 +658,23 @@ const ApiUtils = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user_id: parseInt(user_id) })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    //user delete account summary
+    getUserAccountSummary: function (token, user_id) {
+        let url = "/admin/deleteAccountCheck?user_id=" + user_id;
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
             });
         } catch (error) {
             console.error(error);
