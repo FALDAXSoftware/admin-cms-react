@@ -475,14 +475,15 @@
   "tradeTable.title.crypto": "Crypto",
   "tradeTable.title.simplex_payment_status": "Simplex Status",
   "tradeTable.title.currency": "Currency",
+  "tradeTable.title.symbol": "Symbol",
   "tradeTable.title.settle_currency": "Currency",
   "tradeTable.title.maker_email": "Maker Email",
   "tradeTable.title.taker_email": "Taker Email",
   "tradeTable.title.execution_report": "Execution Report",
   "tradeTable.title.email": "Email",
-  "tradeTable.title.side": "Buy/Sell",
+  "tradeTable.title.side": "Side",
   "tradeTable.title.quantity": "Quantity",
-  "tradeTable.title.fill_price": "Fill Price",
+  "tradeTable.title.fill_price": "Filled Price",
   "tradeTable.title.maker_fee": "Maker Fee",
   "tradeTable.title.taker_fee": "Taker Fee",
   "tradeTable.title.volume": "Volume",
@@ -579,5 +580,9 @@
   "sidebar.tradeHistory": "Trade History",
   "sidebar.withdrawRequests": "Withdraw Requests",
   "sidebar.jobs": "Careers",
-  "sidebar.kyc": "KYC Verifications"
+  "sidebar.kyc": "KYC Verifications",
+  "summaryTableInfos.title.receive_address":"Address",
+  "summaryTableInfos.title.balance":"Available Balance",
+  "summaryTableInfos.title.coin":"Coin",
+  "summaryTableInfos.title.fiat":"Fiat"
 }
