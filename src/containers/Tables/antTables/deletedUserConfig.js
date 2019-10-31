@@ -124,7 +124,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'postal_code')
 }];
 
-const inActiveUserinfos = [
+const deletedUserinfos = [
     {
         title: 'Users',
         value: 'UsersTable',
@@ -132,4 +132,4 @@ const inActiveUserinfos = [
     }
 ];
 
-export { columns, inActiveUserinfos };
+export { columns, deletedUserinfos };

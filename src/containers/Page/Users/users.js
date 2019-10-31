@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Button } from 'antd';
 import ActiveUsers from './activeUsers';
 import InActiveUsers from './inActiveUsers';
+import DeletedUsers from "./deletedUsers"
 
 const { TabPane } = Tabs;
 
@@ -15,6 +16,7 @@ class Users extends Component {
                 <Tabs defaultActiveKey="1" size={'large'}>
                     <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
                     <TabPane tab="In-Active Users" key="2"><InActiveUsers /></TabPane>
+                    <TabPane tab="Deleted Users" key="3"><DeletedUsers /></TabPane>
                 </Tabs>
             </div>
         );
