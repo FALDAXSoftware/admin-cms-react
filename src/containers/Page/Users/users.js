@@ -16,7 +16,7 @@ class Users extends Component {
                 <Tabs defaultActiveKey="1" size={'large'}>
                     <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
                     <TabPane tab="In-Active Users" key="2"><InActiveUsers /></TabPane>
-                    <TabPane tab="Deleted Users" key="3"><DeletedUsers /></TabPane>
+                    <TabPane tab="Deactivated Users" key="3"><DeletedUsers /></TabPane>
                 </Tabs>
             </div>
         );

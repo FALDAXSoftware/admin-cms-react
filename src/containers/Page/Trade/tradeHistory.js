@@ -155,18 +155,27 @@ class TradeHistory extends Component {
         const { allTrades, allTradeCount, errType, errMsg, page, loader, limit,
             searchTrade, rangeDate, filterVal } = this.state;
         const tradeHeaders = [
-            { label: "Currency", key: "currency" },
-            { label: "Settle Currency", key: "settle_currency" },
-            { label: "Type", key: "side" },
-            { label: "Pair", key: "symbol" },
+            { label: "Created On", key: "created_at" },
+            { label: "Symbol", key: "symbol" },
+            { label: "Side", key: "side" },
+            { label: "Email", key: "email" },
             { label: "Quantity", key: "quantity" },
-            { label: "Price", key: "price" },
-            { label: "Fill Price", key: "fill_price" },
-            { label: "Maker Fee", key: "maker_fee" },
-            { label: "Taker Fee", key: "taker_fee" },
-            { label: "Maker Email", key: "reqested_user_email" },
-            { label: "Taker Email", key: "email" },
-            { label: "Created On", key: "created_at" }
+            { label: "Filled Price", key: "fill_price" },
+            { label: "Order Id", key: "order_id" },
+            { label: "Execution Report", key: "execution_report" }
+            // { label: "Currency", key: "currency" },
+            // { label: "Settle Currency", key: "settle_currency" },
+            // { label: "Type", key: "side" },
+            // { label: "Pair", key: "symbol" },
+            // { label: "Quantity", key: "quantity" },
+            // { label: "Order Id", key: "order_id" },
+            // { label: "Price", key: "price" },
+            // { label: "Fill Price", key: "fill_price" },
+            // { label: "Maker Fee", key: "maker_fee" },
+            // { label: "Taker Fee", key: "taker_fee" },
+            // { label: "Maker Email", key: "reqested_user_email" },
+            // { label: "Taker Email", key: "email" },
+            // { label: "Created On", key: "created_at" }
         ];
         let pageSizeOptions = ['20', '30', '40', '50']
         if (errMsg) {
