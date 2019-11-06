@@ -138,58 +138,19 @@ const columns = [
     render: object => renderCell(object, "TextCell", "quantity")
   },
   {
-    title: <IntlMessages id="tradeTable.title.price" />,
-    key: "price",
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, "TextCell", "price")
-  },
-  {
     title: <IntlMessages id="tradeTable.title.fill_price" />,
     key: "fill_price",
     width: 100,
     sorter: true,
     render: object => renderCell(object, "TextCell", "fill_price")
   },
-
-  ,
-  // , {
-  //     title: <IntlMessages id="tradeTable.title.maker_fee" />,
-  //     key: 'maker_fee',
-  //     width: 100,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'maker_fee')
-  // },
-  //  {
-  //     title: <IntlMessages id="tradeTable.title.taker_fee" />,
-  //     key: 'taker_fee',
-  //     width: 100,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'taker_fee')
-  // }
-//   {
-//     title: <IntlMessages id="tradeTable.title.volume" />,
-//     key: "volume",
-//     width: 100,
-//     render: object =>
-//       renderCell(
-//         object,
-//         "VolumeCell",
-//         "id",
-//         "currency",
-//         "settle_currency",
-//         "reqested_user_email",
-//         "email",
-//         "side",
-//         "quantity",
-//         "price",
-//         "fill_price",
-//         "maker_fee",
-//         "taker_fee",
-//         "volume",
-//         "created_at"
-//       )
-//   },
+  {
+    title: <IntlMessages id="tradeTable.title.order_id" />,
+    key: "order_id",
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, "TextCell", "order_id")
+  },
   {
     title: <IntlMessages id="tradeTable.title.execution_report" />,
     key: "execution_report",
