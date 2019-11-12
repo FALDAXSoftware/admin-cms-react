@@ -489,6 +489,7 @@
   "tradeTable.title.volume": "Volume",
   "tradeTable.title.created_at": "Created On",
   "tradeTable.title.price": "Price",
+  "tradeTable.title.order_id": "Order Id",
   "simplexTradeTable.title.email":"Email",
   "simplexTradeTable.title.currency":"Coin",
   "simplexTradeTable.title.created_at":"Date",
