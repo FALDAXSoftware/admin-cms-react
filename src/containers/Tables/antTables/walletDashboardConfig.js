@@ -39,6 +39,11 @@ const columns = [{
     key: 'fee',
     width: 200,
     render: object => renderCell(object, 'TextCell', 'fee')
+}, {
+    title: <IntlMessages id="walletTable.title.forfeit_funds" />,
+    key: 'forfeit_funds',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'forfeit_funds')
 }];
 
 const dashboardTableinfos = [
