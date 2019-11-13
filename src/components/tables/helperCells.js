@@ -886,21 +886,72 @@ const transactionDetails = (
       {created_at}
     </a>
   ) : (
-    <span>{created_at}</span>
-  );
+      <span>{created_at}</span>
+    );
+};
+
+const transactionDetailsUser = (
+  value,
+  email,
+  source_address,
+  destination_address,
+  amount,
+  transaction_type,
+  created_at,
+  transaction_id,
+  coin_id
+) => {
+  let url = "";
+  console.log(coin_id);
+  if (transaction_id) {
+    switch (coin_id) {
+      case "tbtc":
+        url = "https://blockstream.info/testnet/tx/" + transaction_id;
+        return <a target="_blank" href={url}>
+          {transaction_id}
+        </a>
+      case "txrp":
+        url = "https://test.bithomp.com/explorer/" + transaction_id;
+        return <a target="_blank" href={url}>
+          {transaction_id}
+        </a>
+      case "tltc":
+        url = "https://blockexplorer.one/litecoin/testnet/tx/" + transaction_id;
+        return <a target="_blank" href={url}>
+          {transaction_id}
+        </a>
+      case "tbch":
+        url = "https://explorer.bitcoin.com/tbch/tx/" + transaction_id;
+        return <a target="_blank" href={url}>
+          {transaction_id}
+        </a>
+      default:
+        url = "";
+    }
+  } else {
+    return "";
+  }
+  // console.log("URL >>>>>>>>>>", url)
+  // return url !== "" ? (
+  //   <a target="_blank" href={url}>
+  //     {created_at}
+  //   </a>
+  // ) : (
+  //     <span>{created_at}</span>
+  //   );
 };
 
 const DateCell = data => (
   <p>
     {data
       ? moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY")
+        ? moment
           .utc(data)
           .local()
           .format("DD MMM YYYY")
-        ? moment
-            .utc(data)
-            .local()
-            .format("DD MMM YYYY")
         : ""
       : ""}
   </p>
@@ -926,20 +977,20 @@ const UserDateCell = (
   no_of_referrals,
   created_at
 ) => (
-  <p>
-    {no_of_referrals && no_of_referrals > 0
-      ? moment
+    <p>
+      {no_of_referrals && no_of_referrals > 0
+        ? moment
           .utc(created_at)
           .local()
           .format("DD MMM YYYY")
-        ? moment
+          ? moment
             .utc(created_at)
             .local()
             .format("DD MMM YYYY")
-        : ""
-      : ""}
-  </p>
-);
+          : ""
+        : ""}
+    </p>
+  );
 const ReferralDateCell = (
   value,
   full_name,
@@ -950,20 +1001,20 @@ const ReferralDateCell = (
   refered_by,
   no_of_referral
 ) => (
-  <p>
-    {created_at
-      ? moment
+    <p>
+      {created_at
+        ? moment
           .utc(created_at)
           .local()
           .format("DD MMM YYYY")
-        ? moment
+          ? moment
             .utc(created_at)
             .local()
             .format("DD MMM YYYY")
-        : ""
-      : ""}
-  </p>
-);
+          : ""
+        : ""}
+    </p>
+  );
 const TransactionTypeCell = data => (
   <p>{data == "send" ? "Send" : "Receive"}</p>
 );
@@ -1024,23 +1075,23 @@ const ObjectCell = (value, execution_report) => (
         })}
       </ul>
     ) : (
-      <ul>
-        <li style={{ display: "flex", width: "100%" }}>-</li>
-      </ul>
-    )}
+        <ul>
+          <li style={{ display: "flex", width: "100%" }}>-</li>
+        </ul>
+      )}
   </span>
 );
 const DateTimeCell = data => (
   <p>
     {data
       ? moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY HH:mm")
+        ? moment
           .utc(data)
           .local()
-          .format("DD MMM YYYY HH:mm")
-        ? moment
-            .utc(data)
-            .local()
-            .format("DD MMM, YYYY HH:mm")
+          .format("DD MMM, YYYY HH:mm")
         : ""
       : ""}
   </p>
@@ -1049,13 +1100,13 @@ const DateTimeSecCell = data => (
   <p>
     {data
       ? moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY HH:mm:ss")
+        ? moment
           .utc(data)
           .local()
-          .format("DD MMM YYYY HH:mm:ss")
-        ? moment
-            .utc(data)
-            .local()
-            .format("DD MMM, YYYY HH:mm:ss")
+          .format("DD MMM, YYYY HH:mm:ss")
         : ""
       : ""}
   </p>
@@ -1131,10 +1182,10 @@ const LegalityCell = text => (
     {text == 1
       ? "Legal"
       : text == 2
-      ? "Illegal"
-      : text == 3
-      ? "Neutral"
-      : "Partial Services Available"}
+        ? "Illegal"
+        : text == 3
+          ? "Neutral"
+          : "Partial Services Available"}
   </p>
 );
 const SwitchCell = (
@@ -1149,24 +1200,24 @@ const SwitchCell = (
   isERC,
   coin_icon
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      coinstatus(
-        value,
-        coin_name,
-        coin_code,
-        min_limit,
-        max_limit,
-        wallet_address,
-        created_at,
-        is_active,
-        isERC,
-        coin_icon
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        coinstatus(
+          value,
+          coin_name,
+          coin_code,
+          min_limit,
+          max_limit,
+          wallet_address,
+          created_at,
+          is_active,
+          isERC,
+          coin_icon
+        );
+      }}
+    />
+  );
 const StaticSwitchCell = (
   value,
   coin_name,
@@ -1176,21 +1227,21 @@ const StaticSwitchCell = (
   created_at,
   is_active
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      coinstatus(
-        value,
-        coin_name,
-        coin_code,
-        limit,
-        wallet_address,
-        created_at,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        coinstatus(
+          value,
+          coin_name,
+          coin_code,
+          limit,
+          wallet_address,
+          created_at,
+          is_active
+        );
+      }}
+    />
+  );
 const CountrySwitchCell = (value, name, legality, color, is_active) => (
   <Switch
     checked={is_active}
@@ -1217,22 +1268,22 @@ const NewsSwitchCell = (
   is_active,
   owner
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      newsStatus(
-        value,
-        cover_image,
-        title,
-        link,
-        posted_at,
-        description,
-        is_active,
-        owner
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        newsStatus(
+          value,
+          cover_image,
+          title,
+          link,
+          posted_at,
+          description,
+          is_active,
+          owner
+        );
+      }}
+    />
+  );
 const NewsDescCell = value => (
   <Tooltip title={value}>
     <p>{value.slice(0, 35) + (value.length > 35 ? "..." : "")}</p>
@@ -1261,81 +1312,81 @@ const ActionCell = (
   created_at,
   deleted_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewUser(
-            value,
-            profile_pic,
-            first_name,
-            last_name,
-            email,
-            city_town,
-            street_address,
-            street_address_2,
-            phone_number,
-            country,
-            dob,
-            is_active,
-            kyc,
-            date_format,
-            account_tier,
-            account_class,
-            state,
-            no_of_referrals,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {!deleted_at ? (
-      <React.Fragment>
-        <Tooltip title="View">
-          <Icon
-            type="delete"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() => deleteUser(value)}
-          />
-        </Tooltip>
-        <Tooltip title="Edit">
-          <Icon
-            type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() =>
-              editUser(
-                value,
-                profile_pic,
-                first_name,
-                last_name,
-                email,
-                city_town,
-                street_address,
-                street_address_2,
-                phone_number,
-                country,
-                dob,
-                is_active,
-                kyc,
-                date_format,
-                account_tier,
-                account_class,
-                state,
-                no_of_referrals,
-                created_at,
-                deleted_at
-              )
-            }
-          />
-        </Tooltip>
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewUser(
+              value,
+              profile_pic,
+              first_name,
+              last_name,
+              email,
+              city_town,
+              street_address,
+              street_address_2,
+              phone_number,
+              country,
+              dob,
+              is_active,
+              kyc,
+              date_format,
+              account_tier,
+              account_class,
+              state,
+              no_of_referrals,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+      {!deleted_at ? (
+        <React.Fragment>
+          <Tooltip title="View">
+            <Icon
+              type="delete"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={() => deleteUser(value)}
+            />
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Icon
+              type="edit"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={() =>
+                editUser(
+                  value,
+                  profile_pic,
+                  first_name,
+                  last_name,
+                  email,
+                  city_town,
+                  street_address,
+                  street_address_2,
+                  phone_number,
+                  country,
+                  dob,
+                  is_active,
+                  kyc,
+                  date_format,
+                  account_tier,
+                  account_class,
+                  state,
+                  no_of_referrals,
+                  created_at,
+                  deleted_at
+                )
+              }
+            />
+          </Tooltip>
+        </React.Fragment>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const DeletedUserActionCell = (
   value,
   profile_pic,
@@ -1358,81 +1409,81 @@ const DeletedUserActionCell = (
   created_at,
   deleted_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewActiveUser(
-            value,
-            profile_pic,
-            first_name,
-            last_name,
-            email,
-            city_town,
-            street_address,
-            street_address_2,
-            phone_number,
-            country,
-            dob,
-            is_active,
-            kyc,
-            date_format,
-            account_tier,
-            account_class,
-            state,
-            no_of_referrals,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {!deleted_at ? (
-      <React.Fragment>
-        <Tooltip title="View">
-          <Icon
-            type="delete"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() => deleteActiveUser(value)}
-          />
-        </Tooltip>
-        <Tooltip title="Edit">
-          <Icon
-            type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() =>
-              editActiveUser(
-                value,
-                profile_pic,
-                first_name,
-                last_name,
-                email,
-                city_town,
-                street_address,
-                street_address_2,
-                phone_number,
-                country,
-                dob,
-                is_active,
-                kyc,
-                date_format,
-                account_tier,
-                account_class,
-                state,
-                no_of_referrals,
-                created_at,
-                deleted_at
-              )
-            }
-          />
-        </Tooltip>
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewActiveUser(
+              value,
+              profile_pic,
+              first_name,
+              last_name,
+              email,
+              city_town,
+              street_address,
+              street_address_2,
+              phone_number,
+              country,
+              dob,
+              is_active,
+              kyc,
+              date_format,
+              account_tier,
+              account_class,
+              state,
+              no_of_referrals,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+      {!deleted_at ? (
+        <React.Fragment>
+          <Tooltip title="View">
+            <Icon
+              type="delete"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={() => deleteActiveUser(value)}
+            />
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Icon
+              type="edit"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={() =>
+                editActiveUser(
+                  value,
+                  profile_pic,
+                  first_name,
+                  last_name,
+                  email,
+                  city_town,
+                  street_address,
+                  street_address_2,
+                  phone_number,
+                  country,
+                  dob,
+                  is_active,
+                  kyc,
+                  date_format,
+                  account_tier,
+                  account_class,
+                  state,
+                  no_of_referrals,
+                  created_at,
+                  deleted_at
+                )
+              }
+            />
+          </Tooltip>
+        </React.Fragment>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const ActiveUserActionCell = (
   value,
   profile_pic,
@@ -1455,81 +1506,81 @@ const ActiveUserActionCell = (
   created_at,
   deleted_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewActiveUser(
-            value,
-            profile_pic,
-            first_name,
-            last_name,
-            email,
-            city_town,
-            street_address,
-            street_address_2,
-            phone_number,
-            country,
-            dob,
-            is_active,
-            kyc,
-            date_format,
-            account_tier,
-            account_class,
-            state,
-            no_of_referrals,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {!deleted_at ? (
-      <React.Fragment>
-        <Tooltip title="View">
-          <Icon
-            type="delete"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() => deleteActiveUser(value)}
-          />
-        </Tooltip>
-        <Tooltip title="Edit">
-          <Icon
-            type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() =>
-              editActiveUser(
-                value,
-                profile_pic,
-                first_name,
-                last_name,
-                email,
-                city_town,
-                street_address,
-                street_address_2,
-                phone_number,
-                country,
-                dob,
-                is_active,
-                kyc,
-                date_format,
-                account_tier,
-                account_class,
-                state,
-                no_of_referrals,
-                created_at,
-                deleted_at
-              )
-            }
-          />
-        </Tooltip>
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewActiveUser(
+              value,
+              profile_pic,
+              first_name,
+              last_name,
+              email,
+              city_town,
+              street_address,
+              street_address_2,
+              phone_number,
+              country,
+              dob,
+              is_active,
+              kyc,
+              date_format,
+              account_tier,
+              account_class,
+              state,
+              no_of_referrals,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+      {!deleted_at ? (
+        <React.Fragment>
+          <Tooltip title="View">
+            <Icon
+              type="delete"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={() => deleteActiveUser(value)}
+            />
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Icon
+              type="edit"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={() =>
+                editActiveUser(
+                  value,
+                  profile_pic,
+                  first_name,
+                  last_name,
+                  email,
+                  city_town,
+                  street_address,
+                  street_address_2,
+                  phone_number,
+                  country,
+                  dob,
+                  is_active,
+                  kyc,
+                  date_format,
+                  account_tier,
+                  account_class,
+                  state,
+                  no_of_referrals,
+                  created_at,
+                  deleted_at
+                )
+              }
+            />
+          </Tooltip>
+        </React.Fragment>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const CoinActionCell = (
   value,
   coin_name,
@@ -1546,71 +1597,71 @@ const CoinActionCell = (
   hot_receive_wallet_address,
   custody_wallet_address
 ) => (
-  <div>
-    <Tooltip title="Delete">
-      <Icon
-        type="delete"
-        onClick={() => deleteCoin(value)}
-        style={{ cursor: "pointer" }}
-      />
-    </Tooltip>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          editCoin(
-            value,
-            coin_name,
-            coin_code,
-            min_limit,
-            max_limit,
-            wallet_address,
-            created_at,
-            is_active,
-            isERC,
-            coin_icon,
-            warm_wallet_address,
-            hot_send_wallet_address,
-            hot_receive_wallet_address,
-            custody_wallet_address
-          )
-        }
-      />
-    </Tooltip>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewCoin(
-            value,
-            coin_name,
-            coin_code,
-            min_limit,
-            max_limit,
-            wallet_address,
-            created_at,
-            is_active,
-            isERC,
-            coin_icon,
-            warm_wallet_address,
-            hot_send_wallet_address,
-            hot_receive_wallet_address,
-            custody_wallet_address
-          )
-        }
-      />
-    </Tooltip>
-    <Tooltip>
-      <Icon
-        type="wallet"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() => assetWallet(value, coin_name, coin_code)}
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Delete">
+        <Icon
+          type="delete"
+          onClick={() => deleteCoin(value)}
+          style={{ cursor: "pointer" }}
+        />
+      </Tooltip>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            editCoin(
+              value,
+              coin_name,
+              coin_code,
+              min_limit,
+              max_limit,
+              wallet_address,
+              created_at,
+              is_active,
+              isERC,
+              coin_icon,
+              warm_wallet_address,
+              hot_send_wallet_address,
+              hot_receive_wallet_address,
+              custody_wallet_address
+            )
+          }
+        />
+      </Tooltip>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewCoin(
+              value,
+              coin_name,
+              coin_code,
+              min_limit,
+              max_limit,
+              wallet_address,
+              created_at,
+              is_active,
+              isERC,
+              coin_icon,
+              warm_wallet_address,
+              hot_send_wallet_address,
+              hot_receive_wallet_address,
+              custody_wallet_address
+            )
+          }
+        />
+      </Tooltip>
+      <Tooltip>
+        <Icon
+          type="wallet"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => assetWallet(value, coin_name, coin_code)}
+        />
+      </Tooltip>
+    </div>
+  );
 const RolesActionCell = (
   value,
   name,
@@ -1632,37 +1683,37 @@ const RolesActionCell = (
   add_user,
   is_active
 ) => (
-  <div>
-    <Tooltip title="Delete">
-      <Icon
-        type="delete"
-        onClick={() =>
-          deleteRole(
-            value,
-            name,
-            users,
-            assets,
-            countries,
-            roles,
-            employee,
-            pairs,
-            transaction_history,
-            trade_history,
-            withdraw_requests,
-            jobs,
-            kyc,
-            fees,
-            panic_button,
-            news,
-            is_referral,
-            add_user,
-            is_active
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Delete">
+        <Icon
+          type="delete"
+          onClick={() =>
+            deleteRole(
+              value,
+              name,
+              users,
+              assets,
+              countries,
+              roles,
+              employee,
+              pairs,
+              transaction_history,
+              trade_history,
+              withdraw_requests,
+              jobs,
+              kyc,
+              fees,
+              panic_button,
+              news,
+              is_referral,
+              add_user,
+              is_active
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const CountryActionCell = (
   value,
   name,
@@ -1671,16 +1722,16 @@ const CountryActionCell = (
   stateCount,
   is_active
 ) => (
-  <div>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() => editCountry(value, name, legality, color, is_active)}
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => editCountry(value, name, legality, color, is_active)}
+        />
+      </Tooltip>
+    </div>
+  );
 const StateActionCell = (value, name, legality, color, is_active) => (
   <div>
     <Tooltip title="Edit">
@@ -1722,33 +1773,33 @@ const RoleSwitchCell = (
   add_user,
   is_active
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      roleStatus(
-        value,
-        name,
-        users,
-        assets,
-        countries,
-        roles,
-        employee,
-        pairs,
-        transaction_history,
-        trade_history,
-        withdraw_requests,
-        jobs,
-        kyc,
-        fees,
-        panic_button,
-        news,
-        is_referral,
-        add_user,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        roleStatus(
+          value,
+          name,
+          users,
+          assets,
+          countries,
+          roles,
+          employee,
+          pairs,
+          transaction_history,
+          trade_history,
+          withdraw_requests,
+          jobs,
+          kyc,
+          fees,
+          panic_button,
+          news,
+          is_referral,
+          add_user,
+          is_active
+        );
+      }}
+    />
+  );
 const EmployeeSwitchCell = (
   value,
   first_name,
@@ -1760,23 +1811,23 @@ const EmployeeSwitchCell = (
   role_id,
   is_active
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      employeeStatus(
-        value,
-        first_name,
-        last_name,
-        email,
-        phone_number,
-        address,
-        role,
-        role_id,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        employeeStatus(
+          value,
+          first_name,
+          last_name,
+          email,
+          phone_number,
+          address,
+          role,
+          role_id,
+          is_active
+        );
+      }}
+    />
+  );
 const EmployeeActionCell = (
   value,
   first_name,
@@ -1788,35 +1839,35 @@ const EmployeeActionCell = (
   role_id,
   is_active
 ) => (
-  <div>
-    <Tooltip title="Delete">
-      <Icon
-        type="delete"
-        onClick={() => deleteEmployee(value)}
-        style={{ cursor: "pointer" }}
-      />
-    </Tooltip>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          editEmployee(
-            value,
-            first_name,
-            last_name,
-            email,
-            phone_number,
-            address,
-            role,
-            role_id,
-            is_active
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Delete">
+        <Icon
+          type="delete"
+          onClick={() => deleteEmployee(value)}
+          style={{ cursor: "pointer" }}
+        />
+      </Tooltip>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            editEmployee(
+              value,
+              first_name,
+              last_name,
+              email,
+              phone_number,
+              address,
+              role,
+              role_id,
+              is_active
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const FeeSwitchCell = (
   value,
   name,
@@ -1825,13 +1876,13 @@ const FeeSwitchCell = (
   created_at,
   is_active
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      pairStatus(value, name, maker_fee, taker_fee, created_at, is_active);
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        pairStatus(value, name, maker_fee, taker_fee, created_at, is_active);
+      }}
+    />
+  );
 const FeeActionCell = (
   value,
   name,
@@ -1840,18 +1891,18 @@ const FeeActionCell = (
   created_at,
   is_active
 ) => (
-  <div>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          editPair(value, name, maker_fee, taker_fee, created_at, is_active)
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            editPair(value, name, maker_fee, taker_fee, created_at, is_active)
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const LimitActionCell = (
   value,
   daily_withdraw_crypto,
@@ -1859,24 +1910,24 @@ const LimitActionCell = (
   min_withdrawl_crypto,
   min_withdrawl_fiat
 ) => (
-  <div>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          editLimit(
-            value,
-            daily_withdraw_crypto,
-            daily_withdraw_fiat,
-            min_withdrawl_crypto,
-            min_withdrawl_fiat
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            editLimit(
+              value,
+              daily_withdraw_crypto,
+              daily_withdraw_fiat,
+              min_withdrawl_crypto,
+              min_withdrawl_fiat
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const TagsCell = value => (
   <Tooltip title={value}>
     <p>{value.slice(0, 10) + (value.length > 10 ? "..." : "")}</p>
@@ -1892,52 +1943,52 @@ const JobActionCell = (
   is_active,
   category
 ) => (
-  <div>
-    <Tooltip title="Delete">
-      <Icon
-        type="delete"
-        onClick={() => deleteJob(value)}
-        style={{ cursor: "pointer" }}
-      />
-    </Tooltip>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          editJob(
-            value,
-            position,
-            location,
-            short_desc,
-            job_desc,
-            category_id,
-            is_active,
-            category
-          )
-        }
-      />
-    </Tooltip>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewJob(
-            value,
-            position,
-            location,
-            short_desc,
-            job_desc,
-            category_id,
-            is_active,
-            category
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Delete">
+        <Icon
+          type="delete"
+          onClick={() => deleteJob(value)}
+          style={{ cursor: "pointer" }}
+        />
+      </Tooltip>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            editJob(
+              value,
+              position,
+              location,
+              short_desc,
+              job_desc,
+              category_id,
+              is_active,
+              category
+            )
+          }
+        />
+      </Tooltip>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewJob(
+              value,
+              position,
+              location,
+              short_desc,
+              job_desc,
+              category_id,
+              is_active,
+              category
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const JobSwitchCell = (
   value,
   position,
@@ -1948,22 +1999,22 @@ const JobSwitchCell = (
   is_active,
   category
 ) => (
-  <Switch
-    checked={is_active}
-    onChange={() => {
-      jobStatus(
-        value,
-        position,
-        location,
-        short_desc,
-        job_desc,
-        category_id,
-        is_active,
-        category
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      onChange={() => {
+        jobStatus(
+          value,
+          position,
+          location,
+          short_desc,
+          job_desc,
+          category_id,
+          is_active,
+          category
+        );
+      }}
+    />
+  );
 const JobButtonCell = value => (
   <Button type="primary" onClick={() => showApplicants(value)}>
     Show Applications
@@ -1981,29 +2032,29 @@ const JobAppActionCell = (
   linkedin_profile,
   website_url
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewJobApplication(
-            value,
-            first_name,
-            last_name,
-            email,
-            phone_number,
-            created_at,
-            resume,
-            cover_letter,
-            linkedin_profile,
-            website_url
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewJobApplication(
+              value,
+              first_name,
+              last_name,
+              email,
+              phone_number,
+              created_at,
+              resume,
+              cover_letter,
+              linkedin_profile,
+              website_url
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const KYCActionCell = (
   value,
   mtid,
@@ -2021,43 +2072,43 @@ const KYCActionCell = (
   id_type,
   created_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewKYC(
-            value,
-            mtid,
-            first_name,
-            last_name,
-            email,
-            direct_response,
-            kycDoc_details,
-            webhook_response,
-            address,
-            country,
-            city,
-            zip,
-            dob,
-            id_type,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewKYC(
+              value,
+              mtid,
+              first_name,
+              last_name,
+              email,
+              direct_response,
+              kycDoc_details,
+              webhook_response,
+              address,
+              country,
+              city,
+              zip,
+              dob,
+              id_type,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => (
   <p>
     {" "}
     {is_logged_in == false
       ? updated_at
         ? moment
-            .utc(updated_at)
-            .local()
-            .format("DD MMM, YYYY HH:mm")
+          .utc(updated_at)
+          .local()
+          .format("DD MMM, YYYY HH:mm")
         : ""
       : ""}
   </p>
@@ -2079,12 +2130,12 @@ const PipelineCell = text => (
     {text == 1
       ? "NEW"
       : text == 2
-      ? "Waiting on Customer Feedback"
-        ? text == 3
-          ? "Waiting on FALDAX"
-          : "AClosed"
-        : "BClosed"
-      : "CClosed"}
+        ? "Waiting on Customer Feedback"
+          ? text == 3
+            ? "Waiting on FALDAX"
+            : "AClosed"
+          : "BClosed"
+        : "CClosed"}
   </p>
 );
 const AccountClassActionCell = (value, class_name) => (
@@ -2137,57 +2188,57 @@ const WithdrawActionCell = (
   is_executed,
   created_at
 ) => (
-  <div>
-    {is_approve == null ? (
-      <div>
-        <Button
-          style={{ marginRight: "15px" }}
-          type="primary"
-          onClick={() =>
-            approveWithdrawReq(
-              value,
-              email,
-              source_address,
-              destination_address,
-              amount,
-              transaction_type,
-              is_approve,
-              user_id,
-              coin_id,
-              is_executed,
-              created_at
-            )
-          }
-        >
-          Approve
+    <div>
+      {is_approve == null ? (
+        <div>
+          <Button
+            style={{ marginRight: "15px" }}
+            type="primary"
+            onClick={() =>
+              approveWithdrawReq(
+                value,
+                email,
+                source_address,
+                destination_address,
+                amount,
+                transaction_type,
+                is_approve,
+                user_id,
+                coin_id,
+                is_executed,
+                created_at
+              )
+            }
+          >
+            Approve
         </Button>
-        <Button
-          style={{ margingLeft: "15px" }}
-          type="danger"
-          onClick={() =>
-            declineWithdrawReq(
-              value,
-              email,
-              source_address,
-              destination_address,
-              amount,
-              transaction_type,
-              is_approve,
-              user_id,
-              coin_id,
-              is_executed,
-              created_at
-            )
-          }
-        >
-          Decline
+          <Button
+            style={{ margingLeft: "15px" }}
+            type="danger"
+            onClick={() =>
+              declineWithdrawReq(
+                value,
+                email,
+                source_address,
+                destination_address,
+                amount,
+                transaction_type,
+                is_approve,
+                user_id,
+                coin_id,
+                is_executed,
+                created_at
+              )
+            }
+          >
+            Decline
         </Button>
-      </div>
-    ) : (
-      ""
-    )}
-  </div>
-);
+        </div>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const WithdrawStatusCell = (
   value,
   email,
@@ -2201,14 +2252,14 @@ const WithdrawStatusCell = (
   is_executed,
   created_at
 ) => (
-  <p>
-    {is_approve == null
-      ? "Pending"
-      : is_approve == true
-      ? "Approved"
-      : "Dis-Approved"}
-  </p>
-);
+    <p>
+      {is_approve == null
+        ? "Pending"
+        : is_approve == true
+          ? "Approved"
+          : "Dis-Approved"}
+    </p>
+  );
 const JobCatSwitchCell = (value, category, is_active) => (
   <Switch
     checked={is_active}
@@ -2239,8 +2290,8 @@ const WhiteListActionCell = (value, ip, time, is_permanent) => (
         />
       </Tooltip>
     ) : (
-      "-"
-    )}
+        "-"
+      )}
   </div>
 );
 const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => (
@@ -2254,8 +2305,8 @@ const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => (
         />
       </Tooltip>
     ) : (
-      "-"
-    )}
+        "-"
+      )}
   </div>
 );
 const TwoFAActionCell = (
@@ -2267,67 +2318,67 @@ const TwoFAActionCell = (
   reason,
   created_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewRequest(
-            value,
-            full_name,
-            email,
-            uploaded_file,
-            status,
-            reason,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {status.trim() !== "open" ? (
-      ""
-    ) : (
-      <React.Fragment>
-        <Tooltip title="Approve">
-          <Icon
-            theme="twoTone"
-            type="check-circle"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() =>
-              approve2FA(
-                value,
-                full_name,
-                email,
-                uploaded_file,
-                status,
-                created_at
-              )
-            }
-          />
-        </Tooltip>
-        <Tooltip title="Reject">
-          <Icon
-            theme="twoTone"
-            twoToneColor="#FF0000"
-            type="close-circle"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={() =>
-              reject2FA(
-                value,
-                full_name,
-                email,
-                uploaded_file,
-                status,
-                created_at
-              )
-            }
-          />
-        </Tooltip>
-      </React.Fragment>
-    )}
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewRequest(
+              value,
+              full_name,
+              email,
+              uploaded_file,
+              status,
+              reason,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+      {status.trim() !== "open" ? (
+        ""
+      ) : (
+          <React.Fragment>
+            <Tooltip title="Approve">
+              <Icon
+                theme="twoTone"
+                type="check-circle"
+                style={{ marginLeft: "10px", cursor: "pointer" }}
+                onClick={() =>
+                  approve2FA(
+                    value,
+                    full_name,
+                    email,
+                    uploaded_file,
+                    status,
+                    created_at
+                  )
+                }
+              />
+            </Tooltip>
+            <Tooltip title="Reject">
+              <Icon
+                theme="twoTone"
+                twoToneColor="#FF0000"
+                type="close-circle"
+                style={{ marginLeft: "10px", cursor: "pointer" }}
+                onClick={() =>
+                  reject2FA(
+                    value,
+                    full_name,
+                    email,
+                    uploaded_file,
+                    status,
+                    created_at
+                  )
+                }
+              />
+            </Tooltip>
+          </React.Fragment>
+        )}
+    </div>
+  );
 const TierReqCell = (
   value,
   tier_step,
@@ -2336,15 +2387,15 @@ const TierReqCell = (
   minimum_activity_thresold,
   requirements
 ) => (
-  <div>
-    {Object.keys(requirements).map(req => (
-      <span>
-        {requirements[req]}
-        <br />
-      </span>
-    ))}
-  </div>
-);
+    <div>
+      {Object.keys(requirements).map(req => (
+        <span>
+          {requirements[req]}
+          <br />
+        </span>
+      ))}
+    </div>
+  );
 const TierThresholdCell = (
   value,
   tier_step,
@@ -2353,15 +2404,15 @@ const TierThresholdCell = (
   minimum_activity_thresold,
   requirements
 ) => (
-  <div>
-    {Object.keys(minimum_activity_thresold).map(threshold => (
-      <span>
-        {minimum_activity_thresold[threshold]}
-        <br />
-      </span>
-    ))}
-  </div>
-);
+    <div>
+      {Object.keys(minimum_activity_thresold).map(threshold => (
+        <span>
+          {minimum_activity_thresold[threshold]}
+          <br />
+        </span>
+      ))}
+    </div>
+  );
 const TierActionCell = value => (
   <div>
     <Tooltip title="Edit">
@@ -2392,39 +2443,39 @@ const PendingTierReqActionCell = (
   is_approved,
   user_id
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
-        onClick={() =>
-          viewPendingReq(
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() =>
+            viewPendingReq(
+              value,
+              first_name,
+              last_name,
+              tier_step,
+              is_approved,
+              user_id
+            )
+          }
+        />
+      </Tooltip>
+      <Switch
+        style={{ marginLeft: "10px" }}
+        checked={is_approved}
+        onChange={() => {
+          approvePendingReq(
             value,
             first_name,
             last_name,
             tier_step,
             is_approved,
             user_id
-          )
-        }
+          );
+        }}
       />
-    </Tooltip>
-    <Switch
-      style={{ marginLeft: "10px" }}
-      checked={is_approved}
-      onChange={() => {
-        approvePendingReq(
-          value,
-          first_name,
-          last_name,
-          tier_step,
-          is_approved,
-          user_id
-        );
-      }}
-    />
-  </div>
-);
+    </div>
+  );
 const SimplexStatusCell = (
   value,
   payment_id,
@@ -2438,14 +2489,14 @@ const SimplexStatusCell = (
   simplex_payment_status,
   created_at
 ) => (
-  <div>
-    {simplex_payment_status == 1
-      ? "Under Approval"
-      : simplex_payment_status == 2
-      ? "Approved"
-      : "Cancelled"}
-  </div>
-);
+    <div>
+      {simplex_payment_status == 1
+        ? "Under Approval"
+        : simplex_payment_status == 2
+          ? "Approved"
+          : "Cancelled"}
+    </div>
+  );
 const TransactionHashCell = (
   value,
   email,
@@ -2458,21 +2509,48 @@ const TransactionHashCell = (
   coin_id,
   coin_code
 ) => (
-  <div>
-    {transactionDetails(
-      value,
-      email,
-      source_address,
-      destination_address,
-      amount,
-      transaction_type,
-      created_at,
-      transaction_id,
-      coin_id,
-      coin_code
-    )}
-  </div>
-);
+    <div>
+      {transactionDetails(
+        value,
+        email,
+        source_address,
+        destination_address,
+        amount,
+        transaction_type,
+        created_at,
+        transaction_id,
+        coin_id,
+        coin_code
+      )}
+    </div>
+  );
+
+const TransactionHashCellUser = (
+  value,
+  email,
+  source_address,
+  destination_address,
+  amount,
+  transaction_type,
+  created_at,
+  transaction_id,
+  coin_id
+) => (
+    <div>
+      {transactionDetailsUser(
+        value,
+        email,
+        source_address,
+        destination_address,
+        amount,
+        transaction_type,
+        created_at,
+        transaction_id,
+        coin_id
+      )}
+    </div>
+  );
+
 const ReferralNameCell = (value, full_name, deleted_at) => (
   <div>
     {deleted_at !== null ? (
@@ -2484,8 +2562,8 @@ const ReferralNameCell = (value, full_name, deleted_at) => (
         {full_name}
       </Tooltip>
     ) : (
-      full_name
-    )}
+        full_name
+      )}
   </div>
 );
 
@@ -2565,6 +2643,7 @@ export {
   PendingTierReqActionCell,
   SimplexStatusCell,
   TransactionHashCell,
+  TransactionHashCellUser,
   ReferralNameCell,
   ObjectCell
 };
