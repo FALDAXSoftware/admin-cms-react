@@ -33,12 +33,12 @@ const columns = [
         width: 100,
         render: object => renderCell(object, 'TextCell','name','id','name','slug','type','updated_at','value')
     },
-    {
-        title: <IntlMessages id="networkFeeTable.title.type" />,
-        key: 'type',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'type','id','name','slug','type','updated_at','value')
-    },
+    // {
+    //     title: <IntlMessages id="networkFeeTable.title.type" />,
+    //     key: 'type',
+    //     width: 100,
+    //     render: object => renderCell(object, 'TextCell', 'type','id','name','slug','type','updated_at','value')
+    // },
     {
         title: <IntlMessages id="networkFeeTable.title.value" />,
         key: 'value',
@@ -49,7 +49,7 @@ const columns = [
 
 const networkFeeTableInfos = [
     {
-        title: 'Network Fee',
+        title: 'Network Fees',
         value: 'NetworkFeeTable',
         columns: clone(columns)
     }

@@ -139,7 +139,7 @@ const options = [
   },
   {
     key: "network-fee",
-    label: "Network Fee",
+    label: "Network Fees",
     leftIcon: "fas fa-wifi",
     module: "network_fee"
   },

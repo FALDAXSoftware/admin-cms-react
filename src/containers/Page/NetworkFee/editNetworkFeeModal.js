@@ -54,10 +54,14 @@ class EditNetworkFee extends Component {
   };
 
   onCloseModel = () => {
-    this.setState({ showEditNetworkFeeModal: false });
-    this.props.onCloseEditModal();
     this._resetForm();
+    this.props.onCloseEditModal();
   };
+
+  onHandleClose=()=>{
+    this.setState({ showEditNetworkFeeModal: false });
+    this._resetForm();
+  }
 
   onEditFees = async() => {
     const {token} = this.props;
@@ -108,11 +112,11 @@ class EditNetworkFee extends Component {
       <div>
         <Modal
           title="Edit Network Fees"
-          onCancel={this.onCloseModel}
+          onCancel={this.onHandleClose}
           visible={showEditNetworkFeeModal}
           confirmLoading={loader}
           footer={[
-            <Button onClick={this.onCloseModel}>Cancel</Button>,
+            <Button onClick={this.onHandleClose}>Cancel</Button>,
             <Button onClick={this.onEditFees}>Update</Button>
           ]}
         >
@@ -120,10 +124,10 @@ class EditNetworkFee extends Component {
             <span>Name</span>
             <Input value={fields["name"]} disabled={true} />
           </div>
-          <div className="mg-top-15">
+          {/* <div className="mg-top-15">
             <span>Type</span>
             <Input value={fields["type"]} disabled={true} />
-          </div>
+          </div> */}
           <div className="mg-top-15">
             <span>Value</span>
             <Input
