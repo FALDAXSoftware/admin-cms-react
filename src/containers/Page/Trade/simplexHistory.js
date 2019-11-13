@@ -124,7 +124,7 @@ class SimplexHistory extends Component {
     _resetFilters = () => {
         this.setState({
             filterVal: '', searchTrade: '', startDate: '', endDate: '',
-            rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
+            rangeDate: [], page: 1, sorterCol: '', sortOrder: '',simplex_payment_status:''
         }, () => {
             this._getAllSimplexTrades();
         })
