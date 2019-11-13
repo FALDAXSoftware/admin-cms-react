@@ -2547,7 +2547,38 @@ const ApiUtils = {
             console.error(error);
         }
     },
+
+    getNetworkFee: function (token, sorterCol, sortOrder) {
+        let url = "/admin/get-coin-fees-coin";
+        if (sorterCol && sortOrder ) {
+            url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else if (sorterCol && sortOrder) {
+            url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+        } else {
+            url;
+        }
+
+        try {
+            return fetch(API_URL + url, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    },
+    updateNetworkFee:function(token,body){
+        const url="/admin/update-fees-value"
+        return fetch(API_URL+url,{
+            method: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+            body: JSON.stringify(body)
+        })
+    }
 };
-
-
 export default ApiUtils;

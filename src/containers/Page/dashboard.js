@@ -263,14 +263,14 @@ class Dashboard extends Component {
       <LayoutWrapper>
         {loader && <FaldaxLoader />}
         <Row style={rowStyle} gutter={0} justify="start">
-          <Col>
-            <iframe
+          {/* <Col> */}
+            {/* <iframe
               src="http://18.190.46.86:80/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjJ9LCJwYXJhbXMiOnt9LCJleHAiOjE1NzMyMDI5OTAsImlhdCI6MTU3MzIwMjM5MH0.YzoXrCtsofLWLZ7F_9daEOjwdODIncaQpVu80PqhPIQ#theme=night&bordered&titled"
               frameborder="0"
               width="800"
               height="600"
               allowtransparency
-            ></iframe>
+            ></iframe> */}
             {/* <iframe
               src="http://18.190.46.86:80/public/dashboard/f162c832-30ef-464b-aa68-114440f40682"
               frameborder="0"
@@ -278,7 +278,7 @@ class Dashboard extends Component {
               height="600"
               allowtransparency
             ></iframe> */}
-          </Col>
+          {/* </Col> */}
           <Col md={12} xs={24} style={colStyle}>
             <CardWrapper title="Country">
               <ChartWrapper>

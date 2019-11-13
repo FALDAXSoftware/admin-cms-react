@@ -161,12 +161,12 @@ class EditableUserLimitTable extends React.Component {
                 // id: newData[index].id,
                 coin_id: newData[index].coin_table_id,
                 user_id: user_id,
-                daily_withdraw_crypto: parseInt(row.daily_withdraw_crypto),
-                daily_withdraw_fiat: parseInt(row.daily_withdraw_fiat),
-                min_withdrawl_crypto: parseInt(row.min_withdrawl_crypto),
-                min_withdrawl_fiat: parseInt(row.min_withdrawl_fiat),
-                monthly_withdraw_crypto: parseInt(row.monthly_withdraw_crypto),
-                monthly_withdraw_fiat: parseInt(row.monthly_withdraw_fiat)
+                daily_withdraw_crypto: parseFloat(row.daily_withdraw_crypto),
+                daily_withdraw_fiat: parseFloat(row.daily_withdraw_fiat),
+                min_withdrawl_crypto: parseFloat(row.min_withdrawl_crypto),
+                min_withdrawl_fiat: parseFloat(row.min_withdrawl_fiat),
+                monthly_withdraw_crypto: parseFloat(row.monthly_withdraw_crypto),
+                monthly_withdraw_fiat: parseFloat(row.monthly_withdraw_fiat)
             }
 
             _this.setState({ loader: true });
