@@ -28,8 +28,7 @@ import Whitelist from "../../containers/Page/Employee/employeeWhitelist";
 import TwoFactorRequests from "../../containers/Page/TwoFactorRequest/TwoFactorRequests";
 import Tier from "../../containers/Page/Tiers/tiers";
 import PendingRequests from "../../containers/Page/Tiers/pendingTierRequests";
-import create from "antd/lib/icon/IconFont";
-import { CSVLink } from "react-csv";
+import { NetworkFee } from "../../containers/Page/NetworkFee/networkFee";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -1662,6 +1661,7 @@ const CoinActionCell = (
       </Tooltip>
     </div>
   );
+
 const RolesActionCell = (
   value,
   name,
@@ -2567,6 +2567,20 @@ const ReferralNameCell = (value, full_name, deleted_at) => (
   </div>
 );
 
+const CoinFeesActionCell=(value,name,slug,updated_at,type,fees_value)=>{
+  return (
+    <div>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={()=>NetworkFee.edit(value,name,slug,updated_at,type,fees_value)}
+        />
+      </Tooltip>
+    </div>
+  );
+}
+
 export {
   IPCell,
   DateCell,
@@ -2645,5 +2659,6 @@ export {
   TransactionHashCell,
   TransactionHashCellUser,
   ReferralNameCell,
-  ObjectCell
+  ObjectCell,
+  CoinFeesActionCell
 };
