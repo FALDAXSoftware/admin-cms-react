@@ -18,7 +18,7 @@ class EditableCell extends React.Component {
     };
 
     renderCell = ({ getFieldDecorator }) => {
-        console.log('>>>getFieldDecorator', getFieldDecorator)
+        // console.log('>>>getFieldDecorator', getFieldDecorator)
         const {
             editing,
             dataIndex,
@@ -29,7 +29,7 @@ class EditableCell extends React.Component {
             children,
             ...restProps
         } = this.props;
-        console.log('>>>', record)
+        // console.log('>>>', record)
         return (
             <td {...restProps}>
                 {editing ? (
@@ -150,7 +150,7 @@ class EditableUserLimitTable extends React.Component {
         const { token, user_id } = this.props;
         let _this = this;
         form.validateFields((error, row) => {
-            console.log('error', error, row)
+            // console.log('error', error, row)
             if (error) {
                 return;
             }

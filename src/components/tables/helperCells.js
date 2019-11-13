@@ -956,6 +956,21 @@ const DateCell = data => (
       : ""}
   </p>
 );
+const HistoryDateCell = data => (
+  <p>
+    {data
+      ? moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY LTS")
+        ? moment
+          .utc(data)
+          .local()
+          .format("DD MMM YYYY LTS")
+        : ""
+      : ""}
+  </p>
+);
 const UserDateCell = (
   value,
   profile_pic,
@@ -2570,6 +2585,7 @@ const ReferralNameCell = (value, full_name, deleted_at) => (
 export {
   IPCell,
   DateCell,
+  HistoryDateCell,
   ImageCell,
   LinkCell,
   TextCell,
