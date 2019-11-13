@@ -89,26 +89,6 @@ const columns = [
     sorter: true,
     render: object => renderCell(object, "DateCell", "created_at")
   },
-  // {
-  //     title: <IntlMessages id="tradeTable.title.currency" />,
-  //     key: 'currency',
-  //     width: 200,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'currency')
-  // }, {
-  //     title: <IntlMessages id="tradeTable.title.settle_currency" />,
-  //     key: 'settle_currency',
-  //     width: 200,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'settle_currency')
-  // },
-  // {
-  //     title: <IntlMessages id="tradeTable.title.maker_email" />,
-  //     key: 'reqested_user_email',
-  //     width: 100,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'reqested_user_email')
-  // },
   {
     title: <IntlMessages id="tradeTable.title.symbol" />,
     key: "symbol",
