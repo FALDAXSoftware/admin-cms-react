@@ -138,6 +138,12 @@ const options = [
     module: "wallet_dashboard"
   },
   {
+    key: "network-fee",
+    label: "Network Fees",
+    leftIcon: "fas fa-wifi",
+    module: "network_fee"
+  },
+  {
     key: "batch-and-balance",
     label: "Batch & Balance",
     leftIcon: "fas fa-balance-scale",
