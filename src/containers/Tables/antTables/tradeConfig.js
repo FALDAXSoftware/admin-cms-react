@@ -3,7 +3,7 @@ import clone from "clone";
 import IntlMessages from "../../../components/utility/intlMessages";
 import {
   TextCell,
-  DateCell,
+  HistoryDateCell,
   VolumeCell,
   ObjectCell
 } from "../../../components/tables/helperCells";
@@ -43,7 +43,7 @@ const renderCell = (
 
   switch (type) {
     case "DateCell":
-      return DateCell(
+      return HistoryDateCell(
         value,
         currency,
         settle_currency,
@@ -89,26 +89,6 @@ const columns = [
     sorter: true,
     render: object => renderCell(object, "DateCell", "created_at")
   },
-  // {
-  //     title: <IntlMessages id="tradeTable.title.currency" />,
-  //     key: 'currency',
-  //     width: 200,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'currency')
-  // }, {
-  //     title: <IntlMessages id="tradeTable.title.settle_currency" />,
-  //     key: 'settle_currency',
-  //     width: 200,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'settle_currency')
-  // },
-  // {
-  //     title: <IntlMessages id="tradeTable.title.maker_email" />,
-  //     key: 'reqested_user_email',
-  //     width: 100,
-  //     sorter: true,
-  //     render: object => renderCell(object, 'TextCell', 'reqested_user_email')
-  // },
   {
     title: <IntlMessages id="tradeTable.title.symbol" />,
     key: "symbol",
@@ -151,31 +131,31 @@ const columns = [
     sorter: true,
     render: object => renderCell(object, "TextCell", "order_id")
   },
-  {
-    title: <IntlMessages id="tradeTable.title.execution_report" />,
-    key: "execution_report",
-    width: 100,
-    sorter: true,
-    render: object =>
-      renderCell(
-        object,
-        "ExecutionReport",
-        "id",
-        "currency",
-        "settle_currency",
-        "reqested_user_email",
-        "email",
-        "side",
-        "quantity",
-        "price",
-        "fill_price",
-        "maker_fee",
-        "taker_fee",
-        "volume",
-        "created_at",
-        "execution_report"
-      )
-  }
+  // {
+  //   title: <IntlMessages id="tradeTable.title.execution_report" />,
+  //   key: "execution_report",
+  //   width: 100,
+  //   sorter: true,
+  //   render: object =>
+  //     renderCell(
+  //       object,
+  //       "ExecutionReport",
+  //       "id",
+  //       "currency",
+  //       "settle_currency",
+  //       "reqested_user_email",
+  //       "email",
+  //       "side",
+  //       "quantity",
+  //       "price",
+  //       "fill_price",
+  //       "maker_fee",
+  //       "taker_fee",
+  //       "volume",
+  //       "created_at",
+  //       "execution_report"
+  //     )
+  // }
 ];
 
 const tradeTableInfos = [
