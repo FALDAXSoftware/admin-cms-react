@@ -146,7 +146,8 @@ class AddProfileIPModal extends Component {
                 title="Add Permanent IP Address"
                 visible={showAddProfilePermanentIPModal}
                 confirmLoading={loader}
-                closable={false}
+                // closable={false}
+                onCancel={() =>  this._closeAddIPModal()}
                 footer={[
                     <Button onClick={this._addPermanentIPAddress}>Add</Button>,
                 ]}

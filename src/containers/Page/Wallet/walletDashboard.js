@@ -23,6 +23,7 @@ const FeeDiv = styled.div`
     border: gray solid 2px;
     padding: 6px;    
     border-radius: 7px;
+    margin-bottom: 5px;
 `
 
 class WalletDashboard extends Component {
@@ -224,6 +225,7 @@ class WalletDashboard extends Component {
                                         </div>
                                         <BalanceDiv><span>Total Balance : {wallet.balance}</span></BalanceDiv>
                                         <FeeDiv><span>Total Fees : {wallet.fee}</span></FeeDiv>
+                                        <FeeDiv><span>Forfeit Funds Fees : {wallet.forfeit_funds}</span></FeeDiv>
                                     </Card>
                                 </Col>
                             )) : "No Data Found!!"
