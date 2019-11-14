@@ -144,6 +144,11 @@ const routes = [
         component: asyncComponent(() => import("../Page/SimplexToken/simplexToken")),
         module: "simplex_token"
     },
+    {
+        path: "network-fee",
+        component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
+        module: "network_fee"
+    },
 ];
 
 const mandatoryRoutes = [

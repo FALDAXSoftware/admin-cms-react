@@ -1,34 +1,41 @@
-import React, { Component } from 'react';
-import { Row, Col, notification, Card, Progress } from 'antd';
+import React, { Component } from "react";
+import { Row, Col, notification, Card, Progress, Tabs } from "antd";
 import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import IsoWidgetsWrapper from "../Widgets/widgets-wrapper";
 import basicStyle from "../../settings/basicStyle";
-import ApiUtils from '../../helpers/apiUtills';
-import { connect } from 'react-redux';
-import { Pie, Doughnut } from 'react-chartjs-2';
-import ContentHolder from '../../components/utility/contentHolder';
-import styled from 'styled-components';
-import { palette } from 'styled-theme';
-import CountCard from '../Widgets/card/count-widget';
-import { Link } from 'react-router-dom';
-import authAction from '../../redux/auth/actions';
-import { DatePicker } from 'antd';
-import moment from 'moment';
-import FaldaxLoader from './faldaxLoader';
-import CardView from './cardView';
-import FeeChart from './feeChart';
-import TransactionMapChart from './transactionMapChart';
+import ApiUtils from "../../helpers/apiUtills";
+import { connect } from "react-redux";
+import { Pie, Doughnut } from "react-chartjs-2";
+import ContentHolder from "../../components/utility/contentHolder";
+import styled from "styled-components";
+import { palette } from "styled-theme";
+import CountCard from "../Widgets/card/count-widget";
+import { Link } from "react-router-dom";
+import authAction from "../../redux/auth/actions";
+import { DatePicker } from "antd";
+import moment from "moment";
+import FaldaxLoader from "./faldaxLoader";
+import CardView from "./cardView";
+import FeeChart from "./feeChart";
+import TransactionMapChart from "./transactionMapChart";
+const { TabPane } = Tabs;
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
 
 const CardWrapper = styled(Card)`
-    width:100%;
-    & .ant-card-body{
-        min-height: 219px;
-    }
-`
-
+  width: 100%;
+  & .ant-card-body {
+    min-height: 219px;
+  }
+`;
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 const ChartWrapper = styled.div`
   height: 219px;
   display: flex;
@@ -38,23 +45,23 @@ const ChartWrapper = styled.div`
   .isoChartControl {
     display: flex;
     align-items: center;
-    margin-left: ${props => (props['data-rtl'] === 'rtl' ? 'inherit' : 'auto')};
+    margin-left: ${props => (props["data-rtl"] === "rtl" ? "inherit" : "auto")};
     margin-right: ${props =>
-        props['data-rtl'] === 'rtl' ? 'auto' : 'inherit'};
+      props["data-rtl"] === "rtl" ? "auto" : "inherit"};
     margin-bottom: 20px;
 
     span {
       font-size: 13px;
-      color: ${palette('text', 1)};
+      color: ${palette("text", 1)};
       font-weight: 400;
       margin-right: ${props =>
-        props['data-rtl'] === 'rtl' ? 'inherit' : '15px'};
+        props["data-rtl"] === "rtl" ? "inherit" : "15px"};
       margin-left: ${props =>
-        props['data-rtl'] === 'rtl' ? '15px' : 'inherit'};
+        props["data-rtl"] === "rtl" ? "15px" : "inherit"};
     }
 
     button {
-      border: 1px solid ${palette('border', 0)};
+      border: 1px solid ${palette("border", 0)};
       padding: 0 10px;
       border-radius: 0;
       position: relative;
@@ -65,18 +72,18 @@ const ChartWrapper = styled.div`
 
       &:last-child {
         margin-left: ${props =>
-        props['data-rtl'] === 'rtl' ? 'inherit' : '-1px'};
+          props["data-rtl"] === "rtl" ? "inherit" : "-1px"};
         margin-right: ${props =>
-        props['data-rtl'] === 'rtl' ? '-1px' : 'inherit'};
+          props["data-rtl"] === "rtl" ? "-1px" : "inherit"};
       }
 
       &:hover {
-        color: ${palette('primary', 0)};
-        border-color: ${palette('primary', 0)};
+        color: ${palette("primary", 0)};
+        border-color: ${palette("primary", 0)};
         z-index: 1;
 
         span {
-          color: ${palette('primary', 0)};
+          color: ${palette("primary", 0)};
         }
       }
     }
@@ -84,184 +91,326 @@ const ChartWrapper = styled.div`
 `;
 
 class Dashboard extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            activeUsers: 0,
-            inactiveUsers: 0,
-            deletedUsers:0,
-            activeCoins: 0,
-            InactiveCoins: 0,
-            referralCount: 0,
-            activePairs: 0,
-            InactivePairs: 0,
-            legalCountries: 0,
-            illegalCountries: 0,
-            neutralCountries: 0,
-            employeeCount: 0,
-            jobsCount: 0,
-            withdrawReqCount: 0,
-            kyc_disapproved: 0,
-            kyc_approved: 0,
-            total_kyc: 0,
-            kyc_pending: 0,
-            errMsg: false,
-            errMessage: '',
-            startDate: '',
-            endDate: '',
-            rangeDate: [],
-            loader: false
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeUsers: 0,
+      inactiveUsers: 0,
+      deletedUsers: 0,
+      activeCoins: 0,
+      InactiveCoins: 0,
+      referralCount: 0,
+      activePairs: 0,
+      InactivePairs: 0,
+      legalCountries: 0,
+      illegalCountries: 0,
+      neutralCountries: 0,
+      employeeCount: 0,
+      jobsCount: 0,
+      withdrawReqCount: 0,
+      kyc_disapproved: 0,
+      kyc_approved: 0,
+      total_kyc: 0,
+      kyc_pending: 0,
+      errMsg: false,
+      errMessage: "",
+      startDate: "",
+      endDate: "",
+      rangeDate: [],
+      loader: false,
+      metabaseUrl: ""
+    };
+  }
 
-    openNotificationWithIconError = (type) => {
-        notification[type]({
-            message: 'Error',
-            description: this.state.errMessage
-        });
-        this.setState({ errMsg: false });
+  openNotificationWithIconError = type => {
+    notification[type]({
+      message: "Error",
+      description: this.state.errMessage
+    });
+    this.setState({ errMsg: false });
+  };
+
+  componentDidMount() {
+    this._getAllCount();
+    this._getMetabaseData();
+  }
+
+  _getAllCount = () => {
+    const { token } = this.props;
+    const { startDate, endDate } = this.state;
+    let _this = this;
+
+    _this.setState({ loader: true });
+    ApiUtils.getAllCount(token, startDate, endDate)
+      .then(response => response.json())
+      .then(function(res) {
+        if (res) {
+          if (res.status == 200) {
+            let feeSymbols = [];
+            let feeSum = [];
+            let transactionSymbols = [];
+            let transactionCount = [];
+            res.feesTransactionValue &&
+              res.feesTransactionValue.forEach(function(value, key) {
+                feeSymbols.push(value.symbol);
+                feeSum.push(value.sum);
+              });
+            res.transactionValue &&
+              res.transactionValue.forEach(function(value, key) {
+                transactionSymbols.push(value.symbol);
+                transactionCount.push(value.count);
+              });
+            const {
+              activeUsers,
+              inactiveUsers,
+              activeCoins,
+              InactiveCoins,
+              activePairs,
+              InactivePairs,
+              legalCountries,
+              illegalCountries,
+              PartialCountries,
+              neutralCountries,
+              activeEmployeeCount,
+              jobsCount,
+              inactiveEmployeeCount,
+              withdrawReqCount,
+              kyc_disapproved,
+              kyc_approved,
+              total_kyc,
+              kyc_pending,
+              withdrawReqCountValue,
+              deletedUsers,
+              userSignUpCountValue
+            } = res;
+            _this.setState({
+              activeUsers,
+              inactiveUsers,
+              activeCoins,
+              InactiveCoins,
+              activePairs,
+              InactivePairs,
+              legalCountries,
+              PartialCountries,
+              illegalCountries,
+              neutralCountries,
+              activeEmployeeCount,
+              deletedUsers,
+              inactiveEmployeeCount,
+              jobsCount,
+              withdrawReqCount,
+              kyc_disapproved,
+              kyc_approved,
+              total_kyc,
+              kyc_pending,
+              loader: false,
+              withdrawReqCountValue,
+              userSignUpCountValue,
+              feeSymbols,
+              feeSum,
+              transactionSymbols,
+              transactionCount
+            });
+          } else if (res.status == 403) {
+            _this.props.logout();
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch(err => {
+        console.log("error occured", err);
+      });
+  };
+
+  _getMetabaseData = () => {
+    let _this = this;
+    _this.setState({ loader: true });
+    ApiUtils.getMetabase()
+      .then(response => response.json())
+      .then(function(res) {
+        if (res) {
+          if (res.status == 200) {
+            _this.setState({
+              loader: false,
+              metabaseUrl: res.data
+            });
+          } else if (res.status == 403) {
+            _this.props.logout();
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch(err => {
+        console.log("error occured", err);
+      });
+  };
+
+  range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  isabledRangeTime = (_, type) => {
+    if (type === "start") {
+      return {
+        disabledHours: () => this.range(0, 60).splice(4, 20),
+        disabledMinutes: () => this.range(30, 60),
+        disabledSeconds: () => [55, 56]
+      };
+    }
+    return {
+      disabledHours: () => this.range(0, 60).splice(20, 4),
+      disabledMinutes: () => this.range(0, 31),
+      disabledSeconds: () => [55, 56]
+    };
+  };
+
+  _changeDate = (date, dateString) => {
+    this.setState(
+      {
+        rangeDate: date,
+        startDate:
+          date.length > 0
+            ? moment(date[0])
+                .startOf("d")
+                .toISOString()
+            : "",
+        endDate:
+          date.length > 0
+            ? moment(date[1])
+                .endOf("d")
+                .toISOString()
+            : ""
+      },
+      () => {
+        this._getAllCount();
+      }
+    );
+  };
+
+  render() {
+    const { rowStyle, colStyle } = basicStyle;
+    const {
+      activeUsers,
+      inactiveUsers,
+      activeCoins,
+      InactiveCoins,
+      activePairs,
+      InactivePairs,
+      legalCountries,
+      illegalCountries,
+      PartialCountries,
+      neutralCountries,
+      activeEmployeeCount,
+      inactiveEmployeeCount,
+      jobsCount,
+      withdrawReqCount,
+      kyc_approved,
+      kyc_disapproved,
+      total_kyc,
+      kyc_pending,
+      rangeDate,
+      loader,
+      withdrawReqCountValue,
+      userSignUpCountValue,
+      feeSymbols,
+      feeSum,
+      deletedUsers,
+      transactionSymbols,
+      transactionCount
+    } = this.state;
+
+    const data = {
+      labels: ["Legal", "Illegal", "Neutral", "Partial Services"],
+      datasets: [
+        {
+          data: [
+            legalCountries,
+            illegalCountries,
+            neutralCountries,
+            PartialCountries
+          ],
+          backgroundColor: ["#62d0c5", "#f6776e", "#b6cbfa", "#BA55D3"],
+          hoverBackgroundColor: ["#62d0c5", "#f6776e", "#b6cbfa", "#BA55D3"]
+        }
+      ]
     };
 
-    componentDidMount() {
-        this._getAllCount();
-    }
-
-    _getAllCount = () => {
-        const { token } = this.props;
-        const { startDate, endDate } = this.state;
-        let _this = this;
-
-        _this.setState({ loader: true })
-        ApiUtils.getAllCount(token, startDate, endDate)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    if (res.status == 200) {
-                        let feeSymbols = [];
-                        let feeSum = [];
-                        let transactionSymbols = [];
-                        let transactionCount = [];
-                        res.feesTransactionValue && res.feesTransactionValue.forEach(function (value, key) {
-                            feeSymbols.push(value.symbol);
-                            feeSum.push(value.sum);
-                        });
-                        res.transactionValue && res.transactionValue.forEach(function (value, key) {
-                            transactionSymbols.push(value.symbol);
-                            transactionCount.push(value.count);
-                        });
-                        const {
-                            activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                            InactivePairs, legalCountries, illegalCountries, PartialCountries,
-                            neutralCountries, activeEmployeeCount, jobsCount, inactiveEmployeeCount,
-                            withdrawReqCount, kyc_disapproved, kyc_approved,
-                            total_kyc, kyc_pending, withdrawReqCountValue,deletedUsers, userSignUpCountValue,
-                        } = res;
-                        _this.setState({
-                            activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-                            InactivePairs, legalCountries, PartialCountries,
-                            illegalCountries, neutralCountries, activeEmployeeCount,deletedUsers, inactiveEmployeeCount,
-                            jobsCount, withdrawReqCount,
-                            kyc_disapproved, kyc_approved, total_kyc, kyc_pending, loader: false,
-                            withdrawReqCountValue, userSignUpCountValue, feeSymbols, feeSum,
-                            transactionSymbols, transactionCount
-                        });
-                    } else if (res.status == 403) {
-                        _this.props.logout();
-                    } else {
-                        _this.setState({ errMsg: true, message: res.message, loader: false });
-                    }
-                } else {
-                    _this.setState({ errMsg: true, message: res.message, loader: false });
-                }
-            })
-            .catch(err => {
-                console.log('error occured', err);
-            });
-    }
-
-    range = (start, end) => {
-        const result = [];
-        for (let i = start; i < end; i++) {
-            result.push(i);
+    const transactionData = {
+      labels: [
+        "Total Last 7 days",
+        "Grand Total Last 7 days",
+        "Average Per day",
+        "Total Last 30 days"
+      ],
+      datasets: [
+        {
+          data: [
+            legalCountries,
+            illegalCountries,
+            neutralCountries,
+            neutralCountries
+          ],
+          backgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"],
+          hoverBackgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"]
         }
-        return result;
-    }
+      ]
+    };
 
-    isabledRangeTime = (_, type) => {
-        if (type === 'start') {
-            return {
-                disabledHours: () => this.range(0, 60).splice(4, 20),
-                disabledMinutes: () => this.range(30, 60),
-                disabledSeconds: () => [55, 56],
-            };
+    const tradeData = {
+      labels: [
+        "Total Last 7 days",
+        "Grand Total Last 7 days",
+        "Average Per day",
+        "Total Last 30 days"
+      ],
+      datasets: [
+        {
+          data: [
+            legalCountries,
+            illegalCountries,
+            neutralCountries,
+            neutralCountries
+          ],
+          backgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"],
+          hoverBackgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"]
         }
-        return {
-            disabledHours: () => this.range(0, 60).splice(20, 4),
-            disabledMinutes: () => this.range(0, 31),
-            disabledSeconds: () => [55, 56],
-        };
-    }
+      ]
+    };
 
-    _changeDate = (date, dateString) => {
-        this.setState({
-            rangeDate: date,
-            startDate: date.length > 0 ? moment(date[0]).startOf('d').toISOString() : '',
-            endDate: date.length > 0 ? moment(date[1]).endOf('d').toISOString() : ''
-        }, () => {
-            this._getAllCount();
-        })
-    }
-
-    render() {
-        const { rowStyle, colStyle } = basicStyle;
-        const { activeUsers, inactiveUsers, activeCoins, InactiveCoins, activePairs,
-            InactivePairs, legalCountries, illegalCountries, PartialCountries,
-            neutralCountries, activeEmployeeCount, inactiveEmployeeCount, jobsCount, withdrawReqCount,
-            kyc_approved, kyc_disapproved, total_kyc, kyc_pending, rangeDate, loader,
-            withdrawReqCountValue, userSignUpCountValue, feeSymbols, feeSum,deletedUsers, transactionSymbols,
-            transactionCount
-        } = this.state;
-
-
-        const data = {
-            labels: ['Legal', 'Illegal', 'Neutral', 'Partial Services'],
-            datasets: [{
-                data: [legalCountries, illegalCountries, neutralCountries, PartialCountries],
-                backgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa', '#BA55D3'],
-                hoverBackgroundColor: ['#62d0c5', '#f6776e', '#b6cbfa', '#BA55D3']
-            }]
-        };
-
-        const transactionData = {
-            labels: ['Total Last 7 days', 'Grand Total Last 7 days', 'Average Per day', 'Total Last 30 days'],
-            datasets: [{
-                data: [legalCountries, illegalCountries, neutralCountries, neutralCountries],
-                backgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671'],
-                hoverBackgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671']
-            }]
-        };
-
-        const tradeData = {
-            labels: ['Total Last 7 days', 'Grand Total Last 7 days', 'Average Per day', 'Total Last 30 days'],
-            datasets: [{
-                data: [legalCountries, illegalCountries, neutralCountries, neutralCountries],
-                backgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671'],
-                hoverBackgroundColor: ['#B04387', '#EDED16', '#D2601F', '#B95671']
-            }]
+    const kycData = {
+      labels: ["Total Outstanding", "Total Approved", "Total Disapproved"],
+      datasets: [
+        {
+          data: [kyc_pending, kyc_approved, kyc_disapproved],
+          backgroundColor: ["#E929DD", "#D2601F", "#B95671"],
+          hoverBackgroundColor: ["#E929DD", "#D2601F", "#B95671"]
         }
+      ]
+    };
 
-        const kycData = {
-            labels: ['Total Outstanding', 'Total Approved', 'Total Disapproved'],
-            datasets: [{
-                data: [kyc_pending, kyc_approved, kyc_disapproved],
-                backgroundColor: ['#E929DD', '#D2601F', '#B95671'],
-                hoverBackgroundColor: ['#E929DD', '#D2601F', '#B95671']
-            }]
-        }
-
-        return (
-          <LayoutWrapper>
-            {loader && <FaldaxLoader />}
+    return (
+      <LayoutWrapper>
+        {loader && <FaldaxLoader />}
+        <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }}>
+          <TabPane tab="Admin-Dashboard" key="1">
             <Row style={rowStyle} gutter={0} justify="start">
               <Col md={12} xs={24} style={colStyle}>
                 <CardWrapper title="Country">
@@ -487,12 +636,28 @@ class Dashboard extends Component {
                 </Link>
               </Col>
             </Row>
-          </LayoutWrapper>
-        );
-    }
+          </TabPane>
+          <TabPane tab="Metabase-Dasboard" key="2">
+            <Row style={rowStyle} gutter={0} justify="start">
+              <IframeCol>
+                <iframe
+                  src={this.state.metabaseUrl}
+                  frameborder="0"
+                  width="100%"
+                  allowtransparency
+                ></iframe>
+              </IframeCol>
+            </Row>
+          </TabPane>
+        </Tabs>
+      </LayoutWrapper>
+    );
+  }
 }
 
 export default connect(
-    state => ({
-        token: state.Auth.get('token')
-    }), { logout })(Dashboard);
+  state => ({
+    token: state.Auth.get("token")
+  }),
+  { logout }
+)(Dashboard);

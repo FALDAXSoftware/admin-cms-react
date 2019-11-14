@@ -403,3 +403,12 @@ html[dir='rtl'] .dz-hidden-input {
   background-color: #ffffff;
   height: 100%;
 }
+
+
+.error-danger{
+  color:red;
+}
+
+.mg-top-15{
+  margin-top: 15px;
+}

@@ -59,12 +59,14 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'amount')
-}, {
-    title: <IntlMessages id="withdrawTable.title.transaction_type" />,
-    key: 'transaction_type',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'transaction_type')
-}, {
+},
+//  {
+//     title: <IntlMessages id="withdrawTable.title.transaction_type" />,
+//     key: 'transaction_type',
+//     width: 100,
+//     render: object => renderCell(object, 'TextCell', 'transaction_type')
+// }, 
+{
     title: <IntlMessages id="withdrawTable.title.status" />,
     key: 'status',
     width: 100,
