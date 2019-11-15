@@ -186,6 +186,7 @@ class Sidebar extends Component {
             >
               {
                 options.map(singleOption => {
+                  // console.log(options)
                   if (rolesModuleArray.indexOf(singleOption.module) > -1) {
                     return (
                       that.getMenuItem({ submenuStyle, submenuColor, singleOption })
