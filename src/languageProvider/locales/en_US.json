@@ -448,6 +448,7 @@
   "networkFeeTable.title.name": "Name",
   "networkFeeTable.title.type": "Type",
   "networkFeeTable.title.value": "Value",
+  "networkFeeTable.title.notes": "Notes",
   "feeTable.title.trade": "Trade Volume",
   "feeTable.title.maker_fee": "Maker Fee",
   "feeTable.title.taker_fee": "Taker Fee",
