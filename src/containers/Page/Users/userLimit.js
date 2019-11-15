@@ -38,11 +38,15 @@ class EditableCell extends React.Component {
                             rules: [
                                 {
                                     required: true,
-                                    max: 100,
                                     message: `Please Input ${title}!`,
                                 },
+                                {
+                                    pattern:new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
+                                    message:"Please Enter Valid Positive Number"
+
+                                }
                             ],
-                            initialValue: record[dataIndex],
+                            initialValue: parseFloat(record[dataIndex]||0),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
