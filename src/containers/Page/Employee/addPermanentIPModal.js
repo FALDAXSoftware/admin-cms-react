@@ -39,8 +39,13 @@ class AddPermanentIPModal extends Component {
     };
 
     _closeAddIPModal = () => {
-        this.setState({ showAddIPModal: false })
+        this.setState({ showAddPermanentIPModal: false })
         this.props.closeAddModal();
+        this._resetAddForm()
+    }
+
+    handleOnCloseModel=()=>{
+        this.setState({ showAddPermanentIPModal: false })
         this._resetAddForm()
     }
 
@@ -86,50 +91,64 @@ class AddPermanentIPModal extends Component {
         this.setState({ fields });
     }
 
-    _addIPAddress = () => {
-        const { token, getAllWhitelistIP, emp_id } = this.props;
+    _addIPAddress = async() => {
+        const { token, getAllWhitelistIP, emp_id ,  enableWhitelistIp} = this.props;
         let { fields, showIPError } = this.state;
-        let _this = this;
 
         if (this.validator.allValid() && !showIPError) {
-            _this.setState({ loader: true });
+            this.setState({ loader: true });
             let formData = {
                 ip: fields["ip"],
                 user_type: 2,
                 user_id: emp_id,
                 is_permanent: true
             };
-
-            ApiUtils.addEmpWhitelistIP(token, formData)
-                .then((res) => res.json())
-                .then((res) => {
-                    if (res.status == 200) {
-                        _this.setState({
-                            errMsg: true, errMessage: res.message,
-                            loader: false, errType: 'Success'
-                        }, () => {
-                            getAllWhitelistIP();
-                            _this._resetAddForm();
-                        })
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.err, loader: false, errType: 'error' });
-                    }
-                    _this._closeAddIPModal();
-                })
-                .catch(() => {
-                    _this._resetAddForm();
-                    _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
-                        loader: false, errType: 'error'
-                    });
+            try {
+              await enableWhitelistIp(true);
+              let res = await (
+                await ApiUtils.addEmpWhitelistIP(token, formData)
+              ).json();
+              if (res.status == 200) {
+                this.setState(
+                  {
+                    errMsg: true,
+                    errMessage: res.message,
+                    loader: false,
+                    errType: "Success"
+                  },
+                  () => {
+                    getAllWhitelistIP();
+                    this._resetAddForm();
+                  }
+                );
+              } else if (res.status == 403) {
+                this.setState(
+                  { errMsg: true, errMessage: res.err, errType: "error" },
+                  () => {
+                    this.props.logout();
+                  }
+                );
+              } else {
+                this.setState({
+                  errMsg: true,
+                  errMessage: res.err,
+                  loader: false,
+                  errType: "error"
                 });
+              }
+              this._closeAddIPModal();
+            } catch (error) {
+              this._resetAddForm();
+              this.setState({
+                errMsg: true,
+                errMessage: "Something went wrong!!",
+                loader: false,
+                errType: "error"
+              });
+            }
         } else {
-            _this.validator.showMessages();
-            _this.forceUpdate();
+            this.validator.showMessages();
+            this.forceUpdate();
         }
     }
 
@@ -143,10 +162,12 @@ class AddPermanentIPModal extends Component {
             <Modal
                 title="Add Permanent IP Address"
                 visible={showAddPermanentIPModal}
+                onCancel={this.handleOnCloseModel}
                 confirmLoading={loader}
                 closable={false}
                 footer={[
                     <Button onClick={this._addIPAddress}>Add</Button>,
+                    <Button onClick={this.handleOnCloseModel}>Cancel</Button>
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>

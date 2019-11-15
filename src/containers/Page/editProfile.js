@@ -32,6 +32,7 @@ class EditProfile extends Component {
         fields["email"] = email;
         this.setState({ fields, is_twofactor });
         this._getAdminDetails();
+        fields["otp"] = '';
     }
 
     openNotificationWithIconError = (type) => {
@@ -113,6 +114,7 @@ class EditProfile extends Component {
 
     _setupTwoFactor = () => {
         const { token, user } = this.props;
+        const { fields } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
@@ -126,8 +128,9 @@ class EditProfile extends Component {
             .then(function (res) {
                 if (res) {
                     if (res.status == 200) {
+                        fields["otp"] = '';
                         _this.setState({
-                            loader: false, QRImage: res.dataURL, QRKey: res.tempSecret
+                            loader: false, QRImage: res.dataURL, QRKey: res.tempSecret, fields
                         }, () => {
                             if (_this.state.is_twofactor == false)
                                 _this.setState({ showQR: true })
@@ -211,7 +214,9 @@ class EditProfile extends Component {
             .then(function (res) {
                 if (res) {
                     if (res.status == 200) {
+                        // fields["otp"] = '';
                         _this.setState({
+                            // fields,
                             errMsg: true, errMessage: res.message,
                             loader: false, errType: 'Success', isEnabled: 'ENABLED', showQR: false
                         }, () => {
