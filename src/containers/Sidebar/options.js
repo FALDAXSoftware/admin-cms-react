@@ -161,6 +161,12 @@ const options = [
     leftIcon: "fas fa-file-invoice",
     module: "simplex_token"
   },
+  {
+    key: "campaign",
+    label: "Offers",
+    leftIcon: "fas fa-file-invoice",
+    module: "offers"
+  }
 ];
 
 export default options;
