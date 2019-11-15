@@ -29,6 +29,7 @@ import TwoFactorRequests from "../../containers/Page/TwoFactorRequest/TwoFactorR
 import Tier from "../../containers/Page/Tiers/tiers";
 import PendingRequests from "../../containers/Page/Tiers/pendingTierRequests";
 import { NetworkFee } from "../../containers/Page/NetworkFee/networkFee";
+import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFeesFormula";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -2596,6 +2597,14 @@ const CoinFeesActionCell=(value,name,slug,updated_at,type,fees_value)=>{
   );
 }
 
+const CoinNoteCell=(slug)=>{
+  return (   
+    <div> 
+        <span>{networkFeesFormula.slug[slug]}</span>
+    </div>
+  );
+}
+
 export {
   IPCell,
   DateCell,
@@ -2676,5 +2685,6 @@ export {
   TransactionHashCellUser,
   ReferralNameCell,
   ObjectCell,
-  CoinFeesActionCell
+  CoinFeesActionCell,
+  CoinNoteCell
 };
