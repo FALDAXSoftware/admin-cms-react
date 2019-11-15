@@ -1,15 +1,17 @@
-import { stat } from "fs";
-// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+import {
+  stat
+} from "fs";
+const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 //const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
+// const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
   //super admin sign in api
-  adminSignIn: function(form) {
+  adminSignIn: function (form) {
     try {
       return fetch(API_URL + "/admin/login", {
         method: "POST",
@@ -25,7 +27,7 @@ const ApiUtils = {
   },
 
   //edit profile api
-  editProfile: function(token, form) {
+  editProfile: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update", {
         method: "PUT",
@@ -42,7 +44,7 @@ const ApiUtils = {
   },
 
   //change admin password api
-  changePassword: function(token, form) {
+  changePassword: function (token, form) {
     try {
       return fetch(API_URL + "/admin/change-password", {
         method: "POST",
@@ -57,7 +59,7 @@ const ApiUtils = {
   },
 
   //change employee password api
-  changeEmployeePassword: function(token, form) {
+  changeEmployeePassword: function (token, form) {
     try {
       return fetch(API_URL + "/admin/employee-change-password", {
         method: "POST",
@@ -72,7 +74,7 @@ const ApiUtils = {
   },
 
   //get all counts for dashboard api
-  getAllCount: function(token, startDate, endDate) {
+  getAllCount: function (token, startDate, endDate) {
     let url = "/admin/dashboard/get-data";
     if (startDate && endDate) {
       url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
@@ -90,7 +92,7 @@ const ApiUtils = {
   },
 
   //get all counts for dashboard api
-  getMetabase: function() {
+  getMetabase: function () {
     let url = "/metabase-details";
     try {
       return fetch(API_URL + url, {
@@ -105,7 +107,7 @@ const ApiUtils = {
   },
 
   //get all users api
-  getAllUsers: function(
+  getAllUsers: function (
     page,
     limit,
     token,
@@ -165,7 +167,7 @@ const ApiUtils = {
   },
 
   //get all in-active users api
-  getAllInActiveUsers: function(
+  getAllInActiveUsers: function (
     page,
     limit,
     token,
@@ -225,7 +227,7 @@ const ApiUtils = {
   },
 
   //get all in-active users api
-  getAllDeletedUsers: function(
+  getAllDeletedUsers: function (
     page,
     limit,
     token,
@@ -285,7 +287,7 @@ const ApiUtils = {
   },
 
   //activate user api
-  activateUser: function(token, form) {
+  activateUser: function (token, form) {
     try {
       return fetch(API_URL + "/admin/user-activate", {
         method: "POST",
@@ -300,7 +302,7 @@ const ApiUtils = {
   },
 
   //delete user api
-  deleteUser: function(token, user_id) {
+  deleteUser: function (token, user_id) {
     try {
       return fetch(API_URL + "/admin/delete-user?user_id=" + user_id, {
         method: "DELETE",
@@ -315,7 +317,7 @@ const ApiUtils = {
   },
 
   //get all coins api
-  getAllCoins: function(page, limit, token, search, sorterCol, sortOrder) {
+  getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
     let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -346,7 +348,7 @@ const ApiUtils = {
   },
 
   //add coin api
-  addCoin: function(token, form) {
+  addCoin: function (token, form) {
     try {
       return fetch(API_URL + "/admin/coins/create", {
         method: "POST",
@@ -361,7 +363,7 @@ const ApiUtils = {
   },
 
   //edit coin api
-  editCoin: function(token, form) {
+  editCoin: function (token, form) {
     try {
       return fetch(API_URL + "/admin/coins/update", {
         method: "PUT",
@@ -377,7 +379,7 @@ const ApiUtils = {
   },
 
   //delete coin api
-  deleteCoin: function(coinId, token) {
+  deleteCoin: function (coinId, token) {
     try {
       return fetch(API_URL + "/admin/coins/delete?id=" + coinId, {
         method: "DELETE",
@@ -392,7 +394,7 @@ const ApiUtils = {
   },
 
   //forgot password api
-  forgotPassword: function(form) {
+  forgotPassword: function (form) {
     try {
       return fetch(API_URL + "/admin/forgot-password", {
         method: "POST",
@@ -408,7 +410,7 @@ const ApiUtils = {
   },
 
   //reset password api
-  resetPassword: function(form) {
+  resetPassword: function (form) {
     try {
       return fetch(API_URL + "/admin/reset-password", {
         method: "PUT",
@@ -424,7 +426,7 @@ const ApiUtils = {
   },
 
   //get all referrals api
-  getAllUserReferrals: function(
+  getAllUserReferrals: function (
     page,
     limit,
     token,
@@ -457,7 +459,7 @@ const ApiUtils = {
   },
 
   //get all referrals api
-  getAllReferrals: function(
+  getAllReferrals: function (
     page,
     limit,
     token,
@@ -489,7 +491,7 @@ const ApiUtils = {
   },
 
   //get all counties api
-  getAllCountries: function(
+  getAllCountries: function (
     page,
     limit,
     token,
@@ -529,7 +531,7 @@ const ApiUtils = {
   },
 
   //Activate-deactivate country api
-  activateCountry: function(token, form) {
+  activateCountry: function (token, form) {
     try {
       return fetch(API_URL + "/admin/country-activate", {
         method: "PUT",
@@ -544,7 +546,7 @@ const ApiUtils = {
   },
 
   //Announce to users api
-  announceUser: function(token, form) {
+  announceUser: function (token, form) {
     try {
       return fetch(API_URL + "/admin/email-send", {
         method: "POST",
@@ -559,7 +561,7 @@ const ApiUtils = {
   },
 
   //get all roles api
-  getAllRoles: function(token, sorterCol, sortOrder, status) {
+  getAllRoles: function (token, sorterCol, sortOrder, status) {
     let url = "/admin/role/get?status=" + status;
     if (sorterCol && sortOrder) {
       url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
@@ -578,7 +580,7 @@ const ApiUtils = {
     }
   },
 
-  getAllPermissions: function(token) {
+  getAllPermissions: function (token) {
     let url = "/get-all-permissions";
     try {
       return fetch(API_URL + url, {
@@ -594,7 +596,7 @@ const ApiUtils = {
   },
 
   //edit country api call
-  editCountry: function(token, form) {
+  editCountry: function (token, form) {
     try {
       return fetch(API_URL + "/admin/country-update", {
         method: "PUT",
@@ -609,7 +611,7 @@ const ApiUtils = {
   },
 
   //get all states api
-  getAllStates: function(token, countryId, search, sorterCol, sortOrder) {
+  getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
     let url = "/admin/get-state-data?country_id=" + countryId;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -635,7 +637,7 @@ const ApiUtils = {
   },
 
   //Activate-deactivate state api
-  activateState: function(token, form) {
+  activateState: function (token, form) {
     try {
       return fetch(API_URL + "/admin/state-activate", {
         method: "PUT",
@@ -650,7 +652,7 @@ const ApiUtils = {
   },
 
   //edit state api call
-  editState: function(token, form) {
+  editState: function (token, form) {
     try {
       return fetch(API_URL + "/admin/state-update", {
         method: "PUT",
@@ -665,7 +667,7 @@ const ApiUtils = {
   },
 
   //add role api call
-  addRole: function(token, form) {
+  addRole: function (token, form) {
     try {
       return fetch(API_URL + "/admin/role/create", {
         method: "POST",
@@ -680,7 +682,7 @@ const ApiUtils = {
   },
 
   //edit role api call
-  updateRole: function(token, form) {
+  updateRole: function (token, form) {
     try {
       return fetch(API_URL + "/admin/role/update", {
         method: "PUT",
@@ -694,7 +696,7 @@ const ApiUtils = {
     }
   },
 
-  deleteRole: function(token, roleId) {
+  deleteRole: function (token, roleId) {
     try {
       return fetch(API_URL + "/admin/role/delete", {
         method: "DELETE",
@@ -702,7 +704,9 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ id: roleId })
+        body: JSON.stringify({
+          id: roleId
+        })
       });
     } catch (error) {
       console.error(error);
@@ -710,7 +714,7 @@ const ApiUtils = {
   },
 
   //get all employee api
-  getAllEmployee: function(page, limit, token, sorterCol, sortOrder, search) {
+  getAllEmployee: function (page, limit, token, sorterCol, sortOrder, search) {
     let url = "/admin/get-employees?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -735,7 +739,7 @@ const ApiUtils = {
   },
 
   //add employee api call
-  addEmployee: function(token, form) {
+  addEmployee: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-employee", {
         method: "POST",
@@ -750,7 +754,7 @@ const ApiUtils = {
   },
 
   //delete employee api call
-  deleteEmployee: function(token, roleId) {
+  deleteEmployee: function (token, roleId) {
     try {
       return fetch(API_URL + "/admin/delete-employee", {
         method: "DELETE",
@@ -758,7 +762,9 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ id: roleId })
+        body: JSON.stringify({
+          id: roleId
+        })
       });
     } catch (error) {
       console.error(error);
@@ -766,7 +772,7 @@ const ApiUtils = {
   },
 
   //edit employee api call
-  editEmployee: function(token, form) {
+  editEmployee: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update-employee", {
         method: "PUT",
@@ -781,7 +787,7 @@ const ApiUtils = {
   },
 
   //user login history api call
-  getUserHistory: function(
+  getUserHistory: function (
     token,
     user_id,
     page,
@@ -808,7 +814,9 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user_id: parseInt(user_id) })
+        body: JSON.stringify({
+          user_id: parseInt(user_id)
+        })
       });
     } catch (error) {
       console.error(error);
@@ -816,7 +824,7 @@ const ApiUtils = {
   },
 
   //user delete account summary
-  getUserAccountSummary: function(token, user_id) {
+  getUserAccountSummary: function (token, user_id) {
     let url = "/admin/deleteAccountCheck?user_id=" + user_id;
 
     try {
@@ -832,7 +840,7 @@ const ApiUtils = {
     }
   },
 
-  getAllPairs: function(
+  getAllPairs: function (
     page,
     limit,
     token,
@@ -892,7 +900,7 @@ const ApiUtils = {
   },
 
   //add fees api call
-  addPair: function(token, form) {
+  addPair: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-pair", {
         method: "POST",
@@ -907,7 +915,7 @@ const ApiUtils = {
   },
 
   //edit pair api call
-  updatePair: function(token, form) {
+  updatePair: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-pair", {
         method: "PUT",
@@ -922,7 +930,7 @@ const ApiUtils = {
     }
   },
 
-  getAllLimit: function(token) {
+  getAllLimit: function (token) {
     try {
       return fetch(API_URL + "/admin/all-limits", {
         method: "GET",
@@ -937,7 +945,7 @@ const ApiUtils = {
   },
 
   //edit limit api call
-  updateLimit: function(token, form) {
+  updateLimit: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-limit", {
         method: "PUT",
@@ -952,7 +960,7 @@ const ApiUtils = {
     }
   },
 
-  getAllTransaction: function(
+  getAllTransaction: function (
     page,
     limit,
     token,
@@ -1086,7 +1094,7 @@ const ApiUtils = {
   },
 
   //user wise transaction list api call
-  getUserTransaction: function(
+  getUserTransaction: function (
     page,
     limit,
     token,
@@ -1214,7 +1222,7 @@ const ApiUtils = {
     }
   },
 
-  getAllTrades: function(
+  getAllTrades: function (
     page,
     limit,
     token,
@@ -1348,7 +1356,7 @@ const ApiUtils = {
     }
   },
 
-  getAllSimplexTrades: function(
+  getAllSimplexTrades: function (
     page,
     limit,
     token,
@@ -1562,7 +1570,7 @@ const ApiUtils = {
     }
   },
 
-  getUserTrades: function(
+  getUserTrades: function (
     page,
     limit,
     token,
@@ -1680,7 +1688,7 @@ const ApiUtils = {
     }
   },
 
-  getAllWithdrawRequests: function(
+  getAllWithdrawRequests: function (
     page,
     limit,
     token,
@@ -1794,7 +1802,7 @@ const ApiUtils = {
   },
 
   //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
-  getUserWithdrawReq: function(
+  getUserWithdrawReq: function (
     page,
     limit,
     token,
@@ -1919,7 +1927,7 @@ const ApiUtils = {
     }
   },
 
-  getAllSellOrders: function(
+  getAllSellOrders: function (
     page,
     limit,
     token,
@@ -1951,14 +1959,16 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user_id })
+        body: JSON.stringify({
+          user_id
+        })
       });
     } catch (error) {
       console.error(error);
     }
   },
 
-  getAllPendingOrders: function(
+  getAllPendingOrders: function (
     page,
     limit,
     token,
@@ -1990,14 +2000,16 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user_id })
+        body: JSON.stringify({
+          user_id
+        })
       });
     } catch (error) {
       console.error(error);
     }
   },
 
-  getAllCancelledOrders: function(
+  getAllCancelledOrders: function (
     page,
     limit,
     token,
@@ -2029,14 +2041,16 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user_id })
+        body: JSON.stringify({
+          user_id
+        })
       });
     } catch (error) {
       console.error(error);
     }
   },
 
-  getAllBuyOrders: function(
+  getAllBuyOrders: function (
     page,
     limit,
     token,
@@ -2067,7 +2081,9 @@ const ApiUtils = {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user_id })
+        body: JSON.stringify({
+          user_id
+        })
       });
     } catch (error) {
       console.error(error);
@@ -2075,7 +2091,7 @@ const ApiUtils = {
   },
 
   //get all jobs api
-  getAllJobs: function(page, limit, token, search, sorterCol, sortOrder) {
+  getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
     let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -2106,7 +2122,7 @@ const ApiUtils = {
   },
 
   //get all job categories api
-  getAllJobCategories: function(token, active) {
+  getAllJobCategories: function (token, active) {
     try {
       return fetch(API_URL + "/admin/job-categories?active=" + active, {
         method: "GET",
@@ -2121,7 +2137,7 @@ const ApiUtils = {
   },
 
   //add job api
-  addJob: function(token, form) {
+  addJob: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-job", {
         method: "POST",
@@ -2137,7 +2153,7 @@ const ApiUtils = {
   },
 
   //edit job api call
-  updateJob: function(token, form) {
+  updateJob: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-job", {
         method: "PUT",
@@ -2153,7 +2169,7 @@ const ApiUtils = {
   },
 
   //delete job api call
-  deleteJob: function(jobId, token) {
+  deleteJob: function (jobId, token) {
     try {
       return fetch(API_URL + "/admin/delete-job?job_id=" + jobId, {
         method: "DELETE",
@@ -2168,7 +2184,7 @@ const ApiUtils = {
   },
 
   //edit contact details api
-  editContact: function(token, form) {
+  editContact: function (token, form) {
     try {
       return fetch(API_URL + "/edit-contact-details", {
         method: "POST",
@@ -2184,7 +2200,7 @@ const ApiUtils = {
   },
 
   //get contact details api
-  getContactDetails: function() {
+  getContactDetails: function () {
     try {
       return fetch(API_URL + "/admin/get-contact-details", {
         method: "GET",
@@ -2198,7 +2214,7 @@ const ApiUtils = {
   },
 
   //get all jobs api
-  getAllJobApplications: function(
+  getAllJobApplications: function (
     jobId,
     page,
     limit,
@@ -2243,7 +2259,7 @@ const ApiUtils = {
   },
 
   //get all kyc data api
-  getKYCData: function(
+  getKYCData: function (
     token,
     page,
     limit,
@@ -2342,7 +2358,7 @@ const ApiUtils = {
   },
 
   //get all fees api
-  getFeesData: function(token) {
+  getFeesData: function (token) {
     let url = "/admin/get-all-fee";
     try {
       return fetch(API_URL + url, {
@@ -2357,8 +2373,25 @@ const ApiUtils = {
     }
   },
 
+  //get withdrawl fees api
+  getWithdrawlFee: function (token) {
+    console.log("Herr >>>>>>>>")
+    let url = "/admin/get-withdrawl-faldax-fee";
+    try {
+      return fetch(API_URL + url, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   //edit fees api
-  updateFees: function(token, form) {
+  updateFees: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-fee", {
         method: "PUT",
@@ -2373,7 +2406,7 @@ const ApiUtils = {
     }
   },
 
-  getPanicBtnDetails: function(token) {
+  getPanicBtnDetails: function (token) {
     try {
       return fetch(API_URL + "/get-panic-status", {
         method: "GET",
@@ -2388,7 +2421,7 @@ const ApiUtils = {
   },
 
   //panic button api
-  panicBtn: function(token, form) {
+  panicBtn: function (token, form) {
     try {
       return fetch(API_URL + "/toggle-panic-status", {
         method: "POST",
@@ -2404,7 +2437,7 @@ const ApiUtils = {
   },
 
   // get user details api
-  getUserDetails: function(token, user_id) {
+  getUserDetails: function (token, user_id) {
     try {
       return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
         method: "GET",
@@ -2419,7 +2452,7 @@ const ApiUtils = {
   },
 
   // get employee details api
-  getEmployeeDetails: function(token, emp_id) {
+  getEmployeeDetails: function (token, emp_id) {
     try {
       return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
         method: "GET",
@@ -2433,7 +2466,7 @@ const ApiUtils = {
     }
   },
 
-  disableTwoFactor: function(token, form) {
+  disableTwoFactor: function (token, form) {
     try {
       return fetch(API_URL + "/admin/disable-two-factor", {
         method: "POST",
@@ -2448,7 +2481,7 @@ const ApiUtils = {
     }
   },
 
-  setupTwoFactor: function(token, form) {
+  setupTwoFactor: function (token, form) {
     try {
       return fetch(API_URL + "/admin/setup-two-factor", {
         method: "POST",
@@ -2463,7 +2496,7 @@ const ApiUtils = {
     }
   },
 
-  verifyOTP: function(token, form) {
+  verifyOTP: function (token, form) {
     try {
       return fetch(API_URL + "/admin/verify-two-factor", {
         method: "POST",
@@ -2478,7 +2511,7 @@ const ApiUtils = {
     }
   },
 
-  getAdminDetails: function(token, admin_id) {
+  getAdminDetails: function (token, admin_id) {
     try {
       return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
         method: "GET",
@@ -2493,7 +2526,7 @@ const ApiUtils = {
   },
 
   //get all news api
-  getAllNews: function(
+  getAllNews: function (
     page,
     limit,
     token,
@@ -2624,7 +2657,7 @@ const ApiUtils = {
     }
   },
 
-  changeNewsStatus: function(token, form) {
+  changeNewsStatus: function (token, form) {
     try {
       return fetch(API_URL + "/admin/change-news-status", {
         method: "POST",
@@ -2639,7 +2672,7 @@ const ApiUtils = {
     }
   },
 
-  getNewsDetails: function(token, news_id) {
+  getNewsDetails: function (token, news_id) {
     try {
       return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
         method: "GET",
@@ -2653,7 +2686,7 @@ const ApiUtils = {
     }
   },
 
-  updateReferral: function(token, form) {
+  updateReferral: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update-user-referal", {
         method: "POST",
@@ -2668,7 +2701,7 @@ const ApiUtils = {
     }
   },
 
-  getKYCDetails: function(token, user_id) {
+  getKYCDetails: function (token, user_id) {
     try {
       return fetch(API_URL + "/admin/get-kyc-detail?user_id=" + user_id, {
         method: "GET",
@@ -2682,7 +2715,7 @@ const ApiUtils = {
     }
   },
 
-  getReferredAmounts: function(token, ref_id) {
+  getReferredAmounts: function (token, ref_id) {
     try {
       return fetch(API_URL + "/admin/get-referred-id-data?id=" + ref_id, {
         method: "GET",
@@ -2696,7 +2729,7 @@ const ApiUtils = {
     }
   },
 
-  updateSendCoinFee: function(token, form) {
+  updateSendCoinFee: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update-send-coin-fee", {
         method: "POST",
@@ -2711,8 +2744,23 @@ const ApiUtils = {
     }
   },
 
+  updateFaldaxFee: function (token, form) {
+    try {
+      return fetch(API_URL + "/admin/update-faldax-fee", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   //add user api call
-  addUser: function(token, form) {
+  addUser: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-user", {
         method: "POST",
@@ -2727,7 +2775,7 @@ const ApiUtils = {
     }
   },
 
-  getWalletCoins: function(token) {
+  getWalletCoins: function (token) {
     try {
       return fetch(API_URL + "/coin-list", {
         method: "GET",
@@ -2741,7 +2789,7 @@ const ApiUtils = {
     }
   },
 
-  getUserTickets: function(token, form) {
+  getUserTickets: function (token, form) {
     try {
       return fetch(API_URL + "/admin/get-user-tickets", {
         method: "POST",
@@ -2756,7 +2804,7 @@ const ApiUtils = {
     }
   },
 
-  getAllAccountClasses: function(token, sorterCol, sortOrder) {
+  getAllAccountClasses: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-all-account-classes";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -2775,7 +2823,7 @@ const ApiUtils = {
     }
   },
 
-  addAccountClass: function(token, form) {
+  addAccountClass: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-account-class", {
         method: "POST",
@@ -2790,7 +2838,7 @@ const ApiUtils = {
     }
   },
 
-  updateAccountClass: function(token, form) {
+  updateAccountClass: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update-account-class", {
         method: "POST",
@@ -2805,7 +2853,7 @@ const ApiUtils = {
     }
   },
 
-  deleteAccountClass: function(token, form) {
+  deleteAccountClass: function (token, form) {
     try {
       return fetch(API_URL + "/admin/delete-account-class", {
         method: "POST",
@@ -2820,7 +2868,7 @@ const ApiUtils = {
     }
   },
 
-  getAssetDetails: function(token, coin_id) {
+  getAssetDetails: function (token, coin_id) {
     try {
       return fetch(API_URL + "/admin/coin/get-coin-details?id=" + coin_id, {
         method: "GET",
@@ -2834,7 +2882,7 @@ const ApiUtils = {
     }
   },
 
-  getAssetLimits: function(token, coin_id) {
+  getAssetLimits: function (token, coin_id) {
     try {
       return fetch(API_URL + "/admin/all-limits?coin_id=" + coin_id, {
         method: "GET",
@@ -2848,7 +2896,7 @@ const ApiUtils = {
     }
   },
 
-  updateAssetLimits: function(token, form) {
+  updateAssetLimits: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-limit", {
         method: "PUT",
@@ -2863,7 +2911,7 @@ const ApiUtils = {
     }
   },
 
-  getUserLimits: function(token, user_id) {
+  getUserLimits: function (token, user_id) {
     try {
       return fetch(API_URL + "/admin/all-user-limits?user_id=" + user_id, {
         method: "GET",
@@ -2877,7 +2925,7 @@ const ApiUtils = {
     }
   },
 
-  updateUserLimits: function(token, form) {
+  updateUserLimits: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-user-limit", {
         method: "PUT",
@@ -2892,7 +2940,7 @@ const ApiUtils = {
     }
   },
 
-  getAllEmailTemplates: function(token) {
+  getAllEmailTemplates: function (token) {
     try {
       return fetch(API_URL + "/admin/emailTemplate/get", {
         method: "GET",
@@ -2906,7 +2954,7 @@ const ApiUtils = {
     }
   },
 
-  updateEmailTemplate: function(token, form) {
+  updateEmailTemplate: function (token, form) {
     try {
       return fetch(API_URL + "/admin/emailTemplate/update", {
         method: "PUT",
@@ -2921,7 +2969,7 @@ const ApiUtils = {
     }
   },
 
-  getAllNewsSources: function(token) {
+  getAllNewsSources: function (token) {
     try {
       return fetch(API_URL + "/admin/all-new-source", {
         method: "GET",
@@ -2935,7 +2983,7 @@ const ApiUtils = {
     }
   },
 
-  updateNewsSource: function(token, form) {
+  updateNewsSource: function (token, form) {
     try {
       return fetch(API_URL + "/admin/edit-news-source", {
         method: "PUT",
@@ -2950,7 +2998,7 @@ const ApiUtils = {
     }
   },
 
-  changeWithdrawStatus: function(token, form) {
+  changeWithdrawStatus: function (token, form) {
     try {
       return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
         method: "POST",
@@ -2965,11 +3013,10 @@ const ApiUtils = {
     }
   },
 
-  getTemplateDetails: function(token, template_id) {
+  getTemplateDetails: function (token, template_id) {
     try {
       return fetch(
-        API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id,
-        {
+        API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -2983,7 +3030,7 @@ const ApiUtils = {
   },
 
   //edit job category api call
-  updateJobCategory: function(token, form) {
+  updateJobCategory: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update-job-category", {
         method: "PUT",
@@ -2998,7 +3045,7 @@ const ApiUtils = {
     }
   },
 
-  addJobCategory: function(token, form) {
+  addJobCategory: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-job-category", {
         method: "POST",
@@ -3013,7 +3060,7 @@ const ApiUtils = {
     }
   },
 
-  addWhitelistIP: function(token, form) {
+  addWhitelistIP: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-whitelist-ip", {
         method: "POST",
@@ -3028,15 +3075,14 @@ const ApiUtils = {
     }
   },
 
-  getAllWhitelistIP: function(token, page, limit) {
+  getAllWhitelistIP: function (token, page, limit) {
     try {
       return fetch(
         API_URL +
-          "/admin/get-all-whitelist-ip?page=" +
-          page +
-          "&limit=" +
-          limit,
-        {
+        "/admin/get-all-whitelist-ip?page=" +
+        page +
+        "&limit=" +
+        limit, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3049,7 +3095,7 @@ const ApiUtils = {
     }
   },
 
-  deleteProfileWhitelistIP: function(token, id) {
+  deleteProfileWhitelistIP: function (token, id) {
     try {
       return fetch(API_URL + "/admin/delete-whitelist-ip?id=" + id, {
         method: "DELETE",
@@ -3063,7 +3109,7 @@ const ApiUtils = {
     }
   },
 
-  addProfileWhitelistIP: function(token, form) {
+  addProfileWhitelistIP: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-whitelist-ip", {
         method: "POST",
@@ -3078,17 +3124,16 @@ const ApiUtils = {
     }
   },
 
-  getAllWhitelistIP: function(token, user_id, page, limit) {
+  getAllWhitelistIP: function (token, user_id, page, limit) {
     try {
       return fetch(
         API_URL +
-          "/admin/get-user-whitelist-ip?user_id=" +
-          user_id +
-          "&page=" +
-          page +
-          "&limit=" +
-          limit,
-        {
+        "/admin/get-user-whitelist-ip?user_id=" +
+        user_id +
+        "&page=" +
+        page +
+        "&limit=" +
+        limit, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3101,7 +3146,7 @@ const ApiUtils = {
     }
   },
 
-  deleteEmpWhitelistIP: function(token, id) {
+  deleteEmpWhitelistIP: function (token, id) {
     try {
       return fetch(API_URL + "/admin/delete-user-whitelist-ip?id=" + id, {
         method: "DELETE",
@@ -3115,7 +3160,7 @@ const ApiUtils = {
     }
   },
 
-  addEmpWhitelistIP: function(token, form) {
+  addEmpWhitelistIP: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-user-ip-whitelist", {
         method: "POST",
@@ -3130,7 +3175,7 @@ const ApiUtils = {
     }
   },
 
-  updateUser: function(token, form) {
+  updateUser: function (token, form) {
     try {
       return fetch(API_URL + "/admin/update-user", {
         method: "POST",
@@ -3145,7 +3190,7 @@ const ApiUtils = {
     }
   },
 
-  enableWhitelist: function(token, form) {
+  enableWhitelist: function (token, form) {
     try {
       return fetch(API_URL + "/admin/user-whitelist-ip-status-change", {
         method: "POST",
@@ -3160,7 +3205,7 @@ const ApiUtils = {
     }
   },
 
-  enableProfileWhitelist: function(token, form) {
+  enableProfileWhitelist: function (token, form) {
     try {
       return fetch(API_URL + "/admin/whitelist-ip-status-change", {
         method: "POST",
@@ -3175,7 +3220,7 @@ const ApiUtils = {
     }
   },
 
-  getAll2FARequests: function(
+  getAll2FARequests: function (
     token,
     page,
     limit,
@@ -3233,7 +3278,7 @@ const ApiUtils = {
     }
   },
 
-  approve2FARequest: function(token, form) {
+  approve2FARequest: function (token, form) {
     try {
       return fetch(API_URL + "/admin/approve-twofactors-request-status", {
         method: "POST",
@@ -3248,7 +3293,7 @@ const ApiUtils = {
     }
   },
 
-  rejectRequest: function(token, form) {
+  rejectRequest: function (token, form) {
     try {
       return fetch(API_URL + "/admin/reject-twofactors-request-status", {
         method: "POST",
@@ -3263,7 +3308,7 @@ const ApiUtils = {
     }
   },
 
-  getWalletDetails: function(token, form) {
+  getWalletDetails: function (token, form) {
     try {
       return fetch(API_URL + "/wallet-details", {
         method: "POST",
@@ -3278,7 +3323,7 @@ const ApiUtils = {
     }
   },
 
-  generateWalletAddress: function(token, code) {
+  generateWalletAddress: function (token, code) {
     try {
       return fetch(API_URL + "/users/create-wallet/" + code, {
         method: "GET",
@@ -3292,7 +3337,7 @@ const ApiUtils = {
     }
   },
 
-  generateUserWalletAddress: function(token, coin, userId) {
+  generateUserWalletAddress: function (token, coin, userId) {
     try {
       return fetch(API_URL + "/admin/create-wallet/" + coin + "/" + userId, {
         method: "GET",
@@ -3306,7 +3351,7 @@ const ApiUtils = {
     }
   },
 
-  getAdminThresholds: function(token, code) {
+  getAdminThresholds: function (token, code) {
     try {
       return fetch(API_URL + "/admin/get-admin-thresholds", {
         method: "GET",
@@ -3320,7 +3365,7 @@ const ApiUtils = {
     }
   },
 
-  getAdminContactDetails: function(token, code) {
+  getAdminContactDetails: function (token, code) {
     try {
       return fetch(API_URL + "/admin/get-admin-thresholds-contacts", {
         method: "GET",
@@ -3334,7 +3379,7 @@ const ApiUtils = {
     }
   },
 
-  storeContactDetails: function(token, form) {
+  storeContactDetails: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-admin-thresholds-contacts", {
         method: "POST",
@@ -3349,7 +3394,7 @@ const ApiUtils = {
     }
   },
 
-  saveAllNotification: function(token, form) {
+  saveAllNotification: function (token, form) {
     try {
       return fetch(API_URL + "/admin/add-admin-thresholds", {
         method: "POST",
@@ -3364,7 +3409,7 @@ const ApiUtils = {
     }
   },
 
-  getAllWallets: function(token, search) {
+  getAllWallets: function (token, search) {
     let url = "/admin-wallet-fees-details";
     if (search) {
       url += "?search=" + search;
@@ -3382,7 +3427,7 @@ const ApiUtils = {
     }
   },
 
-  sendWalletBalance: function(token, form) {
+  sendWalletBalance: function (token, form) {
     try {
       return fetch(API_URL + "/send-coin-admin", {
         method: "POST",
@@ -3397,7 +3442,7 @@ const ApiUtils = {
     }
   },
 
-  getAllBatches: function(token, page, limit) {
+  getAllBatches: function (token, page, limit) {
     let url = "/admin/batches/list?page=" + page + "&limit=" + limit;
     try {
       return fetch(API_URL + url, {
@@ -3412,7 +3457,7 @@ const ApiUtils = {
     }
   },
 
-  createBatch: function(token, form) {
+  createBatch: function (token, form) {
     try {
       return fetch(API_URL + "/admin/batches/create", {
         method: "POST",
@@ -3427,7 +3472,7 @@ const ApiUtils = {
     }
   },
 
-  updateBatch: function(token, form) {
+  updateBatch: function (token, form) {
     try {
       return fetch(API_URL + "/admin/batches/update", {
         method: "PUT",
@@ -3442,7 +3487,7 @@ const ApiUtils = {
     }
   },
 
-  getAllTiers: function(token) {
+  getAllTiers: function (token) {
     let url = "/admin/get-tier-details";
     try {
       return fetch(API_URL + url, {
@@ -3457,7 +3502,7 @@ const ApiUtils = {
     }
   },
 
-  getSummaryOfBatch: function(token, transactionStart, transactionEnd) {
+  getSummaryOfBatch: function (token, transactionStart, transactionEnd) {
     let url =
       "/admin/get-batch-value?transaction_start=" +
       transactionStart +
@@ -3476,7 +3521,7 @@ const ApiUtils = {
     }
   },
 
-  getPurchaseOfBatch: function(token, transactionStart, transactionEnd) {
+  getPurchaseOfBatch: function (token, transactionStart, transactionEnd) {
     let url =
       "/admin/get-each-transaction-value?transaction_start=" +
       transactionStart +
@@ -3495,7 +3540,7 @@ const ApiUtils = {
     }
   },
 
-  getBatchDetails: function(token, batchId) {
+  getBatchDetails: function (token, batchId) {
     let url = "/admin/get-batch-detail?id=" + batchId;
     try {
       return fetch(API_URL + url, {
@@ -3510,7 +3555,7 @@ const ApiUtils = {
     }
   },
 
-  getTierDetails: function(token, tierId) {
+  getTierDetails: function (token, tierId) {
     let url = "/admin/get-tier-data?id=" + tierId;
     try {
       return fetch(API_URL + url, {
@@ -3525,7 +3570,7 @@ const ApiUtils = {
     }
   },
 
-  updateTier: function(token, form) {
+  updateTier: function (token, form) {
     let url = "/admin/update-tier-list";
     try {
       return fetch(API_URL + url, {
@@ -3541,7 +3586,7 @@ const ApiUtils = {
     }
   },
 
-  getAllTierRequests: function(token, id, status) {
+  getAllTierRequests: function (token, id, status) {
     let url = "/admin/user-tier-request";
     if (id && status) {
       url += "?id=" + id + "&status=" + status;
@@ -3560,7 +3605,7 @@ const ApiUtils = {
     }
   },
 
-  uploadBatchDoc: function(token, form) {
+  uploadBatchDoc: function (token, form) {
     let url = "/admin/batches/upload";
     try {
       return fetch(API_URL + url, {
@@ -3575,7 +3620,7 @@ const ApiUtils = {
     }
   },
 
-  downloadBatch: function(token, form) {
+  downloadBatch: function (token, form) {
     let url = "/admin/batches/download";
     try {
       return fetch(API_URL + url, {
@@ -3590,11 +3635,10 @@ const ApiUtils = {
     }
   },
 
-  getUserWallets: function(token, user_id) {
+  getUserWallets: function (token, user_id) {
     try {
       return fetch(
-        API_URL + "/admin/get-user-wallet-addresses?user_id=" + user_id,
-        {
+        API_URL + "/admin/get-user-wallet-addresses?user_id=" + user_id, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3607,7 +3651,7 @@ const ApiUtils = {
     }
   },
 
-  getSimplexToken: function(token) {
+  getSimplexToken: function (token) {
     try {
       return fetch(API_URL + "/get-token-value", {
         method: "GET",
@@ -3621,7 +3665,7 @@ const ApiUtils = {
     }
   },
 
-  updateSimplexToken: function(token, form) {
+  updateSimplexToken: function (token, form) {
     let url = "/update-token-value";
     try {
       return fetch(API_URL + url, {
@@ -3636,7 +3680,7 @@ const ApiUtils = {
     }
   },
 
-  getNetworkFee: function(token, sorterCol, sortOrder) {
+  getNetworkFee: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-coin-fees-coin";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -3658,7 +3702,7 @@ const ApiUtils = {
       console.error(error);
     }
   },
-  updateNetworkFee: function(token, body) {
+  updateNetworkFee: function (token, body) {
     const url = "/admin/update-fees-value";
     return fetch(API_URL + url, {
       method: "PUT",
