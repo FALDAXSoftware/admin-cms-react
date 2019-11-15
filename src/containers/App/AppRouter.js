@@ -145,10 +145,20 @@ const routes = [
         module: "simplex_token"
     },
     {
+        path: "campaign",
+        component: asyncComponent(() => import("../Page/Offers/offers")),
+        module: "offers"
+    },
+    {
+        path: "campaign/add-campaign",
+        component: asyncComponent(() => import("../Page/Offers/addCampaign")),
+        module: "offers"
+    },
+    {
         path: "network-fee",
         component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
         module: "network_fee"
-    },
+    }
 ];
 
 const mandatoryRoutes = [
