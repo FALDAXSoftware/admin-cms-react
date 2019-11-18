@@ -24,6 +24,7 @@ import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Column from "antd/lib/table/Column";
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -288,7 +289,7 @@ class AddCampaign extends Component {
       if (
         this.validator1.allValid() &&
         this.validator.allValid() &&
-        this.state.startOfferDate
+        startOfferDate
       ) {
         // alert("offer 2");
         let formdata = {};
@@ -334,7 +335,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         this.state.startDate
       ) {
-        alert("test");
+        // alert("test");
         let formdata = {};
         formdata["code"] = offerFields["offer_name"];
         formdata["description"] = offerFields["offer_code_description"];
@@ -361,7 +362,7 @@ class AddCampaign extends Component {
         });
         this._resetAddOfferForm();
       } else {
-        alert("test2");
+        // alert("test2");
         this.validator1.showMessages();
         this.validator.showMessages();
         if (this.state.startDate) {
@@ -490,7 +491,9 @@ class AddCampaign extends Component {
     console.log("search:", val);
     // this.setState({ filterVal: val });
   }
-
+  getUserText(email, firstname, lastname) {
+    return email + " ( " + firstname + " " + lastname + " )";
+  }
   render() {
     // console.log("errorMessage value", errMsg);
     // if (errMsg) {
@@ -517,7 +520,12 @@ class AddCampaign extends Component {
       errMsg,
       errType
     } = this.state;
-    const columns = [
+    const columns_temp = [
+      {
+        title: "Action",
+        dataIndex: "status",
+        key: "status"
+      },
       {
         title: "Code",
         dataIndex: "code",
@@ -553,18 +561,26 @@ class AddCampaign extends Component {
         title: "End Date",
         dataIndex: "end_date",
         key: "end_date"
-      },
-      {
-        title: "User Id",
-        dataIndex: "user_id",
-        key: "user_id"
-      },
-      {
-        title: "Action",
-        dataIndex: "status",
-        key: "status"
       }
     ];
+    // const columns =
+    //   this.state.checkvalue === 1
+    //     ? columns_temp.concat({
+    //       title: "User Id",
+    //       dataIndex: "user_id",
+    //       key: "user_id"
+    //     })
+    //     : columns_temp;
+    const columns =
+      this.state.checkvalue === 1
+        ? columns_temp.concat({
+            title: "User Id",
+            dataIndex: "user_id",
+            key: "user_id"
+          })
+        : columns_temp;
+
+    // console.log("this is?????", columns);
     return (
       <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent">
@@ -853,32 +869,26 @@ class AddCampaign extends Component {
                         </Col>
                         <Col span={10}>
                           <Select
-                            // getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a user"
-                            // onSearch={this.onSearch}
+                            onSearch={this.onSearch}
                             onChange={this._changeUser}
-                            // optionFilterProp="children"
-                            value={filterVal}
+                            optionFilterProp="children"
                             showSearch
-                            // filterOption={(input, option) =>
-                            //   option.props.children
-                            //     .toLowerCase()
-                            //     .indexOf(input.toLowerCase()) >= 0
-                            // }
+                            filterOption={(input, option) =>
+                              option.props.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                            }
                           >
                             {userList &&
                               userList.map((user, index) => {
                                 return (
-                                  <Option
-                                    key={user.id}
-                                    value={user.id}
-                                    // value={`${user.first_name}${" "}${
-                                    //   user.last_name
-                                    // }`}
-                                  >
-                                    {/* {user.first_name} {user.last_name} */}
-                                    {user.email} ({user.first_name}{" "}
-                                    {user.last_name})
+                                  <Option key={user.id} value={user.id}>
+                                    {this.getUserText(
+                                      user.email,
+                                      user.first_name,
+                                      user.last_name
+                                    )}
                                   </Option>
                                 );
                               })}
