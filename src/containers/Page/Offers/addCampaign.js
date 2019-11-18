@@ -73,13 +73,17 @@ class AddCampaign extends Component {
       openOfferCode: false,
       campaign_offers: [],
       filterVal: "",
-      userList: []
+      userList: [],
+      userIdAssigned: "",
+      errMsg: false,
+      errType: "Success"
     };
     this.onRadioChange = this.onRadioChange.bind(this);
     this.onOfferRadioChange = this.onOfferRadioChange.bind(this);
     this.onDateChange = this.onDateChange.bind(this);
     this.onOfferDateChange = this.onOfferDateChange.bind(this);
     this.getUserList = this.getUserList.bind(this);
+    this.openNotificationWithIcon = this.openNotificationWithIcon.bind(this);
     this.validator = new SimpleReactValidator();
     this.validator1 = new SimpleReactValidator();
   }
@@ -91,9 +95,26 @@ class AddCampaign extends Component {
   _resetAddForm = () => {
     const { fields, endDate, startDate } = this.state;
 
-    fields["campaign_name"] = "";
+    // fields["campaign_name"] = "";
 
-    this.setState({ fields, startDate: "", endDate: "" });
+    // this.setState({ fields, startDate: "", endDate: "" });
+  };
+  _resetAddOfferForm = () => {
+    const { offerFields, startOfferDate, endOfferDate } = this.state;
+    offerFields["offer_name"] = "";
+    offerFields["offer_code_description"] = "";
+    offerFields["no_of_transactions"] = "";
+    offerFields["fees_allowed"] = "";
+    this.setState({
+      offerFields,
+      startOfferDate: "",
+      endOfferDate: "",
+      dateOfferErrMsg: "",
+      checkOfferValue: 1,
+      filterVal: ""
+    });
+    this.validator1.hideMessages();
+    this.forceUpdate();
   };
   getUserList() {
     const { token } = this.props;
@@ -101,7 +122,7 @@ class AddCampaign extends Component {
       .then(res => res.json())
       .then(res => {
         if (res.status == 200) {
-          console.log(res.data);
+          // console.log(res.data);
           this.setState({
             userList: res.data
           });
@@ -121,15 +142,19 @@ class AddCampaign extends Component {
       });
   }
   _addCampaign = e => {
+    const { token } = this.props;
     const {
       fields,
       campaign_offers,
-      startOfferDate,
-      endOfferDate,
+      startDate,
+      endDate,
       is_active,
       checkvalue
     } = this.state;
     e.preventDefault();
+    this.setState({
+      loader: true
+    });
     if (this.state.checkvalue === 1) {
       console.log(this.state.checkvalue);
       if (this.validator.allValid()) {
@@ -139,14 +164,47 @@ class AddCampaign extends Component {
         formdata["description"] = fields["campaign_desc"];
         formdata["no_of_transactions"] = fields["no_of_transactions"];
         formdata["fees_allowed"] = fields["fees_allowed"];
-        formdata["start_date"] = startOfferDate;
-        formdata["end_date"] = endOfferDate;
+        // formdata["start_date"] = startOfferDate;
+        // formdata["end_date"] = endOfferDate;
         formdata["usage"] = checkvalue;
         formdata["is_active"] = is_active;
         formdata["campaign_offers"] = campaign_offers;
         console.log("Add Campaign:", formdata);
-        this._resetAddForm();
+        // this._resetAddForm();
         // this.props.history.push("/dashboard/campaign");
+        ApiUtils.createCampaign(token, formdata)
+          .then(res => res.json())
+          .then(res => {
+            if (res.status == 200) {
+              console.log("create Campaign", res.data);
+              this.openNotificationWithIcon("success", "Success", res.message);
+              this.props.history.push("/dashboard/campaign");
+            } else if (res.status == 400) {
+              // alert("error", res.message);
+              // console.log("error", res.message);
+              // this.setState({
+              //   errMsg: true,
+              //   errMessage: res.message,
+              //   errType: "error"
+              // });
+              this.openNotificationWithIcon("error", "Error", "Please add atleast 1 offer for the campaign.");
+            } else if (res.status == 403) {
+              this.setState(
+                { errMsg: true, errMessage: res.err, errType: "error" },
+                () => {
+                  this.props.logout();
+                }
+              );
+            } else {
+              this.setState({ errMsg: true, errMessage: res.message });
+            }
+            this.setState({
+              loader: false
+            });
+          })
+          .catch(err => {
+            this.setState({ loader: false });
+          });
       } else {
         this.validator.showMessages();
         this.forceUpdate();
@@ -155,7 +213,53 @@ class AddCampaign extends Component {
     if (this.state.checkvalue === 2) {
       console.log(this.state.checkvalue);
       if (this.validator.allValid() && this.state.startDate) {
-        alert("success 2");
+        // alert("success 2");
+        let formdata = {};
+        formdata["label"] = fields["campaign_name"];
+        formdata["description"] = fields["campaign_desc"];
+        formdata["no_of_transactions"] = fields["no_of_transactions"];
+        formdata["fees_allowed"] = fields["fees_allowed"];
+        formdata["start_date"] = startDate.format("YYYY-MM-DD");
+        formdata["end_date"] = endDate.format("YYYY-MM-DD");
+        formdata["usage"] = checkvalue;
+        formdata["is_active"] = is_active;
+        formdata["campaign_offers"] = campaign_offers;
+        console.log("Add Campaign:", formdata);
+        // this._resetAddForm();
+        // this.props.history.push("/dashboard/campaign");
+        ApiUtils.createCampaign(token, formdata)
+          .then(res => res.json())
+          .then(res => {
+            if (res.status == 200) {
+              console.log("create Campaign", res.data);
+              // this.setState({
+              //   userList: res.data
+              // });
+            } else if (res.status == 403) {
+              this.openNotificationWithIcon("error", "Error", res.message);
+              this.props.logout();
+              // this.setState(
+              //   { errMsg: true, errMessage: res.err, errType: "error" },
+              //   () => {
+              //     this.props.logout();
+              //   }
+              // );
+            } else if (res.status == 400) {
+              // alert("error", res.message);
+              this.openNotificationWithIcon("error", "Error", res.message);
+              // this.setState({
+              //   errMsg: true,
+              //   errMessage: res.message,
+              //   errType: "error"
+              // });
+            } else {
+              // this.setState({ errMsg: true, errMessage: res.message });
+              this.openNotificationWithIcon("error", "Error", res.message);
+            }
+          })
+          .catch(err => {
+            this.setState({ loader: false });
+          });
       } else {
         this.validator.showMessages();
         this.forceUpdate();
@@ -179,7 +283,8 @@ class AddCampaign extends Component {
       endOfferDate,
       is_offer_active,
       checkOfferValue,
-      campaign_offers
+      campaign_offers,
+      userIdAssigned
     } = this.state;
     e.preventDefault();
     if (this.state.checkvalue === 1) {
@@ -191,13 +296,13 @@ class AddCampaign extends Component {
         formdata["is_default_values"] = checkOfferValue === 1 ? true : false;
         formdata["no_of_transactions"] =
           checkOfferValue === 1
-            ? fields["no_of_transctions"]
-            : offerFields["no_of_transctions"];
+            ? fields["no_of_transactions"]
+            : offerFields["no_of_transactions"];
         formdata["fees_allowed"] =
           checkOfferValue === 1
             ? fields["fees_allowed"]
             : offerFields["fees_allowed"];
-        formdata["user_id"] = offerFields["offer_name"];
+        formdata["user_id"] = userIdAssigned;
         formdata["start_date"] = startOfferDate.format("YYYY-MM-DD");
         formdata["end_date"] = endOfferDate.format("YYYY-MM-DD");
         formdata["is_active"] = is_offer_active;
@@ -206,6 +311,7 @@ class AddCampaign extends Component {
         this.setState({
           openOfferCode: false
         });
+        this._resetAddOfferForm();
       } else {
         this.validator1.showMessages();
         this.forceUpdate();
@@ -267,8 +373,8 @@ class AddCampaign extends Component {
     );
   };
   onDateChange(dates, dateStrings) {
-    console.log("From: ", dates[0], ", to: ", dates[1]);
-    console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+    // console.log("From: ", dates[0], ", to: ", dates[1]);
+    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
     // this.setState({});
     if (dates[0] === undefined || dates[1] === undefined) {
       this.setState({
@@ -283,8 +389,8 @@ class AddCampaign extends Component {
     }
   }
   onOfferDateChange(dates, dateStrings) {
-    console.log("From: ", dates[0], ", to: ", dates[1]);
-    console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+    // console.log("From: ", dates[0], ", to: ", dates[1]);
+    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
     // this.setState({});
     if (dates[0] === undefined || dates[1] === undefined) {
       this.setState({
@@ -301,6 +407,8 @@ class AddCampaign extends Component {
   onRadioChange = e => {
     this.setState({
       checkvalue: e.target.value,
+      startDate: "",
+      endDate: "",
       openOfferCode: false
     });
   };
@@ -310,17 +418,32 @@ class AddCampaign extends Component {
     });
   };
   _changeUser = val => {
-    this.setState({ filterVal: val });
+    console.log("user details", val);
+    this.setState({ filterVal: val, userIdAssigned: val });
   };
-  openNotificationWithIcon = type => {
+  // openNotificationWithIconError = type => {
+  //   notification[type]({
+  //     message: this.state.errType,
+  //     description: this.state.errMessage
+  //   });
+  //   this.setState({ errMsg: false });
+  // };
+  openNotificationWithIcon(type, head, desc) {
     notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage
+      message: head,
+      description: desc
     });
-    this.setState({ errMsg: false });
-  };
+  }
+  onSearch(val) {
+    console.log("search:", val);
+    // this.setState({ filterVal: val });
+  }
 
   render() {
+    // console.log("errorMessage value", errMsg);
+    // if (errMsg) {
+    //   this.openNotificationWithIconError(errType.toLowerCase());
+    // }
     const {
       loader,
       fields,
@@ -338,7 +461,9 @@ class AddCampaign extends Component {
       openOfferCode,
       campaign_offers,
       filterVal,
-      userList
+      userList,
+      errMsg,
+      errType
     } = this.state;
     const columns = [
       {
@@ -354,7 +479,8 @@ class AddCampaign extends Component {
       {
         title: "Status",
         dataIndex: "is_active",
-        key: "is_active"
+        key: "is_active",
+        render: object => (object === true ? "Active" : "Inactive")
       },
       {
         title: "No of transactions",
@@ -630,14 +756,14 @@ class AddCampaign extends Component {
                             placeholder="Number of Transactions"
                             onChange={this._handleOfferChange.bind(
                               this,
-                              "no_of_transctions"
+                              "no_of_transactions"
                             )}
-                            value={offerFields["no_of_transctions"]}
+                            value={offerFields["no_of_transactions"]}
                           />
                           <ValidSpan>
                             {this.validator1.message(
                               "no of transactions",
-                              offerFields["no_of_transctions"],
+                              offerFields["no_of_transactions"],
                               "required|numeric",
                               "text-danger-validation"
                             )}
@@ -654,7 +780,7 @@ class AddCampaign extends Component {
                             value={offerFields["fees_allowed"]}
                           />
                           <ValidSpan>
-                            {this.validator.message(
+                            {this.validator1.message(
                               "total fees allowed",
                               offerFields["fees_allowed"],
                               "required|numeric",
@@ -671,16 +797,31 @@ class AddCampaign extends Component {
                         </Col>
                         <Col span={10}>
                           <Select
-                            getPopupContainer={trigger => trigger.parentNode}
+                            // getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a user"
+                            // onSearch={this.onSearch}
                             onChange={this._changeUser}
+                            // optionFilterProp="children"
                             value={filterVal}
+                            showSearch
+                            // filterOption={(input, option) =>
+                            //   option.props.children
+                            //     .toLowerCase()
+                            //     .indexOf(input.toLowerCase()) >= 0
+                            // }
                           >
                             {userList &&
                               userList.map((user, index) => {
                                 return (
-                                  <Option key={user.id} value={user.first_name}>
+                                  <Option
+                                    key={user.id}
+                                    value={user.id}
+                                    // value={`${user.first_name}${" "}${
+                                    //   user.last_name
+                                    // }`}
+                                  >
                                     {user.first_name} {user.last_name}
+                                    {/* {user.email} */}
                                   </Option>
                                 );
                               })}
@@ -703,9 +844,14 @@ class AddCampaign extends Component {
                         type="primary"
                         className="user-btn"
                         onClick={e => {
-                          this.setState({
-                            openOfferCode: false
-                          });
+                          this.setState(
+                            {
+                              openOfferCode: false
+                            },
+                            () => {
+                              this._resetAddOfferForm();
+                            }
+                          );
                         }}
                       >
                         Close
