@@ -2605,6 +2605,54 @@ const CoinNoteCell=(slug)=>{
   );
 }
 
+const CampaignActionCell = () => {
+  return (
+    <React.Fragment>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => viewActiveUser()}
+        />
+      </Tooltip>
+      <Tooltip title="View">
+        <Icon
+          type="delete"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => deleteActiveUser()}
+        />
+      </Tooltip>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => editActiveUser()}
+        />
+      </Tooltip>
+    </React.Fragment>
+  );
+};
+
+ const CampaignSwitchCell = (
+        value,
+        campaign_id,
+        campaign_label,
+        campaign_start_date,
+        campaign_end_date,
+        campaign_is_active,
+        campaign_created_at,
+        campaign_updated_at,
+        campaign_deleted_at,
+) => (
+    <Switch
+      checked={campaign_is_active}
+      onChange={() => {
+        roleStatus(
+        );
+      }}
+    />
+  );
+
 export {
   IPCell,
   DateCell,
@@ -2686,5 +2734,7 @@ export {
   ReferralNameCell,
   ObjectCell,
   CoinFeesActionCell,
-  CoinNoteCell
+  CoinNoteCell,
+  CampaignActionCell,
+  CampaignSwitchCell
 };

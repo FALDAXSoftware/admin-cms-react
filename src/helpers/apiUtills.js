@@ -3743,6 +3743,24 @@ const ApiUtils = {
       },
       body: JSON.stringify(body)
     });
+  },
+  offers:function (token){
+    return {
+      url: "/admin/campaigns/",
+      headers: {
+        Authorization: "Bearer " + token
+      },
+      getCampaignList: function() {
+        let formData=new FormData();
+        formData.append("page",1)
+        formData.append("limit",1)
+        return fetch(`${API_URL}${this.url}list`, {
+          method: "POST",
+          headers: this.headers,
+          body: formData
+        });
+      }
+    };
   }
 };
 export default ApiUtils;
