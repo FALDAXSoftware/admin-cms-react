@@ -196,7 +196,8 @@ class AddCampaign extends Component {
                 }
               );
             } else {
-              this.setState({ errMsg: true, errMessage: res.message });
+              // this.setState({ errMsg: true, errMessage: res.message });
+              this.openNotificationWithIcon("error", "Error", res.message);
             }
             this.setState({
               loader: false

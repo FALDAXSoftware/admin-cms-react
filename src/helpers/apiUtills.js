@@ -2479,6 +2479,21 @@ const ApiUtils = {
     }
   },
 
+  // get campaign details api
+  getCampaignDetails: function(token, campaign_id) {
+    try {
+      return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   // get employee details api
   getEmployeeDetails: function(token, emp_id) {
     try {
