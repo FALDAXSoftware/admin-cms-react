@@ -32,14 +32,17 @@ class AddUser extends Component {
       fields: {},
       tierMsg: false,
       countryCode: "",
+      stateID:"",
       selectedClass: "",
       errType: "Success",
       allCoins: [],
       showClassError: false,
+      showPasswordError: false,
       isKYC: false,
-      indeterminate: true,
+      indeterminate: false,
       checkAll: false,
       showDOBErr: false,
+      password:"",
       selectedGender: "male"
     };
     this.validator = new SimpleReactValidator();
@@ -150,6 +153,8 @@ class AddUser extends Component {
       selectedClass,
       isKYC,
       countryCode,
+      stateID,
+      countryID,
       password,
       countrySelected,
       stateSelected,
@@ -160,7 +165,7 @@ class AddUser extends Component {
     } = this.state;
     let _this = this;
 
-    if (this.validator.allValid() && selectedTier && selectedClass) {
+    if (this.validator.allValid() && selectedTier && selectedClass && password.length > 0) {
       let formData = {
         first_name: fields["first_name"],
         last_name: fields["last_name"],
@@ -175,6 +180,7 @@ class AddUser extends Component {
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
+        state_id:stateID,
         generate_wallet_coins: checkedList,
         kyc_done: isKYC,
         gender: selectedGender,
@@ -226,6 +232,7 @@ class AddUser extends Component {
       this.setState({
         showTierError: selectedTier ? false : true,
         showClassError: selectedClass ? false : true,
+        showPasswordError:password?false:true,
         loader: false,
         showDOBErr: dob ? false : true
       });
@@ -235,7 +242,7 @@ class AddUser extends Component {
   };
 
   _changeAccountTier = (field, value) => {
-    this.setState({ selectedTier: value });
+    this.setState({ selectedTier: value ,showTierError:value?false:true});
   };
 
   onCountryChange(country, state, city, stateID, countryID, countryCode) {
@@ -243,12 +250,15 @@ class AddUser extends Component {
       countrySelected: country,
       stateSelected: state,
       citySelected: city,
-      countryCode
+      countryCode,
+      stateID:stateID,
+      countryID
+      
     });
   }
 
   _changeAccountClass = (field, value) => {
-    this.setState({ selectedClass: value });
+    this.setState({ selectedClass: value,showClassError:value?false:true});
   };
 
   _isKYCCompleted = e => {
@@ -304,9 +314,11 @@ class AddUser extends Component {
       allCoins,
       showClassError,
       showDOBErr,
+      password,
       isKYC,
       selectedGender,
-      allAccountClasses
+      allAccountClasses,
+      showPasswordError
     } = this.state;
 
     if (errMsg) {
@@ -473,8 +485,7 @@ class AddUser extends Component {
               </Select>
             </Col>
           </Row>
-          <Row>
-            <Col sm={24}>
+        
               <CountryFields
                 {...this.props}
                 onCountryChange={(
@@ -495,8 +506,7 @@ class AddUser extends Component {
                   )
                 }
               />
-            </Col>
-          </Row>
+      
           <Row style={{ marginBottom: "15px", paddingTop: "78px" }}>
             <Col>
               <span>Postal Code:</span>
@@ -577,7 +587,8 @@ class AddUser extends Component {
             <Col>
               <span>Select Assets to generate wallet address:</span>
               <br />
-              <Checkbox
+              <Checkbox 
+              className="mg-top-1"
                 indeterminate={this.state.indeterminate}
                 onChange={this.onCheckAllChange}
                 checked={this.state.checkAll}
@@ -596,6 +607,12 @@ class AddUser extends Component {
           <br />
           <br />
           <PasswordGenerator getPassword={this._getPassword.bind(this)} />
+          {showPasswordError && password.length==0 
+          && (
+                <span style={{ color: "red" }}>
+                  {"The Password is required."}
+                </span>
+              )}
           <Row>
             <Col>
               <Button

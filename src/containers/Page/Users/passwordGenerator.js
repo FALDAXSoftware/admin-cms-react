@@ -78,7 +78,7 @@ class PasswordGenerator extends Component {
 
     return (
       <React.Fragment>
-        <Card title="Password Generator" style={{ width: 300 }}>
+        <Card title="Password Generator" style={{ width: "100%"}}>
           <div style={{ marginBottom: "15px" }}>
             <span>Length:</span>
             <Input
@@ -99,7 +99,7 @@ class PasswordGenerator extends Component {
             checked={numbers}
             onChange={this._changeCheckbox.bind(this, "numbers")}
           />{" "}
-          <span>Numbers</span>
+          <span>Numbers/Character</span>
           <br />
           <Checkbox
             checked={symbols}
@@ -122,9 +122,10 @@ class PasswordGenerator extends Component {
             Generate
           </Button>
           <br />
+          <br/>
           {password.length > 0 && (
             <span>
-              Generated Password is <PassWordB>{password}</PassWordB>
+            Your Generated Password is <PassWordB>{password}</PassWordB> 
             </span>
           )}
           {password.length < 0 && <span>Password is required.</span>}
