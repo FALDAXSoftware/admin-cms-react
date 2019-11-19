@@ -2479,21 +2479,7 @@ const ApiUtils = {
     }
   },
 
-  // get campaign details api
-  getCampaignDetails: function(token, campaign_id) {
-    try {
-      return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  },
-
+  
   // get employee details api
   getEmployeeDetails: function(token, emp_id) {
     try {
@@ -3759,21 +3745,49 @@ const ApiUtils = {
       body: JSON.stringify(body)
     });
   },
+  // Offer Module API's
   offers:function (token){
     return {
       url: "/admin/campaigns/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getCampaignList: function() {
-        let formData=new FormData();
-        formData.append("page",1)
-        formData.append("limit",1)
+      getCampaignList: function(page, limit) {
+        let formData = new FormData();
+        formData.append("page", page);
+        formData.append("limit", limit);
         return fetch(`${API_URL}${this.url}list`, {
           method: "POST",
           headers: this.headers,
           body: formData
         });
+      },
+      changeStatus: function(id, status = false) {
+        let formData = new FormData();
+        formData.append("status", status);
+        return fetch(`${API_URL}${this.url}change-status/${id}`, {
+          method: "PUT",
+          headers: this.headers,
+          body: formData
+        });
+      },
+      updateCampaign: function(id, data) {
+        return fetch(`${API_URL}${this.url}update/${id}`, {
+          method: "PUT",
+          headers: this.headers,
+          body: JSON.stringify(data)
+        });
+      },
+      // get campaign details api
+      getById: function(campaign_id) {
+        try {
+          return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
+            method: "GET",
+            headers:this.headers
+          });
+        } catch (error) {
+          console.error(error);
+        }
       }
     };
   }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-  Tabs,
+  Tag,
   notification,
   Input,
   Form,
@@ -12,7 +12,10 @@ import {
   Button,
   Card,
   Table,
-  Select
+  Select,
+  Divider,
+  Icon,
+  Tooltip
 } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import moment from "moment";
@@ -24,13 +27,70 @@ import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Column from "antd/lib/table/Column";
-
-const TabPane = Tabs.TabPane;
+import { DateCell } from "../../../components/tables/helperCells";
 const Option = Select.Option;
 const { logout } = authAction;
-const TextArea = Input.TextArea;
 const { RangePicker } = DatePicker;
+var self;
+const columns_temp = [
+  {
+    title: "Action",
+    dataIndex: "id",
+    key: "id",
+    render: id => (
+      <Tooltip title="edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => AddCampaign.editOffer(id)}
+        />
+      </Tooltip>
+    )
+  },
+  {
+    title: "Code",
+    dataIndex: "code",
+    key: "code"
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+    key: "description"
+  },
+  {
+    title: "No of transactions",
+    dataIndex: "no_of_transactions",
+    key: "no_of_transactions"
+  },
+  {
+    title: "Total fees allowed",
+    dataIndex: "fees_allowed",
+    key: "fees_allowed",
+    render: fees => <span>{fees} USD</span>
+  },
+  {
+    title: "Start Date",
+    dataIndex: "start_date",
+    key: "start_date",
+    render: start_date => DateCell(start_date)
+  },
+  {
+    title: "End Date",
+    dataIndex: "end_date",
+    key: "end_date",
+    render: end_date => DateCell(end_date)
+  },
+  {
+    title: "Status",
+    dataIndex: "is_active",
+    key: "is_active",
+    render: object => (
+      <Tag color={object == true ? "geekblue" : "grey"}>
+        {object === true ? "Active" : "Inactive"}
+      </Tag>
+    )
+  },
+];
 const ValidSpan = styled.div`
   color: red;
 `;
@@ -73,12 +133,16 @@ class AddCampaign extends Component {
       dateOfferErrMsg: "",
       openOfferCode: false,
       campaign_offers: [],
+      campaignId:0,
       filterVal: "",
       userList: [],
       userIdAssigned: "",
       errMsg: false,
       errType: "Success",
-      disabledRadio: false
+      disabledRadio: false,
+      isUpdate:false,
+      isOfferUpdate:false,
+      offerId:0
     };
     this.onRadioChange = this.onRadioChange.bind(this);
     this.onOfferRadioChange = this.onOfferRadioChange.bind(this);
@@ -88,19 +152,70 @@ class AddCampaign extends Component {
     this.openNotificationWithIcon = this.openNotificationWithIcon.bind(this);
     this.validator = new SimpleReactValidator();
     this.validator1 = new SimpleReactValidator();
+    self=this;
   }
 
   componentDidMount = () => {
+    let campaignId=this.props.match.params.id;
+    console.log(campaignId);
+    if(campaignId){
+      this.setState({isUpdate:true,campaignId},()=>this.getCampaignById())
+    }
     this.getUserList();
+
   };
+
+  async getCampaignById(){
+    try{
+      let {token} =this.props;
+      let {fields}=this.state;
+      this.setState({loader:false});
+      let res=await(await ApiUtils.offers(token).getById(this.state.campaignId)).json();
+      if(res.status==200){
+        fields["campaign_name"]=res.data.label;
+        fields["campaign_desc"]=res.data.description;
+        fields["no_of_transactions"]=res.data.no_of_transactions;
+        fields["fees_allowed"]=res.data.fees_allowed;
+        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers});
+        this.setState(fields);
+      }else if(res.status==401 || res.status==403){
+        this.setState({errMsg:true,errType:"error",errMessage:res.message});  
+      }
+    }catch(error){
+      this.setState({errMsg:true,errType:"error",errMessage:"Something went to wrong"});
+    }finally{
+      this.setState({loader:false})
+    }
+  }
+
+  static editOffer(id){
+    if(self.state.isUpdate){
+      let index=self.state.campaign_offers.findIndex((ele)=>ele.id==id)
+      if(index!=-1){
+        let {offerFields}=self.state;
+        offerFields['offer_name']=self.state.campaign_offers[index].code;
+        offerFields['offer_code_description']=self.state.campaign_offers[index].description;
+        offerFields['no_of_transactions']=self.state.campaign_offers[index].no_of_transactions;
+        offerFields['fees_allowed']=self.state.campaign_offers[index].fees_allowed;
+        self.setState({
+          openOfferCode:true,
+          startOfferDate:moment(self.state.campaign_offers[index].start_date),
+          endOfferDate:moment(self.state.campaign_offers[index].end_date),
+          is_offer_active:self.state.campaign_offers[index].is_active,
+          checkOfferValue:self.state.campaign_offers[index].is_default_values?1:2,
+          filterVal: self.state.campaign_offers[index].user_id,
+          userIdAssigned: self.state.campaign_offers[index].user_id,
+          isOfferUpdate:true,
+          offerId:id
+        })
+      }
+    }
+  }
 
   _resetAddForm = () => {
     const { fields, endDate, startDate } = this.state;
-
-    // fields["campaign_name"] = "";
-
-    // this.setState({ fields, startDate: "", endDate: "" });
   };
+
   _resetAddOfferForm = () => {
     const { offerFields, startOfferDate, endOfferDate } = this.state;
     offerFields["offer_name"] = "";
@@ -151,7 +266,9 @@ class AddCampaign extends Component {
       startDate,
       endDate,
       is_active,
-      checkvalue
+      checkvalue,
+      isUpdate,
+      campaignId
     } = this.state;
     e.preventDefault();
 
@@ -165,15 +282,26 @@ class AddCampaign extends Component {
         formdata["description"] = fields["campaign_desc"];
         formdata["no_of_transactions"] = fields["no_of_transactions"];
         formdata["fees_allowed"] = fields["fees_allowed"];
-        // formdata["start_date"] = startOfferDate;
-        // formdata["end_date"] = endOfferDate;
         formdata["usage"] = checkvalue;
         formdata["is_active"] = is_active;
-        formdata["campaign_offers"] = campaign_offers;
-        console.log("Add Campaign:", formdata);
-        // this._resetAddForm();
-        // this.props.history.push("/dashboard/campaign");
-        ApiUtils.createCampaign(token, formdata)
+        formdata["campaign_offers"]=[];
+        if(isUpdate){
+          for(let offer of campaign_offers){
+            if(offer['campaign_offers_new']){
+              delete offer.campaign_offers_new;
+              delete offer.id;
+              if(!formdata['campaign_offers_new']){
+                formdata['campaign_offers_new']=[]
+              }
+              formdata['campaign_offers_new'].push(offer)
+            }else{
+              formdata['campaign_offers'].push(offer)
+            }
+          }
+        }else{
+          formdata["campaign_offers"] = campaign_offers;
+        }
+        (isUpdate? ApiUtils.offers(token).updateCampaign(campaignId,formdata):ApiUtils.createCampaign(token, formdata))
           .then(res => res.json())
           .then(res => {
             if (res.status == 200) {
@@ -181,8 +309,6 @@ class AddCampaign extends Component {
               this.openNotificationWithIcon("success", "Success", res.message);
               this.props.history.push("/dashboard/campaign");
             } else if (res.status == 400) {
-              ype: "error";
-
               this.openNotificationWithIcon(
                 "error",
                 "Error",
@@ -226,11 +352,24 @@ class AddCampaign extends Component {
         formdata["end_date"] = endDate.format("YYYY-MM-DD");
         formdata["usage"] = checkvalue;
         formdata["is_active"] = is_active;
-        formdata["campaign_offers"] = campaign_offers;
-        console.log("Add Campaign:", formdata);
-        // this._resetAddForm();
-        // this.props.history.push("/dashboard/campaign");
-        ApiUtils.createCampaign(token, formdata)
+        formdata["campaign_offers"]=[];
+        if(isUpdate){
+          for(let offer of campaign_offers){
+            if(offer['campaign_offers_new']){
+              delete offer.campaign_offers_new;
+              delete offer.id;
+              if(!formdata['campaign_offers_new']){
+                formdata['campaign_offers_new']=[]
+              }
+              formdata['campaign_offers_new'].push(offer)
+            }else{
+              formdata['campaign_offers'].push(offer)
+            }
+          }
+        }else{
+          formdata["campaign_offers"] = campaign_offers;
+        }
+        (isUpdate? ApiUtils.offers(token).updateCampaign(campaignId,formdata):ApiUtils.createCampaign(token, formdata))
           .then(res => res.json())
           .then(res => {
             if (res.status == 200) {
@@ -283,7 +422,10 @@ class AddCampaign extends Component {
       is_offer_active,
       checkOfferValue,
       campaign_offers,
-      userIdAssigned
+      userIdAssigned,
+      isOfferUpdate,
+      offerId,
+      isUpdate
     } = this.state;
     e.preventDefault();
     if (this.state.checkvalue === 1) {
@@ -310,8 +452,23 @@ class AddCampaign extends Component {
         formdata["end_date"] = endOfferDate.format("YYYY-MM-DD");
         formdata["is_active"] = is_offer_active;
         console.log("Add Offer:", formdata);
-        campaign_offers.push(formdata);
+        if(isUpdate){
+          if(isOfferUpdate){
+            let index=campaign_offers.findIndex(ele=>ele.id==offerId)
+            if(index!=-1){
+              formdata["id"] = offerId;
+              campaign_offers[index]=formdata;
+            }
+            }else{
+              formdata["id"]=new Date().getTime();
+              formdata["campaign_offers_new"]=true;
+              campaign_offers.push(formdata);      
+            }
+          }else{
+            campaign_offers.push(formdata);
+          }
         this.setState({
+          campaign_offers:campaign_offers,
           openOfferCode: false,
           disabledRadio: true
         });
@@ -356,8 +513,23 @@ class AddCampaign extends Component {
         formdata["end_date"] = endDate ? endDate.format("YYYY-MM-DD") : "";
         formdata["is_active"] = is_offer_active;
         console.log("Add Offer:", formdata);
-        campaign_offers.push(formdata);
+        if(isUpdate){
+          if(isOfferUpdate){
+            let index=campaign_offers.findIndex(ele=>ele.id==offerId)
+            if(index!=-1){
+              formdata["id"] = offerId;
+              campaign_offers[index]=formdata;
+            }
+            }else{
+              formdata["id"]=new Date().getTime();
+              formdata["campaign_offers_new"]=true;
+              campaign_offers.push(formdata);      
+            }
+          }else{
+            campaign_offers.push(formdata);
+          }
         this.setState({
+          campaign_offers:campaign_offers,
           openOfferCode: false,
           disabledRadio: true
         });
@@ -519,59 +691,11 @@ class AddCampaign extends Component {
       filterVal,
       userList,
       errMsg,
-      errType
+      isUpdate,
+      errType,
+      isOfferUpdate
     } = this.state;
-    const columns_temp = [
-      {
-        title: "Action",
-        dataIndex: "status",
-        key: "status"
-      },
-      {
-        title: "Code",
-        dataIndex: "code",
-        key: "code"
-      },
-      {
-        title: "Description",
-        dataIndex: "description",
-        key: "description"
-      },
-      {
-        title: "Status",
-        dataIndex: "is_active",
-        key: "is_active",
-        render: object => (object === true ? "Active" : "Inactive")
-      },
-      {
-        title: "No of transactions",
-        dataIndex: "no_of_transactions",
-        key: "no_of_transactions"
-      },
-      {
-        title: "Total fees allowed",
-        dataIndex: "fees_allowed",
-        key: "fees_allowed"
-      },
-      {
-        title: "Start Date",
-        dataIndex: "start_date",
-        key: "start_date"
-      },
-      {
-        title: "End Date",
-        dataIndex: "end_date",
-        key: "end_date"
-      }
-    ];
-    // const columns =
-    //   this.state.checkvalue === 1
-    //     ? columns_temp.concat({
-    //       title: "User Id",
-    //       dataIndex: "user_id",
-    //       key: "user_id"
-    //     })
-    //     : columns_temp;
+
     const columns =
       this.state.checkvalue === 1
         ? columns_temp.concat({
@@ -580,8 +704,6 @@ class AddCampaign extends Component {
             key: "user_id"
           })
         : columns_temp;
-
-    // console.log("this is?????", columns);
     return (
       <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent">
@@ -599,7 +721,7 @@ class AddCampaign extends Component {
               Back
             </a>
           </Link>
-          <h2>Add Campaign</h2>
+          <h2>{isUpdate?'Update':'Add'} Campaign</h2>
           <CampForm onSubmit={this._addCampaign}>
             <Row>
               <CampaignCol>
@@ -608,6 +730,7 @@ class AddCampaign extends Component {
                   placeholder="Name"
                   onChange={this._handleChange.bind(this, "campaign_name")}
                   value={fields["campaign_name"]}
+                  disabled={isUpdate}
                 />
                 <ValidSpan>
                   {this.validator.message(
@@ -632,6 +755,7 @@ class AddCampaign extends Component {
                   placeholder="Number of Transactions"
                   onChange={this._handleChange.bind(this, "no_of_transactions")}
                   value={fields["no_of_transactions"]}
+                  disabled={isUpdate}
                 />
                 <ValidSpan>
                   {this.validator.message(
@@ -648,6 +772,7 @@ class AddCampaign extends Component {
                   placeholder="Total Fees Allowed"
                   onChange={this._handleChange.bind(this, "fees_allowed")}
                   value={fields["fees_allowed"]}
+                  disabled={isUpdate}
                 />
                 <ValidSpan>
                   {this.validator.message(
@@ -658,22 +783,6 @@ class AddCampaign extends Component {
                   )}
                 </ValidSpan>
               </CampaignCol>
-              {/* <CampaignCol>
-                <CampRow>
-                  <Col span={4}>
-                    <span>Campaign Status:</span>
-                  </Col>
-                  <Col span={20}>
-                    <StatusSwitch
-                      checked={is_active}
-                      checkedChildren="Active"
-                      unCheckedChildren="Inactive"
-                      size="large"
-                      onChange={this._campaignStatus.bind(this)}
-                    />
-                  </Col>
-                </CampRow>
-              </CampaignCol> */}
               <CampaignCol>
                 <Radio.Group
                   disabled={this.state.disabledRadio}
@@ -714,7 +823,8 @@ class AddCampaign extends Component {
             {/* Offer Code listing start */}
             {campaign_offers.length > 0 && (
               <Row>
-                <Table dataSource={campaign_offers} columns={columns} />
+                <Divider orientation="left">Offers</Divider>
+                <Table bordered dataSource={campaign_offers} columns={columns} pagination={false}/>
               </Row>
             )}
             {/* Offer Code listing end */}
@@ -726,7 +836,8 @@ class AddCampaign extends Component {
                     className="user-btn"
                     onClick={e => {
                       this.setState({
-                        openOfferCode: true
+                        openOfferCode: true,
+                        isOfferUpdate:false,
                       });
                     }}
                   >
@@ -739,12 +850,13 @@ class AddCampaign extends Component {
             {openOfferCode && (
               <Row>
                 <Card>
-                  <h2>Add Offer Code</h2>
+                  <h2>{isOfferUpdate?'Update':'Add'} Offer Codes</h2>
                   <CampForm>
                     <CampaignCol>
                       <span>Offer Code*:</span>
                       <Input
                         placeholder="Offer Code"
+                        disabled={isOfferUpdate}
                         onChange={this._handleOfferChange.bind(
                           this,
                           "offer_name"
@@ -795,6 +907,7 @@ class AddCampaign extends Component {
                           </Col>
                           <Col span={18}>
                             <RangePicker
+                              disabled={isOfferUpdate}
                               ranges={{
                                 Today: [moment(), moment()],
                                 "This Month": [
@@ -814,6 +927,7 @@ class AddCampaign extends Component {
                     )}
                     <CampaignCol>
                       <Radio.Group
+                        disabled={isOfferUpdate}
                         onChange={this.onOfferRadioChange}
                         value={checkOfferValue}
                       >
@@ -827,6 +941,7 @@ class AddCampaign extends Component {
                           <span>Default Total Number of Transactions:</span>
                           <Input
                             placeholder="Number of Transactions"
+                            disabled={isOfferUpdate}
                             onChange={this._handleOfferChange.bind(
                               this,
                               "no_of_transactions"
@@ -846,6 +961,7 @@ class AddCampaign extends Component {
                           <span>Default Total Fees Allowed:</span>
                           <Input
                             placeholder="Total Fees Allowed"
+                            disabled={isOfferUpdate}
                             onChange={this._handleOfferChange.bind(
                               this,
                               "fees_allowed"
@@ -870,10 +986,12 @@ class AddCampaign extends Component {
                         </Col>
                         <Col span={10}>
                           <Select
+                            disabled={isOfferUpdate}
                             placeholder="Select a user"
                             onSearch={this.onSearch}
                             onChange={this._changeUser}
                             optionFilterProp="children"
+                            value={(parseInt(filterVal)||"")}
                             showSearch
                             filterOption={(input, option) =>
                               option.props.children
@@ -914,7 +1032,7 @@ class AddCampaign extends Component {
                           this._addOffer(e);
                         }}
                       >
-                        Add
+                      {isOfferUpdate?'Update':'Add'}
                       </Button>
                       <Button
                         type="primary"
@@ -941,13 +1059,13 @@ class AddCampaign extends Component {
             <Row>
               <CampaignCol>
                 <Button type="primary" htmlType="submit" className="user-btn">
-                  Add Campaign
+                  {isUpdate?'Update':'Add'} Campaign
                 </Button>
                 <Button
                   type="primary"
                   className="user-btn"
                   onClick={() => {
-                    this.props.history.push("/dashboard/campaign");
+                    this.props.history.goBack();
                   }}
                 >
                   Close

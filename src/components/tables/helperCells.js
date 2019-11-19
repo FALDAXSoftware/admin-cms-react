@@ -30,11 +30,23 @@ import Tier from "../../containers/Page/Tiers/tiers";
 import PendingRequests from "../../containers/Page/Tiers/pendingTierRequests";
 import { NetworkFee } from "../../containers/Page/NetworkFee/networkFee";
 import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFeesFormula";
+import offers from "../../containers/Page/Offers/offers";
+import styled from "styled-components";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
   "https://s3.us-east-2.amazonaws.com/production-static-asset/";
 
+const StatusSwitch = styled(Switch)`
+  width: 84px;
+  text-align: center;
+  height: 30px !important;
+  line-height: 26px !important;
+  &::after {
+    width: 26px !important;
+    height: 26px !important;
+  }
+`;
 const viewActiveUser = (
   value,
   profile_pic,
@@ -2605,28 +2617,44 @@ const CoinNoteCell=(slug)=>{
   );
 }
 
-const CampaignActionCell = () => {
+const CampaignActionCell = ( value,
+  campaign_id,
+  campaign_label,
+  campaign_start_date,
+  campaign_end_date,
+  campaign_is_active,
+  campaign_created_at,
+  campaign_updated_at,
+  campaign_deleted_at) => {
   return (
     <React.Fragment>
       <Tooltip title="View">
         <Icon
           type="info-circle"
           style={{ marginLeft: "10px", cursor: "pointer" }}
-          onClick={() => viewActiveUser()}
+          onClick={() => offers.view(campaign_id)}
         />
       </Tooltip>
-      <Tooltip title="View">
+      {/* <Tooltip title="Delete">
         <Icon
           type="delete"
           style={{ marginLeft: "10px", cursor: "pointer" }}
-          onClick={() => deleteActiveUser()}
+          onClick={() => offers.delete( value,
+            campaign_id,
+            campaign_label,
+            campaign_start_date,
+            campaign_end_date,
+            campaign_is_active,
+            campaign_created_at,
+            campaign_updated_at,
+            campaign_deleted_at,)}
         />
-      </Tooltip>
+      </Tooltip> */}
       <Tooltip title="Edit">
         <Icon
           type="edit"
           style={{ marginLeft: "10px", cursor: "pointer" }}
-          onClick={() => editActiveUser()}
+          onClick={() => offers.edit(campaign_id)}
         />
       </Tooltip>
     </React.Fragment>
@@ -2634,23 +2662,19 @@ const CampaignActionCell = () => {
 };
 
  const CampaignSwitchCell = (
-        value,
         campaign_id,
-        campaign_label,
-        campaign_start_date,
-        campaign_end_date,
         campaign_is_active,
-        campaign_created_at,
-        campaign_updated_at,
-        campaign_deleted_at,
+        campaign_label
 ) => (
-    <Switch
-      checked={campaign_is_active}
-      onChange={() => {
-        roleStatus(
-        );
-      }}
-    />
+  <StatusSwitch
+  checked={campaign_is_active}
+  checkedChildren="Active"
+  unCheckedChildren="Inactive"
+  size="large"
+  onChange={()=>offers.changeState(
+    campaign_id,
+    campaign_is_active,campaign_label)}
+/>
   );
 
 export {

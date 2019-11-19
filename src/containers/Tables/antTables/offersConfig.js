@@ -34,14 +34,8 @@ const renderCell = (
     case "DateCell":
       return DateCell(value);
     case "CampaignSwitchCell":
-      return CampaignSwitchCell( campaign_id,
-        campaign_label,
-        campaign_start_date,
-        campaign_end_date,
-        campaign_is_active,
-        campaign_created_at,
-        campaign_updated_at,
-        campaign_deleted_at,);
+      return CampaignSwitchCell(campaign_id,
+        campaign_is_active,campaign_label);
     case "ActiveUserActionCell":
       return CampaignActionCell(
         value,
@@ -64,7 +58,7 @@ const columns = [{
     key: 'action',
     width: 100,
     render: object => renderCell(object,
-        'ActiveUserActionCell',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at")
+        'ActiveUserActionCell',"id","id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at")
 },
 {
     title: <IntlMessages id="CampaignTable.title.label" />,
@@ -72,15 +66,8 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'label',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
-},
+}, 
 {
-    title: <IntlMessages id="CampaignTable.title.is_active" />,
-    key: 'is_active',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'CampaignSwitchCell', 'is_active',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
-},
- {
     title: <IntlMessages id="CampaignTable.title.start_date" />,
     key: 'start_date',
     width: 100,
@@ -94,13 +81,20 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'end_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
+{
+    title: <IntlMessages id="CampaignTable.title.is_active" />,
+    key: 'is_active',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'CampaignSwitchCell', 'is_active',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
+},
 ]
 
 
 const tblOffers= [
     {
-        title: 'Offers',
-        value: 'Offers',
+        title: 'Campaigns',
+        value: 'Campaigns',
         columns: clone(columns)
     }
 ];
