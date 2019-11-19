@@ -107,6 +107,9 @@ class Employees extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    for (var i = 0; i < res.data.employees.length; i++) {
+                        res.data.employees[i].first_name = res.data.employees[i].first_name + ' ' + res.data.employees[i].last_name;
+                    }
                     _this.setState({ allEmployee: res.data.employees, employeeCount: res.data.employeeCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

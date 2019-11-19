@@ -75,7 +75,7 @@ export default class CountryFields extends Component {
             countries: [],
             selectedCountry: null,
             selectedState: null,
-            selectedCity: null,
+            selectedCity:null,
             countryID: "",
             stateID: "",
             states: [],
@@ -86,6 +86,14 @@ export default class CountryFields extends Component {
         this._changeCity = this._changeCity.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        if(this.props.update && this.props!=nextProps){
+            if(this.props.countryName){
+                this.props.onCountryChange(nextProps.countryName,nextProps.stateName,nextProps.cityName ,null, null, null);
+            }
+            this.setState({selectedCountry:nextProps.countryName,selectedState:nextProps.stateName,selectedCity:nextProps.cityName})
+        }
+    }
     componentDidMount() {
         let allCountries = CountryData.getAllCountries();
         this.setState({ countries: allCountries });
@@ -108,6 +116,7 @@ export default class CountryFields extends Component {
     }
 
     _changeState = (value, position) => {
+        console.log(position)
         var cities = CountryData.getCitiesOfState(position.key);
         var stateID = position.key;
         const { selectedCountry, countryID, countryCode } = this.state;

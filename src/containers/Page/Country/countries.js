@@ -123,9 +123,16 @@ class Countries extends Component {
 
     _searchCountry = (e) => {
         e.preventDefault();
-        this.setState({ page: 1 }, () => {
-            this._getAllCountries();
-        });
+        var patt = new RegExp("^[_A-z0-9]*((-|\s)*[_A-z0-9])*$");
+        if (patt.test(this.state.searchCountry)) {
+            this.setState({ page: 1 }, () => {
+                this._getAllCountries();
+            });
+        } else {
+            this.setState({
+                errMsg: true, errMessage: 'Special Characters are not allowed in search.', errType: 'error', loader: false
+            });
+        }
     }
 
     _resetFilters = () => {
@@ -174,12 +181,14 @@ class Countries extends Component {
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchCountry}>
-                                        <Input
-                                            placeholder="Search countries"
-                                            onChange={this._changeSearch}
-                                            style={{ "width": "200px" }}
-                                            value={searchCountry}
-                                        />
+                                        <Form.Item validateStatus={this.state.searchValid}>
+                                            <Input
+                                                placeholder="Search countries"
+                                                onChange={this._changeSearch}
+                                                style={{ "width": "200px" }}
+                                                value={searchCountry}
+                                            />
+                                        </Form.Item>
                                         <Select
                                             getPopupContainer={trigger => trigger.parentNode}
                                             style={{ width: 200, "marginLeft": "15px" }}
