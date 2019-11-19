@@ -36,17 +36,17 @@ class EditableCell extends React.Component {
                     <Form.Item style={{ margin: 0 }}>
                         {getFieldDecorator(dataIndex, {
                             rules: [
+                                // {
+                                //     required: true,
+                                //     message: `Please Input ${title}!`,
+                                // },
                                 {
-                                    required: true,
-                                    message: `Please Input ${title}!`,
-                                },
-                                {
-                                    pattern:new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
-                                    message:"Please Enter Valid Positive Number"
+                                    pattern: new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
+                                    message: "Please Enter Valid Positive Number"
 
                                 }
                             ],
-                            initialValue: parseFloat(record[dataIndex]||0),
+                            initialValue: parseFloat(record[dataIndex] || 0),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (

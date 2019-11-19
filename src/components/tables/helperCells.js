@@ -902,7 +902,6 @@ const transactionDetailsUser = (
   coin_id
 ) => {
   let url = "";
-  console.log(coin_id);
   if (transaction_id) {
     switch (coin_id) {
       case "tbtc":
@@ -947,11 +946,11 @@ const DateCell = data => (
       ? moment
         .utc(data)
         .local()
-        .format("DD MMM YYYY")
+        .format("DD MMM, YYYY HH:mm")
         ? moment
           .utc(data)
           .local()
-          .format("DD MMM YYYY")
+          .format("DD MMM, YYYY HH:mm")
         : ""
       : ""}
   </p>
@@ -997,11 +996,11 @@ const UserDateCell = (
         ? moment
           .utc(created_at)
           .local()
-          .format("DD MMM YYYY")
+          .format("DD MMM, YYYY HH:mm")
           ? moment
             .utc(created_at)
             .local()
-            .format("DD MMM YYYY")
+            .format("DD MMM, YYYY HH:mm")
           : ""
         : ""}
     </p>
@@ -1021,11 +1020,11 @@ const ReferralDateCell = (
         ? moment
           .utc(created_at)
           .local()
-          .format("DD MMM YYYY")
+          .format("DD MMM, YYYY HH:mm")
           ? moment
             .utc(created_at)
             .local()
-            .format("DD MMM YYYY")
+            .format("DD MMM, YYYY HH:mm")
           : ""
         : ""}
     </p>
@@ -2583,24 +2582,24 @@ const ReferralNameCell = (value, full_name, deleted_at) => (
   </div>
 );
 
-const CoinFeesActionCell=(value,name,slug,updated_at,type,fees_value)=>{
+const CoinFeesActionCell = (value, name, slug, updated_at, type, fees_value) => {
   return (
     <div>
       <Tooltip title="Edit">
         <Icon
           type="edit"
           style={{ marginLeft: "10px", cursor: "pointer" }}
-          onClick={()=>NetworkFee.edit(value,name,slug,updated_at,type,fees_value)}
+          onClick={() => NetworkFee.edit(value, name, slug, updated_at, type, fees_value)}
         />
       </Tooltip>
     </div>
   );
 }
 
-const CoinNoteCell=(slug)=>{
-  return (   
-    <div> 
-        <span>{networkFeesFormula.slug[slug]}</span>
+const CoinNoteCell = (slug) => {
+  return (
+    <div>
+      <span>{networkFeesFormula.slug[slug]}</span>
     </div>
   );
 }
