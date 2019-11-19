@@ -29,6 +29,7 @@ import TwoFactorRequests from "../../containers/Page/TwoFactorRequest/TwoFactorR
 import Tier from "../../containers/Page/Tiers/tiers";
 import PendingRequests from "../../containers/Page/Tiers/pendingTierRequests";
 import { NetworkFee } from "../../containers/Page/NetworkFee/networkFee";
+import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFeesFormula";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -901,7 +902,6 @@ const transactionDetailsUser = (
   coin_id
 ) => {
   let url = "";
-  console.log(coin_id);
   if (transaction_id) {
     switch (coin_id) {
       case "tbtc":
@@ -946,11 +946,11 @@ const DateCell = data => (
       ? moment
         .utc(data)
         .local()
-        .format("DD MMM YYYY")
+        .format("DD MMM, YYYY HH:mm")
         ? moment
           .utc(data)
           .local()
-          .format("DD MMM YYYY")
+          .format("DD MMM, YYYY HH:mm")
         : ""
       : ""}
   </p>
@@ -996,11 +996,11 @@ const UserDateCell = (
         ? moment
           .utc(created_at)
           .local()
-          .format("DD MMM YYYY")
+          .format("DD MMM, YYYY HH:mm")
           ? moment
             .utc(created_at)
             .local()
-            .format("DD MMM YYYY")
+            .format("DD MMM, YYYY HH:mm")
           : ""
         : ""}
     </p>
@@ -1020,11 +1020,11 @@ const ReferralDateCell = (
         ? moment
           .utc(created_at)
           .local()
-          .format("DD MMM YYYY")
+          .format("DD MMM, YYYY HH:mm")
           ? moment
             .utc(created_at)
             .local()
-            .format("DD MMM YYYY")
+            .format("DD MMM, YYYY HH:mm")
           : ""
         : ""}
     </p>
@@ -2582,19 +2582,75 @@ const ReferralNameCell = (value, full_name, deleted_at) => (
   </div>
 );
 
-const CoinFeesActionCell=(value,name,slug,updated_at,type,fees_value)=>{
+const CoinFeesActionCell = (value, name, slug, updated_at, type, fees_value) => {
   return (
     <div>
       <Tooltip title="Edit">
         <Icon
           type="edit"
           style={{ marginLeft: "10px", cursor: "pointer" }}
-          onClick={()=>NetworkFee.edit(value,name,slug,updated_at,type,fees_value)}
+          onClick={() => NetworkFee.edit(value, name, slug, updated_at, type, fees_value)}
         />
       </Tooltip>
     </div>
   );
 }
+
+const CoinNoteCell = (slug) => {
+  return (
+    <div>
+      <span>{networkFeesFormula.slug[slug]}</span>
+    </div>
+  );
+}
+
+const CampaignActionCell = () => {
+  return (
+    <React.Fragment>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => viewActiveUser()}
+        />
+      </Tooltip>
+      <Tooltip title="View">
+        <Icon
+          type="delete"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => deleteActiveUser()}
+        />
+      </Tooltip>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => editActiveUser()}
+        />
+      </Tooltip>
+    </React.Fragment>
+  );
+};
+
+ const CampaignSwitchCell = (
+        value,
+        campaign_id,
+        campaign_label,
+        campaign_start_date,
+        campaign_end_date,
+        campaign_is_active,
+        campaign_created_at,
+        campaign_updated_at,
+        campaign_deleted_at,
+) => (
+    <Switch
+      checked={campaign_is_active}
+      onChange={() => {
+        roleStatus(
+        );
+      }}
+    />
+  );
 
 export {
   IPCell,
@@ -2676,5 +2732,8 @@ export {
   TransactionHashCellUser,
   ReferralNameCell,
   ObjectCell,
-  CoinFeesActionCell
+  CoinFeesActionCell,
+  CoinNoteCell,
+  CampaignActionCell,
+  CampaignSwitchCell
 };

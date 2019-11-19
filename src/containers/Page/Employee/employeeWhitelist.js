@@ -172,41 +172,81 @@ class EmployeeWhitelist extends Component {
         });
     }
 
-    _enableWhitelist = (checked) => {
-        const { token } = this.props;
-        let formData = {
+    onClickOpenPermanentIpModal = async (checked) => {
+        try {
+          console.log("checked call");
+          const {allIPAddresses } = this.state;
+         
+          if (checked) {
+            if (allIPAddresses && allIPAddresses.length > 0) {
+              await this.enableWhitelistIp(true);
+              this.setState({
+                showAddPermanentIPModal: false,
+                isWhitelist: true
+              });
+            } else {
+              this.setState({
+                showAddPermanentIPModal: true,
+                isWhitelist: false
+              });
+            }
+          } else {
+            await this.enableWhitelistIp(false);
+            this.setState({
+              showAddPermanentIPModal: false,
+              isWhitelist: false
+            });
+          }
+        } catch (error) {
+          console.log("Error in whitelist",error);
+        }
+      };
+    
+      enableWhitelistIp=async(checked) =>{
+        try {
+          console.log(checked);
+          const { token} = this.props;
+          let formData = {
             status: checked,
             user_id: this.props.emp_id
-        }
-        let _this = this;
-
-        this.setState({ loader: true });
-        ApiUtils.enableWhitelist(token, formData)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    if (res.status == 200) {
-                        _this.setState({
-                            showAddPermanentIPModal: checked ? true : false, isWhitelist: !checked ? false : true
-                        });
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                    }
-                    _this.setState({ loader: false });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, loader: false });
-                }
-            })
-            .catch(() => {
-                _this.setState({
-                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
-                });
+          };
+          this.setState({loader:true});
+          let res = await (
+            await ApiUtils.enableWhitelist(token, formData)
+          ).json();
+          if (res.status == 200) {
+            this.setState({
+              showAddPermanentIPModal: checked ? true : false,
+              isWhitelist: !checked ? false : true,
+              errMsg: true,
+              errType: "success",
+              errMessage: res.message,
+              loader:false
             });
-    }
+          } else if (res.status == 403) {
+            this.setState(
+              { errMsg: true, errMessage: res.err, errType: "error" ,loader:false},
+              () => {
+                this.props.logout();
+              }
+            );
+          } else {
+            this.setState({
+              errMsg: true,
+              errMessage: res.message,
+              errType: "error",
+              loader:false
+            });
+          }
+        } catch (error) {
+          console.log("Error in profileWhitelist", error);
+          this.setState({
+            errMsg: true,
+            errMessage: "Some thing went to wrong",
+            errType: "error"
+          });
+        }
+      }
 
     _changePaginationSize = (current, pageSize) => {
         this.setState({ page: current, limit: pageSize }, () => {
@@ -227,12 +267,13 @@ class EmployeeWhitelist extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <span>Whitelist:</span>
-                    <StatusSwitch checked={isWhitelist} onChange={this._enableWhitelist} />
+                    <StatusSwitch checked={isWhitelist} onChange={this.onClickOpenPermanentIpModal} />
                     {showAddPermanentIPModal && <AddPermanentIPModal
                         emp_id={this.props.emp_id}
                         showAddPermanentIPModal={showAddPermanentIPModal}
                         closeAddModal={this._closeAddPermanentIPModal}
-                        getAllWhitelistIP={this._getAllWhitelistIP.bind(this)} />}
+                        getAllWhitelistIP={this._getAllWhitelistIP.bind(this)}
+                        enableWhitelistIp={this.enableWhitelistIp} />}
                     {isWhitelist && !showAddPermanentIPModal &&
                         <div style={{ marginTop: '20px' }}>
                             {

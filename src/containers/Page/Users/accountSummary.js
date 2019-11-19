@@ -55,19 +55,25 @@ class AccountSummary extends Component {
     _this.setState({ loader: true });
     ApiUtils.getUserAccountSummary(token, user_id)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         console.log(res);
         if (res.status == 201) {
+          console.log(res);
           //   res.data = res.data.map(element => {
           //     element["usd_price"] = res.usd_price;
           //     return element;
           //   });
           //   console.log("element", res.data);
+
+          for (var i = 0; i < res.data.length; i++) {
+            res.data[i].fiat = parseFloat(res.data[i].totalAmount * res.data[i].fiat).toFixed(3) + ' USD'
+          }
           _this.setState({
             allHistory: res.data,
             loader: false,
             totalCount: parseFloat(res.usd_price).toFixed(2),
-            deleteDate: new Date(res.deleteDate).toLocaleDateString()
+            // deleteDate: new Date(res.user.deleted_at).toLocaleDateString()
+            deleteDate: (res.user.deleted_at != null) ? (moment.utc(res.user.deleted_at).local().format("DD MMM, YYYY HH:mm")) : null
           });
         } else if (res.status == 200) {
           _this.setState({
@@ -233,13 +239,13 @@ class AccountSummary extends Component {
                   </div>
                 </div>
               ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  {/* <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    {/* <div>
                     <b
                       style={{
                         marginRight: "10px"
@@ -249,24 +255,24 @@ class AccountSummary extends Component {
                     </b>
                     <span>{deleteDate}</span>
                   </div> */}
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "flex-end"
-                    }}
-                  >
-                    <b
+                    <div
                       style={{
-                        marginRight: "10px"
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "flex-end"
                       }}
                     >
-                      Total :
+                      <b
+                        style={{
+                          marginRight: "10px"
+                        }}
+                      >
+                        Total :
                     </b>
-                    <span>{totalCount} USD</span>
+                      <span>{totalCount} USD</span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
               <TableWrapper
                 style={{ marginTop: "20px" }}
                 {...this.state}
