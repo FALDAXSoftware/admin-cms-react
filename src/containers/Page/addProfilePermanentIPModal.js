@@ -39,7 +39,7 @@ class AddProfileIPModal extends Component {
     };
 
     _closeAddIPModal = () => {
-        this.setState({ showAddProfilePermanentIPModal: false })
+        // this.setState({ showAddProfilePermanentIPModal: false })
         this.props.closeAddModal();
         this._resetAddForm()
     }
@@ -86,14 +86,19 @@ class AddProfileIPModal extends Component {
         this.setState({ fields });
     }
 
+    handleClose=()=>{
+        this.setState({ showAddProfilePermanentIPModal: false })
+        this._resetAddForm()
+    }
+
     _closeAddIPModal = () => {
         this.setState({ showAddProfilePermanentIPModal: false })
         this.props.closeAddPermanentModal();
         this._resetAddForm()
     }
 
-    _addPermanentIPAddress = () => {
-        const { token, getAllWhitelistIP } = this.props;
+    _addPermanentIPAddress = async() => {
+        const { token, getAllWhitelistIP ,enableWhitelistIp,closeAddPermanentModal} = this.props;
         let { fields, showIPError } = this.state;
 
         if (this.validator.allValid() && !showIPError) {
@@ -102,33 +107,51 @@ class AddProfileIPModal extends Component {
                 ip: fields["ip"],
                 is_permanent: true
             };
-            let _this = this;
-
-            ApiUtils.addProfileWhitelistIP(token, formData)
-                .then((res) => res.json())
-                .then((res) => {
-                    if (res.status == 200) {
-                        _this.setState({
-                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
-                        }, () => {
-                            getAllWhitelistIP();
-                            _this._resetAddForm();
-                        })
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
-                    }
-                    _this._closeAddIPModal();
-                })
-                .catch(() => {
-                    _this._resetAddForm();
-                    _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error'
-                    });
+            try {
+              await enableWhitelistIp(true);
+              let res = await (
+                await ApiUtils.addProfileWhitelistIP(token, formData)
+              ).json();
+              if (res.status == 200) {
+                this.setState(
+                  {
+                    errMsg: true,
+                    errMessage: res.message,
+                    loader: false,
+                    errType: "Success"
+                  },
+                  () => {
+                    getAllWhitelistIP();
+                    this._resetAddForm();
+                    closeAddPermanentModal();
+                    
+                  }
+                );
+              } else if (res.status == 403) {
+                this.setState(
+                  { errMsg: true, errMessage: res.err, errType: "error" },
+                  () => {
+                    this.props.logout();
+                  }
+                );
+              } else {
+                this.setState({
+                  errMsg: true,
+                  errMessage: res.message,
+                  loader: false,
+                  errType: "error"
                 });
+              }
+              this._closeAddIPModal();
+            } catch (error) {
+              this._resetAddForm();
+              this.setState({
+                errMsg: true,
+                errMessage: "Something went wrong!!",
+                loader: false,
+                errType: "error"
+              });
+            }
         } else {
             this.validator.showMessages();
             this.forceUpdate();
@@ -146,10 +169,11 @@ class AddProfileIPModal extends Component {
                 title="Add Permanent IP Address"
                 visible={showAddProfilePermanentIPModal}
                 confirmLoading={loader}
-                // closable={false}
-                onCancel={() =>  this._closeAddIPModal()}
+                closable={false}
+                onCancel={this.handleClose}
                 footer={[
                     <Button onClick={this._addPermanentIPAddress}>Add</Button>,
+                    <Button onClick={this.handleClose}>Cancel</Button>
                 ]}
             >
                 <div style={{ "marginBottom": "15px" }}>

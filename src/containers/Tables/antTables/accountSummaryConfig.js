@@ -35,10 +35,10 @@ const renderCell = (
 
 const columns = [
   {
-    title: <IntlMessages id="summaryTableInfos.title.coin" />,
-    key: "coin",
+    title: <IntlMessages id="summaryTableInfos.title.coin_name" />,
+    key: "coin_name",
     width: 100,
-    render: object => renderCell(object, "TextCell", "coin")
+    render: object => renderCell(object, "TextCell", "coin_name")
   },
   {
     title: <IntlMessages id="summaryTableInfos.title.receive_address" />,
@@ -48,7 +48,7 @@ const columns = [
   },
   {
     title: <IntlMessages id="summaryTableInfos.title.balance" />,
-    key: "balance",
+    key: "totalAmount",
     width: 100,
     render: object => renderCell(object, "TextCell", "balance")
   },

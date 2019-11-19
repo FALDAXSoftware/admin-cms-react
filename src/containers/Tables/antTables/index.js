@@ -47,6 +47,7 @@ import { tierPendingReqTableInfos } from './pendingTierReqConfig';
 import { simplexTableInfos } from './simplexConfig';
 import { networkFeeTableInfos } from './networFeeConfig';
 import * as TableViews from './tableViews/';
+import { tblOffers } from './offersConfig';
 
 
 const dataList = new fakeData(10);
@@ -103,5 +104,5 @@ export {
   ApprovedKYCInfos, whitelistTableInfos, profileWhitelistTableInfos, twoFactorReqInfos,
   walletTableInfos, dashboardTableinfos, walletFeeTableinfos, pendingOrderTableInfos,
   cancelOrderTableInfos, tierTableInfos, tierReqTableInfos, tierPendingReqTableInfos,
-  simplexTableInfos, inActiveUserinfos,networkFeeTableInfos
+  simplexTableInfos, inActiveUserinfos,networkFeeTableInfos,tblOffers
 };

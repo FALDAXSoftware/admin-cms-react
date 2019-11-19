@@ -41,13 +41,54 @@ class Referral extends Component {
                     }
                 },
                 required: true
+            },
+            gtzero: {
+                // name the rule
+                message: "Amount must be greater than 0.",
+                rule: (val, params, validator) => {
+                    if (val > 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                required: true // optional
             }
         });
     }
 
     componentDidMount = () => {
         this._getAllReferredAdmins();
+        this._getReferalPercentage();
         this._getContactDetails();
+    }
+
+    _getReferalPercentage = () => {
+        let _this = this;
+        const { token } = this.props
+
+        //_this.setState({ loader: true });
+        ApiUtils.getReferPercentage(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    let fields = _this.state.fields;
+                    console.log(res.data.value);
+                    fields['percentage'] = res.data.value;
+                    console.log(fields['percentage'])
+                    _this.setState({ fields, prevDefaultReferral: res.data.value });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                }
+                // _this.setState({ loader: false });
+            })
+            .catch(() => {
+                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+            })
     }
 
     _getContactDetails = () => {
@@ -59,7 +100,7 @@ class Referral extends Component {
             .then(function (res) {
                 if (res.status == 200) {
                     let fields = _this.state.fields;
-                    fields['percentage'] = res.data.default_referral_percentage;
+                    // fields['percentage'] = res.data.default_referral_percentage;
                     _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -254,7 +295,7 @@ class Referral extends Component {
                                 <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                                     onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                                 <span className="field-error">
-                                    {this.validator.message('percentage', fields['percentage'], 'required|custom_between:0,100|max:10')}
+                                    {this.validator.message('percentage', fields['percentage'], 'required|custom_between:0,100|max:10|gtzero')}
                                 </span>
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateDefaultReferral}> Update </Button>
                                 <Button type="primary" className="cancel-btn" onClick={this._cancelDefaultReferral}> Cancel </Button>

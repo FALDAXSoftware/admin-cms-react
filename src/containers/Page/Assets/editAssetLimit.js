@@ -38,8 +38,15 @@ class EditableCell extends React.Component {
                                     required: true,
                                     message: `Please Input ${title}!`,
                                 },
+                                {
+                                    pattern: new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
+                                    message: "Please Enter Valid Positive Number"
+
+                                }
+
                             ],
-                            initialValue: record[dataIndex],
+                            // initialValue: (parseFloat(record[dataIndex]) > 0)?(parseFloat(record[dataIndex])).toPrecision(8):"0",
+                            initialValue: parseFloat(record[dataIndex] || 0),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -79,12 +86,12 @@ class EditableTable extends React.Component {
                 editable: true,
             },
             {
-                title: 'Min Withdrawl Crypto',
+                title: 'Min Withdrawal Crypto',
                 dataIndex: 'min_withdrawl_crypto',
                 editable: true,
             },
             {
-                title: 'Min Withdrawl Fiat',
+                title: 'Min Withdrawal Fiat',
                 dataIndex: 'min_withdrawl_fiat',
                 editable: true,
             },
@@ -143,9 +150,9 @@ class EditableTable extends React.Component {
         const { token, coin_id } = this.props;
         let _this = this;
         form.validateFields((error, row) => {
-            // if (error) {
-            //     return;
-            // }
+            if (error) {
+                return;
+            }
             const newData = [...this.state.allAssetLimit];
             const index = newData.findIndex(item => key === item.id);
 

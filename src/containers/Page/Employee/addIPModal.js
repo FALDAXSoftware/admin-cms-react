@@ -116,7 +116,7 @@ class AddIPModal extends Component {
                             _this.props.logout();
                         });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+                        _this.setState({ errMsg: true,errType: 'error',errMessage: res.message, loader: false });
                     }
                     _this._closeAddIPModal();
                 })
