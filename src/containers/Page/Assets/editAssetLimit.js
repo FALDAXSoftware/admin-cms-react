@@ -39,14 +39,14 @@ class EditableCell extends React.Component {
                                     message: `Please Input ${title}!`,
                                 },
                                 {
-                                    pattern:new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
-                                    message:"Please Enter Valid Positive Number"
+                                    pattern: new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
+                                    message: "Please Enter Valid Positive Number"
 
                                 }
-                                
+
                             ],
                             // initialValue: (parseFloat(record[dataIndex]) > 0)?(parseFloat(record[dataIndex])).toPrecision(8):"0",
-                            initialValue:parseFloat(record[dataIndex]||0),
+                            initialValue: parseFloat(record[dataIndex] || 0),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -86,12 +86,12 @@ class EditableTable extends React.Component {
                 editable: true,
             },
             {
-                title: 'Min Withdrawl Crypto',
+                title: 'Min Withdrawal Crypto',
                 dataIndex: 'min_withdrawl_crypto',
                 editable: true,
             },
             {
-                title: 'Min Withdrawl Fiat',
+                title: 'Min Withdrawal Fiat',
                 dataIndex: 'min_withdrawl_fiat',
                 editable: true,
             },

@@ -73,7 +73,7 @@ class AccountSummary extends Component {
             loader: false,
             totalCount: parseFloat(res.usd_price).toFixed(2),
             // deleteDate: new Date(res.user.deleted_at).toLocaleDateString()
-            deleteDate: moment.utc(res.user.deleted_at).local().format("DD MMM, YYYY HH:mm")
+            deleteDate: (res.user.deleted_at != null) ? (moment.utc(res.user.deleted_at).local().format("DD MMM, YYYY HH:mm")) : null
           });
         } else if (res.status == 200) {
           _this.setState({
