@@ -105,6 +105,21 @@ const ApiUtils = {
     }
   },
 
+  // create new campaign
+  createCampaign: function (token, formdata) {
+    try {
+      return fetch(API_URL + "/admin/campaigns/create", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify(formdata)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   //get all counts for dashboard api
   getMetabase: function () {
     let url = "/metabase-details";
@@ -2404,7 +2419,7 @@ const ApiUtils = {
 
   //get withdrawl fees api
   getWithdrawlFee: function (token) {
-    console.log("Herr >>>>>>>>")
+    console.log("Herr >>>>>>>>");
     let url = "/admin/get-withdrawl-faldax-fee";
     try {
       return fetch(API_URL + url, {
@@ -2469,6 +2484,21 @@ const ApiUtils = {
   getUserDetails: function (token, user_id) {
     try {
       return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  // get campaign details api
+  getCampaignDetails: function (token, campaign_id) {
+    try {
+      return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
@@ -3045,7 +3075,8 @@ const ApiUtils = {
   getTemplateDetails: function (token, template_id) {
     try {
       return fetch(
-        API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
+        API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id,
+        {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3111,7 +3142,8 @@ const ApiUtils = {
         "/admin/get-all-whitelist-ip?page=" +
         page +
         "&limit=" +
-        limit, {
+        limit,
+        {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3162,7 +3194,8 @@ const ApiUtils = {
         "&page=" +
         page +
         "&limit=" +
-        limit, {
+        limit,
+        {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3667,7 +3700,8 @@ const ApiUtils = {
   getUserWallets: function (token, user_id) {
     try {
       return fetch(
-        API_URL + "/admin/get-user-wallet-addresses?user_id=" + user_id, {
+        API_URL + "/admin/get-user-wallet-addresses?user_id=" + user_id,
+        {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -3740,6 +3774,24 @@ const ApiUtils = {
       },
       body: JSON.stringify(body)
     });
+  },
+  offers: function (token) {
+    return {
+      url: "/admin/campaigns/",
+      headers: {
+        Authorization: "Bearer " + token
+      },
+      getCampaignList: function () {
+        let formData = new FormData();
+        formData.append("page", 1)
+        formData.append("limit", 1)
+        return fetch(`${API_URL}${this.url}list`, {
+          method: "POST",
+          headers: this.headers,
+          body: formData
+        });
+      }
+    };
   }
 };
 export default ApiUtils;

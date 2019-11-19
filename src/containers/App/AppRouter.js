@@ -211,6 +211,10 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Users/viewUser"))
     },
     {
+        path: "campaign/:id",
+        component: asyncComponent(() => import("../Page/Offers/viewCampaign"))
+    },
+    {
         path: "employee/:id",
         component: asyncComponent(() => import("../Page/Employee/employeeProfile"))
     },
