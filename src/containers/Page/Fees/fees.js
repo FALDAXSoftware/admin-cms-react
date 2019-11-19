@@ -10,6 +10,7 @@ import EditFeesModal from "./editFeesModal";
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
+import NetworkFee from '../NetworkFee/networkFee'
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -27,7 +28,9 @@ class Fees extends Component {
             errType: '',
             loader: false,
             fields: {},
-            prevFees: ''
+            prevFees: '',
+            withdrawlFeesData: '',
+            faldaxFee: ''
         }
         this.validator = new SimpleReactValidator({
             className: 'text-danger',
@@ -58,6 +61,8 @@ class Fees extends Component {
 
     componentDidMount = () => {
         this._getAllFeesData();
+        this._getWithdrawlFeeData();
+        // this._getFaldaxFeeData();
         this._getContactDetails();
     }
 
@@ -82,6 +87,36 @@ class Fees extends Component {
                     }
                     self.setState({ loader: false });
                 }
+            })
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                });
+            });
+    }
+
+    _getWithdrawlFeeData = () => {
+        const { token } = this.props;
+        let _this = this;
+
+        _this.setState({ loader: true });
+        ApiUtils.getWithdrawlFee(token)
+            .then((response) => response.json())
+            .then(function (res) {
+                if (res.status == 200) {
+                    console.log(res.withdrawFee[0].value)
+                    let fields = _this.state.fields;
+                    fields['default_send_coin_fee'] = res.withdrawFee[1].value;
+                    fields['defualt_faldax_fee'] = res.withdrawFee[0].value;
+                    _this.setState({ fields });
+                } else if (res.status == 403) {
+                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        self.props.logout();
+                    });
+                } else {
+                    self.setState({ errMsg: true, errMessage: res.message });
+                }
+                _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
@@ -145,7 +180,50 @@ class Fees extends Component {
                         _this.setState({
                             errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
                         }, () => {
-                            _this._getContactDetails();
+                            _this._getWithdrawlFeeData();
+                            // _this._getContactDetails();
+                        })
+                    } else if (res.status == 403) {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            _this.props.logout();
+                        });
+                    } else {
+                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
+                    }
+                })
+                .catch(() => {
+                    _this.setState({ loader: false });
+                });
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
+    }
+
+    _updateFaldaxFee = () => {
+        const { token } = this.props;
+        let fields = this.state.fields;
+        console.log(fields)
+        let _this = this;
+
+        if (_this.validator.allValid()) {
+            _this.setState({ loader: true });
+
+            const formData = {
+                send_coin_fee: fields['defualt_faldax_fee'],
+            }
+
+            console.log(formData);
+
+            ApiUtils.updateFaldaxFee(token, formData)
+                .then((response) => response.json())
+                .then(function (res) {
+                    if (res.status == 200) {
+                        _this.setState({
+                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
+                        }, () => {
+                            _this._getWithdrawlFeeData();
+                            // _this._getContactDetails();
                         })
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -218,7 +296,7 @@ class Fees extends Component {
                                     <b>Withdrawal Fee</b>
                                 </span>
                                 <Input addonAfter={'%'} placeholder="Withdrawal Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                                    onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields["default_send_coin_fee"]} />
+                                    onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields['default_send_coin_fee']} />
                                 <span className="field-error">
                                     {this.validator.message('withdrawal fee', fields['default_send_coin_fee'], 'required|custom_between:0,100')}
                                 </span>
@@ -226,6 +304,25 @@ class Fees extends Component {
                                 <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button>
                             </div>
                             {loader && <FaldaxLoader />}
+                        </TabPane>
+                        <TabPane tab="Faldax Fee" key="3">
+                            <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
+                                <span>
+                                    <b>Faldax Fee</b>
+                                </span>
+                                <Input addonAfter={'%'} placeholder="Faldax Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                                    onChange={this._onChangeFields.bind(this, "defualt_faldax_fee")} value={fields['defualt_faldax_fee']} />
+                                <span className="field-error">
+                                    {this.validator.message('faldax fee', fields['defualt_faldax_fee'], 'required|custom_between:0,100')}
+                                </span>
+                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateFaldaxFee}> Update </Button>
+                                {/* <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button> */}
+                            </div>
+                            {loader && <FaldaxLoader />}
+                        </TabPane>
+                        <TabPane tab="Network Fee" key="4">
+                            <NetworkFee />
+                            {/* {loader && <FaldaxLoader />} */}
                         </TabPane>
                     </Tabs>
                 </TableDemoStyle>

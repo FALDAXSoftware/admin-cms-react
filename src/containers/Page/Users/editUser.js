@@ -36,31 +36,31 @@ class EditUser extends Component {
   };
 
   _getUserDetails = () => {
-    const { location, token } = this.props;
-    let path = location.pathname.split("/");
-    let user_id = path[path.length - 1];
-    let _this = this;
-
+    const { token } = this.props;
+    let user_id = this.props.match.params.id;
     ApiUtils.getUserDetails(token, user_id)
       .then(response => response.json())
-      .then(function(res) {
+      .then((res)=> {
         if (res.status == 200) {
-          _this.setState({
-            fields: res.data[0],
-            dob: res.data[0].dob
-              ? moment(res.data[0].dob, "DD-MM-YYYY").local()
+          res=res.data[0]
+          this.setState({
+            fields: res,
+            dob: res.dob
+              ? moment(res.dob, "DD-MM-YYYY").local()
               : "",
-            selectedClass: res.data[0].account_class,
-            selectedTier: res.data[0].account_tier,
-            countrySelected: res.data[0].country,
-            stateSelected: res.data[0].state,
-            citySelected: res.data[0].city_town
+            selectedClass: res.account_class,
+            selectedTier: res.account_tier,
+            countrySelected: res.country,
+            stateSelected: res.state,
+            citySelected: res.city_town,
+            selectedGender:res.gender,
+            stateCode:res.state_id
           });
         } else if (res.status == 403) {
-          _this.setState(
+          this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
             () => {
-              _this.props.logout();
+              this.props.logout();
             }
           );
         } else {
@@ -183,7 +183,8 @@ class EditUser extends Component {
       stateSelected,
       citySelected,
       dob,
-      selectedGender
+      selectedGender,
+      stateCode
     } = this.state;
     let _this = this;
 
@@ -202,6 +203,7 @@ class EditUser extends Component {
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
+        state_id:stateCode,
         kyc_done: isKYC,
         gender: selectedGender,
         dob: moment(dob).format("DD-MM-YYYY")
@@ -263,7 +265,8 @@ class EditUser extends Component {
       countrySelected: country,
       stateSelected: state,
       citySelected: city,
-      countryCode
+      countryCode,
+      stateCode:stateID
     });
   }
 
@@ -290,6 +293,7 @@ class EditUser extends Component {
       countrySelected,
       stateSelected,
       citySelected,
+      stateCode,
       dob,
       loader
     } = this.state;
@@ -445,12 +449,12 @@ class EditUser extends Component {
               </Select>
             </Col>
           </Row>
-          <Row>
-            <Col sm={24}>
               <CountryFields
                 countryName={countrySelected}
                 stateName={stateSelected}
                 cityName={citySelected}
+                stateCode={stateCode}
+                update={countrySelected?false:true}
                 {...this.props}
                 onCountryChange={(
                   country,
@@ -479,8 +483,6 @@ class EditUser extends Component {
                 )}
                 {/* {this.state.postalmsg} */}
               </span>
-            </Col>
-          </Row>
           <Row style={{ marginBottom: "15px", paddingTop: "78px" }}>
             <Col>
               <span>Postal Code:</span>

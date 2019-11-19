@@ -132,9 +132,16 @@ class News extends Component {
 
     _searchNews = (e) => {
         e.preventDefault();
-        this.setState({ page: 1 }, () => {
-            this._getAllNews();
-        });
+        var patt = new RegExp("^[_A-z0-9]*((-|\s)*[_A-z0-9])*$");
+        if (patt.test(this.state.searchNews)) {
+            this.setState({ page: 1 }, () => {
+                this._getAllNews();
+            });
+        } else {
+            this.setState({
+                errMsg: true, errMessage: 'Special Characters are not allowed in search.', errType: 'error', loader: false
+            });
+        }
     }
 
     _changeFilter = (val) => {
@@ -142,7 +149,15 @@ class News extends Component {
     }
 
     _changeSearch = (field, e) => {
-        this.setState({ searchNews: field.target.value })
+        this.setState({ searchNews: field.target.value }, () => {
+
+            var patt = new RegExp("^[_A-z0-9]*((-|\s)*[_A-z0-9])*$");
+            if (patt.test(this.state.searchNews)) {
+                this.setState({ searchValid: "success" });
+            } else {
+                this.setState({ searchValid: "error" });
+            }
+        })
     }
 
     range = (start, end) => {
@@ -225,11 +240,15 @@ class News extends Component {
                                     <Form onSubmit={this._searchNews}>
                                         <Row>
                                             <ColWithPadding sm={5}>
-                                                <Input
-                                                    placeholder="Search news"
-                                                    onChange={this._changeSearch.bind(this)}
-                                                    value={searchNews}
-                                                />
+                                                <Form.Item validateStatus={this.state.searchValid}>
+
+                                                    <Input
+                                                        placeholder="Search news"
+                                                        onChange={this._changeSearch.bind(this)}
+                                                        value={searchNews}
+
+                                                    />
+                                                </Form.Item>
                                             </ColWithPadding>
                                             <ColWithPadding sm={5}>
                                                 <Select
