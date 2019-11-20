@@ -415,3 +415,7 @@ html[dir='rtl'] .dz-hidden-input {
 .mg-top-1{
   margin-top: 1px;
 }
+
+.float-clear{
+  clear: both;
+}
