@@ -13,6 +13,7 @@ import { CSVLink } from "react-csv";
 import ColWithPadding from '../common.style';
 import DeclineActionModal from './declineModal'
 import { Record } from 'immutable';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -27,7 +28,7 @@ class WithdrawRequest extends Component {
             allRequests: [],
             allReqCount: 0,
             searchReq: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -223,7 +224,7 @@ class WithdrawRequest extends Component {
             { label: "Fees", key: "fees" },
             { label: "Created On", key: "created_at" }
         ];
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

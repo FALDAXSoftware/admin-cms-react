@@ -10,6 +10,7 @@ import authAction from "../../../redux/auth/actions";
 import { tblOffers } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -28,7 +29,7 @@ class Offers extends Component {
       errMsg: false,
       errType: "Success",
       page: 1,
-      limit: 50,
+      limit: PAGESIZE,
       showDeleteModal: false,
       campaignId: 0
     };
@@ -172,7 +173,7 @@ class Offers extends Component {
       campaignId,
       showDeleteModal
     } = this.state;
-    let pageSizeOptions = ["20", "30", "40", "50"];
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());

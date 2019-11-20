@@ -11,6 +11,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import moment from "moment";
 import ColWithPadding from '../common.style';
 import { CSVLink } from "react-csv";
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const EditableContext = React.createContext();
 const { logout } = authAction;
@@ -107,7 +108,7 @@ class BatchBalance extends React.Component {
             allBatches: [],
             fields: {},
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
             batchCount: 0,
             transactionID: '',
             showDownloadPopup: false,
@@ -423,7 +424,7 @@ class BatchBalance extends React.Component {
             transactionID, showDownloadPopup, selectedExport, purchaseDownloadData, summaryDownloadData,
         } = this.state;
         console.log('summaryDownloadData', summaryDownloadData, selectedExport)
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }

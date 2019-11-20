@@ -12,6 +12,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -25,7 +26,7 @@ class Transactions extends Component {
             allTransactions: [],
             allTransactionCount: 0,
             searchTransaction: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -169,7 +170,7 @@ class Transactions extends Component {
             { label: "Email", key: "email" },
             { label: "Created On", key: "created_at" },
         ];
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

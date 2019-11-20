@@ -8,6 +8,8 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+
 
 const Search = Input.Search;
 const { logout } = authAction;
@@ -19,7 +21,7 @@ class BuyOrders extends Component {
             allOrders: [],
             allOrderCount: 0,
             searchOrder: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -93,7 +95,7 @@ class BuyOrders extends Component {
 
     render() {
         const { allOrders, allOrderCount, errType, errMsg, page, loader, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

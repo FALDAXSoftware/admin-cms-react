@@ -8,6 +8,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 
@@ -19,7 +20,7 @@ class ReferralUsers extends Component {
             allReferralCount: this.props.allReferralCount,
             userId: this.props.userId,
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
         }
     }
 
@@ -78,7 +79,7 @@ class ReferralUsers extends Component {
 
     render() {
         const { allReferral, allReferralCount, loader, page, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
             <LayoutWrapper>

@@ -12,6 +12,7 @@ import AddIPModal from './addIPModal';
 import FaldaxLoader from '../faldaxLoader';
 import AddPermanentIPModal from './addPermanentIPModal';
 import styled from 'styled-components';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 var self;
@@ -258,7 +259,7 @@ class EmployeeWhitelist extends Component {
     render() {
         const { allIPAddresses, errMsg, errType, loader, showDeleteIPModal, showAddIPModal,
             EmpIPCount, page, isWhitelist, showAddPermanentIPModal, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

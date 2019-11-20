@@ -10,6 +10,7 @@ import ViewCoinModal from './viewCoinModal';
 import AddCoinModal from './addCoinModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -26,7 +27,7 @@ class Assets extends Component {
             showViewCoinModal: false,
             showDeleteCoinModal: false,
             searchCoin: '',
-            limit: 50,
+             limit: PAGESIZE,
             coinDetails: [],
             deleteCoinId: '',
             errMessage: '',
@@ -218,7 +219,7 @@ class Assets extends Component {
         const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
             showViewCoinModal, showDeleteCoinModal, errMsg, page, limit
         } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
