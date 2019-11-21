@@ -9,7 +9,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
-import { DateCell } from "../../../components/tables/helperCells";
+import { DateCell ,HistoryDateCell} from "../../../components/tables/helperCells";
 const tableColumns=[
   {
     title:"Code",
@@ -36,13 +36,23 @@ const tableColumns=[
     title:"Start Date",
     dataIndex: 'start_date',
     key: 'start_date',
-    render:(start_date)=>DateCell(start_date)
+    render:(start_date)=>HistoryDateCell(start_date)
   },
   {
     title:"End Date",
     dataIndex: 'end_date',
     key: 'end_date',
-    render:(end_date)=>DateCell(end_date)
+    render:(end_date)=>HistoryDateCell(end_date)
+  },
+  {
+    title:"Code Used",
+    dataIndex: 'offercode_used',
+    key: 'offercode_used'
+  },
+  {
+    title:"User id",
+    dataIndex: 'user_id',
+    key: 'user_id',
   },
   {
     title:"Status",
@@ -147,42 +157,42 @@ class ViewCampaign extends Component {
             <Col span={8}>
               <detailHead>Total number of transactions allowed</detailHead>
             </Col>
-            <Col span={16}>: {campaignDetails.no_of_transactions}</Col>
+            <Col span={16}>{campaignDetails.no_of_transactions}</Col>
           </CampRow>
           <CampRow>
             <Col span={8}>
               <detailHead>Total fees allowed</detailHead>
             </Col>
-            <Col span={16}>: {campaignDetails.fees_allowed} USD</Col>
+            <Col span={16}>{campaignDetails.fees_allowed} USD</Col>
           </CampRow>
           <CampRow>
+            <Col span={8}>
+              <detailHead>Type</detailHead>
+            </Col>
+            <Col span={16}>{campaignDetails.usage==1?'Single code use':'Multiple code use'}</Col>
+          </CampRow>
+          {campaignDetails.start_date && <CampRow>
             <Col span={8}>
               <detailHead>Start Date</detailHead>
             </Col>
             <Col span={16}>
-              : {moment
-                .utc(campaignDetails.start_date)
-                .local()
-                .format("DD MMM YYYY LTS")}
+              {HistoryDateCell(campaignDetails.start_date)}
             </Col>
-          </CampRow>
-          <CampRow>
+          </CampRow>}
+          {campaignDetails.end_date && <CampRow>
             <Col span={8}>
               <detailHead>End Date</detailHead>
             </Col>
             <Col span={16}>
-              : {moment
-                .utc(campaignDetails.end_date)
-                .local()
-                .format("DD MMM YYYY LTS")}
+              {HistoryDateCell(campaignDetails.end_date)}
             </Col>
-          </CampRow>
+          </CampRow>}
           <CampRow>
             <Col span={8}>
               <detailHead>Campaign Status</detailHead>
             </Col>
             <Col span={16}>
-              : <Tag color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
+              <Tag color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
             </Col>
           </CampRow>
           <div className='mg-top-15'>

@@ -112,9 +112,6 @@ class Offers extends Component {
         this.setState({
           campaignList: offers.data.campaigns,
           campaignCount: offers.data.total,
-          errMsg: true,
-          errMessage: offers.message,
-          errType: "success"
         });
       } else if (offers.status == 401 || offers.status == 403) {
         this.setState({

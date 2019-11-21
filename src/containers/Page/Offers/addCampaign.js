@@ -27,7 +27,7 @@ import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { DateCell } from "../../../components/tables/helperCells";
+import { DateCell ,HistoryDateCell} from "../../../components/tables/helperCells";
 const Option = Select.Option;
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -72,13 +72,13 @@ const columns_temp = [
     title: "Start Date",
     dataIndex: "start_date",
     key: "start_date",
-    render: start_date => DateCell(start_date)
+    render: start_date => start_date?HistoryDateCell(start_date):'-'
   },
   {
     title: "End Date",
     dataIndex: "end_date",
     key: "end_date",
-    render: end_date => DateCell(end_date)
+    render: end_date => end_date?HistoryDateCell(end_date):'-'
   },
   {
     title: "Status",
@@ -176,7 +176,7 @@ class AddCampaign extends Component {
         fields["campaign_desc"]=res.data.description;
         fields["no_of_transactions"]=res.data.no_of_transactions;
         fields["fees_allowed"]=res.data.fees_allowed;
-        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers});
+        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):''});
         this.setState(fields);
       }else if(res.status==401 || res.status==403){
         this.setState({errMsg:true,errType:"error",errMessage:res.message});  
@@ -205,7 +205,7 @@ class AddCampaign extends Component {
           filterVal: self.state.campaign_offers[index].user_id,
           userIdAssigned: self.state.campaign_offers[index].user_id,
           isOfferUpdate:true,
-          offerId:id
+          offerId:id,
       })
     }
   }
@@ -743,7 +743,6 @@ class AddCampaign extends Component {
                   placeholder="Name"
                   onChange={this._handleChange.bind(this, "campaign_name")}
                   value={fields["campaign_name"]}
-                  disabled={isUpdate}
                 />
                 <ValidSpan>
                   {this.validator.message(
@@ -920,7 +919,7 @@ class AddCampaign extends Component {
                           </Col>
                           <Col span={18}>
                             <RangePicker
-                              disabled={isOfferUpdate && isUpdate}
+                              disabled={false}
                               ranges={{
                                 Today: [moment(), moment()],
                                 "This Month": [
@@ -930,7 +929,7 @@ class AddCampaign extends Component {
                               }}
                               allowClear={false}
                               value={[startOfferDate, endOfferDate]}
-                              disabledDate={this._disabledDate && isUpdate}
+                              disabledDate={this._disabledDate}
                               onChange={this.onOfferDateChange}
                             />
                             <ValidSpan>{dateOfferErrMsg}</ValidSpan>

@@ -2676,6 +2676,8 @@ const CampaignActionCell = ( value,
 />
   );
 
+  const CampaignTypeCell=(value)=>value==1?'Single Code Use':"Multiple Code Use"
+
 export {
   IPCell,
   DateCell,
@@ -2759,5 +2761,7 @@ export {
   CoinFeesActionCell,
   CoinNoteCell,
   CampaignActionCell,
-  CampaignSwitchCell
+  CampaignSwitchCell,
+  CampaignTypeCell
+
 };
