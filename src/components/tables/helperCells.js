@@ -32,6 +32,7 @@ import { NetworkFee } from "../../containers/Page/NetworkFee/networkFee";
 import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFeesFormula";
 import offers from "../../containers/Page/Offers/offers";
 import styled from "styled-components";
+import { DeletedUsers } from "../../containers/Page/Users/deletedUsers";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -982,6 +983,23 @@ const HistoryDateCell = data => (
       : ""}
   </p>
 );
+
+const OfferDateCell = data => (
+  <p>
+    {data
+      ? moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY")
+        ?<span> <Icon type="calendar"/> {moment
+          .utc(data)
+          .local()
+          .format("DD MMM YYYY")}</span>
+        : "-"
+      : "--"}
+  </p>
+);
+
 const UserDateCell = (
   value,
   profile_pic,
@@ -1441,7 +1459,7 @@ const DeletedUserActionCell = (
           type="info-circle"
           style={{ marginLeft: "10px", cursor: "pointer" }}
           onClick={() =>
-            viewActiveUser(
+            DeletedUsers.view(
               value,
               profile_pic,
               first_name,
@@ -2762,6 +2780,7 @@ export {
   CoinNoteCell,
   CampaignActionCell,
   CampaignSwitchCell,
-  CampaignTypeCell
+  CampaignTypeCell,
+  OfferDateCell
 
 };

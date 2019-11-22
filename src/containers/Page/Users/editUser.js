@@ -204,8 +204,8 @@ class EditUser extends Component {
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
-        state_id:stateCode.toString(),
-        country_id:countryID.toString(),
+        state_id:stateCode,
+        country_id:countryID,
         kyc_done: isKYC,
         gender: selectedGender,
         dob: moment(dob).format("DD-MM-YYYY")
@@ -518,7 +518,7 @@ class EditUser extends Component {
                 {this.validator.message(
                   "postal",
                   fields["postal_code"],
-                  "required|numeric",
+                  "required|alpha_num_dash|min:3|max:25",
                   "text-danger"
                 )}
                 {this.state.postalmsg}
