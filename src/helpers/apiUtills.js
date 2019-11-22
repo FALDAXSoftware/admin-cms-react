@@ -1,6 +1,3 @@
-import {
-  stat
-} from "fs";
 // const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
@@ -3803,6 +3800,16 @@ const ApiUtils = {
           });
         } catch (error) {
           console.error(error);
+        }
+      },
+      checkOfferCode:function(offerCode=""){
+        try{
+           return fetch(`${API_URL}${this.url}verify-offercode/${offerCode}`,{
+             method:'GET',
+             headers:this.headers
+           })
+        }catch(error){
+          console.log("api middle-ware issue",error);
         }
       }
     };

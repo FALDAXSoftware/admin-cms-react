@@ -13,6 +13,7 @@ import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import CountryData from 'country-state-city';
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from '../../../helpers/globals';
+import { withRouter } from 'react-router-dom'
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -43,8 +44,12 @@ class DeletedUsers extends Component {
     }
 
     static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
-        street_address_2, phone_number, country, dob, is_active, kyc) {
-        self.props.history.push('/dashboard/users/' + value)
+        street_address_2, phone_number, country, dob, is_active, kyc) {    
+        console.log("is_active",value);
+        self.props.history.push({
+          pathname: `/dashboard/users/${value}`,
+          state: { is_active: is_active }
+        });
     }
 
     static deleteUser(value) {
@@ -299,9 +304,9 @@ class DeletedUsers extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(DeletedUsers);
+    }), { logout })(DeletedUsers));
 
 export { DeletedUsers, deletedUserinfos };
