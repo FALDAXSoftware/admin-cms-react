@@ -7,7 +7,7 @@ import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
 const EditableContext = React.createContext();
-
+const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
 class EditableCell extends React.Component {
 
     getInput = () => {
@@ -41,7 +41,7 @@ class EditableCell extends React.Component {
                                 //     message: `Please Input ${title}!`,
                                 // },
                                 {
-                                    pattern: new RegExp("^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$"),
+                                    pattern: regEx,
                                     message: "Please Enter Valid Positive Number"
 
                                 }
