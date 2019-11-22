@@ -4,7 +4,7 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell,
     DateCell,
-    HistoryDateCell,
+    OfferDateCell,
     CampaignSwitchCell,
     CampaignActionCell,
     CampaignTypeCell
@@ -34,7 +34,7 @@ const renderCell = (
   const campaign_deleted_at = object[deleted_at];
   switch (type) {
     case "DateCell":
-      return HistoryDateCell(value);
+      return OfferDateCell(value);
     case "CampaignSwitchCell":
       return CampaignSwitchCell(campaign_id,
         campaign_is_active,campaign_label);

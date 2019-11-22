@@ -9,7 +9,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
-import { DateCell ,HistoryDateCell} from "../../../components/tables/helperCells";
+import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
 const tableColumns=[
   {
     title:"Code",
@@ -36,13 +36,13 @@ const tableColumns=[
     title:"Start Date",
     dataIndex: 'start_date',
     key: 'start_date',
-    render:(start_date)=>HistoryDateCell(start_date)
+    render:(start_date)=>OfferDateCell(start_date)
   },
   {
     title:"End Date",
     dataIndex: 'end_date',
     key: 'end_date',
-    render:(end_date)=>HistoryDateCell(end_date)
+    render:(end_date)=>OfferDateCell(end_date)
   },
   {
     title:"Code Used",
@@ -61,7 +61,7 @@ const tableColumns=[
     render:(status)=>(
       <span>
             <Tag color={status==true? 'geekblue' : 'grey'} key={status}>
-            {status==true? 'Active' : 'DeActive'}
+            {status==true? 'Active' : 'Inactive'}
             </Tag>
       </span>
     )
@@ -176,7 +176,7 @@ class ViewCampaign extends Component {
               <detailHead>Start Date</detailHead>
             </Col>
             <Col span={16}>
-              {HistoryDateCell(campaignDetails.start_date)}
+              {OfferDateCell(campaignDetails.start_date)}
             </Col>
           </CampRow>}
           {campaignDetails.end_date && <CampRow>
@@ -184,7 +184,7 @@ class ViewCampaign extends Component {
               <detailHead>End Date</detailHead>
             </Col>
             <Col span={16}>
-              {HistoryDateCell(campaignDetails.end_date)}
+              {OfferDateCell(campaignDetails.end_date)}
             </Col>
           </CampRow>}
           <CampRow>

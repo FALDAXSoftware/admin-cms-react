@@ -552,7 +552,7 @@ class AddUser extends Component {
                 {this.validator.message(
                   "postal_code",
                   fields["postal_code"],
-                  "required|numeric",
+                  "required|alpha_num_dash|min:3|max:25",
                   "text-danger"
                 )}
               </span>

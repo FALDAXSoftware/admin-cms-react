@@ -27,7 +27,7 @@ import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { DateCell ,HistoryDateCell} from "../../../components/tables/helperCells";
+import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
 const Option = Select.Option;
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -72,13 +72,13 @@ const columns_temp = [
     title: "Start Date",
     dataIndex: "start_date",
     key: "start_date",
-    render: start_date => start_date?HistoryDateCell(start_date):'-'
+    render: start_date => start_date?OfferDateCell(start_date):'-'
   },
   {
     title: "End Date",
     dataIndex: "end_date",
     key: "end_date",
-    render: end_date => end_date?HistoryDateCell(end_date):'-'
+    render: end_date => end_date?OfferDateCell(end_date):'-'
   },
   {
     title: "Status",
@@ -169,7 +169,7 @@ class AddCampaign extends Component {
     try{
       let {token} =this.props;
       let {fields}=this.state;
-      this.setState({loader:false});
+      this.setState({loader:true});
       let res=await(await ApiUtils.offers(token).getById(this.state.campaignId)).json();
       if(res.status==200){
         fields["campaign_name"]=res.data.label;
@@ -293,6 +293,8 @@ class AddCampaign extends Component {
               }
               formdata['campaign_offers_new'].push(offer)
             }else{
+              offer.start_date=moment(offer.start_date).format("YYYY-MM-DD");
+              offer.end_date=moment(offer.end_date).format("YYYY-MM-DD");
               formdata['campaign_offers'].push(offer)
             }
           }
@@ -361,6 +363,8 @@ class AddCampaign extends Component {
               }
               formdata['campaign_offers_new'].push(offer)
             }else{
+              offer.start_date=moment(offer.start_date).format("YYYY-MM-DD");
+              offer.end_date=moment(offer.end_date).format("YYYY-MM-DD");
               formdata['campaign_offers'].push(offer)
             }
           }
@@ -652,6 +656,11 @@ class AddCampaign extends Component {
     );
   };
   onOfferRadioChange = e => {
+    // Remove react validation in case of change radio 
+    if(e.target.value==1){
+      delete this.validator1.fields["no of transactions"]
+      delete this.validator1.fields["total fees allowed"]
+    }
     this.setState(
       {
         checkOfferValue: e.target.value,
