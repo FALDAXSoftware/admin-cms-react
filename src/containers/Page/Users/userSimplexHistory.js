@@ -10,6 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -21,7 +22,7 @@ class UserSimplexHistory extends Component {
             allTrades: [],
             allTradeCount: 0,
             searchTrade: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -120,7 +121,7 @@ class UserSimplexHistory extends Component {
     render() {
         const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
             searchTrade, limit, simplex_payment_status } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         const tradeHeaders = [
             { label: "Email", key: "email" },
             { label: "Coin", key: "currency" },

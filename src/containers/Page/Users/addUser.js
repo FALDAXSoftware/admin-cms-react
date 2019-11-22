@@ -43,7 +43,10 @@ class AddUser extends Component {
       checkAll: false,
       showDOBErr: false,
       password:"",
-      selectedGender: "male"
+      selectedGender: "male",
+      dob:moment()
+      .subtract(18, "years")
+      .endOf("day")
     };
     this.validator = new SimpleReactValidator();
   }
@@ -161,11 +164,11 @@ class AddUser extends Component {
       citySelected,
       checkedList,
       dob,
-      selectedGender
+      selectedGender,
     } = this.state;
     let _this = this;
 
-    if (this.validator.allValid() && selectedTier && selectedClass && password.length > 0) {
+    if (this.validator.allValid() && selectedTier && selectedClass && password.length > 0 && dob) {
       let formData = {
         first_name: fields["first_name"],
         last_name: fields["last_name"],
@@ -180,6 +183,7 @@ class AddUser extends Component {
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
+        country_id: countryID,
         state_id:stateID,
         generate_wallet_coins: checkedList,
         kyc_done: isKYC,
@@ -251,7 +255,7 @@ class AddUser extends Component {
       stateSelected: state,
       citySelected: city,
       countryCode,
-      stateID:stateID,
+      stateID,
       countryID
       
     });
@@ -275,7 +279,7 @@ class AddUser extends Component {
   };
 
   _changeDate = (date, dateString) => {
-    this.setState({ dob: moment(date).format("DD-MM-YYYY") });
+    this.setState({ dob: moment(date).format("DD-MM-YYYY"),showDOBErr:date?false:true });
   };
 
   onCheckAllChange = e => {
@@ -318,7 +322,10 @@ class AddUser extends Component {
       isKYC,
       selectedGender,
       allAccountClasses,
-      showPasswordError
+      showPasswordError,
+      citySelected,
+      stateSelected,
+      countrySelected
     } = this.state;
 
     if (errMsg) {
@@ -483,6 +490,12 @@ class AddUser extends Component {
                 <Option value={"male"}>Male</Option>
                 <Option value={"female"}>Female</Option>
               </Select>
+              {this.validator.message(
+                  "gender",
+                  selectedGender,
+                  "required",
+                  "error-danger"
+                )}
             </Col>
           </Row>
         
@@ -506,8 +519,28 @@ class AddUser extends Component {
                   )
                 }
               />
-      
-          <Row style={{ marginBottom: "15px", paddingTop: "78px" }}>
+              <div className='float-clear'>
+                {this.validator.message(
+                  "Country",
+                  countrySelected,
+                  "required",
+                  "error-danger"
+                )}
+                {this.validator.message(
+                  "City",
+                  citySelected,
+                  "required",
+                  "error-danger"
+                )}
+                
+                {this.validator.message(
+                  "State",
+                  stateSelected,
+                  "required",
+                  "error-danger"
+                )}
+              </div>
+          <Row style={{ marginBottom: "15px", paddingTop: "15px" }}>
             <Col>
               <span>Postal Code:</span>
               <Input

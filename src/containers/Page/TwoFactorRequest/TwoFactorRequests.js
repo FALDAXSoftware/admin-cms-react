@@ -12,6 +12,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import ViewRequestModal from './viewRequestModal';
 import RequestActionModal from './requestActionModal';
 import ColWithPadding from '../common.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -25,7 +26,7 @@ class TwoFactorRequests extends Component {
             all2FARequests: [],
             allRequestsCount: 0,
             searchReq: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -181,7 +182,7 @@ class TwoFactorRequests extends Component {
     render() {
         const { all2FARequests, allRequestsCount, errType, loader, errMsg, page, limit,
             showRejectForm, twoFactorReqDetails, showViewRequestModal, searchReq, filterVal } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

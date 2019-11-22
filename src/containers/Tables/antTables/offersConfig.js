@@ -4,8 +4,10 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell,
     DateCell,
+    HistoryDateCell,
     CampaignSwitchCell,
-    CampaignActionCell
+    CampaignActionCell,
+    CampaignTypeCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (
@@ -32,16 +34,10 @@ const renderCell = (
   const campaign_deleted_at = object[deleted_at];
   switch (type) {
     case "DateCell":
-      return DateCell(value);
+      return HistoryDateCell(value);
     case "CampaignSwitchCell":
-      return CampaignSwitchCell( campaign_id,
-        campaign_label,
-        campaign_start_date,
-        campaign_end_date,
-        campaign_is_active,
-        campaign_created_at,
-        campaign_updated_at,
-        campaign_deleted_at,);
+      return CampaignSwitchCell(campaign_id,
+        campaign_is_active,campaign_label);
     case "ActiveUserActionCell":
       return CampaignActionCell(
         value,
@@ -54,6 +50,8 @@ const renderCell = (
         campaign_updated_at,
         campaign_deleted_at,
       );
+    case "CampaignTypeCell":
+      return CampaignTypeCell(value)
     default:
       return TextCell(value);
   }
@@ -64,7 +62,7 @@ const columns = [{
     key: 'action',
     width: 100,
     render: object => renderCell(object,
-        'ActiveUserActionCell',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at")
+        'ActiveUserActionCell',"id","id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at")
 },
 {
     title: <IntlMessages id="CampaignTable.title.label" />,
@@ -72,15 +70,8 @@ const columns = [{
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'label',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
-},
+}, 
 {
-    title: <IntlMessages id="CampaignTable.title.is_active" />,
-    key: 'is_active',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'CampaignSwitchCell', 'is_active',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
-},
- {
     title: <IntlMessages id="CampaignTable.title.start_date" />,
     key: 'start_date',
     width: 100,
@@ -94,13 +85,27 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'end_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
+{
+  title: <IntlMessages id="CampaignTable.title.type" />,
+  key: 'usage',
+  width: 100,
+  sorter: true,
+  render: object => renderCell(object, 'CampaignTypeCell', 'usage',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
+},
+{
+    title: <IntlMessages id="CampaignTable.title.is_active" />,
+    key: 'is_active',
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, 'CampaignSwitchCell', 'is_active',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
+},
 ]
 
 
 const tblOffers= [
     {
-        title: 'Offers',
-        value: 'Offers',
+        title: 'Campaigns',
+        value: 'Campaigns',
         columns: clone(columns)
     }
 ];

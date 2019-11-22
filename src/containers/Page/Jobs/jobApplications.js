@@ -10,6 +10,7 @@ import ViewJobAppModal from './viewJobAppModal';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const Search = Input.Search;
@@ -23,7 +24,7 @@ class JobApplications extends Component {
             allApplications: [],
             allApplicationsCount: 0,
             searchJobApp: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -119,7 +120,7 @@ class JobApplications extends Component {
     render() {
         const { allApplications, allApplicationsCount, errType, loader, errMsg, page,
             showViewJobAppModal, applicationDetails, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

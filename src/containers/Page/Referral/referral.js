@@ -9,6 +9,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -21,7 +22,7 @@ class Referral extends Component {
             allReferral: [],
             allReferralCount: 0,
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
             searchReferral: '',
             fields: {},
             prevDefaultReferral: '',
@@ -241,7 +242,7 @@ class Referral extends Component {
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
             <LayoutWrapper>

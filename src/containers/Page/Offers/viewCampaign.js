@@ -3,18 +3,82 @@ import { Link } from "react-router-dom";
 import ApiUtils from "../../../helpers/apiUtills";
 import authAction from "../../../redux/auth/actions";
 import { connect } from "react-redux";
-import { notification, Row, Col } from "antd";
-import FaldaxLoader from "../faldaxLoader";
+import { notification, Row, Col ,Table,Divider,Tag} from "antd";
+import Loader from "../faldaxLoader";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
+import { DateCell ,HistoryDateCell} from "../../../components/tables/helperCells";
+const tableColumns=[
+  {
+    title:"Code",
+    dataIndex: 'code',
+    key: 'code',
+  },
+  {
+    title:"Description",
+    dataIndex: 'description',
+    key: 'description',
+  },
+  {
+    title:"No of transactions",
+    dataIndex: 'no_of_transactions',
+    key: 'no_of_transactions',
+  },
+  {
+    title:"Total fees allowed",
+    dataIndex: 'fees_allowed',
+    key: 'fees_allowed',
+    render:(fees)=><span>{fees} USD</span>
+  },
+  {
+    title:"Start Date",
+    dataIndex: 'start_date',
+    key: 'start_date',
+    render:(start_date)=>HistoryDateCell(start_date)
+  },
+  {
+    title:"End Date",
+    dataIndex: 'end_date',
+    key: 'end_date',
+    render:(end_date)=>HistoryDateCell(end_date)
+  },
+  {
+    title:"Code Used",
+    dataIndex: 'offercode_used',
+    key: 'offercode_used'
+  },
+  {
+    title:"User id",
+    dataIndex: 'user_id',
+    key: 'user_id',
+  },
+  {
+    title:"Status",
+    dataIndex: 'is_active',
+    key: 'is_active',
+    render:(status)=>(
+      <span>
+            <Tag color={status==true? 'geekblue' : 'grey'} key={status}>
+            {status==true? 'Active' : 'DeActive'}
+            </Tag>
+      </span>
+    )
+  },
+]
 
 const { logout } = authAction;
 
 const CampaignCol = styled(Col)`
   margin: 0 0 15px 0;
 `;
+
+const detailHead=styled.span`
+  font-weight:500;
+  font-size:15px;
+`;
+
 const CampRow = styled(Row)`
   display: flex !important;
   align-items: center;
@@ -29,49 +93,47 @@ class ViewCampaign extends Component {
     super(props);
     this.state = {
       loader: false,
-      campaignDetials: ""
+      campaignDetails: ""
+    };
+    this.loader = {
+      show: () => this.setState({ loader: true }),
+      hide: () => this.setState({ loader: false })
     };
     this.openNotificationWithIcon = this.openNotificationWithIcon.bind(this);
   }
   componentDidMount() {
-    // console.log("this.props.params", this.props.match.params.id);
-    this._getCampaignDetail();
+    this.getCampaignDetail();
   }
-  _getCampaignDetail = () => {
+  getCampaignDetail = async () => {
     const { token } = this.props;
     const campaign_id = this.props.match.params.id;
-    let _this = this;
-    this.setState({
-      loader: true
-    });
-    ApiUtils.getCampaignDetails(token, campaign_id)
-      .then(response => response.json())
-      .then(function(res) {
-        if (res.status == 200) {
-          console.log(res.data);
-          _this.setState({ campaignDetials: res.data });
-        } else if (res.status == 403) {
-          _this.props.logout();
-        } else {
-          //   _this.setState({ errMsg: true, errMessage: res.message });
-          _this.openNotificationWithIcon("error", "Error", res.message);
-        }
-        _this.setState({
-          loader: false
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.loader.show();
+    try {
+      let res = await (
+        await ApiUtils.offers(token).getById(campaign_id)
+      ).json();
+      if (res.status == 200) {
+        this.setState({ campaignDetails: res.data });
+      } else if (res.status == 403) {
+        this.props.logout();
+      } else {
+        this.openNotificationWithIcon("error", "Error", res.message);
+      }
+    } catch (error) {
+    } finally {
+      this.loader.hide();
+    }
   };
+
   openNotificationWithIcon(type, head, desc) {
     notification[type]({
       message: head,
       description: desc
     });
   }
+
   render() {
-    const { loader, campaignDetials } = this.state;
+    const { loader, campaignDetails } = this.state;
     return (
       <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent">
@@ -89,50 +151,56 @@ class ViewCampaign extends Component {
               Back
             </a>
           </Link>
-          <h2>{campaignDetials.label}</h2>
-          <p>{campaignDetials.description}</p>
+          <h2>{campaignDetails.label}</h2>
+          <p>{campaignDetails.description}</p>
           <CampRow>
             <Col span={8}>
-              <b>Total number of transactions allowed:</b>
+              <detailHead>Total number of transactions allowed</detailHead>
             </Col>
-            <Col span={16}>{campaignDetials.no_of_transactions}</Col>
+            <Col span={16}>{campaignDetails.no_of_transactions}</Col>
           </CampRow>
           <CampRow>
             <Col span={8}>
-              <b>Total fees allowed:</b>
+              <detailHead>Total fees allowed</detailHead>
             </Col>
-            <Col span={16}>{campaignDetials.fees_allowed}</Col>
+            <Col span={16}>{campaignDetails.fees_allowed} USD</Col>
           </CampRow>
           <CampRow>
             <Col span={8}>
-              <b>Start Date:</b>
+              <detailHead>Type</detailHead>
+            </Col>
+            <Col span={16}>{campaignDetails.usage==1?'Single code use':'Multiple code use'}</Col>
+          </CampRow>
+          {campaignDetails.start_date && <CampRow>
+            <Col span={8}>
+              <detailHead>Start Date</detailHead>
             </Col>
             <Col span={16}>
-              {moment
-                .utc(campaignDetials.start_date)
-                .local()
-                .format("DD MMM YYYY LTS")}
+              {HistoryDateCell(campaignDetails.start_date)}
             </Col>
-          </CampRow>
-          <CampRow>
+          </CampRow>}
+          {campaignDetails.end_date && <CampRow>
             <Col span={8}>
-              <b>End Date:</b>
-            </Col>
-            <Col span={16}>{moment
-                .utc(campaignDetials.end_date)
-                .local()
-                .format("DD MMM YYYY LTS")}</Col>
-          </CampRow>
-          <CampRow>
-            <Col span={8}>
-              <b>Campaign Status:</b>
+              <detailHead>End Date</detailHead>
             </Col>
             <Col span={16}>
-              {campaignDetials.is_active ? "Active" : "Inactive"}
+              {HistoryDateCell(campaignDetails.end_date)}
+            </Col>
+          </CampRow>}
+          <CampRow>
+            <Col span={8}>
+              <detailHead>Campaign Status</detailHead>
+            </Col>
+            <Col span={16}>
+              <Tag color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
             </Col>
           </CampRow>
+          <div className='mg-top-15'>
+            <Divider orientation="left">Offers</Divider>
+            <Table dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
+          </div>
         </TableDemoStyle>
-        {loader && <FaldaxLoader />}
+        {loader && <Loader />}
       </LayoutWrapper>
     );
   }

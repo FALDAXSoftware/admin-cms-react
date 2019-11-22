@@ -13,7 +13,7 @@ class Users extends Component {
                 <div style={{ float: 'right', backgroundColor: 'white', marginRight: '20px' }}>
                     <Button icon="plus" onClick={() => this.props.history.push('/dashboard/users/add-user')} type="primary">Add User</Button>
                 </div>
-                <Tabs defaultActiveKey="1" size={'large'}>
+                <Tabs className='float-clear' defaultActiveKey="1" size={'large'}>
                     <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
                     <TabPane tab="In-Active Users" key="2"><InActiveUsers /></TabPane>
                     <TabPane tab="Deactivated Users" key="3"><DeletedUsers /></TabPane>
