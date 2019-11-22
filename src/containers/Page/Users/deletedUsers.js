@@ -12,6 +12,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import CountryData from 'country-state-city';
+import { PAGESIZE, PAGE_SIZE_OPTIONS } from '../../../helpers/globals';
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -26,7 +27,7 @@ class DeletedUsers extends Component {
             searchUser: '',
             userDetails: [],
             page: 1,
-            limit: 50,
+            limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -178,7 +179,7 @@ class DeletedUsers extends Component {
     render() {
         const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal,
             allCountries, showDeleteUserModal, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+        let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         const headers = [
             { label: "First Name", key: "first_name" },

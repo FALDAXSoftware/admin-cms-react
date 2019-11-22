@@ -11,6 +11,7 @@ import EditPairModal from './editPairModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -28,7 +29,7 @@ class Pairs extends Component {
             pairDetails: [],
             pairsCount: 0,
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
             allCoins: [],
             showAddPairsModal: false,
             showEditPairModal: false,
@@ -195,7 +196,7 @@ class Pairs extends Component {
     render() {
         const { allPairs, errType, errMsg, page, pairsCount, loader, allCoins, searchPair, limit,
             showAddPairsModal, pairDetails, showEditPairModal, allAssets, selectedAsset } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

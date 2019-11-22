@@ -184,7 +184,8 @@ class EditUser extends Component {
       citySelected,
       dob,
       selectedGender,
-      stateCode
+      stateCode,
+      countryID
     } = this.state;
     let _this = this;
 
@@ -203,7 +204,8 @@ class EditUser extends Component {
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
-        state_id:stateCode,
+        state_id:stateCode.toString(),
+        country_id:countryID.toString(),
         kyc_done: isKYC,
         gender: selectedGender,
         dob: moment(dob).format("DD-MM-YYYY")
@@ -261,17 +263,20 @@ class EditUser extends Component {
   };
 
   onCountryChange(country, state, city, stateID, countryID, countryCode) {
+    
     this.setState({
       countrySelected: country,
       stateSelected: state,
       citySelected: city,
       countryCode,
+      countryID,
       stateCode:stateID
-    });
+    },()=>console.log("State Changed => ",this.state));
+    
   }
 
   _changeDate = (date, dateString) => {
-    this.setState({ dob: date });
+    this.setState({ dob: date ,showDOBErr:false});
   };
 
   _changeGender = val => {
@@ -447,6 +452,12 @@ class EditUser extends Component {
                 <Option value={"male"}>Male</Option>
                 <Option value={"female"}>Female</Option>
               </Select>
+              {this.validator.message(
+                  "gender",
+                  selectedGender,
+                  "required",
+                  "error-danger"
+                )}
             </Col>
           </Row>
               <CountryFields
@@ -454,7 +465,7 @@ class EditUser extends Component {
                 stateName={stateSelected}
                 cityName={citySelected}
                 stateCode={stateCode}
-                update={countrySelected?false:true}
+                update={true}
                 {...this.props}
                 onCountryChange={(
                   country,
@@ -474,16 +485,28 @@ class EditUser extends Component {
                   )
                 }
               />
-              <span style={{ color: "red" }}>
+             <div className='float-clear'>
                 {this.validator.message(
-                  "country",
-                  fields["country"],
+                  "Country",
+                  countrySelected,
                   "required",
-                  "text-danger"
+                  "error-danger"
                 )}
-                {/* {this.state.postalmsg} */}
-              </span>
-          <Row style={{ marginBottom: "15px", paddingTop: "78px" }}>
+                {this.validator.message(
+                  "City",
+                  citySelected,
+                  "required",
+                  "error-danger"
+                )}
+                
+                {this.validator.message(
+                  "State",
+                  stateSelected,
+                  "required",
+                  "error-danger"
+                )}
+              </div>
+          <Row style={{ marginBottom: "15px", paddingTop: "16" }}>
             <Col>
               <span>Postal Code:</span>
               <Input

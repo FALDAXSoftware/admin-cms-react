@@ -10,6 +10,7 @@ import AddEmployeeModal from './addEmployeeModal';
 import EditEmployeeModal from './editEmployeeModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -33,7 +34,7 @@ class Employees extends Component {
             deleteEmpId: '',
             searchEmp: '',
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
         }
         self = this;
         Employees.employeeStatus = Employees.employeeStatus.bind(this);
@@ -229,7 +230,7 @@ class Employees extends Component {
     render() {
         const { allEmployee, errType, errMsg, loader, showAddEmpModal, employeeCount, page, limit,
             showEditEmpModal, empDetails, showDeleteEmpModal, allRoles } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

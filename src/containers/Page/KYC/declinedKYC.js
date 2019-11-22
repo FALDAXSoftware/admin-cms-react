@@ -10,6 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
 import ColWithPadding from '../common.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -27,7 +28,7 @@ class DeclinedKYC extends Component {
             errType: '',
             loader: false,
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
             searchKYC: '',
             allKYCCount: 0,
             status: 'DENY',
@@ -166,7 +167,7 @@ class DeclinedKYC extends Component {
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
             <TableDemoStyle>
