@@ -21,6 +21,7 @@ import authAction from "../../../redux/auth/actions";
 import ColWithPadding from "../common.style";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -35,7 +36,7 @@ class ActiveUsers extends Component {
       searchUser: "",
       userDetails: [],
       page: 1,
-      limit: 50,
+      limit: PAGESIZE,
       errMessage: "",
       errMsg: false,
       errType: "Success",
@@ -255,7 +256,7 @@ class ActiveUsers extends Component {
       showDeleteUserModal,
       limit
     } = this.state;
-    let pageSizeOptions = ["20", "30", "40", "50"];
+    let pageSizeOptions = PAGE_SIZE_OPTIONS
 
     const headers = [
       { label: "First Name", key: "first_name" },

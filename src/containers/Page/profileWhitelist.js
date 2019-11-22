@@ -11,6 +11,7 @@ import AddProfileIPModal from './addProfileIPModal';
 import FaldaxLoader from './faldaxLoader';
 import styled from 'styled-components';
 import AddProfilePermanentIPModal from './addProfilePermanentIPModal';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../helpers/globals';
 
 const { logout } = authAction;
 var self;
@@ -32,7 +33,7 @@ class ProfileWhitelist extends Component {
     this.state = {
       IPCount: 0,
       page: 1,
-      limit: 5,
+      limit: PAGESIZE,
       allIPAddresses: "",
       showDeleteIPModal: false,
       showAddProfileIPModal: false
@@ -336,7 +337,7 @@ class ProfileWhitelist extends Component {
       isWhitelistEnabled,
       showAddProfilePermanentIPModal
     } = this.state;
-    let pageSizeOptions = ["5", "10", "20"];
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }

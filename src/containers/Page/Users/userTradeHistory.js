@@ -20,6 +20,7 @@ import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
 import ColWithPadding from "../common.style";
 import { ExecutionUl } from "../common.style";
+import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -32,7 +33,7 @@ class UserTradeHistory extends Component {
       allTrades: [],
       allTradeCount: 0,
       searchTrade: "",
-      limit: 50,
+       limit: PAGESIZE,
       errMessage: "",
       errMsg: false,
       errType: "Success",
@@ -169,7 +170,7 @@ class UserTradeHistory extends Component {
       searchTrade,
       limit
     } = this.state;
-    let pageSizeOptions = ["20", "30", "40", "50"];
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
     const tradeHeaders = [
       { label: "Created On", key: "created_at" },
       { label: "Coin", key: "symbol" },

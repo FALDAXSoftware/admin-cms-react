@@ -11,6 +11,7 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -23,7 +24,7 @@ class SimplexHistory extends Component {
             allSimplexTrades: [],
             allTradeCount: 0,
             searchTrade: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -170,7 +171,7 @@ class SimplexHistory extends Component {
             { label: "Quote ID", key: "quote_id" },
             { label: "Simplex Payment Status", key: "simplex_payment_status" },
         ];
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

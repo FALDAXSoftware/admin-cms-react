@@ -10,6 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import { CSVLink } from "react-csv";
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -22,7 +23,7 @@ class UserWithdrawRequest extends Component {
             allRequests: [],
             allReqCount: 0,
             searchReq: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -115,7 +116,7 @@ class UserWithdrawRequest extends Component {
     render() {
         const { allRequests, allReqCount, errType, errMsg, page, loader, filterVal,
             searchReq, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         const requestHeaders = [
             { label: "Source Address", key: "source_address" },

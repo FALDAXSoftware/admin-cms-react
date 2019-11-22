@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../helpers/apiUtills';
-import { Modal, Input, notification, Button } from 'antd';
+import { Modal, Input, notification,Button,DatePicker} from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
 import FaldaxLoader from './faldaxLoader';
+import moment from 'moment';
 
 const { logout } = authAction;
 
@@ -18,7 +19,8 @@ class AddProfileIPModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            showIPError: false
+            showIPError: false,
+            endDate:""
         }
         this.validator = new SimpleReactValidator();
     }
@@ -130,46 +132,92 @@ class AddProfileIPModal extends Component {
         }
     }
 
+    disabledDate(current) {
+        // Can not select days before today and today
+        return current < moment().startOf('day');
+      }
+
+    onChangeDate=(date)=>{
+        const {fields}=this.state;
+        fields["days"]=moment(date).endOf('day').diff(moment().startOf('day'), 'days');
+        fields["days"]=parseInt(fields["days"])+1;
+        this.setState({fields,endDate:date});
+    
+    }
+
     _changeTime = (value) => {
         this.setState({ selectedTime: value });
     }
 
     render() {
-        const { loader, showAddProfileIPModal, fields, errMsg, errType, showIPError } = this.state;
+        const { loader, showAddProfileIPModal, fields, errMsg, errType, showIPError,endDate } = this.state;
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
-            <Modal
-                title="Add IP Address"
-                visible={showAddProfileIPModal}
-                confirmLoading={loader}
-                onCancel={this._closeAddIPModal}
-                footer={[
-                    <Button onClick={this._closeAddIPModal}>Cancel</Button>,
-                    <Button onClick={this._addIPAddress}>Add</Button>,
-                ]}
-            >
-                <div style={{ "marginBottom": "15px" }}>
-                    <span>IP Address:</span>
-                    <Input placeholder="192.168.0.0" onChange={this._handleChange.bind(this, "ip")} value={fields["ip"]} />
-                    <span style={{ "color": "red" }}>
-                        {this.validator.message('ip', fields["ip"], 'required|max:50', 'text-danger')}
-                        {showIPError && <span>The IP Address is not valid.</span>}
-                    </span>
-                </div>
+          <Modal
+            title="Add IP Address"
+            visible={showAddProfileIPModal}
+            confirmLoading={loader}
+            onCancel={this._closeAddIPModal}
+            footer={[
+              <Button onClick={this._closeAddIPModal}>Cancel</Button>,
+              <Button onClick={this._addIPAddress}>Add</Button>
+            ]}
+          >
+            <div style={{ marginBottom: "15px" }}>
+              <span>IP Address:</span>
+              <Input
+                placeholder="192.168.0.0"
+                onChange={this._handleChange.bind(this, "ip")}
+                value={fields["ip"]}
+              />
+              <span style={{ color: "red" }}>
+                {this.validator.message(
+                  "ip",
+                  fields["ip"],
+                  "required|max:50",
+                  "text-danger"
+                )}
+                {showIPError && <span>The IP Address is not valid.</span>}
+              </span>
+            </div>
 
-                <div style={{ "marginBottom": "15px" }}>
+            {/* <div style={{ "marginBottom": "15px" }}>
                     <span>Days:</span>
                     <Input placeholder="Time Period" onChange={this._handleChange.bind(this, "days")} value={fields["days"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('days', fields["days"], 'required|max:3', 'text-danger')}
                     </span>
-                </div>
-                {loader && <FaldaxLoader />}
-            </Modal>
+                </div> */}
+
+            <div style={{ marginBottom: "15px" }}>
+              <span>End Date:</span>
+              <DatePicker
+                style={{ width: "100%" }}
+                disabledDate={this.disabledDate}
+                value={endDate}
+                format="YYYY-MM-DD"
+                showTime={false}
+                allowClear={false}
+                onChange={this.onChangeDate}
+              />
+              <span style={{ fontStyle: "italic" }}>
+                * {fields["days"]} Days
+              </span>
+              <span style={{ color: "red" }}>
+                {this.validator.message(
+                  "end date",
+                  fields["days"],
+                  "required",
+                  "text-danger"
+                )}
+              </span>
+            </div>
+            {loader && <FaldaxLoader />}
+          </Modal>
         );
     }
 }

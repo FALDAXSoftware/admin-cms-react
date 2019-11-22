@@ -22,6 +22,7 @@ import authAction from "../../../redux/auth/actions";
 import ColWithPadding from "../common.style";
 import {ExecutionUl} from "../common.style";
 import { parse } from "path";
+import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -34,7 +35,7 @@ class TradeHistory extends Component {
       allTrades: [],
       allTradeCount: 0,
       searchTrade: "",
-      limit: 50,
+       limit: PAGESIZE,
       errMessage: "",
       errMsg: false,
       errType: "Success",
@@ -242,7 +243,7 @@ class TradeHistory extends Component {
       // { label: "Taker Email", key: "email" },
       // { label: "Created On", key: "created_at" }
     ];
-    let pageSizeOptions = ["20", "30", "40", "50"];
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }

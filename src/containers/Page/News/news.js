@@ -10,6 +10,7 @@ import moment from 'moment';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -24,7 +25,7 @@ class News extends Component {
             allNews: [],
             allNewsCount: 0,
             searchNews: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -228,7 +229,7 @@ class News extends Component {
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
             <LayoutWrapper>

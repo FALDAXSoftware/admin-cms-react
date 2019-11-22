@@ -12,6 +12,7 @@ import EditJobModal from './editJobModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import JobCategory from './jobsCategory';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -25,7 +26,7 @@ class Jobs extends Component {
             allJobs: [],
             allJobsCount: 0,
             searchJob: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -257,7 +258,7 @@ class Jobs extends Component {
         const { allJobs, allJobsCount, errType, loader, errMsg, page,
             showAddJobModal, showViewJobModal, showEditJobModal, showDeleteJobModal,
             jobDetails, allJobCategories, activeTab, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
