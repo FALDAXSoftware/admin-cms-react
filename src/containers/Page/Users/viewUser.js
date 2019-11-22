@@ -18,6 +18,14 @@ import UserWallets from './userWallets';
 const { TabPane } = Tabs;
 
 class ViewUser extends Component {
+
+    constructor(props){
+        super(props)
+    }
+
+    componentDidMount(){
+        console.log(this.props.location)
+    }
     render() {
         const { location } = this.props;
         let path = location.pathname.split('/');
@@ -44,7 +52,7 @@ class ViewUser extends Component {
                     <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
                     <TabPane tab="Tickets" key="11"><UserTickets user_id={user_id} /></TabPane>
                     <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
-                    <TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
+                    {(this.props.location.state && this.props.location.state.is_active) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>}
                 </Tabs>
             </div>
         );

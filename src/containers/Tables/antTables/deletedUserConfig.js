@@ -8,7 +8,8 @@ import {
     ActiveUserActionCell,
     DateCell,
     TierCell,
-    ReferralCell
+    ReferralCell,
+    DeletedUserActionCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
@@ -48,7 +49,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'ReferralCell':
             return ReferralCell(value);
         case 'ActiveUserActionCell':
-            return ActiveUserActionCell(value, profile_pic, first_name, last_name, email, city_town,
+            return DeletedUserActionCell(value, profile_pic, first_name, last_name, email, city_town,
                 street_address, street_address_2, phone_number, country, dob, is_active, kyc,
                 date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
         default:
