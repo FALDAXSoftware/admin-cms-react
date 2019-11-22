@@ -9,6 +9,7 @@ import { Tabs, Input, Pagination, DatePicker, Button, Form, notification } from 
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
 
@@ -23,7 +24,7 @@ class LoginHistory extends Component {
             loader: false,
             allHistoryCount: 0,
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
             startDate: '',
             endDate: '',
             rangeDate: [],
@@ -135,7 +136,7 @@ class LoginHistory extends Component {
     render() {
         const { allHistory, loader, allHistoryCount, page, rangeDate, searchHistory,
             errMsg, errType, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

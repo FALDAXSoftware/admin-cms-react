@@ -11,6 +11,7 @@ import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
 import ColWithPadding from '../common.style';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -23,7 +24,7 @@ class UserTransactionHistory extends Component {
             allTransactions: [],
             allTransactionCount: 0,
             searchTransaction: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -149,7 +150,7 @@ class UserTransactionHistory extends Component {
     render() {
         const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
             searchTransaction, limit } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         const transactionsHeaders = [
             { label: "Transaction Hash", key: "transaction_id" },
             { label: "Source Address", key: "source_address" },

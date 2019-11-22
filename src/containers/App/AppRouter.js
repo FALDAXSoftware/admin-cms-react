@@ -155,6 +155,11 @@ const routes = [
         module: "offers"
     },
     {
+        path: "campaign/update-campaign/:id",
+        component: asyncComponent(() => import("../Page/Offers/addCampaign")),
+        module: "offers"
+    },
+    {
         path: "network-fee",
         component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
         module: "network_fee"

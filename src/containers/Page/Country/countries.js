@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import EditCountryModal from './editCountryModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -23,7 +24,7 @@ class Countries extends Component {
             allCountries: [],
             allCountryCount: 0,
             searchCountry: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -167,7 +168,7 @@ class Countries extends Component {
     render() {
         const { allCountries, allCountryCount, errType, errMsg, loader, limit,
             page, showEditCountryModal, countryDetails, searchCountry, localityVal } = this.state;
-        let pageSizeOptions = ['20', '30', '40', '50']
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());

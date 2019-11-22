@@ -5,6 +5,8 @@ import { summaryTableInfos } from "../../Tables/antTables/accountSummaryConfig";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+
 import {
   Tabs,
   Input,
@@ -31,7 +33,7 @@ class AccountSummary extends Component {
       loader: false,
       totalCount: 0,
       page: 1,
-      limit: 50,
+       limit: PAGESIZE,
       startDate: "",
       endDate: "",
       rangeDate: [],
@@ -191,7 +193,7 @@ class AccountSummary extends Component {
       limit,
       deleteDate
     } = this.state;
-    let pageSizeOptions = ["20", "30", "40", "50"];
+    let pageSizeOptions =PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
