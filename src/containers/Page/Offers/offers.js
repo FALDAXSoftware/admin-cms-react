@@ -108,7 +108,6 @@ class Offers extends Component {
         await ApiUtils.offers(this.props.token).getCampaignList(page, limit)
       ).json();
       if (offers.status == 200) {
-        this.loader.hide();
         this.setState({
           campaignList: offers.data.campaigns,
           campaignCount: offers.data.total,
@@ -128,8 +127,9 @@ class Offers extends Component {
         });
       }
     } catch (error) {
-      this.loader.hide();
       this.setState({ errMsg: true, errMessage: OtherError, errType: "error" });
+    }finally{
+      this.loader.hide();
     }
   }
 

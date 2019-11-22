@@ -467,7 +467,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         startOfferDate
       ) {
-        if(!(await this.offerIsValid(offerFields["offer_name"]))){
+        if(!isOfferUpdate && !(await this.offerIsValid(offerFields["offer_name"]))){
           return false;
         }
         let formdata = {};
@@ -535,7 +535,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         this.state.startDate
       ) {
-        if(!(await this.offerIsValid(offerFields["offer_name"]))){
+        if(!(isOfferUpdate) &&!(await this.offerIsValid(offerFields["offer_name"]))){
           return false;
         }
         let formdata = {};
