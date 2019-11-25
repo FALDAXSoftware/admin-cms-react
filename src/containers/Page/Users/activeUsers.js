@@ -7,7 +7,8 @@ import {
   Row,
   Select,
   Form,
-  Modal
+  Modal,
+  Col
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
@@ -106,7 +107,7 @@ class ActiveUsers extends Component {
       filterVal
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allUsers: res.data, allUserCount: res.userCount });
         } else if (res.status == 403) {
@@ -139,7 +140,7 @@ class ActiveUsers extends Component {
     _this.setState({ loader: true });
     ApiUtils.deleteUser(token, deleteUserId)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             deleteUserId: "",
@@ -302,20 +303,21 @@ class ActiveUsers extends Component {
               <div>
                 <div style={{ display: "inline-block", width: "100%" }}>
                   <Form onSubmit={this._searchUser}>
-                    <Row type="flex" justify="end">
-                      <ColWithPadding sm={7}>
+                    <Row gutter={16}>
+                      <Col lg={8} xs={24}>
                         <Input
                           placeholder="Search users"
                           onChange={this._changeSearch.bind(this)}
                           value={searchUser}
                         />
-                      </ColWithPadding>
-                      <ColWithPadding sm={6}>
+                      </Col>
+                      <Col lg={7} xs={24}>
                         <Select
                           getPopupContainer={trigger => trigger.parentNode}
                           placeholder="Select a country"
                           onChange={this._changeCountry}
                           value={filterVal}
+                          style={{ width: "100%" }}
                         >
                           {allCountries &&
                             allCountries.map((country, index) => {
@@ -326,40 +328,42 @@ class ActiveUsers extends Component {
                               );
                             })}
                         </Select>
-                      </ColWithPadding>
-                      <ColWithPadding xs={12} sm={4}>
+                      </Col>
+                      <Col xs={24} lg={3}>
                         <Button
                           htmlType="submit"
                           className="search-btn"
                           type="primary"
+                          style={{ width: "100%", margin: "0" }}
                         >
                           Search
                         </Button>
-                      </ColWithPadding>
-                      <ColWithPadding xs={12} sm={4}>
+                      </Col>
+                      <Col xs={24} lg={3}>
                         <Button
                           className="search-btn"
                           type="primary"
                           onClick={this._resetFilters}
+                          style={{ width: "100%", margin: "0" }}
                         >
                           Reset
                         </Button>
-                      </ColWithPadding>
-                      <ColWithPadding sm={3}>
+                      </Col>
+                      <Col xs={24} lg={3}>
                         {allUsers && allUsers.length > 0 ? (
                           <CSVLink
                             data={allUsers}
                             filename={"users.csv"}
                             headers={headers}
                           >
-                            <Button className="search-btn" type="primary">
+                            <Button className="search-btn" type="primary" style={{ width: "100%", margin: "0" }}>
                               Export
                             </Button>
                           </CSVLink>
                         ) : (
-                          ""
-                        )}
-                      </ColWithPadding>
+                            ""
+                          )}
+                      </Col>
                     </Row>
                   </Form>
                 </div>
@@ -386,8 +390,8 @@ class ActiveUsers extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                   {showDeleteUserModal && (
                     <Modal
                       title="Delete User"

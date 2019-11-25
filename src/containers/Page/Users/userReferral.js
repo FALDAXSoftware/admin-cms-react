@@ -168,7 +168,7 @@ class Referral extends Component {
                     <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "5px    ", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                     <span className="field-error">
-                        {this.validator.message('percentage', fields['percentage'], 'required|numeric|lte:100|gt:0')}
+                        {this.validator.message('percentage', fields['percentage'], 'required|numeric|lte:100')}
                     </span>
                     {/* <span>
                         <b>Referral Days</b>
