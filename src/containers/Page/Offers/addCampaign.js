@@ -413,7 +413,38 @@ class AddCampaign extends Component {
       }
     }
   };
-  _addOffer = e => {
+
+  offerIsValid=async(offerCode)=>{
+    try {
+      this.setState({ loader: true });
+      let offerCodeIsValid = await (
+        await ApiUtils.offers(this.props.token).checkOfferCode(
+          offerCode
+        )
+      ).json();
+      if (offerCodeIsValid.status == 200) {
+        return true;
+      } else if (offerCodeIsValid.status == 400) {
+        this.openNotificationWithIcon("error","Error",offerCodeIsValid.message);
+        return false
+      } else if (offerCodeIsValid.status == 403) {
+        this.openNotificationWithIcon("error", "Error", offerCodeIsValid.message);
+        this.props.logout();
+
+      } else {
+        this.openNotificationWithIcon("error", "Error", offerCodeIsValid.message);
+        return false; 
+      }
+    } catch(error){
+      console.log("Error",error)
+      this.openNotificationWithIcon("error", "Error", "Something went to wrong please try again or contact support");
+      return false;
+    } finally {
+      this.setState({ loader: false });
+    }
+  }
+
+  _addOffer =async e => {
     const {
       offerFields,
       fields,
@@ -436,7 +467,9 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         startOfferDate
       ) {
-        // alert("offer 2");
+        if(!isOfferUpdate && !(await this.offerIsValid(offerFields["offer_name"]))){
+          return false;
+        }
         let formdata = {};
         formdata["code"] = offerFields["offer_name"];
         formdata["description"] = offerFields["offer_code_description"];
@@ -502,7 +535,9 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         this.state.startDate
       ) {
-        // alert("test");
+        if(!(isOfferUpdate) &&!(await this.offerIsValid(offerFields["offer_name"]))){
+          return false;
+        }
         let formdata = {};
         formdata["code"] = offerFields["offer_name"];
         formdata["description"] = offerFields["offer_code_description"];

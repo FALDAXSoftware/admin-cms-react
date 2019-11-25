@@ -44,15 +44,12 @@ const tableColumns=[
     key: 'end_date',
     render:(end_date)=>OfferDateCell(end_date)
   },
+  
   {
-    title:"Code Used",
-    dataIndex: 'offercode_used',
-    key: 'offercode_used'
-  },
-  {
-    title:"User id",
-    dataIndex: 'user_id',
-    key: 'user_id',
+    title:"User",
+    dataIndex: 'user_data',
+    key: 'user_data',
+    render:(data)=>(data.id?<a href={`/dashboard/users/${data.id}`}>{data.first_name+" "+data.last_name}</a>:'-')
   },
   {
     title:"Status",
