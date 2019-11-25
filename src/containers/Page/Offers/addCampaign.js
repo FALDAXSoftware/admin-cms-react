@@ -85,7 +85,7 @@ const columns_temp = [
     dataIndex: "is_active",
     key: "is_active",
     render: object => (
-      <Tag color={object == true ? "geekblue" : "grey"}>
+      <Tag className="cursor-default" color={object == true ? "geekblue" : "grey"}>
         {object === true ? "Active" : "Inactive"}
       </Tag>
     )

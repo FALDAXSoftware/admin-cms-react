@@ -419,3 +419,7 @@ html[dir='rtl'] .dz-hidden-input {
 .float-clear{
   clear: both;
 }
+
+.cursor-default{
+  cursor: default !important;
+}

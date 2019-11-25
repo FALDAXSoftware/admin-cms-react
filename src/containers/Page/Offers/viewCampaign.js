@@ -56,11 +56,9 @@ const tableColumns=[
     dataIndex: 'is_active',
     key: 'is_active',
     render:(status)=>(
-      <span>
-            <Tag color={status==true? 'geekblue' : 'grey'} key={status}>
-            {status==true? 'Active' : 'Inactive'}
-            </Tag>
-      </span>
+      <Tag className="cursor-default" color={status==true? 'geekblue' : 'grey'} key={status}>
+      {status==true? 'Active' : 'Inactive'}
+      </Tag>
     )
   },
 ]
@@ -189,7 +187,7 @@ class ViewCampaign extends Component {
               <detailHead>Campaign Status</detailHead>
             </Col>
             <Col span={16}>
-              <Tag color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
+              <Tag className="cursor-default" color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
             </Col>
           </CampRow>
           <div className='mg-top-15'>
