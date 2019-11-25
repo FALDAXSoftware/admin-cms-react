@@ -493,16 +493,7 @@ const ApiUtils = {
     sorterCol,
     sortOrder
   ) {
-    let url = "/admin/get-referal-list";
-    searchReferral = encodeURIComponent(searchReferral);
-    // if (sorterCol && sortOrder && searchReferral) {
-    //     url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    // } else if (sorterCol && sortOrder) {
-    //     url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    // } else {
-    //     url += "&data=" + searchReferral;
-    // }
-
+    let url = `/admin/get-referal-list?data=${searchReferral}${sorterCol?'&sort_col='+sorterCol:''}${sortOrder?'&sort_order='+sortOrder:''}`;
     try {
       return fetch(API_URL + url, {
         method: "GET",

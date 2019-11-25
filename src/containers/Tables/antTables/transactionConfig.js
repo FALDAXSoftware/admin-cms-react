@@ -80,7 +80,14 @@ const columns = [{
     key: 'transaction_type',
     width: 100,
     render: object => renderCell(object, 'TransactionTypeCell', 'transaction_type')
-}];
+},
+{
+    title: <IntlMessages id="transactionTable.title.transactionFees" />,
+    key: 'transaction_fees',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'transaction_fees')
+}
+];
 
 const transactionTableInfos = [
     {
