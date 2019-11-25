@@ -476,6 +476,7 @@
   "transactionTable.title.destination_address": "Destination Address",
   "transactionTable.title.amount": "Amount",
   "transactionTable.title.transactionType": "Transaction Type",
+  "transactionTable.title.transactionFees": "Transaction Fees",
   "transactionTable.title.coin": "Asset",
   "transactionTable.title.created_at": "Created On",
   "tradeTable.title.payment_id": "Payment ID",

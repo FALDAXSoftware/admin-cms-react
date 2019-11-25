@@ -1060,7 +1060,7 @@ const ReferralDateCell = (
     </p>
   );
 const TransactionTypeCell = data => (
-  <p>{data == "send" ? "Send" : "Receive"}</p>
+  <p style={{color:data=='send'?'red':'green'}}>{data == "send" ? "Send" : "Receive"}</p>
 );
 const VolumeCell = (
   value,

@@ -15,7 +15,7 @@ import {
   Select,
   Divider,
   Icon,
-  Tooltip
+  Tooltip,
 } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import moment from "moment";
@@ -28,6 +28,7 @@ import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
+const { TextArea } = Input;
 const Option = Select.Option;
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -278,8 +279,8 @@ class AddCampaign extends Component {
         let formdata = {};
         formdata["label"] = fields["campaign_name"];
         formdata["description"] = fields["campaign_desc"];
-        formdata["no_of_transactions"] = fields["no_of_transactions"];
-        formdata["fees_allowed"] = fields["fees_allowed"];
+        formdata["no_of_transactions"] = parseInt(fields["no_of_transactions"]);
+        formdata["fees_allowed"] = parseFloat(fields["fees_allowed"]);
         formdata["usage"] = checkvalue;
         formdata["is_active"] = is_active;
         formdata["campaign_offers"]=[];
@@ -346,8 +347,8 @@ class AddCampaign extends Component {
         let formdata = {};
         formdata["label"] = fields["campaign_name"];
         formdata["description"] = fields["campaign_desc"];
-        formdata["no_of_transactions"] = fields["no_of_transactions"];
-        formdata["fees_allowed"] = fields["fees_allowed"];
+        formdata["no_of_transactions"] = parseInt(fields["no_of_transactions"]);
+        formdata["fees_allowed"] = parseFloat(fields["fees_allowed"]);
         formdata["start_date"] = startDate.format("YYYY-MM-DD");
         formdata["end_date"] = endDate.format("YYYY-MM-DD");
         formdata["usage"] = checkvalue;
@@ -369,7 +370,7 @@ class AddCampaign extends Component {
             }
           }
         }else{
-          formdata["campaign_offers"] = campaign_offers;
+          formdata["campaign_offers"] = campaign_offers.map(ele=>{delete ele.id;return ele});
         }
         (isUpdate? ApiUtils.offers(token).updateCampaign(campaignId,formdata):ApiUtils.createCampaign(token, formdata))
           .then(res => res.json())
@@ -467,7 +468,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         startOfferDate
       ) {
-        if(!isOfferUpdate && !(await this.offerIsValid(offerFields["offer_name"]))){
+        if(!isUpdate && !(await this.offerIsValid(offerFields["offer_name"]))||!isOfferUpdate && !(await this.offerIsValid(offerFields["offer_name"]))){
           return false;
         }
         let formdata = {};
@@ -477,11 +478,11 @@ class AddCampaign extends Component {
         formdata["no_of_transactions"] =
           checkOfferValue === 1
             ? fields["no_of_transactions"]
-            : offerFields["no_of_transactions"];
+            : parseInt(offerFields["no_of_transactions"]);
         formdata["fees_allowed"] =
           checkOfferValue === 1
             ? fields["fees_allowed"]
-            : offerFields["fees_allowed"];
+            : parseFloat(offerFields["fees_allowed"]);
         formdata["user_id"] = userIdAssigned;
         formdata["start_date"] = startOfferDate.format("YYYY-MM-DD");
         formdata["end_date"] = endOfferDate.format("YYYY-MM-DD");
@@ -535,7 +536,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         this.state.startDate
       ) {
-        if(!(isOfferUpdate) &&!(await this.offerIsValid(offerFields["offer_name"]))){
+        if(!isUpdate && !(await this.offerIsValid(offerFields["offer_name"]))||!(isOfferUpdate) &&!(await this.offerIsValid(offerFields["offer_name"]))){
           return false;
         }
         let formdata = {};
@@ -545,18 +546,17 @@ class AddCampaign extends Component {
         formdata["no_of_transactions"] =
           checkOfferValue === 1
             ? fields["no_of_transactions"]
-            : offerFields["no_of_transactions"];
+            : parseInt(offerFields["no_of_transactions"]);
         formdata["fees_allowed"] =
           checkOfferValue === 1
             ? fields["fees_allowed"]
-            : offerFields["fees_allowed"];
+            : parseFloat(offerFields["fees_allowed"]);
         // formdata["user_id"] = userIdAssigned;
         formdata["start_date"] = startDate
           ? startDate.format("YYYY-MM-DD")
           : "";
         formdata["end_date"] = endDate ? endDate.format("YYYY-MM-DD") : "";
         formdata["is_active"] = is_offer_active;
-        console.log("Add Offer:", formdata);
         if (isUpdate) {
           if (isOfferUpdate) {
             let index = campaign_offers.findIndex(ele => ele.id == offerId);
@@ -799,7 +799,7 @@ class AddCampaign extends Component {
               </CampaignCol>
               <CampaignCol>
                 <span>Description:</span>
-                <Input
+                <TextArea rows={4} 
                   placeholder="Description"
                   onChange={this._handleChange.bind(this, "campaign_desc")}
                   value={fields["campaign_desc"]}
@@ -930,7 +930,7 @@ class AddCampaign extends Component {
                     </CampaignCol>
                     <CampaignCol>
                       <span>Offer Code Description:</span>
-                      <Input
+                      <TextArea rows={4} 
                         placeholder="Offer Code Description"
                         onChange={this._handleOfferChange.bind(
                           this,
