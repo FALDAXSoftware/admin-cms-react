@@ -53,6 +53,7 @@ class Transactions extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    res.data=_this.addTransactionFees(res.data,res.default_send_Coin_fee);
                     _this.setState({
                         allTransactions: res.data, allTransactionCount: res.transactionCount,
                         fees: res.default_send_Coin_fee
@@ -71,6 +72,13 @@ class Transactions extends Component {
                     errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
                 });
             });
+    }
+
+    addTransactionFees(data,fees){
+        return data.map(ele => {
+          ele["transaction_fees"] =ele["transaction_type"] == "send" ? (fees+" %") : "-";
+          return ele;
+        });
     }
 
     _searchTransaction = (e) => {
@@ -162,16 +170,18 @@ class Transactions extends Component {
             loader, searchTransaction, rangeDate, filterVal, limit, fees
         } = this.state;
         const transactionsHeaders = [
+            { label: "Created On", key: "created_at" },
             { label: "Transaction Hash", key: "transaction_id" },
+            { label: "Email", key: "email" },
             { label: "Source Address", key: "source_address" },
             { label: "Destination Address", key: "destination_address" },
-            { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
-            { label: "Email", key: "email" },
-            { label: "Created On", key: "created_at" },
+            { label: "Assets", key: "coin" },
+            { label: "Transaction Type", key: "transaction_type" },
+            { label: "Transaction Fees(%)", key: "transaction_fees" },
         ];
        let pageSizeOptions = PAGE_SIZE_OPTIONS
-
+        
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -241,13 +251,21 @@ class Transactions extends Component {
                                     expandedRowRender={record => {
                                         return (
                                             <div>
+                                                <span> <b>Created On: </b></span> {moment(record.created_at).format('DD MMM YYYY HH:MM')}<br/>
                                                 <span><b>Transaction Hash: </b></span>
                                                 <CopyToClipboard style={{ cursor: 'pointer' }}
                                                     text={record.transaction_id}
                                                     onCopy={this._copyNotification}>
                                                     <span>{record.transaction_id}</span>
                                                 </CopyToClipboard><br />
-                                                <span> <b>Fees: </b></span> {fees}
+                                                <span><b>Email: </b></span> {record.email}<br/>
+                                                <span><b>Source Address: </b></span> {record.source_address}<br/>
+                                                <span><b>Destination Address: </b></span> {record.destination_address}<br/>
+                                                <span><b>Amount: </b></span> {record.amount}<br/>
+                                                <span><b>Asset: </b></span> {record.coin}<br/>
+                                                <span><b>Transaction Type: </b></span><span style={{color:record.transaction_type=='send'?'red':'green'}}> {record.transaction_type}</span><br/>
+                                                <span><b>Transaction Fees: </b></span> {record.transaction_fees}<br/>
+
                                             </div>)
                                     }}
                                 />

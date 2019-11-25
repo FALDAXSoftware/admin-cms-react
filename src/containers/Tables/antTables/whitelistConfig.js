@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, WhiteListActionCell, DaysCell, DateTimeCell
+    TextCell, WhiteListActionCell, DaysCell, DateTimeCell,ExpireIpDateCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, ip_address = null, selected_time = null, permanent = null) => {
@@ -18,6 +18,8 @@ const renderCell = (object, type, key, ip_address = null, selected_time = null, 
             return DaysCell(value, ip, days, is_permanent);
         case 'DateTimeCell':
             return DateTimeCell(value, ip, days, is_permanent);
+        case 'ExpireIpDateCell':
+            return ExpireIpDateCell(value);
         default:
             return TextCell(value);
     }
@@ -26,7 +28,7 @@ const renderCell = (object, type, key, ip_address = null, selected_time = null, 
 const columns = [{
     title: <IntlMessages id="whitelistTable.title.Actions" />,
     key: 'action',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'WhiteListActionCell', 'id', 'ip', 'time', 'is_permanent')
 }, {
     title: <IntlMessages id="whitelistTable.title.created_at" />,
@@ -38,12 +40,14 @@ const columns = [{
     key: 'ip',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'ip')
-}, {
-    title: <IntlMessages id="whitelistTable.title.time" />,
-    key: 'days',
+},
+{
+    title: <IntlMessages id="whitelistTable.title.expire_date" />,
+    key: 'expire_time',
     width: 100,
-    render: object => renderCell(object, 'DaysCell', 'days')
-}];
+    render: object => renderCell(object, 'ExpireIpDateCell', 'expire_time')
+}
+];
 
 const whitelistTableInfos = [
     {

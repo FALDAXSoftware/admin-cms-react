@@ -84,7 +84,7 @@ class AddIPModal extends Component {
 
         fields['ip'] = '';
         fields['time'] = '';
-        this.setState({ fields });
+        this.setState({ fields,endDate:""});
     }
 
     _addIPAddress = () => {

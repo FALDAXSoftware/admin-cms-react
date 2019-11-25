@@ -1060,7 +1060,7 @@ const ReferralDateCell = (
     </p>
   );
 const TransactionTypeCell = data => (
-  <p>{data == "send" ? "Send" : "Receive"}</p>
+  <p style={{color:data=='send'?'red':'green'}}>{data == "send" ? "Send" : "Receive"}</p>
 );
 const VolumeCell = (
   value,
@@ -2679,23 +2679,38 @@ const CampaignActionCell = ( value,
 };
 
  const CampaignSwitchCell = (
-        campaign_id,
-        campaign_is_active,
-        campaign_label
-) => (
-  <StatusSwitch
-  checked={campaign_is_active}
-  checkedChildren="Active"
-  unCheckedChildren="Inactive"
-  size="large"
-  onChange={()=>offers.changeState(
-    campaign_id,
-    campaign_is_active,campaign_label)}
-/>
-  );
+   campaign_id,
+   campaign_is_active,
+   campaign_label
+ ) => (
+   <StatusSwitch
+     checked={campaign_is_active}
+     checkedChildren="Active"
+     unCheckedChildren="Inactive"
+     size="large"
+     onChange={() =>
+       offers.changeState(campaign_id, campaign_is_active, campaign_label)
+     }
+   />
+ );
 
-  const CampaignTypeCell=(value)=>value==1?'Single Code Use':"Multiple Code Use"
+ const CampaignTypeCell = value =>
+   value == 1 ? "Single Code Use" : "Multiple Code Use";
 
+const ExpireIpDateCell=(data)=> <p>
+{data
+  ? moment
+    .utc(data)
+    .local()
+    .format("DD MMM YYYY LTS")
+    ?<span> <Icon type="calendar"/> {moment
+      .utc(data)
+      .local()
+      .format("DD MMM YYYY LTS")}</span>
+    : "-"
+  : "Permanent"}
+</p>
+    
 export {
   IPCell,
   DateCell,
@@ -2781,6 +2796,7 @@ export {
   CampaignActionCell,
   CampaignSwitchCell,
   CampaignTypeCell,
-  OfferDateCell
+  OfferDateCell,
+  ExpireIpDateCell
 
 };

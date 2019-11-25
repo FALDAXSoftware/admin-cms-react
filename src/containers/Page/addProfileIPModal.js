@@ -86,7 +86,7 @@ class AddProfileIPModal extends Component {
 
         fields['ip'] = '';
         fields['days'] = '';
-        this.setState({ fields });
+        this.setState({ fields,endDate:''});
     }
 
     _addIPAddress = () => {
