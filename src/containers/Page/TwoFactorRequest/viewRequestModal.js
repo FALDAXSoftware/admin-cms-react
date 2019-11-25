@@ -48,7 +48,7 @@ class ViewRequestModal extends Component {
                     {twoFactorReqDetails.full_name ? twoFactorReqDetails.full_name : 'N/A'}
                 </p>
 
-                {twoFactorReqDetails.uploaded_file ?
+                {twoFactorReqDetails.uploaded_file && twoFactorReqDetails.status == "open" ?
                     <div>
                         <span><b>Uploaded Image:</b> </span><br />
                         <RequestImg alt="" src={BUCKET_URL + twoFactorReqDetails.uploaded_file} />
