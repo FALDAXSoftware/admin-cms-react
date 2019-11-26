@@ -28,6 +28,7 @@ import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
+import { messages } from "../../../helpers/messages";
 const { TextArea } = Input;
 const Option = Select.Option;
 const { logout } = authAction;
@@ -227,7 +228,8 @@ class AddCampaign extends Component {
       endOfferDate: "",
       dateOfferErrMsg: "",
       checkOfferValue: 1,
-      filterVal: ""
+      filterVal: "",
+      is_offer_active:true
     });
     this.validator1.hideMessages();
     this.forceUpdate();
@@ -444,6 +446,10 @@ class AddCampaign extends Component {
       this.setState({ loader: false });
     }
   }
+  // Show success message on offer code add 
+  showOfferAddSuccessMsg(){
+    this.openNotificationWithIcon('success','Success',messages.campaign.offer.added);
+  }
 
   _addOffer =async e => {
     const {
@@ -515,6 +521,7 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
+        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         this.validator1.showMessages();
@@ -584,6 +591,7 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
+        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         // alert("test2");
@@ -817,13 +825,13 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "no of transactions",
                     fields["no_of_transactions"],
-                    "required|numeric",
+                    "required|numeric|gte:1|lte:10",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
               </CampaignCol>
               <CampaignCol>
-                <span>Default Total Fees Allowed:</span>
+                <span>Default Total Fees Allowed (USD):</span>
                 <Input
                   placeholder="Total Fees Allowed"
                   onChange={this._handleChange.bind(this, "fees_allowed")}
@@ -834,7 +842,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "total fees allowed",
                     fields["fees_allowed"],
-                    "required|numeric",
+                    "required|numeric|gte:25|lte:100",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -1008,13 +1016,13 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "no of transactions",
                               offerFields["no_of_transactions"],
-                              "required|numeric",
+                              "required|numeric|gte:1|lte:10",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
                         </CampaignCol>
                         <CampaignCol>
-                          <span>Default Total Fees Allowed:</span>
+                          <span>Default Total Fees Allowed (USD):</span>
                           <Input
                             placeholder="Total Fees Allowed"
                             disabled={isOfferUpdate && isUpdate}
@@ -1028,7 +1036,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "total fees allowed",
                               offerFields["fees_allowed"],
-                              "required|numeric",
+                              "required|numeric|gte:25|lte:100",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
