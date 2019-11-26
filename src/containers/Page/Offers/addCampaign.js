@@ -817,13 +817,13 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "no of transactions",
                     fields["no_of_transactions"],
-                    "required|numeric",
+                    "required|numeric|gte:1|lte:10",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
               </CampaignCol>
               <CampaignCol>
-                <span>Default Total Fees Allowed:</span>
+                <span>Default Total Fees Allowed (USD):</span>
                 <Input
                   placeholder="Total Fees Allowed"
                   onChange={this._handleChange.bind(this, "fees_allowed")}
@@ -834,7 +834,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "total fees allowed",
                     fields["fees_allowed"],
-                    "required|numeric",
+                    "required|numeric|gte:25|lte:100",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -1008,13 +1008,13 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "no of transactions",
                               offerFields["no_of_transactions"],
-                              "required|numeric",
+                              "required|numeric|gte:1|lte:10",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
                         </CampaignCol>
                         <CampaignCol>
-                          <span>Default Total Fees Allowed:</span>
+                          <span>Default Total Fees Allowed (USD):</span>
                           <Input
                             placeholder="Total Fees Allowed"
                             disabled={isOfferUpdate && isUpdate}
@@ -1028,7 +1028,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "total fees allowed",
                               offerFields["fees_allowed"],
-                              "required|numeric",
+                              "required|numeric|gte:25|lte:100",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
