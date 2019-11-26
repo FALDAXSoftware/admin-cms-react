@@ -296,7 +296,7 @@ class Referral extends Component {
                                 <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
                                     onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                                 <span className="field-error">
-                                    {this.validator.message('percentage', fields['percentage'], 'required|custom_between:0,100|max:10|gtzero')}
+                                    {this.validator.message('percentage', fields['percentage'], 'required|numeric|lte:100')}
                                 </span>
                                 <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateDefaultReferral}> Update </Button>
                                 <Button type="primary" className="cancel-btn" onClick={this._cancelDefaultReferral}> Cancel </Button>
