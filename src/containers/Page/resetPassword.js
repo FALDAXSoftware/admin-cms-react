@@ -44,45 +44,49 @@ export default class extends Component {
   };
 
   _resetPassword = () => {
+    try{
     const { fields, errors } = this.state;
     this.setState({ loader: true });
     let _this = this;
 
     if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
-      let URLParam = this.props.location.pathname.split('/');
-      let formData = {
-        reset_token: URLParam[2],
-        password: this.state.fields['confirmPwd']
-      }
-
-      ApiUtils.resetPassword(formData)
-        .then((response) => response.json())
-        .then(function (res) {
-          if (res.status == 200) {
-            _this.setState({
-              errMsg: true, errMessage: res.message, loader: false
-            }, () => {
-              _this.props.history.push('/signin');
-            });
-          } else {
-            _this.setState({
-              errMsg: true, errMessage: res.message,
-              loader: false, errType: 'error'
-            }, () => {
-              _this.props.history.push('/signin');
-            });
-          }
-        })
-        .catch((err) => {
-          _this.setState({ errMsg: true, errMessage: err.err, loader: false });
-        });
-    } else {
-      if (fields["newPwd"] !== fields["confirmPwd"] && fields["confirmPwd"] != "" && fields["confirmPwd"] != undefined) {
-        this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
+        let URLParam = this.props.location.pathname.split('/');
+        let formData = {
+          reset_token: URLParam[2],
+          password: this.state.fields['confirmPwd']
+        }
+  
+        ApiUtils.resetPassword(formData)
+          .then((response) => response.json())
+          .then(function (res) {
+            if (res.status == 200) {
+              _this.setState({
+                errMsg: true, errMessage: res.message, loader: false
+              }, () => {
+                _this.props.history.push('/signin');
+              });
+            } else {
+              _this.setState({
+                errMsg: true, errMessage: res.message,
+                loader: false, errType: 'error'
+              }, () => {
+                _this.props.history.push('/signin');
+              });
+            }
+          })
+          .catch((err) => {
+            _this.setState({ errMsg: true, errMessage: err.err, loader: false });
+          });
+      } else {
+        if (fields["newPwd"] !== fields["confirmPwd"] && fields["confirmPwd"] != "" && fields["confirmPwd"] != undefined) {
+          this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
+        }
         this.setState({ errors, loader: false })
+        this.validator.showMessages();
+        this.forceUpdate();
       }
-      this.validator.showMessages();
-      this.forceUpdate();
+    }catch(error){
+      console.log("Error",error);
     }
   }
 
