@@ -28,6 +28,7 @@ import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
+import { messages } from "../../../helpers/messages";
 const { TextArea } = Input;
 const Option = Select.Option;
 const { logout } = authAction;
@@ -445,6 +446,10 @@ class AddCampaign extends Component {
       this.setState({ loader: false });
     }
   }
+  // Show success message on offer code add 
+  showOfferAddSuccessMsg(){
+    this.openNotificationWithIcon('success','Success',messages.campaign.offer.added);
+  }
 
   _addOffer =async e => {
     const {
@@ -516,6 +521,7 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
+        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         this.validator1.showMessages();
@@ -585,6 +591,7 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
+        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         // alert("test2");
