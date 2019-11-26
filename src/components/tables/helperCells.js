@@ -33,6 +33,7 @@ import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFees
 import offers from "../../containers/Page/Offers/offers";
 import styled from "styled-components";
 import { DeletedUsers } from "../../containers/Page/Users/deletedUsers";
+import referral from "../../containers/Page/Referral/referral";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -1211,6 +1212,7 @@ const referralActionCell = value => (
     <Icon
       type="info-circle"
       style={{ marginLeft: "10px", cursor: "pointer" }}
+      onClick={()=>referral.edit(value)}
     />
   </Tooltip>
 );
