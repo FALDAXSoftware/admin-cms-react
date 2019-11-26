@@ -125,12 +125,13 @@ class AddPairModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        this._closeAddPairsModal();
-                        getAllPairs();
-                        this._resetAddForm();
                         this.setState({
-                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            errType: 'success', errMsg: true, errMessage: res.message,
                             isDisabled: false, loader: false
+                        },()=>{
+                            this._resetAddForm();
+                            this._closeAddPairsModal();
+                            getAllPairs();
                         })
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
