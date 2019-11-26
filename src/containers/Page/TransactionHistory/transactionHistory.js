@@ -251,7 +251,7 @@ class Transactions extends Component {
                                     expandedRowRender={record => {
                                         return (
                                             <div>
-                                                <span> <b>Created On: </b></span> {moment(record.created_at).format('DD MMM YYYY HH:MM')}<br/>
+                                                <span> <b>Created On: </b></span> {moment.utc(record.created_at).local().format("DD MMM, YYYY HH:mm:ss")}<br/>
                                                 <span><b>Transaction Hash: </b></span>
                                                 <CopyToClipboard style={{ cursor: 'pointer' }}
                                                     text={record.transaction_id}

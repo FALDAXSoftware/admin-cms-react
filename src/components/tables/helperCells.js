@@ -1131,11 +1131,11 @@ const DateTimeCell = data => (
       ? moment
         .utc(data)
         .local()
-        .format("DD MMM YYYY HH:mm")
+        .format("DD MMM YYYY HH:mm:ss")
         ? moment
           .utc(data)
           .local()
-          .format("DD MMM, YYYY HH:mm")
+          .format("DD MMM, YYYY HH:mm:ss")
         : ""
       : ""}
   </p>
