@@ -178,7 +178,8 @@ class AddCampaign extends Component {
         fields["campaign_desc"]=res.data.description;
         fields["no_of_transactions"]=res.data.no_of_transactions;
         fields["fees_allowed"]=res.data.fees_allowed;
-        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):''});
+        
+        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):'',is_active:res.data.is_active});
         this.setState(fields);
       }else if(res.status==401 || res.status==403){
         this.setState({errMsg:true,errType:"error",errMessage:res.message});  
