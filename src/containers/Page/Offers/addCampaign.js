@@ -227,7 +227,8 @@ class AddCampaign extends Component {
       endOfferDate: "",
       dateOfferErrMsg: "",
       checkOfferValue: 1,
-      filterVal: ""
+      filterVal: "",
+      is_offer_active:true
     });
     this.validator1.hideMessages();
     this.forceUpdate();
