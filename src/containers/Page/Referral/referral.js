@@ -14,7 +14,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const Search = Input.Search;
-
+var self;
 class Referral extends Component {
     constructor(props) {
         super(props);
@@ -56,6 +56,11 @@ class Referral extends Component {
                 required: true // optional
             }
         });
+        self=this;
+    }
+
+    static edit = (id)=>{
+        self.props.history.push('/dashboard/referral/' + id)
     }
 
     componentDidMount = () => {
@@ -260,11 +265,11 @@ class Referral extends Component {
                                         />
                                     </div>
                                     <TableWrapper
-                                        onRow={(record, rowIndex) => {
-                                            return {
-                                                onClick: () => { this._changeRow(record) },
-                                            };
-                                        }}
+                                        // onRow={(record, rowIndex) => {
+                                        //     return {
+                                        //         onClick: () => { this._changeRow(record) },
+                                        //     };
+                                        // }}
                                         {...this.state}
                                         columns={tableInfo.columns}
                                         pagination={false}

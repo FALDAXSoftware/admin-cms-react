@@ -33,7 +33,7 @@ class AccountSummary extends Component {
       loader: false,
       totalCount: 0,
       page: 1,
-       limit: PAGESIZE,
+      limit: PAGESIZE,
       startDate: "",
       endDate: "",
       rangeDate: [],
@@ -80,7 +80,7 @@ class AccountSummary extends Component {
         } else if (res.status == 200) {
           _this.setState({
             loader: false,
-            deleteDate: null
+            deleteDate: (res.user.deleted_at != null) ? (moment.utc(res.user.deleted_at).local().format("DD MMM, YYYY HH:mm")) : null
           });
         } else if (res.status == 403) {
           _this.setState(
@@ -193,7 +193,7 @@ class AccountSummary extends Component {
       limit,
       deleteDate
     } = this.state;
-    let pageSizeOptions =PAGE_SIZE_OPTIONS;
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());

@@ -39,6 +39,7 @@ class EditPairModal extends Component {
     }
 
     openNotificationWithIconError = (type) => {
+        console.log("Error type",type)
         notification[type]({
             message: this.state.errType,
             description: this.state.errMessage
@@ -114,13 +115,14 @@ class EditPairModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        this._closeEditPairModal();
-                        getAllPairs();
-                        this._resetEditForm();
                         this.setState({
-                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            errType: 'success', errMsg: true, errMessage: res.message,
                             isDisabled: false, loader: false
+                        },()=>{
+                            this._closeEditPairModal();
+                            getAllPairs();
                         })
+                        this._resetEditForm();
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                             this.props.logout();
