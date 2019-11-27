@@ -249,7 +249,7 @@ class AddCampaign extends Component {
           });
         } else if (res.status == 403) {
           this.setState(
-            { errMsg: true, errMessage: res.err, errType: "error" },
+            { errMsg: true, errMessage: res.message, errType: "error" },
             () => {
               this.props.logout();
             }
@@ -322,7 +322,7 @@ class AddCampaign extends Component {
               );
             } else if (res.status == 403) {
               this.setState(
-                { errMsg: true, errMessage: res.err, errType: "error" },
+                { errMsg: true, errMessage: res.message, errType: "error" },
                 () => {
                   this.props.logout();
                 }
@@ -453,6 +453,10 @@ class AddCampaign extends Component {
   showOfferAddSuccessMsg(){
     this.openNotificationWithIcon('success','Success',messages.campaign.offer.added);
   }
+  // Show update success message on offer code
+  showOfferUpdateSuccessMsg(){
+    this.openNotificationWithIcon('success','Success',messages.campaign.offer.updated);
+  }
 
   _addOffer =async e => {
     const {
@@ -503,28 +507,31 @@ class AddCampaign extends Component {
             if(index!=-1){
               formdata["id"] = offerId;
               campaign_offers[index]=formdata;
+              this.showOfferUpdateSuccessMsg();
             }
             }else{
               formdata["id"]=new Date().getTime();
               formdata["campaign_offers_new"]=true;
-              campaign_offers.push(formdata);      
+              campaign_offers.push(formdata);   
+              this.showOfferAddSuccessMsg();   
             }
           }else if(isOfferUpdate){
             let index=campaign_offers.findIndex(ele=>ele.id==offerId)
             if(index!=-1){
               formdata["id"] = offerId;
               campaign_offers[index]=formdata;
+              this.showOfferUpdateSuccessMsg();
             }
           }else{
             formdata["id"]=new Date().getTime();
             campaign_offers.push(formdata);
+            this.showOfferAddSuccessMsg();
           }
         this.setState({
           campaign_offers:campaign_offers,
           openOfferCode: false,
           disabledRadio: true
         });
-        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         this.validator1.showMessages();
@@ -573,19 +580,23 @@ class AddCampaign extends Component {
             if (index != -1) {
               formdata["id"] = offerId;
               campaign_offers[index] = formdata;
+              this.showOfferUpdateSuccessMsg();
             }
           } else {
             formdata["id"] = new Date().getTime();
             formdata["campaign_offers_new"] = true;
             campaign_offers.push(formdata);
+            this.showOfferAddSuccessMsg();
           }
         } else if (isOfferUpdate) {
           let index = campaign_offers.findIndex(ele => ele.id == offerId);
           if (index != -1) {
             formdata["id"] = offerId;
             campaign_offers[index] = formdata;
+            this.showOfferUpdateSuccessMsg();
           }
         } else {
+          this.showOfferAddSuccessMsg();
           formdata["id"]=new Date().getTime();
           campaign_offers.push(formdata);
         }
@@ -594,7 +605,6 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
-        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         // alert("test2");
