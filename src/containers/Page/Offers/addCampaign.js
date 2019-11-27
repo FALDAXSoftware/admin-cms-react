@@ -57,7 +57,9 @@ const columns_temp = [
   {
     title: "Description",
     dataIndex: "description",
-    key: "description"
+    width:200,
+    key: "description",
+    render:(desc)=><p style={{textAlign:'justify'}}>{desc}</p>
   },
   {
     title: "No of transactions",
@@ -826,7 +828,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "no of transactions",
                     fields["no_of_transactions"],
-                    "required|numeric|gte:1|lte:10",
+                    "required|integer|gte:1|lte:10",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -843,7 +845,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "total fees allowed",
                     fields["fees_allowed"],
-                    "required|numeric|gte:25|lte:100",
+                    "required|numeric|gte:25|lte:200",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -1017,7 +1019,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "no of transactions",
                               offerFields["no_of_transactions"],
-                              "required|numeric|gte:1|lte:10",
+                              "required|integer|gte:1|lte:10",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
@@ -1037,7 +1039,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "total fees allowed",
                               offerFields["fees_allowed"],
-                              "required|numeric|gte:25|lte:100",
+                              "required|numeric|gte:25|lte:200",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
