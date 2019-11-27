@@ -423,3 +423,13 @@ html[dir='rtl'] .dz-hidden-input {
 .cursor-default{
   cursor: default !important;
 }
+.save-thresh-btn{
+  padding: 5px 35px;
+  background: #fff;
+  width:100%;
+  text-align: right;
+} 
+
+.clear-after::after{
+  clear:both;
+}
