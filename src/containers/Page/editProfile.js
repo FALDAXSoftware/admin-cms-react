@@ -23,6 +23,7 @@ class EditProfile extends Component {
             QRKey: ''
         }
         this.validator = new SimpleReactValidator();
+        this.twoFaValidator=new SimpleReactValidator();
     }
 
     componentDidMount = () => {
@@ -198,6 +199,11 @@ class EditProfile extends Component {
     }
 
     _verifyOtp = () => {
+        if(!this.twoFaValidator.allValid()){
+            this.twoFaValidator.showMessages();
+            this.forceUpdate();
+            return ;
+        }
         const { token, user } = this.props;
         const { fields } = this.state;
         let _this = this;
@@ -311,6 +317,7 @@ class EditProfile extends Component {
                                                 <Input style={{ width: "200px" }} value={fields["otp"]}
                                                     onChange={this._onChangeFields.bind(this, "otp")} />
                                             </div>
+                                            <div class="error-danger">{this.twoFaValidator.message('otp',fields['otp'],'required|min:6|max:6','error-danger')}</div>
                                             <span className="MSG_OTP">{this.state.otp_msg}</span>
                                         </div>
                                         <Button style={{ marginTop: "20px", marginBottom: "20px" }}
