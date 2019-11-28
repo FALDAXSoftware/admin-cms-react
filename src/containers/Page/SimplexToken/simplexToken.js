@@ -137,28 +137,64 @@ class SimplexToken extends Component {
         }
 
         return (
-            <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        <TabPane tab="Simplex Access Token" key="1">
-                            <div style={{ "marginTop": "10px" }}>
-                                <span>
-                                    <b>Simplex Access Token</b>
-                                </span>
-                                <TextArea disabled={enableInput} placeholder="Simplex Access Token" style={{ width: "80%", "marginTop": "15px", "marginBottom": "15px" }}
-                                    onChange={this._onChangeFields.bind(this, "access_token")} value={fields["access_token"]} />
-                                <Icon type="edit" theme="twoTone" onClick={this._showInputEditable} />
-                                <span className="field-error">
-                                    {this.validator.message('Simplex Access Token', fields['access_token'], 'required')}
-                                </span>
-                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateAccessToken}> Update </Button>
-                                <Button type="primary" className="cancel-btn" onClick={this._cancelAccessToken}> Cancel </Button>
-                            </div>
-                            {loader && <FaldaxLoader />}
-                        </TabPane>
-                    </Tabs>
-                </TableDemoStyle>
-            </LayoutWrapper>
+          <LayoutWrapper>
+            <TableDemoStyle className="isoLayoutContent">
+              <Tabs className="isoTableDisplayTab">
+                <TabPane tab="Simplex Access Token" key="1">
+                  <div style={{ marginTop: "10px" }}>
+                    <div>
+                      <span>
+                        <b>Simplex Access Token</b>
+                      </span>
+                    </div>
+                    <TextArea
+                      disabled={enableInput}
+                      placeholder="Simplex Access Token"
+                      style={{
+                        width: "95%",
+                        marginTop: "15px",
+                        marginBottom: "15px"
+                      }}
+                      onChange={this._onChangeFields.bind(this, "access_token")}
+                      value={fields["access_token"]}
+                    />
+                    <Icon
+                      className="btn-token-edit"
+                      type="edit"
+                      theme="twoTone"
+                      onClick={this._showInputEditable}
+                    />
+                    <span className="field-error">
+                      {this.validator.message(
+                        "Simplex Access Token",
+                        fields["access_token"],
+                        "required"
+                      )}
+                    </span>
+                    <div>
+                      <Button
+                        type="primary"
+                        style={{ marginBottom: "15px" }}
+                        onClick={this._updateAccessToken}
+                      >
+                        {" "}
+                        Update{" "}
+                      </Button>
+                      <Button
+                        type="primary"
+                        className="cancel-btn"
+                        onClick={this._cancelAccessToken}
+                      >
+                        {" "}
+                        Cancel{" "}
+                      </Button>
+                    </div>
+                    {loader && <FaldaxLoader />}
+                  </div>
+                </TabPane>
+              </Tabs>
+            </TableDemoStyle>
+          </LayoutWrapper>
         );
     }
 }
