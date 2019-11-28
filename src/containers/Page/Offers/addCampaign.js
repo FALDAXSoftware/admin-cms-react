@@ -458,6 +458,19 @@ class AddCampaign extends Component {
     this.openNotificationWithIcon('success','Success',messages.campaign.offer.updated);
   }
 
+  // get user by id
+
+  getUserById(id){
+  let {userList}= this.state;
+  let index=userList.findIndex(user=>user.id==id)
+  console.log(index)
+    if(index > -1){
+        return userList[index]
+    }else{
+      return {};
+    }
+  }
+
   _addOffer =async e => {
     const {
       offerFields,
@@ -779,7 +792,11 @@ class AddCampaign extends Component {
         ? columns_temp.concat({
             title: "User Id",
             dataIndex: "user_id",
-            key: "user_id"
+            key: "user_id",
+            render:((id)=>{
+              let user=this.getUserById(id);
+              return <a href={`/dashboard/users/${id}`}>{user.first_name + " " +user.last_name}</a>
+            })
           })
         : columns_temp;
     return (

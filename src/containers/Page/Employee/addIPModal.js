@@ -193,7 +193,7 @@ class AddIPModal extends Component {
               allowClear={false}
               onChange={this.onChangeDate}
             />
-            <span style={{fontStyle: 'italic'}}>* {fields['time']} Days</span>
+            <span style={{fontStyle: 'italic'}}>* {fields['time']}{parseInt(fields['time'])>1?' Days':' Day'}</span>
               <span style={{ color: "red" }}>
                 {this.validator.message(
                   "time",
