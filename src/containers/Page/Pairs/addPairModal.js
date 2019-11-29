@@ -222,7 +222,7 @@ class AddPairModal extends Component {
                     <Select
                         getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Asset"
+                        placeholder="Select an Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id1')}
                     >
                         {coinOptions}
@@ -237,7 +237,7 @@ class AddPairModal extends Component {
                     <Select
                         getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Asset"
+                        placeholder="Select an Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id2')}
                     >
                         {coinOptions}
@@ -260,7 +260,7 @@ class AddPairModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Taker Fee:</span>
-                    <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
+                    <Input addonAfter={'%'} placeholder="Taker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>

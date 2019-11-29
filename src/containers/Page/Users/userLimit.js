@@ -46,7 +46,7 @@ class EditableCell extends React.Component {
 
                                 }
                             ],
-                            initialValue: parseFloat(record[dataIndex] || 0),
+                            initialValue: typeof record[dataIndex]=="number" ?parseFloat(record[dataIndex]):undefined,
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
