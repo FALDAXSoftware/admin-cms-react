@@ -86,13 +86,18 @@ const columns_temp = [
   },
   {
     title: "Status",
-    dataIndex: "is_active",
     key: "is_active",
-    render: object => (
-      <Tag className="cursor-default" color={object == true ? "geekblue" : "grey"}>
-        {object === true ? "Active" : "Inactive"}
-      </Tag>
-    )
+    render: (object) =>{
+      return (
+        <StatusSwitch
+          checked={object.is_active}
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          size="large"
+          onChange={(checked)=>AddCampaign.updateOfferStatus(checked,object)}
+        />
+      )
+    } 
   },
 ];
 const ValidSpan = styled.div`
@@ -161,13 +166,23 @@ class AddCampaign extends Component {
 
   componentDidMount = () => {
     let campaignId=this.props.match.params.id;
-    console.log(campaignId);
     if(campaignId){
       this.setState({isUpdate:true,campaignId},()=>this.getCampaignById())
     }
     this.getUserList();
-
   };
+
+  //change status of offer that added on table 
+ static updateOfferStatus=(status,data)=>{
+  console.log(status,data)
+  let {campaign_offers} = self.state
+  let index=campaign_offers.findIndex((offer)=>offer.id==data.id);
+  if(index>-1){
+    campaign_offers[index].is_active=status;
+    self.setState(campaign_offers);
+  }
+ }
+
 
   async getCampaignById(){
     try{
@@ -335,7 +350,7 @@ class AddCampaign extends Component {
               loader: false
             });
           })
-          .catch(err => {
+          .catch(() => {
             this.setState({ loader: false });
           });
       } else {
@@ -515,7 +530,7 @@ class AddCampaign extends Component {
             let index=campaign_offers.findIndex(ele=>ele.id==offerId)
             if(index!=-1){
               formdata["id"] = offerId;
-              campaign_offers[index]=formdata;
+              campaign_offers[index]={...campaign_offers[index],...formdata};
             }
             }else{
               formdata["id"]=new Date().getTime();
@@ -526,7 +541,7 @@ class AddCampaign extends Component {
             let index=campaign_offers.findIndex(ele=>ele.id==offerId)
             if(index!=-1){
               formdata["id"] = offerId;
-              campaign_offers[index]=formdata;
+              campaign_offers[index]={...campaign_offers[index],...formdata};
             }
           }else{
             formdata["id"]=new Date().getTime();
@@ -585,7 +600,7 @@ class AddCampaign extends Component {
             let index = campaign_offers.findIndex(ele => ele.id == offerId);
             if (index != -1) {
               formdata["id"] = offerId;
-              campaign_offers[index] = formdata;
+              campaign_offers[index]={...campaign_offers[index],...formdata};
             }
           } else {
             formdata["id"] = new Date().getTime();
@@ -596,7 +611,7 @@ class AddCampaign extends Component {
           let index = campaign_offers.findIndex(ele => ele.id == offerId);
           if (index != -1) {
             formdata["id"] = offerId;
-            campaign_offers[index] = formdata;
+            campaign_offers[index]={...campaign_offers[index],...formdata};
           }
         } else {
           formdata["id"]=new Date().getTime();
@@ -780,7 +795,7 @@ class AddCampaign extends Component {
     const columns =
       this.state.checkvalue === 1
         ? columns_temp.concat({
-            title: "User Id",
+            title: "User",
             dataIndex: "user_id",
             key: "user_id",
             render:((id)=>{

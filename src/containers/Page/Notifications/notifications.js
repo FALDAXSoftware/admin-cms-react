@@ -5,6 +5,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
+import {messages} from '../../../helpers/messages'
 const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
 
 const EditableContext = React.createContext();
@@ -15,9 +16,9 @@ class EditableCell extends React.Component {
       if (this.props.inputType === 'number') {
         return <InputNumber />;
       }
-      return <InputNumber />;
+      return <Input/>;
     };
-  
+
     renderCell = ({ getFieldDecorator }) => {
       const {
         editing,
@@ -39,15 +40,6 @@ class EditableCell extends React.Component {
                         pattern: regEx,
                         message: "Please Enter Valid Positive Number"
                     },
-                    // {
-                    //     type:'number',
-                    //     message: "Please Enter Positive Number"
-                    // },
-                    // {
-                    //     min:(dataIndex=='fist_limit'?'':dataIndex=='second_limit'?parseFloat(record['fist_limit']):parseFloat(record['third_limit'])),
-                    //     message:"Please Enter Valid Thresh-hold limit"
-
-                    // }
                 ],
                 initialValue: (parseFloat(record[dataIndex])||undefined),
               })(this.getInput())}
@@ -167,10 +159,51 @@ class EditableTable extends React.Component {
     this.setState({ editingKey: "" });
   };
 
+  isValidRow=(data)=>{
+
+    let {fist_limit,second_limit,third_limit}=data;
+    if (fist_limit && second_limit && third_limit) {
+      if (parseFloat(fist_limit) < parseFloat(second_limit)) {
+        if (parseFloat(second_limit) < parseFloat(third_limit)) {
+          return true;
+        } else {
+          this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.third_gt_second_limit})
+          return false;
+        }
+      } else {
+        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_gt_first_limit})
+      }
+    } else if (fist_limit && second_limit) {
+      if (parseFloat(fist_limit) < parseFloat(second_limit)) {
+        return true;
+      } else {
+        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_gt_first_limit})
+        return false;
+      }
+    } else if (fist_limit && third_limit) {
+      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_required})
+      return false;
+    } else if (second_limit && third_limit) {
+      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_required})
+      return false;
+    } else if (second_limit) {
+      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_required})
+      return false
+    }else if(third_limit){
+      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_second_required})
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   save(form, key) {
     form.validateFields((error, row) => {
       if (error) {
         return;
+      }
+      if(!this.isValidRow(row)){
+        return 
       }
       const newData = [...this.state.dataSource];
       const index = newData.findIndex(item => key === item.coin_id);
