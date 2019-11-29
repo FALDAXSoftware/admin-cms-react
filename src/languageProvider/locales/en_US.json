@@ -596,5 +596,6 @@
   "summaryTableInfos.title.receive_address": "Address",
   "summaryTableInfos.title.balance": "Available Balance",
   "summaryTableInfos.title.coin_name": "Coin",
-  "summaryTableInfos.title.fiat": "Fiat"
+  "summaryTableInfos.title.fiat": "Fiat",
+  "antTable.title.collectamount": "Collected Asset"
 }

@@ -20,7 +20,7 @@ class ReferralUsers extends Component {
             allReferralCount: this.props.allReferralCount,
             userId: this.props.userId,
             page: 1,
-             limit: PAGESIZE,
+            limit: PAGESIZE,
         }
     }
 
@@ -39,6 +39,7 @@ class ReferralUsers extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    console.log(res.data);
                     _this.setState({
                         allReferral: res.data, allReferralCount: res.referralCount,
                         showReferralModal: true, userId: user_id
@@ -79,7 +80,7 @@ class ReferralUsers extends Component {
 
     render() {
         const { allReferral, allReferralCount, loader, page, limit } = this.state;
-       let pageSizeOptions = PAGE_SIZE_OPTIONS
+        let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
             <LayoutWrapper>
