@@ -57,7 +57,9 @@ const columns_temp = [
   {
     title: "Description",
     dataIndex: "description",
-    key: "description"
+    width:200,
+    key: "description",
+    render:(desc)=><p style={{textAlign:'justify'}}>{desc}</p>
   },
   {
     title: "No of transactions",
@@ -452,6 +454,19 @@ class AddCampaign extends Component {
     this.openNotificationWithIcon('success','Success',messages.campaign.offer.added);
   }
 
+  // get user by id
+
+  getUserById(id){
+  let {userList}= this.state;
+  let index=userList.findIndex(user=>user.id==id)
+  console.log(index)
+    if(index > -1){
+        return userList[index]
+    }else{
+      return {};
+    }
+  }
+
   _addOffer =async e => {
     const {
       offerFields,
@@ -767,7 +782,11 @@ class AddCampaign extends Component {
         ? columns_temp.concat({
             title: "User Id",
             dataIndex: "user_id",
-            key: "user_id"
+            key: "user_id",
+            render:((id)=>{
+              let user=this.getUserById(id);
+              return <a href={`/dashboard/users/${id}`}>{user.first_name + " " +user.last_name}</a>
+            })
           })
         : columns_temp;
     return (
@@ -826,7 +845,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "no of transactions",
                     fields["no_of_transactions"],
-                    "required|numeric|gte:1|lte:10",
+                    "required|integer|gte:1|lte:10",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -843,7 +862,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "total fees allowed",
                     fields["fees_allowed"],
-                    "required|numeric|gte:25|lte:100",
+                    "required|numeric|gte:25|lte:200",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -1017,7 +1036,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "no of transactions",
                               offerFields["no_of_transactions"],
-                              "required|numeric|gte:1|lte:10",
+                              "required|integer|gte:1|lte:10",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
@@ -1037,7 +1056,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "total fees allowed",
                               offerFields["fees_allowed"],
-                              "required|numeric|gte:25|lte:100",
+                              "required|numeric|gte:25|lte:200",
                               "text-danger-validation"
                             )}
                           </ValidSpan>

@@ -184,14 +184,14 @@ class SimplexHistory extends Component {
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Form onSubmit={this._searchTrade}>
                                     <Row>
-                                        <ColWithPadding sm={5}>
+                                        <ColWithPadding md={6} sm={24}>
                                             <Input
                                                 placeholder="Search trades"
                                                 onChange={this._changeSearch.bind(this)}
                                                 value={searchTrade}
                                             />
                                         </ColWithPadding>
-                                        <ColWithPadding sm={3}>
+                                        {/* <ColWithPadding sm={3}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select type"
@@ -202,8 +202,8 @@ class SimplexHistory extends Component {
                                                 <Option value={'Sell'}>Sell</Option>
                                                 <Option value={'Buy'}>Buy</Option>
                                             </Select>
-                                        </ColWithPadding>
-                                        <ColWithPadding sm={3}>
+                                        </ColWithPadding> */}
+                                        <ColWithPadding sm={24} md={4}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select Status"
@@ -216,7 +216,7 @@ class SimplexHistory extends Component {
                                                 <Option value={3}>Cancelled</Option>
                                             </Select>
                                         </ColWithPadding>
-                                        <ColWithPadding sm={7}>
+                                        <ColWithPadding md={8} sm={24}>
                                             <RangePicker
                                                 value={rangeDate}
                                                 disabledTime={this.disabledRangeTime}
@@ -226,13 +226,13 @@ class SimplexHistory extends Component {
                                                 style={{ width: "100%" }}
                                             />
                                         </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
+                                        <ColWithPadding xs={24} md={2} sm={24}>
                                             <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
                                         </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
+                                        <ColWithPadding xs={24} md={2} sm={24}>
                                             <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
                                         </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
+                                        <ColWithPadding xs={24} sm={24} md={2}>
                                             {allSimplexTrades && allSimplexTrades.length > 0 ?
                                                 <CSVLink filename={'simplex_history.csv'} data={allSimplexTrades} headers={tradeHeaders}>
                                                     <Button className="search-btn" type="primary">Export</Button>

@@ -70,7 +70,7 @@ const columns = [
   {
     title: <IntlMessages id="feeTable.title.Actions" />,
     key: "action",
-    width: 200,
+    width: 100,
     render: object =>
       renderCell(
         object,

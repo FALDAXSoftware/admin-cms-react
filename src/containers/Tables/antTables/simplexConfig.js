@@ -64,7 +64,7 @@ const columns = [
     key: "quantity",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "quantity")
+    render: object => <span>{object.quantity+" "+object.settle_currency}</span>
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.address" />,
