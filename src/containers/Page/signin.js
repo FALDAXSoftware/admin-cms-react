@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Input, Checkbox, notification } from 'antd';
+import { Button, Input, Form, notification } from 'antd';
 import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
@@ -44,7 +44,8 @@ class SignIn extends Component {
     this.setState({ fields });
   }
 
-  _handleLogin = () => {
+  _handleLogin = (e) => {
+    e.preventDefault();
     const { login, storeToken, checkRoles } = this.props;
     const { fields } = this.state;
     let _this = this;
@@ -109,8 +110,8 @@ class SignIn extends Component {
                 <img src={logo} />
               </Link>
             </div>
-
             <div className="isoSignInForm">
+            <Form onSubmit={this._handleLogin}>
               <div className="isoInputWrapper">
                 <Input size="large" placeholder="Email ID" onChange={this._onChangeFields.bind(this, "email")} />
                 <span className="field-error">
@@ -140,11 +141,12 @@ class SignIn extends Component {
                 {/* <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
                 </Checkbox> */}
-                <Button type="primary" onClick={this._handleLogin}>
+                <Button htmlType="submit" type="primary">
                   <IntlMessages id="page.signInButton" />
                 </Button>
               </div>
 
+            </Form>
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="/forgot-password" className="isoForgotPass">
                   <IntlMessages id="page.signInForgotPass" />
