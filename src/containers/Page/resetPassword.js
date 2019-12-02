@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Input, notification } from 'antd';
+import { Button, Input,Form,notification } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import ResetPasswordStyleWrapper from './resetPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
@@ -43,8 +43,9 @@ export default class extends Component {
     this.setState({ errMsg: false });
   };
 
-  _resetPassword = () => {
+  _resetPassword = (e) => {
     try{
+    e.preventDefault();
     const { fields, errors } = this.state;
     this.setState({ loader: true });
     let _this = this;
@@ -117,6 +118,7 @@ export default class extends Component {
             </div>
 
             <div className="isoResetPassForm">
+            <Form onSubmit={this._resetPassword}>
               <div className="isoInputWrapper">
                 <Input
                   size="large"
@@ -129,7 +131,6 @@ export default class extends Component {
                   {this.validator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
                 </span>
               </div>
-
               <div className="isoInputWrapper">
                 <Input
                   size="large"
@@ -137,7 +138,7 @@ export default class extends Component {
                   placeholder="Confirm Password"
                   onChange={this._onChangeFields.bind(this, "confirmPwd")}
                   value={fields["confirmPwd"]}
-                />
+                  />
                 <span style={{ "color": "red" }}>
                   {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
                   {errors["main"]}
@@ -145,10 +146,11 @@ export default class extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Button type="primary" onClick={this._resetPassword}>
+                <Button htmlType='submit' type="primary">
                   <IntlMessages id="page.resetPassSave" />
                 </Button>
               </div>
+            </Form>
               {loader && <FaldaxLoader />}
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="/signin" className="isoForgotPass">
