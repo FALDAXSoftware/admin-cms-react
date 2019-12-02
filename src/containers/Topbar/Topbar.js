@@ -29,7 +29,7 @@ class Topbar extends Component {
           <div className="isoLeft">
             <button
               className={
-                collapsed ? 'triggerBtn menuCollapsed' : 'triggerBtn menuOpen'
+                collapsed ? 'triggerBtn menuCollapsed' : 'triggerBtn menuOpen mg-left-30'
               }
               style={{ color: customizedTheme.textColor }}
               onClick={toggleCollapsed}
