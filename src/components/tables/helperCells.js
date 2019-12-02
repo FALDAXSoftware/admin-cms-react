@@ -992,7 +992,7 @@ const OfferDateCell = data => (
         .utc(data)
         .local()
         .format("DD MMM YYYY")
-        ?<span> <Icon type="calendar"/> {moment
+        ? <span> <Icon type="calendar" /> {moment
           .utc(data)
           .local()
           .format("DD MMM YYYY")}</span>
@@ -1061,7 +1061,7 @@ const ReferralDateCell = (
     </p>
   );
 const TransactionTypeCell = data => (
-  <p style={{color:data=='send'?'red':'green'}}>{data == "send" ? "Send" : "Receive"}</p>
+  <p style={{ color: data == 'send' ? 'red' : 'green' }}>{data == "send" ? "Send" : "Receive"}</p>
 );
 const VolumeCell = (
   value,
@@ -2636,7 +2636,7 @@ const CoinNoteCell = (slug) => {
   );
 }
 
-const CampaignActionCell = ( value,
+const CampaignActionCell = (value,
   campaign_id,
   campaign_label,
   campaign_start_date,
@@ -2680,39 +2680,49 @@ const CampaignActionCell = ( value,
   );
 };
 
- const CampaignSwitchCell = (
-   campaign_id,
-   campaign_is_active,
-   campaign_label
- ) => (
-   <StatusSwitch
-     checked={campaign_is_active}
-     checkedChildren="Active"
-     unCheckedChildren="Inactive"
-     size="large"
-     onChange={() =>
-       offers.changeState(campaign_id, campaign_is_active, campaign_label)
-     }
-   />
- );
+const CampaignSwitchCell = (
+  campaign_id,
+  campaign_is_active,
+  campaign_label
+) => (
+    <StatusSwitch
+      checked={campaign_is_active}
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      size="large"
+      onChange={() =>
+        offers.changeState(campaign_id, campaign_is_active, campaign_label)
+      }
+    />
+  );
 
- const CampaignTypeCell = value =>
-   value == 1 ? "Single Code Use" : "Multiple Code Use";
+const CampaignTypeCell = value =>
+  value == 1 ? "Single Code Use" : "Multiple Code Use";
 
-const ExpireIpDateCell=(data)=> <p>
-{data
-  ? moment
-    .utc(data)
-    .local()
-    .format("DD MMM YYYY LTS")
-    ?<span> <Icon type="calendar"/> {moment
+const ExpireIpDateCell = (data) => <p>
+  {data
+    ? moment
       .utc(data)
       .local()
-      .format("DD MMM YYYY LTS")}</span>
-    : "-"
-  : "Permanent"}
+      .format("DD MMM YYYY LTS")
+      ? <span> <Icon type="calendar" /> {moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY LTS")}</span>
+      : "-"
+    : "Permanent"}
 </p>
-    
+
+const CollectedAmountCell = value =>
+  // console.log(value)
+  value.map(ele => (
+    <div>
+      <span>{parseFloat(ele.collectedamount).toFixed(8) + " " + ele.coin_name}</span><br />
+    </div>
+  )
+  )
+
+
 export {
   IPCell,
   DateCell,
@@ -2799,6 +2809,7 @@ export {
   CampaignSwitchCell,
   CampaignTypeCell,
   OfferDateCell,
-  ExpireIpDateCell
+  ExpireIpDateCell,
+  CollectedAmountCell
 
 };
