@@ -163,21 +163,21 @@ class EditableTable extends React.Component {
 
     let {fist_limit,second_limit,third_limit}=data;
     if (fist_limit && second_limit && third_limit) {
-      if (parseFloat(fist_limit) < parseFloat(second_limit)) {
-        if (parseFloat(second_limit) < parseFloat(third_limit)) {
+      if (parseFloat(fist_limit) > parseFloat(second_limit)) {
+        if (parseFloat(second_limit) > parseFloat(third_limit)) {
           return true;
         } else {
-          this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.third_gt_second_limit})
+          this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_gt_third_limit})
           return false;
         }
       } else {
-        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_gt_first_limit})
+        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_gt_second_limit})
       }
     } else if (fist_limit && second_limit) {
-      if (parseFloat(fist_limit) < parseFloat(second_limit)) {
+      if (parseFloat(fist_limit) > parseFloat(second_limit)) {
         return true;
       } else {
-        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_gt_first_limit})
+        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_gt_second_limit})
         return false;
       }
     } else if (fist_limit && third_limit) {
