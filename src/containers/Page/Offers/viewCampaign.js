@@ -3,65 +3,88 @@ import { Link } from "react-router-dom";
 import ApiUtils from "../../../helpers/apiUtills";
 import authAction from "../../../redux/auth/actions";
 import { connect } from "react-redux";
-import { notification, Row, Col ,Table,Divider,Tag} from "antd";
+import { notification, Row, Icon,Col ,Table,Divider,Tag} from "antd";
 import Loader from "../faldaxLoader";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
 import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
-const tableColumns=[
+const tableColumns = [
   {
-    title:"Code",
-    dataIndex: 'code',
-    key: 'code',
+    title: "Code",
+    dataIndex: "code",
+    key: "code"
   },
   {
-    title:"Description",
-    dataIndex: 'description',
-    key: 'description',
+    title: "Description",
+    width:200,
+    dataIndex: "description",
+    key: "description"
   },
   {
-    title:"No of transactions",
-    dataIndex: 'no_of_transactions',
-    key: 'no_of_transactions',
+    title: "No of transactions",
+    dataIndex: "no_of_transactions",
+    key: "no_of_transactions"
   },
   {
-    title:"Total fees allowed",
-    dataIndex: 'fees_allowed',
-    key: 'fees_allowed',
-    render:(fees)=><span>{fees} USD</span>
+    title: "Total fees allowed",
+    dataIndex: "fees_allowed",
+    key: "fees_allowed",
+    render: fees => <span>{fees} USD</span>
   },
   {
-    title:"Start Date",
-    dataIndex: 'start_date',
-    key: 'start_date',
-    render:(start_date)=>OfferDateCell(start_date)
+    title: "Start Date",
+    dataIndex: "start_date",
+    key: "start_date",
+    render: start_date => OfferDateCell(start_date)
   },
   {
-    title:"End Date",
-    dataIndex: 'end_date',
-    key: 'end_date',
-    render:(end_date)=>OfferDateCell(end_date)
+    title: "End Date",
+    dataIndex: "end_date",
+    key: "end_date",
+    render: end_date => OfferDateCell(end_date)
   },
-  
+
   {
-    title:"User",
-    dataIndex: 'user_data',
-    key: 'user_data',
-    render:(data)=>(data.id?<a href={`/dashboard/users/${data.id}`}>{data.first_name+" "+data.last_name}</a>:'-')
+    title: "User",
+    dataIndex: "user_data",
+    key: "user_data",
+    render: data =>
+      data.id ? (
+        <a href={`/dashboard/users/${data.id}`}>
+          {data.first_name + " " + data.last_name}
+        </a>
+      ) : (
+        "-"
+      )
   },
   {
-    title:"Status",
-    dataIndex: 'is_active',
-    key: 'is_active',
-    render:(status)=>(
-      <Tag className="cursor-default" color={status==true? 'geekblue' : 'grey'} key={status}>
-      {status==true? 'Active' : 'Inactive'}
+    title: "Status",
+    dataIndex: "is_active",
+    key: "is_active",
+    render: status => (
+      <Tag
+        className="cursor-default"
+        color={status == true ? "geekblue" : "grey"}
+        key={status}
+      >
+        {status == true ? "Active" : "Inactive"}
       </Tag>
     )
   },
-]
+  {
+    title: "",
+    dataIndex: "end_date",
+    key: "end_date",
+    render: (end_date) => {
+    let [today,exp_date]=[moment().set({hour:0,minute:0,second:0,millisecond:0}),moment(end_date).set({hour:23,minute:59,second:59,millisecond:59})]
+    return <div>{(exp_date.diff(today, "days"))>-1?'':
+    <span className="error-danger"><Icon type="info-circle" className="error-danger"/> Offer Expired</span>}
+    </div>;
+    }
+  }
+];
 
 const { logout } = authAction;
 
