@@ -8,7 +8,8 @@ import {
   Select,
   Form,
   Modal,
-  Col
+  Col,
+  Icon
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
@@ -296,7 +297,7 @@ class ActiveUsers extends Component {
     }
 
     return (
-      <LayoutContentWrapper>
+      // <LayoutContentWrapper>
         <TableDemoStyle className="isoLayoutContent">
           <div className="isoTableDisplayTab">
             {tableinfos.map(tableInfo => (
@@ -332,21 +333,19 @@ class ActiveUsers extends Component {
                       <Col xs={24} lg={3}>
                         <Button
                           htmlType="submit"
-                          className="search-btn"
+                          className="search-btn btn-full-width"
                           type="primary"
-                          style={{ width: "100%", margin: "0" }}
                         >
-                          Search
+                          <Icon type="search" />Search
                         </Button>
                       </Col>
                       <Col xs={24} lg={3}>
                         <Button
-                          className="search-btn"
+                          className="search-btn btn-full-width"
                           type="primary"
                           onClick={this._resetFilters}
-                          style={{ width: "100%", margin: "0" }}
                         >
-                          Reset
+                         <Icon type="reload" /> Reset
                         </Button>
                       </Col>
                       <Col xs={24} lg={3}>
@@ -356,8 +355,8 @@ class ActiveUsers extends Component {
                             filename={"users.csv"}
                             headers={headers}
                           >
-                            <Button className="search-btn" type="primary" style={{ width: "100%", margin: "0" }}>
-                              Export
+                            <Button className="search-btn btn-full-width" type="primary">
+                            <Icon type="export" /> Export
                             </Button>
                           </CSVLink>
                         ) : (
@@ -412,7 +411,7 @@ class ActiveUsers extends Component {
             ))}
           </div>
         </TableDemoStyle>
-      </LayoutContentWrapper>
+      //</LayoutContentWrapper> 
     );
   }
 }

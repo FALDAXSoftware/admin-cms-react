@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Pagination, Button, Input, Form, Row, Select } from 'antd';
+import { Tabs, notification,Col, Pagination, Button, Input, Form, Row, Select, Icon } from 'antd';
 import { pairsTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -10,7 +10,6 @@ import AddPairModal from './addPairModal';
 import EditPairModal from './editPairModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithPadding from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
@@ -202,90 +201,115 @@ class Pairs extends Component {
         }
 
         return (
-            <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {pairsTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Form onSubmit={this._searchPair}>
-                                        <Row type="flex" justify="end">
-                                            <ColWithPadding sm={5}>
-                                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._showAddPairModal}>Add Pair</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={3}>
-                                                {showAddPairsModal &&
-                                                    <AddPairModal
-                                                        allCoins={allCoins}
-                                                        showAddPairsModal={showAddPairsModal}
-                                                        closeAddModal={this._closeAddFeesModal}
-                                                        getAllPairs={this._getAllPairs}
-                                                    />
-                                                }
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={4}>
-                                                <Input
-                                                    placeholder="Search pairs"
-                                                    onChange={this._changeSearch.bind(this)}
-                                                    value={searchPair}
-                                                />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={5}>
-                                                <Select
-                                                    getPopupContainer={trigger => trigger.parentNode}
-                                                    placeholder="Select an asset"
-                                                    onChange={this._changeAsset}
-                                                    value={selectedAsset}
-                                                >
-                                                    {allAssets && allAssets.map((asset, index) => <Option key={asset.coin} value={asset.id}>{asset.coin}</Option>)}
-                                                </Select>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                            </ColWithPadding>
-                                        </Row>
-                                    </Form>
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <div>
-                                    {showEditPairModal && <EditPairModal
-                                        allCoins={allCoins}
-                                        fields={pairDetails}
-                                        showEditPairModal={showEditPairModal}
-                                        closeEditModal={this._closeEditPairModal}
-                                        getAllPairs={this._getAllPairs}
-                                    />}
-                                    <TableWrapper
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allPairs}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handlePairsChange}
-                                    />
-                                    {
-                                        pairsCount > 0 ?
-                                            <Pagination
-                                                style={{ marginTop: '15px' }}
-                                                className="ant-users-pagination"
-                                                onChange={this._handleFeesPagination.bind(this)}
-                                                pageSize={limit}
-                                                current={page}
-                                                total={pairsCount}
-                                                showSizeChanger
-                                                onShowSizeChange={this._changePaginationSize}
-                                                pageSizeOptions={pageSizeOptions}
-                                            /> : ''
-                                    }
-                                </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
-                </TableDemoStyle>
-            </LayoutWrapper >
+          <LayoutWrapper>
+            <TableDemoStyle className="isoLayoutContent">
+              <Tabs className="isoTableDisplayTab">
+                {pairsTableInfos.map(tableInfo => (
+                  <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                    <div style={{ display: "inline-block", width: "100%" }}>
+                      <Form onSubmit={this._searchPair}>
+                        <Row>
+                          <Col sm={3}>
+                            <Button
+                              type="primary"
+                              className="btn-full-width"
+                              onClick={this._showAddPairModal}
+                            >
+                            <Icon type="plus" />
+                              Add Pair
+                            </Button>
+                          </Col>
+                          <Col sm={7}>
+                            <Input
+                              placeholder="Search pairs"
+                              onChange={this._changeSearch.bind(this)}
+                              value={searchPair}
+                            />
+                          </Col>
+                          <Col sm={7}>
+                            <Select
+                              getPopupContainer={trigger => trigger.parentNode}
+                              placeholder="Select an asset"
+                              onChange={this._changeAsset}
+                              value={selectedAsset}
+                            >
+                              {allAssets &&
+                                allAssets.map((asset, index) => (
+                                  <Option key={asset.coin} value={asset.id}>
+                                    {asset.coin}
+                                  </Option>
+                                ))}
+                            </Select>
+                          </Col>
+                          <Col xs={12} sm={3}>
+                            <Button
+                              htmlType="submit"
+                              className="search-btn btn-full-width"
+                              type="primary"
+                            >
+                              <Icon type="search" />Search
+                            </Button>
+                          </Col>
+                          <Col xs={12} sm={3}>
+                            <Button
+                              className="search-btn btn-full-width"
+                              type="primary"
+                              onClick={this._resetFilters}
+                            >
+                              <Icon type="reload" />Reset
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </div>
+                    {showAddPairsModal && (
+                      <AddPairModal
+                        allCoins={allCoins}
+                        showAddPairsModal={showAddPairsModal}
+                        closeAddModal={this._closeAddFeesModal}
+                        getAllPairs={this._getAllPairs}
+                      />
+                    )}
+                    {loader && <FaldaxLoader />}
+                    <div>
+                      {showEditPairModal && (
+                        <EditPairModal
+                          allCoins={allCoins}
+                          fields={pairDetails}
+                          showEditPairModal={showEditPairModal}
+                          closeEditModal={this._closeEditPairModal}
+                          getAllPairs={this._getAllPairs}
+                        />
+                      )}
+                      <TableWrapper
+                        {...this.state}
+                        columns={tableInfo.columns}
+                        pagination={false}
+                        dataSource={allPairs}
+                        className="isoCustomizedTable"
+                        onChange={this._handlePairsChange}
+                      />
+                      {pairsCount > 0 ? (
+                        <Pagination
+                          style={{ marginTop: "15px" }}
+                          className="ant-users-pagination"
+                          onChange={this._handleFeesPagination.bind(this)}
+                          pageSize={limit}
+                          current={page}
+                          total={pairsCount}
+                          showSizeChanger
+                          onShowSizeChange={this._changePaginationSize}
+                          pageSizeOptions={pageSizeOptions}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </TabPane>
+                ))}
+              </Tabs>
+            </TableDemoStyle>
+          </LayoutWrapper>
         );
     }
 }

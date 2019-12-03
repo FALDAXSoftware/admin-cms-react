@@ -15,6 +15,10 @@ const ColWithPadding = styled(Col)`
   }
 `;
 
+export const ColWithMarginBottom=styled(Col)`
+  margin-bottom:15px;
+`;
+
 export const ExecutionUl = styled.ul`
   max-height: 350px;
   overflow: auto;

@@ -5,9 +5,11 @@ import {
   notification,
   Button,
   Row,
+  Col,
   Select,
   Form,
-  Modal
+  Modal,
+  Icon
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { inActiveUserinfos } from "../../Tables/antTables";
@@ -284,28 +286,29 @@ class InActiveUsers extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <LayoutContentWrapper>
+      // <LayoutWrapper>
+      //   <LayoutContentWrapper>
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
               {inActiveUserinfos.map(tableInfo => (
                 <div tab={tableInfo.title} key={tableInfo.value}>
                   <div style={{ display: "inline-block", width: "100%" }}>
                     <Form onSubmit={this._searchUser}>
-                      <Row type="flex" justify="end">
-                        <ColWithPadding sm={8}>
+                      <Row gutter={16}>
+                        <Col lg={7} xs={24}>
                           <Input
                             placeholder="Search users"
                             onChange={this._changeSearch.bind(this)}
                             value={searchUser}
                           />
-                        </ColWithPadding>
-                        <ColWithPadding sm={6}>
+                        </Col>
+                        <Col  lg={7} xs={24}>
                           <Select
                             getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a country"
                             onChange={this._changeCountry}
                             value={filterVal}
+                            style={{ width: "100%" }}
                           >
                             {allCountries &&
                               allCountries.map((country, index) => {
@@ -316,40 +319,40 @@ class InActiveUsers extends Component {
                                 );
                               })}
                           </Select>
-                        </ColWithPadding>
-                        <ColWithPadding xs={12} sm={3}>
+                        </Col>
+                        <Col lg={3} xs={24}>
                           <Button
                             htmlType="submit"
-                            className="search-btn"
+                            className="search-btn btn-full-width"
                             type="primary"
                           >
-                            Search
+                           <Icon type="search"/> Search
                           </Button>
-                        </ColWithPadding>
-                        <ColWithPadding xs={12} sm={3}>
+                        </Col>
+                        <Col  xs={24} lg={3}>
                           <Button
-                            className="search-btn"
+                            className="search-btn btn-full-width"
                             type="primary"
                             onClick={this._resetFilters}
                           >
-                            Reset
+                            <Icon type="reload" />Reset
                           </Button>
-                        </ColWithPadding>
-                        <ColWithPadding sm={3}>
+                        </Col>
+                        <Col  xs={24} lg={3}>
                           {allUsers && allUsers.length > 0 ? (
                             <CSVLink
                               data={allUsers}
                               filename={"users.csv"}
                               headers={headers}
                             >
-                              <Button className="search-btn" type="primary">
-                                Export
+                              <Button className="search-btn btn-full-width" type="primary">
+                              <Icon type="export" />Export
                               </Button>
                             </CSVLink>
                           ) : (
                             ""
                           )}
-                        </ColWithPadding>
+                        </Col>
                       </Row>
                     </Form>
                   </div>
@@ -398,8 +401,8 @@ class InActiveUsers extends Component {
               ))}
             </div>
           </TableDemoStyle>
-        </LayoutContentWrapper>
-      </LayoutWrapper>
+      //   </LayoutContentWrapper>
+      // </LayoutWrapper>
     );
   }
 }

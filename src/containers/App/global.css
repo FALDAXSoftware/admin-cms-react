@@ -428,6 +428,10 @@ html[dir='rtl'] .dz-hidden-input {
   clear: both;
 }
 
+.full-width{
+  width: 100%;
+}
+
 .cursor-default{
   cursor: default !important;
 }
@@ -440,4 +444,32 @@ html[dir='rtl'] .dz-hidden-input {
 
 .clear-after::after{
   clear:both;
+}
+
+.assets-card{
+  font-weight: 700;
+  font-size: large;
+  cursor:pointer;
+}
+.assets-card:hover{
+  border: 1px solid #1890FF;
+}
+.assets-card .amount{
+  float: right;
+}
+
+.btn-full-width{
+  width: 100%;
+}
+
+.filter-btn{
+  margin:0;
+  border-radius: 5px !important;
+}
+
+.cty-search .ant-form-item-control-wrapper{
+  padding: 0 !important;
+}
+.cty-search .ant-form-item-control{
+  line-height: 0 !important;
 }
