@@ -306,7 +306,7 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { rowStyle, colStyle } = basicStyle;
+    const { rowStyle, colStyle,colStyle2} = basicStyle;
     const {
       activeUsers,
       inactiveUsers,
@@ -412,7 +412,7 @@ class Dashboard extends Component {
         <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }}>
           <TabPane tab="Admin-Dashboard" key="1">
             <Row style={rowStyle} gutter={0} justify="start">
-              <Col md={12} xs={24} style={colStyle}>
+              <Col md={12} xs={24} style={colStyle2}>
                 <CardWrapper title="Country">
                   <ChartWrapper>
                     <ContentHolder>
@@ -422,7 +422,7 @@ class Dashboard extends Component {
                 </CardWrapper>
               </Col>
 
-              <Col md={12} xs={24} style={colStyle}>
+              <Col md={12} xs={24} style={colStyle2}>
                 <CardWrapper title="Pending Identity Verifications">
                   <ChartWrapper>
                     <RangePicker

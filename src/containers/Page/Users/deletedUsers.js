@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Button, Row, Select, Form, Modal } from 'antd';
+import { Input, Pagination, notification, Button, Row,Icon, Col,Select, Form, Modal } from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { deletedUserinfos } from "../../Tables/antTables/deletedUserConfig";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -212,23 +212,23 @@ class DeletedUsers extends Component {
         }
 
         return (
-            <LayoutWrapper>
-                <LayoutContentWrapper>
+            // <LayoutWrapper>
+            //     <LayoutContentWrapper>
                     <TableDemoStyle className="isoLayoutContent">
                         <div className="isoTableDisplayTab">
                             {deletedUserinfos.map(tableInfo => (
                                 <div tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Form onSubmit={this._searchUser}>
-                                            <Row type="flex" justify="end">
-                                                <ColWithPadding sm={8}>
+                                            <Row>
+                                            <Col lg={7} xs={24}>
                                                     <Input
                                                         placeholder="Search users"
                                                         onChange={this._changeSearch.bind(this)}
                                                         value={searchUser}
                                                     />
-                                                </ColWithPadding>
-                                                <ColWithPadding sm={6}>
+                                                </Col>
+                                                <Col lg={7} xs={24}>
                                                     <Select
                                                         getPopupContainer={trigger => trigger.parentNode}
                                                         placeholder="Select a country"
@@ -239,23 +239,23 @@ class DeletedUsers extends Component {
                                                             return <Option key={country.id} value={country.name} >{country.name}</Option>
                                                         })}
                                                     </Select>
-                                                </ColWithPadding>
-                                                <ColWithPadding xs={12} sm={3}>
-                                                    <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
-                                                </ColWithPadding>
-                                                <ColWithPadding xs={12} sm={3}>
-                                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                                </ColWithPadding>
-                                                <ColWithPadding sm={3}>
+                                                </Col>
+                                                <Col lg={3} xs={24}>
+                                                    <Button htmlType="submit" className="search-btn btn-full-width" type="primary" ><Icon type="search" />Search</Button>
+                                                </Col>
+                                                <Col lg={3} xs={24}>
+                                                    <Button className="search-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload" />Reset</Button>
+                                                </Col>
+                                                <Col xs={24} lg={3}>
                                                     {allUsers && allUsers.length > 0 ?
                                                         <CSVLink
                                                             data={allUsers}
                                                             filename={'users.csv'}
                                                             headers={headers}
                                                         >
-                                                            <Button className="search-btn" type="primary">Export</Button>
+                                                            <Button className="search-btn btn-full-width" type="primary"><Icon type="export" />Export</Button>
                                                         </CSVLink> : ''}
-                                                </ColWithPadding>
+                                                </Col>
                                             </Row>
                                         </Form>
                                     </div>
@@ -298,8 +298,8 @@ class DeletedUsers extends Component {
                             ))}
                         </div>
                     </TableDemoStyle>
-                </LayoutContentWrapper>
-            </LayoutWrapper>
+            //     </LayoutContentWrapper>
+            // </LayoutWrapper>
         );
     }
 }

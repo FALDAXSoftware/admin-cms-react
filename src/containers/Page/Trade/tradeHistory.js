@@ -7,7 +7,8 @@ import {
   DatePicker,
   Button,
   Form,
-  Row
+  Row,
+  Icon
 } from "antd";
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -19,7 +20,7 @@ import moment from "moment";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithPadding from "../common.style";
+import ColWithMarginBottom from "../common.style";
 import {ExecutionUl} from "../common.style";
 import { parse } from "path";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
@@ -249,21 +250,21 @@ class TradeHistory extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <TableDemoStyle className="isoLayoutContent">
+      // <LayoutWrapper>
+        <TableDemoStyle className="isoLayoutContent full-width">
           {tradeTableInfos.map(tableInfo => (
             <div>
               <div style={{ display: "inline-block", width: "100%" }}>
                 <Form onSubmit={this._searchTrade}>
                   <Row>
-                    <ColWithPadding sm={5}>
+                    <ColWithMarginBottom sm={6}>
                       <Input
                         placeholder="Search trades"
                         onChange={this._changeSearch.bind(this)}
                         value={searchTrade}
                       />
-                    </ColWithPadding>
-                    <ColWithPadding sm={3}>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom sm={3}>
                       <Select
                         getPopupContainer={trigger => trigger.parentNode}
                         placeholder="Select type"
@@ -274,37 +275,36 @@ class TradeHistory extends Component {
                         <Option value={"Sell"}>Sell</Option>
                         <Option value={"Buy"}>Buy</Option>
                       </Select>
-                    </ColWithPadding>
-                    <ColWithPadding sm={7}>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom sm={6}>
                       <RangePicker
                         value={rangeDate}
                         disabledTime={this.disabledRangeTime}
                         onChange={this._changeDate}
                         format="YYYY-MM-DD"
                         allowClear={false}
-                        style={{ width: "100%" }}
+                        className='full-width'
                       />
-                    </ColWithPadding>
-                    <ColWithPadding xs={12} sm={3}>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom xs={12} sm={3}>
                       <Button
                         htmlType="submit"
-                        className="search-btn"
+                        className="search-btn btn-full-width"
                         type="primary"
-                        style={{ margin: "0" }}
                       >
-                        Search
+                        <Icon type="search"/>Search
                       </Button>
-                    </ColWithPadding>
-                    <ColWithPadding xs={12} sm={3}>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom xs={12} sm={3}>
                       <Button
-                        className="search-btn"
+                        className="search-btn full-width"
                         type="primary"
                         onClick={this._resetFilters}
-                      >
+                      ><Icon type="reload"></Icon>
                         Reset
                       </Button>
-                    </ColWithPadding>
-                    <ColWithPadding xs={12} sm={3}>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom xs={12} sm={3}>
                       {allTrades && allTrades.length > 0 ? (
                         <CSVLink
                           filename={"trade_history.csv"}
@@ -312,19 +312,18 @@ class TradeHistory extends Component {
                           headers={tradeHeaders}
                         >
                           <Button className="search-btn" type="primary">
-                            Export
+                            <Icon type="export"></Icon>Export
                           </Button>
                         </CSVLink>
                       ) : (
                         ""
                       )}
-                    </ColWithPadding>
+                    </ColWithMarginBottom>
                   </Row>
                 </Form>
               </div>
               {loader && <FaldaxLoader />}
               <TableWrapper
-                style={{ marginTop: "20px" }}
                 {...this.state}
                 columns={tableInfo.columns}
                 pagination={false}
@@ -412,7 +411,7 @@ class TradeHistory extends Component {
             </div>
           ))}
         </TableDemoStyle>
-      </LayoutWrapper>
+      // </LayoutWrapper>
     );
   }
 }

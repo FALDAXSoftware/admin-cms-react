@@ -107,7 +107,13 @@ const columns = [{
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'state')
-}, {
+},
+{
+    title: <IntlMessages id="antTable.title.zip" />,
+    key: 'postal_code',
+    width: 200,
+    render: object => renderCell(object, 'TextCell', 'postal_code')
+},{
     title: <IntlMessages id="antTable.title.tier" />,
     key: 'account_tier',
     width: 200,
@@ -117,11 +123,6 @@ const columns = [{
     key: 'no_of_referrals',
     width: 200,
     render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
-}, {
-    title: <IntlMessages id="antTable.title.zip" />,
-    key: 'postal_code',
-    width: 200,
-    render: object => renderCell(object, 'TextCell', 'postal_code')
 }];
 
 const tableinfos = [

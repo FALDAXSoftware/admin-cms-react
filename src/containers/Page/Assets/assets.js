@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Button, Modal, notification } from 'antd';
+import { Input, Tabs, Pagination,Icon, Button, Modal, notification } from 'antd';
 import { assetTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -232,7 +232,7 @@ class Assets extends Component {
                         {assetTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Asset</Button>
+                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}><Icon type="plus" />Add Asset</Button>
                                     <AddCoinModal
                                         showAddCoinModal={showAddCoinModal}
                                         closeAddModal={this._closeAddCoinModal}
