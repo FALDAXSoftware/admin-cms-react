@@ -18,12 +18,12 @@ class AllHistory extends Component {
     render() {
         return (
             <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
+                {/* <TableDemoStyle className="isoLayoutContent"> */}
+                    <Tabs className="isoTableDisplayTab full-width">
                         <TabPane tab="Crypto Only" key="1"><TradeHistory /></TabPane>
                         <TabPane tab="Credit Card" key="2"><SimplexHistory /></TabPane>
                     </Tabs>
-                </TableDemoStyle>
+                {/* </TableDemoStyle> */}
             </LayoutWrapper>
         );
     }

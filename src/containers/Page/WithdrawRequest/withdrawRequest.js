@@ -1,18 +1,29 @@
-import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Button, DatePicker, Select, Form, Row } from 'antd';
+import React, { Component } from "react";
+import {
+  Input,
+  Tabs,
+  Pagination,
+  notification,
+  Button,
+  DatePicker,
+  Select,
+  Form,
+  Row,
+  Icon
+} from "antd";
 import { withdrawReqTableInfos } from "../../Tables/antTables";
-import ApiUtils from '../../../helpers/apiUtills';
+import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
-import TableDemoStyle from '../../Tables/antTables/demo.style';
+import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { connect } from 'react-redux';
-import moment from 'moment';
-import FaldaxLoader from '../faldaxLoader';
-import authAction from '../../../redux/auth/actions';
+import { connect } from "react-redux";
+import moment from "moment";
+import FaldaxLoader from "../faldaxLoader";
+import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
-import ColWithPadding from '../common.style';
-import DeclineActionModal from './declineModal'
-import { Record } from 'immutable';
+import ColWithMarginBottom from "../common.style";
+import DeclineActionModal from "./declineModal";
+import { Record } from "immutable";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
@@ -22,308 +33,474 @@ const { logout } = authAction;
 var self;
 
 class WithdrawRequest extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            allRequests: [],
-            allReqCount: 0,
-            searchReq: '',
-             limit: PAGESIZE,
-            errMessage: '',
-            errMsg: false,
-            errType: 'Success',
-            page: 1,
-            loader: false,
-            startDate: '',
-            endDate: '',
-            filterVal: '',
-            rangeDate: [],
-            showDeclineModal: false,
-            withdrawReqDetails: []
-        }
-        self = this;
-        WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(this);
-        WithdrawRequest.declineWithdrawReq = WithdrawRequest.declineWithdrawReq.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      allRequests: [],
+      allReqCount: 0,
+      searchReq: "",
+      limit: PAGESIZE,
+      errMessage: "",
+      errMsg: false,
+      errType: "Success",
+      page: 1,
+      loader: false,
+      startDate: "",
+      endDate: "",
+      filterVal: "",
+      rangeDate: [],
+      showDeclineModal: false,
+      withdrawReqDetails: []
+    };
+    self = this;
+    WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(
+      this
+    );
+    WithdrawRequest.declineWithdrawReq = WithdrawRequest.declineWithdrawReq.bind(
+      this
+    );
+  }
 
-    static approveWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) {
-        let requestData = {
-            value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at, status: true
-        }
-        self._updateWithdrawRequest(requestData);
-    }
+  static approveWithdrawReq(
+    value,
+    email,
+    source_address,
+    destination_address,
+    amount,
+    transaction_type,
+    is_approve,
+    user_id,
+    coin_id,
+    is_executed,
+    created_at
+  ) {
+    let requestData = {
+      value,
+      email,
+      source_address,
+      destination_address,
+      amount,
+      transaction_type,
+      is_approve,
+      user_id,
+      coin_id,
+      is_executed,
+      created_at,
+      status: true
+    };
+    self._updateWithdrawRequest(requestData);
+  }
 
-    static declineWithdrawReq(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at) {
-        let requestData = {
-            value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at, status: false
-        }
-        self.setState({ showDeclineModal: true, withdrawReqDetails: requestData })
-    }
+  static declineWithdrawReq(
+    value,
+    email,
+    source_address,
+    destination_address,
+    amount,
+    transaction_type,
+    is_approve,
+    user_id,
+    coin_id,
+    is_executed,
+    created_at
+  ) {
+    let requestData = {
+      value,
+      email,
+      source_address,
+      destination_address,
+      amount,
+      transaction_type,
+      is_approve,
+      user_id,
+      coin_id,
+      is_executed,
+      created_at,
+      status: false
+    };
+    self.setState({ showDeclineModal: true, withdrawReqDetails: requestData });
+  }
 
-    _updateWithdrawRequest = (requestData) => {
-        const { token } = this.props;
+  _updateWithdrawRequest = requestData => {
+    const { token } = this.props;
 
-        let formData = {
-            status: requestData.status,
-            id: requestData.value,
-            amount: requestData.amount,
-            destination_address: requestData.destination_address,
-            coin_id: requestData.coin_id,
-            user_id: requestData.user_id
-        };
-
-        this.setState({ loader: true });
-        ApiUtils.changeWithdrawStatus(token, formData)
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.status == 200) {
-                    this._getAllWithdrawReqs();
-                    this.setState({
-                        errMsg: true, errMessage: res.message, errType: 'Success', loader: false
-                    })
-                } else if (res.status == 403) {
-                    this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        this.props.logout();
-                    });
-                } else {
-                    this.setState({ errType: 'error', errMsg: true, errMessage: res.message, loader: false });
-                }
-            })
-            .catch(() => {
-                this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
-    }
-
-    componentDidMount = () => {
-        this._getAllWithdrawReqs();
-    }
-
-    _getAllWithdrawReqs = () => {
-        const { token } = this.props;
-        const { searchReq, page, limit, filterVal, startDate, endDate, sorterCol, sortOrder } = this.state;
-        let _this = this;
-
-        _this.setState({ loader: true });
-        ApiUtils.getAllWithdrawRequests(page, limit, token, searchReq, filterVal, startDate, endDate, sorterCol, sortOrder)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
-                } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                }
-                _this.setState({ loader: false });
-            })
-            .catch(() => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
-    }
-
-    _searchReq = (e) => {
-        e.preventDefault();
-        this.setState({ page: 1 }, () => {
-            this._getAllWithdrawReqs();
-        })
-    }
-
-    _handleReqPagination = (page) => {
-        this.setState({ page }, () => {
-            this._getAllWithdrawReqs();
-        })
-    }
-
-    _changeSearch = (field, e) => {
-        this.setState({ searchReq: field.target.value })
-    }
-
-    range = (start, end) => {
-        const result = [];
-        for (let i = start; i < end; i++) {
-            result.push(i);
-        }
-        return result;
-    }
-
-    isabledRangeTime = (_, type) => {
-        if (type === 'start') {
-            return {
-                disabledHours: () => this.range(0, 60).splice(4, 20),
-                disabledMinutes: () => this.range(30, 60),
-                disabledSeconds: () => [55, 56],
-            };
-        }
-        return {
-            disabledHours: () => this.range(0, 60).splice(20, 4),
-            disabledMinutes: () => this.range(0, 31),
-            disabledSeconds: () => [55, 56],
-        };
-    }
-
-    _changeDate = (date, dateString) => {
-        this.setState({
-            rangeDate: date,
-            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
-            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
-        })
-    }
-
-    _changeFilter = (val) => {
-        this.setState({ filterVal: val });
-    }
-
-    _resetFilters = () => {
-        this.setState({
-            filterVal: '', searchReq: '', startDate: '', endDate: '', rangeDate: []
-        }, () => {
-            this._getAllWithdrawReqs();
-        })
-    }
-
-    openNotificationWithIconError = (type) => {
-        notification[type]({
-            message: this.state.errType,
-            description: this.state.errMessage
-        });
-        this.setState({ errMsg: false });
+    let formData = {
+      status: requestData.status,
+      id: requestData.value,
+      amount: requestData.amount,
+      destination_address: requestData.destination_address,
+      coin_id: requestData.coin_id,
+      user_id: requestData.user_id
     };
 
-    _handleWithdrawTableChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
-            this._getAllWithdrawReqs();
-        })
-    }
-
-    _changePaginationSize = (current, pageSize) => {
-        this.setState({ page: current, limit: pageSize }, () => {
-            this._getAllWithdrawReqs();
-        });
-    }
-
-    _closeDeclineModal = () => {
-        this.setState({ showDeclineModal: false })
-    }
-
-    render() {
-        const { allRequests, allReqCount, errType, errMsg, page, loader, limit,
-            searchReq, rangeDate, filterVal, showDeclineModal, withdrawReqDetails } = this.state;
-        const requestHeaders = [
-            { label: "Source Address", key: "source_address" },
-            { label: "Destination Address", key: "destination_address" },
-            { label: "Transaction Type", key: "transaction_type" },
-            { label: "Amount", key: "amount" },
-            { label: "Email", key: "email" },
-            { label: "Asset", key: "coin_name" },
-            { label: "Fees", key: "fees" },
-            { label: "Created On", key: "created_at" }
-        ];
-       let pageSizeOptions = PAGE_SIZE_OPTIONS
-
-        if (errMsg) {
-            this.openNotificationWithIconError(errType.toLowerCase());
+    this.setState({ loader: true });
+    ApiUtils.changeWithdrawStatus(token, formData)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status == 200) {
+          this._getAllWithdrawReqs();
+          this.setState({
+            errMsg: true,
+            errMessage: res.message,
+            errType: "Success",
+            loader: false
+          });
+        } else if (res.status == 403) {
+          this.setState(
+            { errMsg: true, errMessage: res.err, errType: "error" },
+            () => {
+              this.props.logout();
+            }
+          );
+        } else {
+          this.setState({
+            errType: "error",
+            errMsg: true,
+            errMessage: res.message,
+            loader: false
+          });
         }
+      })
+      .catch(() => {
+        this.setState({
+          errMsg: true,
+          errMessage: "Something went wrong!!",
+          errType: "error",
+          loader: false
+        });
+      });
+  };
 
-        return (
-            <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {withdrawReqTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Form onSubmit={this._searchReq}>
-                                        <Row>
-                                            <ColWithPadding sm={5}>
-                                                <Input
-                                                    placeholder="Search Requests"
-                                                    onChange={this._changeSearch.bind(this)}
-                                                    value={searchReq}
-                                                />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={3}>
-                                                <Select
-                                                    getPopupContainer={trigger => trigger.parentNode}
-                                                    placeholder="Select a type"
-                                                    onChange={this._changeFilter}
-                                                    value={filterVal}
-                                                >
-                                                    <Option value={''}>All</Option>
-                                                    <Option value={'null'}>Pending</Option>
-                                                    <Option value={'true'}>Approved</Option>
-                                                    <Option value={'false'}>Declined</Option>
-                                                </Select>
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={7}>
-                                                <RangePicker
-                                                    value={rangeDate}
-                                                    disabledTime={this.disabledRangeTime}
-                                                    onChange={this._changeDate}
-                                                    format="YYYY-MM-DD"
-                                                    style={{ marginLeft: '15px' }}
-                                                />
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                {allRequests && allRequests.length > 0 ?
-                                                    <CSVLink filename={'withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
-                                                        <Button type="primary" className="search-btn" style={{ margin: "0px" }}>Export</Button>
-                                                    </CSVLink>
-                                                    : ''}
-                                            </ColWithPadding>
-                                        </Row>
-                                    </Form>
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <TableWrapper
-                                    style={{ marginTop: '20px' }}
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allRequests}
-                                    className="isoCustomizedTable"
-                                    onChange={this._handleWithdrawTableChange}
-                                    expandedRowRender={record => <p style={{ margin: 0 }}>{<div><b>Email ID</b> - {record.email} <br />  <b>Fees</b> - {record.fees}% <br />  <b>Asset</b> - {record.coin_name} {record.reason ? <React.Fragment><br /><b> Reason</b> - <span>{record.reason}</span> </React.Fragment> : ''}</div>}</p>}
-                                />
-                                {allReqCount > 0 ? <Pagination
-                                    style={{ marginTop: '15px' }}
-                                    className="ant-users-pagination"
-                                    onChange={this._handleReqPagination.bind(this)}
-                                    pageSize={limit}
-                                    current={page}
-                                    total={allReqCount}
-                                    showSizeChanger
-                                    onShowSizeChange={this._changePaginationSize}
-                                    pageSizeOptions={pageSizeOptions}
-                                /> : ''}
-                                <DeclineActionModal
-                                    showDeclineModal={showDeclineModal}
-                                    withdrawReqDetails={withdrawReqDetails}
-                                    closeDeclineModal={this._closeDeclineModal}
-                                    getAllWithdrawReqs={this._getAllWithdrawReqs}
-                                />
-                            </TabPane>
-                        ))}
-                    </Tabs>
-                </TableDemoStyle>
-            </LayoutWrapper>
-        );
+  componentDidMount = () => {
+    this._getAllWithdrawReqs();
+  };
+
+  _getAllWithdrawReqs = () => {
+    const { token } = this.props;
+    const {
+      searchReq,
+      page,
+      limit,
+      filterVal,
+      startDate,
+      endDate,
+      sorterCol,
+      sortOrder
+    } = this.state;
+    let _this = this;
+
+    _this.setState({ loader: true });
+    ApiUtils.getAllWithdrawRequests(
+      page,
+      limit,
+      token,
+      searchReq,
+      filterVal,
+      startDate,
+      endDate,
+      sorterCol,
+      sortOrder
+    )
+      .then(response => response.json())
+      .then(function(res) {
+        if (res.status == 200) {
+          _this.setState({
+            allRequests: res.data,
+            allReqCount: res.withdrawReqCount
+          });
+        } else if (res.status == 403) {
+          _this.setState(
+            { errMsg: true, errMessage: res.err, errType: "error" },
+            () => {
+              _this.props.logout();
+            }
+          );
+        } else {
+          _this.setState({
+            errMsg: true,
+            errMessage: res.message,
+            errType: "error"
+          });
+        }
+        _this.setState({ loader: false });
+      })
+      .catch(() => {
+        _this.setState({
+          errMsg: true,
+          errMessage: "Something went wrong!!",
+          errType: "error",
+          loader: false
+        });
+      });
+  };
+
+  _searchReq = e => {
+    e.preventDefault();
+    this.setState({ page: 1 }, () => {
+      this._getAllWithdrawReqs();
+    });
+  };
+
+  _handleReqPagination = page => {
+    this.setState({ page }, () => {
+      this._getAllWithdrawReqs();
+    });
+  };
+
+  _changeSearch = (field, e) => {
+    this.setState({ searchReq: field.target.value });
+  };
+
+  range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
     }
+    return result;
+  };
+
+  isabledRangeTime = (_, type) => {
+    if (type === "start") {
+      return {
+        disabledHours: () => this.range(0, 60).splice(4, 20),
+        disabledMinutes: () => this.range(30, 60),
+        disabledSeconds: () => [55, 56]
+      };
+    }
+    return {
+      disabledHours: () => this.range(0, 60).splice(20, 4),
+      disabledMinutes: () => this.range(0, 31),
+      disabledSeconds: () => [55, 56]
+    };
+  };
+
+  _changeDate = (date, dateString) => {
+    this.setState({
+      rangeDate: date,
+      startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
+      endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+    });
+  };
+
+  _changeFilter = val => {
+    this.setState({ filterVal: val });
+  };
+
+  _resetFilters = () => {
+    this.setState(
+      {
+        filterVal: "",
+        searchReq: "",
+        startDate: "",
+        endDate: "",
+        rangeDate: []
+      },
+      () => {
+        this._getAllWithdrawReqs();
+      }
+    );
+  };
+
+  openNotificationWithIconError = type => {
+    notification[type]({
+      message: this.state.errType,
+      description: this.state.errMessage
+    });
+    this.setState({ errMsg: false });
+  };
+
+  _handleWithdrawTableChange = (pagination, filters, sorter) => {
+    this.setState(
+      { sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 },
+      () => {
+        this._getAllWithdrawReqs();
+      }
+    );
+  };
+
+  _changePaginationSize = (current, pageSize) => {
+    this.setState({ page: current, limit: pageSize }, () => {
+      this._getAllWithdrawReqs();
+    });
+  };
+
+  _closeDeclineModal = () => {
+    this.setState({ showDeclineModal: false });
+  };
+
+  render() {
+    const {
+      allRequests,
+      allReqCount,
+      errType,
+      errMsg,
+      page,
+      loader,
+      limit,
+      searchReq,
+      rangeDate,
+      filterVal,
+      showDeclineModal,
+      withdrawReqDetails
+    } = this.state;
+    const requestHeaders = [
+      { label: "Source Address", key: "source_address" },
+      { label: "Destination Address", key: "destination_address" },
+      { label: "Transaction Type", key: "transaction_type" },
+      { label: "Amount", key: "amount" },
+      { label: "Email", key: "email" },
+      { label: "Asset", key: "coin_name" },
+      { label: "Fees", key: "fees" },
+      { label: "Created On", key: "created_at" }
+    ];
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
+
+    if (errMsg) {
+      this.openNotificationWithIconError(errType.toLowerCase());
+    }
+
+    return (
+      <LayoutWrapper>
+        <Tabs className="isoTableDisplayTab full-width">
+          <TabPane tab={withdrawReqTableInfos[0].title} key={withdrawReqTableInfos[0].value}>
+            <TableDemoStyle className="isoLayoutContent">
+              <div style={{ display: "inline-block", width: "100%" }}>
+                <Form onSubmit={this._searchReq}>
+                  <Row>
+                    <ColWithMarginBottom sm={6}>
+                      <Input
+                        placeholder="Search Requests"
+                        onChange={this._changeSearch.bind(this)}
+                        value={searchReq}
+                      />
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom sm={3}>
+                      <Select
+                        getPopupContainer={trigger => trigger.parentNode}
+                        placeholder="Select a type"
+                        onChange={this._changeFilter}
+                        value={filterVal}
+                      >
+                        <Option value={""}>All</Option>
+                        <Option value={"null"}>Pending</Option>
+                        <Option value={"true"}>Approved</Option>
+                        <Option value={"false"}>Declined</Option>
+                      </Select>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom sm={6}>
+                      <RangePicker
+                        value={rangeDate}
+                        disabledTime={this.disabledRangeTime}
+                        onChange={this._changeDate}
+                        format="YYYY-MM-DD"
+                      />
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom xs={12} sm={3}>
+                      <Button
+                        htmlType="submit"
+                        className="filter-btn btn-full-width"
+                        type="primary"
+                      >
+                        <Icon type="search"></Icon>Search
+                      </Button>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom xs={12} sm={3}>
+                      <Button
+                        className="filter-btn btn-full-width"
+                        type="primary"
+                        onClick={this._resetFilters}
+                      >
+                        <Icon type="reload" />
+                        Reset
+                      </Button>
+                    </ColWithMarginBottom>
+                    <ColWithMarginBottom xs={12} sm={3}>
+                      {allRequests && allRequests.length > 0 ? (
+                        <CSVLink
+                          filename={"withdraw_requests.csv"}
+                          data={allRequests}
+                          headers={requestHeaders}
+                        >
+                          <Button
+                            type="primary"
+                            className="filter-btn btn-full-width"
+                            style={{ margin: "0px" }}
+                          >
+                            <Icon type="export" />
+                            Export
+                          </Button>
+                        </CSVLink>
+                      ) : (
+                        ""
+                      )}
+                    </ColWithMarginBottom>
+                  </Row>
+                </Form>
+              </div>
+              {loader && <FaldaxLoader />}
+              {withdrawReqTableInfos.map(tableInfo => (
+                <TableWrapper
+                  {...this.state}
+                  columns={tableInfo.columns}
+                  pagination={false}
+                  dataSource={allRequests}
+                  className="isoCustomizedTable"
+                  onChange={this._handleWithdrawTableChange}
+                  expandedRowRender={record => (
+                    <p style={{ margin: 0 }}>
+                      {
+                        <div>
+                          <b>Email ID</b> - {record.email} <br /> <b>Fees</b> -{" "}
+                          {record.fees}% <br /> <b>Asset</b> -{" "}
+                          {record.coin_name}{" "}
+                          {record.reason ? (
+                            <React.Fragment>
+                              <br />
+                              <b> Reason</b> - <span>{record.reason}</span>{" "}
+                            </React.Fragment>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      }
+                    </p>
+                  )}
+                />
+              ))}
+              {allReqCount > 0 ? (
+                <Pagination
+                  style={{ marginTop: "15px" }}
+                  className="ant-users-pagination"
+                  onChange={this._handleReqPagination.bind(this)}
+                  pageSize={limit}
+                  current={page}
+                  total={allReqCount}
+                  showSizeChanger
+                  onShowSizeChange={this._changePaginationSize}
+                  pageSizeOptions={pageSizeOptions}
+                />
+              ) : (
+                ""
+              )}
+              <DeclineActionModal
+                showDeclineModal={showDeclineModal}
+                withdrawReqDetails={withdrawReqDetails}
+                closeDeclineModal={this._closeDeclineModal}
+                getAllWithdrawReqs={this._getAllWithdrawReqs}
+              />
+            </TableDemoStyle>
+          </TabPane>
+        </Tabs>
+      </LayoutWrapper>
+    );
+  }
 }
 
 export default connect(
-    state => ({
-        token: state.Auth.get('token')
-    }), { logout })(WithdrawRequest);
+  state => ({
+    token: state.Auth.get("token")
+  }),
+  { logout }
+)(WithdrawRequest);
 
 export { WithdrawRequest, withdrawReqTableInfos };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification, Pagination, Input, DatePicker, Row, Form, Button } from 'antd';
+import { Tabs, notification, Pagination, Input, DatePicker, Row, Form, Button,Icon } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -13,7 +13,7 @@ import ApprovedKYC from './approvedKYC';
 import ReviewKYC from './reviewKYC';
 import DeclinedKYC from './declinedKYC';
 import moment from 'moment';
-import ColWithPadding from '../common.style';
+import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const { logout } = authAction;
@@ -175,82 +175,93 @@ class KYC extends Component {
         }
 
         return (
-            <LayoutWrapper>
+          <LayoutWrapper>
+            <Tabs className="isoTableDisplayTab">
+              <TabPane tab={KYCInfos[0].title} key={KYCInfos[0].value}>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {KYCInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Form onSubmit={this._searchKYC}>
-                                        <Row type="flex" justify="end">
-                                            <ColWithPadding sm={5}>
-                                                <Input
-                                                    placeholder="Search KYC"
-                                                    onChange={this._changeSearch.bind(this)}
-                                                    value={searchKYC}
-                                                />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={7}>
-                                                <RangePicker
-                                                    value={rangeDate}
-                                                    disabledTime={this.disabledRangeTime}
-                                                    onChange={this._changeDate}
-                                                    format="YYYY-MM-DD"
-                                                    allowClear={false}
-                                                    style={{ width: "100%" }}
-                                                />
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                            </ColWithPadding>
-                                        </Row>
-                                    </Form>
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <div style={{ marginTop: "30px" }}>
-                                    <ViewKYCModal
-                                        kycDetails={kycDetails}
-                                        showViewKYCModal={showViewKYCModal}
-                                        closeViewModal={this._closeViewKYCModal}
-                                    />
-                                    <TableWrapper
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allKYCData}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleKYCTableChange}
-                                    />
-                                    {allKYCCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleKYCPagination.bind(this)}
-                                            pageSize={limit}
-                                            current={page}
-                                            total={allKYCCount}
-                                            showSizeChanger
-                                            onShowSizeChange={this._changePaginationSize}
-                                            pageSizeOptions={pageSizeOptions}
-                                        /> : ''}
-                                </div>
-                            </TabPane>
-                        ))}
-                        <TabPane tab="Approved KYC" key="2">
-                            <ApprovedKYC />
-                        </TabPane>
-                        <TabPane tab="Under Review KYC" key="3">
-                            <ReviewKYC />
-                        </TabPane>
-                        <TabPane tab="Declined KYC" key="4">
-                            <DeclinedKYC />
-                        </TabPane>
-                    </Tabs>
+                    <Form onSubmit={this._searchKYC}>
+                      <Row type="flex" justify="end">
+                        <ColWithMarginBottom md={6}>
+                          <Input
+                            placeholder="Search KYC"
+                            onChange={this._changeSearch.bind(this)}
+                            value={searchKYC}
+                          />
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  md={6}>
+                          <RangePicker
+                            value={rangeDate}
+                            disabledTime={this.disabledRangeTime}
+                            onChange={this._changeDate}
+                            format="YYYY-MM-DD"
+                            allowClear={false}
+                            style={{ width: "100%" }}
+                          />
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom xs={12} md={3}>
+                          <Button
+                            htmlType="submit"
+                            className="filter-btn btn-full-width"
+                            type="primary"
+                          >
+                            <Icon type="search"/>Search
+                          </Button>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom xs={12} md={3}>
+                          <Button
+                            className="filter-btn btn-full-width"
+                            type="primary"
+                            onClick={this._resetFilters}
+                          >
+                            <Icon type="reload"/>Reset
+                          </Button>
+                        </ColWithMarginBottom>
+                      </Row>
+                    </Form>
+                  {loader && <FaldaxLoader />}
+                    <ViewKYCModal
+                      kycDetails={kycDetails}
+                      showViewKYCModal={showViewKYCModal}
+                      closeViewModal={this._closeViewKYCModal}
+                    />
+                    {KYCInfos.map(tableInfo => (
+                      <TableWrapper
+                        {...this.state}
+                        columns={tableInfo.columns}
+                        pagination={false}
+                        dataSource={allKYCData}
+                        className="isoCustomizedTable"
+                        onChange={this._handleKYCTableChange}
+                      />
+                    ))}
+                    {allKYCCount > 0 ? (
+                      <Pagination
+                        style={{ marginTop: "15px" }}
+                        className="ant-users-pagination"
+                        onChange={this._handleKYCPagination.bind(this)}
+                        pageSize={limit}
+                        current={page}
+                        total={allKYCCount}
+                        showSizeChanger
+                        onShowSizeChange={this._changePaginationSize}
+                        pageSizeOptions={pageSizeOptions}
+                      />
+                    ) : (
+                      ""
+                    )}
                 </TableDemoStyle>
-            </LayoutWrapper>
+              </TabPane>
+              <TabPane tab="Approved KYC" key="2">
+                <ApprovedKYC />
+              </TabPane>
+              <TabPane tab="Under Review KYC" key="3">
+                <ReviewKYC />
+              </TabPane>
+              <TabPane tab="Declined KYC" key="4">
+                <DeclinedKYC />
+              </TabPane>
+            </Tabs>
+          </LayoutWrapper>
         );
     }
 }

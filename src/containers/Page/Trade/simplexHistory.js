@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, DatePicker, Button, Form, Row } from 'antd';
+import { Input, Pagination, notification,Icon,Select, DatePicker, Button, Form, Row } from 'antd';
 import { simplexTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,7 @@ import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithPadding from '../common.style';
+import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Option = Select.Option;
@@ -184,14 +184,14 @@ class SimplexHistory extends Component {
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Form onSubmit={this._searchTrade}>
                                     <Row>
-                                        <ColWithPadding md={6} sm={24}>
+                                        <ColWithMarginBottom md={6} sm={24}>
                                             <Input
                                                 placeholder="Search trades"
                                                 onChange={this._changeSearch.bind(this)}
                                                 value={searchTrade}
                                             />
-                                        </ColWithPadding>
-                                        {/* <ColWithPadding sm={3}>
+                                        </ColWithMarginBottom>
+                                        {/* <ColWithMarginBottom sm={3}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select type"
@@ -202,8 +202,8 @@ class SimplexHistory extends Component {
                                                 <Option value={'Sell'}>Sell</Option>
                                                 <Option value={'Buy'}>Buy</Option>
                                             </Select>
-                                        </ColWithPadding> */}
-                                        <ColWithPadding sm={24} md={4}>
+                                        </ColWithMarginBottom> */}
+                                        <ColWithMarginBottom sm={24} md={3}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select Status"
@@ -215,8 +215,8 @@ class SimplexHistory extends Component {
                                                 <Option value={2}>Approved</Option>
                                                 <Option value={3}>Cancelled</Option>
                                             </Select>
-                                        </ColWithPadding>
-                                        <ColWithPadding md={8} sm={24}>
+                                        </ColWithMarginBottom>
+                                        <ColWithMarginBottom md={6} sm={24}>
                                             <RangePicker
                                                 value={rangeDate}
                                                 disabledTime={this.disabledRangeTime}
@@ -225,26 +225,25 @@ class SimplexHistory extends Component {
                                                 allowClear={false}
                                                 style={{ width: "100%" }}
                                             />
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={24} md={2} sm={24}>
-                                            <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={24} md={2} sm={24}>
-                                            <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={24} sm={24} md={2}>
+                                        </ColWithMarginBottom>
+                                        <ColWithMarginBottom xs={24} md={3} sm={24}>
+                                            <Button htmlType="submit" className="search-btn btn-full-width" type="primary"><Icon type="search"></Icon>Search</Button>
+                                        </ColWithMarginBottom>
+                                        <ColWithMarginBottom xs={24} md={3} sm={24}>
+                                            <Button className="search-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
+                                        </ColWithMarginBottom>
+                                        <ColWithMarginBottom xs={24} sm={24} md={3}>
                                             {allSimplexTrades && allSimplexTrades.length > 0 ?
                                                 <CSVLink filename={'simplex_history.csv'} data={allSimplexTrades} headers={tradeHeaders}>
-                                                    <Button className="search-btn" type="primary">Export</Button>
+                                                    <Button className="search-btn btn-full-width" type="primary"><Icon type="export"></Icon>Export</Button>
                                                 </CSVLink>
                                                 : ''}
-                                        </ColWithPadding>
+                                        </ColWithMarginBottom>
                                     </Row>
                                 </Form>
                             </div>
                             {loader && <FaldaxLoader />}
                             <TableWrapper
-                                style={{ marginTop: '20px' }}
                                 {...this.state}
                                 columns={tableInfo.columns}
                                 pagination={false}

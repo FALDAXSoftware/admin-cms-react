@@ -72,9 +72,13 @@ class ReferredAmount extends Component {
                     result.map((referral) => {
                         return (
                             <Row>
-                                <Col xs={{ span: 5 }} lg={{ span: 8 }}>
-                                    <Card style={{ width: 300, padding: '5px' }}>
-                                        <span>{referral[0].firstname} {referral[0].lastname}</span> <br />
+                                <Col md={8} sm={12} xs={24}>
+                                    <Card className='assets-card'>
+                                        <div>
+                                           <span>BTC</span>
+                                           <span className="amount">10000</span>
+                                        </div>
+                                        {/* <span>{referral[0].firstname} {referral[0].lastname}</span> <br />
                                         <span>{referral[0].email}</span> <br />
                                         {
                                             referral && referral.map(function (ref) {
@@ -84,7 +88,7 @@ class ReferredAmount extends Component {
                                                     </p>
                                                 );
                                             })
-                                        }
+                                        } */}
                                     </Card>
                                 </Col>
                             </Row>
