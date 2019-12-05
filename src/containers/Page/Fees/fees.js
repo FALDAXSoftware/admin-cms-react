@@ -11,6 +11,7 @@ import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import NetworkFee from '../NetworkFee/networkFee'
+import { isAllowed } from '../../../helpers/accessControl';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -61,9 +62,11 @@ class Fees extends Component {
 
     componentDidMount = () => {
         this._getAllFeesData();
-        this._getWithdrawlFeeData();
+        if (isAllowed("get_withdrawl_faldax_fee")) {
+            this._getWithdrawlFeeData();
+        }
         // this._getFaldaxFeeData();
-        this._getContactDetails();
+        // this._getContactDetails();
     }
 
     _getContactDetails = () => {
@@ -269,11 +272,12 @@ class Fees extends Component {
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {FeesInfos.map(tableInfo => (
+                        {isAllowed("get_all_fee") && FeesInfos.map(tableInfo => (
+
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                {loader && <FaldaxLoader />}
                                 {showEditFeesModal && <EditFeesModal
                                     fields={feesDetails}
                                     getAllFees={this._getAllFeesData}
@@ -289,41 +293,52 @@ class Fees extends Component {
                                     className="isoCustomizedTable"
                                 />
                             </TabPane>
+
                         ))}
-                        <TabPane tab="Withdrawal Fee" key="2">
-                            <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
-                                <span>
-                                    <b>Withdrawal Fee</b>
-                                </span>
-                                <Input addonAfter={'%'} placeholder="Withdrawal Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                                    onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields['default_send_coin_fee']} />
-                                <span className="field-error">
-                                    {this.validator.message('withdrawal fee', fields['default_send_coin_fee'], 'required|custom_between:0,100')}
-                                </span>
-                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateSendFee}> Update </Button>
-                                <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button>
-                            </div>
-                            {loader && <FaldaxLoader />}
-                        </TabPane>
-                        <TabPane tab="Faldax Fee" key="3">
-                            <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
-                                <span>
-                                    <b>Faldax Fee</b>
-                                </span>
-                                <Input addonAfter={'%'} placeholder="Faldax Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
-                                    onChange={this._onChangeFields.bind(this, "defualt_faldax_fee")} value={fields['defualt_faldax_fee']} />
-                                <span className="field-error">
-                                    {this.validator.message('faldax fee', fields['defualt_faldax_fee'], 'required|custom_between:0,100')}
-                                </span>
-                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateFaldaxFee}> Update </Button>
-                                {/* <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button> */}
-                            </div>
-                            {loader && <FaldaxLoader />}
-                        </TabPane>
-                        <TabPane tab="Network Fee" key="4">
-                            <NetworkFee />
-                            {/* {loader && <FaldaxLoader />} */}
-                        </TabPane>
+                        {isAllowed("get_withdrawl_faldax_fee") &&
+                            <TabPane tab="Withdrawal Fee" key="2">
+                                <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
+                                    <span>
+                                        <b>Withdrawal Fee</b>
+                                    </span>
+                                    <Input addonAfter={'%'} placeholder="Withdrawal Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                                        onChange={this._onChangeFields.bind(this, "default_send_coin_fee")} value={fields['default_send_coin_fee']} />
+                                    <span className="field-error">
+                                        {this.validator.message('withdrawal fee', fields['default_send_coin_fee'], 'required|custom_between:0,100')}
+                                    </span>
+                                    {isAllowed("update_send_coin_fee") &&
+                                        <>
+                                            <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateSendFee}> Update </Button>
+                                            <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button>
+                                        </>
+                                    }
+                                </div>
+                            </TabPane>
+                        }
+                        {isAllowed("get_withdrawl_faldax_fee") &&
+                            <TabPane tab="Faldax Fee" key="3">
+                                <div style={{ "marginTop": "10px", "marginLeft": "200px" }}>
+                                    <span>
+                                        <b>Faldax Fee</b>
+                                    </span>
+                                    <Input addonAfter={'%'} placeholder="Faldax Fee" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                                        onChange={this._onChangeFields.bind(this, "defualt_faldax_fee")} value={fields['defualt_faldax_fee']} />
+                                    <span className="field-error">
+                                        {this.validator.message('faldax fee', fields['defualt_faldax_fee'], 'required|custom_between:0,100')}
+                                    </span>
+                                    {isAllowed("update_faldax_fee") &&
+                                        <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateFaldaxFee}> Update </Button>
+                                    }
+                                    {/* <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button> */}
+                                </div>
+                            </TabPane>
+                        }
+                        {isAllowed("get_coin_fees") &&
+                            <TabPane tab="Network Fee" key="4">
+                                <NetworkFee />
+                                {/* {loader && <FaldaxLoader />} */}
+                            </TabPane>
+                        }
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>

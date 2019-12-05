@@ -108,32 +108,33 @@ class NetworkFee extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <div>
-        {/* <TableDemoStyle className="isoLayoutContent"> */}
-        {/* <Tabs className="isoTableDisplayTab"> */}
-        {networkFeeTableInfos.map(tableInfo => (
-          <div tab={tableInfo.title} key={tableInfo.value}>
-            {loader && <FaldaxLoader />}
-            <div>
-              <TableWrapper
-                {...this.state}
-                columns={tableInfo.columns}
-                pagination={false}
-                dataSource={coinFees}
-                className="isoCustomizedTable"
-                onChange={this.handleNetworkChange}
-              />
-              <EditNetworkFeeModal
-                showEditNetworkFeeModal={showEditNetworkFeeModal}
-                onCloseEditModal={this.onCloseEditModal}
-                fields={modalData}
-              />
-            </div>
-          </div>
-        ))}
-        {/* </Tabs> */}
-        {/* // </TableDemoStyle> */}
-      </div>
+      <LayoutWrapper>
+        <TableDemoStyle className="isoLayoutContent">
+          <Tabs className="isoTableDisplayTab">
+            {networkFeeTableInfos.map(tableInfo => (
+              <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                {loader && <FaldaxLoader />}
+                <div>
+                  <TableWrapper
+                    {...this.state}
+                    columns={tableInfo.columns}
+                    pagination={false}
+                    dataSource={coinFees}
+                    className="isoCustomizedTable"
+                    onChange={this.handleNetworkChange}
+                    style={{ width: "100%" }}
+                  />
+                  <EditNetworkFeeModal
+                    showEditNetworkFeeModal={showEditNetworkFeeModal}
+                    onCloseEditModal={this.onCloseEditModal}
+                    fields={modalData}
+                  />
+                </div>
+              </TabPane>
+            ))}
+          </Tabs>
+        </TableDemoStyle>
+      </LayoutWrapper>
     );
   }
 }

@@ -11,6 +11,7 @@ import EditEmployeeModal from './editEmployeeModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -34,7 +35,7 @@ class Employees extends Component {
             deleteEmpId: '',
             searchEmp: '',
             page: 1,
-             limit: PAGESIZE,
+            limit: PAGESIZE,
         }
         self = this;
         Employees.employeeStatus = Employees.employeeStatus.bind(this);
@@ -87,7 +88,9 @@ class Employees extends Component {
 
     componentDidMount = () => {
         this._getAllEmployees();
-        this._getAllRoles();
+        if (isAllowed("get_role")) {
+            this._getAllRoles();
+        }
     }
 
     openNotificationWithIconError = (type) => {
@@ -230,7 +233,7 @@ class Employees extends Component {
     render() {
         const { allEmployee, errType, errMsg, loader, showAddEmpModal, employeeCount, page, limit,
             showEditEmpModal, empDetails, showDeleteEmpModal, allRoles } = this.state;
-       let pageSizeOptions = PAGE_SIZE_OPTIONS
+        let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -248,7 +251,9 @@ class Employees extends Component {
                                         style={{ "float": "right", "width": "250px" }}
                                         enterButton
                                     />
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddEmpModal}>Add Employee</Button>
+                                    {isAllowed("add_employee") &&
+                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddEmpModal}>Add Employee</Button>
+                                    }
                                     {showAddEmpModal && <AddEmployeeModal
                                         showAddEmpModal={showAddEmpModal}
                                         allRoles={allRoles}

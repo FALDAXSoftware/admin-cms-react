@@ -66,7 +66,11 @@ class SignIn extends Component {
             login({ user: res.user });
             storeToken({ token: res.token });
             checkRoles({ roles: res.user.roles })
-            _this.props.history.push('/dashboard');
+            if (res.user.roleAllowedData.length > 0) {
+              _this.props.history.push('/dashboard');
+            } else {
+              _this.props.history.push('/403');
+            }
           } else if (res.status == 201) {
             _this.setState({ isOtpRequired: true, loader: false });
           } else if (res.status == 402) {

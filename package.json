@@ -11,6 +11,7 @@
     "ckeditor4-react": "^1.0.0-beta.2",
     "classnames": "^2.2.5",
     "clone": "^2.1.1",
+    "connected-react-router": "^6.6.1",
     "country-state-city": "0.0.5",
     "d3-shape": "^1.0.6",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -36,7 +37,7 @@
     "react-csv": "^1.1.1",
     "react-dates": "12.2.4",
     "react-dnd": "^2.3.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.12.0",
     "react-dropzone-component": "^3.0.0",
     "react-element-resize": "^0.2.1",
     "react-error-overlay": "1.0.6",
@@ -50,11 +51,11 @@
     "react-motion-drawer": "^2.1.7",
     "react-phone-input-2": "^2.9.4",
     "react-placeholder": "^2.0.0",
-    "react-redux": "^5.0.4",
+    "react-redux": "^7.1.1",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.0",
-    "react-router-redux": "^5.0.0-alpha.5",
-    "react-scripts": "1.0.17",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "react-scripts": "3.2.0",
     "react-sidebar": "^2.3.2",
     "react-smooth-scrollbar": "^8.0.6",
     "react-stockcharts": "^0.7.8",
@@ -93,9 +94,21 @@
     "redux-mock-store": "^1.2.3"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired --max_old_space_size=8192 build",
-    "test": "react-app-rewired test --env=jsdom",
+    "start": "react-scripts --max_old_space_size=4096 start",
+    "build": "react-scripts --max_old_space_size=4096 build",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import AllRequests from './tierRequests';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -35,7 +36,9 @@ class Tiers extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllTiers();
+        if (isAllowed("get_tier_details")) {
+            this._getAllTiers();
+        }
     }
 
     openNotificationWithIconError = (type) => {
@@ -85,22 +88,24 @@ class Tiers extends Component {
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {tierTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                {loader && <FaldaxLoader />}
+                        {isAllowed("get_tier_details") &&
+                            <TabPane tab={tierTableInfos[0].title} key={tierTableInfos[0].value}>
                                 <TableWrapper
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={tierTableInfos[0].columns}
                                     pagination={false}
                                     dataSource={allTiers}
                                     className="isoCustomizedTable"
                                     onChange={this._handlePairsChange}
                                 />
                             </TabPane>
-                        ))}
-                        <TabPane tab="Tier Requests" key="2"><AllRequests /></TabPane>
+                        }
+                        {isAllowed("user_tier_request") &&
+                            <TabPane tab="Tier Requests" key="2"><AllRequests /></TabPane>
+                        }
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper >

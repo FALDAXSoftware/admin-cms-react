@@ -11,6 +11,7 @@ import AddCoinModal from './addCoinModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -232,7 +233,9 @@ class Assets extends Component {
                         {assetTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Asset</Button>
+                                    {isAllowed("create_coins") &&
+                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Asset</Button>
+                                    }
                                     <AddCoinModal
                                         showAddCoinModal={showAddCoinModal}
                                         closeAddModal={this._closeAddCoinModal}

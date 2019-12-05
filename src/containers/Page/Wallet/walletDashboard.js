@@ -9,6 +9,7 @@ import TableDemoStyle from '../../Tables/antTables/demo.style';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styled from 'styled-components';
 import SimpleReactValidator from 'simple-react-validator';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const Search = Input.Search;
@@ -204,7 +205,13 @@ class WalletDashboard extends Component {
                             {allWallets.length > 0 ? allWallets.map(wallet => (
                                 <Col xs={{ span: 5 }} lg={{ span: 8 }}>
                                     <Card className="wallet-card" title={wallet.coin}
-                                        extra={<Button style={{ borderRadius: '5px' }} onClick={this._openSendModal.bind(this, wallet)}>Send</Button>}>
+                                        extra={
+                                            <span>
+                                                {isAllowed("send_coin_admin") &&
+                                                    <Button style={{ borderRadius: '5px' }} onClick={this._openSendModal.bind(this, wallet)}>Send</Button>
+                                                }
+                                            </span>
+                                        }>
                                         <div className="wallet-div">
                                             <div>
                                                 <b className="custom-spacing">HOT Send Address</b><br />

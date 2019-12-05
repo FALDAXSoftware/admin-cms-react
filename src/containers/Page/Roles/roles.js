@@ -10,6 +10,7 @@ import AddRoleModal from './addRoleModal';
 import EditRoleModal from './editRoleModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -101,6 +102,9 @@ class Roles extends Component {
 
     static deleteRole(value) {
         self.setState({ showDeleteRoleModal: true, deleteRoleId: value });
+    }
+    static openAccessGrant(value) {
+        self.props.history.push(`access-grant/${value}`)
     }
 
     componentDidMount = () => {
@@ -244,7 +248,9 @@ class Roles extends Component {
                         {rolesTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
+                                    {isAllowed("create_role") &&
+                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddRoleModal}>Add Role</Button>
+                                    }
                                     {showAddRoleModal && <AddRoleModal
                                         allRolesValue={allRolesValue}
                                         showAddRoleModal={showAddRoleModal}

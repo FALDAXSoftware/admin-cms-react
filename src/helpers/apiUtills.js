@@ -1,9 +1,9 @@
-// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+const API_URL = "http://192.168.0.213:1338"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
+// const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -2492,7 +2492,7 @@ const ApiUtils = {
     }
   },
 
-  
+
   // get employee details api
   getEmployeeDetails: function (token, emp_id) {
     try {
@@ -3733,7 +3733,7 @@ const ApiUtils = {
     } else if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
     } else {
-      url;
+      // url;
     }
 
     try {
@@ -3758,14 +3758,41 @@ const ApiUtils = {
       body: JSON.stringify(body)
     });
   },
+  getRolePermissions: function (token, roleId = "") {
+    try {
+      const url = "/admin/get-role-permission";
+      return fetch(`${API_URL}${url}?role_id=${roleId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+    } catch (error) {
+      console.log("api middle-ware issue", error);
+    }
+  },
+  updatePermissions: function (token, form) {
+    let url = "/admin/update-role-permission";
+    try {
+      return fetch(API_URL + url, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify(form)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
   // Offer Module API's
-  offers:function (token){
+  offers: function (token) {
     return {
       url: "/admin/campaigns/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getCampaignList: function(page, limit) {
+      getCampaignList: function (page, limit) {
         let formData = new FormData();
         formData.append("page", page);
         formData.append("limit", limit);
@@ -3775,7 +3802,7 @@ const ApiUtils = {
           body: formData
         });
       },
-      changeStatus: function(id, status = false) {
+      changeStatus: function (id, status = false) {
         let formData = new FormData();
         formData.append("status", status);
         return fetch(`${API_URL}${this.url}change-status/${id}`, {
@@ -3784,7 +3811,7 @@ const ApiUtils = {
           body: formData
         });
       },
-      updateCampaign: function(id, data) {
+      updateCampaign: function (id, data) {
         return fetch(`${API_URL}${this.url}update/${id}`, {
           method: "PUT",
           headers: this.headers,
@@ -3792,26 +3819,27 @@ const ApiUtils = {
         });
       },
       // get campaign details api
-      getById: function(campaign_id) {
+      getById: function (campaign_id) {
         try {
           return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
             method: "GET",
-            headers:this.headers
+            headers: this.headers
           });
         } catch (error) {
           console.error(error);
         }
       },
-      checkOfferCode:function(offerCode=""){
-        try{
-           return fetch(`${API_URL}${this.url}verify-offercode/${offerCode}`,{
-             method:'GET',
-             headers:this.headers
-           })
-        }catch(error){
-          console.log("api middle-ware issue",error);
+      checkOfferCode: function (offerCode = "") {
+        try {
+          return fetch(`${API_URL}${this.url}verify-offercode/${offerCode}`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
         }
-      }
+      },
+
     };
   }
 };

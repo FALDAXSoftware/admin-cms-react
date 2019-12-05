@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -147,12 +148,16 @@ class SimplexToken extends Component {
                                 </span>
                                 <TextArea disabled={enableInput} placeholder="Simplex Access Token" style={{ width: "80%", "marginTop": "15px", "marginBottom": "15px" }}
                                     onChange={this._onChangeFields.bind(this, "access_token")} value={fields["access_token"]} />
-                                <Icon type="edit" theme="twoTone" onClick={this._showInputEditable} />
-                                <span className="field-error">
-                                    {this.validator.message('Simplex Access Token', fields['access_token'], 'required')}
-                                </span>
-                                <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateAccessToken}> Update </Button>
-                                <Button type="primary" className="cancel-btn" onClick={this._cancelAccessToken}> Cancel </Button>
+                                {isAllowed("update_token_value") &&
+                                    <span>
+                                        <Icon type="edit" theme="twoTone" onClick={this._showInputEditable} />
+                                        <span className="field-error">
+                                            {this.validator.message('Simplex Access Token', fields['access_token'], 'required')}
+                                        </span>
+                                        <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateAccessToken}> Update </Button>
+                                        <Button type="primary" className="cancel-btn" onClick={this._cancelAccessToken}> Cancel </Button>
+                                    </span>
+                                }
                             </div>
                             {loader && <FaldaxLoader />}
                         </TabPane>

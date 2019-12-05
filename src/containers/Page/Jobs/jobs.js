@@ -13,6 +13,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import JobCategory from './jobsCategory';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -51,7 +52,9 @@ class Jobs extends Component {
 
     componentDidMount = () => {
         this._getAllJobs();
-        this._getAllJobCategories();
+        if (isAllowed("get_job_categories")) {
+            this._getAllJobCategories();
+        }
     }
 
     static jobStatus(value, position, location, short_desc, job_desc, category_id, is_active, category) {
@@ -270,7 +273,9 @@ class Jobs extends Component {
                         {jobsTableInfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobModal}>Add Job</Button>
+                                    {isAllowed("add_job") && isAllowed("get_job_categories") &&
+                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobModal}>Add Job</Button>
+                                    }
                                     <AddJobModal
                                         showAddJobModal={showAddJobModal}
                                         closeAddModal={this._closeAddJobModal}
@@ -334,9 +339,11 @@ class Jobs extends Component {
                                     /> : ''}
                             </TabPane>
                         ))}
-                        <TabPane tab="Job Category" key="2">
-                            {activeTab == 2 && <JobCategory />}
-                        </TabPane>
+                        {isAllowed("get_job_categories") &&
+                            <TabPane tab="Job Category" key="2">
+                                {activeTab == 2 && <JobCategory />}
+                            </TabPane>
+                        }
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>

@@ -11,6 +11,7 @@ import EditAccountClassModal from './editAccountClass';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import SimpleReactValidator from 'simple-react-validator';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -183,7 +184,9 @@ class AccountClass extends Component {
                         {accountClassTableinfos.map(tableInfo => (
                             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAccClassModal}>Add</Button>
+                                    {isAllowed("add_account_class") &&
+                                        <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddAccClassModal}>Add</Button>
+                                    }
                                     {showAddClassModal &&
                                         <AddAccountClassModal
                                             showAddClassModal={showAddClassModal}

@@ -4,6 +4,7 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell, DateCell, StaticImageCell, NewsDescCell, NewsSwitchCell, NewsLinkCell
 } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, image = null, news_title = null, news_link = null, posted = null,
     desc = null, active = null, source = null) => {
@@ -57,8 +58,14 @@ const columns = [{
     title: <IntlMessages id="newsTable.title.active" />,
     key: 'is_active',
     width: 100,
-    render: object => renderCell(object, 'NewsSwitchCell', 'id', 'cover_image', 'title',
-        'link', 'posted_at', 'description', 'is_active', 'owner')
+    render: object => {
+        if (isAllowed()) {
+            return renderCell(object, 'NewsSwitchCell', 'id', 'cover_image', 'title',
+            'link', 'posted_at', 'description', 'is_active', 'owner')
+        } else {
+            return renderCell(object, 'TextCell', 'is_active')
+        }
+    }
 }];
 
 const newsTableInfos = [

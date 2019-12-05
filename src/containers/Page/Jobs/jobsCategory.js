@@ -8,6 +8,7 @@ import AddJobCatModal from './addJobCategoryModal';
 import EditJobCatModal from './editCategory';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 var self;
@@ -136,7 +137,10 @@ class JobCategory extends Component {
                 {jobCategoryTableInfos.map(tableInfo => (
                     <div key={tableInfo.value}>
                         <div style={{ "display": "inline-block", "width": "100%" }}>
-                            <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}>Add Category</Button>
+                            {isAllowed("add_job_category") &&
+
+                                <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}>Add Category</Button>
+                            }
                             <AddJobCatModal
                                 showAddJobCatModal={showAddJobCatModal}
                                 closeAddModal={this._closeAddJobModal}

@@ -6,6 +6,7 @@ import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import styled from 'styled-components';
 import SimpleReactValidator from 'simple-react-validator';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const SaveBtn = styled(Button)`
     float: right;
@@ -354,48 +355,60 @@ class EditableTable extends React.Component {
 
         return (
             <div>
-                <Divider orientation="left">Contact Information</Divider>
-                <div className="isoLayoutContent" style={{ "marginTop": "10px" }}>
-                    <span>
-                        <b>Email Address</b>
-                    </span>
-                    <Input
-                        placeholder="Email Address"
-                        style={{ "marginBottom": "15px", "display": "inherit" }}
-                        onChange={this._handleChange.bind(this, 'email')}
-                        value={fields['email']}
-                    />
-                    <span className="field-error">
-                        {this.validator.message('Email Address', fields['email'], 'required')}
-                    </span>
+                {isAllowed("get_admin_thresholds_contacts") &&
+                    <div>
+                        <Divider orientation="left">Contact Information</Divider>
+                        <div className="isoLayoutContent" style={{ "marginTop": "10px" }}>
+                            <span>
+                                <b>Email Address</b>
+                            </span>
+                            <Input
+                                placeholder="Email Address"
+                                style={{ "marginBottom": "15px", "display": "inherit" }}
+                                onChange={this._handleChange.bind(this, 'email')}
+                                value={fields['email']}
+                            />
+                            <span className="field-error">
+                                {this.validator.message('Email Address', fields['email'], 'required')}
+                            </span>
 
-                    <span>
-                        <b>Phone Number</b>
-                    </span>
-                    <Input
-                        placeholder="Phone Number"
-                        style={{ "marginBottom": "15px", "display": "inherit" }}
-                        onChange={this._handleChange.bind(this, 'phone')}
-                        value={fields['phone']}
-                    />
-                    <span className="field-error">
-                        {this.validator.message('Phone Number', fields['phone'], 'required')}
-                    </span>
-                    <Button onClick={this._storeContactDetails} htmlType="submit" type="primary">Submit</Button>
-                </div>
+                            <span>
+                                <b>Phone Number</b>
+                            </span>
+                            <Input
+                                placeholder="Phone Number"
+                                style={{ "marginBottom": "15px", "display": "inherit" }}
+                                onChange={this._handleChange.bind(this, 'phone')}
+                                value={fields['phone']}
+                            />
+                            <span className="field-error">
+                                {this.validator.message('Phone Number', fields['phone'], 'required')}
+                            </span>
+                            {isAllowed("add_admin_thresholds_contacts") &&
+                                <Button onClick={this._storeContactDetails} htmlType="submit" type="primary">Submit</Button>
+                            }
+                        </div>
+                    </div>
+                }
 
-                <Divider orientation="left">Notification Thresholds</Divider>
-                {/* <Tooltip title="Click this button and it will store all values."> */}
-                <SaveBtn className="save-all-btn" htmlType="submit" type="primary" onClick={this._saveAll}>Save ALL</SaveBtn>
-                {/* </Tooltip> */}
-                <Table
-                    className="isoLayoutContent"
-                    components={components}
-                    bordered
-                    dataSource={dataSource}
-                    columns={columns}
-                    pagination={false}
-                />
+                {isAllowed("get_admin_thresholds") &&
+                    <div>
+                        <Divider orientation="left">Notification Thresholds</Divider>
+                        {/* <Tooltip title="Click this button and it will store all values."> */}
+                        {isAllowed("add_admin_thresholds") &&
+                            <SaveBtn className="save-all-btn" htmlType="submit" type="primary" onClick={this._saveAll}>Save ALL</SaveBtn>
+                        }
+                        {/* </Tooltip> */}
+                        <Table
+                            className="isoLayoutContent"
+                            components={components}
+                            bordered
+                            dataSource={dataSource}
+                            columns={columns}
+                            pagination={false}
+                        />
+                    </div>
+                }
                 {loader && <FaldaxLoader />}
             </div>
         );

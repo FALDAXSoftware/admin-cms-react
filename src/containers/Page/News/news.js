@@ -11,6 +11,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -242,7 +243,6 @@ class News extends Component {
                                         <Row>
                                             <ColWithPadding sm={5}>
                                                 <Form.Item validateStatus={this.state.searchValid}>
-
                                                     <Input
                                                         placeholder="Search news"
                                                         onChange={this._changeSearch.bind(this)}
@@ -251,31 +251,41 @@ class News extends Component {
                                                     />
                                                 </Form.Item>
                                             </ColWithPadding>
-                                            <ColWithPadding sm={5}>
-                                                <Select
-                                                    getPopupContainer={trigger => trigger.parentNode}
-                                                    placeholder="Select a source"
-                                                    onChange={this._changeFilter}
-                                                    value={filterVal}
-                                                >
-                                                    <Option value={''}>{'All'}</Option>
-                                                    {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
-                                                </Select>
-                                            </ColWithPadding>
+                                            {isAllowed("get_all_news_source") &&
+                                                <ColWithPadding sm={5}>
+                                                    <Form.Item>
+                                                        <Select
+                                                            getPopupContainer={trigger => trigger.parentNode}
+                                                            placeholder="Select a source"
+                                                            onChange={this._changeFilter}
+                                                            value={filterVal}
+                                                        >
+                                                            <Option value={''}>{'All'}</Option>
+                                                            {allNewsSources && allNewsSources.map((news, index) => <Option key={news.id} value={news.slug}>{news.source_name}</Option>)}
+                                                        </Select>
+                                                    </Form.Item>
+                                                </ColWithPadding>
+                                            }
                                             <ColWithPadding sm={8}>
-                                                <RangePicker
-                                                    value={rangeDate}
-                                                    disabledTime={this.disabledRangeTime}
-                                                    onChange={this._changeDate}
-                                                    format="YYYY-MM-DD"
-                                                    allowClear={false}
-                                                />
+                                                <Form.Item>
+                                                    <RangePicker
+                                                        value={rangeDate}
+                                                        disabledTime={this.disabledRangeTime}
+                                                        onChange={this._changeDate}
+                                                        format="YYYY-MM-DD"
+                                                        allowClear={false}
+                                                    />
+                                                </Form.Item>
                                             </ColWithPadding>
                                             <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                                <Form.Item>
+                                                    <Button htmlType="submit" className="search-btn" type="primary" >Search</Button>
+                                                </Form.Item>
                                             </ColWithPadding>
                                             <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                                <Form.Item>
+                                                    <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
+                                                </Form.Item>
                                             </ColWithPadding>
                                         </Row>
                                     </Form>
