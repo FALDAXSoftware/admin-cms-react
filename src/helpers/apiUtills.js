@@ -3847,6 +3847,24 @@ const ApiUtils = {
         }
       }
     };
+  },
+  metabase:function(token){
+    return {
+      url: "/admin/",
+      headers: {
+        Authorization: "Bearer " + token
+      },
+      getAccountClassMetabase:function(){
+        try{
+          return fetch(`${API_URL}${this.url}get-account-report`,{
+            method:'GET',
+            headers:this.headers
+          })
+        }catch(error){
+          console.log("api middle-ware issue",error);
+        }
+      }
+    }
   }
 };
 export default ApiUtils;

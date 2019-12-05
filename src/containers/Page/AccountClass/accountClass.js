@@ -31,7 +31,8 @@ class AccountClass extends Component {
       showEditAccountClassModal: false,
       showDeleteAccountClassModal: false,
       sorterCol: "id",
-      sortOrder: "ASC"
+      sortOrder: "ASC",
+      metabaseUrl:""
     };
     self = this;
     AccountClass.editAccountClass = AccountClass.editAccountClass.bind(this);
@@ -198,6 +199,29 @@ class AccountClass extends Component {
     );
   };
 
+  async getMetaBaseUrl(){
+    try{
+      this.setState({loader:true})
+      let response= await (await ApiUtils.metabase(this.props.token).getAccountClassMetabase()).json();
+      if(response.status==200){
+         this.setState({metabaseUrl:response.frameURL})
+      }else if(response.statue==400 || response.status==403){
+
+      }
+    }catch(error){
+
+    }finally{
+      this.setState({loader:false})
+    }
+  }
+
+  onChangeTabs=(key)=>{
+    if(key=="metabase" && this.state.metabaseUrl==""){
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();    
+    }
+  }
+
   render() {
     const {
       allAccountClasses,
@@ -208,7 +232,8 @@ class AccountClass extends Component {
       accountClassDetails,
       showEditAccountClassModal,
       showDeleteAccountClassModal,
-      fields
+      fields,
+      metabaseUrl
     } = this.state;
 
     if (errMsg) {
@@ -217,7 +242,7 @@ class AccountClass extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {accountClassTableinfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -331,6 +356,17 @@ class AccountClass extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
+          <TabPane tab="Metabase-Account Class Management" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl &&
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                ></iframe>}
+              </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );
