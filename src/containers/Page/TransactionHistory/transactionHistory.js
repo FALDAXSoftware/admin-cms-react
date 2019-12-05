@@ -263,9 +263,9 @@ class Transactions extends Component {
             key={transactionTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-              <div style={{ display: "inline-block", width: "100%" }}>
+              
                 <Form onSubmit={this._searchTransaction}>
-                  <Row>
+                  <Row type="flex" justify="end">
                     <ColWithMarginBottom md={6}>
                       <Input
                         placeholder="Search transactions"
@@ -297,7 +297,7 @@ class Transactions extends Component {
                     <ColWithMarginBottom xs={12} md={3}>
                       <Button
                         htmlType="submit"
-                        className="search-btn btn-full-width"
+                        className="filter-btn btn-full-width"
                         type="primary"
                       ><Icon type="search"/>
                         Search
@@ -305,7 +305,7 @@ class Transactions extends Component {
                     </ColWithMarginBottom>
                     <ColWithMarginBottom xs={12} md={3}>
                       <Button
-                        className="search-btn btn-full-width"
+                        className="filter-btn btn-full-width"
                         type="primary"
                         onClick={this._resetFilters}
                       ><Icon type="reload"/>
@@ -319,7 +319,7 @@ class Transactions extends Component {
                           data={allTransactions}
                           headers={transactionsHeaders}
                         >
-                          <Button className="search-btn btn-full-width" type="primary">
+                          <Button className="filter-btn btn-full-width" type="primary">
                             <Icon type="export"></Icon>
                             Export
                           </Button>
@@ -330,11 +330,10 @@ class Transactions extends Component {
                     </ColWithMarginBottom>
                   </Row>
                 </Form>
-              </div>
               {loader && <FaldaxLoader />}
               {transactionTableInfos.map(tableInfo => (
                 <TableWrapper
-                  style={{ marginTop: "20px" }}
+                  className="float-clear"
                   {...this.state}
                   columns={tableInfo.columns}
                   pagination={false}

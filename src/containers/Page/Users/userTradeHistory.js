@@ -7,7 +7,8 @@ import {
   Button,
   Form,
   Row,
-  Tabs
+  Tabs,
+  Icon
 } from "antd";
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -232,21 +233,20 @@ class UserTradeHistory extends Component {
                       <ColWithPadding xs={12} sm={3}>
                         <Button
                           htmlType="submit"
-                          className="search-btn"
+                          className="filter-btn btn-full-width"
                           type="primary"
-                          style={{ margin: "0px" }}
                         >
-                          Search
+                         <Icon type="search">Search</Icon>
                         </Button>
                       </ColWithPadding>
                       <ColWithPadding xs={12} sm={3}>
                         <Button
-                          className="search-btn"
+                          className="filter-btn btn-full-width"
                           type="primary"
                           onClick={this._resetFilters}
                           style={{ margin: "0px" }}
                         >
-                          Reset
+                          <Icon type="search">Search</Icon>Reset
                         </Button>
                       </ColWithPadding>
                       <ColWithPadding xs={12} sm={3}>

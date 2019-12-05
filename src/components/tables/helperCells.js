@@ -1584,7 +1584,7 @@ const ActiveUserActionCell = (
       </Tooltip>
       {!deleted_at ? (
         <React.Fragment>
-          <Tooltip title="View">
+          <Tooltip title="delete">
             <Icon
               type="delete"
               style={{ marginLeft: "10px", cursor: "pointer" }}

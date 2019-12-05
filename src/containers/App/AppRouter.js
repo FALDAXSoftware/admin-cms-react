@@ -160,6 +160,11 @@ const routes = [
         module: "offers"
     },
     {
+        path: "campaign/offer-usage/:id",
+        component: asyncComponent(() => import("../Page/Offers/offersUsage")),
+        module: "offers"
+    },
+    {
         path: "network-fee",
         component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
         module: "network_fee"

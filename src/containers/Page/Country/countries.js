@@ -264,7 +264,7 @@ class Countries extends Component {
           >
             <TableDemoStyle className="isoLayoutContent">
                 <Form onSubmit={this._searchCountry}>
-                  <Row gutter={[0,16]}>
+                  <Row gutter={[0,16]} type="flex" justify="end">
                     <ColWithMarginBottom lg={7}>
                       <Form.Item
                         style={{ margin: 0 }}

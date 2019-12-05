@@ -1,9 +1,9 @@
-// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
+// const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 //const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -3799,6 +3799,22 @@ const ApiUtils = {
              method:'GET',
              headers:this.headers
            })
+        }catch(error){
+          console.log("api middle-ware issue",error);
+        }
+      },
+      getOfferCodeHistory:function(offerId,page,limit,data="",action_type=""){
+        try{
+          let formData = new FormData();
+          formData.append("page",page);
+          formData.append("data",data);
+          formData.append("limit",limit);
+          formData.append("action_type",action_type);
+          return fetch(`${API_URL}${this.url}offercode-used/${offerId}`,{
+            method:'POST',
+            headers:this.headers,
+            body:formData            
+          })
         }catch(error){
           console.log("api middle-ware issue",error);
         }

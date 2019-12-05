@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithPadding from "../common.style";
+import ColWithMarginBottom from "../common.style";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
@@ -108,7 +108,7 @@ class ActiveUsers extends Component {
       filterVal
     )
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
           _this.setState({ allUsers: res.data, allUserCount: res.userCount });
         } else if (res.status == 403) {
@@ -141,7 +141,7 @@ class ActiveUsers extends Component {
     _this.setState({ loader: true });
     ApiUtils.deleteUser(token, deleteUserId)
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
           _this.setState({
             deleteUserId: "",
@@ -258,7 +258,7 @@ class ActiveUsers extends Component {
       showDeleteUserModal,
       limit
     } = this.state;
-    let pageSizeOptions = PAGE_SIZE_OPTIONS
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     const headers = [
       { label: "First Name", key: "first_name" },
@@ -298,120 +298,119 @@ class ActiveUsers extends Component {
 
     return (
       // <LayoutContentWrapper>
-        <TableDemoStyle className="isoLayoutContent">
-          <div className="isoTableDisplayTab">
-            {tableinfos.map(tableInfo => (
-              <div>
-                <div style={{ display: "inline-block", width: "100%" }}>
-                  <Form onSubmit={this._searchUser}>
-                    <Row gutter={16}>
-                      <Col lg={8} xs={24}>
-                        <Input
-                          placeholder="Search users"
-                          onChange={this._changeSearch.bind(this)}
-                          value={searchUser}
-                        />
-                      </Col>
-                      <Col lg={7} xs={24}>
-                        <Select
-                          getPopupContainer={trigger => trigger.parentNode}
-                          placeholder="Select a country"
-                          onChange={this._changeCountry}
-                          value={filterVal}
-                          style={{ width: "100%" }}
-                        >
-                          {allCountries &&
-                            allCountries.map((country, index) => {
-                              return (
-                                <Option key={country.id} value={country.name}>
-                                  {country.name}
-                                </Option>
-                              );
-                            })}
-                        </Select>
-                      </Col>
-                      <Col xs={24} lg={3}>
-                        <Button
-                          htmlType="submit"
-                          className="search-btn btn-full-width"
-                          type="primary"
-                        >
-                          <Icon type="search" />Search
-                        </Button>
-                      </Col>
-                      <Col xs={24} lg={3}>
-                        <Button
-                          className="search-btn btn-full-width"
-                          type="primary"
-                          onClick={this._resetFilters}
-                        >
-                         <Icon type="reload" /> Reset
-                        </Button>
-                      </Col>
-                      <Col xs={24} lg={3}>
-                        {allUsers && allUsers.length > 0 ? (
-                          <CSVLink
-                            data={allUsers}
-                            filename={"users.csv"}
-                            headers={headers}
-                          >
-                            <Button className="search-btn btn-full-width" type="primary">
-                            <Icon type="export" /> Export
-                            </Button>
-                          </CSVLink>
-                        ) : (
-                            ""
-                          )}
-                      </Col>
-                    </Row>
-                  </Form>
-                </div>
-                {loader && <FaldaxLoader />}
-                <div style={{ marginTop: "30px" }} className="scroll-table">
-                  <TableWrapper
-                    {...this.state}
-                    columns={tableInfo.columns}
-                    pagination={false}
-                    dataSource={allUsers}
-                    className="isoCustomizedTable"
-                    onChange={this.handleTableChange}
-                  />
-                  {allUserCount > 0 ? (
-                    <Pagination
-                      style={{ marginTop: "15px" }}
-                      className="ant-users-pagination"
-                      onChange={this._handleUserPagination.bind(this)}
-                      pageSize={limit}
-                      current={page}
-                      total={allUserCount}
-                      showSizeChanger
-                      onShowSizeChange={this._changePaginationSize}
-                      pageSizeOptions={pageSizeOptions}
+      <TableDemoStyle className="isoLayoutContent">
+        <div className="isoTableDisplayTab">
+          {tableinfos.map(tableInfo => (
+            <div>
+              <Form onSubmit={this._searchUser} className="cty-search">
+                <Row type="flex" justify="end">
+                  <ColWithMarginBottom lg={7} xs={24}>
+                    <Input
+                      placeholder="Search users"
+                      onChange={this._changeSearch.bind(this)}
+                      value={searchUser}
                     />
-                  ) : (
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom lg={7} xs={24}>
+                    <Select
+                      getPopupContainer={trigger => trigger.parentNode}
+                      placeholder="Select a country"
+                      onChange={this._changeCountry}
+                      value={filterVal}
+                    >
+                      {allCountries &&
+                        allCountries.map((country, index) => {
+                          return (
+                            <Option key={country.id} value={country.name}>
+                              {country.name}
+                            </Option>
+                          );
+                        })}
+                    </Select>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom xs={24} lg={3}>
+                    <Button
+                      htmlType="submit"
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                    >
+                      <Icon type="search" />
+                      Search
+                    </Button>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom xs={24} lg={3}>
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      onClick={this._resetFilters}
+                    >
+                      <Icon type="reload" /> Reset
+                    </Button>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom xs={24} lg={3}>
+                    {allUsers && allUsers.length > 0 ? (
+                      <CSVLink
+                        data={allUsers}
+                        filename={"users.csv"}
+                        headers={headers}
+                      >
+                        <Button
+                          className="filter-btn btn-full-width"
+                          type="primary"
+                        >
+                          <Icon type="export" /> Export
+                        </Button>
+                      </CSVLink>
+                    ) : (
                       ""
                     )}
-                  {showDeleteUserModal && (
-                    <Modal
-                      title="Delete User"
-                      onCancel={this._closeDeleteUserModal}
-                      visible={showDeleteUserModal}
-                      footer={[
-                        <Button onClick={this._closeDeleteUserModal}>
-                          No
-                        </Button>,
-                        <Button onClick={this._deleteUser}>Yes</Button>
-                      ]}
-                    >
-                      Are you sure you want to delete this user ?
-                    </Modal>
-                  )}
-                </div>
+                  </ColWithMarginBottom>
+                </Row>
+              </Form>
+              {loader && <FaldaxLoader />}
+              <div className="scroll-table float-clear">
+                <TableWrapper
+                  {...this.state}
+                  columns={tableInfo.columns}
+                  pagination={false}
+                  dataSource={allUsers}
+                  className="isoCustomizedTable"
+                  onChange={this.handleTableChange}
+                />
+                {allUserCount > 0 ? (
+                  <Pagination
+                    style={{ marginTop: "15px" }}
+                    className="ant-users-pagination"
+                    onChange={this._handleUserPagination.bind(this)}
+                    pageSize={limit}
+                    current={page}
+                    total={allUserCount}
+                    showSizeChanger
+                    onShowSizeChange={this._changePaginationSize}
+                    pageSizeOptions={pageSizeOptions}
+                  />
+                ) : (
+                  ""
+                )}
+                {showDeleteUserModal && (
+                  <Modal
+                    title="Delete User"
+                    onCancel={this._closeDeleteUserModal}
+                    visible={showDeleteUserModal}
+                    footer={[
+                      <Button onClick={this._closeDeleteUserModal}>No</Button>,
+                      <Button onClick={this._deleteUser}>Yes</Button>
+                    ]}
+                  >
+                    Are you sure you want to delete this user ?
+                  </Modal>
+                )}
               </div>
-            ))}
-          </div>
-        </TableDemoStyle>
-      //</LayoutContentWrapper> 
+            </div>
+          ))}
+        </div>
+      </TableDemoStyle>
+      //</LayoutContentWrapper>
     );
   }
 }
