@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Input, notification } from 'antd';
+import { Button, Input,Form,notification } from 'antd';
 import IntlMessages from '../../components/utility/intlMessages';
 import ResetPasswordStyleWrapper from './resetPassword.style';
 import SimpleReactValidator from 'simple-react-validator';
@@ -43,46 +43,51 @@ export default class extends Component {
     this.setState({ errMsg: false });
   };
 
-  _resetPassword = () => {
+  _resetPassword = (e) => {
+    try{
+    e.preventDefault();
     const { fields, errors } = this.state;
     this.setState({ loader: true });
     let _this = this;
 
     if (this.validator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
-      let URLParam = this.props.location.pathname.split('/');
-      let formData = {
-        reset_token: URLParam[2],
-        password: this.state.fields['confirmPwd']
-      }
-
-      ApiUtils.resetPassword(formData)
-        .then((response) => response.json())
-        .then(function (res) {
-          if (res.status == 200) {
-            _this.setState({
-              errMsg: true, errMessage: res.message, loader: false
-            }, () => {
-              _this.props.history.push('/signin');
-            });
-          } else {
-            _this.setState({
-              errMsg: true, errMessage: res.message,
-              loader: false, errType: 'error'
-            }, () => {
-              _this.props.history.push('/signin');
-            });
-          }
-        })
-        .catch((err) => {
-          _this.setState({ errMsg: true, errMessage: err.err, loader: false });
-        });
-    } else {
-      if (fields["newPwd"] !== fields["confirmPwd"] && fields["confirmPwd"] != "" && fields["confirmPwd"] != undefined) {
-        this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
+        let URLParam = this.props.location.pathname.split('/');
+        let formData = {
+          reset_token: URLParam[2],
+          password: this.state.fields['confirmPwd']
+        }
+  
+        ApiUtils.resetPassword(formData)
+          .then((response) => response.json())
+          .then(function (res) {
+            if (res.status == 200) {
+              _this.setState({
+                errMsg: true, errMessage: res.message, loader: false
+              }, () => {
+                _this.props.history.push('/signin');
+              });
+            } else {
+              _this.setState({
+                errMsg: true, errMessage: res.message,
+                loader: false, errType: 'error'
+              }, () => {
+                _this.props.history.push('/signin');
+              });
+            }
+          })
+          .catch((err) => {
+            _this.setState({ errMsg: true, errMessage: err.err, loader: false });
+          });
+      } else {
+        if (fields["newPwd"] !== fields["confirmPwd"] && fields["confirmPwd"] != "" && fields["confirmPwd"] != undefined) {
+          this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
+        }
         this.setState({ errors, loader: false })
+        this.validator.showMessages();
+        this.forceUpdate();
       }
-      this.validator.showMessages();
-      this.forceUpdate();
+    }catch(error){
+      console.log("Error",error);
     }
   }
 
@@ -113,6 +118,7 @@ export default class extends Component {
             </div>
 
             <div className="isoResetPassForm">
+            <Form onSubmit={this._resetPassword}>
               <div className="isoInputWrapper">
                 <Input
                   size="large"
@@ -125,7 +131,6 @@ export default class extends Component {
                   {this.validator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
                 </span>
               </div>
-
               <div className="isoInputWrapper">
                 <Input
                   size="large"
@@ -133,7 +138,7 @@ export default class extends Component {
                   placeholder="Confirm Password"
                   onChange={this._onChangeFields.bind(this, "confirmPwd")}
                   value={fields["confirmPwd"]}
-                />
+                  />
                 <span style={{ "color": "red" }}>
                   {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
                   {errors["main"]}
@@ -141,10 +146,11 @@ export default class extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Button type="primary" onClick={this._resetPassword}>
+                <Button htmlType='submit' type="primary">
                   <IntlMessages id="page.resetPassSave" />
                 </Button>
               </div>
+            </Form>
               {loader && <FaldaxLoader />}
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="/signin" className="isoForgotPass">

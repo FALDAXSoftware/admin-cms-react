@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Table, Input, Form, Button, Checkbox, notification, Pagination, Row, Modal
+    Table, Input, Form, Button, Checkbox, notification, Pagination, Row, Modal,Icon
 } from 'antd';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
@@ -9,7 +9,7 @@ import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import moment from "moment";
-import ColWithPadding from '../common.style';
+import ColWithMarginBottom from '../common.style';
 import { CSVLink } from "react-csv";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
@@ -472,25 +472,20 @@ class BatchBalance extends React.Component {
         return (
             <LayoutWrapper>
                 <div className="isoLayoutContent scroll-table">
-                    <div style={{ "display": "inline-block", "width": "100%" }}>
                         <Form layout="inline" onSubmit={this._createBatch}>
                             <Row type="flex" justify="end">
-                                <ColWithPadding sm={6}>
-                                    <label>Last Transaction ID</label>
-                                </ColWithPadding>
-                                <ColWithPadding sm={7}>
+                                <ColWithMarginBottom md={6}>
                                     <Input
                                         placeholder="Enter Last Transaction ID"
                                         onChange={this._changeTransID.bind(this)}
                                         value={transactionID}
                                     />
-                                </ColWithPadding>
-                                <ColWithPadding sm={5}>
-                                    <Button className="search-btn" type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._createBatch}>Create Batch</Button>
-                                </ColWithPadding>
+                                </ColWithMarginBottom>
+                                <ColWithMarginBottom md={4}>
+                                    <Button className="filter-btn btn-full-width" type="primary"  onClick={this._createBatch}><Icon type="plus"/>Create Batch</Button>
+                                </ColWithMarginBottom>
                             </Row>
                         </Form>
-                    </div>
                     {/* {
                         summaryDownloadData && selectedExport.map((exportFile) => {
                             selectedExport.includes('XLSX') &&

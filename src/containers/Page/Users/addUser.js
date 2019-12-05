@@ -189,7 +189,7 @@ class AddUser extends Component {
         kyc_done: isKYC,
         gender: selectedGender,
         password,
-        dob
+        dob:dob.format("DD-MM-YYYY")
       };
 
       this.setState({ loader: true, isDisabled: true });
@@ -279,7 +279,9 @@ class AddUser extends Component {
   };
 
   _changeDate = (date, dateString) => {
-    this.setState({ dob: moment(date).format("DD-MM-YYYY"),showDOBErr:date?false:true });
+    console.log("date",date)
+    console.log(date.format("DD-MM-YYYY"))
+    this.setState({ dob: date,showDOBErr:date?false:true });
   };
 
   onCheckAllChange = e => {
@@ -420,42 +422,6 @@ class AddUser extends Component {
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
-            <Col>
-              <span>Street Address 1:</span>
-              <Input
-                placeholder="Street Address 1"
-                onChange={this._handleChange.bind(this, "street_address")}
-                value={fields["street_address"]}
-              />
-              <span style={{ color: "red" }}>
-                {this.validator.message(
-                  "address 1",
-                  fields["street_address"],
-                  "required",
-                  "text-danger"
-                )}
-              </span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
-            <Col>
-              <span>Street Address 2:</span>
-              <Input
-                placeholder="Street Address 2"
-                onChange={this._handleChange.bind(this, "street_address_2")}
-                value={fields["street_address_2"]}
-              />
-              <span style={{ color: "red" }}>
-                {this.validator.message(
-                  "address 2",
-                  fields["street_address_2"],
-                  "required",
-                  "text-danger"
-                )}
-              </span>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
               <span>Date of Birth:</span>
             </Col>
@@ -497,8 +463,44 @@ class AddUser extends Component {
                   "error-danger"
                 )}
             </Col>
+            
           </Row>
-        
+          <Row style={{ marginBottom: "15px" }}>
+            <Col>
+              <span>Street Address 1:</span>
+              <Input
+                placeholder="Street Address 1"
+                onChange={this._handleChange.bind(this, "street_address")}
+                value={fields["street_address"]}
+              />
+              <span style={{ color: "red" }}>
+                {this.validator.message(
+                  "address 1",
+                  fields["street_address"],
+                  "required",
+                  "text-danger"
+                )}
+              </span>
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: "15px" }}>
+            <Col>
+              <span>Street Address 2:</span>
+              <Input
+                placeholder="Street Address 2"
+                onChange={this._handleChange.bind(this, "street_address_2")}
+                value={fields["street_address_2"]}
+              />
+              {/* <span style={{ color: "red" }}>
+                {this.validator.message(
+                  "address 2",
+                  fields["street_address_2"],
+                  "required",
+                  "text-danger"
+                )}
+              </span> */}
+            </Col>
+          </Row>
               <CountryFields
                 {...this.props}
                 onCountryChange={(

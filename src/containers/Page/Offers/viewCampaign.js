@@ -3,67 +3,121 @@ import { Link } from "react-router-dom";
 import ApiUtils from "../../../helpers/apiUtills";
 import authAction from "../../../redux/auth/actions";
 import { connect } from "react-redux";
-import { notification, Row, Col ,Table,Divider,Tag} from "antd";
+import { notification, Row, Icon,Col ,Table,Divider,Tag,Tooltip} from "antd";
 import Loader from "../faldaxLoader";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
+import TableWrapper from "../../Tables/antTables/antTable.style";
 import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
-const tableColumns=[
+const tableColumns = [
   {
-    title:"Code",
-    dataIndex: 'code',
-    key: 'code',
-  },
-  {
-    title:"Description",
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title:"No of transactions",
-    dataIndex: 'no_of_transactions',
-    key: 'no_of_transactions',
-  },
-  {
-    title:"Total fees allowed",
-    dataIndex: 'fees_allowed',
-    key: 'fees_allowed',
-    render:(fees)=><span>{fees} USD</span>
-  },
-  {
-    title:"Start Date",
-    dataIndex: 'start_date',
-    key: 'start_date',
-    render:(start_date)=>OfferDateCell(start_date)
-  },
-  {
-    title:"End Date",
-    dataIndex: 'end_date',
-    key: 'end_date',
-    render:(end_date)=>OfferDateCell(end_date)
-  },
-  
-  {
-    title:"User",
-    dataIndex: 'user_data',
-    key: 'user_data',
-    render:(data)=>(data.id?<a href={`/dashboard/users/${data.id}`}>{data.first_name+" "+data.last_name}</a>:'-')
-  },
-  {
-    title:"Status",
-    dataIndex: 'is_active',
-    key: 'is_active',
-    render:(status)=>(
-      <span>
-            <Tag color={status==true? 'geekblue' : 'grey'} key={status}>
-            {status==true? 'Active' : 'Inactive'}
-            </Tag>
-      </span>
+    title: "Action",
+    key: "action",
+    width:75,
+    render:(object)=>(
+      <div>
+        <Tooltip title="Usage">
+          <Icon
+            type="usergroup-add"
+            className="btn-icon"
+            onClick={() =>
+              ViewCampaign.viewOfferUsage(object.id,object.code)
+            }
+          />
+        </Tooltip>
+      </div>
     )
   },
-]
+  {
+    title: "Code",
+    dataIndex: "code",
+    key: "code",
+    width:100,
+  },
+  {
+    title: "Description",
+    width:200,
+    dataIndex: "description",
+    key: "description"
+  },
+  {
+    title: "No of transactions",
+    dataIndex: "no_of_transactions",
+    key: "no_of_transactions",
+    width:100,
+    
+  },
+  {
+    title: "Total fees allowed",
+    dataIndex: "fees_allowed",
+    key: "fees_allowed",
+    width:100,
+    render: fees => <span>{fees} USD</span>
+  },
+  {
+    title: "Usage",
+    dataIndex: "offercode_used",
+    key: "offercode_used",
+    width:75
+  },
+  {
+    title: "Start Date",
+    dataIndex: "start_date",
+    key: "start_date",
+    width:100,
+    render: start_date => OfferDateCell(start_date)
+  },
+  {
+    title: "End Date",
+    dataIndex: "end_date",
+    key: "end_date",
+    width:100,
+    render: end_date => OfferDateCell(end_date)
+  },
+  {
+    title: "User",
+    dataIndex: "user_data",
+    key: "user_data",
+    width:100,
+    render: data =>
+      data.id ? (
+        <a href={`/dashboard/users/${data.id}`}>
+          {data.first_name + " " + data.last_name}
+        </a>
+      ) : (
+        "-"
+      )
+  },
+  {
+    title: "Status",
+    dataIndex: "is_active",
+    key: "is_active",
+    width:100,
+    render: status => (
+      <Tag
+        className="cursor-default"
+        color={status == true ? "geekblue" : "grey"}
+        key={status}
+      >
+        {status == true ? "Active" : "Inactive"}
+      </Tag>
+    )
+  },
+  {
+    title: "",
+    dataIndex: "end_date",
+    key: "end_date",
+    width:100,
+    render: (end_date) => {
+    let [today,exp_date]=[moment().set({hour:0,minute:0,second:0,millisecond:0}),moment(end_date).set({hour:23,minute:59,second:59,millisecond:59})]
+    return <div>{(exp_date.diff(today, "days"))>-1?'':
+    <span className="error-danger"><Icon type="info-circle" className="error-danger"/> Offer Expired</span>}
+    </div>;
+    }
+  }
+];
 
 const { logout } = authAction;
 
@@ -84,6 +138,7 @@ const CampRow = styled(Row)`
     padding: 0;
   }
 `;
+var self;
 
 class ViewCampaign extends Component {
   constructor(props) {
@@ -97,6 +152,7 @@ class ViewCampaign extends Component {
       hide: () => this.setState({ loader: false })
     };
     this.openNotificationWithIcon = this.openNotificationWithIcon.bind(this);
+    self=this;
   }
   componentDidMount() {
     this.getCampaignDetail();
@@ -127,6 +183,18 @@ class ViewCampaign extends Component {
       message: head,
       description: desc
     });
+  }
+
+  static viewOfferUsage(offerId,offerName){
+    console.log(self.props)
+    self.props.history.push({pathname:`/dashboard/campaign/offer-usage/${offerId}`, state: JSON.stringify({ detail: self.state.campaignDetails.label,name:offerName})})
+  }
+
+  getOfferNameById(id){
+     let index=this.props.campaignDetails.campaign_offers.findIndex(ele=>ele.id==id);
+     if(index>-1){
+       return this.props.campaignDetails.campaign_offers[index]
+     }
   }
 
   render() {
@@ -189,12 +257,12 @@ class ViewCampaign extends Component {
               <detailHead>Campaign Status</detailHead>
             </Col>
             <Col span={16}>
-              <Tag color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
+              <Tag className="cursor-default" color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
             </Col>
           </CampRow>
           <div className='mg-top-15'>
             <Divider orientation="left">Offers</Divider>
-            <Table dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
+            <TableWrapper dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
           </div>
         </TableDemoStyle>
         {loader && <Loader />}

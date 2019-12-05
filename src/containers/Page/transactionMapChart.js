@@ -8,6 +8,9 @@ class TransactionMapChart extends Component {
 
     render() {
         const { transactionSymbols, transactionCount } = this.props;
+        const option= {
+            maintainAspectRatio: false,
+        }
         const data = {
             labels: transactionSymbols,
             datasets: [
@@ -35,7 +38,7 @@ class TransactionMapChart extends Component {
             ]
         };
         return (
-            <Line data={data} />
+            <Line data={data} options={option}/>
         );
     }
 }

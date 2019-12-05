@@ -8,26 +8,28 @@ import { isAllowed } from "../../../helpers/accessControl";
 const TabPane = Tabs.TabPane;
 
 class Referral extends React.Component {
-    render() {
-        return (
-            <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {isAllowed("get_referal_list") &&
-                            <TabPane tab="Referral" key="ReferralTable">
-                                <Referrals></Referrals>
-                            </TabPane>
-                        }
-                        {isAllowed("get_referral_details") &&
-                            < TabPane tab="Referral Percentage" key="ReferralPercentage">
-                                <ReferralPercentage></ReferralPercentage>
-                            </TabPane>
-                        }
-                    </Tabs>
-                </TableDemoStyle>
-            </LayoutWrapper >
-        )
-    }
+  render() {
+    return (
+      <LayoutWrapper>
+        <Tabs className="isoTableDisplayTab full-width">
+          {isAllowed("get_referal_list") &&
+            <TabPane tab="Referral" key="ReferralTable">
+              <TableDemoStyle className="isoLayoutContent">
+                <Referrals></Referrals>
+              </TableDemoStyle>
+            </TabPane>
+          }
+          {isAllowed("get_referral_details") &&
+            < TabPane tab="Referral Percentage" key="ReferralPercentage">
+              <TableDemoStyle className="isoLayoutContent">
+                <ReferralPercentage></ReferralPercentage>
+              </TableDemoStyle>
+            </TabPane>
+          }
+        </Tabs>
+      </LayoutWrapper >
+    )
+  }
 }
 
 export default Referral

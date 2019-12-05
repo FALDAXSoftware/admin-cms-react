@@ -15,7 +15,7 @@ import {
   Select,
   Divider,
   Icon,
-  Tooltip
+  Tooltip,
 } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import moment from "moment";
@@ -28,6 +28,8 @@ import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
+import { messages } from "../../../helpers/messages";
+const { TextArea } = Input;
 const Option = Select.Option;
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -55,7 +57,9 @@ const columns_temp = [
   {
     title: "Description",
     dataIndex: "description",
-    key: "description"
+    width:200,
+    key: "description",
+    render:(desc)=><p style={{textAlign:'justify'}}>{desc}</p>
   },
   {
     title: "No of transactions",
@@ -82,13 +86,18 @@ const columns_temp = [
   },
   {
     title: "Status",
-    dataIndex: "is_active",
     key: "is_active",
-    render: object => (
-      <Tag color={object == true ? "geekblue" : "grey"}>
-        {object === true ? "Active" : "Inactive"}
-      </Tag>
-    )
+    render: (object) =>{
+      return (
+        <StatusSwitch
+          checked={object.is_active}
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          size="large"
+          onChange={(checked)=>AddCampaign.updateOfferStatus(checked,object)}
+        />
+      )
+    } 
   },
 ];
 const ValidSpan = styled.div`
@@ -157,13 +166,23 @@ class AddCampaign extends Component {
 
   componentDidMount = () => {
     let campaignId=this.props.match.params.id;
-    console.log(campaignId);
     if(campaignId){
       this.setState({isUpdate:true,campaignId},()=>this.getCampaignById())
     }
     this.getUserList();
-
   };
+
+  //change status of offer that added on table 
+ static updateOfferStatus=(status,data)=>{
+  console.log(status,data)
+  let {campaign_offers} = self.state
+  let index=campaign_offers.findIndex((offer)=>offer.id==data.id);
+  if(index>-1){
+    campaign_offers[index].is_active=status;
+    self.setState(campaign_offers);
+  }
+ }
+
 
   async getCampaignById(){
     try{
@@ -176,7 +195,8 @@ class AddCampaign extends Component {
         fields["campaign_desc"]=res.data.description;
         fields["no_of_transactions"]=res.data.no_of_transactions;
         fields["fees_allowed"]=res.data.fees_allowed;
-        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):''});
+        
+        this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):'',is_active:res.data.is_active});
         this.setState(fields);
       }else if(res.status==401 || res.status==403){
         this.setState({errMsg:true,errType:"error",errMessage:res.message});  
@@ -226,7 +246,8 @@ class AddCampaign extends Component {
       endOfferDate: "",
       dateOfferErrMsg: "",
       checkOfferValue: 1,
-      filterVal: ""
+      filterVal: "",
+      is_offer_active:true
     });
     this.validator1.hideMessages();
     this.forceUpdate();
@@ -278,8 +299,8 @@ class AddCampaign extends Component {
         let formdata = {};
         formdata["label"] = fields["campaign_name"];
         formdata["description"] = fields["campaign_desc"];
-        formdata["no_of_transactions"] = fields["no_of_transactions"];
-        formdata["fees_allowed"] = fields["fees_allowed"];
+        formdata["no_of_transactions"] = parseInt(fields["no_of_transactions"]);
+        formdata["fees_allowed"] = parseFloat(fields["fees_allowed"]);
         formdata["usage"] = checkvalue;
         formdata["is_active"] = is_active;
         formdata["campaign_offers"]=[];
@@ -329,7 +350,7 @@ class AddCampaign extends Component {
               loader: false
             });
           })
-          .catch(err => {
+          .catch(() => {
             this.setState({ loader: false });
           });
       } else {
@@ -346,8 +367,8 @@ class AddCampaign extends Component {
         let formdata = {};
         formdata["label"] = fields["campaign_name"];
         formdata["description"] = fields["campaign_desc"];
-        formdata["no_of_transactions"] = fields["no_of_transactions"];
-        formdata["fees_allowed"] = fields["fees_allowed"];
+        formdata["no_of_transactions"] = parseInt(fields["no_of_transactions"]);
+        formdata["fees_allowed"] = parseFloat(fields["fees_allowed"]);
         formdata["start_date"] = startDate.format("YYYY-MM-DD");
         formdata["end_date"] = endDate.format("YYYY-MM-DD");
         formdata["usage"] = checkvalue;
@@ -369,7 +390,7 @@ class AddCampaign extends Component {
             }
           }
         }else{
-          formdata["campaign_offers"] = campaign_offers;
+          formdata["campaign_offers"] = campaign_offers.map(ele=>{delete ele.id;return ele});
         }
         (isUpdate? ApiUtils.offers(token).updateCampaign(campaignId,formdata):ApiUtils.createCampaign(token, formdata))
           .then(res => res.json())
@@ -443,6 +464,23 @@ class AddCampaign extends Component {
       this.setState({ loader: false });
     }
   }
+  // Show success message on offer code add 
+  showOfferAddSuccessMsg(){
+    this.openNotificationWithIcon('success','Success',messages.campaign.offer.added);
+  }
+
+  // get user by id
+
+  getUserById(id){
+  let {userList}= this.state;
+  let index=userList.findIndex(user=>user.id==id)
+  console.log(index)
+    if(index > -1){
+        return userList[index]
+    }else{
+      return {};
+    }
+  }
 
   _addOffer =async e => {
     const {
@@ -467,7 +505,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         startOfferDate
       ) {
-        if(!isOfferUpdate && !(await this.offerIsValid(offerFields["offer_name"]))){
+        if(!isUpdate && !(await this.offerIsValid(offerFields["offer_name"]))||!isOfferUpdate && !(await this.offerIsValid(offerFields["offer_name"]))){
           return false;
         }
         let formdata = {};
@@ -477,11 +515,11 @@ class AddCampaign extends Component {
         formdata["no_of_transactions"] =
           checkOfferValue === 1
             ? fields["no_of_transactions"]
-            : offerFields["no_of_transactions"];
+            : parseInt(offerFields["no_of_transactions"]);
         formdata["fees_allowed"] =
           checkOfferValue === 1
             ? fields["fees_allowed"]
-            : offerFields["fees_allowed"];
+            : parseFloat(offerFields["fees_allowed"]);
         formdata["user_id"] = userIdAssigned;
         formdata["start_date"] = startOfferDate.format("YYYY-MM-DD");
         formdata["end_date"] = endOfferDate.format("YYYY-MM-DD");
@@ -492,7 +530,7 @@ class AddCampaign extends Component {
             let index=campaign_offers.findIndex(ele=>ele.id==offerId)
             if(index!=-1){
               formdata["id"] = offerId;
-              campaign_offers[index]=formdata;
+              campaign_offers[index]={...campaign_offers[index],...formdata};
             }
             }else{
               formdata["id"]=new Date().getTime();
@@ -503,7 +541,7 @@ class AddCampaign extends Component {
             let index=campaign_offers.findIndex(ele=>ele.id==offerId)
             if(index!=-1){
               formdata["id"] = offerId;
-              campaign_offers[index]=formdata;
+              campaign_offers[index]={...campaign_offers[index],...formdata};
             }
           }else{
             formdata["id"]=new Date().getTime();
@@ -514,6 +552,7 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
+        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         this.validator1.showMessages();
@@ -535,7 +574,7 @@ class AddCampaign extends Component {
         this.validator.allValid() &&
         this.state.startDate
       ) {
-        if(!(isOfferUpdate) &&!(await this.offerIsValid(offerFields["offer_name"]))){
+        if(!isUpdate && !(await this.offerIsValid(offerFields["offer_name"]))||!(isOfferUpdate) &&!(await this.offerIsValid(offerFields["offer_name"]))){
           return false;
         }
         let formdata = {};
@@ -545,24 +584,23 @@ class AddCampaign extends Component {
         formdata["no_of_transactions"] =
           checkOfferValue === 1
             ? fields["no_of_transactions"]
-            : offerFields["no_of_transactions"];
+            : parseInt(offerFields["no_of_transactions"]);
         formdata["fees_allowed"] =
           checkOfferValue === 1
             ? fields["fees_allowed"]
-            : offerFields["fees_allowed"];
+            : parseFloat(offerFields["fees_allowed"]);
         // formdata["user_id"] = userIdAssigned;
         formdata["start_date"] = startDate
           ? startDate.format("YYYY-MM-DD")
           : "";
         formdata["end_date"] = endDate ? endDate.format("YYYY-MM-DD") : "";
         formdata["is_active"] = is_offer_active;
-        console.log("Add Offer:", formdata);
         if (isUpdate) {
           if (isOfferUpdate) {
             let index = campaign_offers.findIndex(ele => ele.id == offerId);
             if (index != -1) {
               formdata["id"] = offerId;
-              campaign_offers[index] = formdata;
+              campaign_offers[index]={...campaign_offers[index],...formdata};
             }
           } else {
             formdata["id"] = new Date().getTime();
@@ -573,7 +611,7 @@ class AddCampaign extends Component {
           let index = campaign_offers.findIndex(ele => ele.id == offerId);
           if (index != -1) {
             formdata["id"] = offerId;
-            campaign_offers[index] = formdata;
+            campaign_offers[index]={...campaign_offers[index],...formdata};
           }
         } else {
           formdata["id"]=new Date().getTime();
@@ -584,6 +622,7 @@ class AddCampaign extends Component {
           openOfferCode: false,
           disabledRadio: true
         });
+        this.showOfferAddSuccessMsg();
         this._resetAddOfferForm();
       } else {
         // alert("test2");
@@ -756,9 +795,13 @@ class AddCampaign extends Component {
     const columns =
       this.state.checkvalue === 1
         ? columns_temp.concat({
-            title: "User Id",
+            title: "User",
             dataIndex: "user_id",
-            key: "user_id"
+            key: "user_id",
+            render:((id)=>{
+              let user=this.getUserById(id);
+              return <a href={`/dashboard/users/${id}`}>{user.first_name + " " +user.last_name}</a>
+            })
           })
         : columns_temp;
     return (
@@ -799,7 +842,7 @@ class AddCampaign extends Component {
               </CampaignCol>
               <CampaignCol>
                 <span>Description:</span>
-                <Input
+                <TextArea rows={4} 
                   placeholder="Description"
                   onChange={this._handleChange.bind(this, "campaign_desc")}
                   value={fields["campaign_desc"]}
@@ -817,13 +860,13 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "no of transactions",
                     fields["no_of_transactions"],
-                    "required|numeric",
+                    "required|integer|gte:1|lte:10",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
               </CampaignCol>
               <CampaignCol>
-                <span>Default Total Fees Allowed:</span>
+                <span>Default Total Fees Allowed (USD):</span>
                 <Input
                   placeholder="Total Fees Allowed"
                   onChange={this._handleChange.bind(this, "fees_allowed")}
@@ -834,7 +877,7 @@ class AddCampaign extends Component {
                   {this.validator.message(
                     "total fees allowed",
                     fields["fees_allowed"],
-                    "required|numeric",
+                    "required|numeric|gte:25|lte:200",
                     "text-danger-validation"
                   )}
                 </ValidSpan>
@@ -930,7 +973,7 @@ class AddCampaign extends Component {
                     </CampaignCol>
                     <CampaignCol>
                       <span>Offer Code Description:</span>
-                      <Input
+                      <TextArea rows={4} 
                         placeholder="Offer Code Description"
                         onChange={this._handleOfferChange.bind(
                           this,
@@ -1008,13 +1051,13 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "no of transactions",
                               offerFields["no_of_transactions"],
-                              "required|numeric",
+                              "required|integer|gte:1|lte:10",
                               "text-danger-validation"
                             )}
                           </ValidSpan>
                         </CampaignCol>
                         <CampaignCol>
-                          <span>Default Total Fees Allowed:</span>
+                          <span>Default Total Fees Allowed (USD):</span>
                           <Input
                             placeholder="Total Fees Allowed"
                             disabled={isOfferUpdate && isUpdate}
@@ -1028,7 +1071,7 @@ class AddCampaign extends Component {
                             {this.validator1.message(
                               "total fees allowed",
                               offerFields["fees_allowed"],
-                              "required|numeric",
+                              "required|numeric|gte:25|lte:200",
                               "text-danger-validation"
                             )}
                           </ValidSpan>

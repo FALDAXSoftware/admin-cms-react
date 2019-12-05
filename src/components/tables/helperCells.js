@@ -34,6 +34,7 @@ import offers from "../../containers/Page/Offers/offers";
 import styled from "styled-components";
 import { DeletedUsers } from "../../containers/Page/Users/deletedUsers";
 import { isAllowed } from "../../helpers/accessControl";
+import referral from "../../containers/Page/Referral/referral";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -1064,7 +1065,7 @@ const ReferralDateCell = (
     </p>
   );
 const TransactionTypeCell = data => (
-  <p>{data == "send" ? "Send" : "Receive"}</p>
+  <p style={{ color: data == 'send' ? 'red' : 'green' }}>{data == "send" ? "Send" : "Receive"}</p>
 );
 const VolumeCell = (
   value,
@@ -1135,11 +1136,11 @@ const DateTimeCell = data => (
       ? moment
         .utc(data)
         .local()
-        .format("DD MMM YYYY HH:mm")
+        .format("DD MMM YYYY HH:mm:ss")
         ? moment
           .utc(data)
           .local()
-          .format("DD MMM, YYYY HH:mm")
+          .format("DD MMM, YYYY HH:mm:ss")
         : ""
       : ""}
   </p>
@@ -1215,6 +1216,7 @@ const referralActionCell = value => (
     <Icon
       type="info-circle"
       style={{ marginLeft: "10px", cursor: "pointer" }}
+      onClick={() => referral.edit(value)}
     />
   </Tooltip>
 );
@@ -2758,13 +2760,38 @@ const CampaignSwitchCell = (
       checkedChildren="Active"
       unCheckedChildren="Inactive"
       size="large"
-      onChange={() => offers.changeState(
-        campaign_id,
-        campaign_is_active, campaign_label)}
+      onChange={() =>
+        offers.changeState(campaign_id, campaign_is_active, campaign_label)
+      }
     />
   );
 
-const CampaignTypeCell = (value) => value == 1 ? 'Single Code Use' : "Multiple Code Use"
+const CampaignTypeCell = value =>
+  value == 1 ? "Single Code Use" : "Multiple Code Use";
+
+const ExpireIpDateCell = (data) => <p>
+  {data
+    ? moment
+      .utc(data)
+      .local()
+      .format("DD MMM YYYY LTS")
+      ? <span> <Icon type="calendar" /> {moment
+        .utc(data)
+        .local()
+        .format("DD MMM YYYY LTS")}</span>
+      : "-"
+    : "Permanent"}
+</p>
+
+const CollectedAmountCell = value =>
+  // console.log(value)
+  value.map(ele => (
+    <div>
+      <span>{parseFloat(ele.collectedamount).toFixed(8) + " " + ele.coin_name}</span><br />
+    </div>
+  )
+  )
+
 
 export {
   IPCell,
@@ -2851,6 +2878,8 @@ export {
   CampaignActionCell,
   CampaignSwitchCell,
   CampaignTypeCell,
-  OfferDateCell
+  OfferDateCell,
+  ExpireIpDateCell,
+  CollectedAmountCell
 
 };

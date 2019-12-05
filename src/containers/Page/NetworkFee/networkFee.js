@@ -108,33 +108,24 @@ class NetworkFee extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <LayoutWrapper>
-        <TableDemoStyle className="isoLayoutContent">
-          <Tabs className="isoTableDisplayTab">
-            {networkFeeTableInfos.map(tableInfo => (
-              <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                {loader && <FaldaxLoader />}
-                <div>
-                  <TableWrapper
-                    {...this.state}
-                    columns={tableInfo.columns}
-                    pagination={false}
-                    dataSource={coinFees}
-                    className="isoCustomizedTable"
-                    onChange={this.handleNetworkChange}
-                    style={{ width: "100%" }}
-                  />
-                  <EditNetworkFeeModal
-                    showEditNetworkFeeModal={showEditNetworkFeeModal}
-                    onCloseEditModal={this.onCloseEditModal}
-                    fields={modalData}
-                  />
-                </div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </TableDemoStyle>
-      </LayoutWrapper>
+
+      <div>
+        <TableWrapper
+          {...this.state}
+          columns={networkFeeTableInfos[0].columns}
+          pagination={false}
+          dataSource={coinFees}
+          className="isoCustomizedTable"
+          onChange={this.handleNetworkChange}
+          style={{ width: "100%" }}
+        />
+        <EditNetworkFeeModal
+          showEditNetworkFeeModal={showEditNetworkFeeModal}
+          onCloseEditModal={this.onCloseEditModal}
+          fields={modalData}
+        />
+      </div>
+
     );
   }
 }

@@ -493,16 +493,7 @@ const ApiUtils = {
     sorterCol,
     sortOrder
   ) {
-    let url = "/admin/get-referal-list";
-    searchReferral = encodeURIComponent(searchReferral);
-    // if (sorterCol && sortOrder && searchReferral) {
-    //     url += "&data=" + searchReferral + "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    // } else if (sorterCol && sortOrder) {
-    //     url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    // } else {
-    //     url += "&data=" + searchReferral;
-    // }
-
+    let url = `/admin/get-referal-list?data=${searchReferral}${sorterCol ? '&sort_col=' + sorterCol : ''}${sortOrder ? '&sort_order=' + sortOrder : ''}`;
     try {
       return fetch(API_URL + url, {
         method: "GET",
@@ -3839,7 +3830,22 @@ const ApiUtils = {
           console.log("api middle-ware issue", error);
         }
       },
-
+      getOfferCodeHistory: function (offerId, page, limit, data = "", action_type = "") {
+        try {
+          let formData = new FormData();
+          formData.append("page", page);
+          formData.append("data", data);
+          formData.append("limit", limit);
+          formData.append("action_type", action_type);
+          return fetch(`${API_URL}${this.url}offercode-used/${offerId}`, {
+            method: 'POST',
+            headers: this.headers,
+            body: formData
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      }
     };
   }
 };

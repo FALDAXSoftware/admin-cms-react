@@ -5,9 +5,11 @@ import {
   notification,
   Button,
   Row,
+  Col,
   Select,
   Form,
-  Modal
+  Modal,
+  Icon
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { inActiveUserinfos } from "../../Tables/antTables";
@@ -19,7 +21,7 @@ import { connect } from "react-redux";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithPadding from "../common.style";
+import ColWithMarginBottom from "../common.style";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
@@ -284,23 +286,22 @@ class InActiveUsers extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <LayoutContentWrapper>
+      // <LayoutWrapper>
+      //   <LayoutContentWrapper>
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
               {inActiveUserinfos.map(tableInfo => (
                 <div tab={tableInfo.title} key={tableInfo.value}>
-                  <div style={{ display: "inline-block", width: "100%" }}>
-                    <Form onSubmit={this._searchUser}>
+                    <Form onSubmit={this._searchUser} className="cty-search">
                       <Row type="flex" justify="end">
-                        <ColWithPadding sm={8}>
+                        <ColWithMarginBottom lg={7} xs={24}>
                           <Input
                             placeholder="Search users"
                             onChange={this._changeSearch.bind(this)}
                             value={searchUser}
                           />
-                        </ColWithPadding>
-                        <ColWithPadding sm={6}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  lg={7} xs={24}>
                           <Select
                             getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a country"
@@ -316,45 +317,44 @@ class InActiveUsers extends Component {
                                 );
                               })}
                           </Select>
-                        </ColWithPadding>
-                        <ColWithPadding xs={12} sm={3}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom lg={3} xs={24}>
                           <Button
                             htmlType="submit"
-                            className="search-btn"
+                            className="filter-btn btn-full-width"
                             type="primary"
                           >
-                            Search
+                           <Icon type="search"/> Search
                           </Button>
-                        </ColWithPadding>
-                        <ColWithPadding xs={12} sm={3}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  xs={24} lg={3}>
                           <Button
-                            className="search-btn"
+                            className="filter-btn btn-full-width"
                             type="primary"
                             onClick={this._resetFilters}
                           >
-                            Reset
+                            <Icon type="reload" />Reset
                           </Button>
-                        </ColWithPadding>
-                        <ColWithPadding sm={3}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  xs={24} lg={3}>
                           {allUsers && allUsers.length > 0 ? (
                             <CSVLink
                               data={allUsers}
                               filename={"users.csv"}
                               headers={headers}
                             >
-                              <Button className="search-btn" type="primary">
-                                Export
+                              <Button className="filter-btn btn-full-width" type="primary">
+                              <Icon type="export" />Export
                               </Button>
                             </CSVLink>
                           ) : (
                             ""
                           )}
-                        </ColWithPadding>
+                        </ColWithMarginBottom>
                       </Row>
                     </Form>
-                  </div>
                   {loader && <FaldaxLoader />}
-                  <div style={{ marginTop: "30px" }} className="scroll-table">
+                  <div className="scroll-table float-clear">
                     <TableWrapper
                       {...this.state}
                       columns={tableInfo.columns}
@@ -398,8 +398,8 @@ class InActiveUsers extends Component {
               ))}
             </div>
           </TableDemoStyle>
-        </LayoutContentWrapper>
-      </LayoutWrapper>
+      //   </LayoutContentWrapper>
+      // </LayoutWrapper>
     );
   }
 }

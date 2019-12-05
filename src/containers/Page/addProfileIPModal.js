@@ -86,7 +86,7 @@ class AddProfileIPModal extends Component {
 
         fields['ip'] = '';
         fields['days'] = '';
-        this.setState({ fields });
+        this.setState({ fields,endDate:''});
     }
 
     _addIPAddress = () => {
@@ -205,7 +205,7 @@ class AddProfileIPModal extends Component {
                 onChange={this.onChangeDate}
               />
               <span style={{ fontStyle: "italic" }}>
-                * {fields["days"]} Days
+               * {fields['days']}{parseInt(fields['days'])>1?' Days':' Day'}} 
               </span>
               <span style={{ color: "red" }}>
                 {this.validator.message(

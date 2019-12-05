@@ -480,6 +480,7 @@
   "transactionTable.title.destination_address": "Destination Address",
   "transactionTable.title.amount": "Amount",
   "transactionTable.title.transactionType": "Transaction Type",
+  "transactionTable.title.transactionFees": "Transaction Fees",
   "transactionTable.title.coin": "Asset",
   "transactionTable.title.created_at": "Created On",
   "tradeTable.title.payment_id": "Payment ID",
@@ -564,6 +565,7 @@
   "Map.leaflet.basicTitle": "Basic Map",
   "whitelistTable.title.ip": "IP Address",
   "whitelistTable.title.time": "Time",
+  "whitelistTable.title.expire_date": "Time",
   "whitelistTable.title.Actions": "Actions",
   "whitelistTable.title.created_at": "Added On",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
@@ -598,5 +600,6 @@
   "summaryTableInfos.title.receive_address": "Address",
   "summaryTableInfos.title.balance": "Available Balance",
   "summaryTableInfos.title.coin_name": "Coin",
-  "summaryTableInfos.title.fiat": "Fiat"
+  "summaryTableInfos.title.fiat": "Fiat",
+  "antTable.title.collectamount": "Collected Asset"
 }

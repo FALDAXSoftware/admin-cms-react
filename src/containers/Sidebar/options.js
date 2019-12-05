@@ -207,15 +207,15 @@ const options = [
       "admin_wallet_fees_details"
     ]
   },
-  {
-    key: "network-fee",
-    label: "Network Fees",
-    leftIcon: "fas fa-wifi",
-    module: "network_fee",
-    permssions: [
-      "get_coin_fees"
-    ]
-  },
+  // {
+  //   key: "network-fee",
+  //   label: "Network Fees",
+  //   leftIcon: "fas fa-wifi",
+  //   module: "network_fee",
+  //   permssions: [
+  //     "get_coin_fees"
+  //   ]
+  // },
   {
     key: "batch-and-balance",
     label: "Batch & Balance",

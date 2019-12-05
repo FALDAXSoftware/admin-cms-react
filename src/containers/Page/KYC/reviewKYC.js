@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Pagination, Input, DatePicker, Row, Form, Button } from 'antd';
+import { notification, Pagination, Input,Icon, DatePicker, Row, Form, Button } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,7 @@ import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
-import ColWithPadding from '../common.style';
+import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -171,38 +171,37 @@ class ReviewKYC extends Component {
 
         return (
             <TableDemoStyle>
-                <div className="isoTableDisplayTab">
+                <div className="isoLayoutContent">
                     {KYCInfos.map(tableInfo => (
                         <div key={tableInfo.value}>
                             <Form onSubmit={this._searchKYC}>
                                 <Row type="flex" justify="end">
-                                    <ColWithPadding sm={5}>
+                                    <ColWithMarginBottom md={6}>
                                         <Input
                                             placeholder="Search KYC"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
-                                    </ColWithPadding>
-                                    <ColWithPadding sm={7}>
+                                    </ColWithMarginBottom>
+                                    <ColWithMarginBottom md={6}>
                                         <RangePicker
                                             value={rangeDate}
                                             disabledTime={this.disabledRangeTime}
                                             onChange={this._changeDate}
                                             format="YYYY-MM-DD"
                                             allowClear={false}
-                                            style={{ width: "100%" }}
                                         />
-                                    </ColWithPadding>
-                                    <ColWithPadding xs={12} sm={3}>
-                                        <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
-                                    </ColWithPadding>
-                                    <ColWithPadding xs={12} sm={3}>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                    </ColWithPadding>
-                                </Row>
+                                    </ColWithMarginBottom>
+                                    <ColWithMarginBottom xs={12} md={3}>
+                                        <Button htmlType="submit" className="filter-btn btn-full-width" type="primary"><Icon type="search"/>Search</Button>
+                                    </ColWithMarginBottom>
+                                    <ColWithMarginBottom xs={12} md={3}>
+                                        <Button className="filter-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"></Icon>Reset</Button>
+                                    </ColWithMarginBottom>
+                                </Row>  
                             </Form>
                             {loader && <FaldaxLoader />}
-                            <div style={{ marginTop: "30px" }}>
+                          
                                 <ViewKYCModal
                                     kycDetails={kycDetails}
                                     showViewKYCModal={showViewKYCModal}
@@ -228,7 +227,7 @@ class ReviewKYC extends Component {
                                         onShowSizeChange={this._changePaginationSize}
                                         pageSizeOptions={pageSizeOptions}
                                     /> : ''}
-                            </div>
+                            
                         </div>
                     ))}
                 </div>

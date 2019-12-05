@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, notification, Button, Pagination } from "antd";
+import { Tabs, notification, Button, Pagination, Icon } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -110,7 +110,7 @@ class Offers extends Component {
       if (offers.status == 200) {
         this.setState({
           campaignList: offers.data.campaigns,
-          campaignCount: offers.data.total,
+          campaignCount: offers.data.total
         });
       } else if (offers.status == 401 || offers.status == 403) {
         this.setState({
@@ -128,7 +128,7 @@ class Offers extends Component {
       }
     } catch (error) {
       this.setState({ errMsg: true, errMessage: OtherError, errType: "error" });
-    }finally{
+    } finally {
       this.loader.hide();
     }
   }
@@ -147,10 +147,10 @@ class Offers extends Component {
     });
   };
 
-  onDeleteConfirm=(id)=>{
-    this.setState({showDeleteModal:false})
-    console.log(id)
-  }
+  onDeleteConfirm = id => {
+    this.setState({ showDeleteModal: false });
+    console.log(id);
+  };
 
   handleUserPagination = page => {
     this.setState({ page }, () => {
@@ -175,30 +175,27 @@ class Offers extends Component {
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());
     }
-    console.log("render",showDeleteModal)
+    console.log("render", showDeleteModal);
 
     return (
       <LayoutWrapper>
-        <TableDemoStyle className="isoLayoutContent">
-          <Tabs className="isoTableDisplayTab">
-            {tblOffers.map(tableInfo => (
-              <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                <div style={{ display: "inline-block", width: "100%" }}>
-                  <Button
-                    type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={() =>
-                      this.props.history.push(
-                        "/dashboard/campaign/add-campaign"
-                      )
-                    }
-                  >
-                    {" "}
-                    Add Campaign
-                  </Button>
-                </div>
+        <Tabs className="isoTableDisplayTab full-width">
+          {tblOffers.map(tableInfo => (
+            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+              <TableDemoStyle className="isoLayoutContent">
+                <Button
+                  type="primary"
+                  style={{ marginBottom: "15px", float: "left" }}
+                  onClick={() =>
+                    this.props.history.push("/dashboard/campaign/add-campaign")
+                  }
+                >
+                  {" "}
+                  <Icon type="plus" />
+                  Add Campaign
+                </Button>
                 {loader && <Loader />}
-                <div>
+                <div className="float-clear">
                   <TableWrapper
                     {...this.state}
                     columns={tableInfo.columns}
@@ -215,7 +212,7 @@ class Offers extends Component {
                       pageSize={limit}
                       current={page}
                       total={campaignCount}
-                      showSizeChanger
+                      showSizeChanger={true}
                       onShowSizeChange={this.changePaginationSize}
                       pageSizeOptions={pageSizeOptions}
                     />
@@ -230,10 +227,10 @@ class Offers extends Component {
                     />
                   }
                 </div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </TableDemoStyle>
+              </TableDemoStyle>
+            </TabPane>
+          ))}
+        </Tabs>
       </LayoutWrapper>
     );
   }

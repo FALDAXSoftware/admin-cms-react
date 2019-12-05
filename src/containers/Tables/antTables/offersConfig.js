@@ -68,35 +68,35 @@ const columns = [{
     title: <IntlMessages id="CampaignTable.title.label" />,
     key: 'label',
     width: 100,
-    sorter: true,
+    sorter: false,
     render: object => renderCell(object, 'TextCell', 'label',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 }, 
 {
     title: <IntlMessages id="CampaignTable.title.start_date" />,
     key: 'start_date',
     width: 100,
-    sorter: true,
+    sorter: false,
     render: object => renderCell(object, 'DateCell', 'start_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
     title: <IntlMessages id="CampaignTable.title.e_date" />,
     key: 'end_date',
     width: 100,
-    sorter: true,
+    sorter: false,
     render: object => renderCell(object, 'DateCell', 'end_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
   title: <IntlMessages id="CampaignTable.title.type" />,
   key: 'usage',
   width: 100,
-  sorter: true,
+  sorter: false,
   render: object => renderCell(object, 'CampaignTypeCell', 'usage',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
     title: <IntlMessages id="CampaignTable.title.is_active" />,
     key: 'is_active',
     width: 100,
-    sorter: true,
+    sorter: false,
     render: object => renderCell(object, 'CampaignSwitchCell', 'is_active',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 ]
