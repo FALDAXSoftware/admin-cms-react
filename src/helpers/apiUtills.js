@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.0.213:1338"; // Local (Mansi) URL
+const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 //const API_URL = "http://192.168.2.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
@@ -3848,20 +3848,50 @@ const ApiUtils = {
       }
     };
   },
-  metabase:function(token){
+  metabase: function (token) {
     return {
       url: "/admin/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getAccountClassMetabase:function(){
-        try{
-          return fetch(`${API_URL}${this.url}get-account-report`,{
-            method:'GET',
-            headers:this.headers
+      getAccountClassMetabase: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-account-report`, {
+            method: 'GET',
+            headers: this.headers
           })
-        }catch(error){
-          console.log("api middle-ware issue",error);
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getWithdrawRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-withdraw-request-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getUsersRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-users-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getTwoFactorRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-two-factor-request-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
         }
       }
     }

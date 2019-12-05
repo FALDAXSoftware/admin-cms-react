@@ -8,7 +8,8 @@ import {
   Row,
   Button,
   Select,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { twoFactorReqInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -23,6 +24,16 @@ import ViewRequestModal from "./viewRequestModal";
 import RequestActionModal from "./requestActionModal";
 import ColWithMarginBottom from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import styled from "styled-components";
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
+
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -45,7 +56,8 @@ class TwoFactorRequests extends Component {
       showRejectForm: false,
       showViewRequestModal: false,
       twoFactorReqDetails: [],
-      filterVal: ""
+      filterVal: "",
+      metabaseUrl: ""
     };
     this.validator = new SimpleReactValidator();
     self = this;
@@ -180,7 +192,7 @@ class TwoFactorRequests extends Component {
       sortOrder
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             all2FARequests: res.data,
@@ -208,6 +220,22 @@ class TwoFactorRequests extends Component {
       });
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getTwoFactorRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
   _searchRequest = e => {
     e.preventDefault();
     this.setState({ page: 1 }, () => {
@@ -229,6 +257,13 @@ class TwoFactorRequests extends Component {
       }
     );
   };
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
 
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
@@ -274,7 +309,8 @@ class TwoFactorRequests extends Component {
       twoFactorReqDetails,
       showViewRequestModal,
       searchReq,
-      filterVal
+      filterVal,
+      metabaseUrl
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -283,7 +319,7 @@ class TwoFactorRequests extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab" onChange={this._changeTab}>
+        <Tabs className="isoTableDisplayTab" onChange={this.onChangeTabs}>
           {twoFactorReqInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -315,7 +351,7 @@ class TwoFactorRequests extends Component {
                         className="filter-btn btn-full-width"
                         type="primary"
                       >
-                        <Icon type="search"/>Search
+                        <Icon type="search" />Search
                       </Button>
                     </ColWithMarginBottom>
                     <ColWithMarginBottom xs={12} sm={3}>
@@ -324,7 +360,7 @@ class TwoFactorRequests extends Component {
                         type="primary"
                         onClick={this._resetFilters}
                       >
-                        <Icon type="reload"/>Reset
+                        <Icon type="reload" />Reset
                       </Button>
                     </ColWithMarginBottom>
                   </Row>
@@ -356,8 +392,8 @@ class TwoFactorRequests extends Component {
                     pageSizeOptions={pageSizeOptions}
                   />
                 ) : (
-                  ""
-                )}
+                    ""
+                  )}
                 <RequestActionModal
                   showRejectForm={showRejectForm}
                   twoFactorReqDetails={twoFactorReqDetails}
@@ -367,6 +403,20 @@ class TwoFactorRequests extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
+
+          <TabPane tab="Metabase-Two Factor Request Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );
