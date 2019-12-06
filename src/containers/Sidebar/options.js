@@ -247,7 +247,7 @@ const options = [
   {
     key: "campaign",
     label: "Offers",
-    leftIcon: "fas fa-file-invoice",
+    leftIcon: "fas fa-percent",
     module: "offers",
     permssions: [
       "list_campaigns"
