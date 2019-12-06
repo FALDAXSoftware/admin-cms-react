@@ -40,7 +40,7 @@ class EditAssetDetails extends Component {
     _this.setState({ loader: true });
     ApiUtils.getAssetDetails(token, coin_id)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           if (res.coin.max_limit > 0) {
             _this.setState({
@@ -219,8 +219,8 @@ class EditAssetDetails extends Component {
     var final = num;
     var finalValue = 0;
     if (result) {
-      final;
-      Number.prototype.noExponents = function() {
+      // final;`
+      Number.prototype.noExponents = function () {
         var data = String(this).split(/[eE]/);
         if (data.length == 1) return data[0];
 

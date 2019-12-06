@@ -9,6 +9,7 @@ import {
     CountryButtonCell,
     LegalityCell
 } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, c_name = null, legal = null, colorCode = null,
     status = null, states = null) => {
@@ -66,8 +67,14 @@ const columns = [{
     title: < IntlMessages id="countryTable.title.status" />,
     key: 'is_active',
     width: 200,
-    render: object => renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
-        'color', 'stateCount', 'is_active')
+    render: object => {
+        if (isAllowed("activate_country")) {
+            return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
+            'color', 'stateCount', 'is_active')
+        }else{
+            return renderCell(object, 'TextCell', 'is_active')
+        }
+    }
 },
 {
     title: < IntlMessages id="countryTable.title.State" />,

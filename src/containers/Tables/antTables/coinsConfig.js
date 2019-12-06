@@ -7,6 +7,7 @@ import {
   CoinActionCell,
   SwitchCell
 } from "../../../components/tables/helperCells";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const renderCell = (
   object,
@@ -148,25 +149,31 @@ const columns = [
     title: <IntlMessages id="coinTable.title.active" />,
     key: "is_active",
     width: 200,
-    render: object =>
-      renderCell(
-        object,
-        "SwitchCell",
-        "id",
-        "coin_name",
-        "coin_code",
-        "min_limit",
-        "max_limit",
-        "wallet_address",
-        "created_at",
-        "is_active",
-        "isERC",
-        "coin_icon",
-        "warm_wallet_address",
-        "hot_send_wallet_address",
-        "hot_receive_wallet_address",
-        "custody_wallet_address"
-      )
+    render: object =>{
+      if (isAllowed("update_coins")) {
+        return renderCell(
+          object,
+          "SwitchCell",
+          "id",
+          "coin_name",
+          "coin_code",
+          "min_limit",
+          "max_limit",
+          "wallet_address",
+          "created_at",
+          "is_active",
+          "isERC",
+          "coin_icon",
+          "warm_wallet_address",
+          "hot_send_wallet_address",
+          "hot_receive_wallet_address",
+          "custody_wallet_address"
+        )  
+      }else{
+        renderCell(object, "TextCell", "is_active")
+      }
+    }
+      
   }
 ];
 

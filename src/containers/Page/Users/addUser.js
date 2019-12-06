@@ -189,7 +189,7 @@ class AddUser extends Component {
         kyc_done: isKYC,
         gender: selectedGender,
         password,
-        dob
+        dob:dob.format("DD-MM-YYYY")
       };
 
       this.setState({ loader: true, isDisabled: true });
@@ -279,7 +279,9 @@ class AddUser extends Component {
   };
 
   _changeDate = (date, dateString) => {
-    this.setState({ dob: moment(date).format("DD-MM-YYYY"),showDOBErr:date?false:true });
+    console.log("date",date)
+    console.log(date.format("DD-MM-YYYY"))
+    this.setState({ dob: date,showDOBErr:date?false:true });
   };
 
   onCheckAllChange = e => {

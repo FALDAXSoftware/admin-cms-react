@@ -6,6 +6,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import styled from 'styled-components';
 import FaldaxLoader from '../faldaxLoader';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -258,41 +259,46 @@ class PersonalDetails extends Component {
                     <br />
                     <Button type="primary" onClick={this._updateEmployee}> Update </Button>
                 </div>
-                <Divider>Change Password</Divider>
-                <div className="">
-                    <div style={{ "marginTop": "10px" }}>
-                        <span>
-                            <b>New Password</b>
-                        </span>
-                        <Input
-                            type="password"
-                            placeholder="New Password"
-                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                            onChange={this._onChangeFields.bind(this, "newPwd")}
-                            value={fields["newPwd"]}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.PasswordValidator.message('New Password', fields["newPwd"], 'required|min:6', 'text-danger')}
-                        </span>
+                {isAllowed("employee_change_password") &&
+                    <>
+                        <Divider>Change Password</Divider>
+                        <div className="">
+                            <div style={{ "marginTop": "10px" }}>
+                                <span>
+                                    <b>New Password</b>
+                                </span>
+                                <Input
+                                    type="password"
+                                    placeholder="New Password"
+                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                                    onChange={this._onChangeFields.bind(this, "newPwd")}
+                                    value={fields["newPwd"]}
+                                />
+                                <span style={{ "color": "red" }}>
+                                    {this.PasswordValidator.message('New Password', fields["newPwd"], 'required|min:6', 'text-danger')}
+                                </span>
 
-                        <span>
-                            <b>Confirm Password</b>
-                        </span>
-                        <Input
-                            type="password"
-                            placeholder="Confirm Password"
-                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                            onChange={this._onChangeFields.bind(this, "confirmPwd")}
-                            value={fields["confirmPwd"]}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.PasswordValidator.message('Confirm Password', fields["confirmPwd"], 'required|min:6', 'text-danger')}
-                            {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
-                        </span>
-                        <br />
-                        <Button type="primary" onClick={this._changePassword}> Change </Button>
-                    </div>
-                </div>
+                                <span>
+                                    <b>Confirm Password</b>
+                                </span>
+                                <Input
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                                    onChange={this._onChangeFields.bind(this, "confirmPwd")}
+                                    value={fields["confirmPwd"]}
+                                />
+                                <span style={{ "color": "red" }}>
+                                    {this.PasswordValidator.message('Confirm Password', fields["confirmPwd"], 'required|min:6', 'text-danger')}
+                                    {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
+                                </span>
+                                <br />
+                                <Button type="primary" onClick={this._changePassword}> Change </Button>
+                            </div>
+                        </div>
+                    </>
+                }
+
                 {/* <Divider>Change Email Address</Divider>
                 <div className="">
                     <div style={{ "marginTop": "10px" }}>

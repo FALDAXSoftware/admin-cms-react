@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Row, Col, Switch, notification } from "antd";
 import authAction from "../../../redux/auth/actions";
 import styled from "styled-components";
+import { isAllowed } from "../../../helpers/accessControl";
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
@@ -145,27 +146,31 @@ class PersonalDetails extends Component {
         {userDetails != null && (
           <ParentDiv className="parent-div">
             <Row type="flex" justify="end">
-              <Col span={3}>
-                <StatusSwitch
-                  checked={userDetails.is_active}
-                  checkedChildren="Active"
-                  unCheckedChildren="Inactive"
-                  size="large"
-                  onChange={this._userStatus.bind(this, "is_active")}
-                />
-                <br />
-              </Col>
-              <Col span={3}>
-                <StatusSwitch
-                  style={{ width: "120px" }}
-                  checked={userDetails.is_verified}
-                  checkedChildren="Verified"
-                  unCheckedChildren="Non-verified"
-                  size="large"
-                  onChange={this._userStatus.bind(this, "is_verified")}
-                />
-              </Col>
-            </Row>
+              {isAllowed("user_activate") &&
+                <Col span={3}>
+                  <StatusSwitch
+                    checked={userDetails.is_active}
+                    checkedChildren="Active"
+                    unCheckedChildren="Inactive"
+                    size="large"
+                    onChange={this._userStatus.bind(this, "is_active")}
+                  />
+                  <br />
+                </Col>
+              }
+              {isAllowed("user_activate") &&
+                <Col span={3}>
+                  <StatusSwitch
+                    style={{ width: "120px" }}
+                    checked={userDetails.is_verified}
+                    checkedChildren="Verified"
+                    unCheckedChildren="Non-verified"
+                    size="large"
+                    onChange={this._userStatus.bind(this, "is_verified")}
+                  />
+                </Col>
+              }
+              </Row>
             <Row>
               <Col>
                 <UserPic

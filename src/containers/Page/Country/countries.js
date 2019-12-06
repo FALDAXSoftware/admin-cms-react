@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import EditCountryModal from "./editCountryModal";
 import FaldaxLoader from "../faldaxLoader";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
@@ -137,7 +137,7 @@ class Countries extends Component {
       sortOrder
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             allCountries: res.data,
@@ -257,66 +257,66 @@ class Countries extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab">
+        <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={countryTableInfos[0].title}
             key={countryTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-                <Form onSubmit={this._searchCountry}>
-                  <Row gutter={[0,16]}>
-                    <ColWithMarginBottom lg={7}>
-                      <Form.Item
-                        style={{ margin: 0 }}
-                        validateStatus={this.state.searchValid}
-                        className="cty-search"
-                      >
-                        <Input
-                          placeholder="Search countries"
-                          onChange={this._changeSearch}
-                          value={searchCountry}
-                        />
-                      </Form.Item>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom lg={7}>
-                      <Select
-                        getPopupContainer={trigger => trigger.parentNode}
-                        placeholder="Select a locality"
-                        onChange={this._changeLocality}
-                        value={localityVal}
-                      >
-                        <Option value={""}>All</Option>
-                        <Option value={1}>Legal</Option>
-                        <Option value={2}>Illegal</Option>
-                        <Option value={3}>Neutral</Option>
-                        <Option value={4}>Partial Services Available</Option>
-                      </Select>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom lg={3}>
-                      <Button
-                        htmlType="submit"
-                        className="search-btn btn-full-width"
-                        type="primary"
-                      >
-                        <Icon type="search" />
-                        Search
+              <Form onSubmit={this._searchCountry}>
+                <Row gutter={[0, 16]} type="flex" justify="end">
+                  <ColWithMarginBottom lg={7}>
+                    <Form.Item
+                      style={{ margin: 0 }}
+                      validateStatus={this.state.searchValid}
+                      className="cty-search"
+                    >
+                      <Input
+                        placeholder="Search countries"
+                        onChange={this._changeSearch}
+                        value={searchCountry}
+                      />
+                    </Form.Item>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom lg={7}>
+                    <Select
+                      getPopupContainer={trigger => trigger.parentNode}
+                      placeholder="Select a locality"
+                      onChange={this._changeLocality}
+                      value={localityVal}
+                    >
+                      <Option value={""}>All</Option>
+                      <Option value={1}>Legal</Option>
+                      <Option value={2}>Illegal</Option>
+                      <Option value={3}>Neutral</Option>
+                      <Option value={4}>Partial Services Available</Option>
+                    </Select>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom lg={3}>
+                    <Button
+                      htmlType="submit"
+                      className="search-btn btn-full-width"
+                      type="primary"
+                    >
+                      <Icon type="search" />
+                      Search
                       </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom lg={3}>
-                      <Button
-                        className="search-btn btn-full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      >
-                        <Icon type="reload" />
-                        Reset
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom lg={3}>
+                    <Button
+                      className="search-btn btn-full-width"
+                      type="primary"
+                      onClick={this._resetFilters}
+                    >
+                      <Icon type="reload" />
+                      Reset
                       </Button>
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
+                  </ColWithMarginBottom>
+                </Row>
+              </Form>
               {loader && <FaldaxLoader />}
               {countryTableInfos.map(tableInfo => (
-                <div className="float-clear"> 
+                <div className="float-clear">
                   <TableWrapper
                     {...this.state}
                     columns={tableInfo.columns}
@@ -346,8 +346,8 @@ class Countries extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                 </div>
               ))}
             </TableDemoStyle>

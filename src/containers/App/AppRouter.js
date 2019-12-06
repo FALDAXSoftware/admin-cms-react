@@ -160,6 +160,11 @@ const routes = [
         module: "offers"
     },
     {
+        path: "campaign/offer-usage/:id",
+        component: asyncComponent(() => import("../Page/Offers/offersUsage")),
+        module: "offers"
+    },
+    {
         path: "network-fee",
         component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
         module: "network_fee"
@@ -247,6 +252,10 @@ const mandatoryRoutes = [
         path: "account-tier/:id",
         component: asyncComponent(() => import("../Page/Tiers/editTier"))
     },
+    {
+        path: "access-grant/:id",
+        component: asyncComponent(() => import("../Page/Roles/access-grant"))
+    },
 ]
 
 class AppRouter extends Component {
@@ -261,21 +270,21 @@ class AppRouter extends Component {
             <div style={style}>
                 <Switch>
                     {
-                        rolesArray.map((role) => (
-                            routes.map(singleRoute => {
-                                const { path, exact, ...otherProps } = singleRoute;
-                                if ((role.module == singleRoute.module) && role.value == true) {
-                                    return (
-                                        <Route
-                                            exact={true}
-                                            key={singleRoute.path}
-                                            path={`${url}/${singleRoute.path}`}
-                                            {...otherProps}
-                                        />
-                                    )
-                                }
-                            })
-                        ))
+                        // rolesArray.map((role) => (
+                        routes.map(singleRoute => {
+                            const { path, exact, ...otherProps } = singleRoute;
+                            // if ((role.module == singleRoute.module) && role.value == true) {
+                            return (
+                                <Route
+                                    exact={true}
+                                    key={singleRoute.path}
+                                    path={`${url}/${singleRoute.path}`}
+                                    {...otherProps}
+                                />
+                            )
+                            // }
+                        })
+                        // ))
                     }
                     {
                         mandatoryRoutes.map(singleRoute => {

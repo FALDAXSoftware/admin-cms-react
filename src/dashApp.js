@@ -16,7 +16,7 @@ const currentAppLocale =
   AppLocale[getCurrentLanguage(config.defaultLanguage || 'english').locale];
 
 const DashApp = () => (
-  <LocaleProvider locale={currentAppLocale.antd}>
+  < LocaleProvider locale={currentAppLocale.antd} >
     <IntlProvider
       locale={currentAppLocale.locale}
       messages={currentAppLocale.messages}
@@ -29,7 +29,7 @@ const DashApp = () => (
         </DashAppHolder>
       </ThemeProvider>
     </IntlProvider>
-  </LocaleProvider>
+  </LocaleProvider >
 );
 Boot()
   .then(() => DashApp())

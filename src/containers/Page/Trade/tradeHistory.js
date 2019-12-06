@@ -20,7 +20,7 @@ import moment from "moment";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import {ExecutionUl} from "../common.style";
 import { parse } from "path";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";

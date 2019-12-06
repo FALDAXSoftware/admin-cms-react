@@ -2,6 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, JobCatSwitchCell, JobCatActionCell } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, jobCat = null, active = null) => {
     const value = object[key];
@@ -32,7 +33,13 @@ const columns = [{
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
     width: 200,
-    render: object => renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
+    render: object => {
+        if (isAllowed()) {
+            return renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
+        } else {
+            return renderCell(object, 'TextCell', 'is_active')
+        }
+    }
 }];
 
 const jobCategoryTableInfos = [
