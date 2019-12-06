@@ -11,6 +11,7 @@ import EditEmployeeModal from "./editEmployeeModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -127,7 +128,9 @@ class Employees extends Component {
 
   componentDidMount = () => {
     this._getAllEmployees();
-    this._getAllRoles();
+    if (isAllowed("get_role")) {
+      this._getAllRoles();
+    }
   };
 
   openNotificationWithIconError = type => {
@@ -146,7 +149,7 @@ class Employees extends Component {
     _this.setState({ loader: true });
     ApiUtils.getAllEmployee(page, limit, token, sorterCol, sortOrder, searchEmp)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           for (var i = 0; i < res.data.employees.length; i++) {
             res.data.employees[i].first_name =
@@ -191,7 +194,7 @@ class Employees extends Component {
 
     ApiUtils.getAllRoles(token, sorterCol, sortOrder, true)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           let roles = res.roleName.map(role => ({
             key: role.id,
@@ -230,7 +233,7 @@ class Employees extends Component {
     _this.setState({ loader: true });
     ApiUtils.deleteEmployee(token, deleteEmpId)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             deleteEmpId: "",
@@ -348,13 +351,17 @@ class Employees extends Component {
                   style={{ float: "right", width: "250px" }}
                   enterButton
                 />
-                <Button
-                  type="primary"
-                  style={{ marginBottom: "15px", float: "left" }}
-                  onClick={this._showAddEmpModal}
-                >
-                 <Icon type="plus"/> Add Employee
+                {isAllowed("add_employee") &&
+
+                  <Button
+                    type="primary"
+                    style={{ marginBottom: "15px", float: "left" }}
+                    onClick={this._showAddEmpModal}
+                  >
+                    <Icon type="plus" /> Add Employee
                 </Button>
+                }
+
                 {showAddEmpModal && (
                   <AddEmployeeModal
                     showAddEmpModal={showAddEmpModal}
@@ -411,8 +418,8 @@ class Employees extends Component {
                     pageSizeOptions={pageSizeOptions}
                   />
                 ) : (
-                  ""
-                )}
+                    ""
+                  )}
                 {showDeleteEmpModal && (
                   <Modal
                     title="Delete Employee"

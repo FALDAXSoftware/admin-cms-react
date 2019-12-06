@@ -7,6 +7,7 @@ import {
   DateCell,
   FeeSwitchCell
 } from "../../../components/tables/helperCells";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const renderCell = (
   object,
@@ -115,17 +116,23 @@ const columns = [
     title: <IntlMessages id="feeTable.title.status" />,
     key: "is_active",
     width: 100,
-    render: object =>
-      renderCell(
-        object,
-        "FeeSwitchCell",
-        "id",
-        "name",
-        "maker_fee",
-        "taker_fee",
-        "created_at",
-        "is_active"
-      )
+    render: object =>{
+      if (isAllowed("update_pair")) {
+        return renderCell(
+          object,
+          "FeeSwitchCell",
+          "id",
+          "name",
+          "maker_fee",
+          "taker_fee",
+          "created_at",
+          "is_active"
+        )  
+      }else{
+        return renderCell(object, "TextCell", "is_active")
+      }
+    }
+      
   }
 ];
 

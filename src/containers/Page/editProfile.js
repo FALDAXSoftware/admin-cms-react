@@ -71,7 +71,7 @@ class EditProfile extends Component {
                 .then((response) => response.json())
                 .then(function (res) {
                     if (res.status == 200) {
-                        login({ user: res.data[0] });
+                        login({ user: { ...this.props.user, ...res.data[0] } });
                         _this.setState({
                             errMsg: true, errMessage: 'Profile updated successfully.',
                             loader: false, errType: 'Success'
@@ -101,7 +101,7 @@ class EditProfile extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res) {
-                    login({ user: res.data });
+                    login({ user: { ...this.props.user, ...res.data } });
                     _this.setState({
                         isEnabled: res.data.is_twofactor ? 'ENABLED' : 'DISABLED',
                         is_twofactor: res.data.is_twofactor

@@ -7,10 +7,11 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
 import EditFeesModal from "./editFeesModal";
-import FaldaxLoader from "../faldaxLoader";
-import SimpleReactValidator from "simple-react-validator";
-import authAction from "../../../redux/auth/actions";
-import NetworkFee from "../NetworkFee/networkFee";
+import FaldaxLoader from '../faldaxLoader';
+import SimpleReactValidator from 'simple-react-validator';
+import authAction from '../../../redux/auth/actions';
+import NetworkFee from '../NetworkFee/networkFee'
+import { isAllowed } from '../../../helpers/accessControl';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -36,7 +37,7 @@ class Fees extends Component {
       className: "text-danger",
       custom_between: {
         message: "The :attribute must be between 1 to 100 %.",
-        rule: function(val, params, validator) {
+        rule: function (val, params, validator) {
           if (isNaN(val)) {
             return false;
           } else if (
@@ -67,10 +68,12 @@ class Fees extends Component {
 
   componentDidMount = () => {
     this._getAllFeesData();
-    this._getWithdrawlFeeData();
+    if (isAllowed("get_withdrawl_faldax_fee")) {
+      this._getWithdrawlFeeData();
+    }
     // this._getFaldaxFeeData();
-    this._getContactDetails();
-  };
+    // this._getContactDetails();
+  }
 
   _getContactDetails = () => {
     let _this = this;
@@ -78,7 +81,7 @@ class Fees extends Component {
     _this.setState({ loader: true });
     ApiUtils.getContactDetails()
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res) {
           if (res.status == 200) {
             let fields = _this.state.fields;
@@ -121,7 +124,7 @@ class Fees extends Component {
     _this.setState({ loader: true });
     ApiUtils.getWithdrawlFee(token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           console.log(res.withdrawFee[0].value);
           let fields = _this.state.fields;
@@ -157,7 +160,7 @@ class Fees extends Component {
     _this.setState({ loader: true });
     ApiUtils.getFeesData(token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allFeesData: res.data });
         } else if (res.status == 403) {
@@ -206,7 +209,7 @@ class Fees extends Component {
 
       ApiUtils.updateSendCoinFee(token, formData)
         .then(response => response.json())
-        .then(function(res) {
+        .then(function (res) {
           if (res.status == 200) {
             _this.setState(
               {
@@ -262,7 +265,7 @@ class Fees extends Component {
 
       ApiUtils.updateFaldaxFee(token, formData)
         .then(response => response.json())
-        .then(function(res) {
+        .then(function (res) {
           if (res.status == 200) {
             _this.setState(
               {
@@ -337,7 +340,7 @@ class Fees extends Component {
     return (
       <LayoutWrapper>
         <Tabs className="isoTableDisplayTab full-width">
-          {FeesInfos.map(tableInfo => (
+          {isAllowed("get_all_fee") && FeesInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
                 {loader && <FaldaxLoader />}
@@ -359,101 +362,117 @@ class Fees extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
-          <TabPane tab="Withdrawal Fee" key="2">
-            <TableDemoStyle className="isoLayoutContent">
-              <div style={{ marginTop: "10px", marginLeft: "200px" }}>
-                <span>
-                  <b>Withdrawal Fee</b>
-                </span>
-                <Input
-                  addonAfter={"%"}
-                  placeholder="Withdrawal Fee"
-                  style={{
-                    marginTop: "15px",
-                    marginBottom: "15px",
-                    width: "60%",
-                    display: "inherit"
-                  }}
-                  onChange={this._onChangeFields.bind(
-                    this,
-                    "default_send_coin_fee"
-                  )}
-                  value={fields["default_send_coin_fee"]}
-                />
-                <span className="field-error">
-                  {this.validator.message(
-                    "withdrawal fee",
-                    fields["default_send_coin_fee"],
-                    "required|custom_between:0,100"
-                  )}
-                </span>
-                <Button
-                  type="primary"
-                  style={{ marginBottom: "15px" }}
-                  onClick={this._updateSendFee}
-                >
-                  {" "}
-                  Update{" "}
-                </Button>
-                <Button
-                  type="primary"
-                  className="cancel-btn"
-                  onClick={this._cancelSendFee}
-                >
-                  {" "}
-                  Cancel{" "}
-                </Button>
-              </div>
-              {loader && <FaldaxLoader />}
-            </TableDemoStyle>
-          </TabPane>
-          <TabPane tab="Faldax Fee" key="3">
-            <TableDemoStyle className="isoLayoutContent">
-              <div style={{ marginTop: "10px", marginLeft: "200px" }}>
-                <span>
-                  <b>Faldax Fee</b>
-                </span>
-                <Input
-                  addonAfter={"%"}
-                  placeholder="Faldax Fee"
-                  style={{
-                    marginTop: "15px",
-                    marginBottom: "15px",
-                    width: "60%",
-                    display: "inherit"
-                  }}
-                  onChange={this._onChangeFields.bind(
-                    this,
-                    "defualt_faldax_fee"
-                  )}
-                  value={fields["defualt_faldax_fee"]}
-                />
-                <span className="field-error">
-                  {this.validator.message(
-                    "faldax fee",
-                    fields["defualt_faldax_fee"],
-                    "required|custom_between:0,100"
-                  )}
-                </span>
-                <Button
-                  type="primary"
-                  style={{ marginBottom: "15px" }}
-                  onClick={this._updateFaldaxFee}
-                >
-                  {" "}
-                  Update{" "}
-                </Button>
-                {/* <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button> */}
-              </div>
-              {loader && <FaldaxLoader />}
-            </TableDemoStyle>
-          </TabPane>
-          <TabPane tab="Network Fee" key="4">
-            <TableDemoStyle className="isoLayoutContent">
-              <NetworkFee />
-              {/* {loader && <FaldaxLoader />} */}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("get_withdrawl_faldax_fee") &&
+
+            <TabPane tab="Withdrawal Fee" key="2">
+              <TableDemoStyle className="isoLayoutContent">
+                <div style={{ marginTop: "10px", marginLeft: "200px" }}>
+                  <span>
+                    <b>Withdrawal Fee</b>
+                  </span>
+                  <Input
+                    addonAfter={"%"}
+                    placeholder="Withdrawal Fee"
+                    style={{
+                      marginTop: "15px",
+                      marginBottom: "15px",
+                      width: "60%",
+                      display: "inherit"
+                    }}
+                    onChange={this._onChangeFields.bind(
+                      this,
+                      "default_send_coin_fee"
+                    )}
+                    value={fields["default_send_coin_fee"]}
+                  />
+                  <span className="field-error">
+                    {this.validator.message(
+                      "withdrawal fee",
+                      fields["default_send_coin_fee"],
+                      "required|custom_between:0,100"
+                    )}
+                  </span>
+                  {isAllowed("update_send_coin_fee") &&
+                    <>
+                      <Button
+                        type="primary"
+                        style={{ marginBottom: "15px" }}
+                        onClick={this._updateSendFee}
+                      >
+                        {" "}
+                        Update{" "}
+                      </Button>
+                      <Button
+                        type="primary"
+                        className="cancel-btn"
+                        onClick={this._cancelSendFee}
+                      >
+                        {" "}
+                        Cancel{" "}
+                      </Button>
+                    </>
+                  }
+                </div>
+                {loader && <FaldaxLoader />}
+              </TableDemoStyle>
+            </TabPane>
+          }
+          {isAllowed("get_withdrawl_faldax_fee") &&
+
+            <TabPane tab="Faldax Fee" key="3">
+              <TableDemoStyle className="isoLayoutContent">
+                <div style={{ marginTop: "10px", marginLeft: "200px" }}>
+                  <span>
+                    <b>Faldax Fee</b>
+                  </span>
+                  <Input
+                    addonAfter={"%"}
+                    placeholder="Faldax Fee"
+                    style={{
+                      marginTop: "15px",
+                      marginBottom: "15px",
+                      width: "60%",
+                      display: "inherit"
+                    }}
+                    onChange={this._onChangeFields.bind(
+                      this,
+                      "defualt_faldax_fee"
+                    )}
+                    value={fields["defualt_faldax_fee"]}
+                  />
+                  <span className="field-error">
+                    {this.validator.message(
+                      "faldax fee",
+                      fields["defualt_faldax_fee"],
+                      "required|custom_between:0,100"
+                    )}
+                  </span>
+                  {isAllowed("update_faldax_fee") &&
+
+                    <Button
+                      type="primary"
+                      style={{ marginBottom: "15px" }}
+                      onClick={this._updateFaldaxFee}
+                    >
+                      {" "}
+                      Update{" "}
+                    </Button>
+                  }
+                  {/* <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button> */}
+                </div>
+                {loader && <FaldaxLoader />}
+              </TableDemoStyle>
+            </TabPane>
+          }
+          {isAllowed("get_coin_fees") &&
+
+            <TabPane tab="Network Fee" key="4">
+              <TableDemoStyle className="isoLayoutContent">
+                <NetworkFee />
+                {/* {loader && <FaldaxLoader />} */}
+              </TableDemoStyle>
+            </TabPane>
+          }
         </Tabs>
       </LayoutWrapper>
     );

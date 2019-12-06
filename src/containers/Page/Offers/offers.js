@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, notification, Button, Pagination } from "antd";
+import { Tabs, notification, Button, Pagination, Icon, Col } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -11,10 +11,19 @@ import { tblOffers } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import styled from "styled-components";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const OtherError = "Something went to wrong please try again after some time.";
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 var self;
 
@@ -31,7 +40,8 @@ class Offers extends Component {
       page: 1,
       limit: PAGESIZE,
       showDeleteModal: false,
-      campaignId: 0
+      campaignId: 0,
+      metabaseUrl: ""
     };
     self = this;
     this.validator = new SimpleReactValidator({});
@@ -110,7 +120,7 @@ class Offers extends Component {
       if (offers.status == 200) {
         this.setState({
           campaignList: offers.data.campaigns,
-          campaignCount: offers.data.total,
+          campaignCount: offers.data.total
         });
       } else if (offers.status == 401 || offers.status == 403) {
         this.setState({
@@ -128,7 +138,7 @@ class Offers extends Component {
       }
     } catch (error) {
       this.setState({ errMsg: true, errMessage: OtherError, errType: "error" });
-    }finally{
+    } finally {
       this.loader.hide();
     }
   }
@@ -147,16 +157,39 @@ class Offers extends Component {
     });
   };
 
-  onDeleteConfirm=(id)=>{
-    this.setState({showDeleteModal:false})
-    console.log(id)
-  }
+  onDeleteConfirm = id => {
+    this.setState({ showDeleteModal: false });
+    console.log(id);
+  };
 
   handleUserPagination = page => {
     this.setState({ page }, () => {
       this.getAllCampaign();
     });
   };
+
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getOffersRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
 
   render() {
     let {
@@ -168,37 +201,35 @@ class Offers extends Component {
       page,
       limit,
       campaignId,
-      showDeleteModal
+      showDeleteModal,
+      metabaseUrl
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());
     }
-    console.log("render",showDeleteModal)
+    console.log("render", showDeleteModal);
 
     return (
       <LayoutWrapper>
-        <TableDemoStyle className="isoLayoutContent">
-          <Tabs className="isoTableDisplayTab">
-            {tblOffers.map(tableInfo => (
-              <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                <div style={{ display: "inline-block", width: "100%" }}>
-                  <Button
-                    type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={() =>
-                      this.props.history.push(
-                        "/dashboard/campaign/add-campaign"
-                      )
-                    }
-                  >
-                    {" "}
-                    Add Campaign
-                  </Button>
-                </div>
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
+          {tblOffers.map(tableInfo => (
+            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+              <TableDemoStyle className="isoLayoutContent">
+                <Button
+                  type="primary"
+                  style={{ marginBottom: "15px", float: "left" }}
+                  onClick={() =>
+                    this.props.history.push("/dashboard/campaign/add-campaign")
+                  }
+                >
+                  {" "}
+                  <Icon type="plus" />
+                  Add Campaign
+                </Button>
                 {loader && <Loader />}
-                <div>
+                <div className="float-clear">
                   <TableWrapper
                     {...this.state}
                     columns={tableInfo.columns}
@@ -215,13 +246,13 @@ class Offers extends Component {
                       pageSize={limit}
                       current={page}
                       total={campaignCount}
-                      showSizeChanger
+                      showSizeChanger={true}
                       onShowSizeChange={this.changePaginationSize}
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                   {
                     <ConfirmDeleteModalComponent
                       visible={showDeleteModal}
@@ -230,10 +261,23 @@ class Offers extends Component {
                     />
                   }
                 </div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </TableDemoStyle>
+              </TableDemoStyle>
+            </TabPane>
+          ))}
+          <TabPane tab="Metabase-Offers Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
+            </TableDemoStyle>
+          </TabPane>
+        </Tabs>
       </LayoutWrapper>
     );
   }
