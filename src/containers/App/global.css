@@ -504,3 +504,8 @@ html[dir='rtl'] .dz-hidden-input {
 .color-blue{
   color: #5dade2;
 }
+
+.metabase-iframe{
+  height: calc(100vh - 326px);
+    min-height: 500px;
+}

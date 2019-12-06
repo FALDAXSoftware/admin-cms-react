@@ -359,12 +359,16 @@ class AccountClass extends Component {
           <TabPane tab="Metabase-Account Class Management" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl &&
+                <div class="full-width">
                   <iframe
+                    className="metabase-iframe"
                     src={metabaseUrl}
                     frameborder="0"
                     width="100%"
                     allowtransparency
-                ></iframe>}
+                ></iframe>
+                </div>
+                }
               </TableDemoStyle>
           </TabPane>
         </Tabs>
