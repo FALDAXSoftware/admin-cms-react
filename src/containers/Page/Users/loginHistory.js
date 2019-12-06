@@ -5,7 +5,8 @@ import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, Input, Pagination, DatePicker, Button, Form, notification } from 'antd';
+import { Tabs, Input, Pagination, DatePicker,Row, Button, Form, notification,Icon } from 'antd';
+import {ColWithMarginBottom} from "../common.style";
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 import authAction from '../../../redux/auth/actions';
@@ -143,60 +144,81 @@ class LoginHistory extends Component {
         }
 
         return (
-            <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {historyTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Form onSubmit={this._searchHistory}>
-                                        <Input
-                                            placeholder="Search history"
-                                            onChange={this._changeSearch.bind(this)}
-                                            style={{ "width": "200px" }}
-                                            value={searchHistory}
-                                        />
-                                        <RangePicker
-                                            value={rangeDate}
-                                            disabledTime={this.disabledRangeTime}
-                                            onChange={this._changeDate}
-                                            format="YYYY-MM-DD"
-                                            style={{ marginLeft: '15px' }}
-                                        />
+          <LayoutWrapper>
+            <Tabs className="isoTableDisplayTab full-width">
+              {historyTableInfos.map(tableInfo => (
+                <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                  <TableDemoStyle className="isoLayoutContent">
+                    <Form onSubmit={this._searchHistory} className="cty-search">
+                      <Row type="flex" justify="end">
+                        <ColWithMarginBottom sm={6}>
+                          <Input
+                            placeholder="Search history"
+                            onChange={this._changeSearch.bind(this)}
+                            value={searchHistory}
+                          />
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom sm={6}>
+                          <RangePicker
+                            value={rangeDate}
+                            disabledTime={this.disabledRangeTime}
+                            onChange={this._changeDate}
+                            format="YYYY-MM-DD"
+                          />
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom sm={3}>
+                          <Button
+                            className="filter-btn btn-full-width"
+                            htmlType="submit"
+                            type="primary"
+                          >
+                            <Icon type="search" />
+                            Search
+                          </Button>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom sm={3}>
+                          <Button
+                            className="filter-btn btn-full-width"
+                            type="primary"
+                            onClick={this._resetFilters}
+                          >
+                            <Icon type="reload"></Icon>Reset
+                          </Button>
+                        </ColWithMarginBottom>
+                      </Row>
+                    </Form>
 
-                                        <Button className="search-btn" htmlType="submit" type="primary">Search</Button>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                    </Form>
-                                </div>
-                                <div>
-                                    <TableWrapper
-                                        style={{ marginTop: '20px' }}
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allHistory}
-                                        className="isoCustomizedTable"
-                                    />
-                                    {loader && <FaldaxLoader />}
-                                    {allHistoryCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleHistoryPagination.bind(this)}
-                                            pageSize={limit}
-                                            current={page}
-                                            total={allHistoryCount}
-                                            showSizeChanger
-                                            onShowSizeChange={this._changePaginationSize}
-                                            pageSizeOptions={pageSizeOptions}
-                                        /> : ''}
-                                </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
-                </TableDemoStyle>
-            </LayoutWrapper>
-        )
+                    <div>
+                      <TableWrapper
+                        {...this.state}
+                        columns={tableInfo.columns}
+                        pagination={false}
+                        dataSource={allHistory}
+                        className="isoCustomizedTable"
+                      />
+                      {loader && <FaldaxLoader />}
+                      {allHistoryCount > 0 ? (
+                        <Pagination
+                          style={{ marginTop: "15px" }}
+                          className="ant-users-pagination"
+                          onChange={this._handleHistoryPagination.bind(this)}
+                          pageSize={limit}
+                          current={page}
+                          total={allHistoryCount}
+                          showSizeChanger
+                          onShowSizeChange={this._changePaginationSize}
+                          pageSizeOptions={pageSizeOptions}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </TableDemoStyle>
+                </TabPane>
+              ))}
+            </Tabs>
+          </LayoutWrapper>
+        );
     }
 }
 

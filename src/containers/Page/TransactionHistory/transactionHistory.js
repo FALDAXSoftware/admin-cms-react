@@ -9,7 +9,8 @@ import {
   notification,
   Form,
   Row,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -21,14 +22,23 @@ import moment from "moment";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import styled from "styled-components";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 class Transactions extends Component {
   constructor(props) {
@@ -46,7 +56,8 @@ class Transactions extends Component {
       filterVal: "",
       startDate: "",
       endDate: "",
-      rangeDate: []
+      rangeDate: [],
+      metabaseUrl: ""
     };
   }
 
@@ -81,7 +92,7 @@ class Transactions extends Component {
       sortOrder
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           res.data = _this.addTransactionFees(
             res.data,
@@ -119,7 +130,7 @@ class Transactions extends Component {
       ele["transaction_fees"] =
         ele["transaction_type"] == "send"
           ? ((parseFloat(ele.amount) * parseFloat(fees)) / 100).toFixed(8) +
-            " USD"
+          " USD"
           : "-";
       return ele;
     });
@@ -193,6 +204,22 @@ class Transactions extends Component {
     );
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getTransactionHistory()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
   openNotificationWithIconError = type => {
     notification[type]({
       message: this.state.errType,
@@ -216,6 +243,13 @@ class Transactions extends Component {
     });
   };
 
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
   _copyNotification = () => {
     this.setState({
       errMsg: true,
@@ -236,7 +270,8 @@ class Transactions extends Component {
       rangeDate,
       filterVal,
       limit,
-      fees
+      fees,
+      metabaseUrl
     } = this.state;
     const transactionsHeaders = [
       { label: "Created On", key: "created_at" },
@@ -257,84 +292,83 @@ class Transactions extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           <TabPane
             tab={transactionTableInfos[0].title}
             key={transactionTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-              <div style={{ display: "inline-block", width: "100%" }}>
-                <Form onSubmit={this._searchTransaction}>
-                  <Row>
-                    <ColWithMarginBottom md={6}>
-                      <Input
-                        placeholder="Search transactions"
-                        onChange={this._changeSearch.bind(this)}
-                        value={searchTransaction}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom md={3}>
-                      <Select
-                        getPopupContainer={trigger => trigger.parentNode}
-                        placeholder="Select a type"
-                        onChange={this._changeFilter}
-                        value={filterVal}
+
+              <Form onSubmit={this._searchTransaction}>
+                <Row type="flex" justify="end">
+                  <ColWithMarginBottom md={6}>
+                    <Input
+                      placeholder="Search transactions"
+                      onChange={this._changeSearch.bind(this)}
+                      value={searchTransaction}
+                    />
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom md={3}>
+                    <Select
+                      getPopupContainer={trigger => trigger.parentNode}
+                      placeholder="Select a type"
+                      onChange={this._changeFilter}
+                      value={filterVal}
+                    >
+                      <Option value={""}>All</Option>
+                      <Option value={"send"}>Send</Option>
+                      <Option value={"receive"}>Receive</Option>
+                    </Select>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom md={6}>
+                    <RangePicker
+                      value={rangeDate}
+                      disabledTime={this.disabledRangeTime}
+                      onChange={this._changeDate}
+                      format="YYYY-MM-DD"
+                      style={{ marginLeft: "15px" }}
+                    />
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom xs={12} md={3}>
+                    <Button
+                      htmlType="submit"
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                    ><Icon type="search" />
+                      Search
+                      </Button>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom xs={12} md={3}>
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      onClick={this._resetFilters}
+                    ><Icon type="reload" />
+                      Reset
+                      </Button>
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom xs={12} md={3}>
+                    {allTransactions && allTransactions.length > 0 ? (
+                      <CSVLink
+                        filename={"transaction_history.csv"}
+                        data={allTransactions}
+                        headers={transactionsHeaders}
                       >
-                        <Option value={""}>All</Option>
-                        <Option value={"send"}>Send</Option>
-                        <Option value={"receive"}>Receive</Option>
-                      </Select>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom md={6}>
-                      <RangePicker
-                        value={rangeDate}
-                        disabledTime={this.disabledRangeTime}
-                        onChange={this._changeDate}
-                        format="YYYY-MM-DD"
-                        style={{ marginLeft: "15px" }}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} md={3}>
-                      <Button
-                        htmlType="submit"
-                        className="search-btn btn-full-width"
-                        type="primary"
-                      ><Icon type="search"/>
-                        Search
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} md={3}>
-                      <Button
-                        className="search-btn btn-full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      ><Icon type="reload"/>
-                        Reset
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} md={3}>
-                      {allTransactions && allTransactions.length > 0 ? (
-                        <CSVLink
-                          filename={"transaction_history.csv"}
-                          data={allTransactions}
-                          headers={transactionsHeaders}
-                        >
-                          <Button className="search-btn btn-full-width" type="primary">
-                            <Icon type="export"></Icon>
-                            Export
+                        <Button className="filter-btn btn-full-width" type="primary">
+                          <Icon type="export"></Icon>
+                          Export
                           </Button>
-                        </CSVLink>
-                      ) : (
+                      </CSVLink>
+                    ) : (
                         ""
                       )}
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
-              </div>
+                  </ColWithMarginBottom>
+                </Row>
+              </Form>
               {loader && <FaldaxLoader />}
               {transactionTableInfos.map(tableInfo => (
                 <TableWrapper
-                  style={{ marginTop: "20px" }}
+                  className="float-clear"
                   {...this.state}
                   columns={tableInfo.columns}
                   pagination={false}
@@ -427,8 +461,22 @@ class Transactions extends Component {
                   pageSizeOptions={pageSizeOptions}
                 />
               ) : (
-                ""
-              )}
+                  ""
+                )}
+            </TableDemoStyle>
+          </TabPane>
+
+          <TabPane tab="Metabase-Transaction History Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
             </TableDemoStyle>
           </TabPane>
         </Tabs>
