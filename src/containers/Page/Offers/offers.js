@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, notification, Button, Pagination, Icon } from "antd";
+import { Tabs, notification, Button, Pagination, Icon, Col } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -11,10 +11,19 @@ import { tblOffers } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import styled from "styled-components";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const OtherError = "Something went to wrong please try again after some time.";
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 var self;
 
@@ -31,7 +40,8 @@ class Offers extends Component {
       page: 1,
       limit: PAGESIZE,
       showDeleteModal: false,
-      campaignId: 0
+      campaignId: 0,
+      metabaseUrl: ""
     };
     self = this;
     this.validator = new SimpleReactValidator({});
@@ -158,6 +168,29 @@ class Offers extends Component {
     });
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getOffersRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
   render() {
     let {
       loader,
@@ -168,7 +201,8 @@ class Offers extends Component {
       page,
       limit,
       campaignId,
-      showDeleteModal
+      showDeleteModal,
+      metabaseUrl
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -179,7 +213,7 @@ class Offers extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {tblOffers.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -217,8 +251,8 @@ class Offers extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                   {
                     <ConfirmDeleteModalComponent
                       visible={showDeleteModal}
@@ -230,6 +264,19 @@ class Offers extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
+          <TabPane tab="Metabase-Offers Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );

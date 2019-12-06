@@ -312,6 +312,29 @@ class Dashboard extends Component {
     );
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getDashboardRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
   render() {
     const { rowStyle, colStyle, colStyle2 } = basicStyle;
     const {
@@ -341,7 +364,8 @@ class Dashboard extends Component {
       feeSum,
       deletedUsers,
       transactionSymbols,
-      transactionCount
+      transactionCount,
+      metabaseUrl
     } = this.state;
 
     const data = {
@@ -417,7 +441,7 @@ class Dashboard extends Component {
       <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent">
           {loader && <FaldaxLoader />}
-          <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }}>
+          <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }} onChange={this.onChangeTabs}>
             {!isAllowed("get_dashboard_data") && !isAllowed("metabase_details") &&
               <TabPane tab="Admin-Dashboard" key="1">
                 <Row tyle={rowStyle} gutter={0} justify="start">
@@ -657,20 +681,21 @@ class Dashboard extends Component {
               </TabPane>
 
             }
-            {isAllowed("metabase_details") &&
-              <TabPane tab="Metabase-Dasboard" key="2">
-                <Row style={rowStyle} gutter={0} justify="start">
+            {/* {isAllowed("metabase_details") && */}
+            <TabPane tab="Metabase-Dasboard Management" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl &&
                   <IframeCol>
                     <iframe
-                      src={this.state.metabaseUrl}
+                      src={metabaseUrl}
                       frameborder="0"
                       width="100%"
                       allowtransparency
                     ></iframe>
-                  </IframeCol>
-                </Row>
-              </TabPane>
-            }
+                  </IframeCol>}
+              </TableDemoStyle>
+            </TabPane>
+            {/* } */}
           </Tabs>
         </TableDemoStyle>
       </LayoutWrapper>

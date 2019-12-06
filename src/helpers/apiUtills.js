@@ -3893,7 +3893,77 @@ const ApiUtils = {
         } catch (error) {
           console.log("api middle-ware issue", error);
         }
-      }
+      },
+      getTransactionHistory: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-transaction-history-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getRolesRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-roles-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getPairsRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-pairs-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getOffersRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-offers-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getNewsRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-news-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getDashboardRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-dashboard-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getKYCRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-kyc-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
     }
   }
 };

@@ -9,7 +9,8 @@ import {
   Button,
   Form,
   Row,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { newsTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -23,12 +24,21 @@ import authAction from "../../../redux/auth/actions";
 import ColWithMarginBottom from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
+import styled from "styled-components";
 
 const Option = Select.Option;
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 var self;
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 class News extends Component {
   constructor(props) {
@@ -46,7 +56,8 @@ class News extends Component {
       filterVal: "",
       startDate: "",
       endDate: "",
-      rangeDate: []
+      rangeDate: [],
+      metabaseUrl: ""
     };
     self = this;
     News.newsStatus = News.newsStatus.bind(this);
@@ -299,6 +310,29 @@ class News extends Component {
     });
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getNewsRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
   render() {
     const {
       allNews,
@@ -311,7 +345,8 @@ class News extends Component {
       rangeDate,
       filterVal,
       allNewsSources,
-      limit
+      limit,
+      metabaseUrl
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -320,7 +355,7 @@ class News extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {newsTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -415,6 +450,19 @@ class News extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
+          <TabPane tab="Metabase-News Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );

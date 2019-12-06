@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Modal, Icon } from 'antd';
+import { Button, Tabs, notification, Modal, Icon, Col } from 'antd';
 import { rolesTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,10 +11,19 @@ import EditRoleModal from './editRoleModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { isAllowed } from '../../../helpers/accessControl';
+import styled from 'styled-components';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 var self;
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 class Roles extends Component {
   constructor(props) {
@@ -29,7 +38,8 @@ class Roles extends Component {
       showEditRoleModal: false,
       showDeleteRoleModal: false,
       roleDetails: [],
-      deleteRoleId: ""
+      deleteRoleId: "",
+      metabaseUrl: ""
     };
     self = this;
     Roles.roleStatus = Roles.roleStatus.bind(this);
@@ -220,6 +230,31 @@ class Roles extends Component {
       });
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getRolesRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
+
   _getAllPermissions = () => {
     const { token } = this.props;
     let _this = this;
@@ -338,7 +373,8 @@ class Roles extends Component {
       showEditRoleModal,
       roleDetails,
       showDeleteRoleModal,
-      allRolesValue
+      allRolesValue,
+      metabaseUrl
     } = this.state;
 
     if (errMsg) {
@@ -347,7 +383,7 @@ class Roles extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           <TabPane
             tab={rolesTableInfos[0].title}
             key={rolesTableInfos[0].value}
@@ -407,6 +443,20 @@ class Roles extends Component {
                   </Modal>
                 )}
               </div>
+            </TableDemoStyle>
+          </TabPane>
+
+          <TabPane tab="Metabase-Roles Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
             </TableDemoStyle>
           </TabPane>
         </Tabs>

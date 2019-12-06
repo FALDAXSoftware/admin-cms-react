@@ -8,7 +8,8 @@ import {
   Form,
   Row,
   Select,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { pairsTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -22,11 +23,20 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import ColWithMarginBottom from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import styled from "styled-components";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const Option = Select.Option;
 var self;
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 class Pairs extends Component {
   constructor(props) {
@@ -45,7 +55,8 @@ class Pairs extends Component {
       showEditPairModal: false,
       searchPair: "",
       sorterCol: "",
-      sortOrder: ""
+      sortOrder: "",
+      metabaseUrl: ""
     };
     self = this;
     Pairs.editPair = Pairs.editPair.bind(this);
@@ -120,7 +131,7 @@ class Pairs extends Component {
 
     ApiUtils.getWalletCoins(token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allAssets: res.data });
         } else if (res.status == 403) {
@@ -170,7 +181,7 @@ class Pairs extends Component {
       selectedAsset
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           const { pairsCount, allCoins } = res;
           _this.setState({ allPairs: res.data, pairsCount, allCoins });
@@ -232,6 +243,22 @@ class Pairs extends Component {
     );
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getPairsRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
   _changeAsset = value => {
     this.setState({ selectedAsset: value });
   };
@@ -252,6 +279,13 @@ class Pairs extends Component {
     });
   };
 
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
   render() {
     const {
       allPairs,
@@ -267,7 +301,8 @@ class Pairs extends Component {
       pairDetails,
       showEditPairModal,
       allAssets,
-      selectedAsset
+      selectedAsset,
+      metabaseUrl
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -276,7 +311,7 @@ class Pairs extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {pairsTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -377,12 +412,26 @@ class Pairs extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                 </div>
               </TableDemoStyle>
             </TabPane>
           ))}
+
+          <TabPane tab="Metabase-Pairs Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );
