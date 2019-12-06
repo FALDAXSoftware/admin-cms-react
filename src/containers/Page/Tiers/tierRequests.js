@@ -57,7 +57,7 @@ class AllRequests extends React.Component {
         const { allPendingReq, allApprovedReq, allRejectedReq } = this.state;
         return (
             <React.Fragment>
-                <Tabs className="orders-tab" defaultActiveKey="1" size={'large'}>
+                <Tabs className="tier-tab" defaultActiveKey="1" size={'large'}>
                     <TabPane tab="Pending Requests" key="1"><PendingRequests data={allPendingReq} /></TabPane>
                     <TabPane tab="Approved Requests" key="2"><ApprovedRequests data={allApprovedReq} /></TabPane>
                     <TabPane tab="Rejected Requests" key="3"><RejectedRequests data={allRejectedReq} /></TabPane>

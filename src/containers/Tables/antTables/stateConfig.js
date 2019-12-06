@@ -4,6 +4,7 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell, StateSwitchCell, StateActionCell, ColorCell, LegalityCell
 } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, s_name = null, legal = null, colorCode = null, status = null) => {
     const value = object[key];
@@ -52,7 +53,13 @@ const columns = [{
     title: <IntlMessages id="countryTable.title.status" />,
     key: 'is_active',
     width: 200,
-    render: object => renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
+    render: object => {
+        if (isAllowed("activate_state")) {
+            return renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
+        }else{
+            return renderCell(object, 'TextCell', 'is_active')
+        }
+    }
 }];
 
 const stateTableInfos = [

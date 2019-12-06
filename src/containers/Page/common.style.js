@@ -17,6 +17,7 @@ const ColWithPadding = styled(Col)`
 
 export const ColWithMarginBottom=styled(Col)`
   margin-bottom:15px;
+  padding:0 5px;
 `;
 
 export const ExecutionUl = styled.ul`

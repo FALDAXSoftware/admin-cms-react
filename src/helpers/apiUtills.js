@@ -493,7 +493,7 @@ const ApiUtils = {
     sorterCol,
     sortOrder
   ) {
-    let url = `/admin/get-referal-list?data=${searchReferral}${sorterCol?'&sort_col='+sorterCol:''}${sortOrder?'&sort_order='+sortOrder:''}`;
+    let url = `/admin/get-referal-list?data=${searchReferral}${sorterCol ? '&sort_col=' + sorterCol : ''}${sortOrder ? '&sort_order=' + sortOrder : ''}`;
     try {
       return fetch(API_URL + url, {
         method: "GET",
@@ -2483,7 +2483,7 @@ const ApiUtils = {
     }
   },
 
-  
+
   // get employee details api
   getEmployeeDetails: function (token, emp_id) {
     try {
@@ -3724,7 +3724,7 @@ const ApiUtils = {
     } else if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
     } else {
-      url;
+      // url;
     }
 
     try {
@@ -3749,14 +3749,41 @@ const ApiUtils = {
       body: JSON.stringify(body)
     });
   },
+  getRolePermissions: function (token, roleId = "") {
+    try {
+      const url = "/admin/get-role-permission";
+      return fetch(`${API_URL}${url}?role_id=${roleId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+    } catch (error) {
+      console.log("api middle-ware issue", error);
+    }
+  },
+  updatePermissions: function (token, form) {
+    let url = "/admin/update-role-permission";
+    try {
+      return fetch(API_URL + url, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token
+        },
+        body: JSON.stringify(form)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
   // Offer Module API's
-  offers:function (token){
+  offers: function (token) {
     return {
       url: "/admin/campaigns/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getCampaignList: function(page, limit) {
+      getCampaignList: function (page, limit) {
         let formData = new FormData();
         formData.append("page", page);
         formData.append("limit", limit);
@@ -3766,7 +3793,7 @@ const ApiUtils = {
           body: formData
         });
       },
-      changeStatus: function(id, status = false) {
+      changeStatus: function (id, status = false) {
         let formData = new FormData();
         formData.append("status", status);
         return fetch(`${API_URL}${this.url}change-status/${id}`, {
@@ -3775,7 +3802,7 @@ const ApiUtils = {
           body: formData
         });
       },
-      updateCampaign: function(id, data) {
+      updateCampaign: function (id, data) {
         return fetch(`${API_URL}${this.url}update/${id}`, {
           method: "PUT",
           headers: this.headers,
@@ -3783,27 +3810,161 @@ const ApiUtils = {
         });
       },
       // get campaign details api
-      getById: function(campaign_id) {
+      getById: function (campaign_id) {
         try {
           return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
             method: "GET",
-            headers:this.headers
+            headers: this.headers
           });
         } catch (error) {
           console.error(error);
         }
       },
-      checkOfferCode:function(offerCode=""){
-        try{
-           return fetch(`${API_URL}${this.url}verify-offercode/${offerCode}`,{
-             method:'GET',
-             headers:this.headers
-           })
-        }catch(error){
-          console.log("api middle-ware issue",error);
+      checkOfferCode: function (offerCode = "") {
+        try {
+          return fetch(`${API_URL}${this.url}verify-offercode/${offerCode}`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getOfferCodeHistory: function (offerId, page, limit, data = "", action_type = "") {
+        try {
+          let formData = new FormData();
+          formData.append("page", page);
+          formData.append("data", data);
+          formData.append("limit", limit);
+          formData.append("action_type", action_type);
+          return fetch(`${API_URL}${this.url}offercode-used/${offerId}`, {
+            method: 'POST',
+            headers: this.headers,
+            body: formData
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
         }
       }
     };
+  },
+  metabase: function (token) {
+    return {
+      url: "/admin/",
+      headers: {
+        Authorization: "Bearer " + token
+      },
+      getAccountClassMetabase: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-account-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getWithdrawRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-withdraw-request-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getUsersRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-users-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getTwoFactorRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-two-factor-request-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getTransactionHistory: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-transaction-history-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getRolesRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-roles-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getPairsRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-pairs-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getOffersRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-offers-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getNewsRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-news-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getDashboardRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-dashboard-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getKYCRequest: function () {
+        try {
+          return fetch(`${API_URL}${this.url}get-kyc-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+    }
   }
 };
 export default ApiUtils;

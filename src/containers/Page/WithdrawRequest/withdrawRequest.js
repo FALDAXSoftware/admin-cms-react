@@ -9,7 +9,8 @@ import {
   Select,
   Form,
   Row,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -21,16 +22,25 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import DeclineActionModal from "./declineModal";
 import { Record } from "immutable";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import styled from "styled-components";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
 var self;
+
+const IframeCol = styled(Col)`
+  width: 100%;
+  > iframe {
+    height: calc(100vh - 326px);
+    min-height: 500px;
+  }
+`;
 
 class WithdrawRequest extends Component {
   constructor(props) {
@@ -50,7 +60,8 @@ class WithdrawRequest extends Component {
       filterVal: "",
       rangeDate: [],
       showDeclineModal: false,
-      withdrawReqDetails: []
+      withdrawReqDetails: [],
+      metabaseUrl: ""
     };
     self = this;
     WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(
@@ -202,7 +213,7 @@ class WithdrawRequest extends Component {
       sortOrder
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             allRequests: res.data,
@@ -318,6 +329,22 @@ class WithdrawRequest extends Component {
     );
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getWithdrawRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
       this._getAllWithdrawReqs();
@@ -327,6 +354,13 @@ class WithdrawRequest extends Component {
   _closeDeclineModal = () => {
     this.setState({ showDeclineModal: false });
   };
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
 
   render() {
     const {
@@ -341,7 +375,8 @@ class WithdrawRequest extends Component {
       rangeDate,
       filterVal,
       showDeclineModal,
-      withdrawReqDetails
+      withdrawReqDetails,
+      metabaseUrl
     } = this.state;
     const requestHeaders = [
       { label: "Source Address", key: "source_address" },
@@ -361,7 +396,7 @@ class WithdrawRequest extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           <TabPane tab={withdrawReqTableInfos[0].title} key={withdrawReqTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
               <div style={{ display: "inline-block", width: "100%" }}>
@@ -431,8 +466,8 @@ class WithdrawRequest extends Component {
                           </Button>
                         </CSVLink>
                       ) : (
-                        ""
-                      )}
+                          ""
+                        )}
                     </ColWithMarginBottom>
                   </Row>
                 </Form>
@@ -459,8 +494,8 @@ class WithdrawRequest extends Component {
                               <b> Reason</b> - <span>{record.reason}</span>{" "}
                             </React.Fragment>
                           ) : (
-                            ""
-                          )}
+                              ""
+                            )}
                         </div>
                       }
                     </p>
@@ -480,14 +515,28 @@ class WithdrawRequest extends Component {
                   pageSizeOptions={pageSizeOptions}
                 />
               ) : (
-                ""
-              )}
+                  ""
+                )}
               <DeclineActionModal
                 showDeclineModal={showDeclineModal}
                 withdrawReqDetails={withdrawReqDetails}
                 closeDeclineModal={this._closeDeclineModal}
                 getAllWithdrawReqs={this._getAllWithdrawReqs}
               />
+            </TableDemoStyle>
+          </TabPane>
+
+          <TabPane tab="Metabase-Withdraw Request Management" key="metabase">
+            <TableDemoStyle className="isoLayoutContent">
+              {metabaseUrl &&
+                <IframeCol>
+                  <iframe
+                    src={metabaseUrl}
+                    frameborder="0"
+                    width="100%"
+                    allowtransparency
+                  ></iframe>
+                </IframeCol>}
             </TableDemoStyle>
           </TabPane>
         </Tabs>

@@ -23,7 +23,7 @@ const renderCell = (object, type, key, fname = null, emailContent = null, emailN
 const columns = [{
     title: <IntlMessages id="emailTable.title.actions" />,
     key: 'action',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',
         'note')
 }, {

@@ -24,7 +24,6 @@ class AddRoleModal extends Component {
             isDisabled: false,
             showError: false,
             indeterminate: true,
-            checkAll: false,
         }
         this.validator = new SimpleReactValidator();
     }
@@ -34,7 +33,6 @@ class AddRoleModal extends Component {
             let roles = Object.keys(nextProps.allRoles)
             this.setState({
                 showAddRoleModal: nextProps.showAddRoleModal,
-                allRoles: nextProps.roles
             });
             this.validator = new SimpleReactValidator();
         }
@@ -69,25 +67,21 @@ class AddRoleModal extends Component {
         const { fields } = this.state;
 
         fields['name'] = '';
-        this.setState({ fields, showError: false, checkedList: [] });
+        this.setState({ fields, showError: false });
     }
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
         let { fields, showError, checkedList } = this.state;
         let roles = {}
-        roles = checkedList && checkedList.reduce((o, key) => Object.assign(o, { [key]: true }), {});
         let _this = this;
 
-        if (this.validator.allValid() && (roles !== undefined || Object.entries(roles).length !== 0)) {
+        if (this.validator.allValid()) {
             this.setState({ loader: true, isDisabled: true, showError: false });
 
             let formData = {
                 name: fields["name"],
             };
-            Object.keys(roles).forEach(function (key) {
-                formData[key] = roles[key]
-            });
 
             ApiUtils.addRole(token, formData)
                 .then((res) => res.json())
@@ -119,22 +113,6 @@ class AddRoleModal extends Component {
             _this.validator.showMessages();
             _this.forceUpdate();
         }
-    }
-
-    _onRolesCheck = (e) => {
-        this.setState({
-            checkedList: e.target.checked ? this.state.allRoles : [],
-            indeterminate: false,
-            checkAll: e.target.checked,
-        });
-    }
-
-    onChange = (checkedList) => {
-        this.setState({
-            checkedList,
-            indeterminate: !!checkedList.length && (checkedList.length < this.state.allRoles.length),
-            checkAll: checkedList.length === this.state.allRoles.length,
-        });
     }
 
     render() {
@@ -172,25 +150,6 @@ class AddRoleModal extends Component {
                             {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
                         </span>
                     </div>
-
-                    <Row style={{ "marginBottom": "15px" }}>
-                        <Col>
-                            <span>Modules:</span><br />
-                            <Checkbox
-                                indeterminate={this.state.indeterminate}
-                                onChange={this._onRolesCheck}
-                                checked={this.state.checkAll}
-                            >
-                                Check all
-          </Checkbox>
-                            <br />
-                            <CheckboxGroup options={allRoleOptions} value={this.state.checkedList} onChange={this.onChange} />
-                        </Col>
-                    </Row>
-                    {showError && <span style={{ "color": "red" }}>
-                        {'The module field is required.'}
-                    </span>
-                    }
                 </Form>
                 {loader && <FaldaxLoader />}
             </Modal>

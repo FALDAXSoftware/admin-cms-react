@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithPadding from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
@@ -292,23 +292,21 @@ class InActiveUsers extends Component {
             <div className="isoTableDisplayTab">
               {inActiveUserinfos.map(tableInfo => (
                 <div tab={tableInfo.title} key={tableInfo.value}>
-                  <div style={{ display: "inline-block", width: "100%" }}>
-                    <Form onSubmit={this._searchUser}>
-                      <Row gutter={16}>
-                        <Col lg={7} xs={24}>
+                    <Form onSubmit={this._searchUser} className="cty-search">
+                      <Row type="flex" justify="end">
+                        <ColWithMarginBottom lg={7} xs={24}>
                           <Input
                             placeholder="Search users"
                             onChange={this._changeSearch.bind(this)}
                             value={searchUser}
                           />
-                        </Col>
-                        <Col  lg={7} xs={24}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  lg={7} xs={24}>
                           <Select
                             getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a country"
                             onChange={this._changeCountry}
                             value={filterVal}
-                            style={{ width: "100%" }}
                           >
                             {allCountries &&
                               allCountries.map((country, index) => {
@@ -319,45 +317,44 @@ class InActiveUsers extends Component {
                                 );
                               })}
                           </Select>
-                        </Col>
-                        <Col lg={3} xs={24}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom lg={3} xs={24}>
                           <Button
                             htmlType="submit"
-                            className="search-btn btn-full-width"
+                            className="filter-btn btn-full-width"
                             type="primary"
                           >
                            <Icon type="search"/> Search
                           </Button>
-                        </Col>
-                        <Col  xs={24} lg={3}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  xs={24} lg={3}>
                           <Button
-                            className="search-btn btn-full-width"
+                            className="filter-btn btn-full-width"
                             type="primary"
                             onClick={this._resetFilters}
                           >
                             <Icon type="reload" />Reset
                           </Button>
-                        </Col>
-                        <Col  xs={24} lg={3}>
+                        </ColWithMarginBottom>
+                        <ColWithMarginBottom  xs={24} lg={3}>
                           {allUsers && allUsers.length > 0 ? (
                             <CSVLink
                               data={allUsers}
                               filename={"users.csv"}
                               headers={headers}
                             >
-                              <Button className="search-btn btn-full-width" type="primary">
+                              <Button className="filter-btn btn-full-width" type="primary">
                               <Icon type="export" />Export
                               </Button>
                             </CSVLink>
                           ) : (
                             ""
                           )}
-                        </Col>
+                        </ColWithMarginBottom>
                       </Row>
                     </Form>
-                  </div>
                   {loader && <FaldaxLoader />}
-                  <div style={{ marginTop: "30px" }} className="scroll-table">
+                  <div className="scroll-table float-clear">
                     <TableWrapper
                       {...this.state}
                       columns={tableInfo.columns}

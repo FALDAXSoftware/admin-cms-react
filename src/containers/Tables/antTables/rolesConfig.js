@@ -2,6 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
     isCountry = null, isEmp = null, isRole = null,
@@ -63,10 +64,16 @@ const columns = [
         title: <IntlMessages id="roleTable.title.status" />,
         key: 'is_active',
         width: 200,
-        render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
-            'countries', 'roles', 'employee', 'pairs', 'transaction_history',
-            'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
-            'is_referral', 'add_user', 'is_active')
+        render: object => {
+            if (isAllowed("update_role")) {
+                return renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
+                    'countries', 'roles', 'employee', 'pairs', 'transaction_history',
+                    'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
+                    'is_referral', 'add_user', 'is_active')
+            } else {
+                return renderCell(object, 'TextCell', 'is_active')
+            }
+        }
     }
 ];
 

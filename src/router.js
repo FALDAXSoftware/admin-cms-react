@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
@@ -33,6 +33,11 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           exact
           path={'/404'}
           component={asyncComponent(() => import('./containers/Page/404'))}
+        />
+        <Route
+          exact
+          path={'/403'}
+          component={asyncComponent(() => import('./containers/Page/403'))}
         />
         <Route
           exact

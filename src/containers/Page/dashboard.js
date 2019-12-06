@@ -18,6 +18,8 @@ import FaldaxLoader from "./faldaxLoader";
 import CardView from "./cardView";
 import FeeChart from "./feeChart";
 import TransactionMapChart from "./transactionMapChart";
+import { isAllowed } from "../../helpers/accessControl.js";
+import TableDemoStyle from "../Tables/antTables/demo.style.js";
 const { TabPane } = Tabs;
 
 const { logout } = authAction;
@@ -47,7 +49,7 @@ const ChartWrapper = styled.div`
     align-items: center;
     margin-left: ${props => (props["data-rtl"] === "rtl" ? "inherit" : "auto")};
     margin-right: ${props =>
-      props["data-rtl"] === "rtl" ? "auto" : "inherit"};
+    props["data-rtl"] === "rtl" ? "auto" : "inherit"};
     margin-bottom: 20px;
 
     span {
@@ -55,9 +57,9 @@ const ChartWrapper = styled.div`
       color: ${palette("text", 1)};
       font-weight: 400;
       margin-right: ${props =>
-        props["data-rtl"] === "rtl" ? "inherit" : "15px"};
+    props["data-rtl"] === "rtl" ? "inherit" : "15px"};
       margin-left: ${props =>
-        props["data-rtl"] === "rtl" ? "15px" : "inherit"};
+    props["data-rtl"] === "rtl" ? "15px" : "inherit"};
     }
 
     button {
@@ -72,9 +74,9 @@ const ChartWrapper = styled.div`
 
       &:last-child {
         margin-left: ${props =>
-          props["data-rtl"] === "rtl" ? "inherit" : "-1px"};
+    props["data-rtl"] === "rtl" ? "inherit" : "-1px"};
         margin-right: ${props =>
-          props["data-rtl"] === "rtl" ? "-1px" : "inherit"};
+    props["data-rtl"] === "rtl" ? "-1px" : "inherit"};
       }
 
       &:hover {
@@ -131,8 +133,13 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    this._getAllCount();
-    this._getMetabaseData();
+    if (isAllowed("get_dashboard_data")) {
+      this._getAllCount();
+    }
+    if (isAllowed("metabase_details")) {
+
+      this._getMetabaseData();
+    }
   }
 
   _getAllCount = () => {
@@ -143,7 +150,7 @@ class Dashboard extends Component {
     _this.setState({ loader: true });
     ApiUtils.getAllCount(token, startDate, endDate)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res) {
           if (res.status == 200) {
             let feeSymbols = [];
@@ -151,12 +158,12 @@ class Dashboard extends Component {
             let transactionSymbols = [];
             let transactionCount = [];
             res.feesTransactionValue &&
-              res.feesTransactionValue.forEach(function(value, key) {
+              res.feesTransactionValue.forEach(function (value, key) {
                 feeSymbols.push(value.symbol);
                 feeSum.push(value.sum);
               });
             res.transactionValue &&
-              res.transactionValue.forEach(function(value, key) {
+              res.transactionValue.forEach(function (value, key) {
                 transactionSymbols.push(value.symbol);
                 transactionCount.push(value.count);
               });
@@ -234,7 +241,7 @@ class Dashboard extends Component {
     _this.setState({ loader: true });
     ApiUtils.getMetabase()
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res) {
           if (res.status == 200) {
             _this.setState({
@@ -289,14 +296,14 @@ class Dashboard extends Component {
         startDate:
           date.length > 0
             ? moment(date[0])
-                .startOf("d")
-                .toISOString()
+              .startOf("d")
+              .toISOString()
             : "",
         endDate:
           date.length > 0
             ? moment(date[1])
-                .endOf("d")
-                .toISOString()
+              .endOf("d")
+              .toISOString()
             : ""
       },
       () => {
@@ -305,8 +312,31 @@ class Dashboard extends Component {
     );
   };
 
+  async getMetaBaseUrl() {
+    try {
+      this.setState({ loader: true })
+      let response = await (await ApiUtils.metabase(this.props.token).getDashboardRequest()).json();
+      if (response.status == 200) {
+        this.setState({ metabaseUrl: response.frameURL })
+      } else if (response.statue == 400 || response.status == 403) {
+
+      }
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
+    }
+  }
+
+  onChangeTabs = (key) => {
+    if (key == "metabase" && this.state.metabaseUrl == "") {
+      console.log("Metabase is calling")
+      this.getMetaBaseUrl();
+    }
+  }
+
   render() {
-    const { rowStyle, colStyle,colStyle2} = basicStyle;
+    const { rowStyle, colStyle, colStyle2 } = basicStyle;
     const {
       activeUsers,
       inactiveUsers,
@@ -334,7 +364,8 @@ class Dashboard extends Component {
       feeSum,
       deletedUsers,
       transactionSymbols,
-      transactionCount
+      transactionCount,
+      metabaseUrl
     } = this.state;
 
     const data = {
@@ -408,53 +439,64 @@ class Dashboard extends Component {
 
     return (
       <LayoutWrapper>
-        {loader && <FaldaxLoader />}
-        <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }}>
-          <TabPane tab="Admin-Dashboard" key="1">
-            <Row style={rowStyle} gutter={0} justify="start">
-              <Col md={12} xs={24} style={colStyle2}>
-                <CardWrapper title="Country">
-                  <ChartWrapper>
-                    <ContentHolder>
-                      <Pie data={data} />
-                    </ContentHolder>
-                  </ChartWrapper>
-                </CardWrapper>
-              </Col>
+        <TableDemoStyle className="isoLayoutContent">
+          {loader && <FaldaxLoader />}
+          <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }} onChange={this.onChangeTabs}>
+            {!isAllowed("get_dashboard_data") && !isAllowed("metabase_details") &&
+              <TabPane tab="Admin-Dashboard" key="1">
+                <Row tyle={rowStyle} gutter={0} justify="start">
+                  <Col>
+                    You do not have permission to access this page</Col>
+                </Row>
+              </TabPane>
 
-              <Col md={12} xs={24} style={colStyle2}>
-                <CardWrapper title="Pending Identity Verifications">
-                  <ChartWrapper>
-                    <RangePicker
-                      value={rangeDate}
-                      disabledTime={this.disabledRangeTime}
-                      onChange={this._changeDate}
-                      format="YYYY-MM-DD"
-                      style={{ marginBottom: "15px" }}
-                    />
-                    <Row style={{ width: "100%" }}>
-                      <Col span={12}>
-                        <b>Total: {total_kyc}</b>
-                      </Col>
-                      <Col span={12} style={{ textAlign: "right" }}>
-                        <a
-                          href="https://edna.identitymind.com/merchantedna/"
-                          target="_blank"
-                        >
-                          View all Applications
+            }
+            {isAllowed("get_dashboard_data") &&
+              <TabPane tab="Admin-Dashboard" key="1">
+                <Row style={rowStyle} gutter={0} justify="start">
+                  <Col md={12} xs={24} style={colStyle2}>
+                    <CardWrapper title="Country">
+                      <ChartWrapper>
+                        <ContentHolder>
+                          <Pie data={data} />
+                        </ContentHolder>
+                      </ChartWrapper>
+                    </CardWrapper>
+                  </Col>
+
+                  <Col md={12} xs={24} style={colStyle2}>
+                    <CardWrapper title="Pending Identity Verifications">
+                      <ChartWrapper>
+                        <RangePicker
+                          value={rangeDate}
+                          disabledTime={this.disabledRangeTime}
+                          onChange={this._changeDate}
+                          format="YYYY-MM-DD"
+                          style={{ marginBottom: "15px" }}
+                        />
+                        <Row style={{ width: "100%" }}>
+                          <Col span={12}>
+                            <b>Total: {total_kyc}</b>
+                          </Col>
+                          <Col span={12} style={{ textAlign: "right" }}>
+                            <a
+                              href="https://edna.identitymind.com/merchantedna/"
+                              target="_blank"
+                            >
+                              View all Applications
                         </a>
-                      </Col>
-                    </Row>
-                    <ContentHolder>
-                      {total_kyc > 0 ? <Pie data={kycData} /> : "NO DATA FOUND"}
-                    </ContentHolder>
-                  </ChartWrapper>
-                </CardWrapper>
-              </Col>
-            </Row>
+                          </Col>
+                        </Row>
+                        <ContentHolder>
+                          {total_kyc > 0 ? <Pie data={kycData} /> : "NO DATA FOUND"}
+                        </ContentHolder>
+                      </ChartWrapper>
+                    </CardWrapper>
+                  </Col>
+                </Row>
 
-            <Row style={rowStyle} gutter={0} justify="start">
-              {/* <Col md={12} xs={24} style={colStyle}>
+                <Row style={rowStyle} gutter={0} justify="start">
+                  {/* <Col md={12} xs={24} style={colStyle}>
                         <Card title="KYC">
                             <span>Grand Total</span>
                             <Progress percent={30} size="small" format={percent => `${percent}`} />
@@ -467,33 +509,33 @@ class Dashboard extends Component {
                         </Card>
                     </Col> */}
 
-              <Col md={12} xs={24} style={colStyle}>
-                <CardWrapper>
-                  <span>
-                    <b>Fees collected in last 30 days:</b>
-                  </span>
-                  <ChartWrapper>
-                    <FeeChart feeSymbols={feeSymbols} feeSum={feeSum} />
-                  </ChartWrapper>
-                </CardWrapper>
-              </Col>
+                  <Col md={12} xs={24} style={colStyle}>
+                    <CardWrapper>
+                      <span>
+                        <b>Fees collected in last 30 days:</b>
+                      </span>
+                      <ChartWrapper>
+                        <FeeChart feeSymbols={feeSymbols} feeSum={feeSum} />
+                      </ChartWrapper>
+                    </CardWrapper>
+                  </Col>
 
-              <Col md={12} xs={24} style={colStyle}>
-                <CardWrapper>
-                  <span>
-                    <b>Transactions</b>
-                  </span>
-                  <ChartWrapper>
-                    <TransactionMapChart
-                      transactionSymbols={transactionSymbols}
-                      transactionCount={transactionCount}
-                    />
-                  </ChartWrapper>
-                </CardWrapper>
-              </Col>
-            </Row>
+                  <Col md={12} xs={24} style={colStyle}>
+                    <CardWrapper>
+                      <span>
+                        <b>Transactions</b>
+                      </span>
+                      <ChartWrapper>
+                        <TransactionMapChart
+                          transactionSymbols={transactionSymbols}
+                          transactionCount={transactionCount}
+                        />
+                      </ChartWrapper>
+                    </CardWrapper>
+                  </Col>
+                </Row>
 
-            {/* <Row style={rowStyle} gutter={0} justify="start">
+                {/* <Row style={rowStyle} gutter={0} justify="start">
                     <Col md={12} xs={24} style={colStyle}>
                         <IsoWidgetsWrapper>
                             <span><b>Transactions</b></span>
@@ -505,151 +547,157 @@ class Dashboard extends Component {
                     </Col>
                 </Row> */}
 
-            <Row style={rowStyle} gutter={0} justify="start">
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/users">
-                  <CountCard
-                    number={activeUsers}
-                    headcolor={"#1f2431"}
-                    number2={inactiveUsers}
-                    bgcolor={"#fff"}
-                    style={{
-                      boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
-                    }}
-                    title={"Users"}
-                    text={"Active Users"}
-                    text2={"Inactive Users"}
-                    icon="fa fa-users"
-                    fontColor="#2d3446"
-                  />
-                </Link>
-              </Col>
+                <Row style={rowStyle} gutter={0} justify="start">
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/users">
+                      <CountCard
+                        number={activeUsers}
+                        headcolor={"#1f2431"}
+                        number2={inactiveUsers}
+                        bgcolor={"#fff"}
+                        style={{
+                          boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                        }}
+                        title={"Users"}
+                        text={"Active Users"}
+                        text2={"Inactive Users"}
+                        icon="fa fa-users"
+                        fontColor="#2d3446"
+                      />
+                    </Link>
+                  </Col>
 
-              {/* Deleted Account */}
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <CardView
-                  cardText={"Deleted Account"}
-                  cardTitle={"Deleted Account"}
-                  icon={"fa fa-users"}
-                  countNumber={deletedUsers}
-                />
-              </Col>
+                  {/* Deleted Account */}
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <CardView
+                      cardText={"Deleted Account"}
+                      cardTitle={"Deleted Account"}
+                      icon={"fa fa-users"}
+                      countNumber={deletedUsers}
+                    />
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/assets">
-                  <CountCard
-                    number={activeCoins}
-                    headcolor={"#1f2431"}
-                    number2={InactiveCoins}
-                    bgcolor={"#fff"}
-                    style={{
-                      boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
-                    }}
-                    title={"Assets"}
-                    text={"Active Assets"}
-                    text2={"Inactive Assets"}
-                    icon="fa fa-coins"
-                    fontColor="#ffffff"
-                  />
-                </Link>
-              </Col>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/assets">
+                      <CountCard
+                        number={activeCoins}
+                        headcolor={"#1f2431"}
+                        number2={InactiveCoins}
+                        bgcolor={"#fff"}
+                        style={{
+                          boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                        }}
+                        title={"Assets"}
+                        text={"Active Assets"}
+                        text2={"Inactive Assets"}
+                        icon="fa fa-coins"
+                        fontColor="#ffffff"
+                      />
+                    </Link>
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/pairs">
-                  <CountCard
-                    number={activePairs}
-                    headcolor={"#1f2431"}
-                    number2={InactivePairs}
-                    bgcolor={"#fff"}
-                    style={{
-                      boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
-                    }}
-                    title={"Pairs"}
-                    text={"Active Pairs"}
-                    text2={"Inactive Pairs"}
-                    icon="fa fa-coins"
-                    fontColor="#ffffff"
-                  />
-                </Link>
-              </Col>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/pairs">
+                      <CountCard
+                        number={activePairs}
+                        headcolor={"#1f2431"}
+                        number2={InactivePairs}
+                        bgcolor={"#fff"}
+                        style={{
+                          boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                        }}
+                        title={"Pairs"}
+                        text={"Active Pairs"}
+                        text2={"Inactive Pairs"}
+                        icon="fa fa-coins"
+                        fontColor="#ffffff"
+                      />
+                    </Link>
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/employee">
-                  <CountCard
-                    number={activeEmployeeCount}
-                    headcolor={"#1f2431"}
-                    number2={inactiveEmployeeCount}
-                    bgcolor={"#fff"}
-                    style={{
-                      boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
-                    }}
-                    title={"Employees"}
-                    text={"Active Employees"}
-                    text2={"Inactive Employees"}
-                    icon="fa fa-coins"
-                    fontColor="#ffffff"
-                  />
-                </Link>
-              </Col>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/employee">
+                      <CountCard
+                        number={activeEmployeeCount}
+                        headcolor={"#1f2431"}
+                        number2={inactiveEmployeeCount}
+                        bgcolor={"#fff"}
+                        style={{
+                          boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                        }}
+                        title={"Employees"}
+                        text={"Active Employees"}
+                        text2={"Inactive Employees"}
+                        icon="fa fa-coins"
+                        fontColor="#ffffff"
+                      />
+                    </Link>
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/jobs">
-                  <CardView
-                    cardText={"Pending Job Applications"}
-                    cardTitle={"Pending Job Applications"}
-                    icon={"fa fa-tasks"}
-                    countNumber={jobsCount}
-                  />
-                </Link>
-              </Col>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/jobs">
+                      <CardView
+                        cardText={"Pending Job Applications"}
+                        cardTitle={"Pending Job Applications"}
+                        icon={"fa fa-tasks"}
+                        countNumber={jobsCount}
+                      />
+                    </Link>
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/withdraw-requests">
-                  <CardView
-                    cardText={"Last 7 Days Withdraw Requests"}
-                    cardTitle={"Withdraw Requests"}
-                    icon={"fa fa-server"}
-                    countNumber={withdrawReqCount}
-                  />
-                </Link>
-              </Col>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/withdraw-requests">
+                      <CardView
+                        cardText={"Last 7 Days Withdraw Requests"}
+                        cardTitle={"Withdraw Requests"}
+                        icon={"fa fa-server"}
+                        countNumber={withdrawReqCount}
+                      />
+                    </Link>
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/withdraw-requests">
-                  <CardView
-                    cardText={"Pending Withdraw Requests"}
-                    cardTitle={"Withdraw Requests"}
-                    icon={"fa fa-server"}
-                    countNumber={withdrawReqCountValue}
-                  />
-                </Link>
-              </Col>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/withdraw-requests">
+                      <CardView
+                        cardText={"Pending Withdraw Requests"}
+                        cardTitle={"Withdraw Requests"}
+                        icon={"fa fa-server"}
+                        countNumber={withdrawReqCountValue}
+                      />
+                    </Link>
+                  </Col>
 
-              <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                <Link to="/dashboard/users">
-                  <CardView
-                    cardText={"Signed up Users"}
-                    cardTitle={"24 hours Signed up Users"}
-                    icon={"fa fa-users"}
-                    countNumber={userSignUpCountValue}
-                  />
-                </Link>
-              </Col>
-            </Row>
-          </TabPane>
-          <TabPane tab="Metabase-Dasboard" key="2">
-            <Row style={rowStyle} gutter={0} justify="start">
-              <IframeCol>
-                <iframe
-                  src={this.state.metabaseUrl}
-                  frameborder="0"
-                  width="100%"
-                  allowtransparency
-                ></iframe>
-              </IframeCol>
-            </Row>
-          </TabPane>
-        </Tabs>
+                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                    <Link to="/dashboard/users">
+                      <CardView
+                        cardText={"Signed up Users"}
+                        cardTitle={"24 hours Signed up Users"}
+                        icon={"fa fa-users"}
+                        countNumber={userSignUpCountValue}
+                      />
+                    </Link>
+                  </Col>
+                </Row>
+              </TabPane>
+
+            }
+            {/* {isAllowed("metabase_details") && */}
+            <TabPane tab="Metabase-Dasboard Management" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl &&
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>}
+              </TableDemoStyle>
+            </TabPane>
+            {/* } */}
+          </Tabs>
+        </TableDemoStyle>
       </LayoutWrapper>
     );
   }

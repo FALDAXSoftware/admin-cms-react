@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Button,Icon } from 'antd';
+import { notification, Button, Icon } from 'antd';
 import { jobCategoryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import TableWrapper from "../../Tables/antTables/antTable.style";
@@ -8,6 +8,7 @@ import AddJobCatModal from './addJobCategoryModal';
 import EditJobCatModal from './editCategory';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { isAllowed } from '../../../helpers/accessControl';
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 
 const { logout } = authAction;
@@ -137,7 +138,11 @@ class JobCategory extends Component {
                 {jobCategoryTableInfos.map(tableInfo => (
                     <div key={tableInfo.value}>
                         <div style={{ "display": "inline-block", "width": "100%" }}>
-                            <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}><Icon type="plus"/>Add Category</Button>
+
+                            {isAllowed("add_job_category") &&
+                                <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}><Icon type="plus" />Add Category</Button>
+                            }
+
                             <AddJobCatModal
                                 showAddJobCatModal={showAddJobCatModal}
                                 closeAddModal={this._closeAddJobModal}
@@ -161,7 +166,7 @@ class JobCategory extends Component {
                         />
                     </div>
                 ))}
-           </TableDemoStyle>
+            </TableDemoStyle>
         );
     }
 }
