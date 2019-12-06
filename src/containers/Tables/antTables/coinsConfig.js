@@ -170,7 +170,7 @@ const columns = [
           "custody_wallet_address"
         )  
       }else{
-        renderCell(object, "TextCell", "is_active")
+        return renderCell(object, "TextCell", "is_active")
       }
     }
       

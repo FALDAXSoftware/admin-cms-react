@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
@@ -22,7 +21,6 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import {ExecutionUl} from "../common.style";
-import { parse } from "path";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
 const Option = Select.Option;
@@ -351,41 +349,9 @@ class TradeHistory extends Component {
                                 );
                               }
                             )}
-                            <li>
-                              <span className="ex_head">
-                                <b>Faldax Fees : </b>
-                              </span>
-                              <span className="ex_data">
-                                {parseFloat(record.faldax_fees).toFixed(8)}
-                              </span>
-                            </li>
-                            <li>
-                              <span className="ex_head">
-                                <b>Network Fees : </b>
-                              </span>
-                              <span className="ex_data">
-                                {parseFloat(record.network_fees).toFixed(8)}
-                              </span>
-                            </li>
                           </ExecutionUl>
                         ) : (
                           <ExecutionUl>
-                            <li>
-                              <span className="ex_head">
-                                <b>Faldax Fees : </b>
-                              </span>
-                              <span className="ex_data">
-                                {record.faldax_fees}
-                              </span>
-                            </li>
-                            <li>
-                              <span className="ex_head">
-                                <b>Network Fees : </b>
-                              </span>
-                              <span className="ex_data">
-                                {record.network_fees}
-                              </span>
-                            </li>
                           </ExecutionUl>
                         )}
                       </span>

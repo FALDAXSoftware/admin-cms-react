@@ -220,7 +220,7 @@ class EditableTable extends React.Component {
           ...item,
           ...row
         });
-        this.setState({ dataSource: newData, editingKey: "" });
+        this.setState({ dataSource: newData, editingKey: "" },()=>this._saveAll());
       } else {
         newData.push(row);
         this.setState({ dataSource: newData, editingKey: "" });
@@ -532,15 +532,6 @@ class EditableTable extends React.Component {
 
           <div>
             <Divider orientation="left">Notification Thresholds</Divider>
-            {/* <Tooltip title="Click this button and it will store all values."> */}
-            <div className="save-thresh-btn">
-              <Button type="primary"
-                onClick={this._saveAll}
-              >
-                Save ALL
-         </Button>
-            </div>
-            {/* </Tooltip> */}
             <EditableContext.Provider value={this.props.form}>
               <Table
                 className="isoLayoutContent"
