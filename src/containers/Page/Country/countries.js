@@ -22,6 +22,7 @@ import FaldaxLoader from "../faldaxLoader";
 import {ColWithMarginBottom} from "../common.style";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import Metabase from "./countriesMetabase"
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -350,6 +351,11 @@ class Countries extends Component {
                     )}
                 </div>
               ))}
+            </TableDemoStyle>
+          </TabPane>
+          <TabPane tab="Metabase-Country" key="metabase">
+            <TableDemoStyle>
+                <Metabase></Metabase>
             </TableDemoStyle>
           </TabPane>
         </Tabs>
