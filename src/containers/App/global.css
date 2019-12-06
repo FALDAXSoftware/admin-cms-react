@@ -483,6 +483,9 @@ html[dir='rtl'] .dz-hidden-input {
 .cty-search .ant-form-item-control,.news-search .ant-form-item-control{
   line-height: 0 !important;
 }
+.ant-form-item.news-search{
+  margin: 0;
+}
 
 .referral-container{
   margin:0 auto;

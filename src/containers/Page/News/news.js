@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import styled from "styled-components";

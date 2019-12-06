@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Input, Button, notification } from 'antd';
-import { connect } from 'react-redux';
+import { Tabs, Pagination, Input, notification } from 'antd';
+import { connect} from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
-import TableDemoStyle from '../../Tables/antTables/demo.style';
+import { withRouter} from "react-router-dom";
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
-
+var self;
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const Search = Input.Search;
@@ -56,11 +55,17 @@ class Referrals extends Component {
                 required: true // optional
             }
         });
+        self = this;
     }
+
+    static edit = id => {
+        console.log(self)
+        self.props.history.push("/dashboard/referral/" + id);
+  };
+
 
     componentDidMount = () => {
         this._getAllReferredAdmins();
-        // this._getContactDetails();
     }
 
     _getReferalPercentage = () => {
@@ -157,10 +162,6 @@ class Referrals extends Component {
         });
     }
 
-    _changeRow = (referral) => {
-        this.props.history.push('/dashboard/referral/' + referral.id)
-    }
-
     _onChangeFields(field, e) {
         let fields = this.state.fields;
         if (e.target.value.trim() == "") {
@@ -254,11 +255,6 @@ class Referrals extends Component {
                     />
                 </div>
                 <TableWrapper
-                    onRow={(record, rowIndex) => {
-                        return {
-                            onClick: () => { this._changeRow(record) },
-                        };
-                    }}
                     {...this.state}
                     columns={referralInfos[0].columns}
                     pagination={false}
@@ -284,8 +280,8 @@ class Referrals extends Component {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }), { logout })(Referrals);
+    }), { logout })(Referrals));

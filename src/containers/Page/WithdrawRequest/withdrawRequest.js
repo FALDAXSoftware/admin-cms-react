@@ -22,7 +22,7 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import DeclineActionModal from "./declineModal";
 import { Record } from "immutable";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";

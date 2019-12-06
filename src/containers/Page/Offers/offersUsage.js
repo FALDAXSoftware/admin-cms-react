@@ -19,7 +19,7 @@ import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { ExpireIpDateCell } from "../../../components/tables/helperCells";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 const OtherError = "Something went to wrong please try again after some time.";
 
 let { Option } = Select;
@@ -108,7 +108,6 @@ class OffersUsage extends Component {
       let [{ page, limit, searchData, searchFilter }, offerId] = [
         this.state,
         this.props.match.params.id,
-        searchData
       ];
       let response = await (
         await ApiUtils.offers(this.props.token).getOfferCodeHistory(

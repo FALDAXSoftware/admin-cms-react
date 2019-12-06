@@ -6,7 +6,6 @@ import Referrals from "./referrals";
 import ReferralPercentage from "./referralPercentage";
 import { isAllowed } from "../../../helpers/accessControl";
 const TabPane = Tabs.TabPane;
-
 class Referral extends React.Component {
   render() {
     return (

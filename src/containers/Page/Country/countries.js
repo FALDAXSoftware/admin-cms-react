@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import EditCountryModal from "./editCountryModal";
 import FaldaxLoader from "../faldaxLoader";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 

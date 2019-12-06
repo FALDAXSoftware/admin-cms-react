@@ -22,7 +22,7 @@ import authAction from "../../../redux/auth/actions";
 import SimpleReactValidator from "simple-react-validator";
 import ViewRequestModal from "./viewRequestModal";
 import RequestActionModal from "./requestActionModal";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
 

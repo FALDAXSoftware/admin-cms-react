@@ -34,7 +34,7 @@ import offers from "../../containers/Page/Offers/offers";
 import styled from "styled-components";
 import { DeletedUsers } from "../../containers/Page/Users/deletedUsers";
 import { isAllowed } from "../../helpers/accessControl";
-import referral from "../../containers/Page/Referral/referral";
+import referrals from "../../containers/Page/Referral/referrals";
 
 //const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 const S3BucketImageURL =
@@ -1216,7 +1216,7 @@ const referralActionCell = value => (
     <Icon
       type="info-circle"
       style={{ marginLeft: "10px", cursor: "pointer" }}
-      onClick={() => referral.edit(value)}
+      onClick={() => referrals.edit(value)}
     />
   </Tooltip>
 );

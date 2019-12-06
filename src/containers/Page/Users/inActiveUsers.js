@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import ColWithMarginBottom from "../common.style";
+import {ColWithMarginBottom} from "../common.style";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
