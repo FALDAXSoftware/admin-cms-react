@@ -131,6 +131,29 @@ const columns = [
     sorter: true,
     render: object => renderCell(object, "TextCell", "order_id")
   },
+  {
+    title: <IntlMessages id="tradeTable.title.order_id" />,
+    key: "order_id",
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, "TextCell", "order_id")
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.network_fees" />,
+    key: "network_fees",
+    width: 100,
+    dataIndex:"network_fees",
+    sorter: true,
+    render: object => (<span>{parseFloat(object).toFixed(8)}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.faldax_fees" />,
+    key: "faldax_fees",
+    dataIndex:"faldax_fees",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{parseFloat(object).toFixed(8)}</span>)
+  },
   // {
   //   title: <IntlMessages id="tradeTable.title.execution_report" />,
   //   key: "execution_report",

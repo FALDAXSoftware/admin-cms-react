@@ -485,6 +485,8 @@
   "transactionTable.title.created_at": "Created On",
   "tradeTable.title.payment_id": "Payment ID",
   "tradeTable.title.quote_id": "Quote ID",
+  "tradeTable.title.faldax_fees":"Faldax Fees",
+  "tradeTable.title.network_fees":"Network Fees",
   "tradeTable.title.address": "Wallet Address",
   "tradeTable.title.crypto": "Crypto",
   "tradeTable.title.simplex_payment_status": "Simplex Status",
