@@ -4,6 +4,7 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell, DateCell, JobActionCell, JobSwitchCell, JobButtonCell, LocationCell
 } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, title = null, loc = null, desc = null, jobDesc = null,
     cat = null, active = null, categoryName = null) => {
@@ -61,8 +62,14 @@ const columns = [{
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
     width: 200,
-    render: object => renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
+    render: object =>{
+        if (isAllowed("update_job")) {
+            return renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
         'short_desc', 'job_desc', 'category_id', 'is_active', 'category')
+        } else {
+            return renderCell(object, 'TextCell', 'is_active')
+        }
+    } 
 }, {
     title: <IntlMessages id="jobTable.title.app" />,
     key: 'button',

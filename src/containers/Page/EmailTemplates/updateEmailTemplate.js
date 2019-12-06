@@ -7,6 +7,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { Link } from 'react-router-dom';
 import CKEditor from "ckeditor4-react";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 
@@ -197,11 +198,13 @@ class UpdateEmailTemplate extends Component {
                             {'The content field is required.'}
                         </span>}
                     </div>
-                    <Row>
-                        <Col>
-                            <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
-                        </Col>
-                    </Row>
+                    {isAllowed("update_email_template") &&
+                        <Row>
+                            <Col>
+                                <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
+                            </Col>
+                        </Row>
+                    }
                     {loader && <FaldaxLoader />}
                 </Form>
             </div>

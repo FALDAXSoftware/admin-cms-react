@@ -6,6 +6,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { Link } from 'react-router-dom';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 
@@ -192,11 +193,13 @@ class EditTier extends Component {
                             </span>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col>
-                            <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
-                        </Col>
-                    </Row>
+                    {isAllowed("update_tier_list") &&
+                        <Row>
+                            <Col>
+                                <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>
+                            </Col>
+                        </Row>
+                    }
                 </Form>
                 {loader && <FaldaxLoader />}
             </div >

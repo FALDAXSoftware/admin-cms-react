@@ -6,6 +6,7 @@ import authAction from "../../../redux/auth/actions";
 import styled from "styled-components";
 import { BUCKET_URL } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const { logout } = authAction;
 
@@ -169,7 +170,7 @@ class UserWallets extends Component {
                                     <Card
                                         title={coinTitle}
                                         actions={[
-                                            wallet.send_address == "" && wallet.send_address == "" ? (
+                                            wallet.send_address == "" && wallet.send_address == "" && isAllowed("create_wallet") ? (
                                                 <Button
                                                     type="primary"
                                                     onClick={this._createUserWallet.bind(this, wallet)}

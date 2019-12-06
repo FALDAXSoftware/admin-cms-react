@@ -1,60 +1,67 @@
 import React from 'react';
-import { Table, Input, Form,Popconfirm,InputNumber,Button, Checkbox, notification, Divider } from 'antd';
+import { Table, Input, Form, Popconfirm, InputNumber, Button, Checkbox, notification, Divider } from 'antd';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
-import {messages} from '../../../helpers/messages'
+import { isAllowed } from '../../../helpers/accessControl';
+import { messages } from '../../../helpers/messages'
+import styled from 'styled-components';
+
+const SaveBtn = styled(Button)`
+    float: right;
+    margin: 10px !important;
+`
 const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
 
 const EditableContext = React.createContext();
 const { logout } = authAction;
 
 class EditableCell extends React.Component {
-    getInput = () => {
-      if (this.props.inputType === 'number') {
-        return <InputNumber />;
-      }
-      return <Input/>;
-    };
+  getInput = () => {
+    if (this.props.inputType === 'number') {
+      return <InputNumber />;
+    }
+    return <Input />;
+  };
 
-    renderCell = ({ getFieldDecorator }) => {
-      const {
-        editing,
-        dataIndex,
-        title,
-        inputType,
-        record,
-        index,
-        children,
-        ...restProps
-      } = this.props;
-      return (
-        <td {...restProps}>
-          {editing ? (
-            <Form.Item style={{ margin: 0 }}>
-              {getFieldDecorator(dataIndex, {
-                rules: [
-                    {
-                        pattern: regEx,
-                        message: "Please Enter Valid Positive Number"
-                    },
-                ],
-                initialValue: (parseFloat(record[dataIndex])||undefined),
-              })(this.getInput())}
-            </Form.Item>
-          ) : (
+  renderCell = ({ getFieldDecorator }) => {
+    const {
+      editing,
+      dataIndex,
+      title,
+      inputType,
+      record,
+      index,
+      children,
+      ...restProps
+    } = this.props;
+    return (
+      <td {...restProps}>
+        {editing ? (
+          <Form.Item style={{ margin: 0 }}>
+            {getFieldDecorator(dataIndex, {
+              rules: [
+                {
+                  pattern: regEx,
+                  message: "Please Enter Valid Positive Number"
+                },
+              ],
+              initialValue: (parseFloat(record[dataIndex]) || undefined),
+            })(this.getInput())}
+          </Form.Item>
+        ) : (
             children
           )}
-        </td>
-      );
-    };
-  
-    render() {
-      return <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>;
-    }
+      </td>
+    );
+  };
+
+  render() {
+    return <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>;
   }
+}
 
 class EditableTable extends React.Component {
   constructor(props) {
@@ -93,7 +100,7 @@ class EditableTable extends React.Component {
               key={record.coin_id}
               checked={record.is_email_notification}
               onChange={this._checkEmail.bind(this, record)}
-              disabled={(this.state.editingKey!=record.coin_id)}
+              disabled={(this.state.editingKey != record.coin_id)}
             >
               Email{text}
             </Checkbox>
@@ -109,7 +116,7 @@ class EditableTable extends React.Component {
               key={record.coin_id}
               checked={record.is_sms_notification}
               onChange={this._checkSMS.bind(this, record)}
-              disabled={(this.state.editingKey!=record.coin_id)}
+              disabled={(this.state.editingKey != record.coin_id)}
             >
               SMS
             </Checkbox>
@@ -141,13 +148,13 @@ class EditableTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <a
-              disabled={editingKey !== ""}
-              onClick={() => this.edit(record.coin_id)}
-            >
-              Edit
+              <a
+                disabled={editingKey !== ""}
+                onClick={() => this.edit(record.coin_id)}
+              >
+                Edit
             </a>
-          );
+            );
         }
       }
     ];
@@ -159,38 +166,38 @@ class EditableTable extends React.Component {
     this.setState({ editingKey: "" });
   };
 
-  isValidRow=(data)=>{
+  isValidRow = (data) => {
 
-    let {fist_limit,second_limit,third_limit}=data;
+    let { fist_limit, second_limit, third_limit } = data;
     if (fist_limit && second_limit && third_limit) {
       if (parseFloat(fist_limit) > parseFloat(second_limit)) {
         if (parseFloat(second_limit) > parseFloat(third_limit)) {
           return true;
         } else {
-          this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_gt_third_limit})
+          this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.second_gt_third_limit })
           return false;
         }
       } else {
-        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_gt_second_limit})
+        this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.first_gt_second_limit })
       }
     } else if (fist_limit && second_limit) {
       if (parseFloat(fist_limit) > parseFloat(second_limit)) {
         return true;
       } else {
-        this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_gt_second_limit})
+        this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.first_gt_second_limit })
         return false;
       }
     } else if (fist_limit && third_limit) {
-      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.second_required})
+      this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.second_required })
       return false;
     } else if (second_limit && third_limit) {
-      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_required})
+      this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.first_required })
       return false;
     } else if (second_limit) {
-      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_required})
+      this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.first_required })
       return false
-    }else if(third_limit){
-      this.setState({errMsg:true,errType:'error',errMessage:messages.notification.thresh_hold.first_second_required})
+    } else if (third_limit) {
+      this.setState({ errMsg: true, errType: 'error', errMessage: messages.notification.thresh_hold.first_second_required })
       return false;
     } else {
       return true;
@@ -202,8 +209,8 @@ class EditableTable extends React.Component {
       if (error) {
         return;
       }
-      if(!this.isValidRow(row)){
-        return 
+      if (!this.isValidRow(row)) {
+        return
       }
       const newData = [...this.state.dataSource];
       const index = newData.findIndex(item => key === item.coin_id);
@@ -222,7 +229,7 @@ class EditableTable extends React.Component {
   }
 
   edit(key) {
-    console.log("key",key)
+    console.log("key", key)
     this.setState({ editingKey: key });
   }
 
@@ -269,7 +276,7 @@ class EditableTable extends React.Component {
     _this.setState({ loader: true });
     ApiUtils.getAdminThresholds(token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ dataSource: res.data });
         } else if (res.status == 403) {
@@ -305,7 +312,7 @@ class EditableTable extends React.Component {
     _this.setState({ loader: true });
     ApiUtils.getAdminContactDetails(token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ fields: res.data.value });
         } else if (res.status == 403) {
@@ -456,87 +463,97 @@ class EditableTable extends React.Component {
       }
     };
     const columns = this.columns.map(col => {
-        if (!col.editable) {
-          return col;
-        }
-        return {
-          ...col,
-          onCell: record => ({
-            record,
-            inputType: col.dataIndex === 'age' ? 'number' : 'text',
-            dataIndex: col.dataIndex,
-            title: col.title,
-            editing: this.isEditing(record),
-          }),
-        };
-      });
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          inputType: col.dataIndex === 'age' ? 'number' : 'text',
+          dataIndex: col.dataIndex,
+          title: col.title,
+          editing: this.isEditing(record),
+        }),
+      };
+    });
 
     return (
       <div>
-        <Divider orientation="left">Contact Information</Divider>
-        <div className="isoLayoutContent" style={{ marginTop: "10px" }}>
-          <span>
-            <b>Email Address</b>
-          </span>
-          <Input
-            placeholder="Email Address"
-            style={{ marginBottom: "15px", display: "inherit" }}
-            onChange={this._handleChange.bind(this, "email")}
-            value={fields["email"]}
-          />
-          <span className="field-error">
-            {this.validator.message(
-              "Email Address",
-              fields["email"],
-              "required"
-            )}
-          </span>
+        {isAllowed("get_admin_thresholds_contacts") &&
+          <div>
 
-          <span>
-            <b>Phone Number</b>
-          </span>
-          <Input
-            placeholder="Phone Number"
-            style={{ marginBottom: "15px", display: "inherit" }}
-            onChange={this._handleChange.bind(this, "phone")}
-            value={fields["phone"]}
-          />
-          <span className="field-error">
-            {this.validator.message(
-              "Phone Number",
-              fields["phone"],
-              "required"
-            )}
-          </span>
-          <Button
-            onClick={this._storeContactDetails}
-            htmlType="submit"
-            type="primary"
-          >
-            Submit
-          </Button>
-        </div>
+            <Divider orientation="left">Contact Information</Divider>
+            <div className="isoLayoutContent" style={{ marginTop: "10px" }}>
+              <span>
+                <b>Email Address</b>
+              </span>
+              <Input
+                placeholder="Email Address"
+                style={{ marginBottom: "15px", display: "inherit" }}
+                onChange={this._handleChange.bind(this, "email")}
+                value={fields["email"]}
+              />
+              <span className="field-error">
+                {this.validator.message(
+                  "Email Address",
+                  fields["email"],
+                  "required"
+                )}
+              </span>
 
-        <Divider orientation="left">Notification Thresholds</Divider>
-        {/* <Tooltip title="Click this button and it will store all values."> */}
-        <div className="save-thresh-btn">
-          <Button type="primary"
-            onClick={this._saveAll}
-          >
-            Save ALL
+              <span>
+                <b>Phone Number</b>
+              </span>
+              <Input
+                placeholder="Phone Number"
+                style={{ marginBottom: "15px", display: "inherit" }}
+                onChange={this._handleChange.bind(this, "phone")}
+                value={fields["phone"]}
+              />
+              <span className="field-error">
+                {this.validator.message(
+                  "Phone Number",
+                  fields["phone"],
+                  "required"
+                )}
+              </span>
+              <Button
+                onClick={this._storeContactDetails}
+                htmlType="submit"
+                type="primary"
+              >
+                Submit
           </Button>
-        </div>
-        {/* </Tooltip> */}
-        <EditableContext.Provider value={this.props.form}>
-          <Table
-            className="isoLayoutContent"
-            components={components}
-            bordered
-            dataSource={dataSource}
-            columns={columns}
-            pagination={false}
-          />
-        </EditableContext.Provider>
+            </div>
+          </div>
+        }
+        {isAllowed("get_admin_thresholds") &&
+
+          <div>
+            <Divider orientation="left">Notification Thresholds</Divider>
+            {/* <Tooltip title="Click this button and it will store all values."> */}
+            <div className="save-thresh-btn">
+              <Button type="primary"
+                onClick={this._saveAll}
+              >
+                Save ALL
+         </Button>
+            </div>
+            {/* </Tooltip> */}
+            <EditableContext.Provider value={this.props.form}>
+              <Table
+                className="isoLayoutContent"
+                components={components}
+                bordered
+                dataSource={dataSource}
+                columns={columns}
+                pagination={false}
+              />
+            </EditableContext.Provider>
+          </div>
+        }
+
         {loader && <FaldaxLoader />}
       </div>
     );
@@ -544,6 +561,6 @@ class EditableTable extends React.Component {
 }
 
 export default connect(
-    state => ({
-        token: state.Auth.get('token')
-    }), { logout })(Form.create()(EditableTable));
+  state => ({
+    token: state.Auth.get('token')
+  }), { logout })(Form.create()(EditableTable));

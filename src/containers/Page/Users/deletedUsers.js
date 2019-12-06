@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithPadding from '../common.style';
+import ColWithMarginBottom from '../common.style';
 import CountryData from 'country-state-city';
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from '../../../helpers/globals';
 import { withRouter } from 'react-router-dom'
@@ -220,15 +220,15 @@ class DeletedUsers extends Component {
                                 <div tab={tableInfo.title} key={tableInfo.value}>
                                     <div style={{ "display": "inline-block", "width": "100%" }}>
                                         <Form onSubmit={this._searchUser}>
-                                            <Row>
-                                            <Col lg={7} xs={24}>
+                                            <Row type="flex" justify="end">
+                                            <ColWithMarginBottom lg={7} xs={24}>
                                                     <Input
                                                         placeholder="Search users"
                                                         onChange={this._changeSearch.bind(this)}
                                                         value={searchUser}
                                                     />
-                                                </Col>
-                                                <Col lg={7} xs={24}>
+                                                </ColWithMarginBottom>
+                                                <ColWithMarginBottom lg={7} xs={24}>
                                                     <Select
                                                         getPopupContainer={trigger => trigger.parentNode}
                                                         placeholder="Select a country"
@@ -239,28 +239,28 @@ class DeletedUsers extends Component {
                                                             return <Option key={country.id} value={country.name} >{country.name}</Option>
                                                         })}
                                                     </Select>
-                                                </Col>
-                                                <Col lg={3} xs={24}>
-                                                    <Button htmlType="submit" className="search-btn btn-full-width" type="primary" ><Icon type="search" />Search</Button>
-                                                </Col>
-                                                <Col lg={3} xs={24}>
-                                                    <Button className="search-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload" />Reset</Button>
-                                                </Col>
-                                                <Col xs={24} lg={3}>
+                                                </ColWithMarginBottom>
+                                                <ColWithMarginBottom lg={3} xs={24}>
+                                                    <Button htmlType="submit" className="filter-btn btn-full-width" type="primary" ><Icon type="search" />Search</Button>
+                                                </ColWithMarginBottom>
+                                                <ColWithMarginBottom lg={3} xs={24}>
+                                                    <Button className="filter-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload" />Reset</Button>
+                                                </ColWithMarginBottom>
+                                                <ColWithMarginBottom xs={24} lg={3}>
                                                     {allUsers && allUsers.length > 0 ?
                                                         <CSVLink
                                                             data={allUsers}
                                                             filename={'users.csv'}
                                                             headers={headers}
                                                         >
-                                                            <Button className="search-btn btn-full-width" type="primary"><Icon type="export" />Export</Button>
+                                                            <Button className="filter-btn btn-full-width" type="primary"><Icon type="export" />Export</Button>
                                                         </CSVLink> : ''}
-                                                </Col>
+                                                </ColWithMarginBottom>
                                             </Row>
                                         </Form>
                                     </div>
                                     {loader && <FaldaxLoader />}
-                                    <div style={{ marginTop: "30px" }} className="scroll-table">
+                                    <div className="scroll-table float-clear">
                                         <TableWrapper
                                             {...this.state}
                                             columns={tableInfo.columns}

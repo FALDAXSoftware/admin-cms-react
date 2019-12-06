@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Tabs, Pagination,Icon, notification, Button, Modal } from "antd";
+import { Input, Tabs, Pagination, Icon, notification, Button, Modal } from "antd";
 import { jobsTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -13,6 +13,7 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import JobCategory from "./jobsCategory";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -51,7 +52,9 @@ class Jobs extends Component {
 
   componentDidMount = () => {
     this._getAllJobs();
-    this._getAllJobCategories();
+    if (isAllowed("get_job_categories")) {
+      this._getAllJobCategories();
+    }
   };
 
   static jobStatus(
@@ -187,7 +190,7 @@ class Jobs extends Component {
     _this.setState({ loader: true });
     ApiUtils.getAllJobs(page, limit, token, searchJob, sorterCol, sortOrder)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allJobs: res.data, allJobsCount: res.allJobsCount });
         } else if (res.status == 403) {
@@ -218,7 +221,7 @@ class Jobs extends Component {
 
     ApiUtils.getAllJobCategories(token, true)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allJobCategories: res.data });
         } else if (res.status == 403) {
@@ -263,7 +266,7 @@ class Jobs extends Component {
     this.setState({ loader: true });
     ApiUtils.deleteJob(deleteJobId, token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             deleteJobId: "",
@@ -361,13 +364,16 @@ class Jobs extends Component {
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
               <div style={{ display: "inline-block", width: "100%" }}>
-                <Button
-                  type="primary"
-                  style={{ marginBottom: "15px", float: "left" }}
-                  onClick={this._showAddJobModal}
-                ><Icon type="plus"/>
-                  Add Job
+                {isAllowed("add_job") && isAllowed("get_job_categories") &&
+
+                  <Button
+                    type="primary"
+                    style={{ marginBottom: "15px", float: "left" }}
+                    onClick={this._showAddJobModal}
+                  ><Icon type="plus" />
+                    Add Job
                 </Button>
+                }
                 <AddJobModal
                   showAddJobModal={showAddJobModal}
                   closeAddModal={this._closeAddJobModal}
@@ -432,14 +438,16 @@ class Jobs extends Component {
                   pageSizeOptions={pageSizeOptions}
                 />
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </TableDemoStyle>
           </TabPane>
+          {isAllowed("get_job_categories") &&
 
-          <TabPane tab="Job Category" key="2">
-            {activeTab == 2 && <JobCategory />}
-          </TabPane>
+            <TabPane tab="Job Category" key="2">
+              {activeTab == 2 && <JobCategory />}
+            </TabPane>
+          }
         </Tabs>
       </LayoutWrapper>
     );
