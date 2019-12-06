@@ -14,6 +14,7 @@ import authAction from "../../../redux/auth/actions";
 import JobCategory from "./jobsCategory";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
+import Metabase from "./jobsMetabase"
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -448,6 +449,11 @@ class Jobs extends Component {
               {activeTab == 2 && <JobCategory />}
             </TabPane>
           }
+        <TabPane tab="Metabase-Careers" key="metabase">
+            <TableDemoStyle>
+                <Metabase></Metabase>
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );

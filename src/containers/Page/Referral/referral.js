@@ -5,6 +5,7 @@ import { Tabs } from "antd";
 import Referrals from "./referrals";
 import ReferralPercentage from "./referralPercentage";
 import { isAllowed } from "../../../helpers/accessControl";
+import ReferralMetabase from "./referalMetabase";
 const TabPane = Tabs.TabPane;
 class Referral extends React.Component {
   render() {
@@ -25,6 +26,11 @@ class Referral extends React.Component {
               </TableDemoStyle>
             </TabPane>
           }
+           < TabPane tab="Metabase-Referral" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                <ReferralMetabase></ReferralMetabase>
+              </TableDemoStyle>
+            </TabPane>
         </Tabs>
       </LayoutWrapper >
     )

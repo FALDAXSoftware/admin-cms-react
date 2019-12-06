@@ -3964,6 +3964,96 @@ const ApiUtils = {
           console.log("api middle-ware issue", error);
         }
       },
+      getReferralMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-referral-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getAssetsMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-assets-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getBatchMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-batch-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getCareerMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-career-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getCountryMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-country-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getEmployeeMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-employee-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getFeesMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-fees-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getHistoryMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-history-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
+      getKycMetabaseUrl:function(){
+        try {
+          return fetch(`${API_URL}${this.url}get-kyc-report`, {
+            method: 'GET',
+            headers: this.headers
+          })
+        } catch (error) {
+          console.log("api middle-ware issue", error);
+        }
+      },
     }
   }
 };
