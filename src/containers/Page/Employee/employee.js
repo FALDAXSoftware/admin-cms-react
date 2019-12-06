@@ -12,6 +12,7 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
+import Metabase from './employeeMetabase'
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -434,6 +435,11 @@ class Employees extends Component {
                   </Modal>
                 )}
               </div>
+            </TableDemoStyle>
+          </TabPane>
+          <TabPane tab="Metabase-Employee" key="metabase">
+            <TableDemoStyle>
+                <Metabase></Metabase>
             </TableDemoStyle>
           </TabPane>
         </Tabs>

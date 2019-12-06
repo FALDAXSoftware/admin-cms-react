@@ -20,6 +20,7 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
+import AssetsMetabase from "./assetsMetabase";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -415,6 +416,11 @@ class Assets extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
+          <TabPane tab="Assets-Metabase" key="metabase">
+            <TableDemoStyle>
+              <AssetsMetabase></AssetsMetabase>
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
       </LayoutWrapper>
     );
