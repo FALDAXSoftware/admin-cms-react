@@ -118,7 +118,7 @@ export default class extends Component {
             </div>
 
             <div className="isoResetPassForm">
-            <Form onSubmit={this._resetPassword}>
+            <Form onSubmit={(e)=>this._resetPassword(e)}>
               <div className="isoInputWrapper">
                 <Input
                   size="large"
