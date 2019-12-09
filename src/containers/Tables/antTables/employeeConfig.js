@@ -37,34 +37,34 @@ const columns = [
     {
         title: <IntlMessages id="antTable.title.details" />,
         key: 'action',
-        width: 200,
+        width: 150,
         render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
             'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     },
     {
         title: <IntlMessages id="antTable.title.name" />,
         key: 'first_name',
-        width: 100,
+        width: 150,
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'first_name')
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
         key: 'email',
-        width: 200,
+        width: 150,
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
     },
     {
         title: <IntlMessages id="antTable.title.role" />,
         key: 'role',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'role')
+        width: 150,
+        render: (object)=>(<a href={"access-grant/"+object.role_id}>{object['role']}</a>)
     },
     {
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
-        width: 200,
+        width: 150,
         render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'first_name', 'last_name',
             'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     }

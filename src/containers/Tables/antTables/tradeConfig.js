@@ -132,13 +132,6 @@ const columns = [
     render: object => renderCell(object, "TextCell", "order_id")
   },
   {
-    title: <IntlMessages id="tradeTable.title.order_id" />,
-    key: "order_id",
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, "TextCell", "order_id")
-  },
-  {
     title: <IntlMessages id="tradeTable.title.network_fees" />,
     key: "network_fees",
     width: 100,

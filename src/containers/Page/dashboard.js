@@ -682,7 +682,7 @@ class Dashboard extends Component {
 
             }
             {/* {isAllowed("metabase_details") && */}
-            <TabPane tab="Metabase-Dasboard Management" key="metabase">
+            <TabPane tab="Metabase-Dashboard Management" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl &&
                   <IframeCol>
