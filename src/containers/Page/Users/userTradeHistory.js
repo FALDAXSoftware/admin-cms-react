@@ -210,7 +210,7 @@ class UserTradeHistory extends Component {
               <div>
                 <div style={{ display: "inline-block", width: "100%" }}>
                   <Form onSubmit={this._searchTrade}>
-                    <Row>
+                    <Row type="flex" justify="end">
                       <ColWithPadding sm={8}>
                         <Input
                           placeholder="Search trades"
@@ -236,7 +236,7 @@ class UserTradeHistory extends Component {
                           className="filter-btn btn-full-width"
                           type="primary"
                         >
-                         <Icon type="search">Search</Icon>
+                         <Icon type="search"></Icon>Search
                         </Button>
                       </ColWithPadding>
                       <ColWithPadding xs={12} sm={3}>
@@ -246,7 +246,7 @@ class UserTradeHistory extends Component {
                           onClick={this._resetFilters}
                           style={{ margin: "0px" }}
                         >
-                          <Icon type="search">Search</Icon>Reset
+                          <Icon type="reload"></Icon>Reset
                         </Button>
                       </ColWithPadding>
                       <ColWithPadding xs={12} sm={3}>

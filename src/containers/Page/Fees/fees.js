@@ -12,6 +12,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import NetworkFee from '../NetworkFee/networkFee'
 import { isAllowed } from '../../../helpers/accessControl';
+import Metabase from './feesMetabase'
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -473,6 +474,13 @@ class Fees extends Component {
               </TableDemoStyle>
             </TabPane>
           }
+
+        <TabPane tab="Metabase-Fees Management" key="5">
+              <TableDemoStyle className="isoLayoutContent">
+                <Metabase/>
+                {/* {loader && <FaldaxLoader />} */}
+              </TableDemoStyle>
+            </TabPane>
         </Tabs>
       </LayoutWrapper>
     );
