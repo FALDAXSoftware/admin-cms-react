@@ -509,3 +509,7 @@ html[dir='rtl'] .dz-hidden-input {
   height: calc(100vh - 326px);
     min-height: 500px;
 }
+
+.btn-back{
+  margin: 0px 10px;
+}

@@ -3812,7 +3812,7 @@ const ApiUtils = {
       // get campaign details api
       getById: function (campaign_id) {
         try {
-          return fetch(API_URL + "/admin/campaigns/get/" + campaign_id, {
+          return fetch(API_URL + "/admin/campaigns/get?id=" + campaign_id, {
             method: "GET",
             headers: this.headers
           });
@@ -3837,7 +3837,7 @@ const ApiUtils = {
           formData.append("data", data);
           formData.append("limit", limit);
           formData.append("action_type", action_type);
-          return fetch(`${API_URL}${this.url}offercode-used/${offerId}`, {
+          return fetch(`${API_URL}${this.url}offercode-used?id=${offerId}`, {
             method: 'POST',
             headers: this.headers,
             body: formData
@@ -4037,16 +4037,6 @@ const ApiUtils = {
       getHistoryMetabaseUrl:function(){
         try {
           return fetch(`${API_URL}${this.url}get-history-report`, {
-            method: 'GET',
-            headers: this.headers
-          })
-        } catch (error) {
-          console.log("api middle-ware issue", error);
-        }
-      },
-      getKycMetabaseUrl:function(){
-        try {
-          return fetch(`${API_URL}${this.url}get-kyc-report`, {
             method: 'GET',
             headers: this.headers
           })
