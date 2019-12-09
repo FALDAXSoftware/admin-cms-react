@@ -353,7 +353,7 @@ class Countries extends Component {
               ))}
             </TableDemoStyle>
           </TabPane>
-          <TabPane tab="Metabase-Country" key="metabase">
+          <TabPane tab="Metabase-Country Management" key="metabase">
             <TableDemoStyle>
                 <Metabase></Metabase>
             </TableDemoStyle>

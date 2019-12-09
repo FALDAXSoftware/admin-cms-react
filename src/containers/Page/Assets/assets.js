@@ -416,7 +416,7 @@ class Assets extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
-          <TabPane tab="Assets-Metabase" key="metabase">
+          <TabPane tab="Metabase-Assets Management" key="metabase">
             <TableDemoStyle>
               <AssetsMetabase></AssetsMetabase>
             </TableDemoStyle>

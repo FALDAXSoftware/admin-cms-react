@@ -437,7 +437,7 @@ class Employees extends Component {
               </div>
             </TableDemoStyle>
           </TabPane>
-          <TabPane tab="Metabase-Employee" key="metabase">
+          <TabPane tab="Metabase-Employee Management" key="metabase">
             <TableDemoStyle>
                 <Metabase></Metabase>
             </TableDemoStyle>
