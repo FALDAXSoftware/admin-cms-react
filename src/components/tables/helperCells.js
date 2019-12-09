@@ -2717,13 +2717,14 @@ const CampaignActionCell = (value,
   campaign_deleted_at) => {
   return (
     <React.Fragment>
-      <Tooltip title="View">
+      {isAllowed('get_campaigns') &&<Tooltip title="View">
         <Icon
           type="info-circle"
           style={{ marginLeft: "10px", cursor: "pointer" }}
           onClick={() => offers.view(campaign_id)}
         />
       </Tooltip>
+      }
       {/* <Tooltip title="Delete">
         <Icon
           type="delete"
@@ -2739,13 +2740,14 @@ const CampaignActionCell = (value,
             campaign_deleted_at,)}
         />
       </Tooltip> */}
-      <Tooltip title="Edit">
+     { isAllowed('update_campaigns') && <Tooltip title="Edit">
         <Icon
           type="edit"
           style={{ marginLeft: "10px", cursor: "pointer" }}
           onClick={() => offers.edit(campaign_id)}
         />
       </Tooltip>
+     }
     </React.Fragment>
   );
 };
@@ -2760,6 +2762,7 @@ const CampaignSwitchCell = (
       checkedChildren="Active"
       unCheckedChildren="Inactive"
       size="large"
+      disabled={!isAllowed('change_campaign_status')}
       onChange={() =>
         offers.changeState(campaign_id, campaign_is_active, campaign_label)
       }

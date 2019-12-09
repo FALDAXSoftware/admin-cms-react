@@ -449,7 +449,7 @@ class Jobs extends Component {
               {activeTab == 2 && <JobCategory />}
             </TabPane>
           }
-        <TabPane tab="Metabase-Careers" key="metabase">
+        <TabPane tab="Metabase-Careers Management" key="metabase">
             <TableDemoStyle>
                 <Metabase></Metabase>
             </TableDemoStyle>

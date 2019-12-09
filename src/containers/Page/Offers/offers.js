@@ -12,6 +12,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -213,21 +214,28 @@ class Offers extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
+        <Tabs
+          className="isoTableDisplayTab full-width"
+          onChange={this.onChangeTabs}
+        >
           {tblOffers.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
-                <Button
-                  type="primary"
-                  style={{ marginBottom: "15px", float: "left" }}
-                  onClick={() =>
-                    this.props.history.push("/dashboard/campaign/add-campaign")
-                  }
-                >
-                  {" "}
-                  <Icon type="plus" />
-                  Add Campaign
-                </Button>
+                {isAllowed("create_campaigns") && (
+                  <Button
+                    type="primary"
+                    style={{ marginBottom: "15px", float: "left" }}
+                    onClick={() =>
+                      this.props.history.push(
+                        "/dashboard/campaign/add-campaign"
+                      )
+                    }
+                  >
+                    {" "}
+                    <Icon type="plus" />
+                    Add Campaign
+                  </Button>
+                )}
                 {loader && <Loader />}
                 <div className="float-clear">
                   <TableWrapper
@@ -251,8 +259,8 @@ class Offers extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                      ""
-                    )}
+                    ""
+                  )}
                   {
                     <ConfirmDeleteModalComponent
                       visible={showDeleteModal}
@@ -266,7 +274,7 @@ class Offers extends Component {
           ))}
           <TabPane tab="Metabase-Offers Management" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
+              {metabaseUrl && (
                 <IframeCol>
                   <iframe
                     src={metabaseUrl}
@@ -274,7 +282,8 @@ class Offers extends Component {
                     width="100%"
                     allowtransparency
                   ></iframe>
-                </IframeCol>}
+                </IframeCol>
+              )}
             </TableDemoStyle>
           </TabPane>
         </Tabs>
