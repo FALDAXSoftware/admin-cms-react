@@ -41,11 +41,6 @@ const AccessGrant = (props) => {
                 })
                 setPermissions(resPermissions)
                 setRole(res.roleValue)
-                setError({
-                    errType: "Success",
-                    errMessage: res.message,
-                    showError: true
-                })
             } else if (res.status == 403) {
                 setError({
                     errType: "Error",

@@ -1716,7 +1716,7 @@ const CoinActionCell = (
         </Tooltip>
       }
       {isAllowed("wallet_details") &&
-        <Tooltip>
+        <Tooltip title="Wallet">
           <Icon
             type="wallet"
             style={{ marginLeft: "10px", cursor: "pointer" }}
