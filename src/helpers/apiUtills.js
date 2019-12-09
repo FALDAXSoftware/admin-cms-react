@@ -3796,14 +3796,14 @@ const ApiUtils = {
       changeStatus: function (id, status = false) {
         let formData = new FormData();
         formData.append("status", status);
-        return fetch(`${API_URL}${this.url}change-status/${id}`, {
+        return fetch(`${API_URL}${this.url}change-status?id=${id}`, {
           method: "PUT",
           headers: this.headers,
           body: formData
         });
       },
       updateCampaign: function (id, data) {
-        return fetch(`${API_URL}${this.url}update/${id}`, {
+        return fetch(`${API_URL}${this.url}update?id=${id}`, {
           method: "PUT",
           headers: this.headers,
           body: JSON.stringify(data)
