@@ -356,7 +356,7 @@ class Assets extends Component {
                 <Search
                   placeholder="Search assets"
                   onSearch={value => this._searchCoin(value)}
-                  style={{ float: "right", width: "250px" }}
+                  style={{ marginBottom: "15px",float: "right", width: "250px" }}
                   enterButton
                 />
 

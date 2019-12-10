@@ -265,7 +265,6 @@ class EmployeeWhitelist extends Component {
         }
 
         return (
-            <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <span>Whitelist:</span>
                     <StatusSwitch checked={isWhitelist} onChange={this.onClickOpenPermanentIpModal} />
@@ -330,7 +329,6 @@ class EmployeeWhitelist extends Component {
                         </div>
                     }
                 </TableDemoStyle>
-            </LayoutWrapper >
         );
     }
 }
