@@ -1780,7 +1780,7 @@ const RolesActionCell = (
         </Tooltip>
       }
       {isAllowed("get_role_value") &&
-        <Tooltip title="Access Grant">
+        <Tooltip title="Permissions">
           <Icon
             type="sliders"
             style={{ marginLeft: "10px", cursor: "pointer" }}

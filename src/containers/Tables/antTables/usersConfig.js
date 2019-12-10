@@ -98,30 +98,30 @@ const columns = [{
 }, {
     title: <IntlMessages id="antTable.title.country" />,
     key: 'country',
-    width: 200,
+    width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="antTable.title.state" />,
     key: 'state',
-    width: 200,
+    width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'state')
 },
 {
     title: <IntlMessages id="antTable.title.zip" />,
     key: 'postal_code',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'TextCell', 'postal_code')
 },{
     title: <IntlMessages id="antTable.title.tier" />,
     key: 'account_tier',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {
     title: <IntlMessages id="antTable.title.numReferral" />,
     key: 'no_of_referrals',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
 }];
 
