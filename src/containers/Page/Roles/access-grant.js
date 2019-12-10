@@ -197,7 +197,7 @@ const AccessGrant = (props) => {
               </Row>
             }
           >
-            <TabPane tab="Access Grant" key="ag">
+            <TabPane tab="Permissions" key="ag">
               <Row>
                 <Col>
                   <Tooltip>

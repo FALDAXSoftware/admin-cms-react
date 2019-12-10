@@ -13,9 +13,7 @@ const Option = Select.Option;
 const { TextArea } = Input;
 
 const ParentDiv = styled.div`
-padding: 20px;
 background-color: white;
-margin: 30px !important;
 `
 
 class PersonalDetails extends Component {

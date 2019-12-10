@@ -3822,7 +3822,7 @@ const ApiUtils = {
       },
       checkOfferCode: function (offerCode = "") {
         try {
-          return fetch(`${API_URL}${this.url}verify-offercode/${offerCode}`, {
+          return fetch(`${API_URL}${this.url}verify-offercode?code=${offerCode}`, {
             method: 'GET',
             headers: this.headers
           })

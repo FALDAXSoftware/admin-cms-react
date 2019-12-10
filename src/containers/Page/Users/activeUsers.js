@@ -8,12 +8,10 @@ import {
   Select,
   Form,
   Modal,
-  Col,
   Icon
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
-import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
