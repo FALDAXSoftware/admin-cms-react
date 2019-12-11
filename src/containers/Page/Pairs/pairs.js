@@ -24,6 +24,7 @@ import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -311,13 +312,16 @@ class Pairs extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
+        <Tabs
+          className="isoTableDisplayTab full-width"
+          onChange={this.onChangeTabs}
+        >
           {pairsTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
                 <Form onSubmit={this._searchPair}>
-                  <Row>
-                    <ColWithMarginBottom sm={3}>
+                  <Row type="flex" justify="end">
+                    {isAllowed('add_pair')&&<ColWithMarginBottom sm={3}>
                       <Button
                         type="primary"
                         className="btn-full-width"
@@ -327,6 +331,7 @@ class Pairs extends Component {
                         Add Pair
                       </Button>
                     </ColWithMarginBottom>
+                    }
                     <ColWithMarginBottom sm={7}>
                       <Input
                         placeholder="Search pairs"
@@ -352,7 +357,7 @@ class Pairs extends Component {
                     <ColWithMarginBottom xs={12} sm={3}>
                       <Button
                         htmlType="submit"
-                        className="search-btn btn-full-width"
+                        className="filter-btn btn-full-width"
                         type="primary"
                       >
                         <Icon type="search" />
@@ -361,7 +366,7 @@ class Pairs extends Component {
                     </ColWithMarginBottom>
                     <ColWithMarginBottom xs={12} sm={3}>
                       <Button
-                        className="search-btn btn-full-width"
+                        className="filter-btn btn-full-width"
                         type="primary"
                         onClick={this._resetFilters}
                       >
@@ -412,26 +417,28 @@ class Pairs extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                      ""
-                    )}
+                    ""
+                  )}
                 </div>
               </TableDemoStyle>
             </TabPane>
           ))}
-
-          <TabPane tab="Metabase-Pairs Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_asset_report") && (
+            <TabPane tab="Metabase-Pairs Management" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

@@ -365,16 +365,16 @@ class Jobs extends Component {
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
               <div style={{ display: "inline-block", width: "100%" }}>
-                {isAllowed("add_job") && isAllowed("get_job_categories") &&
-
+                {isAllowed("add_job") && isAllowed("get_job_categories") && (
                   <Button
                     type="primary"
                     style={{ marginBottom: "15px", float: "left" }}
                     onClick={this._showAddJobModal}
-                  ><Icon type="plus" />
+                  >
+                    <Icon type="plus" />
                     Add Job
-                </Button>
-                }
+                  </Button>
+                )}
                 <AddJobModal
                   showAddJobModal={showAddJobModal}
                   closeAddModal={this._closeAddJobModal}
@@ -439,21 +439,22 @@ class Jobs extends Component {
                   pageSizeOptions={pageSizeOptions}
                 />
               ) : (
-                  ""
-                )}
+                ""
+              )}
             </TableDemoStyle>
           </TabPane>
-          {isAllowed("get_job_categories") &&
-
+          {isAllowed("get_job_categories") && (
             <TabPane tab="Job Category" key="2">
               {activeTab == 2 && <JobCategory />}
             </TabPane>
-          }
-        <TabPane tab="Metabase-Careers Management" key="metabase">
-            <TableDemoStyle>
+          )}
+          {isAllowed("metabase_career_report") && (
+            <TabPane tab="Metabase-Careers Management" key="metabase">
+              <TableDemoStyle>
                 <Metabase></Metabase>
-            </TableDemoStyle>
-          </TabPane>
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

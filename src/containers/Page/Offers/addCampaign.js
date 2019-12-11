@@ -198,7 +198,7 @@ class AddCampaign extends Component {
         
         this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):'',is_active:res.data.is_active});
         this.setState(fields);
-      }else if(res.status==401 || res.status==403){
+      }else if(res.status==400 || res.status==403){
         this.setState({errMsg:true,errType:"error",errMessage:res.message});  
       }
     }catch(error){

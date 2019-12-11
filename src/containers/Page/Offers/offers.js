@@ -272,20 +272,22 @@ class Offers extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
-          <TabPane tab="Metabase-Offers Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl && (
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>
-              )}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_offers_report") && (
+            <TabPane tab="Metabase-Offers Management" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );
