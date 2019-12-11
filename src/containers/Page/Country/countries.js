@@ -57,9 +57,7 @@ class Countries extends Component {
     const { token } = this.props;
 
     self.setState({ loader: true });
-    let message = is_active
-      ? "Country has been inactivated successfully."
-      : "Country has been activated successfully.";
+
     let formData = {
       id: value,
       legality,
@@ -73,7 +71,7 @@ class Countries extends Component {
       .then(res => {
         self.setState({
           errMsg: true,
-          errMessage: message,
+          errMessage: res.message,
           errType: "Success",
           loader: false
         });

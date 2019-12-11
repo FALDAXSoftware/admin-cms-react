@@ -79,17 +79,10 @@ class PersonalDetails extends Component {
       user_id: userDetails.id,
       email: userDetails.email
     };
-    let message;
 
     if (val == "is_active") {
       formData["is_active"] = !userDetails.is_active;
-      message = userDetails.is_active
-        ? "User has been inactivated successfully."
-        : "User has been activated successfully.";
     } else {
-      message = userDetails.is_verified
-        ? "User has been non verified successfully."
-        : "User has been verified successfully.";
       formData["is_verified"] = !userDetails.is_verified;
     }
 
@@ -102,13 +95,13 @@ class PersonalDetails extends Component {
           this._getUserDetail();
           this.setState({
             errMsg: true,
-            errMessage: message,
+            errMessage:res.message,
             errType: "Success",
             loader: false
           });
         } else if (res.status == 403) {
           this.setState(
-            { errMsg: true, errMessage: res.err, errType: "error" },
+            { errMsg: true, errMessage: res.message, errType: "error" },
             () => {
               this.props.logout();
             }

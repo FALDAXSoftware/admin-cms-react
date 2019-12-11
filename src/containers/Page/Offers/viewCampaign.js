@@ -112,7 +112,8 @@ const tableColumns = [
     key: "end_date",
     width:100,
     render: (end_date) => {
-    let [today,exp_date]=[moment().set({hour:0,minute:0,second:0,millisecond:0}),moment(end_date).set({hour:23,minute:59,second:59,millisecond:59})]
+    let [today,exp_date]=[moment().startOf('day'),moment(end_date).startOf('day')]
+    console.log(exp_date.diff(today, "days"))
     return <div>{(exp_date.diff(today, "days"))>-1?'':
     <span className="error-danger"><Icon type="info-circle" className="error-danger"/> Expired</span>}
     </div>;

@@ -111,9 +111,6 @@ class Assets extends Component {
     };
 
     self.setState({ loader: true });
-    let message = is_active
-      ? "Asset has been inactivated successfully."
-      : "Asset has been activated successfully.";
     ApiUtils.editCoin(token, formData)
       .then(res => res.json())
       .then(res => {
@@ -121,7 +118,7 @@ class Assets extends Component {
           self.setState({
             page: 1,
             errMsg: true,
-            errMessage: message,
+            errMessage: res.message,
             errType: "Success",
             loader: false
           });
