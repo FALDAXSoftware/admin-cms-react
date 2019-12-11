@@ -49,6 +49,16 @@ const column = [
     )
   },
   {
+    title: "Waived Fees",
+    key: "waived_fees",
+    dataIndex: "waived_fees",
+    render: data => (
+      <span>
+        {parseFloat(data).toFixed(8) +" USD"}
+      </span>
+    )
+  },
+  {
     title: "Type",
     key: "offer_type",
     dataIndex: "offer_type",
@@ -219,7 +229,7 @@ class OffersUsage extends Component {
             <Row type="flex" justify="end">
               <ColWithMarginBottom sm={6}>
                 <Input
-                  placeholder="Search Uses"
+                  placeholder="Search Users"
                   onChange={this.changeSearch.bind(this)}
                   value={searchData}
                 />
@@ -239,7 +249,7 @@ class OffersUsage extends Component {
               <ColWithMarginBottom xs={12} sm={4}>
                 <Button
                   htmlType="submit"
-                  className="search-btn btn-full-width"
+                  className="filter-btn btn-full-width"
                   type="primary"
                 >
                   <Icon type="search" />
@@ -248,7 +258,7 @@ class OffersUsage extends Component {
               </ColWithMarginBottom>
               <ColWithMarginBottom xs={12} sm={4}>
                 <Button
-                  className="search-btn full-width"
+                  className="filter-btn full-width"
                   type="primary"
                   onClick={this.resetFilters}
                 >
