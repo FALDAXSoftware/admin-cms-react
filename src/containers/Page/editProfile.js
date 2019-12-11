@@ -71,10 +71,10 @@ class EditProfile extends Component {
         .then(response => response.json())
         .then(function(res) {
           if (res.status == 200) {
-            login({ user: { ...this.props.user, ...res.data[0] } });
+            login({ user: { ..._this.props.user, ...res.data[0] } });
             _this.setState({
               errMsg: true,
-              errMessage: "Profile updated successfully.",
+              errMessage:res.message,
               loader: false,
               errType: "Success"
             });

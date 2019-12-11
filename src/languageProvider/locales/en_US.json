@@ -454,6 +454,7 @@
   "networkFeeTable.title.value": "Value",
   "networkFeeTable.title.notes": "Notes",
   "CampaignTable.title.label": "Name",
+  "CampaignTable.title.created_at": "Created At",
   "CampaignTable.title.e_date": "End Date",
   "CampaignTable.title.is_active": "Status",
   "CampaignTable.title.type": "Type",

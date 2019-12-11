@@ -80,17 +80,13 @@ class Jobs extends Component {
     };
 
     self.setState({ loader: true });
-    let message = is_active
-      ? "Job has been inactivated successfully."
-      : "Job has been activated successfully.";
-
     ApiUtils.updateJob(token, formData)
       .then(res => res.json())
       .then(res => {
         if (res.status == 200) {
           self.setState({
             errMsg: true,
-            errMessage: message,
+            errMessage: res.message,
             loader: false,
             errType: "Success",
             showError: false,
