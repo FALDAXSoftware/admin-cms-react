@@ -352,16 +352,15 @@ class Employees extends Component {
                   style={{ float: "right", width: "250px" }}
                   enterButton
                 />
-                {isAllowed("add_employee") &&
-
+                {isAllowed("add_employee") && (
                   <Button
                     type="primary"
                     style={{ marginBottom: "15px", float: "left" }}
                     onClick={this._showAddEmpModal}
                   >
                     <Icon type="plus" /> Add Employee
-                </Button>
-                }
+                  </Button>
+                )}
 
                 {showAddEmpModal && (
                   <AddEmployeeModal
@@ -419,8 +418,8 @@ class Employees extends Component {
                     pageSizeOptions={pageSizeOptions}
                   />
                 ) : (
-                    ""
-                  )}
+                  ""
+                )}
                 {showDeleteEmpModal && (
                   <Modal
                     title="Delete Employee"
@@ -437,11 +436,13 @@ class Employees extends Component {
               </div>
             </TableDemoStyle>
           </TabPane>
-          <TabPane tab="Metabase-Employee Management" key="metabase">
-            <TableDemoStyle>
+          {isAllowed("metabase_employee_report") && (
+            <TabPane tab="Metabase-Employee Management" key="metabase">
+              <TableDemoStyle>
                 <Metabase></Metabase>
-            </TableDemoStyle>
-          </TabPane>
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

@@ -142,10 +142,37 @@ const columns = [
   {
     title: <IntlMessages id="tradeTable.title.faldax_fees" />,
     key: "faldax_fees",
-    dataIndex:"faldax_fees",
     width: 100,
     sorter: true,
-    render: object => (<span>{parseFloat(object).toFixed(8)}</span>)
+    render: object => (<span>{(parseFloat(object["faldax_fees"]).toFixed(8)) +" "+(object["side"].toLowerCase()=="buy"?(object["symbol"].split("/")[0]):(object["symbol"].split("/")[1]))}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.you_send" />,
+    key: "sell_currency_amount",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{(object["side"].toLowerCase()=="buy"?parseFloat(object["sell_currency_amount"]).toFixed(8)+" "+object["symbol"].split("/")[1]:parseFloat(object["sell_currency_amount"]).toFixed(8)+" "+object["symbol"].split("/")[0])}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.you_received" />,
+    key: "buy_currency_amount",
+    width: 100,
+    sorter: true, 
+    render: object => (<span>{(object["side"].toLowerCase()=="buy"?parseFloat(object["buy_currency_amount"]).toFixed(8)+" "+object["symbol"].split("/")[0]:parseFloat(object["buy_currency_amount"]).toFixed(8)+" "+object["symbol"].split("/")[1])}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.commission"/>,
+    key: "difference_faldax_commission",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{parseFloat(object["difference_faldax_commission"]).toFixed(8)+" "+(object["symbol"].split("/")[1])}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.limit_price"/>,
+    key: "limit_price",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{parseFloat(object["limit_price"]).toFixed(8)+" "+(object["symbol"].split("/")[1])}</span>)
   },
   // {
   //   title: <IntlMessages id="tradeTable.title.execution_report" />,

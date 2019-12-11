@@ -10,7 +10,7 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
+import { OfferDateCell} from "../../../components/tables/helperCells";
 const tableColumns = [
   {
     title: "Action",
@@ -18,9 +18,10 @@ const tableColumns = [
     width:75,
     render:(object)=>(
       <div>
-        <Tooltip title="Usage">
+        <Tooltip title="View Details">
           <Icon
-            type="usergroup-add"
+            type="info-circle"
+            theme="twoTone" 
             className="btn-icon"
             onClick={() =>
               ViewCampaign.viewOfferUsage(object.id,object.code)
@@ -106,14 +107,14 @@ const tableColumns = [
     )
   },
   {
-    title: "",
+    title: "Expired",
     dataIndex: "end_date",
     key: "end_date",
     width:100,
     render: (end_date) => {
     let [today,exp_date]=[moment().set({hour:0,minute:0,second:0,millisecond:0}),moment(end_date).set({hour:23,minute:59,second:59,millisecond:59})]
     return <div>{(exp_date.diff(today, "days"))>-1?'':
-    <span className="error-danger"><Icon type="info-circle" className="error-danger"/> Offer Expired</span>}
+    <span className="error-danger"><Icon type="info-circle" className="error-danger"/> Expired</span>}
     </div>;
     }
   }

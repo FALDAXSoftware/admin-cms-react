@@ -328,7 +328,6 @@ class News extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }
@@ -355,7 +354,10 @@ class News extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
+        <Tabs
+          className="isoTableDisplayTab full-width"
+          onChange={this.onChangeTabs}
+        >
           {newsTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -373,7 +375,7 @@ class News extends Component {
                         />
                       </Form.Item>
                     </ColWithMarginBottom>
-                    {isAllowed("get_all_news_source") &&
+                    {isAllowed("get_all_news_source") && (
                       <ColWithMarginBottom md={6}>
                         <Select
                           getPopupContainer={trigger => trigger.parentNode}
@@ -390,7 +392,7 @@ class News extends Component {
                             ))}
                         </Select>
                       </ColWithMarginBottom>
-                    }
+                    )}
                     <ColWithMarginBottom md={6}>
                       <RangePicker
                         value={rangeDate}
@@ -445,24 +447,27 @@ class News extends Component {
                     pageSizeOptions={pageSizeOptions}
                   />
                 ) : (
-                    ""
-                  )}
+                  ""
+                )}
               </TableDemoStyle>
             </TabPane>
           ))}
-          <TabPane tab="Metabase-News Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_news_report") && (
+            <TabPane tab="Metabase-News Management" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { Row, Col, notification, Card, Progress, Tabs } from "antd";
-import LayoutWrapper from "../../components/utility/layoutWrapper.js";
-import IsoWidgetsWrapper from "../Widgets/widgets-wrapper";
+import LayoutWrapper from "../../components/utility/layoutWrapper.js"
 import basicStyle from "../../settings/basicStyle";
 import ApiUtils from "../../helpers/apiUtills";
 import { connect } from "react-redux";
-import { Pie, Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import ContentHolder from "../../components/utility/contentHolder";
 import styled from "styled-components";
 import { palette } from "styled-theme";
@@ -681,7 +680,7 @@ class Dashboard extends Component {
               </TabPane>
 
             }
-            {/* {isAllowed("metabase_details") && */}
+            {isAllowed("metabase_dashboard_report") &&
             <TabPane tab="Metabase-Dashboard Management" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl &&
@@ -695,7 +694,7 @@ class Dashboard extends Component {
                   </IframeCol>}
               </TableDemoStyle>
             </TabPane>
-            {/* } */}
+            }
           </Tabs>
         </TableDemoStyle>
       </LayoutWrapper>

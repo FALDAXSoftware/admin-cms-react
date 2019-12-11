@@ -26,6 +26,7 @@ import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -245,7 +246,6 @@ class Transactions extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }
@@ -292,13 +292,15 @@ class Transactions extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
+        <Tabs
+          className="isoTableDisplayTab full-width"
+          onChange={this.onChangeTabs}
+        >
           <TabPane
             tab={transactionTableInfos[0].title}
             key={transactionTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-
               <Form onSubmit={this._searchTransaction}>
                 <Row type="flex" justify="end">
                   <ColWithMarginBottom md={6}>
@@ -334,18 +336,20 @@ class Transactions extends Component {
                       htmlType="submit"
                       className="filter-btn btn-full-width"
                       type="primary"
-                    ><Icon type="search" />
+                    >
+                      <Icon type="search" />
                       Search
-                      </Button>
+                    </Button>
                   </ColWithMarginBottom>
                   <ColWithMarginBottom xs={12} md={3}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
                       onClick={this._resetFilters}
-                    ><Icon type="reload" />
+                    >
+                      <Icon type="reload" />
                       Reset
-                      </Button>
+                    </Button>
                   </ColWithMarginBottom>
                   <ColWithMarginBottom xs={12} md={3}>
                     {allTransactions && allTransactions.length > 0 ? (
@@ -354,14 +358,17 @@ class Transactions extends Component {
                         data={allTransactions}
                         headers={transactionsHeaders}
                       >
-                        <Button className="filter-btn btn-full-width" type="primary">
+                        <Button
+                          className="filter-btn btn-full-width"
+                          type="primary"
+                        >
                           <Icon type="export"></Icon>
                           Export
-                          </Button>
+                        </Button>
                       </CSVLink>
                     ) : (
-                        ""
-                      )}
+                      ""
+                    )}
                   </ColWithMarginBottom>
                 </Row>
               </Form>
@@ -461,24 +468,30 @@ class Transactions extends Component {
                   pageSizeOptions={pageSizeOptions}
                 />
               ) : (
-                  ""
-                )}
+                ""
+              )}
             </TableDemoStyle>
           </TabPane>
 
-          <TabPane tab="Metabase-Transaction History Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_transaction_history_report") && (
+            <TabPane
+              tab="Metabase-Transaction History Management"
+              key="metabase"
+            >
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );
