@@ -513,3 +513,6 @@ html[dir='rtl'] .dz-hidden-input {
 .btn-back{
   margin: 0px 10px;
 }
+.table-tb-margin{
+  margin:15px auto;
+}

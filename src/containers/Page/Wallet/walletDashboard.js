@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { notification, Card, Row, Col, Button, Modal, Form, Input } from 'antd';
+import { notification, Card, Row, Icon,Col, Button, Modal, Form, Input } from 'antd';
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
+import {  withRouter} from "react-router-dom";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -189,29 +190,26 @@ class WalletDashboard extends Component {
 
         return (
             <LayoutWrapper>
-
                 <TableDemoStyle className="isoLayoutContent">
-                    <div style={{ "display": "inline-block", "width": "100%" }}>
-                        <Search
+                    <div className="isoTableDisplayTab">
+                        {loader && <FaldaxLoader />}
+                        <Row>
+                            <Col span={24}>
+                            <Search
                             placeholder="Search assets"
                             onSearch={(value) => this._searchWalletData(value)}
                             style={{ "float": "right", "width": "250px" }}
                             enterButton
                         />
-                    </div>
-                    <div className="isoTableDisplayTab">
-                        {loader && <FaldaxLoader />}
-                        <Row>
+                            </Col>
                             {allWallets.length > 0 ? allWallets.map(wallet => (
-                                <Col xs={{ span: 5 }} lg={{ span: 8 }}>
+                                <Col xs={24} lg={8}>
                                     <Card className="wallet-card" title={wallet.coin}
-                                        extra={
-                                            <span>
-                                                {isAllowed("send_coin_admin") &&
-                                                    <Button style={{ borderRadius: '5px' }} onClick={this._openSendModal.bind(this, wallet)}>Send</Button>
-                                                }
-                                            </span>
-                                        }>
+                                        actions={[
+                                            isAllowed("send_coin_admin")?<Button size="large"  shape="round" className="filter-btn btn-full-width" onClick={this._openSendModal.bind(this, wallet)}> <Icon type="export" key="sent" />Send</Button>:"",
+                                            <Button size="large"  shape="round" className="filter-btn btn-full-width" onClick={()=>this.props.history.push(`./wallet/${wallet.coin_code}`)}><Icon type="edit" key="edit"/>View</Button>
+                                          ]}
+                                        >
                                         <div className="wallet-div">
                                             <div>
                                                 <b className="custom-spacing">HOT Send Address</b><br />
@@ -271,13 +269,12 @@ class WalletDashboard extends Component {
                         </Modal>
                     </div>
                 </TableDemoStyle>
-
             </LayoutWrapper>
         );
     }
 }
 
-export default connect(
+export default withRouter(connect(
     state => ({
         token: state.Auth.get('token')
-    }), { logout })(WalletDashboard);
+    }), { logout })(WalletDashboard));

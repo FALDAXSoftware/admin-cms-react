@@ -125,6 +125,11 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
+        path: "wallet/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
         path: "batch-and-balance",
         component: asyncComponent(() => import("../Page/Batch/batch")),
         module: "batch_and_balance"

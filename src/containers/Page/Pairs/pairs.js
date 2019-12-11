@@ -78,10 +78,6 @@ class Pairs extends Component {
 
   static pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) {
     const { token } = this.props;
-
-    let message = is_active
-      ? "Pair has been inactivated successfully."
-      : "Pair has been activated successfully.";
     let formData = {
       id: value,
       name: name,
@@ -98,7 +94,7 @@ class Pairs extends Component {
           self.setState({
             errType: "Success",
             errMsg: true,
-            errMessage: message
+            errMessage: res.message
           });
         } else if (res.status == 403) {
           self.setState(

@@ -115,14 +115,14 @@ const columns = [
     key: "quantity",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "quantity")
+    render: object => (<span>{parseFloat(object.quantity).toFixed(8) + " " + (object.currency)}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.fill_price" />,
     key: "fill_price",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "fill_price")
+    render: object => (<span>{parseFloat(object.fill_price).toFixed(8) + " " + (object.settle_currency)}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.order_id" />,
@@ -135,9 +135,8 @@ const columns = [
     title: <IntlMessages id="tradeTable.title.network_fees" />,
     key: "network_fees",
     width: 100,
-    dataIndex:"network_fees",
     sorter: true,
-    render: object => (<span>{parseFloat(object).toFixed(8)}</span>)
+    render: object => (<span>{(parseFloat(object["network_fees"]).toFixed(8)) +" "+(object["side"].toLowerCase()=="buy"?(object["symbol"].split("/")[0]):(object["symbol"].split("/")[1]))}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.faldax_fees" />,
