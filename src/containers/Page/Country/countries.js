@@ -353,7 +353,7 @@ class Countries extends Component {
             </TableDemoStyle>
           </TabPane>
           {isAllowed("metabase_country_report") && (
-            <TabPane tab="Metabase-Country Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle>
                 <Metabase></Metabase>
               </TableDemoStyle>

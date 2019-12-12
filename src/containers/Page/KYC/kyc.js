@@ -232,7 +232,7 @@ class KYC extends Component {
                       style={{ width: "100%" }}
                     />
                   </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  <ColWithMarginBottom xs={24} md={3}>
                     <Button
                       htmlType="submit"
                       className="filter-btn btn-full-width"
@@ -242,7 +242,7 @@ class KYC extends Component {
                       Search
                     </Button>
                   </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  <ColWithMarginBottom xs={24} md={3}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
@@ -297,7 +297,7 @@ class KYC extends Component {
             <DeclinedKYC />
           </TabPane>
           {isAllowed("metabase_kyc_report") && (
-            <TabPane tab="Metabase-KYC Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
                   <IframeCol>

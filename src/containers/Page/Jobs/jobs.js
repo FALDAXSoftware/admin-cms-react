@@ -445,7 +445,7 @@ class Jobs extends Component {
             </TabPane>
           )}
           {isAllowed("metabase_career_report") && (
-            <TabPane tab="Metabase-Careers Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle>
                 <Metabase></Metabase>
               </TableDemoStyle>

@@ -34,9 +34,6 @@ class NewsSources extends Component {
       status: !is_active
     };
 
-    let message = is_active
-      ? "News Source has been inactivated successfully."
-      : "News Source has been activated successfully.";
     self.setState({ loader: true });
     ApiUtils.updateNewsSource(token, formData)
       .then(response => response.json())
@@ -45,7 +42,7 @@ class NewsSources extends Component {
           self._getAllNewsSources();
           self.setState({
             errMsg: true,
-            errMessage: message,
+            errMessage: res.message,
             errType: "Success",
             loader: false
           });

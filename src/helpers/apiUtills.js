@@ -4062,11 +4062,9 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token
       },
-      getWalletDetailByName: function (coin = "") {
+      getWalletDetailByName: function(coin = "",page,limit,sortCol,sortOrder,searchData="",start_date=null,end_date=null,walletType=1) {
         return fetch(
-          `${API_URL}${
-          this.url
-          }get-wallet-dashboard?coin_code=${coin.toLowerCase()}`,
+          `${API_URL}${this.url}get-wallet-dashboard?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${sortCol?("&sort_col="+sortCol):""}${sortOrder?("&sort_order="+sortOrder):""}&page=${page}&limit=${limit}${searchData?"&data="+searchData:""}${start_date?"&start_date="+start_date:""}${end_date?"&end_date="+end_date:""}`,
           {
             method: "GET",
             headers: this.headers

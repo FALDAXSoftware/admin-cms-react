@@ -734,7 +734,7 @@ class BatchBalance extends React.Component {
               {loader && <FaldaxLoader />}
             </TableDemoStyle>
           </TabPane>
-          <TabPane tab="Metabase-Batch and Balance Management" key="2">
+          <TabPane tab="Report" key="2">
               <TableDemoStyle>
                   <BatchMetabase></BatchMetabase>
               </TableDemoStyle>

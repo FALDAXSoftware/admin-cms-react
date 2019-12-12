@@ -417,7 +417,7 @@ class Assets extends Component {
             </TabPane>
           ))}
           {isAllowed("metabase_asset_report") && (
-            <TabPane tab="Metabase-Assets Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle>
                 <AssetsMetabase></AssetsMetabase>
               </TableDemoStyle>

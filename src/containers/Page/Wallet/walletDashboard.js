@@ -175,6 +175,16 @@ class WalletDashboard extends Component {
         }
     }
 
+    navigateToView=(coin_code)=>{
+        let {allWallets}=this.state;
+        let assets=[]
+        allWallets.map((ele)=>{
+            assets.push({name:ele.coin,value:ele.coin_code})
+            return ele;
+        })
+        this.props.history.push({pathname:`./wallet/${coin_code}`,state:{assets:JSON.stringify(assets)}})
+    }
+
     _searchWalletData = (val) => {
         this.setState({ searchWallet: val }, () => {
             this._getAllWallets();
@@ -207,7 +217,7 @@ class WalletDashboard extends Component {
                                     <Card className="wallet-card" title={wallet.coin}
                                         actions={[
                                             isAllowed("send_coin_admin")?<Button size="large"  shape="round" className="filter-btn btn-full-width" onClick={this._openSendModal.bind(this, wallet)}> <Icon type="export" key="sent" />Send</Button>:"",
-                                            <Button size="large"  shape="round" className="filter-btn btn-full-width" onClick={()=>this.props.history.push(`./wallet/${wallet.coin_code}`)}><Icon type="edit" key="edit"/>View</Button>
+                                            <Button size="large"  shape="round" className="filter-btn btn-full-width" onClick={()=>this.navigateToView(wallet.coin_code)}><Icon type="edit" key="edit"/>View</Button>
                                           ]}
                                         >
                                         <div className="wallet-div">
