@@ -516,3 +516,7 @@ html[dir='rtl'] .dz-hidden-input {
 .table-tb-margin{
   margin:15px auto;
 }
+
+.table-column{
+  padding: 5px !important;
+}

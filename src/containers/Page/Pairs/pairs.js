@@ -420,7 +420,7 @@ class Pairs extends Component {
             </TabPane>
           ))}
           {isAllowed("metabase_asset_report") && (
-            <TabPane tab="Metabase-Pairs Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
                   <IframeCol>

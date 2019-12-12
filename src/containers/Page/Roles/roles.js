@@ -449,7 +449,7 @@ class Roles extends Component {
           </TabPane>
 
           {isAllowed("metabase_roles_report") && (
-            <TabPane tab="Metabase-Roles Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
                   <IframeCol>

@@ -526,7 +526,7 @@ class WithdrawRequest extends Component {
           </TabPane>
 
           {isAllowed('metabase_withdraw_request_report') &&
-         <TabPane tab="Metabase-Withdraw Request Management" key="metabase">
+         <TabPane tab="Report" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
               {metabaseUrl &&
                 <IframeCol>

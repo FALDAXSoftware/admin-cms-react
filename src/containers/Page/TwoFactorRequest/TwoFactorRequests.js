@@ -409,7 +409,7 @@ class TwoFactorRequests extends Component {
 
           {isAllowed("metabase_two_factor_request") && (
             <TabPane
-              tab="Metabase-Two Factor Request Management"
+              tab="Report"
               key="metabase"
             >
               <TableDemoStyle className="isoLayoutContent">
