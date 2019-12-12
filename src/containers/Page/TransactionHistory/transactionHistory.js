@@ -475,7 +475,7 @@ class Transactions extends Component {
 
           {isAllowed("metabase_transaction_history_report") && (
             <TabPane
-              tab="Metabase-Transaction History Management"
+              tab="Report"
               key="metabase"
             >
               <TableDemoStyle className="isoLayoutContent">

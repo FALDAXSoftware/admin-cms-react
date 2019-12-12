@@ -356,7 +356,7 @@ class AccountClass extends Component {
               </TableDemoStyle>
             </TabPane>
           ))}
-          <TabPane tab="Metabase-Account Class Management" key="metabase">
+          <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl &&
                 <div class="full-width">

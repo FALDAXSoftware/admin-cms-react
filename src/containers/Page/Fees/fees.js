@@ -473,7 +473,7 @@ class Fees extends Component {
           )}
 
           {isAllowed("metabase_fee_report") && (
-            <TabPane tab="Metabase-Fees Management" key="5">
+            <TabPane tab="Report" key="5">
               <TableDemoStyle className="isoLayoutContent">
                 <Metabase />
               </TableDemoStyle>

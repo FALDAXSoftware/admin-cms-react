@@ -437,7 +437,7 @@ class Employees extends Component {
             </TableDemoStyle>
           </TabPane>
           {isAllowed("metabase_employee_report") && (
-            <TabPane tab="Metabase-Employee Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle>
                 <Metabase></Metabase>
               </TableDemoStyle>

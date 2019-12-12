@@ -453,7 +453,7 @@ class News extends Component {
             </TabPane>
           ))}
           {isAllowed("metabase_news_report") && (
-            <TabPane tab="Metabase-News Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
                   <IframeCol>

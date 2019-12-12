@@ -259,7 +259,7 @@ class Offers extends Component {
             </TabPane>
           ))}
           {isAllowed("metabase_offers_report") && (
-            <TabPane tab="Metabase-Offers Management" key="metabase">
+            <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
                     <iframe
