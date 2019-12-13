@@ -249,7 +249,6 @@ class Roles extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }
@@ -383,23 +382,26 @@ class Roles extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
+        <Tabs
+          className="isoTableDisplayTab full-width"
+          onChange={this.onChangeTabs}
+        >
           <TabPane
             tab={rolesTableInfos[0].title}
             key={rolesTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
               <div style={{ display: "inline-block", width: "100%" }}>
-                {isAllowed("create_role") &&
-
+                {isAllowed("create_role") && (
                   <Button
                     type="primary"
                     style={{ marginBottom: "15px", float: "left" }}
                     onClick={this._showAddRoleModal}
-                  ><Icon type="plus" />
+                  >
+                    <Icon type="plus" />
                     Add Role
-                </Button>
-                }
+                  </Button>
+                )}
                 {showAddRoleModal && (
                   <AddRoleModal
                     allRolesValue={allRolesValue}
@@ -446,19 +448,22 @@ class Roles extends Component {
             </TableDemoStyle>
           </TabPane>
 
-          <TabPane tab="Metabase-Roles Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_roles_report") && (
+            <TabPane tab="Report" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

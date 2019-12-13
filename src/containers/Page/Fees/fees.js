@@ -12,6 +12,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import NetworkFee from '../NetworkFee/networkFee'
 import { isAllowed } from '../../../helpers/accessControl';
+import Metabase from './feesMetabase'
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -340,30 +341,30 @@ class Fees extends Component {
     return (
       <LayoutWrapper>
         <Tabs className="isoTableDisplayTab full-width">
-          {isAllowed("get_all_fee") && FeesInfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-              <TableDemoStyle className="isoLayoutContent">
-                {loader && <FaldaxLoader />}
-                {showEditFeesModal && (
-                  <EditFeesModal
-                    fields={feesDetails}
-                    getAllFees={this._getAllFeesData}
-                    showEditFeesModal={showEditFeesModal}
-                    closeEditFeesModal={this._closeEditFeesModal}
+          {isAllowed("get_all_fee") &&
+            FeesInfos.map(tableInfo => (
+              <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                <TableDemoStyle className="isoLayoutContent">
+                  {loader && <FaldaxLoader />}
+                  {showEditFeesModal && (
+                    <EditFeesModal
+                      fields={feesDetails}
+                      getAllFees={this._getAllFeesData}
+                      showEditFeesModal={showEditFeesModal}
+                      closeEditFeesModal={this._closeEditFeesModal}
+                    />
+                  )}
+                  <TableWrapper
+                    {...this.state}
+                    columns={tableInfo.columns}
+                    pagination={false}
+                    dataSource={allFeesData}
+                    className="isoCustomizedTable"
                   />
-                )}
-                <TableWrapper
-                  {...this.state}
-                  columns={tableInfo.columns}
-                  pagination={false}
-                  dataSource={allFeesData}
-                  className="isoCustomizedTable"
-                />
-              </TableDemoStyle>
-            </TabPane>
-          ))}
-          {isAllowed("get_withdrawl_faldax_fee") &&
-
+                </TableDemoStyle>
+              </TabPane>
+            ))}
+          {isAllowed("get_withdrawl_faldax_fee") && (
             <TabPane tab="Withdrawal Fee" key="2">
               <TableDemoStyle className="isoLayoutContent">
                 <div style={{ marginTop: "10px", marginLeft: "200px" }}>
@@ -392,7 +393,7 @@ class Fees extends Component {
                       "required|custom_between:0,100"
                     )}
                   </span>
-                  {isAllowed("update_send_coin_fee") &&
+                  {isAllowed("update_send_coin_fee") && (
                     <>
                       <Button
                         type="primary"
@@ -411,14 +412,13 @@ class Fees extends Component {
                         Cancel{" "}
                       </Button>
                     </>
-                  }
+                  )}
                 </div>
                 {loader && <FaldaxLoader />}
               </TableDemoStyle>
             </TabPane>
-          }
-          {isAllowed("get_withdrawl_faldax_fee") &&
-
+          )}
+          {isAllowed("get_withdrawl_faldax_fee") && (
             <TabPane tab="Faldax Fee" key="3">
               <TableDemoStyle className="isoLayoutContent">
                 <div style={{ marginTop: "10px", marginLeft: "200px" }}>
@@ -447,8 +447,7 @@ class Fees extends Component {
                       "required|custom_between:0,100"
                     )}
                   </span>
-                  {isAllowed("update_faldax_fee") &&
-
+                  {isAllowed("update_faldax_fee") && (
                     <Button
                       type="primary"
                       style={{ marginBottom: "15px" }}
@@ -457,22 +456,29 @@ class Fees extends Component {
                       {" "}
                       Update{" "}
                     </Button>
-                  }
+                  )}
                   {/* <Button type="primary" className="cancel-btn" onClick={this._cancelSendFee}> Cancel </Button> */}
                 </div>
                 {loader && <FaldaxLoader />}
               </TableDemoStyle>
             </TabPane>
-          }
-          {isAllowed("get_coin_fees") &&
-
+          )}
+          {isAllowed("get_coin_fees") && (
             <TabPane tab="Network Fee" key="4">
               <TableDemoStyle className="isoLayoutContent">
                 <NetworkFee />
                 {/* {loader && <FaldaxLoader />} */}
               </TableDemoStyle>
             </TabPane>
-          }
+          )}
+
+          {isAllowed("metabase_fee_report") && (
+            <TabPane tab="Report" key="5">
+              <TableDemoStyle className="isoLayoutContent">
+                <Metabase />
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

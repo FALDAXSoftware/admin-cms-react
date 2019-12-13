@@ -24,9 +24,9 @@ import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
 import {ColWithMarginBottom} from "../common.style";
 import DeclineActionModal from "./declineModal";
-import { Record } from "immutable";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -357,7 +357,6 @@ class WithdrawRequest extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }
@@ -526,7 +525,8 @@ class WithdrawRequest extends Component {
             </TableDemoStyle>
           </TabPane>
 
-          <TabPane tab="Metabase-Withdraw Request Management" key="metabase">
+          {isAllowed('metabase_withdraw_request_report') &&
+         <TabPane tab="Report" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
               {metabaseUrl &&
                 <IframeCol>
@@ -539,6 +539,7 @@ class WithdrawRequest extends Component {
                 </IframeCol>}
             </TableDemoStyle>
           </TabPane>
+          }
         </Tabs>
       </LayoutWrapper>
     );

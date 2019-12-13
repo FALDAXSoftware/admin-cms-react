@@ -3,8 +3,8 @@ import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell,
-    DateCell,
     OfferDateCell,
+    DateTimeCell,
     CampaignSwitchCell,
     CampaignActionCell,
     CampaignTypeCell
@@ -52,6 +52,8 @@ const renderCell = (
       );
     case "CampaignTypeCell":
       return CampaignTypeCell(value)
+    case "DateTimeCell":
+      return DateTimeCell(value);
     default:
       return TextCell(value);
   }
@@ -64,6 +66,13 @@ const columns = [{
     render: object => renderCell(object,
         'ActiveUserActionCell',"id","id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at")
 },
+{
+  title: <IntlMessages id="CampaignTable.title.created_at" />,
+  key: 'created_at',
+  width: 100,
+  sorter: false,
+  render: object => renderCell(object, 'DateTimeCell',"created_at")
+}, 
 {
     title: <IntlMessages id="CampaignTable.title.label" />,
     key: 'label',

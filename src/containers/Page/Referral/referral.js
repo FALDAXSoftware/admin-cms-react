@@ -26,7 +26,7 @@ class Referral extends React.Component {
               </TableDemoStyle>
             </TabPane>
           }
-           < TabPane tab="Metabase-Referral" key="metabase">
+           < TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 <ReferralMetabase></ReferralMetabase>
               </TableDemoStyle>

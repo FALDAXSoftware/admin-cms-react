@@ -111,49 +111,75 @@ const columns = [
     render: object => renderCell(object, "TextCell", "email")
   },
   {
-    title: <IntlMessages id="tradeTable.title.quantity" />,
-    key: "quantity",
+    title: <IntlMessages id="tradeTable.title.order_id" />,
+    key: "order_id",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "quantity")
+    render: object => renderCell(object, "TextCell", "order_id")
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.you_send" />,
+    key: "sell_currency_amount",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{(object["side"].toLowerCase() == "buy" ? parseFloat(object["sell_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[1] : parseFloat(object["sell_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[0])}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.you_received" />,
+    key: "buy_currency_amount",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{(object["side"].toLowerCase() == "buy" ? parseFloat(object["buy_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[0] : parseFloat(object["buy_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[1])}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.faldax_fees" />,
+    key: "faldax_fees",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{(parseFloat(object["faldax_fees"]).toFixed(8)) + " " + (object["side"].toLowerCase() == "buy" ? (object["symbol"].split("/")[0]) : (object["symbol"].split("/")[1]))}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.network_fees" />,
+    key: "network_fees",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{(parseFloat(object["network_fees"]).toFixed(8)) + " " + (object["side"].toLowerCase() == "buy" ? (object["symbol"].split("/")[0]) : (object["symbol"].split("/")[1]))}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.limit_price" />,
+    key: "limit_price",
+    width: 100,
+    sorter: true,
+    render: object => (<span>{parseFloat(object["limit_price"]).toFixed(8) + " " + (object["symbol"].split("/")[1])}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.fill_price" />,
     key: "fill_price",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "fill_price")
+    render: object => (<span>{parseFloat(object.fill_price).toFixed(8) + " " + (object.settle_currency)}</span>)
   },
   {
-    title: <IntlMessages id="tradeTable.title.order_id" />,
-    key: "order_id",
+    title: <IntlMessages id="tradeTable.title.commission" />,
+    key: "difference_faldax_commission",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "order_id")
+    render: object => (<span>{parseFloat(object["difference_faldax_commission"]).toFixed(8) + " " + (object["symbol"].split("/")[1])}</span>)
   },
-  {
-    title: <IntlMessages id="tradeTable.title.order_id" />,
-    key: "order_id",
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, "TextCell", "order_id")
-  },
-  {
-    title: <IntlMessages id="tradeTable.title.network_fees" />,
-    key: "network_fees",
-    width: 100,
-    dataIndex:"network_fees",
-    sorter: true,
-    render: object => (<span>{parseFloat(object).toFixed(8)}</span>)
-  },
-  {
-    title: <IntlMessages id="tradeTable.title.faldax_fees" />,
-    key: "faldax_fees",
-    dataIndex:"faldax_fees",
-    width: 100,
-    sorter: true,
-    render: object => (<span>{parseFloat(object).toFixed(8)}</span>)
-  },
+  // {
+  //   title: <IntlMessages id="tradeTable.title.quantity" />,
+  //   key: "quantity",
+  //   width: 100,
+  //   sorter: true,
+  //   render: object => (<span>{parseFloat(object.quantity).toFixed(8) + " " + (object.currency)}</span>)
+  // },
+  // {
+  //   title: <IntlMessages id="tradeTable.title.subtotal" />,
+  //   key: "subtotal",
+  //   width: 100,
+  //   sorter: true,
+  //   render: object => (<span>{(object["side"].toLowerCase() == "Buy" ? (parseFloat(object["buy_currency_amount"]).toFixed(8) + parseFloat(object["faldax_fees"]).toFixed(8) + parseFloat(object["network_fees"]).toFixed(8)) + " " + object["symbol"].split("/")[0] : (parseFloat(object["buy_currency_amount"]).toFixed(8) + parseFloat(object["faldax_fees"]).toFixed(8) + parseFloat(object["network_fees"]).toFixed(8)) + " " + object["symbol"].split("/")[1])}</span>)
+  // },
   // {
   //   title: <IntlMessages id="tradeTable.title.execution_report" />,
   //   key: "execution_report",

@@ -16,6 +16,7 @@ import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from 'styled-components';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const IframeCol = styled(Col)`
   width: 100%;
@@ -231,23 +232,25 @@ class KYC extends Component {
                       style={{ width: "100%" }}
                     />
                   </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  <ColWithMarginBottom xs={24} md={3}>
                     <Button
                       htmlType="submit"
                       className="filter-btn btn-full-width"
                       type="primary"
                     >
-                      <Icon type="search" />Search
-                          </Button>
+                      <Icon type="search" />
+                      Search
+                    </Button>
                   </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  <ColWithMarginBottom xs={24} md={3}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
                       onClick={this._resetFilters}
                     >
-                      <Icon type="reload" />Reset
-                          </Button>
+                      <Icon type="reload" />
+                      Reset
+                    </Button>
                   </ColWithMarginBottom>
                 </Row>
               </Form>
@@ -280,8 +283,8 @@ class KYC extends Component {
                   pageSizeOptions={pageSizeOptions}
                 />
               ) : (
-                  ""
-                )}
+                ""
+              )}
             </TableDemoStyle>
           </TabPane>
           <TabPane tab="Approved KYC" key="2">
@@ -293,19 +296,22 @@ class KYC extends Component {
           <TabPane tab="Declined KYC" key="4">
             <DeclinedKYC />
           </TabPane>
-          <TabPane tab="Metabase-KYC Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_kyc_report") && (
+            <TabPane tab="Report" key="metabase">
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

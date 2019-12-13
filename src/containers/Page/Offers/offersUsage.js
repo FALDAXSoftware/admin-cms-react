@@ -49,6 +49,15 @@ const column = [
     )
   },
   {
+    title: "Waived Fees",
+    key: "waived_fees",
+    render: (data) => (
+      <span>
+        {parseFloat(data["waived_fees"]).toFixed(8) +` USD (${data["faldax_fees"]})`}
+      </span>
+    )
+  },
+  {
     title: "Type",
     key: "offer_type",
     dataIndex: "offer_type",
@@ -118,13 +127,12 @@ class OffersUsage extends Component {
           searchFilter
         )
       ).json();
-      console.log(response);
       if (response.status == 200) {
         this.setState({
           dataSet: response.data.used_data,
           dataSetCount: response.data.total
         });
-      } else if (response.status == 401 || response.state == 403) {
+      } else if (response.status == 401 || response.status == 403) {
         this.setState(
           { errMsg: true, errMessage: response.err, errType: "error" },
           () => {
@@ -132,7 +140,7 @@ class OffersUsage extends Component {
           }
         );
       } else {
-        this.setState({ errMsg: true, errMessage: response.message });
+        this.setState({ errMsg: true, errMessage: response.message ,errType: "error"});
       }
     } catch (error) {
         this.setState({ errMsg: true, errMessage: OtherError, errType: "error" });
@@ -219,7 +227,7 @@ class OffersUsage extends Component {
             <Row type="flex" justify="end">
               <ColWithMarginBottom sm={6}>
                 <Input
-                  placeholder="Search Uses"
+                  placeholder="Search Users"
                   onChange={this.changeSearch.bind(this)}
                   value={searchData}
                 />
@@ -239,7 +247,7 @@ class OffersUsage extends Component {
               <ColWithMarginBottom xs={12} sm={4}>
                 <Button
                   htmlType="submit"
-                  className="search-btn btn-full-width"
+                  className="filter-btn btn-full-width"
                   type="primary"
                 >
                   <Icon type="search" />
@@ -248,7 +256,7 @@ class OffersUsage extends Component {
               </ColWithMarginBottom>
               <ColWithMarginBottom xs={12} sm={4}>
                 <Button
-                  className="search-btn full-width"
+                  className="filter-btn full-width"
                   type="primary"
                   onClick={this.resetFilters}
                 >

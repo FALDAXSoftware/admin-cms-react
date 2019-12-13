@@ -111,9 +111,6 @@ class Assets extends Component {
     };
 
     self.setState({ loader: true });
-    let message = is_active
-      ? "Asset has been inactivated successfully."
-      : "Asset has been activated successfully.";
     ApiUtils.editCoin(token, formData)
       .then(res => res.json())
       .then(res => {
@@ -121,7 +118,7 @@ class Assets extends Component {
           self.setState({
             page: 1,
             errMsg: true,
-            errMessage: message,
+            errMessage: res.message,
             errType: "Success",
             loader: false
           });
@@ -337,8 +334,7 @@ class Assets extends Component {
           {assetTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
-                {isAllowed("create_coins") &&
-
+                {isAllowed("create_coins") && (
                   <Button
                     type="primary"
                     style={{ marginBottom: "15px", float: "left" }}
@@ -346,8 +342,8 @@ class Assets extends Component {
                   >
                     <Icon type="plus" />
                     Add Asset
-                </Button>
-                }
+                  </Button>
+                )}
                 <AddCoinModal
                   showAddCoinModal={showAddCoinModal}
                   closeAddModal={this._closeAddCoinModal}
@@ -356,7 +352,11 @@ class Assets extends Component {
                 <Search
                   placeholder="Search assets"
                   onSearch={value => this._searchCoin(value)}
-                  style={{ float: "right", width: "250px" }}
+                  style={{
+                    marginBottom: "15px",
+                    float: "right",
+                    width: "250px"
+                  }}
                   enterButton
                 />
 
@@ -410,17 +410,19 @@ class Assets extends Component {
                       pageSizeOptions={pageSizeOptions}
                     />
                   ) : (
-                      ""
-                    )}
+                    ""
+                  )}
                 </div>
               </TableDemoStyle>
             </TabPane>
           ))}
-          <TabPane tab="Assets-Metabase" key="metabase">
-            <TableDemoStyle>
-              <AssetsMetabase></AssetsMetabase>
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_asset_report") && (
+            <TabPane tab="Report" key="metabase">
+              <TableDemoStyle>
+                <AssetsMetabase></AssetsMetabase>
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

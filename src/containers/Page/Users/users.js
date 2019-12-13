@@ -88,7 +88,7 @@ class Users extends Component {
           {isAllowed("get_deleted_users") &&
             <TabPane tab="Deactivated Users" key="3"><DeletedUsers /></TabPane>
           }
-          <TabPane tab="Metabase-Users Management" key="metabase">
+         {isAllowed('metabase_users_report') && <TabPane tab="Report" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
               {metabaseUrl &&
                 <IframeCol>
@@ -101,6 +101,7 @@ class Users extends Component {
                 </IframeCol>}
             </TableDemoStyle>
           </TabPane>
+         }
         </Tabs>
       </LayoutWrapper>
     );

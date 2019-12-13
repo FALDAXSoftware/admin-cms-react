@@ -25,6 +25,7 @@ import RequestActionModal from "./requestActionModal";
 import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const IframeCol = styled(Col)`
   width: 100%;
@@ -351,7 +352,8 @@ class TwoFactorRequests extends Component {
                         className="filter-btn btn-full-width"
                         type="primary"
                       >
-                        <Icon type="search" />Search
+                        <Icon type="search" />
+                        Search
                       </Button>
                     </ColWithMarginBottom>
                     <ColWithMarginBottom xs={12} sm={3}>
@@ -360,7 +362,8 @@ class TwoFactorRequests extends Component {
                         type="primary"
                         onClick={this._resetFilters}
                       >
-                        <Icon type="reload" />Reset
+                        <Icon type="reload" />
+                        Reset
                       </Button>
                     </ColWithMarginBottom>
                   </Row>
@@ -392,8 +395,8 @@ class TwoFactorRequests extends Component {
                     pageSizeOptions={pageSizeOptions}
                   />
                 ) : (
-                    ""
-                  )}
+                  ""
+                )}
                 <RequestActionModal
                   showRejectForm={showRejectForm}
                   twoFactorReqDetails={twoFactorReqDetails}
@@ -404,19 +407,25 @@ class TwoFactorRequests extends Component {
             </TabPane>
           ))}
 
-          <TabPane tab="Metabase-Two Factor Request Management" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                <IframeCol>
-                  <iframe
-                    src={metabaseUrl}
-                    frameborder="0"
-                    width="100%"
-                    allowtransparency
-                  ></iframe>
-                </IframeCol>}
-            </TableDemoStyle>
-          </TabPane>
+          {isAllowed("metabase_two_factor_request") && (
+            <TabPane
+              tab="Report"
+              key="metabase"
+            >
+              <TableDemoStyle className="isoLayoutContent">
+                {metabaseUrl && (
+                  <IframeCol>
+                    <iframe
+                      src={metabaseUrl}
+                      frameborder="0"
+                      width="100%"
+                      allowtransparency
+                    ></iframe>
+                  </IframeCol>
+                )}
+              </TableDemoStyle>
+            </TabPane>
+          )}
         </Tabs>
       </LayoutWrapper>
     );

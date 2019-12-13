@@ -41,11 +41,6 @@ const AccessGrant = (props) => {
                 })
                 setPermissions(resPermissions)
                 setRole(res.roleValue)
-                setError({
-                    errType: "Success",
-                    errMessage: res.message,
-                    showError: true
-                })
             } else if (res.status == 403) {
                 setError({
                     errType: "Error",
@@ -180,77 +175,115 @@ const AccessGrant = (props) => {
         setPermissions(p)
     }
     return (
-        <LayoutWrapper>
-            {isLoading &&
-                <FaldaxLoader></FaldaxLoader>
+      <LayoutWrapper>
+        <a
+          onClick={() => {
+            props.history.goBack();
+          }}
+        >
+          <i
+            className="fa fa-arrow-left btn-back"
+            aria-hidden="true"
+          ></i>{" "}
+          Back
+        </a>
+        {isLoading && <FaldaxLoader></FaldaxLoader>}
+        <TableDemoStyle className="isoLayoutContent">
+          <Tabs
+            className="isoTableDisplayTab"
+            tabBarExtraContent={
+              <Row>
+                <Col>{role.name && <h3>Role - {role.name}</h3>}</Col>
+              </Row>
             }
-            <TableDemoStyle className="isoLayoutContent">
-                <Tabs className="isoTableDisplayTab" tabBarExtraContent={(<Row>
-                    <Col>
-                        {role.name &&
-                            <h3>Role - {role.name}</h3>
-                        }
-                    </Col>
-                </Row>)}>
-                    <TabPane tab="Access Grant" key="ag">
-                        <Row>
-                            <Col>
-                                <Tooltip>
-                                    <Button onClick={() => {
-                                        checkAll()
-                                    }}><Icon type="check-square" theme="filled" /> Check All</Button>
-                                </Tooltip> <Tooltip>
-                                    <Button onClick={() => {
-                                        uncheckAll()
-                                    }}><Icon type="close-square" theme="filled" /> Uncheck All</Button>
-                                </Tooltip>
-                            </Col>
-                        </Row>
-                        <Row>
-                            {
-                                Object.keys(permissions).map((key, index) => (
-                                    <Col key={index}>
-                                        <Card title={key} bordered={false} style={{ width: "100%" }} extra={<div>
-                                            <Tooltip title="Check All">
-                                                <Button type="dashed" onClick={() => {
-                                                    checkAll(key)
-                                                }}><Icon type="check-square" theme="filled" /></Button>
-                                            </Tooltip> <Tooltip title="Uncheck All">
-                                                <Button type="dashed" onClick={() => {
-                                                    uncheckAll(key)
-                                                }}><Icon type="close-square" theme="filled" /></Button>
-                                            </Tooltip>
-                                        </div>}>
-                                            <Row>
-                                                {permissions[key].map((per, index) => (
-                                                    <Col span={6}>
-                                                        <Checkbox checked={per.isChecked} onChange={(e) => {
-                                                            onCheckedChange(e, per.main_module, index)
-                                                        }}>{per.display_name}</Checkbox>
-                                                    </Col>
-                                                ))
-                                                }
-                                            </Row>
-                                        </Card>
-                                    </Col>
-                                ))
-                            }
-                        </Row>
-                        {isAllowed("update_role_permission") &&
-
-                            <Row>
-                                <Col style={{ textAlign: "right" }}>
-                                    <Button type="primary" onClick={savePermissions}>Save</Button>
-                                </Col>
-                            </Row>
-                        }
-
-
-                    </TabPane>
-                </Tabs>
-            </TableDemoStyle>
-        </LayoutWrapper >
-    )
+          >
+            <TabPane tab="Permissions" key="ag">
+              <Row>
+                <Col>
+                  <Tooltip>
+                    <Button
+                      onClick={() => {
+                        checkAll();
+                      }}
+                    >
+                      <Icon type="check-square" theme="filled" /> Check All
+                    </Button>
+                  </Tooltip>{" "}
+                  <Tooltip>
+                    <Button
+                      onClick={() => {
+                        uncheckAll();
+                      }}
+                    >
+                      <Icon type="close-square" theme="filled" /> Uncheck All
+                    </Button>
+                  </Tooltip>
+                </Col>
+              </Row>
+              <Row>
+                {Object.keys(permissions).map((key, index) => (
+                  <Col key={index}>
+                    <Card
+                      title={key}
+                      bordered={false}
+                      style={{ width: "100%" }}
+                      extra={
+                        <div>
+                          <Tooltip title="Check All">
+                            <Button
+                              type="dashed"
+                              onClick={() => {
+                                checkAll(key);
+                              }}
+                            >
+                              <Icon type="check-square" theme="filled" />
+                            </Button>
+                          </Tooltip>{" "}
+                          <Tooltip title="Uncheck All">
+                            <Button
+                              type="dashed"
+                              onClick={() => {
+                                uncheckAll(key);
+                              }}
+                            >
+                              <Icon type="close-square" theme="filled" />
+                            </Button>
+                          </Tooltip>
+                        </div>
+                      }
+                    >
+                      <Row>
+                        {permissions[key].map((per, index) => (
+                          <Col span={6}>
+                            <Checkbox
+                              checked={per.isChecked}
+                              onChange={e => {
+                                onCheckedChange(e, per.main_module, index);
+                              }}
+                            >
+                              {per.display_name}
+                            </Checkbox>
+                          </Col>
+                        ))}
+                      </Row>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+              {isAllowed("update_role_permission") && (
+                <Row>
+                  <Col style={{ textAlign: "right" }}>
+                    <Button type="primary" onClick={savePermissions}>
+                      Save
+                    </Button>
+                  </Col>
+                </Row>
+              )}
+            </TabPane>
+          </Tabs>
+        </TableDemoStyle>
+      </LayoutWrapper>
+    );
 }
 
 export default AccessGrant

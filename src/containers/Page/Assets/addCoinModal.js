@@ -90,7 +90,6 @@ class AddCoinModal extends Component {
     _addCoin = () => {
         const { token, getAllCoins } = this.props;
         let { fields, selectedToken, showCoinErr } = this.state;
-
         if (this.validator.allValid() && !showCoinErr && this.refs.uploadImg.files[0] !== undefined) {
             this.setState({ loader: true, isDisabled: true });
 
@@ -148,6 +147,7 @@ class AddCoinModal extends Component {
 
     _onChangeImg = e => {
         const { fields } = this.state;
+        debugger
         const file = this.refs.uploadImg.files[0];
         let size = file.size / 1024 / 1024;
         let type = file.type;

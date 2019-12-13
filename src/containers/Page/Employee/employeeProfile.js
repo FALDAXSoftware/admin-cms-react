@@ -3,7 +3,7 @@ import { Tabs } from 'antd';
 import EmployeeOverview from './employeeOverview';
 import EmployeeWhitelist from './employeeWhitelist';
 import { Link } from 'react-router-dom';
-import { isAllowed } from '../../../helpers/accessControl';
+import LayoutWrapper from '../../../components/utility/layoutWrapper';
 
 const { TabPane } = Tabs;
 
@@ -27,11 +27,13 @@ class EmployeeProfile extends Component {
                         <a onClick={() => { this.props.history.push('/dashboard/employee') }}>Back</a>
                     </Link>
                 </div>
-                <Tabs size={'large'} >
+                <LayoutWrapper>
+                <Tabs size={'large'} className="full-width">
                     <TabPane tab="Overview" key="1"><EmployeeOverview emp_id={emp_id} /></TabPane>
                     <TabPane tab="IP Whitelist" key="2"><EmployeeWhitelist emp_id={emp_id} /></TabPane>
                     {/* <TabPane tab="Logs & Activities" key="2">Content of tab 3</TabPane> */}
                 </Tabs>
+                </LayoutWrapper>
             </div>
         );
     }

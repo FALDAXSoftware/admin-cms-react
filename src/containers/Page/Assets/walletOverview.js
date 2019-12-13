@@ -7,6 +7,7 @@ import authAction from '../../../redux/auth/actions';
 import styled from 'styled-components';
 import FaldaxLoader from '../faldaxLoader';
 import { withRouter } from 'react-router';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 
@@ -142,7 +143,7 @@ class WalletOverview extends Component {
                             :
                             <div className="kyc-div">
                                 <p>Your wallet is not created yet. Please click on the button below to create your wallet for {walletUserData.coin_name}.</p>
-                                <Button type='primary' onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
+                                <Button type='primary' disabled={!isAllowed('coin_create_wallet')} onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
                             </div>
                         : ''
                 }
