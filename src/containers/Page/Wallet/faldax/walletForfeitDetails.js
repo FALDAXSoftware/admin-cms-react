@@ -53,13 +53,13 @@ const columns=[
         dataIndex:"balance",
         width:100,
     },
-    {
-        title:<IntlMessages id="walletForfeitDetailsTable.title.placed_balance"/>,
-        key:2,
-        sorter: true,
-        dataIndex:"placed_balance",
-        width:100,
-    },
+    // {
+    //     title:<IntlMessages id="walletForfeitDetailsTable.title.placed_balance"/>,
+    //     key:2,
+    //     sorter: true,
+    //     dataIndex:"placed_balance",
+    //     width:100,
+    // },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.send_address"/>,
         dataIndex:"send_address",

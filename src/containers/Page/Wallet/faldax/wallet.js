@@ -15,10 +15,10 @@ class Wallets extends Component {
         <LayoutWrapper>
                 <BackButton {...this.props}/>   
                 <Tabs className="full-width">
-                    <TabPane tab="Faldax Fee Wallet History" key="1"><WalletDetailsComponent/></TabPane>
-                    <TabPane tab="JST Trade History Fee" key="2"><WalletJstDetailsComponent/></TabPane>
-                    <TabPane tab="Faldax Account Wallet History" key="3"><WalletFaldaxAccountDetailsComponent/></TabPane>
-                    <TabPane tab="Forfeit Funds History" key="4"><WalletForfeitDetailsComponent/></TabPane>
+                    <TabPane tab="Faldax Fee-Wallet" key="1"><WalletDetailsComponent/></TabPane>
+                    <TabPane tab="Crypto Only" key="2"><WalletJstDetailsComponent/></TabPane>
+                    <TabPane tab="Faldax Account Activity" key="3"><WalletFaldaxAccountDetailsComponent/></TabPane>
+                    <TabPane tab="Forfeit Fund" key="4"><WalletForfeitDetailsComponent/></TabPane>
                 </Tabs>
         </LayoutWrapper>
         );

@@ -2,76 +2,51 @@ import React, { Component } from 'react';
 import ApiUtils from '../../../../helpers/apiUtills';
 import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
-import {  withRouter} from "react-router-dom";
+import { withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
-import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
 
-const {RangePicker}=DatePicker;
 const {Option}=Select;
 const columns=[
     {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.created_on"/>,
-        key:1,
-        dataIndex:"created_at",
-        sorter: true,
-        width:100,
-        render:data=><span>{DateTimeCell(data)}</span>
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.amount"/>,
-        key:2,
-        sorter: true,
-        width:100,
-        render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.type"/>,
-        key:3,
-        dataIndex:"transaction_type",
-        sorter: true,
-        width:100,
-        render:type=><span className={"color-"+(type=="send"?"green":"blue")}>{type.charAt(0).toUpperCase()+type.slice(1)}</span>
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
-        dataIndex:"source_address",
+        title:<IntlMessages id="ReferralDetailsTable.title.coin_name"/>,
         key:4,
-        sorter: true,
+        dataIndex:"coin_name",
         width:100,
     },
     {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.destination_address"/>,
-        dataIndex:"destination_address",
+        title:<IntlMessages id="ReferralDetailsTable.title.amount"/>,
         key:5,
-        sorter: true,
+        dataIndex:"amount",
         width:100,
     },
     {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id"/>,
-        key:6,
-        sorter: true,
+        title:<IntlMessages id="ReferralDetailsTable.title.email"/>,
+        key:1,
+        dataIndex:"email",
         width:100,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
-       
-    }
+    },
+    {
+        title:<IntlMessages id="ReferralDetailsTable.title.txid"/>,
+        key:0,
+        dataIndex:"txid",
+        width:100,
+    },   
 ]
-
-class WalletFaldaxDetailsComponent extends Component {
+class ReferralDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
+        this.state={loader:false,data:[],count:0,searchData:"",coin_code:"",assetsList:[],page:1,limit:PAGESIZE,userId:""}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
     }
 
     componentDidMount(){
-        this.setState({coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state.assets)})
-        this.getWalletData();
+        this.setState({coin_code:this.props.match.params.coin_code,userId:this.props.match.params.id,assetsList:this.props.location.state.assets})
+        this.getReferralDetails();
     }
 
     openNotificationWithIcon = (type="Error",message="Something went to wrong") => {
@@ -85,32 +60,31 @@ class WalletFaldaxDetailsComponent extends Component {
         this.setState(
             { sorterCol: sorter.field, sortOrder: sorter.order, page: 1 },
             () => {
-              this.getWalletData();
+              this.getReferralDetails();
             }
           );
     };
 
     changePaginationSize = (current, pageSize) => {
         this.setState({ page: current, limit: pageSize }, () => {
-            this.getWalletData();
+            this.getReferralDetails();
         });
     };
 
     handlePagination = page => {
         this.setState({ page }, () => {
-         this.getWalletData();
+         this.getReferralDetails();
         });
     };
 
-    getWalletData=async ()=>{
+    getReferralDetails=async ()=>{
         try{
             await this.loader.show()
-            const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code}=this.state;
-            let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,2)).json();
-            let [{status,walletValue,err,message,tradeCount},logout]=[res,this.props.logout];
+            const {coin_code,searchData,userId,page,limit}=this.state;
+            let res=await (await ApiUtils.getUserReferData(this.props.token,coin_code,userId,page,limit,searchData,)).json();
+            let [{status,data,err,count},logout]=[res,this.props.logout];
             if(status==200){
-                this.setState({walletValue,count:tradeCount});
+                this.setState({data,count:count});
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)
                 logout();
@@ -124,7 +98,7 @@ class WalletFaldaxDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,data,count,limit,page,searchData,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">
@@ -132,27 +106,23 @@ class WalletFaldaxDetailsComponent extends Component {
                             <Col className="table-column" xs={12} md={7}>
                                 <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={7}>
-                                <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
-                            </Col>
                             <Col className="table-column" xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
-                                    <Option value="">All</Option>
-                                    {assetsList.map((ele)=><Option value={ele.value}>{ele.name}</Option>)}
+                                    {assetsList.map((ele)=><Option value={ele}>{ele}</Option>)}
                                 </Select>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
-                                <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getWalletData()}>Search</Button>
+                                <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getReferralDetails()}>Search</Button>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
-                                <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
+                                <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({searchData:"",coin_code:this.props.match.params.coin_code},()=>this.getReferralDetails())}}>Reset</Button>
                             </Col>
                         </Row>
                         <TableWrapper
                             {...this.state}
                             columns={columns}
                             pagination={false}
-                            dataSource={walletValue}
+                            dataSource={data}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
                         />
@@ -176,5 +146,5 @@ class WalletFaldaxDetailsComponent extends Component {
 export default withRouter(connect(
     state => ({
       token: state.Auth.get("token")
-    }),{ ...authAction})(WalletFaldaxDetailsComponent))
+    }),{ ...authAction})(ReferralDetailsComponent))
  

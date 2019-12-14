@@ -24,7 +24,7 @@ const columns=[
         key:5,
         dataIndex:"baseValue",
         width:100,
-        render:data=><sapn>{data?parseFloat(data)>=0?parseFloat(data):parseFloat(data) * -1:""}</sapn>
+        render:data=><span>{data?parseFloat(data)>=0?parseFloat(data):parseFloat(data) * -1:""}</span>
     },
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.type"/>,

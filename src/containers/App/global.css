@@ -535,6 +535,9 @@ html[dir='rtl'] .dz-hidden-input {
 .status-open{
   color: #5dade2;
 }
+.status-cancelled{
+  color:cadetblue;
+}
 .status-filled{
   color: darkgoldenrod;
 }

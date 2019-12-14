@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
@@ -448,6 +448,21 @@ const ApiUtils = {
       });
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  getUserReferData:function(token,coin_id="",user_id="",page="1",limit="50",data=""){
+    let url=`/admin/get-referred-user-data?coin_code=${coin_id}${user_id?'&user_id='+user_id:""}${page?'&page='+page:""}${limit?'&limit='+limit:""}${data?'&data='+data:""}`
+    try {
+      return fetch(API_URL + url, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        }
+      });
+    } catch (error) {
+      console.log("error",error);
     }
   },
 
@@ -4106,7 +4121,7 @@ const ApiUtils = {
             headers: this.headers
           }
         );
-      }
+      },
     };
   }
 };

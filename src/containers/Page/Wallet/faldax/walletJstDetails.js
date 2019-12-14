@@ -39,6 +39,14 @@ const columns=[
         width:100,
     },
     {
+        title:<IntlMessages id="walletJstDetailsTable.title.order_id"/>,
+        key:5,
+        sorter: true,
+        width:100,
+        dataIndex:"order_id",
+        render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
+    },
+    {
         title:<IntlMessages id="walletJstDetailsTable.title.comission"/>,
         key:3,
         dataIndex:"comission",
@@ -73,29 +81,22 @@ const columns=[
         width:100,
         dataIndex:"network_fees"
     },
-    {
-        title:<IntlMessages id="walletJstDetailsTable.title.order_id"/>,
-        key:5,
-        sorter: true,
-        width:100,
-        dataIndex:"order_id",
-        render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
-    },
-    {
-        title:<IntlMessages id="walletJstDetailsTable.title.order_status"/>,
-        key:10,
-        sorter: true,
-        width:100,
-        dataIndex:"order_status",
-        render:data=><span className={"status-"+data+""}>{data.charAt(0).toUpperCase() + data.slice(1)}</span>
-    },
-    {
-        title:<IntlMessages id="walletJstDetailsTable.title.quantity"/>,
-        key:11,
-        sorter: true,
-        width:100,
-        dataIndex:"quantity"
-    },
+    
+    // {
+    //     title:<IntlMessages id="walletJstDetailsTable.title.order_status"/>,
+    //     key:10,
+    //     sorter: true,
+    //     width:100,
+    //     dataIndex:"order_status",
+    //     render:data=><span className={"status-"+data+""}>{data.charAt(0).toUpperCase() + data.slice(1)}</span>
+    // },
+    // {
+    //     title:<IntlMessages id="walletJstDetailsTable.title.quantity"/>,
+    //     key:11,
+    //     sorter: true,
+    //     width:100,
+    //     dataIndex:"quantity"
+    // },
     // {
     //     title:<IntlMessages id="walletJstDetailsTable.title.settle_currency"/>,
     //     key:13,

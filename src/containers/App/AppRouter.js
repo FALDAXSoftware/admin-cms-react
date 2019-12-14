@@ -248,6 +248,10 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Referral/referredAmount"))
     },
     {
+        path: "referral/:id/:coin_code",
+        component: asyncComponent(() => import("../Page/Referral/details/referralDetails"))
+    },
+    {
         path: "assets/edit-asset/:id",
         component: asyncComponent(() => import("../Page/Assets/editAsset"))
     },
