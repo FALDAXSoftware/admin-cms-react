@@ -1792,6 +1792,37 @@ const RolesActionCell = (
           />
         </Tooltip>
       }
+       {isAllowed("update_role") &&
+        <Tooltip title="Edit">
+          <Icon
+            type="edit"
+            style={{ marginLeft: "10px", cursor: "pointer" }}
+            onClick={() => {
+              editRole(value,
+                name,
+                users,
+                assets,
+                countries,
+                roles,
+                employee,
+                pairs,
+                transaction_history,
+                trade_history,
+                withdraw_requests,
+                jobs,
+                kyc,
+                fees,
+                panic_button,
+                news,
+                is_referral,
+                add_user,
+                is_active)
+
+            }
+            }
+          />
+        </Tooltip>
+      }
     </div>
   );
 const CountryActionCell = (

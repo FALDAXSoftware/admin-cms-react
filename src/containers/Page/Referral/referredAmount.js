@@ -53,9 +53,15 @@ class ReferredAmount extends Component {
             return groups[group];
         })
     }
+    getAssetList=()=>{
+        const { referredAmounts} = this.state;
+        let assetList=[];
+        referredAmounts.map(ele=>assetList.push(ele["coin_name"]));
+        return assetList;
+    }
 
     render() {
-        const { referredAmounts, loader } = this.state;
+        const { referredAmounts, loader,user } = this.state;
         let result = this.groupBy(referredAmounts, function (item) {
             return [item.userid];
         });
@@ -69,31 +75,22 @@ class ReferredAmount extends Component {
                     </Link>
                 </div>
                 {result.length > 0 ?
-                    result.map((referral) => {
-                        return (
-                            <Row>
+                    <Row>
+                        {
+                            referredAmounts && referredAmounts.map((ref) => (
                                 <Col md={8} sm={12} xs={24}>
-                                    <Card className='assets-card'>
+                                    <Card className='assets-card' onClick={()=>this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}})}>
                                         <div>
-                                           <span>BTC</span>
-                                           <span className="amount">10000</span>
+                                            <div className="asset-coinatiner">
+                                                <img src={'https://s3.us-east-2.amazonaws.com/production-static-asset/' + ref.coin_icon}></img>&nbsp;&nbsp;
+                                                <span>{ref.coin_name}</span>
+                                                <span className="amount">{ref.amount}</span>
+                                            </div>
                                         </div>
-                                        {/* <span>{referral[0].firstname} {referral[0].lastname}</span> <br />
-                                        <span>{referral[0].email}</span> <br />
-                                        {
-                                            referral && referral.map(function (ref) {
-                                                return (
-                                                    <p>
-                                                        <span className="amount-span">{ref.earned} {ref.coinname}</span>
-                                                    </p>
-                                                );
-                                            })
-                                        } */}
                                     </Card>
                                 </Col>
-                            </Row>
-                        )
-                    })
+                            ))}
+                    </Row>
                     : ' No Referral Earning'
                 }
                 {loader && <FaldaxLoader />}

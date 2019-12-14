@@ -5,6 +5,7 @@ import authAction from '../../../redux/auth/actions';
 import { Link } from 'react-router-dom';
 import EditAssetDetails from './editAssetDetails';
 import EditAssetLimit from './editAssetLimit';
+import LayoutWrapper from "../../../components/utility/layoutWrapper";
 
 const { logout } = authAction;
 const { TabPane } = Tabs;
@@ -23,18 +24,18 @@ class EditAsset extends Component {
         let coin_id = path[path.length - 1]
 
         return (
-            <div>
+            <LayoutWrapper>
                 <div style={{ "display": "inline-block", "width": "100%", marginLeft: '20px' }}>
                     <Link to="/dashboard/assets">
                         <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
                         <a onClick={() => { this.props.history.push('/dashboard/assets') }}>Back</a>
                     </Link>
                 </div>
-                <Tabs defaultActiveKey="1" size={'large'}>
+                <Tabs defaultActiveKey="1" size={'large'} className="full-width">
                     <TabPane tab="Asset Details" key="1"><EditAssetDetails coin_id={coin_id} /></TabPane>
                     <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane>
                 </Tabs>
-            </div >
+                </LayoutWrapper>
         );
     }
 }

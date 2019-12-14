@@ -47,13 +47,15 @@ const columns = [{
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
-}, {
-    title: <IntlMessages id="antTable.title.numReferral" />,
-    key: 'no_of_referral',
-    width: 50,
-    sorter: true,
-    render: object => renderCell(object, 'ReferralCell', 'no_of_referral')
-}];
+}, 
+// {
+//     title: <IntlMessages id="antTable.title.numReferral" />,
+//     key: 'no_of_referral',
+//     width: 50,
+//     sorter: true,
+//     render: object => renderCell(object, 'ReferralCell', 'no_of_referral')
+// }
+];
 
 const referralInfos = [
     {

@@ -118,6 +118,14 @@ const columns = [
     render: object => renderCell(object, "TextCell", "order_id")
   },
   {
+    title:<IntlMessages id="tradeTable.title.order_status"/>,
+    key:"order_status",
+    sorter: true,
+    width:100,
+    dataIndex:"order_status",
+    render:data=><span className={"status-"+data+""}>{data.charAt(0).toUpperCase() + data.slice(1)}</span>
+    },
+  {
     title: <IntlMessages id="tradeTable.title.you_send" />,
     key: "sell_currency_amount",
     width: 100,

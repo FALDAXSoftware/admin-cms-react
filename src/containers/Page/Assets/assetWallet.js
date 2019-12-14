@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
-import { Link } from 'react-router-dom';
+import { BackButton } from '../../Shared/backBttton';
 import WalletOverview from './walletOverview';
 import AssetWalletHistory from './assetWalletHistory';
 import { LayoutContentWrapper } from '../../../components/utility/layoutWrapper.style';
@@ -20,30 +20,8 @@ class AssetWallet extends Component {
         let asset_id = path[path.length - 1]
 
         return (
-          <div>
-            <div
-              style={{
-                display: "inline-block",
-                width: "100%",
-                marginLeft: "20px"
-              }}
-            >
-              <Link to="/dashboard/assets">
-                <i
-                  style={{ margin: "15px" }}
-                  className="fa fa-arrow-left"
-                  aria-hidden="true"
-                ></i>
-                <a
-                  onClick={() => {
-                    this.props.history.push("/dashboard/assets");
-                  }}
-                >
-                  Back
-                </a>
-              </Link>
-            </div>
             <LayoutContentWrapper>
+             <BackButton {...this.props}></BackButton>
               <Tabs defaultActiveKey="1" size={"large"} className="full-width">
                 <TabPane tab="Wallet" key="1">
                   <WalletOverview asset_id={asset_id} />
@@ -53,7 +31,6 @@ class AssetWallet extends Component {
                 </TabPane>
               </Tabs>
             </LayoutContentWrapper>
-          </div>
         );
     }
 }

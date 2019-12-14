@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Tabs, Pagination, Input, notification } from 'antd';
-import { connect} from 'react-redux';
+import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import { withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
@@ -61,7 +61,7 @@ class Referrals extends Component {
     static edit = id => {
         console.log(self)
         self.props.history.push("/dashboard/referral/" + id);
-  };
+    };
 
 
     componentDidMount = () => {
@@ -175,7 +175,7 @@ class Referrals extends Component {
     _handleReferralChange = (pagination, filters, sorter) => {
         this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
             this._getAllReferredAdmins();
-            this._getContactDetails();
+            // this._getContactDetails();
         })
     }
 
@@ -198,7 +198,7 @@ class Referrals extends Component {
                         _this.setState({
                             errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
                         }, () => {
-                            _this._getContactDetails();
+                            // _this._getContactDetails();
                         })
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

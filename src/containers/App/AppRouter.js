@@ -125,8 +125,18 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/:coin",
-        component: asyncComponent(() => import("../Page/Wallet/wallet")),
+        path: "wallet/faldax/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/faldax/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/warm/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/custodial/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/custodial/wallet")),
         module: "wallet_dashboard"
     },
     {
@@ -236,6 +246,10 @@ const mandatoryRoutes = [
     {
         path: "referral/:id",
         component: asyncComponent(() => import("../Page/Referral/referredAmount"))
+    },
+    {
+        path: "referral/:id/:coin_code",
+        component: asyncComponent(() => import("../Page/Referral/details/referralDetails"))
     },
     {
         path: "assets/edit-asset/:id",

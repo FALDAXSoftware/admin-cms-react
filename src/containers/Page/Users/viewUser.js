@@ -77,7 +77,7 @@ class ViewUser extends Component {
                     {isAllowed("get_user_ticket") &&
                         <TabPane tab="Tickets" key="11"><UserTickets user_id={user_id} /></TabPane>
                     }
-                    {isAllowed("get_all_limits") &&
+                    {isAllowed("get_user_limits") &&
                         <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
                     }
                     {(this.props.location.state && this.props.location.state.is_active) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>}
