@@ -20,6 +20,7 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
+import {  withRouter} from "react-router-dom";
 import {ExecutionUl} from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 
@@ -50,7 +51,10 @@ class TradeHistory extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async() => {
+    if(this.props.location.state){
+        await this.setState({searchTrade:JSON.parse(this.props.location.state.orderId)})
+    }
     this._getAllTrades();
   };
 
@@ -382,11 +386,11 @@ class TradeHistory extends Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     token: state.Auth.get("token")
   }),
   { logout }
-)(TradeHistory);
+)(TradeHistory));
 
 export { TradeHistory, tradeTableInfos };

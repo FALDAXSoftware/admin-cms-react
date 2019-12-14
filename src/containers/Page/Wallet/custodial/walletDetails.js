@@ -1,70 +1,57 @@
 import React, { Component } from 'react';
-import ApiUtils from '../../../helpers/apiUtills';
-import authAction from "../../../redux/auth/actions";
+import ApiUtils from '../../../../helpers/apiUtills';
+import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
-import {  withRouter} from "react-router-dom";
-import Loader from "../faldaxLoader"
+import { withRouter} from "react-router-dom";
+import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
-import IntlMessages from '../../../components/utility/intlMessages';
-import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../helpers/globals';
-import TableWrapper from "../../Tables/antTables/antTable.style";
-import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../components/tables/helperCells';
+import IntlMessages from '../../../../components/utility/intlMessages';
+import TableDemoStyle from '../../../Tables/antTables/demo.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import TableWrapper from "../../../Tables/antTables/antTable.style";
 
-const {RangePicker}=DatePicker;
 const {Option}=Select;
 const columns=[
     {
-        title:<IntlMessages id="walletDetailsTable.title.created_on"/>,
-        key:1,
-        dataIndex:"created_at",
-        sorter: true,
-        width:100,
-        render:data=><span>{DateTimeCell(data)}</span>
-    },
-    {
-        title:<IntlMessages id="walletDetailsTable.title.amount"/>,
-        key:1,
-        sorter: true,
-        width:100,
-        render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
-    },
-    {
-        title:<IntlMessages id="walletDetailsTable.title.faldax_fee"/>,
-        key:2,
-        sorter: true,
-        width:100,
-        render:data=><span>{data["faldax_fee"]?(parseFloat(data["faldax_fee"]).toFixed(8)+" "+data["coin"]):"-"}</span>
-    },
-    {
-        title:<IntlMessages id="walletDetailsTable.title.source_address"/>,
-        dataIndex:"source_address",
-        key:3,
-        sorter: true,
-        width:100,
-    },
-    {
-        title:<IntlMessages id="walletDetailsTable.title.destination_address"/>,
-        dataIndex:"destination_address",
+        title:<IntlMessages id="walletCustodialDetailsTable.title.coin"/>,
         key:4,
-        sorter: true,
+        dataIndex:"coin",
+        width:100,
+        render:data=><span>{data.toUpperCase()}</span>
+    },
+    {
+        title:<IntlMessages id="walletCustodialDetailsTable.title.baseValue"/>,
+        key:5,
+        dataIndex:"baseValue",
+        width:100,
+        render:data=><sapn>{data?parseFloat(data)>=0?parseFloat(data):parseFloat(data) * -1:""}</sapn>
+    },
+    {
+        title:<IntlMessages id="walletCustodialDetailsTable.title.type"/>,
+        key:1,
+        dataIndex:"type",
+        width:100,
+        render:data=><span className={data=="send"?"error-danger":"color-green"}>{data.charAt(0).toUpperCase()+data.slice(1)}</span>
+    },
+    {
+        title:<IntlMessages id="walletCustodialDetailsTable.title.txid"/>,
+        key:0,
+        dataIndex:"txid",
         width:100,
     },
     {
-        title:<IntlMessages id="walletDetailsTable.title.transaction_id"/>,
-        key:5,
-        sorter: true,
+        title:<IntlMessages id="walletCustodialDetailsTable.title.normalizedTxHash"/>,
+        key:3,
+        dataIndex:"normalizedTxHash",
         width:100,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
-       
-    }
+    },
+   
 ]
 
-class WalletDetailsComponent extends Component {
+class WalletWarmDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"",sorterCol:"",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
+        this.state={loader:false,transfers:[],count:0,searchData:"",coin_code:"",assetsList:[]}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
     }
 
@@ -104,12 +91,11 @@ class WalletDetailsComponent extends Component {
     getWalletData=async ()=>{
         try{
             await this.loader.show()
-            const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code}=this.state;
-            let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date)).json();
-            let [{status,walletValue,err,message,tradeCount},logout]=[res,this.props.logout];
+            const {coin_code,searchData}=this.state;
+            let res=await (await ApiUtils.walletDashboard(this.props.token).getCustodialWalletDetail(coin_code,searchData)).json();
+            let [{status,data,err,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
-                this.setState({walletValue,count:tradeCount});
+                this.setState({transfers:data.transfers,count:tradeCount});
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)
                 logout();
@@ -123,7 +109,7 @@ class WalletDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,transfers,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">
@@ -131,12 +117,8 @@ class WalletDetailsComponent extends Component {
                             <Col className="table-column" xs={12} md={7}>
                                 <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={7}>
-                                <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
-                            </Col>
                             <Col className="table-column" xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
-                                    <Option value="">All</Option>
                                     {assetsList.map((ele)=><Option value={ele.value}>{ele.name}</Option>)}
                                 </Select>
                             </Col>
@@ -151,11 +133,11 @@ class WalletDetailsComponent extends Component {
                             {...this.state}
                             columns={columns}
                             pagination={false}
-                            dataSource={walletValue}
+                            dataSource={transfers}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
                         />
-                        <Pagination
+                        {/* <Pagination
                             className="ant-users-pagination"
                             onChange={this.handlePagination}
                             pageSize={limit}
@@ -164,7 +146,7 @@ class WalletDetailsComponent extends Component {
                             showSizeChanger
                             onShowSizeChange={this.changePaginationSize}
                             pageSizeOptions={pageSizeOptions}
-                      />
+                      /> */}
                     {loader && <Loader/>}
                    </TableDemoStyle>
                    </>
@@ -175,5 +157,5 @@ class WalletDetailsComponent extends Component {
 export default withRouter(connect(
     state => ({
       token: state.Auth.get("token")
-    }),{ ...authAction})(WalletDetailsComponent))
+    }),{ ...authAction})(WalletWarmDetailsComponent))
  

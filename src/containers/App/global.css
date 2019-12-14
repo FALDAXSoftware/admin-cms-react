@@ -498,6 +498,12 @@ html[dir='rtl'] .dz-hidden-input {
   cursor: pointer;
   margin-left: 15px;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
+.small-icon-img{
+  height:15px;
+}
 .color-green{
   color:green;
 }
@@ -519,4 +525,10 @@ html[dir='rtl'] .dz-hidden-input {
 
 .table-column{
   padding: 5px !important;
+}
+.status-open{
+  color: #5dade2;
+}
+.status-filled{
+  color: darkgoldenrod;
 }
