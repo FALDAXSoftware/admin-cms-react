@@ -135,10 +135,10 @@ class Dashboard extends Component {
     if (isAllowed("get_dashboard_data")) {
       this._getAllCount();
     }
-    if (isAllowed("metabase_details")) {
+    // if (isAllowed("metabase_details")) {
 
-      this._getMetabaseData();
-    }
+    //   this._getMetabaseData();
+    // }
   }
 
   _getAllCount = () => {
@@ -681,19 +681,19 @@ class Dashboard extends Component {
 
             }
             {isAllowed("metabase_dashboard_report") &&
-            <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl &&
-                  <IframeCol>
-                    <iframe
-                      src={metabaseUrl}
-                      frameborder="0"
-                      width="100%"
-                      allowtransparency
-                    ></iframe>
-                  </IframeCol>}
-              </TableDemoStyle>
-            </TabPane>
+              <TabPane tab="Report" key="metabase">
+                <TableDemoStyle className="isoLayoutContent">
+                  {metabaseUrl &&
+                    <IframeCol>
+                      <iframe
+                        src={metabaseUrl}
+                        frameborder="0"
+                        width="100%"
+                        allowtransparency
+                      ></iframe>
+                    </IframeCol>}
+                </TableDemoStyle>
+              </TabPane>
             }
           </Tabs>
         </TableDemoStyle>

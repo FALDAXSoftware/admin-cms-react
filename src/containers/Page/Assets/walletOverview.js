@@ -70,7 +70,7 @@ class WalletOverview extends Component {
         this.setState({ loader: true });
         let _this = this;
 
-        ApiUtils.generateWalletAddress(token, code)
+        ApiUtils.generateWalletAddress(token, code, 36)
             .then((res) => res.json())
             .then((res) => {
                 if (res.status == 200) {

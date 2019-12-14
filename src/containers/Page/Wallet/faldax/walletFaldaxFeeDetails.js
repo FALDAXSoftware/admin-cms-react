@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import ApiUtils from '../../../helpers/apiUtills';
-import authAction from "../../../redux/auth/actions";
+import ApiUtils from '../../../../helpers/apiUtills';
+import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import {  withRouter} from "react-router-dom";
-import Loader from "../faldaxLoader"
+import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
-import IntlMessages from '../../../components/utility/intlMessages';
-import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../helpers/globals';
-import TableWrapper from "../../Tables/antTables/antTable.style";
+import IntlMessages from '../../../../components/utility/intlMessages';
+import TableDemoStyle from '../../../Tables/antTables/demo.style';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../components/tables/helperCells';
+import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
 
 const {RangePicker}=DatePicker;
 const {Option}=Select;
@@ -64,7 +64,7 @@ const columns=[
 class WalletDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"",sorterCol:"",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
+        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
     }
 

@@ -34,7 +34,7 @@ const columns = [{
     key: 'is_active',
     width: 200,
     render: object => {
-        if (isAllowed()) {
+        if (isAllowed("update_job_category")) {
             return renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
         } else {
             return renderCell(object, 'TextCell', 'is_active')
