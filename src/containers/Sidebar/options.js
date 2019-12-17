@@ -13,7 +13,8 @@ const options = [
     permssions: [
       "get_users",
       "get_inactive_users",
-      "get_deleted_users"
+      "get_deleted_users",
+      "metabase_users_report"
     ]
   },
   {
@@ -22,12 +23,13 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "assets",
     permssions: [
-      "get_coins"
+      "get_coins",
+      "metabase_asset_report"
     ]
   },
   {
     key: "pairs",
-    label: "sidebar.fees",
+    label: "sidebar.pair",
     leftIcon: "fas fa-coins",
     module: "pairs",
     permssions: [
@@ -40,7 +42,8 @@ const options = [
     leftIcon: "far fa-flag",
     module: "countries",
     permssions: [
-      "get_countries_data"
+      "get_countries_data",
+      "metabase_country_report"
     ]
   },
   {
@@ -49,7 +52,8 @@ const options = [
     leftIcon: "fas fa-tasks",
     module: "roles",
     permssions: [
-      "get_role"
+      "get_role",
+      "metabase_roles_report"
     ]
   },
   {
@@ -58,7 +62,8 @@ const options = [
     leftIcon: "fas fa-user-tie",
     module: "employee",
     permssions: [
-      "get_employee"
+      "get_employee",
+      "metabase_employee_report"
     ]
   },
   // {
@@ -74,7 +79,8 @@ const options = [
     leftIcon: "fas fa-exchange-alt",
     module: "transaction_history",
     permssions: [
-      "get_all_transactions"
+      "get_all_transactions",
+      "metabase_transaction_history_report"
     ]
   },
   {
@@ -83,7 +89,8 @@ const options = [
     leftIcon: "fas fa-history",
     module: "trade_history",
     permssions: [
-      "get_all_trade"
+      "get_all_trade",
+      "metabase_history_report"
     ]
   },
   {
@@ -92,7 +99,8 @@ const options = [
     leftIcon: "fas fa-hand-holding-usd",
     module: "withdraw_requests",
     permssions: [
-      "get_all_withdraw_request"
+      "get_all_withdraw_request",
+      "metabase_withdraw_request_report"
     ]
   },
   {
@@ -102,7 +110,8 @@ const options = [
     module: "jobs",
     permssions: [
       "get_all_jobs",
-      "get_job_categories"
+      "get_job_categories",
+      "metabase_career_report"
     ]
   },
   {
@@ -111,22 +120,24 @@ const options = [
     leftIcon: "fas fa-id-card",
     module: "kyc",
     permssions: [
-      "get_all_kyc_data"
+      "get_all_kyc_data",
+      "metabase_kyc_report"      
     ]
   },
   {
     key: "fees",
-    label: "Fees",
+    label: "sidebar.fees",
     leftIcon: "fas fa-percentage",
     module: "fees",
     permssions: [
       "get_withdrawl_faldax_fee",
-      "get_all_fee"
+      "get_all_fee",
+      "metabase_fee_report"
     ]
   },
   {
     key: "panic-button",
-    label: "Panic Button",
+    label: "sidebar.panic_button",
     leftIcon: "fas fa-ban",
     module: "panic_button",
     permssions: [
@@ -135,16 +146,17 @@ const options = [
   },
   {
     key: "news",
-    label: "News",
+    label: "sidebar.news",
     leftIcon: "fas fa-newspaper",
     module: "news",
     permssions: [
-      "get_all_news"
+      "get_all_news",
+      "metabase_news_report"
     ]
   },
   {
     key: "news-source",
-    label: "News Sources",
+    label: "sidebar.news_source",
     leftIcon: "fas fa-rss-square",
     module: "news_source",
     permssions: [
@@ -153,26 +165,28 @@ const options = [
   },
   {
     key: "referral",
-    label: "Affiliate Program & Referrals",
+    label: "sidebar.artifi_and_referral",
     leftIcon: "fas fa-user-friends",
     module: "is_referral",
     permssions: [
       "get_referal_list",
-      "get_referral_details"
+      "get_referral_details",
+      "metabase_referal_report"
     ]
   },
   {
     key: "account-class",
-    label: "Account Class Management",
+    label: "sidebar.account_class",
     leftIcon: "fas fa-file-invoice",
     module: "account_class",
     permssions: [
-      "get_all_account_classes"
+      "get_all_account_classes",
+      "metabase_account_report"
     ]
   },
   {
     key: "email-templates",
-    label: "Email Templates",
+    label: "sidebar.email_temp",
     leftIcon: "fas fa-envelope",
     module: "email_templates",
     permssions: [
@@ -181,16 +195,17 @@ const options = [
   },
   {
     key: "two-factor-requests",
-    label: "Two-Factor Requests",
+    label: "sidebar.two_factor_authentication",
     leftIcon: "fas fa-address-card",
     module: "two_factor_requests",
     permssions: [
-      "get_twofactors_requests"
+      "get_twofactors_requests",
+      "metabase_two_factor_request"
     ]
   },
   {
     key: "notifications",
-    label: "Notifications",
+    label: "sidebar.notification",
     leftIcon: "fas fa-bell",
     module: "notifications",
     permssions: [
@@ -200,11 +215,13 @@ const options = [
   },
   {
     key: "wallet-dashboard",
-    label: "Wallet Dashboard",
+    label: "sidebar.wallet_dashboard",
     leftIcon: "fas fa-wallet",
     module: "wallet_dashboard",
     permssions: [
-      "admin_wallet_fees_details"
+      "admin_wallet_fees_details",
+      "admin_warm_wallet_data",
+      "admin_cold_wallet_data"
     ]
   },
   // {
@@ -218,7 +235,7 @@ const options = [
   // },
   {
     key: "batch-and-balance",
-    label: "Batch & Balance",
+    label: "sidebar.batch_and_balance",
     leftIcon: "fas fa-balance-scale",
     module: "batch_and_balance",
     permssions: [
@@ -237,7 +254,7 @@ const options = [
   // },
   {
     key: "simplex-token",
-    label: "Simplex Token",
+    label: "sidebar.token",
     leftIcon: "fas fa-file-invoice",
     module: "simplex_token",
     permssions: [
@@ -246,11 +263,12 @@ const options = [
   },
   {
     key: "campaign",
-    label: "Offers",
+    label: "sidebar.offers",
     leftIcon: "fas fa-percent",
     module: "offers",
     permssions: [
-      "list_campaigns"
+      "list_campaigns",
+      "metabase_offers_report"
     ]
   }
 ];
