@@ -14,7 +14,7 @@ import { Jobs } from "../../containers/Page/Jobs/jobs";
 import { JobApplications } from "../../containers/Page/Jobs/jobApplications";
 import { LimitManagement } from "../../containers/Page/LimitManagement/limitManagement";
 import { KYC } from "../../containers/Page/KYC/kyc";
-import { Fees } from "../../containers/Page/Fees/fees";
+import  Fees  from "../../containers/Page/Fees/feesWithdrawal";
 import { News } from "../../containers/Page/News/news";
 import { AccountClass } from "../../containers/Page/AccountClass/accountClass";
 import { EmailTemplates } from "../../containers/Page/EmailTemplates/emailTemplates";
@@ -28,7 +28,7 @@ import Whitelist from "../../containers/Page/Employee/employeeWhitelist";
 import TwoFactorRequests from "../../containers/Page/TwoFactorRequest/TwoFactorRequests";
 import Tier from "../../containers/Page/Tiers/tiers";
 import PendingRequests from "../../containers/Page/Tiers/pendingTierRequests";
-import { NetworkFee } from "../../containers/Page/NetworkFee/networkFee";
+import  NetworkFee  from "../../containers/Page/NetworkFee/networkFee";
 import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFeesFormula";
 import offers from "../../containers/Page/Offers/offers";
 import styled from "styled-components";
@@ -656,10 +656,6 @@ const viewKYC = (
     id_type,
     created_at
   );
-};
-
-const editFees = (value, trade_volume, maker_fee, taker_fee) => {
-  Fees.editFees(value, trade_volume, maker_fee, taker_fee);
 };
 
 const newsStatus = (
@@ -1968,7 +1964,7 @@ const EmployeeActionCell = (
           />
         </Tooltip>
       }
-      {isAllowed("update_employee") && isAllowed("get_employee_details") &&
+      { isAllowed("get_employee_details") &&
         <Tooltip title="Edit">
           <Icon
             type="edit"
@@ -2208,7 +2204,7 @@ const KYCActionCell = (
   created_at
 ) => (
     <div>
-      <Tooltip title="View">
+      {isAllowed("get_kyc_detail") && <Tooltip title="View">
         <Icon
           type="info-circle"
           className="btn-icon"
@@ -2232,7 +2228,7 @@ const KYCActionCell = (
             )
           }
         />
-      </Tooltip>
+      </Tooltip>}
     </div>
   );
 const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => (
@@ -2254,7 +2250,7 @@ const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => (
       <Icon
         type="edit"
         className="btn-icon"
-        onClick={() => editFees(value, trade_volume, maker_fee, taker_fee)}
+        onClick={() => console.log()}
       />
     </Tooltip>
   </div>

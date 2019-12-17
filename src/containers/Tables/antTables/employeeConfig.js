@@ -6,6 +6,7 @@ import {
     EmployeeActionCell,
     EmployeeSwitchCell
 } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailID = null,
     phone = null, s_address = null, roles = null, roleID = null, status = null,
@@ -59,7 +60,7 @@ const columns = [
         title: <IntlMessages id="antTable.title.role" />,
         key: 'role',
         width: 150,
-        render: (object)=>(<a href={"access-grant/"+object.role_id}>{object['role']}</a>)
+        render: (object)=>(isAllowed('get_role')?<a href={"access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
     },
     {
         title: <IntlMessages id="antTable.title.Active" />,

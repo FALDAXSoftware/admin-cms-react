@@ -375,6 +375,7 @@ class Employees extends Component {
               <div>
                 {employeeTableinfos.map(tableInfo => (
                   <TableWrapper
+                    rowKey="id"
                     {...this.state}
                     columns={tableInfo.columns}
                     pagination={false}

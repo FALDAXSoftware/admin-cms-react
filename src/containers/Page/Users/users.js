@@ -78,7 +78,7 @@ class Users extends Component {
           </Button>
           }
         </div>
-        <Tabs className="float-clear" defaultActiveKey="1" size={"large"} onChange={this.onChangeTabs}>
+        <Tabs className="float-clear" size={"large"} onChange={this.onChangeTabs}>
           {isAllowed("get_users") &&
             <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
           }
