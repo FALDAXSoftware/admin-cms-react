@@ -171,12 +171,12 @@ class UserWallets extends Component {
                                         title={coinTitle}
                                         actions={[
                                             wallet.send_address == "" && wallet.send_address == "" && isAllowed("create_wallet") ? (
-                                                <Button
+                                               isAllowed("create_wallet") && (<Button
                                                     type="primary"
                                                     onClick={this._createUserWallet.bind(this, wallet)}
                                                 >
                                                     Create Wallet
-                        </Button>
+                                               </Button>)
                                             ) : (
                                                     ""
                                                 )

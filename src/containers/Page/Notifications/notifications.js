@@ -147,14 +147,14 @@ class EditableTable extends React.Component {
                 <a>Cancel</a>
               </Popconfirm>
             </span>
-          ) : (
-              <a
+          ) : 
+              isAllowed("add_admin_thresholds") &&(<a
                 disabled={editingKey !== ""}
                 onClick={() => this.edit(record.coin_id)}
               >
                 Edit
-            </a>
-            );
+            </a>)
+          
         }
       }
     ];
@@ -265,8 +265,8 @@ class EditableTable extends React.Component {
   };
 
   componentDidMount = () => {
-    this._getAllNotificationValues();
-    this._getAdminContactDetails();
+    if (isAllowed("get_admin_thresholds_contacts"))  this._getAdminContactDetails();
+    if (isAllowed("get_admin_thresholds")) this._getAllNotificationValues();
   };
 
   _getAllNotificationValues = () => {
@@ -518,13 +518,11 @@ class EditableTable extends React.Component {
                   "required"
                 )}
               </span>
-              <Button
+             {isAllowed("add_admin_thresholds_contacts") && <Button
                 onClick={this._storeContactDetails}
                 htmlType="submit"
                 type="primary"
-              >
-                Submit
-          </Button>
+              >Submit</Button>}
             </div>
           </div>
         }

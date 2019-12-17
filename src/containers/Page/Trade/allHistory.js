@@ -23,7 +23,7 @@ class AllHistory extends Component {
                     <Tabs className="isoTableDisplayTab full-width">
                         <TabPane tab="Crypto Only" key="1"><TradeHistory /></TabPane>
                         <TabPane tab="Credit Card" key="2"><SimplexHistory /></TabPane>
-                        {isAllowed('metabase_transaction_history_report') && <TabPane tab="Report" key="3"><Metabase /></TabPane>}
+                        {isAllowed("metabase_history_report") && <TabPane tab="Report" key="3"><Metabase /></TabPane>}
                     </Tabs>
                 {/* </TableDemoStyle> */}
             </LayoutWrapper>

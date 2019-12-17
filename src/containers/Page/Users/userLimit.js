@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const EditableContext = React.createContext();
@@ -123,9 +124,9 @@ class EditableUserLimitTable extends React.Component {
                             </Popconfirm>
                         </span>
                     ) : (
-                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
+                           <>{isAllowed("update_user_limit") && <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
                                 Edit
-                    </a>
+                           </a>}</>
                         );
                 },
             },

@@ -2208,7 +2208,7 @@ const KYCActionCell = (
   created_at
 ) => (
     <div>
-      <Tooltip title="View">
+      {isAllowed("get_kyc_detail") && <Tooltip title="View">
         <Icon
           type="info-circle"
           className="btn-icon"
@@ -2232,7 +2232,7 @@ const KYCActionCell = (
             )
           }
         />
-      </Tooltip>
+      </Tooltip>}
     </div>
   );
 const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => (

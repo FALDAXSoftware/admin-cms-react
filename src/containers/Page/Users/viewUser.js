@@ -53,22 +53,22 @@ class ViewUser extends Component {
 
                         <TabPane tab="Wallets" key="3"><UserWallets user_id={user_id} /></TabPane>
                     }
-                    {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
+                    {/* {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
                         <TabPane tab="Orders" key="4"><AllOrders user_id={user_id} /></TabPane>
-                    }
+                    } */}
                     {isAllowed("get_user_login_history") &&
                         <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
                     }
-                    {isAllowed("get_all_trade") &&
+                    {isAllowed("get_users_trades") &&
                         <TabPane tab="History" key="6"><AllTrades user_id={user_id} /></TabPane>
                     }
-                    {isAllowed("get_user_details") &&
+                    {isAllowed("update_user_referal") &&
                         <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
                     }
                     {isAllowed("referred_users") &&
                         <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
                     }
-                    {isAllowed("get_all_transactions") &&
+                    {isAllowed("get_user_transactions") &&
                         <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_all_withdraw_request") &&
@@ -80,7 +80,9 @@ class ViewUser extends Component {
                     {isAllowed("get_user_limits") &&
                         <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
                     }
-                    {(this.props.location.state && this.props.location.state.is_active) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>}
+                    {isAllowed("get_delete_account_summary") &&
+                        (this.props.location.state && this.props.location.state.is_active) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
+                    }
                 </Tabs>
             </div>
         );
