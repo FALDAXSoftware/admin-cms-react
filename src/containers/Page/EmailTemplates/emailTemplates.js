@@ -28,8 +28,7 @@ class EmailTemplates extends Component {
     EmailTemplates.editTemplate = EmailTemplates.editTemplate.bind(this);
   }
 
-  static editTemplate(value, name, content, note) {
-    console.log(value, name, content, note);
+  static editTemplate(value) {
     self.props.history.push(
       "/dashboard/email-templates/edit-template/" + value
     );
@@ -90,13 +89,13 @@ class EmailTemplates extends Component {
     return (
       <LayoutWrapper>
         <Tabs className="isoTableDisplayTab full-width">
-          {templateTableinfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+            <TabPane tab={templateTableinfos[0].title} key={templateTableinfos[0].value}>
               <TableDemoStyle className="isoLayoutContent">
                 <div>
                   <TableWrapper
                     {...this.state}
-                    columns={tableInfo.columns}
+                    rowKey="id"
+                    columns={templateTableinfos[0].columns}
                     pagination={false}
                     dataSource={allTemplates}
                     className="isoCustomizedTable"
@@ -104,7 +103,6 @@ class EmailTemplates extends Component {
                 </div>
               </TableDemoStyle>
             </TabPane>
-          ))}
         </Tabs>
         {loader && <FaldaxLoader />}
       </LayoutWrapper>

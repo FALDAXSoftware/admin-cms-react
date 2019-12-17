@@ -46,7 +46,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
 const columns = [
     {
         title: <IntlMessages id="roleTable.title.actions" />,
-        key: 'action',
+        key: 'roleTable.title.actions',
         width: 200,
         render: object => renderCell(object,
             'RolesActionCell', 'id', 'name', 'users', 'assets',
@@ -56,13 +56,13 @@ const columns = [
     },
     {
         title: <IntlMessages id="roleTable.title.name" />,
-        key: 'name',
+        key: 'roleTable.title.name',
         width: 200,
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'name')
     }, {
         title: <IntlMessages id="roleTable.title.status" />,
-        key: 'is_active',
+        key: 'roleTable.title.status',
         width: 200,
         render: object => {
             if (isAllowed("update_role")) {
