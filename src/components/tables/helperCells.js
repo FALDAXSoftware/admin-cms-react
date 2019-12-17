@@ -1753,7 +1753,7 @@ const RolesActionCell = (
 ) => (
     <div>
       {isAllowed("delete_role") &&
-        <Tooltip title="Delete">
+        <Tooltip title="Delete" key="delete_tooltips">
           <Icon
             type="delete"
             onClick={() =>
@@ -1783,7 +1783,7 @@ const RolesActionCell = (
         </Tooltip>
       }
       {isAllowed("get_role_value") &&
-        <Tooltip title="Permissions">
+        <Tooltip title="Permissions" key="permission_key">
           <Icon
             type="sliders"
             className="btn-icon"
@@ -1796,7 +1796,7 @@ const RolesActionCell = (
         </Tooltip>
       }
        {isAllowed("update_role") &&
-        <Tooltip title="Edit">
+        <Tooltip title="Edit" key="update-tooltips">
           <Icon
             type="edit"
             className="btn-icon"
@@ -1893,6 +1893,7 @@ const RoleSwitchCell = (
 ) => (
     <Switch
       checked={is_active}
+      key="role_switch"
       onChange={() => {
         roleStatus(
           value,

@@ -255,7 +255,7 @@ const AccessGrant = (props) => {
                     >
                       <Row>
                         {permissions[key].map((per, index) => (
-                          <Col span={6}>
+                          <Col span={6} key={index}>
                             <Checkbox
                               checked={per.isChecked}
                               onChange={e => {

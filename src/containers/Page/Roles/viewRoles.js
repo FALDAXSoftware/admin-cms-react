@@ -367,18 +367,18 @@ class ViewRoles extends Component {
           </div>
           {loader && <FaldaxLoader />}
           <div>
-            {rolesTableInfos.map(tableInfo => (
               <TableWrapper
                 {...this.state}
-                columns={tableInfo.columns}
+                rowKey="id" 
+                columns={rolesTableInfos[0].columns}
                 pagination={false}
                 dataSource={allRoles}
                 className="isoCustomizedTable"
                 onChange={this._handleRoleChange}
               />
-            ))}
             {/* {showEditRoleModal && */}
             <EditRoleModal
+              key="edit_role_model"
               fields={roleDetails}
               showEditRoleModal={showEditRoleModal}
               closeEditRoleModal={this._closeEditRoleModal}
@@ -387,6 +387,7 @@ class ViewRoles extends Component {
             {/* } */}
             {showDeleteRoleModal && (
               <Modal
+                key="delete_role_model"
                 title="Delete Role"
                 visible={showDeleteRoleModal}
                 onCancel={this._closeDeleteRoleModal}
