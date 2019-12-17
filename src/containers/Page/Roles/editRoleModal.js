@@ -18,24 +18,6 @@ class EditRoleModal extends Component {
             errMsg: false,
             errMessage: '',
             errType: 'Success',
-            assets: this.props.fields['assets'],
-            users: this.props.fields['users'],
-            roles: this.props.fields['roles'],
-            countries: this.props.fields['countries'],
-            employee: this.props.fields['employee'],
-            pairs: this.props.fields['pairs'],
-            trade_history: this.props.fields['trade_history'],
-            transaction_history: this.props.fields['transaction_history'],
-            jobs: this.props.fields['jobs'],
-            withdraw_requests: this.props.fields['withdraw_requests'],
-            kyc: this.props.fields['kyc'],
-            fees: this.props.fields['fees'],
-            panic_button: this.props.fields['panic_button'],
-            all: this.props.fields['employee'] && this.props.fields['assets'] && this.props.fields['users'] &&
-                this.props.fields['roles'] && this.props.fields['countries'] && this.props.fields['pairs'] &&
-                this.props.fields['trade_history'] && this.props.fields['transaction_history'] &&
-                this.props.fields['jobs'] && this.props.fields['withdraw_requests'] &&
-                this.props.fields['kyc'] && this.props.fields['fees'] && this.props.fields['panic_button'],
             isDisabled: false,
             showError: false
         }
@@ -47,28 +29,6 @@ class EditRoleModal extends Component {
             this.setState({
                 showEditRoleModal: nextProps.showEditRoleModal,
                 fields: nextProps.fields,
-                users: nextProps.fields['users'],
-                assets: nextProps.fields['assets'],
-                countries: nextProps.fields['countries'],
-                roles: nextProps.fields['roles'],
-                employee: nextProps.fields['employee'],
-                pairs: nextProps.fields['pairs'],
-                transaction_history: nextProps.fields['transaction_history'],
-                trade_history: nextProps.fields['trade_history'],
-                withdraw_requests: nextProps.fields['withdraw_requests'],
-                jobs: nextProps.fields['jobs'],
-                kyc: nextProps.fields['kyc'],
-                fees: nextProps.fields['fees'],
-                panic_button: nextProps.fields['panic_button'],
-                all: nextProps.fields['assets'] && nextProps.fields['users'] && nextProps.fields['roles'] &&
-                    nextProps.fields['employee']
-                    && nextProps.fields['countries'] && nextProps.fields['pairs'] &&
-                    nextProps.fields['withdraw_requests'] && nextProps.fields['kyc'] &&
-                    nextProps.fields['jobs'] &&
-                    nextProps.fields['trade_history'] && nextProps.fields['transaction_history'] &&
-                    nextProps.fields['fees'] && nextProps.fields['panic_button'] &&
-                    nextProps.fields['withdraw_requests']
-                    ? true : false
             });
             this.validator = new SimpleReactValidator();
         }
@@ -105,100 +65,49 @@ class EditRoleModal extends Component {
         this._resetForm();
     }
 
-    _editRole = () => {
+     _editRole = async() => {
         const { token, getAllRoles } = this.props;
-        const { fields, users, assets, countries,
-            roles, employee, pairs, showError, trade_history,
-            transaction_history, jobs, withdraw_requests, kyc, fees, panic_button
-        } = this.state;
-        if (users || assets | roles || countries ||
-            employee || pairs || trade_history ||
-            transaction_history || jobs || withdraw_requests || kyc || fees ||
-            panic_button) {
-
-            if (this.validator.allValid() && !showError) {
-                this.setState({ loader: true, isDisabled: true });
-
-                let formData = {
-                    id: fields["value"],
-                    name: fields["name"],
-                    roles,
-                    users,
-                    assets,
-                    countries,
-                    employee,
-                    pairs,
-                    trade_history,
-                    transaction_history,
-                    jobs,
-                    withdraw_requests,
-                    kyc,
-                    fees,
-                    panic_button
-                };
-
-                ApiUtils.updateRole(token, formData)
-                    .then((res) => res.json())
-                    .then((res) => {
-                        if (res.status == 200) {
-                            this.setState({
-                                errMsg: true, errMessage: res.message, loader: false,
-                                errType: 'Success', isDisabled: false
-                            });
-                            this._closeEditRoleModal();
-                            getAllRoles();
-                            this._resetForm();
-                        } else if (res.status == 403) {
-                            this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                                this.props.logout();
-                            });
-                        } else {
-                            this.setState({ errMsg: true, errMessage: res.message });
-                        }
-                    })
-                    .catch(() => {
+        const { fields,showError} = this.state;
+        if (this.validator.allValid() && !showError) {
+            this.setState({ loader: true, isDisabled: true });
+            let formData = {
+                id: fields["value"],
+                name: fields["name"]
+            };
+            try{
+                let res=await(await ApiUtils.updateRole(token, formData)).json();
+                    if (res.status == 200) {
                         this.setState({
-                            errMsg: true, errMessage: 'Something went wrong!!', loader: false,
-                            errType: 'error', isDisabled: false
+                            errMsg: true, errMessage: res.message, loader: false,
+                            errType: 'Success', isDisabled: false
                         });
+                        this._closeEditRoleModal();
+                        getAllRoles();
+                        this._resetForm();
+                    } else if (res.status == 403) {
+                        this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                            this.props.logout();
+                        });
+                    } else {
+                        this.setState({ errMsg: true, errMessage: res.message });
+                    }
+                
+                }catch(error){
+                    this.setState({
+                        errMsg: true, errMessage: 'Something went wrong!!', loader: false,
+                        errType: 'error', isDisabled: false
                     });
-            } else {
-                this.validator.showMessages();
-                this.forceUpdate();
-            }
-            this.setState({ showError: false })
+                }
         } else {
-            this.setState({ showError: true })
+            this.validator.showMessages();
+            this.forceUpdate();
         }
-    }
-
-    _onChangeRole = (field, e, val) => {
-        const { all } = this.state;
-        if (all == false && field == 'all') {
-            this.setState({
-                all: true, assets: true, users: true,
-                countries: true, roles: true, employee: true, pairs: true, trade_history: true, transaction_history: true,
-                jobs: true, withdraw_requests: true, kyc: true, fees: true, panic_button: true
-            })
-        } else {
-            if (field == 'all' && e.target.checked === false) {
-                this.setState({
-                    all: false, assets: false, users: false,
-                    countries: false, roles: false, employee: false, pairs: false,
-                    trade_history: false, transaction_history: false,
-                    jobs: false, withdraw_requests: false, kyc: false, fees: false, panic_button: false
-                })
-            } else {
-                this.setState({ [field]: e.target.checked })
-            }
-        }
+        this.setState({ showError: false })
+       
     }
 
     render() {
-        const { loader, showEditRoleModal, fields, errMsg, errType, assets, users,
-            countries, roles, employee, all, isDisabled,
-            pairs, showError, trade_history, transaction_history,
-            withdraw_requests, jobs, kyc, fees, panic_button
+        const { loader, showEditRoleModal, fields, errMsg, errType,isDisabled,
         } = this.state;
 
         if (errMsg) {
@@ -224,27 +133,6 @@ class EditRoleModal extends Component {
                             {this.validator.message('name', fields["name"], 'required|max:30', 'text-danger')}
                         </span>
                     </div>
-
-                    <div>
-                        <span>Modules:</span><br />
-                        <Checkbox checked={all} onChange={this._onChangeRole.bind(this, 'all')}>All</Checkbox><br />
-                        <Checkbox checked={users} onChange={this._onChangeRole.bind(this, 'users')}>Users Module</Checkbox><br />
-                        <Checkbox checked={assets} onChange={this._onChangeRole.bind(this, 'assets')}>Assets Module</Checkbox><br />
-                        <Checkbox checked={countries} onChange={this._onChangeRole.bind(this, 'countries')}>Country Module</Checkbox><br />
-                        <Checkbox checked={roles} onChange={this._onChangeRole.bind(this, 'roles')}>Roles Module</Checkbox><br />
-                        <Checkbox checked={employee} onChange={this._onChangeRole.bind(this, 'employee')}>Employee Module</Checkbox><br />
-                        <Checkbox checked={pairs} onChange={this._onChangeRole.bind(this, 'pairs')}>Pairs Module</Checkbox><br />
-                        <Checkbox checked={transaction_history} onChange={this._onChangeRole.bind(this, 'transaction_history')}>Transaction History Module</Checkbox><br />
-                        <Checkbox checked={trade_history} onChange={this._onChangeRole.bind(this, 'trade_history')}>Trade History Module</Checkbox><br />
-                        <Checkbox checked={withdraw_requests} onChange={this._onChangeRole.bind(this, 'withdraw_requests')}>Withdraw Request Module</Checkbox><br />
-                        <Checkbox checked={jobs} onChange={this._onChangeRole.bind(this, 'jobs')}>Jobs Module</Checkbox><br />
-                        <Checkbox checked={kyc} onChange={this._onChangeRole.bind(this, 'kyc')}>KYC Module</Checkbox><br />
-                        <Checkbox checked={fees} onChange={this._onChangeRole.bind(this, 'fees')}>Fees Module</Checkbox><br />
-                        <Checkbox checked={panic_button} onChange={this._onChangeRole.bind(this, 'panic_button')}>Panic Button Module</Checkbox><br />
-                    </div>
-                    {showError && <span style={{ "color": "red" }}>
-                        {'The module field is required.'}
-                    </span>}
                     {loader && <FaldaxLoader />}
                 </Modal>
             </div>

@@ -9,6 +9,7 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import SimpleReactValidator from 'simple-react-validator';
+import { isAllowed } from './../../../../helpers/accessControl';
 
 var self
 
@@ -18,7 +19,12 @@ const columns=[
         key:9,
         width:200,
         // fixed: 'left',
-        render:object=>(<><Tooltip className="cursor-pointer" title="Send"><Icon type="export" onClick={()=>WalletFaldaxDashboard.openSendModal(object)}></Icon></Tooltip><Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletFaldaxDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip></>)
+        render:object=>(
+        <>
+            {isAllowed("send_coin_admin") && <Tooltip className="cursor-pointer" title="Send"><Icon type="export" onClick={()=>WalletFaldaxDashboard.openSendModal(object)}></Icon></Tooltip>}
+            {isAllowed("admin_faldax_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletFaldaxDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}
+        </>
+        )
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.coin"/>,

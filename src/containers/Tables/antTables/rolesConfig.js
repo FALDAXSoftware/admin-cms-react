@@ -71,7 +71,7 @@ const columns = [
                     'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
                     'is_referral', 'add_user', 'is_active')
             } else {
-                return renderCell(object, 'TextCell', 'is_active')
+                return <span>{object["is_active"]?"Active":"Inactive"}</span>
             }
         }
     }

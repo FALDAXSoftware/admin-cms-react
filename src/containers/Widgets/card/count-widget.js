@@ -6,7 +6,7 @@ export default class extends Component {
         const { icon, number, text, number2, text2, bgColor, title, headcolor } = this.props;
 
         return (
-            <CardWrapper headColor={headcolor} bgColor={bgColor}
+            <CardWrapper headcolor={headcolor} bgcolor={bgColor}
                 title={<div><i className={icon} />   {title}</div>} bordered={false}>
                 <div>
                     <span className="count">{number}</span>

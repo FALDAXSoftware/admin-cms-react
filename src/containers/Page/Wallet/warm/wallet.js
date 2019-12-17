@@ -13,7 +13,7 @@ class Wallets extends Component {
         <LayoutWrapper>
                 <BackButton {...this.props}/>   
                 <Tabs className="full-width">
-                    <TabPane tab="Wallet" key="1"><WalletWarmDetails/></TabPane>
+                   <TabPane tab="Wallet" key="1"><WalletWarmDetails/></TabPane>
                 </Tabs>
         </LayoutWrapper>
         );

@@ -8,6 +8,7 @@ import { notification, Icon, Tooltip, Row, Col, Input, Button} from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
+import { isAllowed } from '../../../../helpers/accessControl';
 var self;
 
 const columns=[
@@ -15,7 +16,7 @@ const columns=[
         title:<IntlMessages id="walletWarmDashboardTable.title.action"/>,
         key:3,
         width:100,
-        render:object=>(<><Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletCustodialDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip></>)
+        render:object=>(<>{isAllowed("admin_cold_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletCustodialDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}</>)
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.asset"/>,

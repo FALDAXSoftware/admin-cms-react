@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
+import { isAllowed } from "../../../helpers/accessControl";
 
 const { logout } = authAction;
 const EditableContext = React.createContext();
@@ -102,7 +103,7 @@ class EditableTable extends React.Component {
                     const { editingKey } = this.state;
                     const editable = this.isEditing(record);
                     return editable ? (
-                        <span>
+                     <span>
                             <EditableContext.Consumer>
                                 {form => (
                                     <a
@@ -119,9 +120,7 @@ class EditableTable extends React.Component {
                             </Popconfirm>
                         </span>
                     ) : (
-                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.id)}>
-                                Edit
-                    </a>
+                            <span>{isAllowed("edit_limit") && <a disabled={editingKey !== ''} onClick={() => this.edit(record.id)}>Edit</a>}</span>
                         );
                 },
             },
