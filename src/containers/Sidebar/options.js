@@ -29,7 +29,7 @@ const options = [
   },
   {
     key: "pairs",
-    label: "sidebar.fees",
+    label: "sidebar.pair",
     leftIcon: "fas fa-coins",
     module: "pairs",
     permssions: [
@@ -126,7 +126,7 @@ const options = [
   },
   {
     key: "fees",
-    label: "Fees",
+    label: "sidebar.fees",
     leftIcon: "fas fa-percentage",
     module: "fees",
     permssions: [
@@ -137,7 +137,7 @@ const options = [
   },
   {
     key: "panic-button",
-    label: "Panic Button",
+    label: "sidebar.panic_button",
     leftIcon: "fas fa-ban",
     module: "panic_button",
     permssions: [
@@ -146,7 +146,7 @@ const options = [
   },
   {
     key: "news",
-    label: "News",
+    label: "sidebar.news",
     leftIcon: "fas fa-newspaper",
     module: "news",
     permssions: [
@@ -156,7 +156,7 @@ const options = [
   },
   {
     key: "news-source",
-    label: "News Sources",
+    label: "sidebar.news_source",
     leftIcon: "fas fa-rss-square",
     module: "news_source",
     permssions: [
@@ -165,7 +165,7 @@ const options = [
   },
   {
     key: "referral",
-    label: "Affiliate Program & Referrals",
+    label: "sidebar.artifi_and_referral",
     leftIcon: "fas fa-user-friends",
     module: "is_referral",
     permssions: [
@@ -176,7 +176,7 @@ const options = [
   },
   {
     key: "account-class",
-    label: "Account Class Management",
+    label: "sidebar.account_class",
     leftIcon: "fas fa-file-invoice",
     module: "account_class",
     permssions: [
@@ -186,7 +186,7 @@ const options = [
   },
   {
     key: "email-templates",
-    label: "Email Templates",
+    label: "sidebar.email_temp",
     leftIcon: "fas fa-envelope",
     module: "email_templates",
     permssions: [
@@ -195,7 +195,7 @@ const options = [
   },
   {
     key: "two-factor-requests",
-    label: "Two-Factor Requests",
+    label: "sidebar.two_factor_authentication",
     leftIcon: "fas fa-address-card",
     module: "two_factor_requests",
     permssions: [
@@ -205,7 +205,7 @@ const options = [
   },
   {
     key: "notifications",
-    label: "Notifications",
+    label: "sidebar.notification",
     leftIcon: "fas fa-bell",
     module: "notifications",
     permssions: [
@@ -215,7 +215,7 @@ const options = [
   },
   {
     key: "wallet-dashboard",
-    label: "Wallet Dashboard",
+    label: "sidebar.wallet_dashboard",
     leftIcon: "fas fa-wallet",
     module: "wallet_dashboard",
     permssions: [
@@ -235,7 +235,7 @@ const options = [
   // },
   {
     key: "batch-and-balance",
-    label: "Batch & Balance",
+    label: "sidebar.batch_and_balance",
     leftIcon: "fas fa-balance-scale",
     module: "batch_and_balance",
     permssions: [
@@ -254,7 +254,7 @@ const options = [
   // },
   {
     key: "simplex-token",
-    label: "Simplex Token",
+    label: "sidebar.token",
     leftIcon: "fas fa-file-invoice",
     module: "simplex_token",
     permssions: [
@@ -263,7 +263,7 @@ const options = [
   },
   {
     key: "campaign",
-    label: "Offers",
+    label: "sidebar.offers",
     leftIcon: "fas fa-percent",
     module: "offers",
     permssions: [
