@@ -7,7 +7,7 @@ import { InActiveUsers } from "../../containers/Page/Users/inActiveUsers";
 import { Assets } from "../../containers/Page/Assets/assets";
 import { Countries } from "../../containers/Page/Country/countries";
 import { StateList } from "../../containers/Page/Country/StateList";
-import { Roles } from "../../containers/Page/Roles/roles";
+import  Roles  from "../../containers/Page/Roles/viewRoles";
 import { Employees } from "../../containers/Page/Employee/employee";
 import { Pairs } from "../../containers/Page/Pairs/pairs";
 import { Jobs } from "../../containers/Page/Jobs/jobs";
@@ -1212,13 +1212,16 @@ const LocationCell = text => (
 );
 const TierCell = text => <p>Tier {text}</p>;
 const referralActionCell = value => (
-  <Tooltip title="View">
+  <>
+  {isAllowed("get_referred_id_data")&&<Tooltip title="View">
     <Icon
       type="info-circle"
-      style={{ marginLeft: "10px", cursor: "pointer" }}
+      className="btn-icon"
       onClick={() => referrals.edit(value)}
+      disabled
     />
-  </Tooltip>
+  </Tooltip>}
+  </>
 );
 const FeesCell = text => (
   <p dangerouslySetInnerHTML={{ __html: text.toPrecision(2) + "%" }}></p>
@@ -1366,7 +1369,7 @@ const ActionCell = (
       <Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             viewUser(
               value,
@@ -1397,14 +1400,14 @@ const ActionCell = (
           <Tooltip title="View">
             <Icon
               type="delete"
-              style={{ marginLeft: "10px", cursor: "pointer" }}
+              className="btn-icon"
               onClick={() => deleteUser(value)}
             />
           </Tooltip>
           <Tooltip title="Edit">
             <Icon
               type="edit"
-              style={{ marginLeft: "10px", cursor: "pointer" }}
+              className="btn-icon"
               onClick={() =>
                 editUser(
                   value,
@@ -1463,7 +1466,7 @@ const DeletedUserActionCell = (
       <Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             DeletedUsers.view(
               value,
@@ -1494,14 +1497,14 @@ const DeletedUserActionCell = (
           <Tooltip title="View">
             <Icon
               type="delete"
-              style={{ marginLeft: "10px", cursor: "pointer" }}
+              className="btn-icon"
               onClick={() => deleteActiveUser(value)}
             />
           </Tooltip>
           <Tooltip title="Edit">
             <Icon
               type="edit"
-              style={{ marginLeft: "10px", cursor: "pointer" }}
+              className="btn-icon"
               onClick={() =>
                 editActiveUser(
                   value,
@@ -1561,7 +1564,7 @@ const ActiveUserActionCell = (
         <Tooltip title="View">
           <Icon
             type="info-circle"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               viewActiveUser(
                 value,
@@ -1594,7 +1597,7 @@ const ActiveUserActionCell = (
             <Tooltip title="Delete">
               <Icon
                 type="delete"
-                style={{ marginLeft: "10px", cursor: "pointer" }}
+                className="btn-icon"
                 onClick={() => deleteActiveUser(value)}
               />
             </Tooltip>
@@ -1603,7 +1606,7 @@ const ActiveUserActionCell = (
             <Tooltip title="Edit">
               <Icon
                 type="edit"
-                style={{ marginLeft: "10px", cursor: "pointer" }}
+                className="btn-icon"
                 onClick={() =>
                   editActiveUser(
                     value,
@@ -1663,11 +1666,11 @@ const CoinActionCell = (
           />
         </Tooltip>
       }
-      {isAllowed("update_coins") &&
+      {((isAllowed("update_coins") && isAllowed("get_coin_details")) || isAllowed("get_all_limits")) &&
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               editCoin(
                 value,
@@ -1689,11 +1692,11 @@ const CoinActionCell = (
           />
         </Tooltip>
       }
-      {isAllowed("get_coins") &&
+      {isAllowed("get_coin_details") &&
         <Tooltip title="View">
           <Icon
             type="info-circle"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               viewCoin(
                 value,
@@ -1719,7 +1722,7 @@ const CoinActionCell = (
         <Tooltip title="Wallet">
           <Icon
             type="wallet"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() => assetWallet(value, coin_name, coin_code)}
           />
         </Tooltip>
@@ -1783,7 +1786,7 @@ const RolesActionCell = (
         <Tooltip title="Permissions">
           <Icon
             type="sliders"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() => {
               openAccessGrant(value)
 
@@ -1796,7 +1799,7 @@ const RolesActionCell = (
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() => {
               editRole(value,
                 name,
@@ -1838,7 +1841,7 @@ const CountryActionCell = (
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() => editCountry(value, name, legality, color, is_active)}
           />
         </Tooltip>
@@ -1851,7 +1854,7 @@ const StateActionCell = (value, name, legality, color, is_active) => (
       <Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => editState(value, name, legality, color, is_active)}
         />
       </Tooltip>
@@ -1968,7 +1971,7 @@ const EmployeeActionCell = (
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               editEmployee(
                 value,
@@ -2015,7 +2018,7 @@ const FeeActionCell = (
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               editPair(value, name, maker_fee, taker_fee, created_at, is_active)
             }
@@ -2035,7 +2038,7 @@ const LimitActionCell = (
       <Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             editLimit(
               value,
@@ -2078,7 +2081,7 @@ const JobActionCell = (
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               editJob(
                 value,
@@ -2098,7 +2101,7 @@ const JobActionCell = (
         <Tooltip title="View">
           <Icon
             type="info-circle"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() =>
               viewJob(
                 value,
@@ -2167,7 +2170,7 @@ const JobAppActionCell = (
       <Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             viewJobApplication(
               value,
@@ -2207,7 +2210,7 @@ const KYCActionCell = (
       <Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             viewKYC(
               value,
@@ -2249,7 +2252,7 @@ const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => (
     <Tooltip title="Edit">
       <Icon
         type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
+        className="btn-icon"
         onClick={() => editFees(value, trade_volume, maker_fee, taker_fee)}
       />
     </Tooltip>
@@ -2284,7 +2287,7 @@ const AccountClassActionCell = (value, class_name) => (
       <Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => editAccountClass(value, class_name)}
         />
       </Tooltip>
@@ -2297,7 +2300,7 @@ const TemplateActionCell = (value, name, content, note) => (
       < Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => editTemplate(value, name, content, note)}
         />
       </Tooltip>
@@ -2411,7 +2414,7 @@ const JobCatActionCell = (value, category, is_active) => (
       <Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => updateCategory(value, category, is_active)}
         />
       </Tooltip>
@@ -2461,7 +2464,7 @@ const TwoFAActionCell = (
       <Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             viewRequest(
               value,
@@ -2484,7 +2487,7 @@ const TwoFAActionCell = (
                 <Icon
                   theme="twoTone"
                   type="check-circle"
-                  style={{ marginLeft: "10px", cursor: "pointer" }}
+                  className="btn-icon"
                   onClick={() =>
                     approve2FA(
                       value,
@@ -2505,7 +2508,7 @@ const TwoFAActionCell = (
                   theme="twoTone"
                   twoToneColor="#FF0000"
                   type="close-circle"
-                  style={{ marginLeft: "10px", cursor: "pointer" }}
+                  className="btn-icon"
                   onClick={() =>
                     reject2FA(
                       value,
@@ -2563,7 +2566,7 @@ const TierActionCell = value => (
       <Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => editTier(value)}
         />
       </Tooltip>
@@ -2575,7 +2578,7 @@ const TierReqActionCell = value => (
     <Tooltip title="Edit">
       <Icon
         type="edit"
-        style={{ marginLeft: "10px", cursor: "pointer" }}
+        className="btn-icon"
         onClick={() => editTier(value)}
       />
     </Tooltip>
@@ -2593,7 +2596,7 @@ const PendingTierReqActionCell = (
       <Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() =>
             viewPendingReq(
               value,
@@ -2720,7 +2723,7 @@ const CoinFeesActionCell = (value, name, slug, updated_at, type, fees_value) => 
         <Tooltip title="Edit">
           <Icon
             type="edit"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
+            className="btn-icon"
             onClick={() => NetworkFee.edit(value, name, slug, updated_at, type, fees_value)}
           />
         </Tooltip>
@@ -2751,7 +2754,7 @@ const CampaignActionCell = (value,
       {isAllowed('get_campaigns') &&<Tooltip title="View">
         <Icon
           type="info-circle"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => offers.view(campaign_id)}
         />
       </Tooltip>
@@ -2759,7 +2762,7 @@ const CampaignActionCell = (value,
       {/* <Tooltip title="Delete">
         <Icon
           type="delete"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => offers.delete( value,
             campaign_id,
             campaign_label,
@@ -2774,7 +2777,7 @@ const CampaignActionCell = (value,
      { isAllowed('update_campaigns') && <Tooltip title="Edit">
         <Icon
           type="edit"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
+          className="btn-icon"
           onClick={() => offers.edit(campaign_id)}
         />
       </Tooltip>

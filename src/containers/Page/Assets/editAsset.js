@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import EditAssetDetails from './editAssetDetails';
 import EditAssetLimit from './editAssetLimit';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
+import { isAllowed } from "../../../helpers/accessControl";
 
 const { logout } = authAction;
 const { TabPane } = Tabs;
@@ -31,9 +32,9 @@ class EditAsset extends Component {
                         <a onClick={() => { this.props.history.push('/dashboard/assets') }}>Back</a>
                     </Link>
                 </div>
-                <Tabs defaultActiveKey="1" size={'large'} className="full-width">
-                    <TabPane tab="Asset Details" key="1"><EditAssetDetails coin_id={coin_id} /></TabPane>
-                    <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane>
+                <Tabs  className="full-width">
+                    {(isAllowed("update_coins") && isAllowed("get_coin_details"))&& <TabPane tab="Asset Details" key="1"><EditAssetDetails coin_id={coin_id} /></TabPane>}
+                    {isAllowed("get_all_limits") && <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane>}
                 </Tabs>
                 </LayoutWrapper>
         );

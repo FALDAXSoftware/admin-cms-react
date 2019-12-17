@@ -26,11 +26,12 @@ class Referral extends React.Component {
               </TableDemoStyle>
             </TabPane>
           }
+           {isAllowed("metabase_referal_report") &&
            < TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 <ReferralMetabase></ReferralMetabase>
               </TableDemoStyle>
-            </TabPane>
+            </TabPane>}
         </Tabs>
       </LayoutWrapper >
     )

@@ -26,6 +26,7 @@ const AccessGrant = (props) => {
     const getRolePermissions = (roleId) => {
         setIsLoading(true)
         ApiUtils.getRolePermissions(token, roleId).then((response) => response.json()).then((res) => {
+            window.roles=res.getPermissionData;
             if (res.status == 200) {
                 let resPermissions = {}
                 res.getPermissionData.map(element => {

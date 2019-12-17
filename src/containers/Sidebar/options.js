@@ -13,7 +13,8 @@ const options = [
     permssions: [
       "get_users",
       "get_inactive_users",
-      "get_deleted_users"
+      "get_deleted_users",
+      "metabase_users_report"
     ]
   },
   {
@@ -22,7 +23,8 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "assets",
     permssions: [
-      "get_coins"
+      "get_coins",
+      "metabase_asset_report"
     ]
   },
   {
@@ -40,7 +42,8 @@ const options = [
     leftIcon: "far fa-flag",
     module: "countries",
     permssions: [
-      "get_countries_data"
+      "get_countries_data",
+      "metabase_country_report"
     ]
   },
   {
@@ -49,7 +52,8 @@ const options = [
     leftIcon: "fas fa-tasks",
     module: "roles",
     permssions: [
-      "get_role"
+      "get_role",
+      "metabase_roles_report"
     ]
   },
   {
@@ -58,7 +62,8 @@ const options = [
     leftIcon: "fas fa-user-tie",
     module: "employee",
     permssions: [
-      "get_employee"
+      "get_employee",
+      "metabase_employee_report"
     ]
   },
   // {
@@ -74,7 +79,8 @@ const options = [
     leftIcon: "fas fa-exchange-alt",
     module: "transaction_history",
     permssions: [
-      "get_all_transactions"
+      "get_all_transactions",
+      "metabase_transaction_history_report"
     ]
   },
   {
@@ -83,7 +89,8 @@ const options = [
     leftIcon: "fas fa-history",
     module: "trade_history",
     permssions: [
-      "get_all_trade"
+      "get_all_trade",
+      "metabase_history_report"
     ]
   },
   {
@@ -92,7 +99,8 @@ const options = [
     leftIcon: "fas fa-hand-holding-usd",
     module: "withdraw_requests",
     permssions: [
-      "get_all_withdraw_request"
+      "get_all_withdraw_request",
+      "metabase_withdraw_request_report"
     ]
   },
   {
@@ -102,7 +110,8 @@ const options = [
     module: "jobs",
     permssions: [
       "get_all_jobs",
-      "get_job_categories"
+      "get_job_categories",
+      "metabase_career_report"
     ]
   },
   {
@@ -111,7 +120,8 @@ const options = [
     leftIcon: "fas fa-id-card",
     module: "kyc",
     permssions: [
-      "get_all_kyc_data"
+      "get_all_kyc_data",
+      "metabase_kyc_report"      
     ]
   },
   {
@@ -121,7 +131,8 @@ const options = [
     module: "fees",
     permssions: [
       "get_withdrawl_faldax_fee",
-      "get_all_fee"
+      "get_all_fee",
+      "metabase_fee_report"
     ]
   },
   {
@@ -139,7 +150,8 @@ const options = [
     leftIcon: "fas fa-newspaper",
     module: "news",
     permssions: [
-      "get_all_news"
+      "get_all_news",
+      "metabase_news_report"
     ]
   },
   {
@@ -158,7 +170,8 @@ const options = [
     module: "is_referral",
     permssions: [
       "get_referal_list",
-      "get_referral_details"
+      "get_referral_details",
+      "metabase_referal_report"
     ]
   },
   {
@@ -167,7 +180,8 @@ const options = [
     leftIcon: "fas fa-file-invoice",
     module: "account_class",
     permssions: [
-      "get_all_account_classes"
+      "get_all_account_classes",
+      "metabase_account_report"
     ]
   },
   {
@@ -185,7 +199,8 @@ const options = [
     leftIcon: "fas fa-address-card",
     module: "two_factor_requests",
     permssions: [
-      "get_twofactors_requests"
+      "get_twofactors_requests",
+      "metabase_two_factor_request"
     ]
   },
   {
@@ -204,7 +219,9 @@ const options = [
     leftIcon: "fas fa-wallet",
     module: "wallet_dashboard",
     permssions: [
-      "admin_wallet_fees_details"
+      "admin_wallet_fees_details",
+      "admin_warm_wallet_data",
+      "admin_cold_wallet_data"
     ]
   },
   // {
@@ -250,7 +267,8 @@ const options = [
     leftIcon: "fas fa-percent",
     module: "offers",
     permssions: [
-      "list_campaigns"
+      "list_campaigns",
+      "metabase_offers_report"
     ]
   }
 ];
