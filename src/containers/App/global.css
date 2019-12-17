@@ -541,3 +541,10 @@ html[dir='rtl'] .dz-hidden-input {
 .status-filled{
   color: darkgoldenrod;
 }
+.fees-container{
+  width:60%;
+  margin: auto;
+}
+.fees-divider{
+  margin-top:5px;
+}

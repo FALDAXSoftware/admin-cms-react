@@ -131,7 +131,7 @@ const options = [
     module: "fees",
     permssions: [
       "get_withdrawl_faldax_fee",
-      "get_all_fee",
+      "get_coin_fees",
       "metabase_fee_report"
     ]
   },

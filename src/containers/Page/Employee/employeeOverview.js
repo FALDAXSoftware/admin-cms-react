@@ -29,7 +29,7 @@ class PersonalDetails extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllRoles();
+       if(isAllowed("get_role"))this._getAllRoles();
         this._getEmployeeDetails();
     }
 
@@ -255,7 +255,7 @@ class PersonalDetails extends Component {
                         </Select>
                     </div>
                     <br />
-                    <Button type="primary" onClick={this._updateEmployee}> Update </Button>
+                   {isAllowed("update_employee") && <Button type="primary" onClick={this._updateEmployee}> Update </Button>}
                 </div>
                 {isAllowed("employee_change_password") &&
                     <>
@@ -291,7 +291,7 @@ class PersonalDetails extends Component {
                                     {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
                                 </span>
                                 <br />
-                                <Button type="primary" onClick={this._changePassword}> Change </Button>
+                               {isAllowed("employee_change_password") && <Button type="primary" onClick={this._changePassword}> Change </Button>}
                             </div>
                         </div>
                     </>

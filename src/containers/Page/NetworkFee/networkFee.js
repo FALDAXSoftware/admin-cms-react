@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Modal } from 'antd';
+import { Tabs, notification } from 'antd';
 import { networkFeeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
-import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import EditNetworkFeeModal from './editNetworkFeeModal';
-import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { withRouter} from "react-router-dom";
+import TableDemoStyle from '../../Tables/antTables/demo.style';
 
-const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 var self;
 class NetworkFee extends Component {
@@ -109,30 +107,30 @@ class NetworkFee extends Component {
     }
     return (
 
-      <div>
+      <TableDemoStyle className="isoLayoutContent">
         <TableWrapper
+          rowKey="id"
           {...this.state}
           columns={networkFeeTableInfos[0].columns}
           pagination={false}
           dataSource={coinFees}
           className="isoCustomizedTable"
           onChange={this.handleNetworkChange}
-          style={{ width: "100%" }}
+          className="fill-width"
         />
         <EditNetworkFeeModal
           showEditNetworkFeeModal={showEditNetworkFeeModal}
           onCloseEditModal={this.onCloseEditModal}
           fields={modalData}
         />
-      </div>
+      </TableDemoStyle>
 
     );
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     token: state.Auth.get('token')
-  }), { logout })(NetworkFee);
+  }), { logout })(NetworkFee));
 
-export { NetworkFee, networkFeeTableInfos };
