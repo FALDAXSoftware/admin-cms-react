@@ -1964,7 +1964,7 @@ const EmployeeActionCell = (
           />
         </Tooltip>
       }
-      {isAllowed("update_employee") && isAllowed("get_employee_details") &&
+      { isAllowed("get_employee_details") &&
         <Tooltip title="Edit">
           <Icon
             type="edit"
