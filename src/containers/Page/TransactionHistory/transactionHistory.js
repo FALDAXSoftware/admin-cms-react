@@ -373,11 +373,11 @@ class Transactions extends Component {
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}
-              {transactionTableInfos.map(tableInfo => (
                 <TableWrapper
                   className="float-clear"
+                  rowKey="id"
                   {...this.state}
-                  columns={tableInfo.columns}
+                  columns={transactionTableInfos[0].columns}
                   pagination={false}
                   dataSource={allTransactions}
                   onChange={this._handleTransactionTableChange}
@@ -454,7 +454,6 @@ class Transactions extends Component {
                     );
                   }}
                 />
-              ))}
               {allTransactionCount > 0 ? (
                 <Pagination
                   style={{ marginTop: "15px" }}
@@ -462,7 +461,7 @@ class Transactions extends Component {
                   onChange={this._handleTransactionPagination.bind(this)}
                   pageSize={limit}
                   current={page}
-                  total={allTransactionCount}
+                  total={parseInt(allTransactionCount)}
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}

@@ -11,15 +11,15 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import LayoutWrapper from '../../../../components/utility/layoutWrapper';
 import { BackButton } from '../../../Shared/backBttton';
-
+var self;
 const {Option}=Select;
 const columns=[
-    {
-        title:<IntlMessages id="ReferralDetailsTable.title.coin_name"/>,
-        key:4,
-        dataIndex:"coin_name",
-        width:100,
-    },
+    // {
+    //     title:<IntlMessages id="ReferralDetailsTable.title.coin_name"/>,
+    //     key:4,
+    //     dataIndex:"coin_name",
+    //     width:100,
+    // },
     {
         title:<IntlMessages id="ReferralDetailsTable.title.amount"/>,
         key:5,
@@ -37,6 +37,7 @@ const columns=[
         key:0,
         dataIndex:"txid",
         width:100,
+        render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
     },   
 ]
 class ReferralDetailsComponent extends Component {
@@ -44,6 +45,7 @@ class ReferralDetailsComponent extends Component {
         super(props)
         this.state={loader:false,data:[],count:0,searchData:"",coin_code:"",assetsList:[],page:1,limit:PAGESIZE,userId:""}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
+        self=this;
     }
 
     componentDidMount(){
@@ -107,12 +109,12 @@ class ReferralDetailsComponent extends Component {
                    <TableDemoStyle className="isoLayoutContent">
                         <Row justify="end" type="flex">
                             <Col className="table-column" xs={12} md={7}>
-                                <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
+                                <Input placeholder="Search email" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
                             <Col className="table-column" xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
-                                    {assetsList.map((ele)=><Option value={ele}>{ele}</Option>)}
-                                </Select>
+                                    {assetsList.map((ele)=><Option key={ele} value={ele}>{ele}</Option>)}
+                                </Select> 
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
                                 <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getReferralDetails()}>Search</Button>
@@ -122,6 +124,7 @@ class ReferralDetailsComponent extends Component {
                             </Col>
                         </Row>
                         <TableWrapper
+                            rowKey="id"
                             {...this.state}
                             columns={columns}
                             pagination={false}

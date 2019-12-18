@@ -398,7 +398,6 @@ class WithdrawRequest extends Component {
         <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           <TabPane tab={withdrawReqTableInfos[0].title} key={withdrawReqTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
-              <div style={{ display: "inline-block", width: "100%" }}>
                 <Form onSubmit={this._searchReq}>
                   <Row>
                     <ColWithMarginBottom sm={6}>
@@ -470,15 +469,15 @@ class WithdrawRequest extends Component {
                     </ColWithMarginBottom>
                   </Row>
                 </Form>
-              </div>
               {loader && <FaldaxLoader />}
-              {withdrawReqTableInfos.map(tableInfo => (
+              
                 <TableWrapper
                   {...this.state}
-                  columns={tableInfo.columns}
+                  rowKey="id"
+                  columns={withdrawReqTableInfos[0].columns}
                   pagination={false}
                   dataSource={allRequests}
-                  className="isoCustomizedTable"
+                  className="isoCustomizedTable table-tb-margin float-clear"
                   onChange={this._handleWithdrawTableChange}
                   expandedRowRender={record => (
                     <p style={{ margin: 0 }}>
@@ -500,15 +499,13 @@ class WithdrawRequest extends Component {
                     </p>
                   )}
                 />
-              ))}
               {allReqCount > 0 ? (
                 <Pagination
-                  style={{ marginTop: "15px" }}
                   className="ant-users-pagination"
                   onChange={this._handleReqPagination.bind(this)}
                   pageSize={limit}
                   current={page}
-                  total={allReqCount}
+                  total={parseInt(allReqCount)}
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}
@@ -532,9 +529,9 @@ class WithdrawRequest extends Component {
                 <IframeCol>
                   <iframe
                     src={metabaseUrl}
-                    frameborder="0"
+                    frameBorder="0"
                     width="100%"
-                    allowtransparency
+                    allowtransparency="true"
                   ></iframe>
                 </IframeCol>}
             </TableDemoStyle>
