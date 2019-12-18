@@ -60,9 +60,7 @@ class ReferralPercentage extends React.Component {
             .then(function (res) {
                 if (res.status == 200) {
                     let fields = _this.state.fields;
-                    console.log(res.data.value);
                     fields['percentage'] = res.data.value;
-                    console.log(fields['percentage'])
                     _this.setState({ fields, prevDefaultReferral: res.data.value });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

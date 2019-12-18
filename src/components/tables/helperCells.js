@@ -1103,7 +1103,6 @@ const ObjectCell = (value, execution_report) => (
       </ul>
     )} */}
     {/* {JSON.stringify(execution_report)} */}
-    {console.log(Object.keys(execution_report[0]).length)}
     {Object.keys(execution_report[0]).length > 0 ? (
       <ul style={{ height: "350px", overflow: "auto" }}>
         {Object.keys(execution_report[0]).map((element, index) => {
@@ -1861,7 +1860,7 @@ const CountryButtonCell = (value, stateCount) => (
   <Button
     type="primary"
     onClick={() => showStates(value)}
-    disabled={(stateCount > 0 || !isAllowed("get_state_data")) ? false : true}
+    disabled={!(stateCount > 0) && !isAllowed("get_state_data")}
   >
     Show States
   </Button>
@@ -1928,6 +1927,7 @@ const EmployeeSwitchCell = (
 ) => (
     <Switch
       checked={is_active}
+      disabled={isAllowed("update_employee")}
       onChange={() => {
         employeeStatus(
           value,

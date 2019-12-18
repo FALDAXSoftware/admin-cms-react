@@ -58,9 +58,7 @@ class AccountSummary extends Component {
     ApiUtils.getUserAccountSummary(token, user_id)
       .then(response => response.json())
       .then(function (res) {
-        console.log(res);
         if (res.status == 201) {
-          console.log(res);
           //   res.data = res.data.map(element => {
           //     element["usd_price"] = res.usd_price;
           //     return element;

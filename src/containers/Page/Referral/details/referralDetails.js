@@ -9,6 +9,8 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
+import LayoutWrapper from '../../../../components/utility/layoutWrapper';
+import { BackButton } from '../../../Shared/backBttton';
 
 const {Option}=Select;
 const columns=[
@@ -100,7 +102,8 @@ class ReferralDetailsComponent extends Component {
     render() { 
         const [{loader,data,count,limit,page,searchData,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
-            <>
+                <LayoutWrapper>
+                    <BackButton {...this.props}></BackButton>
                    <TableDemoStyle className="isoLayoutContent">
                         <Row justify="end" type="flex">
                             <Col className="table-column" xs={12} md={7}>
@@ -138,7 +141,7 @@ class ReferralDetailsComponent extends Component {
                       />
                     {loader && <Loader/>}
                    </TableDemoStyle>
-                   </>
+                </LayoutWrapper>
               );
     }
 }

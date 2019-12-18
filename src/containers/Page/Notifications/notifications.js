@@ -229,7 +229,6 @@ class EditableTable extends React.Component {
   }
 
   edit(key) {
-    console.log("key", key)
     this.setState({ editingKey: key });
   }
 

@@ -39,7 +39,6 @@ class EditPairModal extends Component {
     }
 
     openNotificationWithIconError = (type) => {
-        console.log("Error type",type)
         notification[type]({
             message: this.state.errType,
             description: this.state.errMessage

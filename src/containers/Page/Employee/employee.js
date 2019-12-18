@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Tabs, notification, Modal, Input, Pagination, Icon } from "antd";
+import { Button, Tabs, notification, Modal, Input, Pagination, Icon, Col, Row } from "antd";
 import { employeeTableinfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -56,10 +56,6 @@ class Employees extends Component {
     is_active
   ) {
     const { token } = self.props;
-
-    let message = is_active
-      ? "Employee has been inactivated successfully."
-      : "Employee has been activated successfully.";
     let formData = {
       id: value,
       first_name,
@@ -78,7 +74,7 @@ class Employees extends Component {
         if (res.status == 200) {
           self.setState({
             errMsg: true,
-            errMessage: message,
+            errMessage: res.message,
             loader: false,
             errType: "Success"
           });
@@ -345,22 +341,25 @@ class Employees extends Component {
             key={employeeTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-              <div style={{ display: "inline-block", width: "100%" }}>
-                <Search
-                  placeholder="Search employees"
-                  onSearch={value => this._searchEmpoyee(value)}
-                  style={{ float: "right", width: "250px" }}
-                  enterButton
-                />
-                {isAllowed("add_employee") && (
-                  <Button
-                    type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={this._showAddEmpModal}
-                  >
-                    <Icon type="plus" /> Add Employee
-                  </Button>
-                )}
+              <Row type="flex" justify="end">
+                <Col md={4}>
+                  {isAllowed("add_employee") && (
+                    <Button
+                      type="primary"
+                      onClick={this._showAddEmpModal}
+                    >
+                      <Icon type="plus" /> Add Employee
+                    </Button>
+                  )}
+                </Col>
+                <Col md={6}>  
+                  <Search
+                    placeholder="Search employees"
+                    onSearch={value => this._searchEmpoyee(value)}
+                    enterButton
+                  />
+                </Col>
+              </Row>
 
                 {showAddEmpModal && (
                   <AddEmployeeModal
@@ -370,17 +369,15 @@ class Employees extends Component {
                     getAllEmployee={this._getAllEmployees.bind(this, 0)}
                   />
                 )}
-              </div>
               {loader && <FaldaxLoader />}
               <div>
-                {employeeTableinfos.map(tableInfo => (
                   <TableWrapper
                     rowKey="id"
                     {...this.state}
-                    columns={tableInfo.columns}
+                    columns={employeeTableinfos[0].columns}
                     pagination={false}
                     dataSource={allEmployee}
-                    className="isoCustomizedTable"
+                    className="isoCustomizedTable table-tb-margin"
                     expandedRowRender={record => (
                       <div>
                         <b>Address</b> -{" "}
@@ -396,7 +393,6 @@ class Employees extends Component {
                     )}
                     onChange={this._handleEmployeeChange}
                   />
-                ))}
                 {showEditEmpModal && (
                   <EditEmployeeModal
                     fields={empDetails}
@@ -408,12 +404,11 @@ class Employees extends Component {
                 )}
                 {employeeCount > 0 ? (
                   <Pagination
-                    style={{ marginTop: "15px" }}
                     className="ant-users-pagination"
                     onChange={this._handleEmployeePagination.bind(this)}
                     pageSize={limit}
                     current={page}
-                    total={employeeCount}
+                    total={parseInt(employeeCount)}
                     showSizeChanger
                     onShowSizeChange={this._changePaginationSize}
                     pageSizeOptions={pageSizeOptions}

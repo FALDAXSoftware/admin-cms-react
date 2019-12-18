@@ -59,7 +59,6 @@ class Referrals extends Component {
     }
 
     static edit = id => {
-        console.log(self)
         self.props.history.push("/dashboard/referral/" + id);
     };
 
@@ -78,9 +77,7 @@ class Referrals extends Component {
             .then(function (res) {
                 if (res.status == 200) {
                     let fields = _this.state.fields;
-                    console.log(res.data.value);
                     fields['percentage'] = res.data.value;
-                    console.log(fields['percentage'])
                     _this.setState({ fields, prevDefaultReferral: res.data.value });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

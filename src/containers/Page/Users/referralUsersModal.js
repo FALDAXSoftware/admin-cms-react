@@ -39,7 +39,6 @@ class ReferralUsers extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    console.log(res.data);
                     _this.setState({
                         allReferral: res.data, allReferralCount: res.referralCount,
                         showReferralModal: true, userId: user_id

@@ -298,7 +298,6 @@ class ActiveUsers extends Component {
       // <LayoutContentWrapper>
       <TableDemoStyle className="isoLayoutContent">
         <div className="isoTableDisplayTab">
-          {tableinfos.map(tableInfo => (
             <div>
               <Form onSubmit={this._searchUser} className="cty-search">
                 <Row type="flex" justify="end">
@@ -369,7 +368,8 @@ class ActiveUsers extends Component {
               <div className="scroll-table float-clear">
                 <TableWrapper
                   {...this.state}
-                  columns={tableInfo.columns}
+                  rowKey="id"
+                  columns={tableinfos[0].columns}
                   pagination={false}
                   dataSource={allUsers}
                   className="isoCustomizedTable"
@@ -382,7 +382,7 @@ class ActiveUsers extends Component {
                     onChange={this._handleUserPagination.bind(this)}
                     pageSize={limit}
                     current={page}
-                    total={allUserCount}
+                    total={parseInt(allUserCount)}
                     showSizeChanger
                     onShowSizeChange={this._changePaginationSize}
                     pageSizeOptions={pageSizeOptions}
@@ -405,7 +405,6 @@ class ActiveUsers extends Component {
                 )}
               </div>
             </div>
-          ))}
         </div>
       </TableDemoStyle>
       //</LayoutContentWrapper>

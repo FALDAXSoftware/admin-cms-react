@@ -35,7 +35,6 @@ class LimitManagement extends Component {
     }
 
     _onEditLimit = (limitDetails) => {
-        console.log('limitDetails', limitDetails)
         this.setState({ limitDetails, showEditLimitModal: true });
     }
 
