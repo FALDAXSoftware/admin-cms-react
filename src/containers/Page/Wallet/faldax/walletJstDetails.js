@@ -17,6 +17,14 @@ const {RangePicker}=DatePicker;
 const {Option}=Select;
 const columns=[
     {
+        title:<IntlMessages id="walletJstDetailsTable.title.coin_code"/>,
+        key:55,
+        dataIndex:"coin_code",
+        sorter: true,
+        width:100,
+        render:data=><span>{data.toUpperCase()}</span>
+    },
+    {
         title:<IntlMessages id="walletJstDetailsTable.title.transact_time"/>,
         key:1,
         dataIndex:"transact_time",

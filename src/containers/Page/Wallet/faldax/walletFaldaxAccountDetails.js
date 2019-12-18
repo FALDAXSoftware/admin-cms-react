@@ -16,12 +16,28 @@ const {RangePicker}=DatePicker;
 const {Option}=Select;
 const columns=[
     {
+        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
+        key:55,
+        dataIndex:"coin_code",
+        sorter: true,
+        width:100,
+        render:data=><span>{data.toUpperCase()}</span>
+    },
+    {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.created_on"/>,
         key:1,
         dataIndex:"created_at",
         sorter: true,
         width:100,
         render:data=><span>{DateTimeCell(data)}</span>
+    },
+    {
+        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
+        key:55,
+        dataIndex:"coin_code",
+        sorter: true,
+        width:100,
+        render:data=><span>{data.toUpperCase()}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.amount"/>,
