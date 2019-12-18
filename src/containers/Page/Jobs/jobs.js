@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Tabs, Pagination, Icon, notification, Button, Modal } from "antd";
+import { Input, Tabs, Pagination, Icon, notification, Button, Modal, Row, Col } from "antd";
 import { jobsTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -15,6 +15,7 @@ import JobCategory from "./jobsCategory";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from "./jobsMetabase"
+import { ColWithMarginBottom } from "../common.style";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -360,30 +361,32 @@ class Jobs extends Component {
         <Tabs className="isoTableDisplayTab" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
-              <div style={{ display: "inline-block", width: "100%" }}>
-                {isAllowed("add_job") && isAllowed("get_job_categories") && (
-                  <Button
-                    type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={this._showAddJobModal}
-                  >
-                    <Icon type="plus" />
-                    Add Job
-                  </Button>
-                )}
+              <Row type="flex" justify="end">
+                <ColWithMarginBottom md={3}>
+                  {isAllowed("add_job") && isAllowed("get_job_categories") && (
+                    <Button
+                      type="primary"
+                      onClick={this._showAddJobModal}
+                    >
+                      <Icon type="plus" />
+                      Add Job
+                    </Button>
+                  )}
+                </ColWithMarginBottom>
+                <ColWithMarginBottom md={8}>
+                  <Search
+                    placeholder="Search jobs"
+                    onSearch={value => this._searchJob(value)}
+                    enterButton
+                  />  
+                </ColWithMarginBottom>
+              </Row>
                 <AddJobModal
                   showAddJobModal={showAddJobModal}
                   closeAddModal={this._closeAddJobModal}
                   getAllJobs={this._getAllJobs.bind(this, 1)}
                   allJobCategories={allJobCategories}
                 />
-                <Search
-                  placeholder="Search jobs"
-                  onSearch={value => this._searchJob(value)}
-                  style={{ float: "right", width: "250px" }}
-                  enterButton
-                />
-              </div>
               {loader && <FaldaxLoader />}
               <ViewJobModal
                 jobDetails={jobDetails}
@@ -399,16 +402,15 @@ class Jobs extends Component {
                   allJobCategories={allJobCategories}
                 />
               )}
-              {jobsTableInfos.map(tableInfo => (
-                <TableWrapper
-                  {...this.state}
-                  columns={tableInfo.columns}
-                  pagination={false}
-                  dataSource={allJobs}
-                  className="isoCustomizedTable"
-                  onChange={this._handleJobTableChange}
-                />
-              ))}
+              <TableWrapper
+                rowKey="id"
+                {...this.state}
+                columns={jobsTableInfos[0].columns}
+                pagination={false}
+                dataSource={allJobs}
+                className="isoCustomizedTable float-clear table-tb-margin"
+                onChange={this._handleJobTableChange}
+              />
               {showDeleteJobModal && (
                 <Modal
                   title="Delete Job"
@@ -424,12 +426,11 @@ class Jobs extends Component {
               )}
               {allJobsCount > 0 ? (
                 <Pagination
-                  style={{ marginTop: "15px" }}
                   className="ant-users-pagination"
                   onChange={this._handleJobPagination.bind(this)}
                   pageSize={limit}
                   current={page}
-                  total={allJobsCount}
+                  total={parseInt(allJobsCount)}
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}
