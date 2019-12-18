@@ -261,7 +261,6 @@ class TwoFactorRequests extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }

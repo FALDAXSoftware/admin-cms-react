@@ -279,8 +279,6 @@ class AddUser extends Component {
   };
 
   _changeDate = (date, dateString) => {
-    console.log("date",date)
-    console.log(date.format("DD-MM-YYYY"))
     this.setState({ dob: date,showDOBErr:date?false:true });
   };
 

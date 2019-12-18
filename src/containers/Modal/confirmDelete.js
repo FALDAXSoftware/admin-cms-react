@@ -25,7 +25,6 @@ class ConfirmDeleteModalComponent extends Component {
     }
     render() { 
         let {visible}=this.state;
-        console.log(visible)
         return ( <Modal
             title="Delete"
             onCancel={this.closeModal}

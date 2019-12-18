@@ -243,7 +243,6 @@ class ProfileWhitelist extends Component {
 
   enableWhitelistIp=async(checked) =>{
     try {
-      console.log(checked);
       const { token, user } = this.props;
       let formData = {
         status: checked,
@@ -278,7 +277,6 @@ class ProfileWhitelist extends Component {
         });
       }
     } catch (error) {
-      console.log("Error in profileWhitelist", error);
       this.setState({
         errMsg: true,
         errMessage: "Some thing went to wrong",
@@ -289,7 +287,6 @@ class ProfileWhitelist extends Component {
 
   onClickOpenPermanentIpModal = async (checked) => {
     try {
-      console.log("checked call");
       const {allIPAddresses } = this.state;
      
       if (checked) {

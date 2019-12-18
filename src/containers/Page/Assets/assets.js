@@ -6,7 +6,9 @@ import {
   Icon,
   Button,
   Modal,
-  notification
+  notification,
+  Col,
+  Row
 } from "antd";
 import { assetTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -21,6 +23,7 @@ import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
+import { ColWithMarginBottom } from "../common.style";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -298,10 +301,6 @@ class Assets extends Component {
     );
   };
 
-  _changeRow = e => {
-    e.preventDefault();
-  };
-
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
       this._getAllCoins();
@@ -334,30 +333,28 @@ class Assets extends Component {
           {assetTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
-                {isAllowed("create_coins") && (
-                  <Button
-                    type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={this._showAddCoinModal}
-                  >
-                    <Icon type="plus" />
-                    Add Asset
-                  </Button>
-                )}
+                <Row type="flex" justify="start">
+                  <ColWithMarginBottom md={6}>
+                    {isAllowed("create_coins") && (
+                      <Button type="primary" onClick={this._showAddCoinModal}>
+                        <Icon type="plus" />
+                        Add Asset
+                      </Button>
+                    )}
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom md={12}></ColWithMarginBottom>
+                  <ColWithMarginBottom md={6}>
+                    <Search
+                      placeholder="Search assets"
+                      onSearch={value => this._searchCoin(value)}
+                      enterButton
+                    />
+                  </ColWithMarginBottom>
+                </Row>
                 <AddCoinModal
                   showAddCoinModal={showAddCoinModal}
                   closeAddModal={this._closeAddCoinModal}
                   getAllCoins={this._getAllCoins.bind(this, 1)}
-                />
-                <Search
-                  placeholder="Search assets"
-                  onSearch={value => this._searchCoin(value)}
-                  style={{
-                    marginBottom: "15px",
-                    float: "right",
-                    width: "250px"
-                  }}
-                  enterButton
                 />
 
                 {loader && <FaldaxLoader />}
@@ -383,28 +380,21 @@ class Assets extends Component {
                     </Modal>
                   )}
                   <TableWrapper
-                    onRow={(record, rowIndex) => {
-                      return {
-                        onClick: () => {
-                          this._changeRow.bind(this);
-                        }
-                      };
-                    }}
+                    rowKey="id"
                     {...this.state}
                     columns={tableInfo.columns}
                     pagination={false}
                     dataSource={allCoins}
                     onChange={this.handleTableChange}
-                    className="isoCustomizedTable"
+                    className="isoCustomizedTable table-tb-margin"
                   />
                   {allCoinCount > 0 ? (
                     <Pagination
-                      style={{ marginTop: "15px" }}
                       className="ant-users-pagination"
                       onChange={this._handleCoinPagination.bind(this)}
                       pageSize={limit}
                       current={page}
-                      total={allCoinCount}
+                      total={parseInt(allCoinCount)}
                       showSizeChanger
                       onShowSizeChange={this._changePaginationSize}
                       pageSizeOptions={pageSizeOptions}

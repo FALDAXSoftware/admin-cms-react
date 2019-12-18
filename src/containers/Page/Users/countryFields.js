@@ -128,7 +128,6 @@ export default class CountryFields extends Component {
     }
 
     _changeState = (value, position) => {
-        console.log(position)
         var cities = CountryData.getCitiesOfState(position.key);
         var stateID = position.key;
         const { selectedCountry, countryID, countryCode } = this.state;

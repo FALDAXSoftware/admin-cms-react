@@ -479,6 +479,9 @@ html[dir='rtl'] .dz-hidden-input {
   border-radius: 5px !important;
 }
 
+.cty-search{
+  margin-bottom: 0px !important;
+}
 .cty-search .ant-form-item-control-wrapper ,.news-search .ant-form-item-control-wrapper{
   padding: 0 !important;
 }

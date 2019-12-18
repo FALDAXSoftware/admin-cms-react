@@ -79,7 +79,6 @@ class ViewRequestModal extends Component {
                     this._closeRejectForm();
                 })
                 .catch(() => {
-                    console.log('else')
                     this.setState({
                         errMsg: true, errMessage: 'Something went wrong!!',
                         loader: false, errType: 'error'

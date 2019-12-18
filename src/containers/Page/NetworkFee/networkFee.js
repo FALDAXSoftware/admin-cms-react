@@ -101,7 +101,6 @@ class NetworkFee extends Component {
   }
   render() {
     const { errType, errMsg, loader, coinFees, modalData, showEditNetworkFeeModal } = this.state;
-    console.log("showEditNetworkFeeModel", showEditNetworkFeeModal);
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }

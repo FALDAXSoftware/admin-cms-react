@@ -326,7 +326,6 @@ class EditProfile extends Component {
       is_twofactor,
       QRKey
     } = this.state;
-    console.log(is_twofactor);
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }

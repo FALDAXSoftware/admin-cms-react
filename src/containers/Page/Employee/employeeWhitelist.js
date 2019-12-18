@@ -82,7 +82,6 @@ class EmployeeWhitelist extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    console.log(res.data.is_whitelist_ip)
                     _this.setState({ isWhitelist: res.data.is_whitelist_ip });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -175,7 +174,6 @@ class EmployeeWhitelist extends Component {
 
     onClickOpenPermanentIpModal = async (checked) => {
         try {
-          console.log("checked call");
           const {allIPAddresses } = this.state;
          
           if (checked) {
@@ -205,7 +203,6 @@ class EmployeeWhitelist extends Component {
     
       enableWhitelistIp=async(checked) =>{
         try {
-          console.log(checked);
           const { token} = this.props;
           let formData = {
             status: checked,
