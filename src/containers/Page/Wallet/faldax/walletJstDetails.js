@@ -52,6 +52,7 @@ const columns=[
         dataIndex:"comission",
         sorter: true,
         width:100,
+        render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
     {
         title:<IntlMessages id="walletJstDetailsTable.title.faldax_fees"/>,
@@ -194,7 +195,7 @@ class WalletJstDetailsComponent extends Component {
                             <Col className="table-column" xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     <Option value="">All</Option>
-                                    {assetsList.map((ele)=><Option value={ele.value}>{ele.name}</Option>)}
+                                    {assetsList.map((ele)=><Option key={ele} value={ele.value}>{ele.name}</Option>)}
                                 </Select>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
@@ -206,6 +207,7 @@ class WalletJstDetailsComponent extends Component {
                         </Row>
                         <TableWrapper
                             {...this.state}
+                            rowKey="id"
                             columns={columns}
                             pagination={false}
                             dataSource={walletValue}

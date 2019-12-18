@@ -254,7 +254,7 @@ class TradeHistory extends Component {
     return (
       // <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent full-width">
-          {tradeTableInfos.map(tableInfo => (
+          
             <div>
               <div style={{ display: "inline-block", width: "100%" }}>
                 <Form onSubmit={this._searchTrade}>
@@ -327,7 +327,8 @@ class TradeHistory extends Component {
               {loader && <FaldaxLoader />}
               <TableWrapper
                 {...this.state}
-                columns={tableInfo.columns}
+                rowKey="id"
+                columns={tradeTableInfos[0].columns}
                 pagination={false}
                 dataSource={allTrades}
                 className="isoCustomizedTable"
@@ -370,7 +371,7 @@ class TradeHistory extends Component {
                   onChange={this._handleTradePagination.bind(this)}
                   pageSize={limit}
                   current={page}
-                  total={allTradeCount}
+                  total={parseInt(allTradeCount)}
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}
@@ -379,7 +380,6 @@ class TradeHistory extends Component {
                 ""
               )}
             </div>
-          ))}
         </TableDemoStyle>
       // </LayoutWrapper>
     );
