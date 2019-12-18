@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Input, notification } from 'antd';
+import { Tabs, Pagination, Input, notification, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
@@ -243,26 +243,27 @@ class Referrals extends Component {
 
         return (
             <div>
-                <div style={{ "display": "inline-block", "width": "100%" }}>
-                    <Search
-                        placeholder="Search users"
-                        onSearch={(value) => this._searchReferral(value)}
-                        style={{ "float": "right", "width": "250px" }}
-                        enterButton
-                    />
-                </div>
+                <Row type="flex" justify="end">
+                    <Col>
+                        <Search
+                            placeholder="Search users"
+                            onSearch={(value) => this._searchReferral(value)}
+                            enterButton
+                        />
+                    </Col>
+                </Row>
                 <TableWrapper
+                    rowKey="id"
                     {...this.state}
                     columns={referralInfos[0].columns}
                     pagination={false}
                     dataSource={allReferral}
-                    className="isoCustomizedTable"
+                    className="isoCustomizedTable table-tb-margin"
                     onChange={this._handleReferralChange}
                 />
                 {loader && <FaldaxLoader />}
                 {allReferralCount > 0 ?
                     <Pagination
-                        style={{ marginTop: '15px' }}
                         className="ant-users-pagination"
                         onChange={this._handleReferralPagination.bind(this)}
                         pageSize={limit}

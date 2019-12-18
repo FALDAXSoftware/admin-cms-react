@@ -77,9 +77,9 @@ class ReferredAmount extends Component {
                 {result.length > 0 ?
                     <Row>
                         {
-                            referredAmounts && referredAmounts.map((ref) => (
+                            referredAmounts && referredAmounts.map((ref,index) => (
                                 <Col md={8} sm={12} xs={24}>
-                                    <Card className='assets-card' onClick={()=>this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}})}>
+                                    <Card key={index} className='assets-card' onClick={()=>this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}})}>
                                         <div>
                                             <div className="asset-coinatiner">
                                                 <img src={'https://s3.us-east-2.amazonaws.com/production-static-asset/' + ref.coin_icon}></img>&nbsp;&nbsp;

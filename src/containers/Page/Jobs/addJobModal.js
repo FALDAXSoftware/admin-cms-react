@@ -133,9 +133,9 @@ class AddJobModal extends Component {
         } = this.state;
         const { allJobCategories } = this.props;
 
-        const catOptions = allJobCategories.map((category) => {
+        const catOptions = allJobCategories.map((category,index) => {
             return (
-                <Option value={category.id}>{category.category}</Option>
+                <Option key={index} value={category.id}>{category.category}</Option>
             )
         })
 
