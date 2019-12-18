@@ -9,6 +9,7 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
+import { DateTimeCell } from '../../../../components/tables/helperCells';
 
 const {Option}=Select;
 const columns=[
@@ -19,6 +20,13 @@ const columns=[
     //     width:100,
     //     render:data=><span>{data.toUpperCase()}</span>
     // },
+    {
+        title:<IntlMessages id="walletWarmDetailsTable.title.created_on"/>,
+        key:"createdTime",
+        dataIndex:"createdTime",
+        width:100,
+        render:data=><span>{DateTimeCell(data)}</span>
+    },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.baseValue"/>,
         key:5,
