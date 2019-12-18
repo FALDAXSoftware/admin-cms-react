@@ -1,9 +1,9 @@
 // const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
-// const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
+const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
+// const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 
 const ApiUtils = {
@@ -451,8 +451,8 @@ const ApiUtils = {
     }
   },
 
-  getUserReferData:function(token,coin_id="",user_id="",page="1",limit="50",data=""){
-    let url=`/admin/get-referred-user-data?coin_code=${coin_id}${user_id?'&user_id='+user_id:""}${page?'&page='+page:""}${limit?'&limit='+limit:""}${data?'&data='+data:""}`
+  getUserReferData: function (token, coin_id = "", user_id = "", page = "1", limit = "50", data = "") {
+    let url = `/admin/get-referred-user-data?coin_code=${coin_id}${user_id ? '&user_id=' + user_id : ""}${page ? '&page=' + page : ""}${limit ? '&limit=' + limit : ""}${data ? '&data=' + data : ""}`
     try {
       return fetch(API_URL + url, {
         method: "GET",
@@ -462,7 +462,7 @@ const ApiUtils = {
         }
       });
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
     }
   },
 
@@ -3377,7 +3377,7 @@ const ApiUtils = {
 
   generateWalletAddress: function (token, code, userId) {
     try {
-      return fetch(API_URL + "/users/create-admin-wallet/" + code + "/" + userId, {
+      return fetch(API_URL + "/admin/create-admin-wallet/" + code + "/" + userId, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
@@ -4077,7 +4077,7 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token
       },
-      getWalletDetailByName: function(coin = "",page,limit,sortCol="created_at",sortOrder="descend",searchData="",start_date=null,end_date=null,walletType=1) {
+      getWalletDetailByName: function (coin = "", page, limit, sortCol = "created_at", sortOrder = "descend", searchData = "", start_date = null, end_date = null, walletType = 1) {
         return fetch(
           `${API_URL}${this.url}get-wallet-dashboard?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${sortCol ? ("&sort_col=" + sortCol) : ""}${sortOrder ? ("&sort_order=" + sortOrder) : ""}&page=${page}&limit=${limit}${searchData ? "&data=" + searchData : ""}${start_date ? "&start_date=" + start_date : ""}${end_date ? "&end_date=" + end_date : ""}`,
           {
@@ -4086,36 +4086,36 @@ const ApiUtils = {
           }
         );
       },
-      getWalletWarnDashboard: function(search="") {
+      getWalletWarnDashboard: function (search = "") {
         return fetch(
-          `${API_URL}${this.url}get-warm-wallet-data${search?'?search='+search:""}`,
+          `${API_URL}${this.url}get-warm-wallet-data${search ? '?search=' + search : ""}`,
           {
             method: "GET",
             headers: this.headers
           }
         );
       },
-      getWalletColdDashboard: function(searchData) {
+      getWalletColdDashboard: function (searchData) {
         return fetch(
-          `${API_URL}${this.url}get-cold-wallet-data${searchData?'?search='+searchData:""}`,
+          `${API_URL}${this.url}get-cold-wallet-data${searchData ? '?search=' + searchData : ""}`,
           {
             method: "GET",
             headers: this.headers
           }
         );
       },
-      getWarmWalletDetail: function(coin_code,search) {
+      getWarmWalletDetail: function (coin_code, search) {
         return fetch(
-          `${API_URL}${this.url}get-warm-wallet-transaction?coin_code=${coin_code}${search?'&searchLabel='+search:""}`,
+          `${API_URL}${this.url}get-warm-wallet-transaction?coin_code=${coin_code}${search ? '&searchLabel=' + search : ""}`,
           {
             method: "GET",
             headers: this.headers
           }
         );
       },
-      getCustodialWalletDetail: function(coin_code,search) {
+      getCustodialWalletDetail: function (coin_code, search) {
         return fetch(
-          `${API_URL}${this.url}get-cold-wallet-transaction?coin_code=${coin_code}${search?'&searchLabel='+search:""}`,
+          `${API_URL}${this.url}get-cold-wallet-transaction?coin_code=${coin_code}${search ? '&searchLabel=' + search : ""}`,
           {
             method: "GET",
             headers: this.headers
