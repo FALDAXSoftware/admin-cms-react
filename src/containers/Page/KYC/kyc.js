@@ -15,16 +15,7 @@ import DeclinedKYC from './declinedKYC';
 import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
-import styled from 'styled-components';
 import { isAllowed } from '../../../helpers/accessControl';
-
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -260,24 +251,22 @@ class KYC extends Component {
                 showViewKYCModal={showViewKYCModal}
                 closeViewModal={this._closeViewKYCModal}
               />
-              {KYCInfos.map(tableInfo => (
                 <TableWrapper
+                  rowKey="id"
                   {...this.state}
-                  columns={tableInfo.columns}
+                  columns={KYCInfos[0].columns}
                   pagination={false}
                   dataSource={allKYCData}
                   className="isoCustomizedTable"
                   onChange={this._handleKYCTableChange}
                 />
-              ))}
               {allKYCCount > 0 ? (
                 <Pagination
-                  style={{ marginTop: "15px" }}
                   className="ant-users-pagination"
                   onChange={this._handleKYCPagination.bind(this)}
                   pageSize={limit}
                   current={page}
-                  total={allKYCCount}
+                  total={parseInt(allKYCCount)}
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}
@@ -300,14 +289,13 @@ class KYC extends Component {
             <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
-                  <IframeCol>
                     <iframe
+                      className="metabase-iframe"
                       src={metabaseUrl}
-                      frameborder="0"
+                      frameBorder="0"
                       width="100%"
-                      allowtransparency
+                      allowtransparency="true"
                     ></iframe>
-                  </IframeCol>
                 )}
               </TableDemoStyle>
             </TabPane>

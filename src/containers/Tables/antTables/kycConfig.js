@@ -48,7 +48,7 @@ const columns = [{
     )
 }, {
     title: <IntlMessages id="kycTable.title.created_at" />,
-    key: 'created_at',
+    key: 'created_at_1',
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')

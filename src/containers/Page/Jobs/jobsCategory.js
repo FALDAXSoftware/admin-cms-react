@@ -135,8 +135,8 @@ class JobCategory extends Component {
 
         return (
             <TableDemoStyle className="isoLayoutContent">
-                {jobCategoryTableInfos.map(tableInfo => (
-                    <div key={tableInfo.value}>
+                
+                
                         <div style={{ "display": "inline-block", "width": "100%" }}>
 
                             {isAllowed("add_job_category") &&
@@ -157,15 +157,14 @@ class JobCategory extends Component {
                             getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
                         />
                         <TableWrapper
+                            rowKey="id"
                             {...this.state}
-                            columns={tableInfo.columns}
+                            columns={jobCategoryTableInfos[0].columns}
                             pagination={false}
                             dataSource={allJobCategories}
                             className="isoCustomizedTable"
                             onChange={this._handleJobTableChange}
                         />
-                    </div>
-                ))}
             </TableDemoStyle>
         );
     }
