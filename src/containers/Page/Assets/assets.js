@@ -6,7 +6,9 @@ import {
   Icon,
   Button,
   Modal,
-  notification
+  notification,
+  Col,
+  Row
 } from "antd";
 import { assetTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -21,6 +23,7 @@ import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
+import { ColWithMarginBottom } from "../common.style";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -334,30 +337,28 @@ class Assets extends Component {
           {assetTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
-                {isAllowed("create_coins") && (
-                  <Button
-                    type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={this._showAddCoinModal}
-                  >
-                    <Icon type="plus" />
-                    Add Asset
-                  </Button>
-                )}
+                <Row type="flex" justify="start">
+                  <ColWithMarginBottom md={6}>
+                    {isAllowed("create_coins") && (
+                      <Button type="primary" onClick={this._showAddCoinModal}>
+                        <Icon type="plus" />
+                        Add Asset
+                      </Button>
+                    )}
+                  </ColWithMarginBottom>
+                  <ColWithMarginBottom md={12}></ColWithMarginBottom>
+                  <ColWithMarginBottom md={6}>
+                    <Search
+                      placeholder="Search assets"
+                      onSearch={value => this._searchCoin(value)}
+                      enterButton
+                    />
+                  </ColWithMarginBottom>
+                </Row>
                 <AddCoinModal
                   showAddCoinModal={showAddCoinModal}
                   closeAddModal={this._closeAddCoinModal}
                   getAllCoins={this._getAllCoins.bind(this, 1)}
-                />
-                <Search
-                  placeholder="Search assets"
-                  onSearch={value => this._searchCoin(value)}
-                  style={{
-                    marginBottom: "15px",
-                    float: "right",
-                    width: "250px"
-                  }}
-                  enterButton
                 />
 
                 {loader && <FaldaxLoader />}

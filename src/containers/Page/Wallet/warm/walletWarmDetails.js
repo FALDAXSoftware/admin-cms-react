@@ -24,7 +24,7 @@ const columns=[
         key:5,
         dataIndex:"baseValue",
         width:100,
-        render:data=><span>{data?parseFloat(data)>=0?parseFloat(data):parseFloat(data) * -1:""}</span>
+        render:data=><span>{data?parseFloat(data)>=0?(parseFloat(data)*0.00000001):((parseFloat(data) * -1)*0.00000001):""}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.type"/>,

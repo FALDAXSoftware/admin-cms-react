@@ -59,6 +59,7 @@ const columns=[
         key:4,
         sorter: true,
         width:100,
+        render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
     // {
     //     title:<IntlMessages id="walletJstDetailsTable.title.fill_price"/>,
@@ -79,7 +80,8 @@ const columns=[
         key:8,
         sorter: true,
         width:100,
-        dataIndex:"network_fees"
+        dataIndex:"network_fees",
+        render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
     
     // {

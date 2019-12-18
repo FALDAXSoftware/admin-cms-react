@@ -1861,7 +1861,7 @@ const CountryButtonCell = (value, stateCount) => (
   <Button
     type="primary"
     onClick={() => showStates(value)}
-    disabled={(stateCount > 0 || !isAllowed("get_state_data")) ? false : true}
+    disabled={!(stateCount > 0) && !isAllowed("get_state_data")}
   >
     Show States
   </Button>
@@ -1928,6 +1928,7 @@ const EmployeeSwitchCell = (
 ) => (
     <Switch
       checked={is_active}
+      disabled={isAllowed("update_employee")}
       onChange={() => {
         employeeStatus(
           value,

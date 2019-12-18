@@ -13,8 +13,6 @@ import {
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { inActiveUserinfos } from "../../Tables/antTables";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
-import LayoutContentWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
@@ -356,21 +354,21 @@ class InActiveUsers extends Component {
                   {loader && <FaldaxLoader />}
                   <div className="scroll-table float-clear">
                     <TableWrapper
+                      rowKey="id"
+                      className="table-tb-margin isoCustomizedTable"
                       {...this.state}
                       columns={tableInfo.columns}
                       pagination={false}
                       dataSource={allUsers}
-                      className="isoCustomizedTable"
                       onChange={this.handleTableChange}
                     />
                     {allUserCount > 0 ? (
                       <Pagination
-                        style={{ marginTop: "15px" }}
                         className="ant-users-pagination"
                         onChange={this._handleUserPagination.bind(this)}
                         pageSize={limit}
                         current={page}
-                        total={allUserCount}
+                        total={parseInt(allUserCount)}
                         showSizeChanger
                         onShowSizeChange={this._changePaginationSize}
                         pageSizeOptions={pageSizeOptions}

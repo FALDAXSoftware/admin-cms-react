@@ -267,7 +267,6 @@ class Countries extends Component {
                 <Row gutter={[0, 16]} type="flex" justify="end">
                   <ColWithMarginBottom lg={7}>
                     <Form.Item
-                      style={{ margin: 0 }}
                       validateStatus={this.state.searchValid}
                       className="cty-search"
                     >
@@ -315,14 +314,15 @@ class Countries extends Component {
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}
-              {countryTableInfos.map(tableInfo => (
+              
                 <div className="float-clear">
                   <TableWrapper
                     {...this.state}
-                    columns={tableInfo.columns}
+                    rowKey="id"
+                    columns={countryTableInfos[0].columns}
                     pagination={false}
                     dataSource={allCountries}
-                    className="isoCustomizedTable"
+                    className="isoCustomizedTable table-tb-margin"
                     onChange={this._handleCountryChange}
                   />
                   {showEditCountryModal && (
@@ -335,7 +335,6 @@ class Countries extends Component {
                   )}
                   {allCountryCount > 0 ? (
                     <Pagination
-                      style={{ marginTop: "15px" }}
                       className="ant-users-pagination"
                       onChange={this._handleCountryPagination.bind(this)}
                       pageSize={limit}
@@ -349,7 +348,6 @@ class Countries extends Component {
                     ""
                   )}
                 </div>
-              ))}
             </TableDemoStyle>
           </TabPane>
           {isAllowed("metabase_country_report") && (
