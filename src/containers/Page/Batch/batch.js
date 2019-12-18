@@ -576,7 +576,6 @@ class BatchBalance extends React.Component {
       purchaseDownloadData,
       summaryDownloadData
     } = this.state;
-    console.log("summaryDownloadData", summaryDownloadData, selectedExport);
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());

@@ -174,7 +174,6 @@ class AddCampaign extends Component {
 
   //change status of offer that added on table 
  static updateOfferStatus=(status,data)=>{
-  console.log(status,data)
   let {campaign_offers} = self.state
   let index=campaign_offers.findIndex((offer)=>offer.id==data.id);
   if(index>-1){
@@ -326,7 +325,6 @@ class AddCampaign extends Component {
           .then(res => res.json())
           .then(res => {
             if (res.status == 200) {
-              console.log("create Campaign", res.data);
               this.openNotificationWithIcon("success", "Success", res.message);
               this.props.history.push("/dashboard/campaign");
             } else if (res.status == 400) {
@@ -396,7 +394,6 @@ class AddCampaign extends Component {
           .then(res => res.json())
           .then(res => {
             if (res.status == 200) {
-              console.log("create Multi Campaign", res.data);
               this.openNotificationWithIcon("success", "Success", res.message);
               this.props.history.push("/dashboard/campaign");
             } else if (res.status == 403) {
@@ -457,7 +454,6 @@ class AddCampaign extends Component {
         return false; 
       }
     } catch(error){
-      console.log("Error",error)
       this.openNotificationWithIcon("error", "Error", "Something went to wrong please try again or contact support");
       return false;
     } finally {
@@ -524,7 +520,6 @@ class AddCampaign extends Component {
         formdata["start_date"] = startOfferDate.format("YYYY-MM-DD");
         formdata["end_date"] = endOfferDate.format("YYYY-MM-DD");
         formdata["is_active"] = is_offer_active;
-        console.log("Add Offer:", formdata);
         if(isUpdate){
           if(isOfferUpdate){
             let index=campaign_offers.findIndex(ele=>ele.id==offerId)
@@ -683,9 +678,6 @@ class AddCampaign extends Component {
   };
   
   onDateChange(dates, dateStrings) {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
-    // this.setState({});
     if (dates[0] === undefined || dates[1] === undefined) {
       this.setState({
         dateErrMsg: "Please enter valid Start date and End date."
@@ -699,9 +691,6 @@ class AddCampaign extends Component {
     }
   }
   onOfferDateChange(dates, dateStrings) {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
-    // this.setState({});
     if (dates[0] === undefined || dates[1] === undefined) {
       this.setState({
         dateOfferErrMsg: "Please enter valid Start date and End date."

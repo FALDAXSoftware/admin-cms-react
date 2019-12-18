@@ -59,7 +59,6 @@ const AccessGrant = (props) => {
             }
             setIsLoading(false)
         }).catch(err => {
-            console.log(err);
             setIsLoading(false)
             setError({
                 errType: "Error",
@@ -126,7 +125,6 @@ const AccessGrant = (props) => {
                 }
                 setIsLoading(false)
             }).catch((err) => {
-                console.log(err);
                 setIsLoading(false)
                 setError({
                     errType: "Error",

@@ -96,7 +96,6 @@ class Offers extends Component {
       }
     } catch (error) {
       self.loader.hide();
-      console.log(error);
       self.setState({ errMsg: true, errMessage: OtherError, errType: "error" });
     }
   }
@@ -150,7 +149,6 @@ class Offers extends Component {
 
   onDeleteConfirm = id => {
     this.setState({ showDeleteModal: false });
-    console.log(id);
   };
 
   handleUserPagination = page => {
@@ -177,7 +175,6 @@ class Offers extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }
@@ -200,7 +197,6 @@ class Offers extends Component {
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());
     }
-    console.log("render", showDeleteModal);
 
     return (
       <LayoutWrapper>

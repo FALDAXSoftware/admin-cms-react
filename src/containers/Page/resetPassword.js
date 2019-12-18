@@ -48,7 +48,6 @@ export default class extends Component {
 
   resetPassword = e => {
     try {
-      console.log("value of this",this)
       e.preventDefault();
       const { fields, errors } = this.state;
       this.setState({ loader: true });

@@ -23,10 +23,6 @@ class ViewUser extends Component {
     constructor(props){
         super(props)
     }
-
-    componentDidMount(){
-        console.log(this.props.location)
-    }
     render() {
         const { location } = this.props;
         let path = location.pathname.split('/');

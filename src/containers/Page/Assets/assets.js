@@ -301,10 +301,6 @@ class Assets extends Component {
     );
   };
 
-  _changeRow = e => {
-    e.preventDefault();
-  };
-
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
       this._getAllCoins();
@@ -384,28 +380,21 @@ class Assets extends Component {
                     </Modal>
                   )}
                   <TableWrapper
-                    onRow={(record, rowIndex) => {
-                      return {
-                        onClick: () => {
-                          this._changeRow.bind(this);
-                        }
-                      };
-                    }}
+                    rowKey="id"
                     {...this.state}
                     columns={tableInfo.columns}
                     pagination={false}
                     dataSource={allCoins}
                     onChange={this.handleTableChange}
-                    className="isoCustomizedTable"
+                    className="isoCustomizedTable table-tb-margin"
                   />
                   {allCoinCount > 0 ? (
                     <Pagination
-                      style={{ marginTop: "15px" }}
                       className="ant-users-pagination"
                       onChange={this._handleCoinPagination.bind(this)}
                       pageSize={limit}
                       current={page}
-                      total={allCoinCount}
+                      total={parseInt(allCoinCount)}
                       showSizeChanger
                       onShowSizeChange={this._changePaginationSize}
                       pageSizeOptions={pageSizeOptions}

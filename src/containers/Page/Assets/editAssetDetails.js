@@ -154,7 +154,6 @@ class EditAssetDetails extends Component {
         custody_wallet_address: fields["custody_wallet_address"],
         isERC: selectedToken
       };
-      console.log("formData", formData.min_limit);
 
       ApiUtils.editCoin(token, formData)
         .then(res => res.json())

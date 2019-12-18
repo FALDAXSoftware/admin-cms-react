@@ -20,7 +20,6 @@ class PendingRequests extends Component {
     }
 
     static approvePendingReq(value, first_name, last_name, tier_step, is_approved, user_id) {
-        console.log('>>>self', value, first_name, last_name, tier_step, is_approved, user_id)
         const { token } = self.props;
 
         self.setState({ loader: true })

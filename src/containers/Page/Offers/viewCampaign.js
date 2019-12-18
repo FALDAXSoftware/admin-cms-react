@@ -113,7 +113,6 @@ const tableColumns = [
     width:100,
     render: (end_date) => {
     let [today,exp_date]=[moment().startOf('day'),moment(end_date).startOf('day')]
-    console.log(exp_date.diff(today, "days"))
     return <div>{(exp_date.diff(today, "days"))>-1?'':
     <span className="error-danger"><Icon type="info-circle" className="error-danger"/> Expired</span>}
     </div>;
@@ -188,7 +187,6 @@ class ViewCampaign extends Component {
   }
 
   static viewOfferUsage(offerId,offerName){
-    console.log(self.props)
     self.props.history.push({pathname:`/dashboard/campaign/offer-usage/${offerId}`, state: JSON.stringify({ detail: self.state.campaignDetails.label,name:offerName})})
   }
 

@@ -1103,7 +1103,6 @@ const ObjectCell = (value, execution_report) => (
       </ul>
     )} */}
     {/* {JSON.stringify(execution_report)} */}
-    {console.log(Object.keys(execution_report[0]).length)}
     {Object.keys(execution_report[0]).length > 0 ? (
       <ul style={{ height: "350px", overflow: "auto" }}>
         {Object.keys(execution_report[0]).map((element, index) => {
