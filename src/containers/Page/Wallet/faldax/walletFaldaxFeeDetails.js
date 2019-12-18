@@ -25,14 +25,14 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.amount"/>,
-        key:1,
+        key:2,
         sorter: true,
         width:100,
         render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.faldax_fee"/>,
-        key:2,
+        key:3,
         sorter: true,
         width:100,
         render:data=><span>{data["faldax_fee"]?(parseFloat(data["faldax_fee"]).toFixed(8)+" "+data["coin"]):"-"}</span>
@@ -40,20 +40,20 @@ const columns=[
     {
         title:<IntlMessages id="walletDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
-        key:3,
+        key:4,
         sorter: true,
         width:100,
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.destination_address"/>,
         dataIndex:"destination_address",
-        key:4,
+        key:5,
         sorter: true,
         width:100,
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.transaction_id"/>,
-        key:5,
+        key:6,
         sorter: true,
         width:100,
         render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
@@ -137,7 +137,7 @@ class WalletDetailsComponent extends Component {
                             <Col className="table-column" xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     <Option value="">All</Option>
-                                    {assetsList.map((ele)=><Option value={ele.value}>{ele.name}</Option>)}
+                                    {assetsList.map((ele)=><Option key={ele} value={ele.value}>{ele.name}</Option>)}
                                 </Select>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
@@ -148,6 +148,7 @@ class WalletDetailsComponent extends Component {
                             </Col>
                         </Row>
                         <TableWrapper
+                            rowKey="id"
                             {...this.state}
                             columns={columns}
                             pagination={false}

@@ -53,9 +53,9 @@ class TradeMetabase extends Component {
               <iframe
                 className="metabase-iframe"
                 src={metabaseUrl}
-                frameborder="0"
+                frameBorder="0"
                 width="100%"
-                allowtransparency
+                allowtransparency="true"
               ></iframe>
             </div>
           )}

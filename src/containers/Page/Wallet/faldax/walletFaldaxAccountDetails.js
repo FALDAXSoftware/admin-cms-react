@@ -138,7 +138,7 @@ class WalletFaldaxDetailsComponent extends Component {
                             <Col className="table-column" xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     <Option value="">All</Option>
-                                    {assetsList.map((ele)=><Option value={ele.value}>{ele.name}</Option>)}
+                                    {assetsList.map((ele)=><Option key={ele} value={ele.value}>{ele.name}</Option>)}
                                 </Select>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
@@ -149,6 +149,7 @@ class WalletFaldaxDetailsComponent extends Component {
                             </Col>
                         </Row>
                         <TableWrapper
+                            rowKey="id"
                             {...this.state}
                             columns={columns}
                             pagination={false}

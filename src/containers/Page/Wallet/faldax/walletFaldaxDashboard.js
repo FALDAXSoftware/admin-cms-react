@@ -37,21 +37,21 @@ const columns=[
         key:5,
         dataIndex:"total",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_forfeit"/>,
         key:2,
         dataIndex:"total_earned_from_forfeit",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst"/>,
         key:3,
         dataIndex:"total_earned_from_jst",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
 
     },
     {
@@ -220,6 +220,7 @@ class WalletFaldaxDashboard extends Component {
                         </Col>
                     </Row>
                     <TableWrapper
+                        rowKey="id"
                         {...this.state}
                         columns={columns}
                         pagination={false}

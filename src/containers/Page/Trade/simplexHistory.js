@@ -179,9 +179,8 @@ class SimplexHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {simplexTableInfos.map(tableInfo => (
-                        <div>
-                            <div style={{ "display": "inline-block", "width": "100%" }}>
+                        
+                           
                                 <Form onSubmit={this._searchTrade}>
                                     <Row>
                                         <ColWithMarginBottom md={6} sm={24}>
@@ -241,30 +240,30 @@ class SimplexHistory extends Component {
                                         </ColWithMarginBottom>
                                     </Row>
                                 </Form>
-                            </div>
+                            
                             {loader && <FaldaxLoader />}
                             <TableWrapper
                                 {...this.state}
-                                columns={tableInfo.columns}
+                                rowKey="id"
+                                columns={simplexTableInfos[0].columns}
                                 pagination={false}
                                 dataSource={allSimplexTrades}
-                                className="isoCustomizedTable"
+                                className="isoCustomizedTable table-tb-margin float-clear"
                                 onChange={this._handleTradeTableChange}
                             />
                             {allTradeCount > 0 ?
                                 <Pagination
-                                    style={{ marginTop: '15px' }}
                                     className="ant-users-pagination"
                                     onChange={this._handleTradePagination.bind(this)}
                                     pageSize={limit}
                                     current={page}
-                                    total={allTradeCount}
+                                    total={parseInt(allTradeCount)}
                                     showSizeChanger
                                     onShowSizeChange={this._changePaginationSize}
                                     pageSizeOptions={pageSizeOptions}
                                 /> : ''}
-                        </div>
-                    ))}
+                        
+                    
                 </TableDemoStyle>
             </LayoutWrapper>
         );
