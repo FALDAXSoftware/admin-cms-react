@@ -321,7 +321,7 @@ class TwoFactorRequests extends Component {
     return (
       <LayoutWrapper>
         <BackButton {...this.props}/>
-        <Tabs className="isoTableDisplayTab" onChange={this.onChangeTabs}>
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {twoFactorReqInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">

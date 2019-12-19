@@ -567,3 +567,17 @@ html[dir='rtl'] .dz-hidden-input {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.switch-cell{
+  width: 70px;
+  text-align: center;
+  height: 22px !important;
+  line-height: 20px !important;
+}
+.switch-cell::after{
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.search-with-btn{
+  width: 300px !important;
+}

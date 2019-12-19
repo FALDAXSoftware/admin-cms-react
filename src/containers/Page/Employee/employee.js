@@ -344,7 +344,7 @@ class Employees extends Component {
           >
             <TableDemoStyle className="isoLayoutContent">
               <Row type="flex" justify="end">
-                <Col md={4}>
+                <Col md={12}>
                   {isAllowed("add_employee") && (
                     <Button
                       type="primary"
@@ -354,8 +354,9 @@ class Employees extends Component {
                     </Button>
                   )}
                 </Col>
-                <Col md={6}>  
+                <Col md={12} className="txt-align-right">  
                   <Search
+                    className="search-with-btn"
                     placeholder="Search employees"
                     onSearch={value => this._searchEmpoyee(value)}
                     enterButton
