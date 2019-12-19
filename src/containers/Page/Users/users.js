@@ -11,6 +11,7 @@ import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import styled from 'styled-components';
 import ApiUtils from "../../../helpers/apiUtills";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
+import { BackButton } from '../../Shared/backBttton';
 const { TabPane } = Tabs;
 const { logout } = authAction;
 
@@ -64,11 +65,10 @@ class Users extends Component {
     } = this.state;
     return (
       <LayoutWrapper>
-        <div className="full-width">
+        <BackButton {...this.props}/>
+        <div className="txt-align-right full-width">
           {isAllowed("add_user") &&
-
             <Button
-              className="float-right"
               icon="plus"
               onClick={() => this.props.history.push("/dashboard/users/add-user")}
               type="primary"
@@ -77,7 +77,7 @@ class Users extends Component {
           </Button>
           }
         </div>
-        <Tabs className="float-clear" size={"large"} onChange={this.onChangeTabs}>
+        <Tabs className="float-clear full-width" onChange={this.onChangeTabs}>
           {isAllowed("get_users") &&
             <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
           }

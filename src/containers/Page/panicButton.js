@@ -5,6 +5,7 @@ import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
+import { BackButton } from '../Shared/backBttton';
 
 const { logout } = authAction;
 
@@ -125,6 +126,7 @@ class PanicButton extends Component {
 
         return (
             <LayoutWrapper>
+                <BackButton {...this.props}/>
                 <div className="isoLayoutContent">
                     <Card title="Panic Button" bordered={false} style={{ width: 300 }}>
                         <p>Panic buttons can be added to security systems to increase safety and security.</p>

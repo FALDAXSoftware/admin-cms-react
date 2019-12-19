@@ -7,16 +7,18 @@ import WalletFaldaxDashboard from './faldax/walletFaldaxDashboard';
 import WalletWarmDashboard from './warm/walletWarmDashboard';
 import WalletCustodialDashboard from './custodial/walletCustodialDashboard';
 import { isAllowed } from '../../../helpers/accessControl';
+import { BackButton } from '../../Shared/backBttton';
 class WalletDashboard extends Component {
     state = {  }    
     render() { 
         return (
         <LayoutWrapper>
-                <Tabs className="full-width">
-                    {isAllowed("admin_wallet_fees_details") &&<TabPane tab="Faldax Wallet" key="1"><WalletFaldaxDashboard/></TabPane>}
-                    {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Warm Wallet" key="2"><WalletWarmDashboard/></TabPane>}
-                    {isAllowed("admin_cold_wallet_data") &&<TabPane tab="Custodial Wallet" key="3"><WalletCustodialDashboard/></TabPane>}
-                </Tabs>
+            <BackButton {...this.props}/>
+            <Tabs className="full-width">
+                {isAllowed("admin_wallet_fees_details") &&<TabPane tab="FALDAX Wallet" key="1"><WalletFaldaxDashboard/></TabPane>}
+                {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Warm Wallet" key="2"><WalletWarmDashboard/></TabPane>}
+                {isAllowed("admin_cold_wallet_data") &&<TabPane tab="Custodial Wallet" key="3"><WalletCustodialDashboard/></TabPane>}
+            </Tabs>
         </LayoutWrapper>
         );
     }

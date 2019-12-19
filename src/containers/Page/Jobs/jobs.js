@@ -16,6 +16,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from "./jobsMetabase"
 import { ColWithMarginBottom } from "../common.style";
+import { BackButton } from "../../Shared/backBttton";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -358,7 +359,8 @@ class Jobs extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab" onChange={this._changeTab}>
+        <BackButton {...this.props}/>
+        <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
               <Row type="flex" justify="end">

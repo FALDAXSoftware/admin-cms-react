@@ -31,25 +31,11 @@ import PendingRequests from "../../containers/Page/Tiers/pendingTierRequests";
 import  NetworkFee  from "../../containers/Page/NetworkFee/networkFee";
 import { networkFeesFormula } from "../../containers/Page/NetworkFee/networkFeesFormula";
 import offers from "../../containers/Page/Offers/offers";
-import styled from "styled-components";
 import { DeletedUsers } from "../../containers/Page/Users/deletedUsers";
 import { isAllowed } from "../../helpers/accessControl";
 import referrals from "../../containers/Page/Referral/referrals";
+import { S3BucketImageURL } from "../../helpers/globals";
 
-//const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
-const S3BucketImageURL =
-  "https://s3.us-east-2.amazonaws.com/production-static-asset/";
-
-const StatusSwitch = styled(Switch)`
-  width: 84px;
-  text-align: center;
-  height: 30px !important;
-  line-height: 26px !important;
-  &::after {
-    width: 26px !important;
-    height: 26px !important;
-  }
-`;
 const viewActiveUser = (
   value,
   profile_pic,
@@ -1249,6 +1235,9 @@ const SwitchCell = (
   coin_icon
 ) => (
     <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       checked={is_active}
       onChange={() => {
         coinstatus(
@@ -1277,6 +1266,9 @@ const StaticSwitchCell = (
 ) => (
     <Switch
       checked={is_active}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       onChange={() => {
         coinstatus(
           value,
@@ -1292,6 +1284,9 @@ const StaticSwitchCell = (
   );
 const CountrySwitchCell = (value, name, legality, color, is_active) => (
   <Switch
+    className="switch-cell"
+    checkedChildren="Active"
+      unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       countryStatus(value, name, legality, color, is_active);
@@ -1300,6 +1295,9 @@ const CountrySwitchCell = (value, name, legality, color, is_active) => (
 );
 const StateSwitchCell = (value, name, legality, color, is_active) => (
   <Switch
+    className="switch-cell"
+    checkedChildren="Active"
+      unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       stateStatus(value, name, legality, color, is_active);
@@ -1317,6 +1315,9 @@ const NewsSwitchCell = (
   owner
 ) => (
     <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       checked={is_active}
       onChange={() => {
         newsStatus(
@@ -1887,6 +1888,9 @@ const RoleSwitchCell = (
   is_active
 ) => (
     <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       checked={is_active}
       key="role_switch"
       onChange={() => {
@@ -1926,8 +1930,11 @@ const EmployeeSwitchCell = (
   is_active
 ) => (
     <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       checked={is_active}
-      disabled={isAllowed("update_employee")}
+      disabled={!isAllowed("update_employee")}
       onChange={() => {
         employeeStatus(
           value,
@@ -1996,6 +2003,9 @@ const FeeSwitchCell = (
   is_active
 ) => (
     <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       checked={is_active}
       onChange={() => {
         pairStatus(value, name, maker_fee, taker_fee, created_at, is_active);
@@ -2127,6 +2137,9 @@ const JobSwitchCell = (
   category
 ) => (
     <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
       checked={is_active}
       onChange={() => {
         jobStatus(
@@ -2306,6 +2319,9 @@ const TemplateActionCell = (value, name, content, note) => (
 );
 const NewsSourceSwitchCell = (value, source_name, slug, is_active) => (
   <Switch
+    className="switch-cell"
+    checkedChildren="Active"
+      unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       newsSourceStatus(value, source_name, slug, is_active);
@@ -2399,6 +2415,9 @@ const WithdrawStatusCell = (
   );
 const JobCatSwitchCell = (value, category, is_active) => (
   <Switch
+    className="switch-cell"
+    checkedChildren="Active"
+      unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       jobCategoryStatus(value, category, is_active);
@@ -2607,7 +2626,9 @@ const PendingTierReqActionCell = (
         />
       </Tooltip>
       <Switch
-        style={{ marginLeft: "10px" }}
+        className="switch-cell"
+        checkedChildren="Active"
+      unCheckedChildren="Inactive"
         checked={is_approved}
         onChange={() => {
           approvePendingReq(
@@ -2788,8 +2809,9 @@ const CampaignSwitchCell = (
   campaign_is_active,
   campaign_label
 ) => (
-    <StatusSwitch
+    <Switch
       checked={campaign_is_active}
+      className="switch-cell"
       checkedChildren="Active"
       unCheckedChildren="Inactive"
       size="large"

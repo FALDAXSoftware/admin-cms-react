@@ -64,7 +64,6 @@ const columns=[
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.send_address"/>,
         key:7,
-        // dataIndex:"send_address",
         width:100,
         render:data=><span>{data["send_address"]?data["send_address"]: <Button size="small" type="dashed" onClick={()=>self.props.history.push(`./assets/wallet/${data["coin_code"]}`)}>Create</Button>}</span>
     },
@@ -167,11 +166,11 @@ class WalletFaldaxDashboard extends Component {
             try{
                 this.loader.show();
                 let res=await (await ApiUtils.sendWalletBalance(token, formData)).json();
-                let [{data,status,err,message},logout]=[res,this.props];
+                let [{data,status,err,message},{logout}]=[res,this.props];
                 if (status == 200) {
-                    this.setState({ allWallets: data });
+                    this.setState({ allWallets: data },()=>this.openNotificationWithIcon("Success",message));
                 } else if (status == 403) {
-                    this.openNotificationWithIcon("Error",message)
+                    this.openNotificationWithIcon("Error",err)
                     logout();
                 } else {
                     this.openNotificationWithIcon("Error",message)

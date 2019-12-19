@@ -26,6 +26,7 @@ import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
+import { BackButton } from "../../Shared/backBttton";
 
 const IframeCol = styled(Col)`
   width: 100%;
@@ -319,7 +320,8 @@ class TwoFactorRequests extends Component {
 
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab" onChange={this.onChangeTabs}>
+        <BackButton {...this.props}/>
+        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {twoFactorReqInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">

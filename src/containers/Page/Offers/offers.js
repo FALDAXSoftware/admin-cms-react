@@ -12,6 +12,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from "../../../helpers/accessControl";
+import { BackButton } from "../../Shared/backBttton";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -200,6 +201,7 @@ class Offers extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs
           className="isoTableDisplayTab full-width"
           onChange={this.onChangeTabs}

@@ -16,6 +16,7 @@ import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
+import { BackButton } from '../../Shared/backBttton';
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -201,6 +202,7 @@ class KYC extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab" onChange={this.onChangeTabs}>
           <TabPane tab={KYCInfos[0].title} key={KYCInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
