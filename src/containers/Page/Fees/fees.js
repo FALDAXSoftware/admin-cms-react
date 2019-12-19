@@ -8,17 +8,19 @@ import FeesMetabase from './feesMetabase';
 import NetworkFee  from '../NetworkFee/networkFee';
 import FeesWithdrawal from './feesWithdrawal';
 import FeesFaldax from './feesFaldax';
+import { BackButton } from '../../Shared/backBttton';
 class FeesComponent extends Component {
     state = {  }    
     render() { 
         return (
         <LayoutWrapper>
-                <Tabs className="full-width">
-                    {isAllowed("get_withdrawl_faldax_fee") &&<TabPane tab="Withdrawal Fees" key="3"><FeesWithdrawal/></TabPane>}
-                    {isAllowed("get_withdrawl_faldax_fee") &&<TabPane tab="Faldax Fees" key="2"><FeesFaldax/></TabPane>}
-                    {isAllowed("get_coin_fees") &&<TabPane tab="Network Fees" key="1"><NetworkFee/></TabPane>}
-                    {isAllowed("metabase_fee_report") &&<TabPane tab="Report" key="4"><FeesMetabase/></TabPane>}
-                </Tabs>
+            <BackButton {...this.props}/>
+            <Tabs className="full-width">
+                {isAllowed("get_withdrawl_faldax_fee") &&<TabPane tab="Withdrawal Fees" key="3"><FeesWithdrawal/></TabPane>}
+                {isAllowed("get_withdrawl_faldax_fee") &&<TabPane tab="Faldax Fees" key="2"><FeesFaldax/></TabPane>}
+                {isAllowed("get_coin_fees") &&<TabPane tab="Network Fees" key="1"><NetworkFee/></TabPane>}
+                {isAllowed("metabase_fee_report") &&<TabPane tab="Report" key="4"><FeesMetabase/></TabPane>}
+            </Tabs>
         </LayoutWrapper>
         );
     }

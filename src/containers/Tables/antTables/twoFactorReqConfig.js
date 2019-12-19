@@ -49,8 +49,9 @@ const columns = [{
 }, {
     title: "Status",
     key: 'status',
+    dataIndex:"status",
     width: 200,
-    render: object => renderCell(object, 'TextCell', 'status')
+    render: object => <span>{object.toUpperCase()}</span>
 }];
 
 const twoFactorReqInfos = [

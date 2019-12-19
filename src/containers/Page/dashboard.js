@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, notification, Card, Progress, Tabs } from "antd";
+import { Row, Col, notification, Card, Progress, Tabs, Divider } from "antd";
 import LayoutWrapper from "../../components/utility/layoutWrapper.js"
 import basicStyle from "../../settings/basicStyle";
 import ApiUtils from "../../helpers/apiUtills";
@@ -437,9 +437,8 @@ class Dashboard extends Component {
 
     return (
       <LayoutWrapper>
-        <TableDemoStyle className="isoLayoutContent">
           {loader && <FaldaxLoader />}
-          <Tabs defaultActiveKey="1" size={"large"} style={{ marginTop: "20px" }} onChange={this.onChangeTabs}>
+          <Tabs defaultActiveKey="1"  style={{ marginTop: "20px" }} onChange={this.onChangeTabs}>
             {!isAllowed("get_dashboard_data") && !isAllowed("metabase_details") &&
               <TabPane tab="Admin-Dashboard" key="1">
                 <Row tyle={rowStyle} gutter={0} justify="start">
@@ -452,7 +451,7 @@ class Dashboard extends Component {
             {isAllowed("get_dashboard_data") &&
               <TabPane tab="Admin-Dashboard" key="1">
                 <Row style={rowStyle} gutter={0} justify="start">
-                  <Col md={12} xs={24} style={colStyle2}>
+                  <Col md={12} xs={24}>
                     <CardWrapper title="Country">
                       <ChartWrapper>
                         <ContentHolder>
@@ -462,7 +461,7 @@ class Dashboard extends Component {
                     </CardWrapper>
                   </Col>
 
-                  <Col md={12} xs={24} style={colStyle2}>
+                  <Col md={12} xs={24}>
                     <CardWrapper title="Pending Identity Verifications">
                       <ChartWrapper>
                         <RangePicker
@@ -494,7 +493,7 @@ class Dashboard extends Component {
                 </Row>
 
                 <Row style={rowStyle} gutter={0} justify="start">
-                  {/* <Col md={12} xs={24} style={colStyle}>
+                  {/* <Col md={12} xs={24} >
                         <Card title="KYC">
                             <span>Grand Total</span>
                             <Progress percent={30} size="small" format={percent => `${percent}`} />
@@ -507,7 +506,7 @@ class Dashboard extends Component {
                         </Card>
                     </Col> */}
 
-                  <Col md={12} xs={24} style={colStyle}>
+                  <Col md={12} xs={24}>
                     <CardWrapper>
                       <span>
                         <b>Fees collected in last 30 days:</b>
@@ -518,7 +517,7 @@ class Dashboard extends Component {
                     </CardWrapper>
                   </Col>
 
-                  <Col md={12} xs={24} style={colStyle}>
+                  <Col md={12} xs={24} >
                     <CardWrapper>
                       <span>
                         <b>Transactions</b>
@@ -534,7 +533,7 @@ class Dashboard extends Component {
                 </Row>
 
                 {/* <Row style={rowStyle} gutter={0} justify="start">
-                    <Col md={12} xs={24} style={colStyle}>
+                    <Col md={12} xs={24} >
                         <IsoWidgetsWrapper>
                             <span><b>Transactions</b></span>
                             <ChartWrapper>
@@ -544,9 +543,9 @@ class Dashboard extends Component {
                         </IsoWidgetsWrapper>
                     </Col>
                 </Row> */}
-
+                <Divider/>
                 <Row style={rowStyle} gutter={0} justify="start">
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24}>
                     <Link to="/dashboard/users">
                       <CountCard
                         number={activeUsers}
@@ -566,8 +565,8 @@ class Dashboard extends Component {
                   </Col>
 
                   {/* Deleted Account */}
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
-                    <CardView
+                  <Col lg={6} md={12} sm={12} xs={24} >
+                    <CardView 
                       cardText={"Deleted Account"}
                       cardTitle={"Deleted Account"}
                       icon={"fa fa-users"}
@@ -575,7 +574,7 @@ class Dashboard extends Component {
                     />
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/assets">
                       <CountCard
                         number={activeCoins}
@@ -594,7 +593,7 @@ class Dashboard extends Component {
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/pairs">
                       <CountCard
                         number={activePairs}
@@ -613,7 +612,7 @@ class Dashboard extends Component {
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/employee">
                       <CountCard
                         number={activeEmployeeCount}
@@ -632,7 +631,7 @@ class Dashboard extends Component {
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/jobs">
                       <CardView
                         cardText={"Pending Job Applications"}
@@ -643,7 +642,7 @@ class Dashboard extends Component {
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/withdraw-requests">
                       <CardView
                         cardText={"Last 7 Days Withdraw Requests"}
@@ -654,7 +653,7 @@ class Dashboard extends Component {
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/withdraw-requests">
                       <CardView
                         cardText={"Pending Withdraw Requests"}
@@ -665,7 +664,7 @@ class Dashboard extends Component {
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} style={colStyle}>
+                  <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/users">
                       <CardView
                         cardText={"Signed up Users"}
@@ -695,7 +694,6 @@ class Dashboard extends Component {
               </TabPane>
             }
           </Tabs>
-        </TableDemoStyle>
       </LayoutWrapper>
     );
   }

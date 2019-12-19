@@ -7,7 +7,6 @@ import {
   Button,
   Modal,
   notification,
-  Col,
   Row
 } from "antd";
 import { assetTableInfos } from "../../Tables/antTables";
@@ -24,6 +23,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
 import { ColWithMarginBottom } from "../common.style";
+import { BackButton } from "../../Shared/backBttton";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -329,6 +329,7 @@ class Assets extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
           {assetTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>

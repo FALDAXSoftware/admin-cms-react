@@ -27,6 +27,7 @@ import DeclineActionModal from "./declineModal";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
+import { BackButton } from "../../Shared/backBttton";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -395,6 +396,7 @@ class WithdrawRequest extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           <TabPane tab={withdrawReqTableInfos[0].title} key={withdrawReqTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">

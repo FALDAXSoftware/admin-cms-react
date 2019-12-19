@@ -8,6 +8,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from '../../../helpers/accessControl';
 import { messages } from '../../../helpers/messages'
 import styled from 'styled-components';
+import { BackButton } from '../../Shared/backBttton';
 
 const SaveBtn = styled(Button)`
     float: right;
@@ -481,7 +482,7 @@ class EditableTable extends React.Component {
       <div>
         {isAllowed("get_admin_thresholds_contacts") &&
           <div>
-
+            <BackButton {...this.props}/>
             <Divider orientation="left">Contact Information</Divider>
             <div className="isoLayoutContent" style={{ marginTop: "10px" }}>
               <span>

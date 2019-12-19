@@ -25,6 +25,7 @@ import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import styled from "styled-components";
+import { BackButton } from "../../Shared/backBttton";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -354,6 +355,7 @@ class News extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs
           className="isoTableDisplayTab full-width"
           onChange={this.onChangeTabs}

@@ -8,6 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
+import { BackButton } from "../../Shared/backBttton";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -111,6 +112,7 @@ class NewsSources extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
           {newsSourceTableInfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>

@@ -27,6 +27,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
+import { BackButton } from "../../Shared/backBttton";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -130,8 +131,8 @@ class Transactions extends Component {
     return data.map(ele => {
       ele["transaction_fees"] =
         ele["transaction_type"] == "send"
-          ? ((parseFloat(ele.amount) * parseFloat(fees)) / 100).toFixed(8) +
-          " USD"
+          ? ((parseFloat(ele.amount) * parseFloat(fees)) / 100).toFixed(8) +" "+ 
+          ele.coin
           : "-";
       return ele;
     });
@@ -292,6 +293,7 @@ class Transactions extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs
           className="isoTableDisplayTab full-width"
           onChange={this.onChangeTabs}

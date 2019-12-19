@@ -13,6 +13,7 @@ import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from './employeeMetabase'
+import { BackButton } from "../../Shared/backBttton";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -335,6 +336,7 @@ class Employees extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={employeeTableinfos[0].title}
@@ -342,7 +344,7 @@ class Employees extends Component {
           >
             <TableDemoStyle className="isoLayoutContent">
               <Row type="flex" justify="end">
-                <Col md={4}>
+                <Col md={12}>
                   {isAllowed("add_employee") && (
                     <Button
                       type="primary"
@@ -352,8 +354,9 @@ class Employees extends Component {
                     </Button>
                   )}
                 </Col>
-                <Col md={6}>  
+                <Col md={12} className="txt-align-right">  
                   <Search
+                    className="search-with-btn"
                     placeholder="Search employees"
                     onSearch={value => this._searchEmpoyee(value)}
                     enterButton

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tabs } from 'antd';
 import authAction from '../../../redux/auth/actions';
-import { Link } from 'react-router-dom';
 import EditAssetDetails from './editAssetDetails';
 import EditAssetLimit from './editAssetLimit';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import { isAllowed } from "../../../helpers/accessControl";
+import { BackButton } from '../../Shared/backBttton';
 
 const { logout } = authAction;
 const { TabPane } = Tabs;
@@ -26,12 +26,7 @@ class EditAsset extends Component {
 
         return (
             <LayoutWrapper>
-                <div style={{ "display": "inline-block", "width": "100%", marginLeft: '20px' }}>
-                    <Link to="/dashboard/assets">
-                        <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <a onClick={() => { this.props.history.push('/dashboard/assets') }}>Back</a>
-                    </Link>
-                </div>
+                <BackButton {...this.props}></BackButton>
                 <Tabs  className="full-width">
                     {(isAllowed("update_coins") && isAllowed("get_coin_details"))&& <TabPane tab="Asset Details" key="1"><EditAssetDetails coin_id={coin_id} /></TabPane>}
                     {isAllowed("get_all_limits") && <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane>}

@@ -91,12 +91,6 @@ const columns = [{
     key: 'direct_response',
     width: 100,
     render: object => renderCell(object, 'TextCell', 'direct_response')
-}, {
-    title: <IntlMessages id="kycTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
 }];
 
 const KYCInfos = [

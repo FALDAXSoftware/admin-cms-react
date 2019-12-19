@@ -8,6 +8,7 @@ import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import { isAllowed } from '../../../helpers/accessControl';
+import { BackButton } from "../../Shared/backBttton";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -161,6 +162,7 @@ class SimplexToken extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane tab="Simplex Access Token" key="1">
             <TableDemoStyle className="isoLayoutContent">

@@ -63,7 +63,7 @@ const columns=[
         title:<IntlMessages id="walletDetailsTable.title.transaction_id"/>,
         key:6,
         sorter: true,
-        width:100,
+        // width:100,
         render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
        
     }
