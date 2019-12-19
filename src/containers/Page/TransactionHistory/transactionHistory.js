@@ -130,8 +130,8 @@ class Transactions extends Component {
     return data.map(ele => {
       ele["transaction_fees"] =
         ele["transaction_type"] == "send"
-          ? ((parseFloat(ele.amount) * parseFloat(fees)) / 100).toFixed(8) +
-          " USD"
+          ? ((parseFloat(ele.amount) * parseFloat(fees)) / 100).toFixed(8) +" "+ 
+          ele.coin
           : "-";
       return ele;
     });
