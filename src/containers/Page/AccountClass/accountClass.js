@@ -12,6 +12,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from '../../../helpers/accessControl';
+import { BackButton } from "../../Shared/backBttton";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -241,6 +242,7 @@ class AccountClass extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
           {accountClassTableinfos.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>

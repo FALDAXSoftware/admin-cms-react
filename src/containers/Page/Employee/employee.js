@@ -13,6 +13,7 @@ import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from './employeeMetabase'
+import { BackButton } from "../../Shared/backBttton";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -335,6 +336,7 @@ class Employees extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={employeeTableinfos[0].title}

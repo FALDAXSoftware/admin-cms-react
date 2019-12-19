@@ -9,7 +9,7 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
-import { DateTimeCell } from '../../../../components/tables/helperCells';
+import { DateTimeCell, TransactionHashCellUser } from '../../../../components/tables/helperCells';
 
 const {Option}=Select;
 const columns=[
@@ -44,15 +44,15 @@ const columns=[
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.txid"/>,
         key:0,
-        dataIndex:"txid",
         width:100,
+        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["txid"],data["coin"])
     },
-    {
-        title:<IntlMessages id="walletCustodialDetailsTable.title.normalizedTxHash"/>,
-        key:3,
-        dataIndex:"normalizedTxHash",
-        width:100,
-    },
+    // {
+    //     title:<IntlMessages id="walletCustodialDetailsTable.title.normalizedTxHash"/>,
+    //     key:3,
+    //     dataIndex:"normalizedTxHash",
+    //     width:100,
+    // },
    
 ]
 

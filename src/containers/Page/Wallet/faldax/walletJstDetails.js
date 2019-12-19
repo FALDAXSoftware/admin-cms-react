@@ -58,7 +58,6 @@ const columns=[
         title:<IntlMessages id="walletJstDetailsTable.title.comission"/>,
         key:3,
         dataIndex:"comission",
-        sorter: true,
         width:100,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },

@@ -96,7 +96,7 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.Actions" />,
     key: "action",
-    width: 200,
+    width:"20%",
     render: object =>
       renderCell(
         object,
@@ -119,36 +119,35 @@ const columns = [
   },
   {
     title: <IntlMessages id="coinTable.title.coin" />,
-    key: "coin_name",
-    width: 100,
+    width:"20%",
     sorter: true,
-    render: object => renderCell(object, "TextCell", "coin_name")
+    render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
   },
-  {
-    title: <IntlMessages id="coinTable.title.code" />,
-    key: "coin_code",
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, "TextCell", "coin_code")
-  },
+  // {
+  //   title: <IntlMessages id="coinTable.title.code" />,
+  //   key: "coin_code",
+  //   width: 100,
+  //   sorter: true,
+  //   render: object => renderCell(object, "TextCell", "coin_code")
+  // },
   {
     title: <IntlMessages id="coinTable.title.limit" />,
     key: "min_limit",
-    width: 200,
+    width:"20%",
     sorter: true,
     render: object => renderCell(object, "FixedCell", "min_limit")
   },
   {
     title: <IntlMessages id="coinTable.title.maxlimit" />,
     key: "max_limit",
-    width: 200,
+    width:"20%",
     sorter: true,
     render: object => renderCell(object, "FixedCell", "max_limit")
   },
   {
     title: <IntlMessages id="coinTable.title.active" />,
     key: "is_active",
-    width: 200,
+    width:"20%",
     render: object =>{
       if (isAllowed("update_coins")) {
         return renderCell(

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ApiUtils from "../../../helpers/apiUtills";
 import { Input, notification, Select, Form, Col, Row, Button } from "antd";
 import SimpleReactValidator from "simple-react-validator";
-import { BUCKET_URL } from "../../../helpers/globals";
+import { BUCKET_URL, BITGO_MIN_LIMIT } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
@@ -23,7 +23,8 @@ class EditAssetDetails extends Component {
       errMessage: "",
       errType: "Success",
       isDisabled: false,
-      selectedToken: false
+      selectedToken: false,
+      bitGoMinLimit:false
     };
     this.validator = new SimpleReactValidator({});
     this.DecimalConvertUpTo = this.DecimalConvertUpTo.bind(this);
@@ -33,6 +34,25 @@ class EditAssetDetails extends Component {
     this._getAssetDetails();
   };
 
+ set setBitGoLimit(coin=""){
+    switch(coin.toLowerCase()){
+      case "btc":
+        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.BTC})
+        break;
+      case "xrp":
+        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.XRP})
+        break;
+      case "eth":
+        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.ETH})
+        break;
+      case "ltc":
+        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.LTC})
+        break;
+      default:
+        this.setState({bitGoMinLimit:0})
+    }
+  }
+
   _getAssetDetails = () => {
     const { token, coin_id } = this.props;
     let _this = this;
@@ -41,6 +61,7 @@ class EditAssetDetails extends Component {
     ApiUtils.getAssetDetails(token, coin_id)
       .then(response => response.json())
       .then(function (res) {
+        _this.setBitGoLimit=res.coin.coin;
         if (res.status == 200) {
           if (res.coin.max_limit > 0) {
             _this.setState({
@@ -64,7 +85,7 @@ class EditAssetDetails extends Component {
               max_limit: res.coin.max_limit
             });
           }
-        } else if (res.status == 403) {
+        } else if (res.status == 403 || res.status==400) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
             () => {
@@ -266,7 +287,7 @@ class EditAssetDetails extends Component {
   };
 
   render() {
-    const { loader, fields, errMsg, errType, selectedToken } = this.state;
+    const { loader, fields, errMsg, errType, selectedToken,bitGoMinLimit } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -278,10 +299,14 @@ class EditAssetDetails extends Component {
             <Col>
               <span>Asset Icon:</span>
               <br />
-              <img
-                style={{ width: "150px", height: "auto" }}
-                src={BUCKET_URL + fields["coin_icon"]}
-              />
+              {fields["coin_icon"]&&
+              <div className="asset-container">
+                <img
+                  className="asset-"
+                  src={BUCKET_URL + fields["coin_icon"]}
+                />
+              </div>
+              }
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
@@ -316,7 +341,7 @@ class EditAssetDetails extends Component {
                   "minimum limit",
                   //   fields["min_limit"],
                   this.state.min_limit,
-                  "required|numeric",
+                  `required|numeric|gte:${bitGoMinLimit}`,
                   "text-danger"
                 )}
               </span>
@@ -431,10 +456,10 @@ class EditAssetDetails extends Component {
                 style={{ width: 125, marginLeft: "15px" }}
                 placeholder="Select a type"
                 onChange={this._changeFilter}
-                value={selectedToken}
+                value={selectedToken.toString()}
               >
-                <Option value={true}>Yes</Option>
-                <Option value={false}>No</Option>
+                <Option value="true">Yes</Option>
+                <Option value="false">No</Option>
               </Select>
             </Col>
           </Row>

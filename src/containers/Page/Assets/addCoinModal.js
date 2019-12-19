@@ -266,8 +266,8 @@ class AddCoinModal extends Component {
                         onChange={this._changeFilter}
                         value={selectedToken}
                     >
-                        <Option value={true}>Yes</Option>
-                        <Option value={false}>No</Option>
+                        <Option value="true">Yes</Option>
+                        <Option value="false">No</Option>
                     </Select>
                 </div>
                 {loader && <FaldaxLoader />}

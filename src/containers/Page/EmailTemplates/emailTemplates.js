@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
+import { BackButton } from "../../Shared/backBttton";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -88,6 +89,7 @@ class EmailTemplates extends Component {
 
     return (
       <LayoutWrapper>
+        <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={templateTableinfos[0].title} key={templateTableinfos[0].value}>
               <TableDemoStyle className="isoLayoutContent">
