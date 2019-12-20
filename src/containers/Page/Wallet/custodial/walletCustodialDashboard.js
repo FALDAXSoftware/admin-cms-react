@@ -14,18 +14,21 @@ var self;
 const columns=[
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.action"/>,
+        align:"center",
         key:3,
         width:100,
         render:object=>(<>{isAllowed("admin_cold_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletCustodialDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}</>)
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.asset"/>,
+        align:"center",
         key:2,
         width:100,
         render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
     },
     {
         title:<IntlMessages id="walletCustodialDashboardTable.title.balance"/>,
+        align:"center",
         key:0,
         dataIndex:"balance",
         width:100,
@@ -33,6 +36,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletCustodialDashboardTable.title.address"/>,
+        align:"center",
         key:5,
         dataIndex:"address",
         width:100,
@@ -109,6 +113,7 @@ class WalletCustodialDashboard extends Component {
                             dataSource={data}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            bordered
                         />
                     {loader && <Loader/>}
                    </TableDemoStyle>

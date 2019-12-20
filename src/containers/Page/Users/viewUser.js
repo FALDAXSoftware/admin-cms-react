@@ -55,7 +55,7 @@ class ViewUser extends Component {
                     {isAllowed("get_user_login_history") &&
                         <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
                     }
-                    {isAllowed("get_users_trades") &&
+                    {isAllowed("get_all_trade") &&
                         <TabPane tab="History" key="6"><AllTrades user_id={user_id} /></TabPane>
                     }
                     {isAllowed("update_user_referal") &&

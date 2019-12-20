@@ -47,7 +47,7 @@ class ReferralMetabase extends Component {
     return (
       <React.Fragment>
         {metabaseUrl && (
-          <div class="full-width">
+          <div className="full-width">
             <iframe
               className="metabase-iframe"
               src={metabaseUrl}

@@ -13,6 +13,7 @@ import authAction from '../../../redux/auth/actions';
 import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from "../../Shared/backBttton";
+import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -244,11 +245,9 @@ class AccountClass extends Component {
       <LayoutWrapper>
         <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
-          {accountClassTableinfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+            <TabPane tab={accountClassTableinfos[0].title} key={accountClassTableinfos[0].value}>
               <TableDemoStyle className="isoLayoutContent">
                 {isAllowed("add_account_class") &&
-
                   <Button
                     type="primary"
                     style={{ marginBottom: "15px", float: "left" }}
@@ -282,12 +281,15 @@ class AccountClass extends Component {
                 {loader && <FaldaxLoader />}
                 <div className="float-clear">
                   <TableWrapper
+                    rowKey="id"
                     {...this.state}
-                    columns={tableInfo.columns}
+                    columns={accountClassTableinfos[0].columns}
                     pagination={false}
                     dataSource={allAccountClasses}
                     className="isoCustomizedTable"
                     onChange={this._handleClassTableChange}
+                    scroll={TABLE_SCROLL_HEIGHT}
+                    bordered
                   />
                   {showDeleteAccountClassModal && (
                     <Modal
@@ -356,17 +358,16 @@ class AccountClass extends Component {
                 </div>
               </TableDemoStyle>
             </TabPane>
-          ))}
           <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl &&
-                <div class="full-width">
+                <div className="full-width">
                   <iframe
                     className="metabase-iframe"
                     src={metabaseUrl}
-                    frameborder="0"
+                    frameBorder="0"
                     width="100%"
-                    allowtransparency
+                    allowtransparency="true"
                 ></iframe>
                 </div>
                 }

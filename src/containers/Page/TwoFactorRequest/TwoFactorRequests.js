@@ -9,7 +9,6 @@ import {
   Button,
   Select,
   Icon,
-  Col
 } from "antd";
 import { twoFactorReqInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -23,19 +22,9 @@ import SimpleReactValidator from "simple-react-validator";
 import ViewRequestModal from "./viewRequestModal";
 import RequestActionModal from "./requestActionModal";
 import {ColWithMarginBottom} from "../common.style";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
-import styled from "styled-components";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
-
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
-
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -377,6 +366,8 @@ class TwoFactorRequests extends Component {
                   dataSource={all2FARequests}
                   className="isoCustomizedTable float-clear"
                   onChange={this._handleRequestTableChange}
+                  scroll={TABLE_SCROLL_HEIGHT}
+                  bordered
                 />
                 <ViewRequestModal
                   twoFactorReqDetails={twoFactorReqDetails}
@@ -415,14 +406,15 @@ class TwoFactorRequests extends Component {
             >
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
-                  <IframeCol>
+                  <div>
                     <iframe
+                    className="metabase-iframe"
                       src={metabaseUrl}
                       frameborder="0"
                       width="100%"
                       allowtransparency
                     ></iframe>
-                  </IframeCol>
+                  </div>
                 )}
               </TableDemoStyle>
             </TabPane>

@@ -12,7 +12,7 @@ import EditJobModal from "./editJobModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import JobCategory from "./jobsCategory";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from "./jobsMetabase"
 import { ColWithMarginBottom } from "../common.style";
@@ -412,6 +412,8 @@ class Jobs extends Component {
                 dataSource={allJobs}
                 className="isoCustomizedTable float-clear table-tb-margin"
                 onChange={this._handleJobTableChange}
+                scroll={TABLE_SCROLL_HEIGHT}
+                bordered
               />
               {showDeleteJobModal && (
                 <Modal
@@ -436,6 +438,7 @@ class Jobs extends Component {
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}
+                  
                 />
               ) : (
                 ""

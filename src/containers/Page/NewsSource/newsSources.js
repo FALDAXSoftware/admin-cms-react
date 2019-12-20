@@ -35,29 +35,30 @@ class NewsSources extends Component {
       status: !is_active
     };
 
-    self.setState({ loader: true });
-    ApiUtils.updateNewsSource(token, formData)
-      .then(response => response.json())
-      .then(function(res) {
-        if (res) {
-          self._getAllNewsSources();
+    self.setState({ loader: true },()=>{
+      ApiUtils.updateNewsSource(token, formData)
+        .then(response => response.json())
+        .then(function(res) {
+          if (res) {
+            self._getAllNewsSources();
+            self.setState({
+              errMsg: true,
+              errMessage: res.message,
+              errType: "Success",
+              loader: false
+            });
+          }
+          self.setState({ loader: false });
+        })
+        .catch(err => {
           self.setState({
             errMsg: true,
-            errMessage: res.message,
-            errType: "Success",
+            errMessage: "Something went wrong!!",
+            errType: "error",
             loader: false
           });
-        }
-        self.setState({ loader: false });
-      })
-      .catch(err => {
-        self.setState({
-          errMsg: true,
-          errMessage: "Something went wrong!!",
-          errType: "error",
-          loader: false
         });
-      });
+    });
   }
 
   componentDidMount = () => {
@@ -114,19 +115,19 @@ class NewsSources extends Component {
       <LayoutWrapper>
         <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
-          {newsSourceTableInfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+            <TabPane tab={newsSourceTableInfos[0].title} key={newsSourceTableInfos[0].value}>
               <TableDemoStyle className="isoLayoutContent">
                 <TableWrapper
+                  rowKey="id"
                   {...this.state}
-                  columns={tableInfo.columns}
+                  columns={newsSourceTableInfos[0].columns}
                   pagination={false}
                   dataSource={allNewsSources}
                   className="isoCustomizedTable"
+                  bordered
                 />
               </TableDemoStyle>
             </TabPane>
-          ))}
         </Tabs>
         {loader && <FaldaxLoader />}
       </LayoutWrapper>

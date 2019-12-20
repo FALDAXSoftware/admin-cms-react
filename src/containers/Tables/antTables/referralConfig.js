@@ -34,16 +34,19 @@ const renderCell = (object, type, key, fName, lName, emailID, createdAt,
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
     key: 'action',
+    align:"center",
     width: 50,
     render: object => renderCell(object, 'referralActionCell', 'id')
 }, {
     title: <IntlMessages id="antTable.title.Name" />,
     key: 'first_name',
-    width: 100,
+    align:"center",
+    width: 200,
     render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
     key: 'email',
+    align:"center",
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')

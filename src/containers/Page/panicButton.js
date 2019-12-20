@@ -128,10 +128,12 @@ class PanicButton extends Component {
             <LayoutWrapper>
                 <BackButton {...this.props}/>
                 <div className="isoLayoutContent">
-                    <Card title="Panic Button" bordered={false} style={{ width: 300 }}>
-                        <p>Panic buttons can be added to security systems to increase safety and security.</p>
-                        <Switch checked={isPanic} checkedChildren="ON" unCheckedChildren="OFF" size="large" onChange={this._showConfirmPanicModal} />
-                    </Card>
+                   <div className="panic-container">
+                        <Card title="Panic Button" bordered={false}>
+                            <p>Panic buttons can be added to security systems to increase safety and security.</p>
+                            <Switch className="panic-btn" checked={isPanic} checkedChildren="ON" unCheckedChildren="OFF" size="large" onChange={this._showConfirmPanicModal} />
+                        </Card>
+                    </div> 
                     <Modal
                         title="Confirm Panic"
                         onCancel={this._closeConfirmModal}

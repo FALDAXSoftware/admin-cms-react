@@ -572,12 +572,45 @@ html[dir='rtl'] .dz-hidden-input {
   text-align: center;
   height: 22px !important;
   line-height: 20px !important;
+  border-radius: 100px !important;
 }
 .switch-cell::after{
   width: 18px !important;
   height: 18px !important;
 }
+.panic-btn{
+  width: 70px;
+  text-align: center;
+  height: 26px !important;
+  line-height: 22px !important;
+  border-radius: 100px !important;
+}
+.panic-btn::after{
+  width: 22px !important;
+  height: 22px !important;
+}
 
 .search-with-btn{
   width: 300px !important;
+}
+
+.kyc-status-rejected{
+  color: tomato;
+  font-weight: 600;
+}
+.kyc-status-closed{
+  color: teal;
+  font-weight: 600;
+}
+.kyc-status-open{
+  color:royalblue;
+  font-weight: 600;
+}
+.panic-container{
+  width: 70%;
+  margin: 0 auto;
+}
+.kyc-round-btn{
+  border-radius: 50% !important;
+  margin: 2px;
 }

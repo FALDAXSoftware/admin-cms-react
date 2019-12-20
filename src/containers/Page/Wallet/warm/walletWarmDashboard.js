@@ -13,20 +13,22 @@ var self;
 const columns=[
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.action"/>,
+        align:"center",
         key:3,
         width:100,
-        // fixed: 'left',
-    render:object=>(<>{isAllowed("admin_warm_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletWarmDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}</>)
+        render:object=>(<>{isAllowed("admin_warm_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletWarmDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}</>)
     },
-    // self.props.history.push({pathname:`./wallet/warm/${object["coin_code"]}`})
+
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.asset"/>,
+        align:"center",
         key:4,
         width:100,
         render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.balance"/>,
+        align:"center",
         key:1,
         dataIndex:"balance",
         width:100,
@@ -34,6 +36,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.address"/>,
+        align:"center",
         key:2,
         dataIndex:"address",
         width:100,
@@ -110,6 +113,7 @@ class WalletWarmDashboard extends Component {
                             dataSource={data}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            bordered
                         />
                     {loader && <Loader/>}
                    </TableDemoStyle>

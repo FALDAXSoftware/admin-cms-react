@@ -8,7 +8,7 @@ import { withRouter } from "react-router-dom";
 import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 var self;
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -260,6 +260,8 @@ class Referrals extends Component {
                     dataSource={allReferral}
                     className="isoCustomizedTable table-tb-margin"
                     onChange={this._handleReferralChange}
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
                 />
                 {loader && <FaldaxLoader />}
                 {allReferralCount > 0 ?
@@ -268,7 +270,7 @@ class Referrals extends Component {
                         onChange={this._handleReferralPagination.bind(this)}
                         pageSize={limit}
                         current={page}
-                        total={allReferralCount}
+                        total={parseInt(allReferralCount)}
                         showSizeChanger
                         onShowSizeChange={this._changePaginationSize}
                         pageSizeOptions={pageSizeOptions}

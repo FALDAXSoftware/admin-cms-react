@@ -16,6 +16,7 @@ var self
 const columns=[
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.action"/>,
+        align:"center",
         key:9,
         width:200,
         // fixed: 'left',
@@ -28,12 +29,14 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.coin"/>,
+        align:"center",
         key:1,
         width:100,
         render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total"/>,
+        align:"center",
         key:5,
         dataIndex:"total",
         width:100,
@@ -41,6 +44,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_forfeit"/>,
+        align:"center",
         key:2,
         dataIndex:"total_earned_from_forfeit",
         width:100,
@@ -48,6 +52,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst"/>,
+        align:"center",
         key:3,
         dataIndex:"total_earned_from_jst",
         width:100,
@@ -56,6 +61,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_wallets"/>,
+        align:"center",
         key:4,
         dataIndex:"total_earned_from_wallets",
         width:100,
@@ -63,12 +69,14 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.send_address"/>,
+        align:"center",
         key:7,
         width:100,
         render:data=><span>{data["send_address"]?data["send_address"]: <Button size="small" type="dashed" onClick={()=>self.props.history.push(`./assets/wallet/${data["coin_code"]}`)}>Create</Button>}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.receive_address"/>,
+        align:"center",
         key:8,
         dataIndex:"receive_address",
         width:100,
@@ -225,7 +233,7 @@ class WalletFaldaxDashboard extends Component {
                         pagination={false}
                         dataSource={walletValue}
                         className="isoCustomizedTable table-tb-margin"
-                        // scroll={{ x: 1500, y: 400 }}
+                        bordered
                     />
                    <Modal
                             title="Send"
@@ -233,7 +241,7 @@ class WalletFaldaxDashboard extends Component {
                             onOk={this.closeSendModal}
                             onCancel={this.closeSendModal}
                             footer={[
-                                <Button type="primary" onClick={this.sendWalletBal}>Send {walletDetails.coin}</Button>
+                                <Button  key="submit-a" type="primary" onClick={this.sendWalletBal}>Send {walletDetails.coin}</Button>
                             ]}
                         >
                             <Form onSubmit={this._sendWalletBal}>

@@ -19,7 +19,7 @@ import ViewCoinModal from "./viewCoinModal";
 import AddCoinModal from "./addCoinModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
 import { ColWithMarginBottom } from "../common.style";
@@ -331,8 +331,7 @@ class Assets extends Component {
       <LayoutWrapper>
         <BackButton {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
-          {assetTableInfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+            <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
               <TableDemoStyle className="isoLayoutContent">
                 <Row type="flex" justify="start">
                   <ColWithMarginBottom md={6}>
@@ -383,11 +382,13 @@ class Assets extends Component {
                   <TableWrapper
                     rowKey="id"
                     {...this.state}
-                    columns={tableInfo.columns}
+                    columns={assetTableInfos.columns}
                     pagination={false}
                     dataSource={allCoins}
                     onChange={this.handleTableChange}
-                    className="isoCustomizedTable table-tb-margin"
+                    className="table-tb-margin"
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
                   />
                   {allCoinCount > 0 ? (
                     <Pagination
@@ -406,7 +407,6 @@ class Assets extends Component {
                 </div>
               </TableDemoStyle>
             </TabPane>
-          ))}
           {isAllowed("metabase_asset_report") && (
             <TabPane tab="Report" key="metabase">
               <TableDemoStyle>

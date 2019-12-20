@@ -24,7 +24,7 @@ import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
 import {ColWithMarginBottom} from "../common.style";
 import DeclineActionModal from "./declineModal";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
@@ -481,6 +481,8 @@ class WithdrawRequest extends Component {
                   dataSource={allRequests}
                   className="isoCustomizedTable table-tb-margin float-clear"
                   onChange={this._handleWithdrawTableChange}
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
                   expandedRowRender={record => (
                     <p style={{ margin: 0 }}>
                       {

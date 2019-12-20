@@ -10,7 +10,7 @@ import authAction from "../../../redux/auth/actions";
 import { tblOffers } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
 
@@ -231,6 +231,8 @@ class Offers extends Component {
                     dataSource={campaignList}
                     className="isoCustomizedTable table-tb-margin float-clear"
                     onChange={this.handleTableChange}
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
                   />
                   {campaignCount > 0 ? (
                     <Pagination
@@ -258,7 +260,7 @@ class Offers extends Component {
           ))}
           {isAllowed("metabase_offers_report") && (
             <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
+              <TableWrapper className="isoLayoutContent">
                 {metabaseUrl && (
                     <iframe
                       className="metabase-iframe"
@@ -268,7 +270,7 @@ class Offers extends Component {
                       allowtransparency
                     ></iframe>
                 )}
-              </TableDemoStyle>
+              </TableWrapper>
             </TabPane>
           )}
         </Tabs>
