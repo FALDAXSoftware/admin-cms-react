@@ -11,7 +11,7 @@ export const PAGE_SIZE_OPTIONS=["20", "30", "40", "50"];
 export const S3BucketImageURL = "https://s3.us-east-2.amazonaws.com/production-static-asset/";
 // export const S3BucketImageURL = 'https://s3.ap-south-1.amazonaws.com/varshalteamprivatebucket/';
 
-export const TABLE_SCROLL_HEIGHT={x:"max-content",y:"75vh"}
+export const TABLE_SCROLL_HEIGHT={x:"max-content",y:"60vh"}
 export const BITGO_MIN_LIMIT={
     "BTC":0.00002750,
     "XRP":20,
