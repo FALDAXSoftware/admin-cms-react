@@ -20,7 +20,7 @@ const renderCell = (object, type, key, Name = null, isDeleted = null) => {
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Name" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'full_name',
     width: 150,
@@ -28,7 +28,7 @@ const columns = [{
     render: object => renderCell(object, 'ReferralNameCell', 'id', 'full_name', 'deleted_at')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'email',
     width: 250,
@@ -36,7 +36,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="antTable.title.country" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'country',
     width: 150,
@@ -44,7 +44,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="antTable.title.collectamount" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'collected_amount',
     width: 200,

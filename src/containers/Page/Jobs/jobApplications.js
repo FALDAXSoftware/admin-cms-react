@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Tabs, Pagination, notification } from 'antd';
-import { jobAppTableInfos } from "../../Tables/antTables";
+import { jobAppTableInfos as tableColumn } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -8,9 +8,9 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewJobAppModal from './viewJobAppModal';
 import FaldaxLoader from '../faldaxLoader';
-import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { BackButton } from '../../Shared/backBttton';
 
 const { logout } = authAction;
 const Search = Input.Search;
@@ -127,53 +127,47 @@ class JobApplications extends Component {
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
+                <BackButton {...this.props}></BackButton>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
-                        {jobAppTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Link to="/dashboard/jobs">
-                                        <i style={{ marginRight: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                                        <a onClick={() => { this.props.history.push('/dashboard/jobs') }}>Back</a>
-                                    </Link>
-                                    <Search
-                                        placeholder="Search applicants"
-                                        onSearch={(value) => this._searchJobApp(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <div>
-                                    <ViewJobAppModal
-                                        applicationDetails={applicationDetails}
-                                        showViewJobAppModal={showViewJobAppModal}
-                                        closeViewJobAppModal={this._closeViewJobAppModal}
-                                    />
-                                    <TableWrapper
-                                        style={{ marginTop: '20px' }}
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allApplications}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleJobAppTableChange}
-                                    />
-                                    {allApplicationsCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleJobPagination.bind(this)}
-                                            pageSize={limit}
-                                            current={page}
-                                            total={allApplicationsCount}
-                                            showSizeChanger
-                                            onShowSizeChange={this._changePaginationSize}
-                                            pageSizeOptions={pageSizeOptions}
-                                        /> : ''}
-                                </div>
+                            <TabPane tab={tableColumn.title} key={tableColumn.value}>
+                               <div className="form-container"><Search
+                                    placeholder="Search applicants"
+                                    onSearch={(value) => this._searchJobApp(value)}
+                                    style={{ "float": "right", "width": "250px" }}
+                                    enterButton
+                                /></div>
+                                
+                                <ViewJobAppModal
+                                    applicationDetails={applicationDetails}
+                                    showViewJobAppModal={showViewJobAppModal}
+                                    closeViewJobAppModal={this._closeViewJobAppModal}
+                                />
+                                <TableWrapper
+                                    rowKey="id"
+                                    className="float-clear table-tb-margin"
+                                    {...this.state}
+                                    columns={tableColumn.columns}
+                                    pagination={false}
+                                    dataSource={allApplications}
+                                    onChange={this._handleJobAppTableChange}
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
+                                />
+                                {allApplicationsCount > 0 ?
+                                    <Pagination
+                                        className="ant-users-pagination"
+                                        onChange={this._handleJobPagination.bind(this)}
+                                        pageSize={limit}
+                                        current={page}
+                                        total={parseInt(allApplicationsCount)}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
+                                    /> : ''}
+                        
                             </TabPane>
-                        ))}
                     </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
@@ -186,4 +180,4 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(JobApplications);
 
-export { JobApplications, jobAppTableInfos };
+export { JobApplications };

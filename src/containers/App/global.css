@@ -589,6 +589,17 @@ html[dir='rtl'] .dz-hidden-input {
   width: 22px !important;
   height: 22px !important;
 }
+.whitelist-btn{
+  width: 80px;
+  text-align: center;
+  height: 26px !important;
+  line-height: 22px !important;
+  border-radius: 100px !important;
+}
+.whitelist-btn::after{
+  width: 22px !important;
+  height: 22px !important;
+}
 .personal-btn{
   width: 100px;
   text-align: center;

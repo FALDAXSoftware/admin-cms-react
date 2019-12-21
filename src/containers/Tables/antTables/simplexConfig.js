@@ -34,7 +34,7 @@ const columns = [
   {
     title: <IntlMessages id="simplexTradeTable.title.email" />,
     key: "email",
-    align:"center",
+   align:"left",
     width: 250,
     sorter: true,
     render: object => renderCell(object, "TextCell", "email")
@@ -42,7 +42,7 @@ const columns = [
   {
     title: <IntlMessages id="simplexTradeTable.title.currency" />,
     key: "currency",
-    align:"center",
+   align:"left",
     width: 150,
     sorter: true,
     render: object => renderCell(object, "TextCell", "currency")
@@ -51,7 +51,7 @@ const columns = [
     title: <IntlMessages id="simplexTradeTable.title.created_at" />,
     key: "created_at",
     width: 150,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, "DateTimeCell", "created_at")
   },
@@ -59,14 +59,14 @@ const columns = [
     title: <IntlMessages id="simplexTradeTable.title.fill_price" />,
     key: "fill_price",
     width: 150,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, "TextCell", "fill_price")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.quantity" />,
     key: "quantity",
-    align:"center",
+   align:"left",
     width: 150,
     sorter: true,
     render: object => <span>{object.quantity+" "+object.settle_currency}</span>
@@ -75,7 +75,7 @@ const columns = [
     title: <IntlMessages id="simplexTradeTable.title.address" />,
     key: "address",
     width: 320,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, "TextCell", "address")
   },
@@ -83,7 +83,7 @@ const columns = [
     title: <IntlMessages id="simplexTradeTable.title.payment_id" />,
     key: "payment_id",
     width: 250,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, "TextCell", "payment_id")
   },
@@ -91,7 +91,7 @@ const columns = [
     title: <IntlMessages id="simplexTradeTable.title.quote_id" />,
     key: "quote_id",
     width: 250,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, "TextCell", "quote_id")
   },
@@ -99,7 +99,7 @@ const columns = [
     title: <IntlMessages id="simplexTradeTable.title.simplex_payment_status" />,
     key: "simplex_payment_status",
     width: 150,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object =>
       renderCell(

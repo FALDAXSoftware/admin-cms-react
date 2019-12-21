@@ -25,21 +25,21 @@ const renderCell = (object, type, key, is_login = null, created_date = null,
 const columns = [{
     title: <IntlMessages id="historyTable.title.logout_at" />,
     key: 'action',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 150,
     render: object => renderCell(object, 'LogoutDateCell', 'ip', 'is_logged_in', 'created_at', 'updated_at')
 }, {
     title: <IntlMessages id="historyTable.title.created_at" />,
     key: 'created_at',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 150,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
 }, {
     title: <IntlMessages id="historyTable.title.ip" />,
     key: 'ip',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 150,
     render: object => renderCell(object, 'IPCell', 'ip')

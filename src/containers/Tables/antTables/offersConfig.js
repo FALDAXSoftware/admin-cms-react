@@ -61,7 +61,7 @@ const renderCell = (
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
-    align:"center",
+   align:"left",
     key: 'action',
     width: 100,
     render: object => renderCell(object,
@@ -69,7 +69,7 @@ const columns = [{
 },
 {
   title: <IntlMessages id="CampaignTable.title.created_at" />,
-  align:"center",
+ align:"left",
   key: 'created_at',
   width: 150,
   sorter: false,
@@ -77,7 +77,7 @@ const columns = [{
 }, 
 {
     title: <IntlMessages id="CampaignTable.title.label" />,
-    align:"center",
+   align:"left",
     key: 'label',
     width: 200,
     sorter: false,
@@ -85,7 +85,7 @@ const columns = [{
 }, 
 {
     title: <IntlMessages id="CampaignTable.title.start_date" />,
-    align:"center",
+   align:"left",
     key: 'start_date',
     width: 150,
     sorter: false,
@@ -93,7 +93,7 @@ const columns = [{
 },
 {
     title: <IntlMessages id="CampaignTable.title.e_date" />,
-    align:"center",
+   align:"left",
     key: 'end_date',
     width: 150,
     sorter: false,
@@ -101,7 +101,7 @@ const columns = [{
 },
 {
   title: <IntlMessages id="CampaignTable.title.type" />,
-  align:"center",
+ align:"left",
   key: 'usage',
   width: 200,
   sorter: false,
@@ -109,7 +109,7 @@ const columns = [{
 },
 {
     title: <IntlMessages id="CampaignTable.title.is_active" />,
-    align:"center",
+   align:"left",
     key: 'is_active',
     width: 100,
     sorter: false,

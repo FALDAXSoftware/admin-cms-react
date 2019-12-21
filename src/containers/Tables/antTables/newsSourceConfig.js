@@ -22,18 +22,18 @@ const columns = [{
     title: <IntlMessages id="newsTable.title.source_name" />,
     key: 'source_name',
     width: 100,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TextCell', 'source_name')
 }, {
     title: <IntlMessages id="newsTable.title.slug" />,
     key: 'slug',
-    align:"center",
+   align:"left",
     width: 100,
     render: object => renderCell(object, 'TextCell', 'slug')
 }, {
     title: <IntlMessages id="newsTable.title.active" />,
     key: 'is_active',
-    align:"center",
+   align:"left",
     width: 100,
     render: object => {
         if (isAllowed("edit_news_source")) {

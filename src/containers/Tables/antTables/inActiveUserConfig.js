@@ -59,7 +59,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'action',
     width: 200,
@@ -70,7 +70,7 @@ const columns = [{
         'deleted_at')
 }, {
     title: <IntlMessages id="userTable.title.created_at" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'created_at',
     width: 200,
@@ -84,7 +84,7 @@ const columns = [{
     render: object => renderCell(object, 'UserImageCell', 'profile_pic')
 }, {
     title: <IntlMessages id="antTable.title.firstName" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'first_name',
     width: 150,
@@ -92,7 +92,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'first_name')
 }, {
     title: <IntlMessages id="antTable.title.lastName" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'last_name',
     width: 150,
@@ -100,7 +100,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'last_name')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'email',
     width: 250,
@@ -108,7 +108,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="antTable.title.country" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'country',
     width: 150,
@@ -116,7 +116,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="antTable.title.state" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'state',
     width: 150,
@@ -125,21 +125,21 @@ const columns = [{
 },
 {
     title: <IntlMessages id="antTable.title.zip" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'postal_code',
     width: 200,
     render: object => renderCell(object, 'TextCell', 'postal_code')
 },{
     title: <IntlMessages id="antTable.title.tier" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'account_tier',
     width: 150,
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {
     title: <IntlMessages id="antTable.title.numReferral" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'no_of_referrals',
     width: 150,

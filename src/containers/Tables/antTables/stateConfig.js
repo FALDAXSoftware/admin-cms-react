@@ -30,13 +30,13 @@ const renderCell = (object, type, key, s_name = null, legal = null, colorCode = 
 const columns = [{
     title: <IntlMessages id="countryTable.title.actions" />,
     key: 'action',
-    align:"center",
+   align:"left",
     width: 50,
     render: object => renderCell(object, 'StateActionCell', 'id', 'name', 'legality', 'color', 'is_active')
 }, {
     title: <IntlMessages id="stateTable.title.name" />,
     key: 'name',
-    align:"center",
+   align:"left",
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'name')
@@ -44,19 +44,19 @@ const columns = [{
     title: <IntlMessages id="countryTable.title.legality" />,
     key: 'legality',
     width: 100,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, 'LegalityCell', 'legality')
 }, {
     title: <IntlMessages id="countryTable.title.color" />,
     key: 'color',
-    align:"center",
+   align:"left",
     width: 100,
     render: object => renderCell(object, 'ColorCell', 'color')
 }, {
     title: <IntlMessages id="countryTable.title.status" />,
     key: 'is_active',
-    align:"center",
+   align:"left",
     width: 100,
     render: object => {
         if (isAllowed("activate_state")) {

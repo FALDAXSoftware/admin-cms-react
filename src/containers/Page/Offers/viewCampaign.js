@@ -11,14 +11,16 @@ import moment from "moment";
 import styled from "styled-components";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { OfferDateCell} from "../../../components/tables/helperCells";
+import { isAllowed } from "../../../helpers/accessControl";
 const tableColumns = [
   {
     title: "Action",
     key: "action",
-    width:75,
+    width:50,
+    align:"left",
     render:(object)=>(
       <div>
-        <Tooltip title="View Details">
+        {isAllowed("view_campaign_offer_used")&&<Tooltip title="View Details">
           <Icon
             type="info-circle"
             theme="twoTone" 
@@ -27,24 +29,28 @@ const tableColumns = [
               ViewCampaign.viewOfferUsage(object.id,object.code)
             }
           />
-        </Tooltip>
+        </Tooltip>}
       </div>
     )
   },
   {
     title: "Code",
     dataIndex: "code",
+    align:"left",
     key: "code",
     width:100,
   },
   {
     title: "Description",
-    width:200,
+    width:300,
+    align:"left",
+    ellipses:"true",
     dataIndex: "description",
     key: "description"
   },
   {
     title: "No of transactions",
+    align:"left",
     dataIndex: "no_of_transactions",
     key: "no_of_transactions",
     width:100,
@@ -52,6 +58,7 @@ const tableColumns = [
   },
   {
     title: "Total fees allowed",
+    align:"left",
     dataIndex: "fees_allowed",
     key: "fees_allowed",
     width:100,
@@ -60,12 +67,14 @@ const tableColumns = [
   {
     title: "Usage",
     dataIndex: "offercode_used",
+    align:"left",
     key: "offercode_used",
     width:75
   },
   {
     title: "Start Date",
     dataIndex: "start_date",
+    align:"left",
     key: "start_date",
     width:100,
     render: start_date => OfferDateCell(start_date)
@@ -73,6 +82,7 @@ const tableColumns = [
   {
     title: "End Date",
     dataIndex: "end_date",
+    align:"left",
     key: "end_date",
     width:100,
     render: end_date => OfferDateCell(end_date)
@@ -81,6 +91,7 @@ const tableColumns = [
     title: "User",
     dataIndex: "user_data",
     key: "user_data",
+    align:"left",
     width:100,
     render: data =>
       data.id ? (
@@ -95,6 +106,7 @@ const tableColumns = [
     title: "Status",
     dataIndex: "is_active",
     key: "is_active",
+    align:"left",
     width:100,
     render: status => (
       <Tag
@@ -109,6 +121,7 @@ const tableColumns = [
   {
     title: "Expired",
     dataIndex: "end_date",
+    align:"left",
     key: "end_date",
     width:100,
     render: (end_date) => {
