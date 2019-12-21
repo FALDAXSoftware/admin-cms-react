@@ -39,7 +39,7 @@ const columns_temp = [
     title: "Action",
     dataIndex: "id",
     key: "id",
-    align:"center",
+    align:"left",
     width:100,
     render: id => (
       <Tooltip title="edit">
@@ -55,22 +55,23 @@ const columns_temp = [
     title: "Code",
     dataIndex: "code",
     key: "code",
-    align:"center",
+    align:"left",
     width:150,
   },
   {
     title: "Description",
     dataIndex: "description",
-    align:"center",
-    width:200,
+    align:"left",
+    ellipses:true,
+    width:100,
     key: "description",
-    render:(desc)=><p style={{textAlign:'justify'}}>{desc}</p>
+    render:(desc)=><p>{desc}</p>
   },
   {
     title: "No of transactions",
     dataIndex: "no_of_transactions",
     key: "no_of_transactions",
-    align:"center",
+    align:"left",
     width:100,
   },
   {
@@ -78,7 +79,7 @@ const columns_temp = [
     dataIndex: "fees_allowed",
     key: "fees_allowed",
     render: fees => <span>{fees} USD</span>,
-    align:"center",
+    align:"left",
     width:100,
   },
   {
@@ -86,21 +87,21 @@ const columns_temp = [
     dataIndex: "start_date",
     key: "start_date",
     render: start_date => start_date?OfferDateCell(start_date):'-',
-    align:"center",
+    align:"left",
     width:150,
   },
   {
     title: "End Date",
     dataIndex: "end_date",
     key: "end_date",
-    align:"center",
+    align:"left",
     width:150,
     render: end_date => end_date?OfferDateCell(end_date):'-'
   },
   {
     title: "Status",
     key: "is_active",
-    align:"center",
+    align:"left",
     width:100,
     render: (object) =>{
       return (
@@ -918,7 +919,7 @@ class AddCampaign extends Component {
             {campaign_offers.length > 0 && (
               <Row>
                 <Divider orientation="left">Offers</Divider>
-                <TableWrapper bordered dataSource={campaign_offers} columns={columns} pagination={false}/>
+                <TableWrapper scroll={{ x: 'max-content' }} bordered dataSource={campaign_offers} columns={columns} pagination={false}/>
               </Row>
             )}
             {/* Offer Code listing end */}

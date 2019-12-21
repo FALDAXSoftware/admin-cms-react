@@ -25,28 +25,28 @@ const columns = [
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'action',
         width: 100,
-        align:"center",
+       align:"left",
         render: object => renderCell(object,
             'CoinFeesActionCell','id','name','slug','type','updated_at','value')
     },
     {
         title: <IntlMessages id="networkFeeTable.title.name" />,
         key: 'name',
-        align:"center",
+       align:"left",
         width: 100,
         render: object => renderCell(object, 'TextCell','name','name','slug','type','updated_at','value')
     },
     {
         title: <IntlMessages id="networkFeeTable.title.value" />,
         key: 'value',
-        align:"center",
+       align:"left",
         width: 100,
         render: object => renderCell(object, 'TextCell','value','name','slug','type','updated_at','value')
     },
     {
         title: <IntlMessages id="networkFeeTable.title.notes" />,
         key: 'type',
-        align:"center",
+       align:"left",
         width: 200,
         render: object => renderCell(object, 'NoteCell','id','name','slug','type','updated_at','value')
     },

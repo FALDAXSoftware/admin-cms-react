@@ -30,28 +30,28 @@ const columns = [{
         'uploaded_file', 'status', 'reason', 'created_at')
 }, {
     title: "Requested On",
-    align:"center",
+   align:"left",
     key: 'created_at',
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: "Name",
-    align:"center",
+   align:"left",
     key: 'full_name',
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'full_name')
 }, {
     title: "Email",
-    align:"center",
+   align:"left",
     key: 'email',
     width: 250,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: "Status",
-    align:"center",
+   align:"left",
     key: 'status',
     dataIndex:"status",
     width: 200,
@@ -61,7 +61,7 @@ const columns = [{
 const twoFactorReqInfos = [
     {
         title: 'Two Factor Requests',
-        align:"center",
+       align:"left",
         value: 'twoFactorReqTable',
         columns: clone(columns)
     }

@@ -38,7 +38,7 @@ const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null
 
 const columns = [{
     title: <IntlMessages id="kycTable.title.actions" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'action',
     width: 100,
@@ -48,7 +48,7 @@ const columns = [{
     )
 }, {
     title: <IntlMessages id="kycTable.title.created_at" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'created_at',
     width: 150,
@@ -56,14 +56,14 @@ const columns = [{
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="kycTable.title.mtid" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'mtid',
     width: 300,
     render: object => renderCell(object, 'TextCell', 'mtid')
 }, {
     title: <IntlMessages id="kycTable.title.name" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'first_name',
     width: 150,
@@ -71,7 +71,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'first_name')
 }, {
     title: <IntlMessages id="kycTable.title.last_name" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'last_name',
     width: 150,
@@ -79,15 +79,15 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'last_name')
 }, {
     title: <IntlMessages id="kycTable.title.email" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'email',
-    width: 250,
+    width: 300,
     //sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="kycTable.title.country" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'country',
     width: 150,
@@ -95,7 +95,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="kycTable.title.account_tier" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'account_tier',
     width: 100,
@@ -103,7 +103,7 @@ const columns = [{
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {
     title: <IntlMessages id="kycTable.title.kycDoc_details" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'webhook_response',
     width: 100,

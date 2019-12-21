@@ -37,30 +37,30 @@ const columns = [{
     title: '',
     key: 'cover_image',
     width: 100,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'StaticImageCell', 'cover_image')
 }, {
     title: <IntlMessages id="newsTable.title.title" />,
-    align:"center",
+   align:"left",
     key: 'title',
     width: 200,
     render: object => renderCell(object, 'NewsDescCell', 'title')
 }, {
     title: <IntlMessages id="newsTable.title.link" />,
-    align:"center",
+   align:"left",
     key: 'link',
     width: 200,
     render: object => renderCell(object, 'NewsLinkCell', 'link')
 }, {
     title: <IntlMessages id="newsTable.title.posted_at" />,
-    align:"center",
+   align:"left",
     key: 'posted_at',
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'posted_at')
 }, {
     title: <IntlMessages id="newsTable.title.active" />,
-    align:"center",
+   align:"left",
     key: 'is_active',
     width: 100,
     render: object => {

@@ -39,14 +39,14 @@ const columns = [{
     title: <IntlMessages id="transactionTable.title.created_at" />,
     key: 'created_at',
     width: 150,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
 }, {
     title: <IntlMessages id="transactionTable.title.transactionId" />,
     key: 'transaction_id',
     width: 450,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TransactionHashCell', 'id', 'source_address',
         'destination_address', 'amount', 'transaction_type', 'created_at',
         'transaction_id', 'coin_id', 'coin_code')
@@ -54,46 +54,46 @@ const columns = [{
     title: <IntlMessages id="transactionTable.title.email" />,
     key: 'email',
     width: 250,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="transactionTable.title.source_address" />,
     key: 'source_address',
     width: 300,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: <IntlMessages id="transactionTable.title.destination_address" />,
     key: 'destination_address',
     width: 300,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="transactionTable.title.amount" />,
     key: 'amount',
     width: 200,
-    align:"center",
+   align:"left",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'amount')
 }, {
     title: <IntlMessages id="transactionTable.title.coin" />,
     key: 'coin',
     width: 100,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TextCell', 'coin')
 }, {
     title: <IntlMessages id="transactionTable.title.transactionType" />,
     key: 'transaction_type',
     width: 200,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TransactionTypeCell', 'transaction_type')
 },
 {
     title: <IntlMessages id="transactionTable.title.transactionFees" />,
     key: 'transaction_fees',
     width: 200,
-    align:"center",
+   align:"left",
     render: object => renderCell(object, 'TextCell', 'transaction_fees')
 }
 ];

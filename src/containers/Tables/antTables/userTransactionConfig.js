@@ -34,7 +34,7 @@ const renderCell = (object, type, key, user = null, source = null, destination =
 const columns = [{
     title: < IntlMessages id="transactionTable.title.created_at" />,
     key: 'created_at',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 150,
     sorter: true,
@@ -43,7 +43,7 @@ const columns = [{
     title: < IntlMessages id="transactionTable.title.transactionId" />,
     key: 'transaction_id',
     width: 450,
-    align:"center",
+   align:"left",
     ellipsis:true,
     render: object => renderCell(object, 'TransactionHashCellUser', 'id', 'user_id', 'source_address',
         'destination_address', 'amount', 'transaction_type', 'created_at',
@@ -51,27 +51,27 @@ const columns = [{
 }, {
     title: < IntlMessages id="transactionTable.title.email" />,
     key: 'email',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 250,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: < IntlMessages id="transactionTable.title.source_address" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'source_address',
     width: 300,
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: < IntlMessages id="transactionTable.title.destination_address" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'destination_address',
     width: 300,
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: < IntlMessages id="transactionTable.title.amount" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'amount',
     width: 100,
@@ -79,7 +79,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'amount', 'coin_id')
 }, {
     title: < IntlMessages id="transactionTable.title.transactionType" />,
-    align:"center",
+   align:"left",
     ellipsis:true,
     key: 'transaction_type',
     width: 100,
