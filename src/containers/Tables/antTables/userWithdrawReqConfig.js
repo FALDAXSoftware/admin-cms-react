@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, ApproveCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, ApproveCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, approve = null, createdOn = null) => {
@@ -15,7 +15,7 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address, amount, is_approve, created_at);
+            return DateTimeCell(value, email, source_address, destination_address, amount, is_approve, created_at);
         case 'ApproveCell':
             return ApproveCell(value);
         default:
@@ -26,34 +26,46 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 const columns = [{
     title: <IntlMessages id="withdrawTable.title.created_at" />,
     key: 'created_at',
-    width: 100,
+    align:"center",
+    ellipsis:true,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="withdrawTable.title.email" />,
     key: 'email',
-    width: 200,
+    align:"center",
+    ellipsis:true,
+    width: 250,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="withdrawTable.title.source_address" />,
     key: 'source_address',
-    width: 100,
+    key: 'created_at',
+    align:"center",
+    width: 300,
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.destination_address" />,
     key: 'destination_address',
-    width: 100,
+    key: 'created_at',
+    align:"center",
+    width: 300,
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.amount" />,
     key: 'amount',
-    width: 100,
+    key: 'created_at',
+    align:"center",
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'amount')
 }, {
-    title: <IntlMessages id="withdrawTable.title.approve" />,
+    title: <IntlMessages id="withdrawTable.title.approve"/>,
     key: 'is_approve',
-    width: 100,
+    key: 'created_at',
+    align:"center",
+    width: 150,
     render: object => renderCell(object, 'ApproveCell', 'is_approve')
 }];
 

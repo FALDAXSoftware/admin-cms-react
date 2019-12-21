@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Form, Row } from 'antd';
+import { Input, Pagination, notification, Select, Button, Form, Row, Col } from 'antd';
 import { simplexTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -139,21 +139,19 @@ class UserSimplexHistory extends Component {
         }
 
         return (
-            <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    {simplexTableInfos.map(tableInfo => (
                         <div>
                             <div style={{ "display": "inline-block", "width": "100%" }}>
                                 <Form onSubmit={this._searchTrade}>
                                     <Row>
-                                        <ColWithPadding sm={8}>
+                                        <Col sm={7}>
                                             <Input
                                                 placeholder="Search trades"
                                                 onChange={this._changeSearch.bind(this)}
                                                 value={searchTrade}
                                             />
-                                        </ColWithPadding>
-                                        <ColWithPadding sm={5}>
+                                        </Col>
+                                        <Col sm={4}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select a type"
@@ -164,8 +162,8 @@ class UserSimplexHistory extends Component {
                                                 <Option value={'Buy'}>Buy</Option>
                                                 <Option value={'Sell'}>Sell</Option>
                                             </Select>
-                                        </ColWithPadding>
-                                        <ColWithPadding sm={5}>
+                                        </Col>
+                                        <Col sm={4}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select Status"
@@ -177,20 +175,20 @@ class UserSimplexHistory extends Component {
                                                 <Option value={2}>Approved</Option>
                                                 <Option value={3}>Cancelled</Option>
                                             </Select>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0px" }} >Search</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
-                                            <Button className="search-btn" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
-                                        </ColWithPadding>
-                                        <ColWithPadding xs={12} sm={3}>
+                                        </Col>
+                                        <Col xs={12} sm={3}>
+                                            <Button htmlType="submit" icon="search" className="filter-btn full-width" type="primary" style={{ margin: "0px" }} >Search</Button>
+                                        </Col>
+                                        <Col xs={12} sm={3}>
+                                            <Button icon="reload" className="filter-btn full-width" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
+                                        </Col>
+                                        <Col xs={12} sm={3}>
                                             {allTrades && allTrades.length > 0 ?
                                                 <CSVLink filename={'user_simplex_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                                    <Button type="primary" className="search-btn" style={{ margin: "0px" }}>Export</Button>
+                                                    <Button icon="export" type="primary" className="filter-btn full-width" style={{ margin: "0px" }}>Export</Button>
                                                 </CSVLink>
                                                 : ''}
-                                        </ColWithPadding>
+                                        </Col>
                                     </Row>
                                 </Form>
 
@@ -200,10 +198,11 @@ class UserSimplexHistory extends Component {
                                 < TableWrapper
                                     style={{ marginTop: '20px' }}
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={simplexTableInfos[0].columns}
                                     pagination={false}
                                     dataSource={allTrades}
-                                    className="isoCustomizedTable"
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
                                     onChange={this._handleUserTradeChange}
                                 />
                                 {allTradeCount > 0 ?
@@ -213,16 +212,14 @@ class UserSimplexHistory extends Component {
                                         onChange={this._handleTradePagination.bind(this)}
                                         pageSize={limit}
                                         current={page}
-                                        total={allTradeCount}
+                                        total={parseInt(allTradeCount)}
                                         showSizeChanger
                                         onShowSizeChange={this._changePaginationSize}
                                         pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </div>
                         </div>
-                    ))}
                 </TableDemoStyle>
-            </LayoutWrapper>
         );
     }
 }

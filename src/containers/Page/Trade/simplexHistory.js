@@ -11,7 +11,7 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithMarginBottom from '../common.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -250,6 +250,8 @@ class SimplexHistory extends Component {
                                 dataSource={allSimplexTrades}
                                 className="isoCustomizedTable table-tb-margin float-clear"
                                 onChange={this._handleTradeTableChange}
+                                scroll={TABLE_SCROLL_HEIGHT}
+                                bordered
                             />
                             {allTradeCount > 0 ?
                                 <Pagination

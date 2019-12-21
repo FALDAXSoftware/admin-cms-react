@@ -35,14 +35,6 @@ const { RangePicker } = DatePicker;
 const { logout } = authAction;
 var self;
 
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
-
 class WithdrawRequest extends Component {
   constructor(props) {
     super(props);
@@ -530,14 +522,13 @@ class WithdrawRequest extends Component {
          <TabPane tab="Report" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
               {metabaseUrl &&
-                <IframeCol>
                   <iframe
+                  className="metabase-iframe"
                     src={metabaseUrl}
                     frameBorder="0"
                     width="100%"
                     allowtransparency="true"
-                  ></iframe>
-                </IframeCol>}
+                  ></iframe>}
             </TableDemoStyle>
           </TabPane>
           }

@@ -589,6 +589,17 @@ html[dir='rtl'] .dz-hidden-input {
   width: 22px !important;
   height: 22px !important;
 }
+.personal-btn{
+  width: 100px;
+  text-align: center;
+  height: 30px !important;
+  line-height: 22px !important;
+  border-radius: 100px !important;
+}
+.personal-btn::after{
+  width: 25px !important;
+  height: 25px !important;
+}
 
 .search-with-btn{
   width: 300px !important;
@@ -613,4 +624,8 @@ html[dir='rtl'] .dz-hidden-input {
 .kyc-round-btn{
   border-radius: 50% !important;
   margin: 2px;
+}
+
+.form-container{
+  height: 40px;
 }

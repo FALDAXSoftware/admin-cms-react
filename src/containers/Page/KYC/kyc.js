@@ -14,7 +14,7 @@ import ReviewKYC from './reviewKYC';
 import DeclinedKYC from './declinedKYC';
 import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from '../../Shared/backBttton';
 
@@ -186,7 +186,6 @@ class KYC extends Component {
 
   onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
-      console.log("Metabase is calling")
       this.getMetaBaseUrl();
     }
   }
@@ -261,6 +260,8 @@ class KYC extends Component {
                   dataSource={allKYCData}
                   className="isoCustomizedTable"
                   onChange={this._handleKYCTableChange}
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
                 />
               {allKYCCount > 0 ? (
                 <Pagination

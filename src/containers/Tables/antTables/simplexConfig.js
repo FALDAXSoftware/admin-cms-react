@@ -34,63 +34,72 @@ const columns = [
   {
     title: <IntlMessages id="simplexTradeTable.title.email" />,
     key: "email",
-    width: 150,
+    align:"center",
+    width: 250,
     sorter: true,
     render: object => renderCell(object, "TextCell", "email")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.currency" />,
     key: "currency",
-    width: 200,
+    align:"center",
+    width: 150,
     sorter: true,
     render: object => renderCell(object, "TextCell", "currency")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.created_at" />,
     key: "created_at",
-    width: 100,
+    width: 150,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "DateTimeCell", "created_at")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.fill_price" />,
     key: "fill_price",
-    width: 100,
+    width: 150,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "TextCell", "fill_price")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.quantity" />,
     key: "quantity",
-    width: 100,
+    align:"center",
+    width: 150,
     sorter: true,
     render: object => <span>{object.quantity+" "+object.settle_currency}</span>
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.address" />,
     key: "address",
-    width: 100,
+    width: 320,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "TextCell", "address")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.payment_id" />,
     key: "payment_id",
-    width: 200,
+    width: 250,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "TextCell", "payment_id")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.quote_id" />,
     key: "quote_id",
-    width: 200,
+    width: 250,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "TextCell", "quote_id")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.simplex_payment_status" />,
     key: "simplex_payment_status",
-    width: 100,
+    width: 150,
+    align:"center",
     sorter: true,
     render: object =>
       renderCell(

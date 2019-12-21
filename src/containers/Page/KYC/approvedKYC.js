@@ -10,7 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
@@ -214,6 +214,8 @@ class ApprovedKYC extends Component {
                                     dataSource={allKYCData}
                                     className="isoCustomizedTable"
                                     onChange={this._handleKYCTableChange}
+                                    scroll={TABLE_SCROLL_HEIGHT}
+                                    bordered
                                 />
                                 {allKYCCount > 0 ?
                                     <Pagination

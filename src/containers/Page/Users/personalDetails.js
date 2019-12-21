@@ -29,16 +29,6 @@ const Address = styled.p`
   }
 `;
 const DateOfBirth = styled(Address)``;
-const StatusSwitch = styled(Switch)`
-  width: 84px;
-  text-align: center;
-  height: 30px !important;
-  line-height: 26px !important;
-  &::after {
-    width: 26px !important;
-    height: 26px !important;
-  }
-`;
 class PersonalDetails extends Component {
   constructor(props) {
     super(props);
@@ -141,7 +131,8 @@ class PersonalDetails extends Component {
             <Row type="flex" justify="end">
               {isAllowed("user_activate") &&
                 <Col span={3}>
-                  <StatusSwitch
+                  <Switch
+                    className="personal-btn"
                     checked={userDetails.is_active}
                     checkedChildren="Active"
                     unCheckedChildren="Inactive"
@@ -153,8 +144,8 @@ class PersonalDetails extends Component {
               }
               {isAllowed("user_activate") &&
                 <Col span={3}>
-                  <StatusSwitch
-                    style={{ width: "120px" }}
+                  <Switch
+                    className="personal-btn"
                     checked={userDetails.is_verified}
                     checkedChildren="Verified"
                     unCheckedChildren="Non-verified"

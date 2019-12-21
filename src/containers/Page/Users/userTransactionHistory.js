@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Form, Row, Tabs } from 'antd';
+import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs } from 'antd';
 import { userTransactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -9,9 +9,8 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
-import ColWithPadding from '../common.style';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -168,20 +167,17 @@ class UserTransactionHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {userTransactionTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
                                 <div style={{ "display": "inline-block", "width": "100%" }}>
                                     <Form onSubmit={this._searchTransaction}>
                                         <Row>
-                                            <ColWithPadding sm={8}>
+                                            <Col sm={8}>
                                                 <Input
                                                     placeholder="Search transactions"
                                                     onChange={this._changeSearch.bind(this)}
                                                     value={searchTransaction}
                                                 />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={7}>
+                                            </Col>
+                                            <Col sm={7}>
                                                 <Select
                                                     getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
@@ -192,33 +188,36 @@ class UserTransactionHistory extends Component {
                                                     <Option value={'receive'}>Receive</Option>
                                                     <Option value={'send'}>Send</Option>
                                                 </Select>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button htmlType="submit" className="filter-btn full-width" icon="search" type="primary">Search</Button>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button className="filter-btn full-width" type="primary" icon="reload" onClick={this._resetFilters}>Reset</Button>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
                                                 {allTransactions && allTransactions.length > 0 ?
                                                     <CSVLink filename={'user_transactions_history.csv'} data={allTransactions} headers={transactionsHeaders}>
-                                                        <Button className="search-btn" type="primary">Export</Button>
+                                                        <Button className="filter-btn full-width" type="primary" icon="export">Export</Button>
                                                     </CSVLink>
                                                     : ''}
-                                            </ColWithPadding>
+                                            </Col>
                                         </Row>
                                     </Form>
                                 </div>
                                 <div className="scroll-table">
                                     {loader && <FaldaxLoader />}
                                     < TableWrapper
+                                        rowId="id"
                                         style={{ marginTop: '20px' }}
                                         {...this.state}
-                                        columns={tableInfo.columns}
+                                        columns={userTransactionTableInfos[0].columns}
                                         pagination={false}
                                         dataSource={allTransactions}
                                         className="isoCustomizedTable"
                                         onChange={this._handleUserTransactionChange}
+                                        scroll={TABLE_SCROLL_HEIGHT}
+                                        bordered
                                     />
                                     {allTransactionCount > 0 ?
                                         <Pagination
@@ -227,16 +226,13 @@ class UserTransactionHistory extends Component {
                                             onChange={this._handleTransactionPagination.bind(this)}
                                             pageSize={limit}
                                             current={page}
-                                            total={allTransactionCount}
+                                            total={parseInt(allTransactionCount)}
                                             showSizeChanger
                                             onShowSizeChange={this._changePaginationSize}
                                             pageSizeOptions={pageSizeOptions}
                                         /> : ''
                                     }
                                 </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
         );
