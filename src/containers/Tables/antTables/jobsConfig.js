@@ -36,7 +36,8 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
 const columns = [{
     title: <IntlMessages id="jobTable.title.Actions" />,
     key: 'action',
-    width: 200,
+    width: 100,
+    align:"center",
     render: object => renderCell(object,
         'JobActionCell', 'id', 'position', 'location', 'short_desc', 'job_desc',
         'category_id', 'is_active', 'category')
@@ -44,24 +45,28 @@ const columns = [{
     title: <IntlMessages id="jobTable.title.created_at" />,
     key: 'created_at',
     sorter: true,
-    width: 200,
+    align:"center",
+    width: 150,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="jobTable.title.position" />,
     key: 'position',
-    width: 100,
+    width: 150,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'position')
 }, {
     title: <IntlMessages id="jobTable.title.location" />,
     key: 'location',
-    width: 200,
+    align:"center",
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'LocationCell', 'location')
 }, {
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
-    width: 200,
+    align:"center",
+    width: 100,
     render: object =>{
         if (isAllowed("update_job")) {
             return renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
@@ -73,7 +78,8 @@ const columns = [{
 }, {
     title: <IntlMessages id="jobTable.title.app" />,
     key: 'button',
-    width: 200,
+    align:"center",
+    width: 150,
     render: object => renderCell(object, 'JobButtonCell', 'id')
 }];
 

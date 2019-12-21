@@ -34,29 +34,34 @@ const columns = [{
     title: <IntlMessages id="withdrawTable.title.action" />,
     key: 'action',
     width: 100,
+    align:"center",
     render: object => renderCell(object, 'WithdrawActionCell', 'id', 'email', 'source_address',
         'destination_address', 'amount', 'transaction_type', 'is_approve', 'user_id', 'coin_id',
         'is_executed', 'created_at')
 }, {
     title: <IntlMessages id="withdrawTable.title.created_at" />,
     key: 'created_at',
-    width: 100,
+    width: 150,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="withdrawTable.title.source_address" />,
     key: 'source_address',
-    width: 100,
+    width: 300,
+    align:"center",
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.destination_address" />,
     key: 'destination_address',
-    width: 100,
+    width: 300,
+    align:"center",
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.amount" />,
     key: 'amount',
-    width: 100,
+    width: 150,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'amount')
 },

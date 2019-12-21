@@ -22,17 +22,20 @@ const renderCell = (object, type, key, jobCat = null, active = null) => {
 const columns = [{
     title: <IntlMessages id="jobTable.title.Actions" />,
     key: 'action',
-    width: 200,
+    width: 100,
+    align:"center",
     render: object => renderCell(object, 'JobCatActionCell', 'id', 'category', 'is_active')
 }, {
     title: <IntlMessages id="jobTable.title.category" />,
     key: 'category',
     width: 100,
+    align:"center",
     render: object => renderCell(object, 'TextCell', 'category')
 }, {
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
-    width: 200,
+    width: 100,
+    align:"center",
     render: object => {
         if (isAllowed("update_job_category")) {
             return renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')

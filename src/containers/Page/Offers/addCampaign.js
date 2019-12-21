@@ -11,7 +11,6 @@ import {
   Switch,
   Button,
   Card,
-  Table,
   Select,
   Divider,
   Icon,
@@ -27,8 +26,9 @@ import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { DateCell ,OfferDateCell} from "../../../components/tables/helperCells";
+import { OfferDateCell} from "../../../components/tables/helperCells";
 import { messages } from "../../../helpers/messages";
+import TableWrapper from "../../Tables/antTables/antTable.style";
 const { TextArea } = Input;
 const Option = Select.Option;
 const { logout } = authAction;
@@ -39,6 +39,8 @@ const columns_temp = [
     title: "Action",
     dataIndex: "id",
     key: "id",
+    align:"center",
+    width:100,
     render: id => (
       <Tooltip title="edit">
         <Icon
@@ -52,11 +54,14 @@ const columns_temp = [
   {
     title: "Code",
     dataIndex: "code",
-    key: "code"
+    key: "code",
+    align:"center",
+    width:150,
   },
   {
     title: "Description",
     dataIndex: "description",
+    align:"center",
     width:200,
     key: "description",
     render:(desc)=><p style={{textAlign:'justify'}}>{desc}</p>
@@ -64,32 +69,43 @@ const columns_temp = [
   {
     title: "No of transactions",
     dataIndex: "no_of_transactions",
-    key: "no_of_transactions"
+    key: "no_of_transactions",
+    align:"center",
+    width:100,
   },
   {
     title: "Total fees allowed",
     dataIndex: "fees_allowed",
     key: "fees_allowed",
-    render: fees => <span>{fees} USD</span>
+    render: fees => <span>{fees} USD</span>,
+    align:"center",
+    width:100,
   },
   {
     title: "Start Date",
     dataIndex: "start_date",
     key: "start_date",
-    render: start_date => start_date?OfferDateCell(start_date):'-'
+    render: start_date => start_date?OfferDateCell(start_date):'-',
+    align:"center",
+    width:150,
   },
   {
     title: "End Date",
     dataIndex: "end_date",
     key: "end_date",
+    align:"center",
+    width:150,
     render: end_date => end_date?OfferDateCell(end_date):'-'
   },
   {
     title: "Status",
     key: "is_active",
+    align:"center",
+    width:100,
     render: (object) =>{
       return (
-        <StatusSwitch
+        <Switch
+          className="switch-cell"
           checked={object.is_active}
           checkedChildren="Active"
           unCheckedChildren="Inactive"
@@ -112,16 +128,6 @@ const CampaignCol = styled(Col)`
 const CampRow = styled(Row)`
   display: flex !important;
   align-items: center;
-`;
-const StatusSwitch = styled(Switch)`
-  width: 84px;
-  text-align: center;
-  height: 30px !important;
-  line-height: 26px !important;
-  &::after {
-    width: 26px !important;
-    height: 26px !important;
-  }
 `;
 class AddCampaign extends Component {
   constructor(props) {
@@ -922,7 +928,7 @@ class AddCampaign extends Component {
             {campaign_offers.length > 0 && (
               <Row>
                 <Divider orientation="left">Offers</Divider>
-                <Table bordered dataSource={campaign_offers} columns={columns} pagination={false}/>
+                <TableWrapper bordered dataSource={campaign_offers} columns={columns} pagination={false}/>
               </Row>
             )}
             {/* Offer Code listing end */}
@@ -987,7 +993,8 @@ class AddCampaign extends Component {
                           <span>Offer Code Status:</span>
                         </Col>
                         <Col span={20}>
-                          <StatusSwitch
+                          <Switch
+                            className="switch-cell"
                             checked={is_offer_active}
                             checkedChildren="Active"
                             unCheckedChildren="Inactive"

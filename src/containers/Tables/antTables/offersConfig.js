@@ -61,6 +61,7 @@ const renderCell = (
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
+    align:"center",
     key: 'action',
     width: 100,
     render: object => renderCell(object,
@@ -68,41 +69,47 @@ const columns = [{
 },
 {
   title: <IntlMessages id="CampaignTable.title.created_at" />,
+  align:"center",
   key: 'created_at',
-  width: 100,
+  width: 150,
   sorter: false,
   render: object => renderCell(object, 'DateTimeCell',"created_at")
 }, 
 {
     title: <IntlMessages id="CampaignTable.title.label" />,
+    align:"center",
     key: 'label',
-    width: 100,
+    width: 200,
     sorter: false,
     render: object => renderCell(object, 'TextCell', 'label',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 }, 
 {
     title: <IntlMessages id="CampaignTable.title.start_date" />,
+    align:"center",
     key: 'start_date',
-    width: 100,
+    width: 150,
     sorter: false,
     render: object => renderCell(object, 'DateCell', 'start_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
     title: <IntlMessages id="CampaignTable.title.e_date" />,
+    align:"center",
     key: 'end_date',
-    width: 100,
+    width: 150,
     sorter: false,
     render: object => renderCell(object, 'DateCell', 'end_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
   title: <IntlMessages id="CampaignTable.title.type" />,
+  align:"center",
   key: 'usage',
-  width: 100,
+  width: 200,
   sorter: false,
   render: object => renderCell(object, 'CampaignTypeCell', 'usage',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
     title: <IntlMessages id="CampaignTable.title.is_active" />,
+    align:"center",
     key: 'is_active',
     width: 100,
     sorter: false,

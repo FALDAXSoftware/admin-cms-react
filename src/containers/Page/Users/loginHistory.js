@@ -10,7 +10,7 @@ import {ColWithMarginBottom} from "../common.style";
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
 
@@ -146,8 +146,7 @@ class LoginHistory extends Component {
         return (
           <LayoutWrapper>
             <Tabs className="isoTableDisplayTab full-width">
-              {historyTableInfos.map(tableInfo => (
-                <TabPane tab={tableInfo.title} key={tableInfo.value}>
+                <TabPane tab={historyTableInfos[0].title} key={historyTableInfos[0].value}>
                   <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchHistory} className="cty-search">
                       <Row type="flex" justify="end">
@@ -190,11 +189,13 @@ class LoginHistory extends Component {
 
                     <div>
                       <TableWrapper
+                        rowKey="id"
                         {...this.state}
-                        columns={tableInfo.columns}
+                        columns={historyTableInfos[0].columns}
                         pagination={false}
                         dataSource={allHistory}
-                        className="isoCustomizedTable"
+                        bordered
+                        scroll={TABLE_SCROLL_HEIGHT}
                       />
                       {loader && <FaldaxLoader />}
                       {allHistoryCount > 0 ? (
@@ -215,7 +216,6 @@ class LoginHistory extends Component {
                     </div>
                   </TableDemoStyle>
                 </TabPane>
-              ))}
             </Tabs>
           </LayoutWrapper>
         );

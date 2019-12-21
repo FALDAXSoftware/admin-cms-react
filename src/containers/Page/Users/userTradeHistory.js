@@ -21,7 +21,7 @@ import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
 import ColWithPadding from "../common.style";
 import { ExecutionUl } from "../common.style";
-import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -203,10 +203,8 @@ class UserTradeHistory extends Component {
     }
 
     return (
-      <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent">
           <div className="isoTableDisplayTab">
-            {tradeTableInfos.map(tableInfo => (
               <div>
                 <div style={{ display: "inline-block", width: "100%" }}>
                   <Form onSubmit={this._searchTrade}>
@@ -258,6 +256,7 @@ class UserTradeHistory extends Component {
                           >
                             <Button
                               type="primary"
+                              icon ="export"
                               className="search-btn"
                               style={{ margin: "0px" }}
                             >
@@ -274,13 +273,16 @@ class UserTradeHistory extends Component {
                 {loader && <FaldaxLoader />}
                 <div className="scroll-table">
                   <TableWrapper
+                    rowKey="id"
                     style={{ marginTop: "20px" }}
                     {...this.state}
-                    columns={tableInfo.columns}
+                    columns={tradeTableInfos[0].columns}
                     pagination={false}
                     dataSource={allTrades}
                     className="isoCustomizedTable"
                     onChange={this._handleUserTradeChange}
+                    scroll={TABLE_SCROLL_HEIGHT}
+                    bordered
                     expandedRowRender={record => {
                       return (
                         <div>
@@ -357,10 +359,8 @@ class UserTradeHistory extends Component {
                   )}
                 </div>
               </div>
-            ))}
           </div>
         </TableDemoStyle>
-      </LayoutWrapper>
     );
   }
 }

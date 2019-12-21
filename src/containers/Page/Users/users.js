@@ -14,15 +14,6 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { BackButton } from '../../Shared/backBttton';
 const { TabPane } = Tabs;
 const { logout } = authAction;
-
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
-
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -90,14 +81,14 @@ class Users extends Component {
          {isAllowed('metabase_users_report') && <TabPane tab="Report" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
               {metabaseUrl &&
-                <IframeCol>
                   <iframe
+                    className="metabase-iframe"
                     src={metabaseUrl}
-                    frameborder="0"
+                    frameBorder="0"
                     width="100%"
-                    allowtransparency
+                    allowtransparency="true"
                   ></iframe>
-                </IframeCol>}
+              }
             </TableDemoStyle>
           </TabPane>
          }

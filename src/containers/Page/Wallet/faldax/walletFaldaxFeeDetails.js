@@ -7,7 +7,7 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
@@ -20,6 +20,8 @@ const columns=[
         key:55,
         dataIndex:"coin_code",
         sorter: true,
+        align:"center",
+        ellipsis: true,
         width:100,
         render:data=><span>{data.toUpperCase()}</span>
     },
@@ -28,21 +30,27 @@ const columns=[
         key:1,
         dataIndex:"created_at",
         sorter: true,
-        width:100,
+        align:"center",
+        ellipsis: true,
+        width:150,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.amount"/>,
         key:2,
         sorter: true,
-        width:100,
+        align:"center",
+        ellipsis: true,
+        width:150,
         render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.faldax_fee"/>,
         key:3,
         sorter: true,
-        width:100,
+        align:"center",
+        ellipsis: true,
+        width:150,
         render:data=><span>{data["faldax_fee"]?(parseFloat(data["faldax_fee"]).toFixed(8)+" "+data["coin"]):"-"}</span>
     },
     {
@@ -50,20 +58,26 @@ const columns=[
         dataIndex:"source_address",
         key:4,
         sorter: true,
-        width:100,
+        align:"center",
+        ellipsis: true,
+        width:300,
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.destination_address"/>,
         dataIndex:"destination_address",
         key:5,
         sorter: true,
-        width:100,
+        align:"center",
+        ellipsis: true,
+        width:300,
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.transaction_id"/>,
         key:6,
         sorter: true,
-        // width:100,
+        width:500,
+        align:"center",
+        ellipsis: true,
         render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
        
     }
@@ -158,11 +172,14 @@ class WalletDetailsComponent extends Component {
                         <TableWrapper
                             rowKey="id"
                             {...this.state}
+                            tableLayout="fixed"
                             columns={columns}
                             pagination={false}
                             dataSource={walletValue}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
                         />
                         <Pagination
                             className="ant-users-pagination"

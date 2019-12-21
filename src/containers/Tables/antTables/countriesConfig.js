@@ -38,13 +38,15 @@ const renderCell = (object, type, key, c_name = null, legal = null, colorCode = 
 
 const columns = [{
     title: < IntlMessages id="countryTable.title.actions" />,
+    align:"center",
     key: 'action',
-    width: 200,
+    width: 50,
     render: object => renderCell(object, 'CountryActionCell', 'id', 'name', 'legality',
         'color', 'stateCount', 'is_active')
 },
 {
     title: < IntlMessages id="countryTable.title.name" />,
+    align:"center",
     key: 'name',
     width: 100,
     sorter: true,
@@ -52,6 +54,7 @@ const columns = [{
 },
 {
     title: < IntlMessages id="countryTable.title.legality" />,
+    align:"center",
     key: 'legality',
     width: 100,
     sorter: true,
@@ -59,14 +62,16 @@ const columns = [{
 },
 {
     title: < IntlMessages id="countryTable.title.color" />,
+    align:"center",
     key: 'color',
     width: 100,
     render: object => renderCell(object, 'ColorCell', 'color')
 },
 {
     title: < IntlMessages id="countryTable.title.status" />,
+    align:"center",
     key: 'is_active',
-    width: 200,
+    width: 100,
     render: object => {
         if (isAllowed("activate_country")) {
             return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
@@ -78,8 +83,9 @@ const columns = [{
 },
 {
     title: < IntlMessages id="countryTable.title.State" />,
+    align:"center",
     key: 'button',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'CountryButtonCell', 'id', 'stateCount')
 }
 ];

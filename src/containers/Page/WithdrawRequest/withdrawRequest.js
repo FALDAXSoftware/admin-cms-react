@@ -24,7 +24,7 @@ import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
 import {ColWithMarginBottom} from "../common.style";
 import DeclineActionModal from "./declineModal";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
@@ -34,14 +34,6 @@ const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
 var self;
-
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
 
 class WithdrawRequest extends Component {
   constructor(props) {
@@ -481,6 +473,8 @@ class WithdrawRequest extends Component {
                   dataSource={allRequests}
                   className="isoCustomizedTable table-tb-margin float-clear"
                   onChange={this._handleWithdrawTableChange}
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
                   expandedRowRender={record => (
                     <p style={{ margin: 0 }}>
                       {
@@ -528,14 +522,13 @@ class WithdrawRequest extends Component {
          <TabPane tab="Report" key="metabase">
             <TableDemoStyle className="isoLayoutContent">
               {metabaseUrl &&
-                <IframeCol>
                   <iframe
+                  className="metabase-iframe"
                     src={metabaseUrl}
                     frameBorder="0"
                     width="100%"
                     allowtransparency="true"
-                  ></iframe>
-                </IframeCol>}
+                  ></iframe>}
             </TableDemoStyle>
           </TabPane>
           }

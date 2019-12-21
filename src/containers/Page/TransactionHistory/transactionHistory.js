@@ -24,7 +24,7 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
@@ -299,8 +299,8 @@ class Transactions extends Component {
           onChange={this.onChangeTabs}
         >
           <TabPane
-            tab={transactionTableInfos[0].title}
-            key={transactionTableInfos[0].value}
+            tab={transactionTableInfos.title}
+            key={transactionTableInfos.value}
           >
             <TableDemoStyle className="isoLayoutContent">
               <Form onSubmit={this._searchTransaction}>
@@ -379,11 +379,12 @@ class Transactions extends Component {
                   className="float-clear"
                   rowKey="id"
                   {...this.state}
-                  columns={transactionTableInfos[0].columns}
+                  columns={transactionTableInfos.columns}
                   pagination={false}
                   dataSource={allTransactions}
                   onChange={this._handleTransactionTableChange}
-                  className="isoCustomizedTable"
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
                   expandedRowRender={record => {
                     return (
                       <div>

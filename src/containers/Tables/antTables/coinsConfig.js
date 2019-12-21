@@ -97,6 +97,7 @@ const columns = [
     title: <IntlMessages id="coinTable.title.Actions" />,
     key: "action",
     width:"20%",
+    align:"center",
     render: object =>
       renderCell(
         object,
@@ -120,6 +121,7 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.coin" />,
     width:"20%",
+    align:"center",
     sorter: true,
     render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
   },
@@ -133,6 +135,7 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.limit" />,
     key: "min_limit",
+    align:"center",
     width:"20%",
     sorter: true,
     render: object => renderCell(object, "FixedCell", "min_limit")
@@ -140,6 +143,7 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.maxlimit" />,
     key: "max_limit",
+    align:"center",
     width:"20%",
     sorter: true,
     render: object => renderCell(object, "FixedCell", "max_limit")
@@ -147,6 +151,7 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.active" />,
     key: "is_active",
+    align:"center",
     width:"20%",
     render: object =>{
       if (isAllowed("update_coins")) {
@@ -176,12 +181,11 @@ const columns = [
   }
 ];
 
-const assetTableInfos = [
+const assetTableInfos = 
   {
     title: "Assets",
     value: "CoinsTable",
     columns: clone(columns)
-  }
-];
+  };
 
 export { columns, assetTableInfos };

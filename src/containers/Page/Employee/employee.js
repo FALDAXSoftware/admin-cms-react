@@ -10,7 +10,7 @@ import AddEmployeeModal from "./addEmployeeModal";
 import EditEmployeeModal from "./editEmployeeModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from './employeeMetabase'
 import { BackButton } from "../../Shared/backBttton";
@@ -381,6 +381,8 @@ class Employees extends Component {
                     pagination={false}
                     dataSource={allEmployee}
                     className="isoCustomizedTable table-tb-margin"
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
                     expandedRowRender={record => (
                       <div>
                         <b>Address</b> -{" "}

@@ -32,22 +32,30 @@ const renderCell = (object, type, key, title = null, created_date = null,
 const columns = [{
     title: <IntlMessages id="ticketTable.title.subject" />,
     key: 'subject',
-    width: 100,
+    width: 200,
+    align:"center",
+    ellipsis:true,
     render: object => renderCell(object, 'TicketSubjectCell', 'subject')
 }, {
     title: <IntlMessages id="ticketTable.title.content" />,
     key: 'content',
-    width: 100,
+    align:"center",
+    ellipsis:true,
+    width: 200,
     render: object => renderCell(object, 'ContentCell', 'content')
 }, {
     title: <IntlMessages id="ticketTable.title.created_at" />,
     key: 'created_by',
-    width: 100,
+    align:"center",
+    ellipsis:true,
+    width: 200,
     render: object => renderCell(object, 'DateTimeCell', 'created_by')
 }, {
     title: <IntlMessages id="ticketTable.title.pipeline_stage" />,
     key: 'pipeline_stage',
-    width: 100,
+    width: 200,
+    align:"center",
+    ellipsis:true,
     render: object => renderCell(object, 'PipelineCell', 'pipeline_stage')
 }];
 

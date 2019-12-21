@@ -3,9 +3,9 @@ import clone from "clone";
 import IntlMessages from "../../../components/utility/intlMessages";
 import {
   TextCell,
-  HistoryDateCell,
   VolumeCell,
-  ObjectCell
+  ObjectCell,
+  DateTimeCell
 } from "../../../components/tables/helperCells";
 
 const renderCell = (
@@ -43,7 +43,7 @@ const renderCell = (
 
   switch (type) {
     case "DateCell":
-      return HistoryDateCell(
+      return DateTimeCell(
         value,
         currency,
         settle_currency,
@@ -85,14 +85,16 @@ const columns = [
   {
     title: <IntlMessages id="tradeTable.title.created_at" />,
     key: "created_at",
-    width: 100,
+    align:"center",
+    width: 150,
     sorter: true,
     render: object => renderCell(object, "DateCell", "created_at")
   },
   {
     title: <IntlMessages id="tradeTable.title.symbol" />,
     key: "symbol",
-    width: 200,
+    width: 100,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "TextCell", "symbol")
   },
@@ -101,26 +103,30 @@ const columns = [
     key: "side",
     width: 100,
     sorter: true,
+    align:"center",
     render: object => renderCell(object, "TextCell", "side")
   },
   {
     title: <IntlMessages id="tradeTable.title.email" />,
     key: "email",
-    width: 100,
+    width: 250,
+    align:"center",
     sorter: true,
     render: object => renderCell(object, "TextCell", "email")
   },
   {
     title: <IntlMessages id="tradeTable.title.order_id" />,
     key: "order_id",
-    width: 100,
+    width: 150,
     sorter: true,
+    align:"center",
     render: object => renderCell(object, "TextCell", "order_id")
   },
   {
     title:<IntlMessages id="tradeTable.title.order_status"/>,
     key:"order_status",
     sorter: true,
+    align:"center",
     width:100,
     dataIndex:"order_status",
     render:data=><span className={"status-"+data+""}>{data.charAt(0).toUpperCase() + data.slice(1)}</span>
@@ -128,49 +134,56 @@ const columns = [
   {
     title: <IntlMessages id="tradeTable.title.you_send" />,
     key: "sell_currency_amount",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{(object["side"].toLowerCase() == "buy" ? parseFloat(object["sell_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[1] : parseFloat(object["sell_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[0])}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.you_received" />,
     key: "buy_currency_amount",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{(object["side"].toLowerCase() == "buy" ? parseFloat(object["buy_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[0] : parseFloat(object["buy_currency_amount"]).toFixed(8) + " " + object["symbol"].split("/")[1])}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.faldax_fees" />,
     key: "faldax_fees",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{(parseFloat(object["faldax_fees"]).toFixed(8)) + " " + (object["side"].toLowerCase() == "buy" ? (object["symbol"].split("/")[0]) : (object["symbol"].split("/")[1]))}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.network_fees" />,
     key: "network_fees",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{(parseFloat(object["network_fees"]).toFixed(8)) + " " + (object["side"].toLowerCase() == "buy" ? (object["symbol"].split("/")[0]) : (object["symbol"].split("/")[1]))}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.limit_price" />,
     key: "limit_price",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{parseFloat(object["limit_price"]).toFixed(8) + " " + (object["symbol"].split("/")[1])}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.fill_price" />,
     key: "fill_price",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{parseFloat(object.fill_price).toFixed(8) + " " + (object.settle_currency)}</span>)
   },
   {
     title: <IntlMessages id="tradeTable.title.commission" />,
     key: "difference_faldax_commission",
-    width: 100,
+    width: 200,
+    align:"center",
     sorter: true,
     render: object => (<span>{parseFloat(object["difference_faldax_commission"]).toFixed(8) + " " + (object["symbol"].split("/")[1])}</span>)
   },

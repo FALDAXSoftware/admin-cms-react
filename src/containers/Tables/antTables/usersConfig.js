@@ -59,7 +59,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
     key: 'action',
-    width: 200,
+    width: 150,
     render: object => renderCell(object,
         'ActiveUserActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
@@ -67,61 +67,81 @@ const columns = [{
         'deleted_at')
 }, {
     title: <IntlMessages id="userTable.title.created_at" />,
+    align:"center",
+    ellipsis:true,
     key: 'created_at',
-    width: 200,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: "",
+    align:"center",
+    ellipsis:true,
     key: 'profile_pic',
-    width: '1%',
+    width: 75,
     className: 'isoImageCell',
     render: object => renderCell(object, 'UserImageCell', 'profile_pic')
 }, {
     title: <IntlMessages id="antTable.title.firstName" />,
+    align:"center",
+    ellipsis:true,
     key: 'first_name',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'first_name')
 }, {
     title: <IntlMessages id="antTable.title.lastName" />,
+    align:"center",
+    ellipsis:true,
     key: 'last_name',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'last_name')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
+    align:"center",
+    ellipsis:true,
     key: 'email',
-    width: 200,
+    width: 250,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="antTable.title.country" />,
+    align:"center",
+    ellipsis:true,
     key: 'country',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="antTable.title.state" />,
+    align:"center",
+    ellipsis:true,
     key: 'state',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'state')
 },
 {
     title: <IntlMessages id="antTable.title.zip" />,
+    align:"center",
+    ellipsis:true,
     key: 'postal_code',
-    width: 100,
+    width: 150,
     render: object => renderCell(object, 'TextCell', 'postal_code')
 },{
     title: <IntlMessages id="antTable.title.tier" />,
+    align:"center",
+    ellipsis:true,
     key: 'account_tier',
-    width: 100,
+    width: 150,
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {
     title: <IntlMessages id="antTable.title.numReferral" />,
+    align:"center",
+    ellipsis:true,
     key: 'no_of_referrals',
-    width: 100,
+    width: 150,
     render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
 }];
 

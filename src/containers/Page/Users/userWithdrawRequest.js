@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Row, Form, Tabs } from 'antd';
+import { Input, Pagination, notification, Select, Button, Row, Form, Col,Tabs } from 'antd';
 import { userWithdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,9 +8,8 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithPadding from '../common.style';
 import { CSVLink } from "react-csv";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -133,21 +132,18 @@ class UserWithdrawRequest extends Component {
 
         return (
             <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {userWithdrawReqTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                <TableDemoStyle className="isoLayoutContent full-width">
+                                    <div className="form-container">
                                     <Form onSubmit={this._searchReq}>
                                         <Row>
-                                            <ColWithPadding sm={8}>
+                                            <Col sm={8}>
                                                 <Input
                                                     placeholder="Search requests"
                                                     onChange={this._changeSearch.bind(this)}
                                                     value={searchReq}
                                                 />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={7}>
+                                            </Col>
+                                            <Col sm={7}>
                                                 <Select
                                                     getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
@@ -158,36 +154,37 @@ class UserWithdrawRequest extends Component {
                                                     <Option value={'true'}>Approve</Option>
                                                     <Option value={'false'}>Dis-Approve</Option>
                                                 </Select>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button htmlType="submit" className="filter-btn full-width" icon ="search" type="primary">Search</Button>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button className="filter-btn full-width" type="primary" icon="reload" onClick={this._resetFilters}>Reset</Button>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
                                                 {allRequests && allRequests.length > 0 ?
                                                     <CSVLink filename={'user_withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
-                                                        <Button className="search-btn" type="primary">Export</Button>
+                                                        <Button icon="export" className="filter-btn full-width" type="primary">Export</Button>
                                                     </CSVLink>
                                                     : ''}
-                                            </ColWithPadding>
+                                            </Col>
                                         </Row>
                                     </Form>
-                                </div>
+                                    </div>
                                 {loader && <FaldaxLoader />}
                                 < TableWrapper
-                                    style={{ marginTop: '20px' }}
+                                    className="table-tb-margin float-clear"
+                                    rowKey="id"
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={userWithdrawReqTableInfos[0].columns}
                                     pagination={false}
                                     dataSource={allRequests}
-                                    className="isoCustomizedTable"
                                     onChange={this._handleUserWithdrawReqChange}
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
                                 />
                                 {allReqCount > 0 ?
                                     <Pagination
-                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleWithdrawPagination.bind(this)}
                                         pageSize={limit}
@@ -198,9 +195,6 @@ class UserWithdrawRequest extends Component {
                                         pageSizeOptions={pageSizeOptions}
                                     /> : ''
                                 }
-                            </TabPane>
-                        ))}
-                    </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

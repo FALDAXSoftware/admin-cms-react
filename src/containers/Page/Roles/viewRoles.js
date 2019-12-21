@@ -375,6 +375,7 @@ class ViewRoles extends Component {
                 dataSource={allRoles}
                 className="isoCustomizedTable"
                 onChange={this._handleRoleChange}
+                bordered
               />
             {/* {showEditRoleModal && */}
             <EditRoleModal

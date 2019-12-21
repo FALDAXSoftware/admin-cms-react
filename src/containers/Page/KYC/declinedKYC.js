@@ -10,7 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -172,8 +172,6 @@ class DeclinedKYC extends Component {
         return (
             <TableDemoStyle>
                 <div className="isoLayoutContent">
-                    {ApprovedKYCInfos.map(tableInfo => (
-                        <div key={tableInfo.value}>
                             <Form onSubmit={this._searchKYC}>
                                 <Row type="flex" justify="end">
                                     <ColWithMarginBottom md={6}>
@@ -207,11 +205,13 @@ class DeclinedKYC extends Component {
                                     closeViewModal={this._closeViewKYCModal}
                                 />
                                 <TableWrapper
+                                    rowKey="id"
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={ApprovedKYCInfos[0].columns}
                                     pagination={false}
                                     dataSource={allKYCData}
-                                    className="isoCustomizedTable"
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
                                     onChange={this._handleKYCTableChange}
                                 />
                                 {allKYCCount > 0 ?
@@ -227,8 +227,6 @@ class DeclinedKYC extends Component {
                                         pageSizeOptions={pageSizeOptions}
                                     /> : ''}
                             </div>
-                    ))}
-                </div>
             </TableDemoStyle>
         );
     }

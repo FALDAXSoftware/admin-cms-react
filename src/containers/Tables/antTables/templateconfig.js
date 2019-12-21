@@ -24,11 +24,13 @@ const columns = [{
     title: <IntlMessages id="emailTable.title.actions" />,
     key: 'action',
     width: 100,
+    align:"center",
     render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',
         'note')
 }, {
     title: <IntlMessages id="antTable.title.name" />,
     key: 'name',
+    align:"center",
     width: 100,
     render: object => renderCell(object, 'TextCell', 'name')
 }];

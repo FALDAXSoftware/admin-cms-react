@@ -21,7 +21,7 @@ import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -374,6 +374,8 @@ class ActiveUsers extends Component {
                   dataSource={allUsers}
                   className="isoCustomizedTable"
                   onChange={this.handleTableChange}
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
                 />
                 {allUserCount > 0 ? (
                   <Pagination

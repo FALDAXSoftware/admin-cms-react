@@ -116,6 +116,7 @@ class NetworkFee extends Component {
           className="isoCustomizedTable"
           onChange={this.handleNetworkChange}
           className="fill-width"
+          bordered
         />
         <EditNetworkFeeModal
           showEditNetworkFeeModal={showEditNetworkFeeModal}
