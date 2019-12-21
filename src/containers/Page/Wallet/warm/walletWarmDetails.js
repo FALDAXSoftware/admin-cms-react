@@ -24,6 +24,7 @@ const columns=[
         title:<IntlMessages id="walletWarmDetailsTable.title.created_on"/>,
         key:"createdTime",
         dataIndex:"createdTime",
+        defaultSortOrder:"ascend",
         width:100,
         render:data=><span>{DateTimeCell(data)}</span>
     },

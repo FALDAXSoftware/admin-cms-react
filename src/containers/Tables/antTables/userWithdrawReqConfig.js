@@ -26,7 +26,7 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 const columns = [{
     title: <IntlMessages id="withdrawTable.title.created_at" />,
     key: 'created_at',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 150,
     sorter: true,
@@ -34,7 +34,7 @@ const columns = [{
 }, {
     title: <IntlMessages id="withdrawTable.title.email" />,
     key: 'email',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 250,
     render: object => renderCell(object, 'TextCell', 'email')
@@ -42,21 +42,21 @@ const columns = [{
     title: <IntlMessages id="withdrawTable.title.source_address" />,
     key: 'source_address',
     key: 'created_at',
-    align:"center",
+   align:"left",
     width: 300,
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.destination_address" />,
     key: 'destination_address',
     key: 'created_at',
-    align:"center",
+   align:"left",
     width: 300,
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.amount" />,
     key: 'amount',
     key: 'created_at',
-    align:"center",
+   align:"left",
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'amount')
@@ -64,7 +64,7 @@ const columns = [{
     title: <IntlMessages id="withdrawTable.title.approve"/>,
     key: 'is_approve',
     key: 'created_at',
-    align:"center",
+   align:"left",
     width: 150,
     render: object => renderCell(object, 'ApproveCell', 'is_approve')
 }];

@@ -39,7 +39,7 @@ const columns = [
         title: <IntlMessages id="antTable.title.details" />,
         key: 'action',
         width: 100,
-        align:"center",
+       align:"left",
         render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
             'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     },
@@ -48,13 +48,13 @@ const columns = [
         key: 'first_name',
         width: 200,
         sorter: true,
-        align:"center",
+       align:"left",
         render: object => renderCell(object, 'TextCell', 'first_name')
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
         key: 'email',
-        align:"center",
+       align:"left",
         width: 200,
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'email')
@@ -63,13 +63,13 @@ const columns = [
         title: <IntlMessages id="antTable.title.role" />,
         key: 'role',
         width: 150,
-        align:"center",
+       align:"left",
         render: (object)=>(isAllowed('get_role')?<a href={"access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
     },
     {
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
-        align:"center",
+       align:"left",
         width: 100,
         render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'first_name', 'last_name',
             'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')

@@ -17,7 +17,7 @@ const {Option}=Select;
 const columns=[
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.coin_code"/>,
-        align:"center",
+       align:"left",
         ellipsis: true,
         key:55,
         dataIndex:"coin_code",
@@ -27,7 +27,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.created_at"/>,
-        align:"center",
+       align:"left",
         ellipsis: true,
         key:1,
         dataIndex:"created_at",
@@ -37,7 +37,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.deleted_at"/>,
-        align:"center",
+       align:"left",
         ellipsis: true,
         key:1,
         dataIndex:"deleted_at",
@@ -47,7 +47,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.full_name"/>,
-        align:"center",
+       align:"left",
         ellipsis: true,
         key:2,
         sorter: true,
@@ -56,7 +56,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.email"/>,
-        align:"center",
+       align:"left",
         ellipsis: true,
         key:1,
         dataIndex:"email",
@@ -66,7 +66,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.balance"/>,
-        align:"center",
+       align:"left",
         key:2,
         ellipsis: true,
         sorter: true,
@@ -76,7 +76,7 @@ const columns=[
     },
     // {
     //     title:<IntlMessages id="walletForfeitDetailsTable.title.placed_balance"/>,
-        // align:"center",
+        //align:"left",
     //     key:2,
     //     sorter: true,
     //     dataIndex:"placed_balance",
@@ -84,7 +84,7 @@ const columns=[
     // },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.send_address"/>,
-        align:"center",
+       align:"left",
         dataIndex:"send_address",
         key:3,
         sorter: true,
@@ -92,7 +92,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.receive_address"/>,
-        align:"center",
+       align:"left",
         dataIndex:"receive_address",
         key:4,
         sorter: true,

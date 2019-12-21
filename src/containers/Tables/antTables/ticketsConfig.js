@@ -33,20 +33,20 @@ const columns = [{
     title: <IntlMessages id="ticketTable.title.subject" />,
     key: 'subject',
     width: 200,
-    align:"center",
+   align:"left",
     ellipsis:true,
     render: object => renderCell(object, 'TicketSubjectCell', 'subject')
 }, {
     title: <IntlMessages id="ticketTable.title.content" />,
     key: 'content',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 200,
     render: object => renderCell(object, 'ContentCell', 'content')
 }, {
     title: <IntlMessages id="ticketTable.title.created_at" />,
     key: 'created_by',
-    align:"center",
+   align:"left",
     ellipsis:true,
     width: 200,
     render: object => renderCell(object, 'DateTimeCell', 'created_by')
@@ -54,7 +54,7 @@ const columns = [{
     title: <IntlMessages id="ticketTable.title.pipeline_stage" />,
     key: 'pipeline_stage',
     width: 200,
-    align:"center",
+   align:"left",
     ellipsis:true,
     render: object => renderCell(object, 'PipelineCell', 'pipeline_stage')
 }];

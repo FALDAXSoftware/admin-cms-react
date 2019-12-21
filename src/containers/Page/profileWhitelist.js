@@ -15,17 +15,6 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../helpers/globals';
 
 const { logout } = authAction;
 var self;
-const StatusSwitch = styled(Switch)`
-width: 67px;
-text-align: center;
-height: 30px !important;
-line-height: 26px !important;
-margin-left: 11px !important;
-&::after{
-    width: 26px !important;
-    height: 26px !important;
-}
-`
 
 class ProfileWhitelist extends Component {
   constructor(props) {
@@ -342,7 +331,10 @@ class ProfileWhitelist extends Component {
     return (
       <TableDemoStyle className="isoLayoutContent">
         <span>Whitelist:</span>
-        <StatusSwitch
+        <Switch
+          className="whitelist-btn"
+          checkedChildren="Enabled"
+          unCheckedChildren="Disabled"
           checked={isWhitelistEnabled}
           onChange={this.onClickOpenPermanentIpModal}
         />

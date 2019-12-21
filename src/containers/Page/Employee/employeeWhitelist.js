@@ -264,7 +264,7 @@ class EmployeeWhitelist extends Component {
         return (
                 <TableDemoStyle className="isoLayoutContent">
                     <span>Whitelist:</span>
-                    <StatusSwitch checked={isWhitelist} onChange={this.onClickOpenPermanentIpModal} />
+                    <Switch className="whitelist-btn"   checkedChildren="Enabled" unCheckedChildren="Disabled" checked={isWhitelist} onChange={this.onClickOpenPermanentIpModal} />
                     {showAddPermanentIPModal && <AddPermanentIPModal
                         emp_id={this.props.emp_id}
                         showAddPermanentIPModal={showAddPermanentIPModal}
