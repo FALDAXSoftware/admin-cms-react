@@ -21,7 +21,7 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import CountryData from "country-state-city";
-import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -360,6 +360,8 @@ class InActiveUsers extends Component {
                       columns={tableInfo.columns}
                       pagination={false}
                       dataSource={allUsers}
+                      bordered
+                      scroll={TABLE_SCROLL_HEIGHT}
                       onChange={this.handleTableChange}
                     />
                     {allUserCount > 0 ? (

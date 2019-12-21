@@ -21,7 +21,7 @@ import EditCountryModal from "./editCountryModal";
 import FaldaxLoader from "../faldaxLoader";
 import {ColWithMarginBottom} from "../common.style";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import Metabase from "./countriesMetabase"
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
@@ -326,6 +326,8 @@ class Countries extends Component {
                     dataSource={allCountries}
                     className="isoCustomizedTable table-tb-margin"
                     onChange={this._handleCountryChange}
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
                   />
                   {showEditCountryModal && (
                     <EditCountryModal

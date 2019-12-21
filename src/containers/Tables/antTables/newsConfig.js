@@ -37,33 +37,38 @@ const columns = [{
     title: '',
     key: 'cover_image',
     width: 100,
+    align:"center",
     render: object => renderCell(object, 'StaticImageCell', 'cover_image')
 }, {
     title: <IntlMessages id="newsTable.title.title" />,
+    align:"center",
     key: 'title',
-    width: 100,
+    width: 200,
     render: object => renderCell(object, 'NewsDescCell', 'title')
 }, {
     title: <IntlMessages id="newsTable.title.link" />,
+    align:"center",
     key: 'link',
-    width: 100,
+    width: 200,
     render: object => renderCell(object, 'NewsLinkCell', 'link')
 }, {
     title: <IntlMessages id="newsTable.title.posted_at" />,
+    align:"center",
     key: 'posted_at',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'posted_at')
 }, {
     title: <IntlMessages id="newsTable.title.active" />,
+    align:"center",
     key: 'is_active',
     width: 100,
     render: object => {
-        if (isAllowed()) {
+        if (isAllowed("update_news_status")) {
             return renderCell(object, 'NewsSwitchCell', 'id', 'cover_image', 'title',
             'link', 'posted_at', 'description', 'is_active', 'owner')
         } else {
-            return renderCell(object, 'TextCell', 'is_active')
+            return <span>{(object['is_active'])?"Active":"Inactive"}</span>
         }
     }
 }];

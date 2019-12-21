@@ -10,6 +10,7 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
 import { BackButton } from "../../Shared/backBttton";
+import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -101,6 +102,8 @@ class EmailTemplates extends Component {
                     pagination={false}
                     dataSource={allTemplates}
                     className="isoCustomizedTable"
+                    scroll={TABLE_SCROLL_HEIGHT}
+                    bordered
                   />
                 </div>
               </TableDemoStyle>

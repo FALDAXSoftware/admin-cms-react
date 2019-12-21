@@ -8,7 +8,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
 
@@ -43,7 +43,7 @@ class ReferralUsers extends Component {
                         allReferral: res.data, allReferralCount: res.referralCount,
                         showReferralModal: true, userId: user_id
                     });
-                } else if (res.status == 403) {
+                } else if (res.status == 403 || res.status==400) {
                     _this.setState({ errMsg: true, message: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
@@ -83,36 +83,30 @@ class ReferralUsers extends Component {
 
         return (
             <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <div className="isoTableDisplayTab">
-                        {
-                            userReferralInfos.map(tableInfo => (
-                                <div tab={tableInfo.title} key={tableInfo.value}>
-                                    <TableWrapper
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allReferral}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleReferralTableChange}
-                                    />
-                                    {loader && <FaldaxLoader />}
-                                    {allReferralCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleReferralPagination.bind(this)}
-                                            pageSize={limit}
-                                            current={page}
-                                            total={allReferralCount}
-                                            showSizeChanger
-                                            onShowSizeChange={this._changePaginationSize}
-                                            pageSizeOptions={pageSizeOptions}
-                                        /> : ''}
-                                </div>
-                            ))
-                        }
-                    </div>
+                <TableDemoStyle className="full-width">
+                    <TableWrapper
+                        rowKey="id"
+                        {...this.state}
+                        columns={userReferralInfos[0].columns}
+                        pagination={false}
+                        dataSource={allReferral}
+                        onChange={this._handleReferralTableChange}
+                        bordered
+                        scroll={TABLE_SCROLL_HEIGHT}
+                    />
+                    {loader && <FaldaxLoader />}
+                    {allReferralCount > 0 ?
+                        <Pagination
+                            style={{ marginTop: '15px' }}
+                            className="ant-users-pagination"
+                            onChange={this._handleReferralPagination.bind(this)}
+                            pageSize={limit}
+                            current={page}
+                            total={parseInt(allReferralCount)}
+                            showSizeChanger
+                            onShowSizeChange={this._changePaginationSize}
+                            pageSizeOptions={pageSizeOptions}
+                        /> : ''}
                 </TableDemoStyle>
             </LayoutWrapper>
         );

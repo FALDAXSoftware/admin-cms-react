@@ -9,6 +9,7 @@ import { Tabs, notification } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { withRouter } from 'react-router';
+import { TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -90,29 +91,24 @@ class UserTickets extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {ticketsTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div className="scroll-table">
-                                    <TableWrapper
-                                        onRow={(record, rowIndex) => {
-                                            return {
-                                                onClick: () => { this._changeRow(record) },
-                                            };
-                                        }}
-                                        style={{ marginTop: '20px' }}
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allTickets}
-                                        className="isoCustomizedTable"
-                                        expandedRowRender={record => <p style={{ margin: 0, whiteSpace: 'pre-line' }}>{record.content}</p>}
-                                    />
-                                    {loader && <FaldaxLoader />}
-                                </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
+
+                    <TableWrapper
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => { this._changeRow(record) },
+                            };
+                        }}
+                        rowKey="id"
+                        {...this.state}
+                        columns={ticketsTableInfos[0].columns}
+                        pagination={false}
+                        dataSource={allTickets}
+                        className="isoCustomizedTable"
+                        expandedRowRender={record => <p style={{ margin: 0, whiteSpace: 'pre-line' }}>{record.content}</p>}
+                        scroll={TABLE_SCROLL_HEIGHT}
+                        bordered
+                    />
+                    {loader && <FaldaxLoader />}    
                 </TableDemoStyle>
             </LayoutWrapper>
         )

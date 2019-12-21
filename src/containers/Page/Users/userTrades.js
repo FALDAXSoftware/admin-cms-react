@@ -12,8 +12,6 @@ export default function AllTrades(props) {
         <Tabs
           className="isoTableDisplayTab float-clear"
           defaultActiveKey="1"
-          size={"large"}
-          style={{ marginTop: "20px" }}
         >
           <TabPane tab="Crypto Only" key="1">
             <UserTradeHistory user_id={props.user_id} />

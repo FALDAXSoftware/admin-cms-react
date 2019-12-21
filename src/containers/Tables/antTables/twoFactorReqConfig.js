@@ -25,38 +25,43 @@ const renderCell = (object, type, key, name = null, Email = null, file = null,
 const columns = [{
     title: "Actions",
     key: 'actions',
-    width: 200,
+    width: 100,
     render: object => renderCell(object, 'TwoFAActionCell', 'id', 'full_name', 'email',
         'uploaded_file', 'status', 'reason', 'created_at')
 }, {
     title: "Requested On",
+    align:"center",
     key: 'created_at',
     width: 200,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: "Name",
+    align:"center",
     key: 'full_name',
     width: 100,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'full_name')
 }, {
     title: "Email",
+    align:"center",
     key: 'email',
-    width: 200,
+    width: 250,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: "Status",
+    align:"center",
     key: 'status',
     dataIndex:"status",
     width: 200,
-    render: object => <span>{object.toUpperCase()}</span>
+    render: object => <span className={"kyc-status-"+object}>{object.toUpperCase()}</span>
 }];
 
 const twoFactorReqInfos = [
     {
         title: 'Two Factor Requests',
+        align:"center",
         value: 'twoFactorReqTable',
         columns: clone(columns)
     }

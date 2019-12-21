@@ -10,6 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { isAllowed } from '../../../helpers/accessControl';
 import TableDemoStyle from '../../Tables/antTables/demo.style';
+import { TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 
 const { logout } = authAction;
 var self;
@@ -135,8 +136,6 @@ class JobCategory extends Component {
 
         return (
             <TableDemoStyle className="isoLayoutContent">
-                
-                
                         <div style={{ "display": "inline-block", "width": "100%" }}>
 
                             {isAllowed("add_job_category") &&
@@ -164,6 +163,8 @@ class JobCategory extends Component {
                             dataSource={allJobCategories}
                             className="isoCustomizedTable"
                             onChange={this._handleJobTableChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
                         />
             </TableDemoStyle>
         );

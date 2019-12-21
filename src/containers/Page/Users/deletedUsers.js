@@ -10,7 +10,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import ColWithMarginBottom from '../common.style';
 import CountryData from 'country-state-city';
-import { PAGESIZE, PAGE_SIZE_OPTIONS } from '../../../helpers/globals';
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 import { withRouter } from 'react-router-dom'
 
 const Option = Select.Option;
@@ -287,8 +287,10 @@ class DeletedUsers extends Component {
                   columns={deletedUserinfos[0].columns}
                   pagination={false}
                   dataSource={allUsers}
-                  className="isoCustomizedTable table-tb-margin"
+                  className="table-tb-margin"
                   onChange={this.handleTableChange}
+                  scroll={TABLE_SCROLL_HEIGHT}
+                  bordered
                 />
                 {allUserCount > 0 ? (
                   <Pagination

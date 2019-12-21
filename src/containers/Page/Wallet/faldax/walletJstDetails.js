@@ -7,7 +7,7 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
@@ -22,6 +22,8 @@ const columns=[
         dataIndex:"coin_code",
         sorter: true,
         width:100,
+        align:"center",
+        ellipsis: true,
         render:data=><span>{data.toUpperCase()}</span>
     },
     {
@@ -29,7 +31,9 @@ const columns=[
         key:1,
         dataIndex:"transact_time",
         sorter: true,
-        width:100,
+        width:150,
+        align:"center",
+        ellipsis: true,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     {
@@ -37,20 +41,26 @@ const columns=[
         key:2,
         dataIndex:"email",
         sorter: true,
-        width:100,
+        width:300,
+        align:"center",
+        ellipsis: true,
     },
     {
         title:<IntlMessages id="walletJstDetailsTable.title.exec_id"/>,
         dataIndex:"exec_id",
         key:5,
         sorter: true,
-        width:100,
+        width:150,
+        align:"center",
+        ellipsis: true,
     },
     {
         title:<IntlMessages id="walletJstDetailsTable.title.order_id"/>,
         key:5,
         sorter: true,
-        width:100,
+        width:150,
+        align:"center",
+        ellipsis: true,
         dataIndex:"order_id",
         render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
     },
@@ -58,7 +68,9 @@ const columns=[
         title:<IntlMessages id="walletJstDetailsTable.title.comission"/>,
         key:3,
         dataIndex:"comission",
-        width:100,
+        width:200,
+        align:"center",
+        ellipsis: true,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
     {
@@ -66,7 +78,9 @@ const columns=[
         dataIndex:"faldax_fees",
         key:4,
         sorter: true,
-        width:100,
+        width:200,
+        align:"center",
+        ellipsis: true,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
     // {
@@ -74,6 +88,8 @@ const columns=[
     //     key:6,
     //     sorter: true,
     //     width:100,
+    // align:"center",
+        // ellipsis: true,
     //     dataIndex:"fill_price"
     // },
     // {
@@ -81,13 +97,17 @@ const columns=[
     //     key:7,
     //     sorter: true,
     //     width:100,
+    // align:"center",
+        // ellipsis: true,
     //     dataIndex:"limit_price"
     // },
     {
         title:<IntlMessages id="walletJstDetailsTable.title.network_fees"/>,
         key:8,
         sorter: true,
-        width:100,
+        width:200,
+        align:"center",
+        ellipsis: true,
         dataIndex:"network_fees",
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
@@ -97,6 +117,8 @@ const columns=[
     //     key:10,
     //     sorter: true,
     //     width:100,
+    //     align:"center",
+        // ellipsis: true,
     //     dataIndex:"order_status",
     //     render:data=><span className={"status-"+data+""}>{data.charAt(0).toUpperCase() + data.slice(1)}</span>
     // },
@@ -105,6 +127,8 @@ const columns=[
     //     key:11,
     //     sorter: true,
     //     width:100,
+    // align:"center",
+        // ellipsis: true,
     //     dataIndex:"quantity"
     // },
     // {
@@ -112,6 +136,8 @@ const columns=[
     //     key:13,
     //     sorter: true,
     //     width:100,
+        // align:"center",
+        // ellipsis: true,
     //     dataIndex:"settle_currency"
     // },
     // {
@@ -119,6 +145,8 @@ const columns=[
     //     key:14,
     //     sorter: true,
     //     width:100,
+        // align:"center",
+        // ellipsis: true,
     //     dataIndex:"symbol"
     // }
 
@@ -220,6 +248,8 @@ class WalletJstDetailsComponent extends Component {
                             dataSource={walletValue}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
                             // expandedRowRender={data => <>{
                             //     <Row type="flex" justify="start">
                             //         {

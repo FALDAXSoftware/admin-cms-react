@@ -7,7 +7,7 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import { DateTimeCell, TransactionHashCellUser } from '../../../../components/tables/helperCells';
 
@@ -31,20 +31,21 @@ const columns=[
         title:<IntlMessages id="walletWarmDetailsTable.title.baseValue"/>,
         key:5,
         dataIndex:"baseValue",
-        width:100,
+        width:75,
         render:data=><span>{data?parseFloat(data)>=0?(parseFloat(data)*0.00000001).toFixed(8):((parseFloat(data) * -1)*0.00000001).toFixed(8):""}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.type"/>,
         key:1,
         dataIndex:"type",
-        width:100,
+        width:75,
         render:data=><span className={data=="send"?"error-danger":"color-green"}>{data.charAt(0).toUpperCase()+data.slice(1)}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.txid"/>,
         key:25,
-        width:100,
+        width:250,
+        ellipsis:true,
         render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["txid"],data["coin"])
     },
     // {
@@ -145,6 +146,8 @@ class WalletWarmDetailsComponent extends Component {
                             dataSource={transfers}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
                         />
                         {/* <Pagination
                             className="ant-users-pagination"

@@ -22,7 +22,7 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import styled from "styled-components";
 import { BackButton } from "../../Shared/backBttton";
@@ -32,14 +32,6 @@ const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 var self;
-
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
 
 class News extends Component {
   constructor(props) {
@@ -111,7 +103,7 @@ class News extends Component {
 
   componentDidMount = () => {
     this._getAllNews();
-    this._getAllNewsSources();
+    if(isAllowed("get_all_news_source"))this._getAllNewsSources()
   };
 
   _getAllNews = () => {
@@ -175,18 +167,17 @@ class News extends Component {
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setState({ allNewsSources: res.data });
+          _this.setState({ allNewsSources: res.data ,loader:false});
         } else if (res.status == 403) {
           _this.setState(
-            { errMsg: true, errMessage: res.err, errType: "error" },
+            { errMsg: true, errMessage: res.err, errType: "error",loader:false},
             () => {
               _this.props.logout();
             }
           );
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message });
+          _this.setState({ errMsg: true, errMessage: res.message,loader:false});
         }
-        _this.setState({ loader: false });
       })
       .catch(() => {
         _this.setState({
@@ -360,8 +351,7 @@ class News extends Component {
           className="isoTableDisplayTab full-width"
           onChange={this.onChangeTabs}
         >
-          {newsTableInfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
+            <TabPane tab={newsTableInfos[0].title} key={newsTableInfos[0].value}>
               <TableDemoStyle className="isoLayoutContent">
                 <Form onSubmit={this._searchNews}>
                   <Row>
@@ -388,7 +378,7 @@ class News extends Component {
                           <Option value={""}>{"All"}</Option>
                           {allNewsSources &&
                             allNewsSources.map((news, index) => (
-                              <Option key={news.id} value={news.slug}>
+                              <Option key={index} value={news.slug}>
                                 {news.source_name}
                               </Option>
                             ))}
@@ -428,12 +418,15 @@ class News extends Component {
                 {loader && <FaldaxLoader />}
                 <div className="float-clear">
                   <TableWrapper
+                    rowKey="id"
                     {...this.state}
-                    columns={tableInfo.columns}
+                    columns={newsTableInfos[0].columns}
                     pagination={false}
                     dataSource={allNews}
                     className="isoCustomizedTable"
                     onChange={this._handleNewsTableChange}
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
                   />
                 </div>
                 {allNewsCount > 0 ? (
@@ -443,7 +436,7 @@ class News extends Component {
                     onChange={this._handleNewsPagination.bind(this)}
                     pageSize={limit}
                     current={page}
-                    total={allNewsCount}
+                    total={parseInt(allNewsCount)}
                     showSizeChanger
                     onShowSizeChange={this._changePaginationSize}
                     pageSizeOptions={pageSizeOptions}
@@ -453,19 +446,18 @@ class News extends Component {
                 )}
               </TableDemoStyle>
             </TabPane>
-          ))}
           {isAllowed("metabase_news_report") && (
             <TabPane tab="Report" key="metabase">
               <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
-                  <IframeCol>
                     <iframe
                       src={metabaseUrl}
-                      frameborder="0"
+                      className="metabase-iframe"
+                      frameBorder="0"
                       width="100%"
-                      allowtransparency
+                      allowtransparency="true"
                     ></iframe>
-                  </IframeCol>
+                
                 )}
               </TableDemoStyle>
             </TabPane>

@@ -11,7 +11,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
 import ColWithMarginBottom from '../common.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
 var self;
@@ -172,8 +172,8 @@ class ReviewKYC extends Component {
         return (
             <TableDemoStyle>
                 <div className="isoLayoutContent">
-                    {KYCInfos.map(tableInfo => (
-                        <div key={tableInfo.value}>
+                    
+                        <div key={KYCInfos[0].value}>
                             <Form onSubmit={this._searchKYC}>
                                 <Row type="flex" justify="end">
                                     <ColWithMarginBottom md={6}>
@@ -209,11 +209,12 @@ class ReviewKYC extends Component {
                                 />
                                 <TableWrapper
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={KYCInfos[0].columns}
                                     pagination={false}
                                     dataSource={allKYCData}
-                                    className="isoCustomizedTable"
                                     onChange={this._handleKYCTableChange}
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
                                 />
                                 {allKYCCount > 0 ?
                                     <Pagination
@@ -229,7 +230,7 @@ class ReviewKYC extends Component {
                                     /> : ''}
                             
                         </div>
-                    ))}
+                    
                 </div>
             </TableDemoStyle>
         );

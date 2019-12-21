@@ -7,7 +7,7 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
@@ -17,6 +17,8 @@ const {Option}=Select;
 const columns=[
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.coin_code"/>,
+        align:"center",
+        ellipsis: true,
         key:55,
         dataIndex:"coin_code",
         sorter: true,
@@ -25,45 +27,56 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.created_at"/>,
+        align:"center",
+        ellipsis: true,
         key:1,
         dataIndex:"created_at",
         sorter: true,
-        width:100,
+        width:150,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.deleted_at"/>,
+        align:"center",
+        ellipsis: true,
         key:1,
         dataIndex:"deleted_at",
         sorter: true,
-        width:100,
+        width:150,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.full_name"/>,
+        align:"center",
+        ellipsis: true,
         key:2,
         sorter: true,
         dataIndex:"full_name",
-        width:100,
+        width:200,
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.email"/>,
+        align:"center",
+        ellipsis: true,
         key:1,
         dataIndex:"email",
         sorter: true,
-        width:100,
+        width:250,
         
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.balance"/>,
+        align:"center",
         key:2,
+        ellipsis: true,
         sorter: true,
         dataIndex:"balance",
-        width:100,
+        width:200,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
     // {
     //     title:<IntlMessages id="walletForfeitDetailsTable.title.placed_balance"/>,
+        // align:"center",
     //     key:2,
     //     sorter: true,
     //     dataIndex:"placed_balance",
@@ -71,17 +84,19 @@ const columns=[
     // },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.send_address"/>,
+        align:"center",
         dataIndex:"send_address",
         key:3,
         sorter: true,
-        width:100,
+        width:300,
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.receive_address"/>,
+        align:"center",
         dataIndex:"receive_address",
         key:4,
         sorter: true,
-        width:100,
+        width:300,
     },
 ]
 
@@ -179,6 +194,8 @@ class WalletForfeitDetailsComponent extends Component {
                             dataSource={walletValue}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
                         />
                         <Pagination
                             className="ant-users-pagination"

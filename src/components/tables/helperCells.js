@@ -2345,7 +2345,10 @@ const WithdrawActionCell = (
       {is_approve == null && isAllowed("approve_disapprove_withdraw_request") ? (
         <div>
           <Button
-            style={{ marginRight: "15px" }}
+            shape="circle"
+            icon="check"
+            size="small"
+            className="kyc-round-btn"
             type="primary"
             onClick={() =>
               approveWithdrawReq(
@@ -2363,12 +2366,13 @@ const WithdrawActionCell = (
               )
             }
           >
-            Approve
         </Button>
           <Button
-            style={{ margingLeft: "15px" }}
+            icon="close"
+            size="small"
+            className="kyc-round-btn"
             type="danger"
-            onClick={() =>
+              onClick={() =>
               declineWithdrawReq(
                 value,
                 email,
@@ -2384,7 +2388,6 @@ const WithdrawActionCell = (
               )
             }
           >
-            Decline
         </Button>
         </div>
       ) : (

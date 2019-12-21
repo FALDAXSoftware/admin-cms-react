@@ -20,9 +20,9 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
-import {  withRouter} from "react-router-dom";
+import { withRouter} from "react-router-dom";
 import {ExecutionUl} from "../common.style";
-import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -333,6 +333,8 @@ class TradeHistory extends Component {
                 dataSource={allTrades}
                 className="isoCustomizedTable"
                 onChange={this._handleTradeTableChange}
+                scroll={TABLE_SCROLL_HEIGHT}
+                bordered
                 expandedRowRender={record => {
                   return (
                     <div>

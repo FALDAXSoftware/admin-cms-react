@@ -20,24 +20,32 @@ const renderCell = (object, type, key, Name = null, isDeleted = null) => {
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Name" />,
+    align:"center",
+    ellipsis:true,
     key: 'full_name',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'ReferralNameCell', 'id', 'full_name', 'deleted_at')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
+    align:"center",
+    ellipsis:true,
     key: 'email',
-    width: 100,
+    width: 250,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
     title: <IntlMessages id="antTable.title.country" />,
+    align:"center",
+    ellipsis:true,
     key: 'country',
-    width: 200,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="antTable.title.collectamount" />,
+    align:"center",
+    ellipsis:true,
     key: 'collected_amount',
     width: 200,
     sorter: true,

@@ -10,6 +10,7 @@ import EditStateModal from './editStateModal';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
+import { BackButton } from '../../Shared/backBttton';
 
 const { logout } = authAction;
 const Search = Input.Search;
@@ -141,15 +142,9 @@ class StateList extends Component {
 
         return (
             <LayoutWrapper>
+                <BackButton {...this.props}/>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {stateTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Link to="/dashboard/countries">
-                                        <i style={{ marginRight: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                                        <a onClick={() => { this.props.history.push('/dashboard/countries') }}>Back</a>
-                                    </Link>
+                                <div>
                                     <Search
                                         placeholder="Search states"
                                         onSearch={(value) => this._searchState(value)}
@@ -160,13 +155,14 @@ class StateList extends Component {
                                 {loader && <FaldaxLoader />}
                                 <div>
                                     <TableWrapper
-                                        style={{ marginTop: '20px' }}
+                                        rowKey="id"
                                         {...this.state}
-                                        columns={tableInfo.columns}
+                                        columns={stateTableInfos[0].columns}
                                         pagination={false}
                                         dataSource={allStates}
-                                        className="isoCustomizedTable"
+                                        className="float-clear"
                                         onChange={this._handleStateChange}
+                                        bordered
                                     />
                                     {showEditStateModal &&
                                         <EditStateModal
@@ -177,9 +173,7 @@ class StateList extends Component {
                                         />
                                     }
                                 </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                    
                 </TableDemoStyle>
             </LayoutWrapper>
         );
