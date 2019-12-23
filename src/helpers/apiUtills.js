@@ -1,4 +1,4 @@
-// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
+// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL÷
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
@@ -3218,10 +3218,14 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token
       },
-      getCampaignList: function (page, limit) {
+      getCampaignList: function (page, limit,searchData="",startDate="",endDate="",type="") {
         let formData = new FormData();
         formData.append("page", page);
         formData.append("limit", limit);
+        formData.append("data",searchData);
+        formData.append("start_date", startDate);
+        formData.append("end_date",endDate);
+        formData.append("type", type);
         return fetch(`${API_URL}${this.url}list`, {
           method: "POST",
           headers: this.headers,
@@ -3432,7 +3436,7 @@ const ApiUtils = {
       },
       getWalletDetailByName: function (coin = "", page, limit, sortCol = "created_at", sortOrder = "descend", searchData = "", start_date = null, end_date = null, walletType = 1) {
         return fetch(
-          `${API_URL}${this.url}get-wallet-dashboard?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${sortCol ? ("&sort_col=" + sortCol) : ""}${sortOrder ? ("&sort_order=" + sortOrder) : ""}&page=${page}&limit=${limit}${searchData ? "&data=" + searchData : ""}${start_date ? "&start_date=" + start_date : ""}${end_date ? "&end_date=" + end_date : ""}`,
+          `${API_URL}${this.url}get-wallet-dashboard?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${sortCol ? ("&sort_col=" + sortCol) : ""}${sortOrder ? ("&sort_order=" + sortOrder) : ""}&page=${page}&limit=${limit}${searchData ? "&data=" + encodeURIComponent(searchData) : ""}${start_date ? "&start_date=" + start_date : ""}${end_date ? "&end_date=" + end_date : ""}`,
           {
             method: "GET",
             headers: this.headers

@@ -678,6 +678,10 @@ const editTemplate = (value, name, content, note) => {
   EmailTemplates.editTemplate(value, name, content, note);
 };
 
+const viewTemplate =(value,name,content,note)=>{
+  EmailTemplates.viewTemplate(value, name, content, note);
+}
+
 const newsSourceStatus = (value, source_name, slug, is_active) => {
   NewsSources.newsSourceStatus(value, source_name, slug, is_active);
 };
@@ -1861,7 +1865,7 @@ const CountryButtonCell = (value, stateCount) => (
   <Button
     type="primary"
     onClick={() => showStates(value)}
-    disabled={!(stateCount > 0) && !isAllowed("get_state_data")}
+    disabled={!isAllowed("get_state_data")}
   >
     Show States
   </Button>
@@ -2307,6 +2311,15 @@ const AccountClassActionCell = (value, class_name) => (
 const TemplateActionCell = (value, name, content, note) => (
   <div>
     {isAllowed("get_email_template_id") &&
+      < Tooltip title="View">
+        <Icon
+          type="info-circle"
+          className="btn-icon"
+          onClick={() => viewTemplate(value, name, content, note)}
+        />
+      </Tooltip>
+    }
+    {(isAllowed("get_email_template_id") && isAllowed("update_email_template")) &&
       < Tooltip title="Edit">
         <Icon
           type="edit"

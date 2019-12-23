@@ -6,9 +6,9 @@ import {
     LinkCell,
     TextCell,
     ActiveUserActionCell,
-    DateCell,
     TierCell,
-    ReferralCell
+    ReferralCell,
+    DateTimeCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
@@ -40,7 +40,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'UserImageCell':
             return UserImageCell(value);
         case 'DateCell':
-            return DateCell(value);
+            return DateTimeCell(value);
         case 'LinkCell':
             return LinkCell(value);
         case 'TierCell':

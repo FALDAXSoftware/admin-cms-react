@@ -36,6 +36,14 @@ class EmailTemplates extends Component {
     );
   }
 
+  static viewTemplate(value){
+    self.props.history.push(
+    {
+      "pathname":"/dashboard/email-templates/edit-template/" + value,
+      "state":{isReadOnly:true}
+    })
+  }
+
   componentDidMount = () => {
     this._getAllTemplates();
   };

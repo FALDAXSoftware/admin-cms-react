@@ -22,7 +22,7 @@ const columns=[
         dataIndex:"coin_code",
         sorter: true,
         width:100,
-       align:"left",
+        align:"left",
         ellipsis: true,
         render:data=><span>{data.toUpperCase()}</span>
     },
@@ -32,7 +32,7 @@ const columns=[
         dataIndex:"transact_time",
         sorter: true,
         width:150,
-       align:"left",
+        align:"left",
         ellipsis: true,
         render:data=><span>{DateTimeCell(data)}</span>
     },
@@ -42,7 +42,7 @@ const columns=[
         dataIndex:"email",
         sorter: true,
         width:300,
-       align:"left",
+        align:"left",
         ellipsis: true,
     },
     {
@@ -51,7 +51,7 @@ const columns=[
         key:5,
         sorter: true,
         width:150,
-       align:"left",
+        align:"left",
         ellipsis: true,
     },
     {
@@ -59,7 +59,7 @@ const columns=[
         key:5,
         sorter: true,
         width:150,
-       align:"left",
+        align:"left",
         ellipsis: true,
         dataIndex:"order_id",
         render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
@@ -69,7 +69,7 @@ const columns=[
         key:3,
         dataIndex:"comission",
         width:200,
-       align:"left",
+        align:"left",
         ellipsis: true,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
@@ -79,7 +79,7 @@ const columns=[
         key:4,
         sorter: true,
         width:200,
-       align:"left",
+        align:"left",
         ellipsis: true,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
     },
@@ -106,7 +106,7 @@ const columns=[
         key:8,
         sorter: true,
         width:200,
-       align:"left",
+        align:"left",
         ellipsis: true,
         dataIndex:"network_fees",
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
@@ -117,7 +117,7 @@ const columns=[
     //     key:10,
     //     sorter: true,
     //     width:100,
-    //    align:"left",
+        //    align:"left",
         // ellipsis: true,
     //     dataIndex:"order_status",
     //     render:data=><span className={"status-"+data+""}>{data.charAt(0).toUpperCase() + data.slice(1)}</span>
@@ -222,7 +222,7 @@ class WalletJstDetailsComponent extends Component {
                    <TableDemoStyle className="isoLayoutContent">
                         <Row justify="end" type="flex">
                             <Col className="table-column" xs={12} md={7}>
-                                <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
+                                <Input placeholder="Search" value={searchData} onChange={(value) => { this.setState({searchData:value.target.value})}}/>
                             </Col>
                             <Col className="table-column" xs={12} md={7}>
                                 <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>

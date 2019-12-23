@@ -44,7 +44,7 @@ class UserKYCDetails extends Component {
                     <div>
                         <Divider>KYC Information</Divider>
                         <DetailDiv title="Status"
-                            value={kycDetails && kycDetails.is_approve != undefined && kycDetails.is_approve ? 'APPROVED' : 'DIS-APPROVED'} />
+                            value={kycDetails && kycDetails.is_approve != undefined && kycDetails.is_approve ? 'APPROVED' :(kycDetails.direct_response?'DIS-APPROVED':'PENDING-APPROVAL')} />
                         <Divider>IDM Details</Divider>
                         <DetailDiv title="Direct Response"
                             value={kycDetails && kycDetails.direct_response ? kycDetails.direct_response : 'N/A'} />
