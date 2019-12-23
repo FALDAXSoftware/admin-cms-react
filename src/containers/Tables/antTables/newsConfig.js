@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, DateCell, StaticImageCell, NewsDescCell, NewsSwitchCell, NewsLinkCell
+    TextCell, StaticImageCell, NewsDescCell, NewsSwitchCell, NewsLinkCell, DateTimeCell
 } from '../../../components/tables/helperCells';
 import { isAllowed } from '../../../helpers/accessControl';
 
@@ -19,7 +19,7 @@ const renderCell = (object, type, key, image = null, news_title = null, news_lin
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, cover_image, title, link, posted_at, description, is_active, owner);
+            return DateTimeCell(value, cover_image, title, link, posted_at, description, is_active, owner);
         case 'NewsLinkCell':
             return NewsLinkCell(value, cover_image, title, link, posted_at, description, is_active, owner);
         case 'StaticImageCell':

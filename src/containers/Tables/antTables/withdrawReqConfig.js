@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, WithdrawStatusCell, WithdrawActionCell } from '../../../components/tables/helperCells';
+import { TextCell, WithdrawStatusCell, WithdrawActionCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, t_type = null, approve = null, userId = null, coinId = null, execute = null,
@@ -20,7 +20,7 @@ const renderCell = (object, type, key, m_email = null, source = null, destinatio
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at);
+            return DateTimeCell(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at);
         case 'WithdrawActionCell':
             return WithdrawActionCell(value, email, source_address, destination_address, amount, transaction_type, is_approve, user_id, coin_id, is_executed, created_at);
         case 'WithdrawStatusCell':

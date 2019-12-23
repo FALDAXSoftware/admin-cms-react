@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, notification, Button, Pagination, Icon, Col } from "antd";
+import { Tabs, notification, Button, Pagination,DatePicker, Icon, Col, Row, Input, Select } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -13,9 +13,12 @@ import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
+import moment from "moment";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
+const {RangePicker}=DatePicker;
+const {Option}=Select;
 const OtherError = "Something went to wrong please try again after some time.";
 var self;
 
@@ -33,7 +36,10 @@ class Offers extends Component {
       limit: PAGESIZE,
       showDeleteModal: false,
       campaignId: 0,
-      metabaseUrl: ""
+      metabaseUrl: "",
+      searchData:"",
+      rangeDate:"",
+      usage_type:""
     };
     self = this;
     this.validator = new SimpleReactValidator({});
@@ -102,11 +108,12 @@ class Offers extends Component {
   }
 
   async getAllCampaign() {
-    let { page, limit } = this.state;
+    let { page, limit , searchData,rangeDate,usage_type} = this.state;
+    let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
     this.loader.show();
     try {
       let offers = await (
-        await ApiUtils.offers(this.props.token).getCampaignList(page, limit)
+        await ApiUtils.offers(this.props.token).getCampaignList(page,limit,searchData,start_date,end_date,usage_type)
       ).json();
       if (offers.status == 200) {
         this.setState({
@@ -191,7 +198,10 @@ class Offers extends Component {
       limit,
       campaignId,
       showDeleteModal,
-      metabaseUrl
+      metabaseUrl,
+      searchData,
+      rangeDate,
+      usage_type
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -208,23 +218,49 @@ class Offers extends Component {
         >
           {tblOffers.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-              <TableDemoStyle className="isoLayoutContent">
                 {isAllowed("create_campaigns") && (
-                  <Button
-                    type="primary"
-                    onClick={() =>
-                      this.props.history.push(
-                        "/dashboard/campaign/add-campaign"
-                      )
-                    }
-                  >
-                    {" "}
-                    <Icon type="plus" />
-                    Add Campaign
-                  </Button>
+                  <Row type="flex" justify="end">
+                    <Col md={3.5} className="wallet-div">
+                      <Button
+                        type="primary"
+                        onClick={() =>
+                          this.props.history.push(
+                            "/dashboard/campaign/add-campaign"
+                          )
+                        }
+                      >
+                        {" "}
+                        <Icon type="plus" />
+                        Add Campaign
+                      </Button>
+                    </Col>
+                  </Row>
                 )}
+              <TableDemoStyle className="isoLayoutContent">
+                <Row justify="end" type="flex">
+                    <Col className="table-column" xs={12} md={7}>
+                        <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
+                    </Col>
+                    <Col className="table-column" xs={12} md={7}>
+                        <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
+                    </Col>
+                    <Col className="table-column" xs={12} md={4}>
+                        <Select className="full-width" placeholder="Type" value={usage_type} onChange={value => this.setState({usage_type:value})}>
+                            <Option value=""></Option>
+                            <Option value="1">Single Code Used</Option>
+                            <Option value="2">Multiple Code Used</Option>
+                        </Select>
+                    </Col>
+                    <Col className="table-column" xs={12} md={3}>
+                        <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getAllCampaign()}>Search</Button>
+                    </Col>
+                    <Col className="table-column" xs={12} md={3}>
+                        <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",usage_type:""},()=>this.getAllCampaign())}}>Reset</Button>
+                    </Col>
+                </Row>
                 {loader && <Loader />}
                   <TableWrapper
+                    rowKey="id"
                     {...this.state}
                     columns={tableInfo.columns}
                     pagination={false}

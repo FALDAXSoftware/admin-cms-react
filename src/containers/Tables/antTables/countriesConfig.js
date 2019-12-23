@@ -77,13 +77,13 @@ const columns = [{
             return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
             'color', 'stateCount', 'is_active')
         }else{
-            return renderCell(object, 'TextCell', 'is_active')
+            return <span>{object["is_active"]?"Active":"inactive"}</span>
         }
     }
 },
 {
     title: < IntlMessages id="countryTable.title.State" />,
-   align:"left",
+    align:"left",
     key: 'button',
     width: 100,
     render: object => renderCell(object, 'CountryButtonCell', 'id', 'stateCount')

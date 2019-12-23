@@ -52,7 +52,7 @@ const options = [
     leftIcon: "fas fa-tasks",
     module: "roles",
     permssions: [
-      "get_role",
+      "get_role_value",
       "metabase_roles_report"
     ]
   },

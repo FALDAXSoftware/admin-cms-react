@@ -691,6 +691,7 @@
   "walletCustodialDetailsTable.title.txid":"Transaction ID",
   "walletCustodialDetailsTable.title.normalizedTxHash":"Transaction Hash",
   "ReferralDetailsTable.title.coin_name":"Asset",
+  "ReferralDetailsTable.title.tx_date":"Transaction Date",
   "ReferralDetailsTable.title.amount":"Amount",
   "ReferralDetailsTable.title.email":"Email",
   "ReferralDetailsTable.title.txid":"Transaction Id"
