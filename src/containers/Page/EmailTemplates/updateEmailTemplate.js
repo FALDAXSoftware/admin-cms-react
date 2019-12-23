@@ -22,11 +22,15 @@ class UpdateEmailTemplate extends Component {
             errType: 'Success',
             editorContent: '',
             showError: false,
+            isReadOnly:false,
         }
         this.validator = new SimpleReactValidator();
     }
 
     componentDidMount = () => {
+        if(this.props.location.state &&  this.props.location.state.isReadOnly){
+            this.setState({isReadOnly:this.props.location.state.isReadOnly})
+        }
         this._getTemplateDetails();
     }
 
@@ -137,7 +141,7 @@ class UpdateEmailTemplate extends Component {
     }
 
     render() {
-        const { loader, fields, errMsg, errType, editorContent, showError } = this.state;
+        const { loader, fields, errMsg, errType, editorContent, showError,isReadOnly } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -198,7 +202,7 @@ class UpdateEmailTemplate extends Component {
                             {'The content field is required.'}
                         </span>}
                     </div>
-                    {isAllowed("update_email_template") &&
+                    {!isReadOnly &&
                         <Row>
                             <Col>
                                 <Button type="primary" htmlType="submit" className="user-btn" style={{ marginLeft: "0px" }} >Update</Button>

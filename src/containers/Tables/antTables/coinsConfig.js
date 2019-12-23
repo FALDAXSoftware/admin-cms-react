@@ -174,7 +174,7 @@ const columns = [
           "custody_wallet_address"
         )  
       }else{
-        return renderCell(object, "TextCell", "is_active")
+        return <span>{object["is_active"]?"Active":"inactive"}</span>
       }
     }
       

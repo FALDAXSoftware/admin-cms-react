@@ -7,36 +7,42 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import LayoutWrapper from '../../../../components/utility/layoutWrapper';
 import { BackButton } from '../../../Shared/backBttton';
+import { DateTimeCell } from '../../../../components/tables/helperCells';
 var self;
 const {Option}=Select;
 const columns=[
-    // {
-    //     title:<IntlMessages id="ReferralDetailsTable.title.coin_name"/>,
-    //     key:4,
-    //     dataIndex:"coin_name",
-    //     width:100,
-    // },
+    {
+        title:<IntlMessages id="ReferralDetailsTable.title.tx_date"/>,
+        key:4,
+        ellipses:true,
+        dataIndex:"updated_at",
+        width:150,
+        render:(date)=>DateTimeCell(date)
+    },
     {
         title:<IntlMessages id="ReferralDetailsTable.title.amount"/>,
         key:5,
+        ellipses:true,
         dataIndex:"amount",
-        width:100,
+        width:150,
     },
     {
         title:<IntlMessages id="ReferralDetailsTable.title.email"/>,
         key:1,
+        ellipses:true,
         dataIndex:"email",
-        width:100,
+        width:250,
     },
     {
         title:<IntlMessages id="ReferralDetailsTable.title.txid"/>,
         key:0,
+        ellipses:true,
         dataIndex:"txid",
-        width:100,
+        width:150,
         render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
     },   
 ]
@@ -129,15 +135,17 @@ class ReferralDetailsComponent extends Component {
                             columns={columns}
                             pagination={false}
                             dataSource={data}
-                            className="isoCustomizedTable table-tb-margin"
+                            className="table-tb-margin"
                             onChange={this.handleTableChange}
+                            bordered
+                            scroll={TABLE_SCROLL_HEIGHT}
                         />
                         <Pagination
                             className="ant-users-pagination"
                             onChange={this.handlePagination}
                             pageSize={limit}
                             current={page}
-                            total={count}
+                            total={parseInt(count)}
                             showSizeChanger
                             onShowSizeChange={this.changePaginationSize}
                             pageSizeOptions={pageSizeOptions}

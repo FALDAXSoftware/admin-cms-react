@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, DateCell, JobActionCell, JobSwitchCell, JobButtonCell, LocationCell
+    TextCell, JobActionCell, JobSwitchCell, JobButtonCell, LocationCell, DateTimeCell
 } from '../../../components/tables/helperCells';
 import { isAllowed } from '../../../helpers/accessControl';
 
@@ -19,7 +19,7 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value);
+            return DateTimeCell(value);
         case 'LocationCell':
             return LocationCell(value);
         case 'JobButtonCell':
@@ -72,13 +72,13 @@ const columns = [{
             return renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
         'short_desc', 'job_desc', 'category_id', 'is_active', 'category')
         } else {
-            return renderCell(object, 'TextCell', 'is_active')
+            return <span>{object["is_active"]?"Active":"inactive"}</span>
         }
     } 
 }, {
     title: <IntlMessages id="jobTable.title.app" />,
     key: 'button',
-   align:"left",
+    align:"left",
     width: 150,
     render: object => renderCell(object, 'JobButtonCell', 'id')
 }];

@@ -18,7 +18,7 @@ import {
 import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
-import { ExpireIpDateCell } from "../../../components/tables/helperCells";
+import {  DateTimeCell } from "../../../components/tables/helperCells";
 import {ColWithMarginBottom} from "../common.style";
 const OtherError = "Something went to wrong please try again after some time.";
 
@@ -29,7 +29,7 @@ const column = [
     title: "Date",
     dataIndex: "created_at",
     key: "created_at",
-    render: date => ExpireIpDateCell(date)
+    render: date => DateTimeCell(date)
   },
   {
     title: "Name",
