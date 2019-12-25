@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs, notification } from 'antd';
-import { walletTableInfos } from "../../Tables/antTables";
+import {walletTableInfos} from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -8,7 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -73,21 +73,15 @@ class AssetWalletHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {walletTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                {loader && <FaldaxLoader />}
-                                <TableWrapper
-                                    style={{ marginTop: '20px' }}
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={walletHistoryData}
-                                    className="isoCustomizedTable"
-                                />
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                    {loader && <FaldaxLoader />}
+                    <TableWrapper
+                        rowKey="id"
+                        {...this.state}
+                        columns={walletTableInfos[0].columns}
+                        pagination={false}
+                        dataSource={walletHistoryData}
+                        bordered
+                    />
                 </TableDemoStyle>
             </LayoutWrapper>
         );

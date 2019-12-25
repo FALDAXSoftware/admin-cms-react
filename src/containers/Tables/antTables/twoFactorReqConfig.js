@@ -1,6 +1,6 @@
 import React from 'react';
 import clone from 'clone';
-import { TextCell, DateCell, TwoFAActionCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, TwoFAActionCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, name = null, Email = null, file = null,
     Status = null, Reason = null, createdAt = null) => {
@@ -14,7 +14,7 @@ const renderCell = (object, type, key, name = null, Email = null, file = null,
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value);
+            return DateTimeCell(value);
         case 'TwoFAActionCell':
             return TwoFAActionCell(value, full_name, email, uploaded_file, status, reason, created_at);
         default:
