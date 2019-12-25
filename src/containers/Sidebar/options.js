@@ -214,6 +214,18 @@ const options = [
     ]
   },
   {
+    key: "key",
+    label: "sidebar.key",
+    leftIcon: "fas fa-key",
+    module: "key",
+  },
+  {
+    key: "terms-and-conditions",
+    label: "sidebar.terms",
+    leftIcon: "fas fa-file",
+    module: "terms-and-conditions",
+  },
+  {
     key: "wallet-dashboard",
     label: "sidebar.wallet_dashboard",
     leftIcon: "fas fa-wallet",

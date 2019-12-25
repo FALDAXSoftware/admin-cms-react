@@ -1,14 +1,14 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key) => {
     const value = object[key];
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value);
+            return DateTimeCell(value);
         default:
             return TextCell(value);
     }

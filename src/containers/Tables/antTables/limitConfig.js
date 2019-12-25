@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, LimitActionCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, LimitActionCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, DailyWithCrypto = null, DailyWithFiat = null,
     MinWithCrypto = null, MinWithFiat = null) => {
@@ -13,7 +13,7 @@ const renderCell = (object, type, key, DailyWithCrypto = null, DailyWithFiat = n
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value);
+            return DateTimeCell(value);
         case 'LimitActionCell':
             return LimitActionCell(value, daily_withdraw_crypto, daily_withdraw_fiat,
                 min_withdrawl_crypto, min_withdrawl_fiat);

@@ -1,4 +1,4 @@
-// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL÷
+// const API_URL = "http://192.168.0.213:1337"; // Local (Mansi) URL
 //const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
@@ -3479,7 +3479,30 @@ const ApiUtils = {
           }
         );
       },
-    };
+    }
+  },
+  getPolicyUrl:function(token){
+    return fetch(`${API_URL}/admin/get-static-page-links`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }
+    )
+  },
+  setPolicyDocs:function(token,formData){
+    return fetch(`${API_URL}/admin/update-static-page-pdf`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": 'multipart/form-data',
+      },
+      body:formData
+    }
+    )
   }
+
 };
 export default ApiUtils;
