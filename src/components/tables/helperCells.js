@@ -1865,7 +1865,7 @@ const CountryButtonCell = (value, stateCount) => (
   <Button
     type="primary"
     onClick={() => showStates(value)}
-    disabled={!isAllowed("get_state_data")}
+    disabled={!(stateCount > 0 && isAllowed("get_state_data"))}
   >
     Show States
   </Button>

@@ -5,7 +5,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import { isAllowed } from "../../../helpers/accessControl";
-
+const isFloat=(n)=>{
+    return Number(n) === n && n % 1 !== 0;
+  }
 const { logout } = authAction;
 const EditableContext = React.createContext();
 const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
@@ -47,7 +49,7 @@ class EditableCell extends React.Component {
 
                             ],
                             // initialValue: (parseFloat(record[dataIndex]) > 0)?(parseFloat(record[dataIndex])).toPrecision(8):"0",
-                            initialValue: parseFloat(record[dataIndex] || 0),
+                            initialValue: isFloat(record[dataIndex])?parseFloat(record[dataIndex]).toFixed(8):parseFloat(record[dataIndex]),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -67,36 +69,49 @@ class EditableTable extends React.Component {
         super(props);
         this.columns = [
             {
+                key:"1",
                 title: 'Daily Withdraw Crypto',
                 dataIndex: 'daily_withdraw_crypto',
                 editable: true,
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
             },
             {
+                key:"2",
                 title: 'Daily Withdraw Fiat',
                 dataIndex: 'daily_withdraw_fiat',
                 editable: true,
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
             },
             {
+                key:"3",
                 title: 'Monthly Withdraw Crypto',
                 dataIndex: 'monthly_withdraw_crypto',
                 editable: true,
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
             },
             {
+                key:"4",
                 title: 'Monthly Withdraw Fiat',
                 dataIndex: 'monthly_withdraw_fiat',
                 editable: true,
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
             },
             {
+                key:"7",
                 title: 'Min Withdrawal Crypto',
                 dataIndex: 'min_withdrawl_crypto',
                 editable: true,
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
             },
             {
+                key:"5",
                 title: 'Min Withdrawal Fiat',
                 dataIndex: 'min_withdrawl_fiat',
                 editable: true,
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
             },
             {
+                key:"6",
                 title: 'Actions',
                 dataIndex: 'operation',
                 render: (text, record) => {
@@ -158,12 +173,12 @@ class EditableTable extends React.Component {
             let formData = {
                 id: newData[index].id,
                 coin_id: newData[index].coin_id,
-                daily_withdraw_crypto: parseFloat(row.daily_withdraw_crypto),
-                daily_withdraw_fiat: parseFloat(row.daily_withdraw_fiat),
-                min_withdrawl_crypto: parseFloat(row.min_withdrawl_crypto),
-                min_withdrawl_fiat: parseFloat(row.min_withdrawl_fiat),
-                monthly_withdraw_crypto: parseFloat(row.monthly_withdraw_crypto),
-                monthly_withdraw_fiat: parseFloat(row.monthly_withdraw_fiat)
+                daily_withdraw_crypto: parseFloat(row.daily_withdraw_crypto)>0?parseFloat(row.daily_withdraw_crypto).toFixed(8):parseFloat(row.daily_withdraw_crypto),
+                daily_withdraw_fiat: parseFloat(row.daily_withdraw_fiat)>0?parseFloat(row.daily_withdraw_fiat).toFixed(8):parseFloat(row.daily_withdraw_fiat),
+                min_withdrawl_crypto: parseFloat(row.min_withdrawl_crypto)>0?parseFloat(row.min_withdrawl_crypto).toFixed(8):parseFloat(row.min_withdrawl_crypto),
+                min_withdrawl_fiat:parseFloat(row.min_withdrawl_fiat)>0?parseFloat(row.min_withdrawl_fiat).toFixed(8):parseFloat(row.min_withdrawl_fiat),
+                monthly_withdraw_crypto: parseFloat(row.monthly_withdraw_crypto)>0?parseFloat(row.monthly_withdraw_crypto).toFixed(8):parseFloat(row.monthly_withdraw_crypto),
+                monthly_withdraw_fiat: parseFloat(row.monthly_withdraw_fiat)>0?parseFloat(row.monthly_withdraw_fiat).toFixed(8):parseFloat(row.monthly_withdraw_fiat),
             }
 
             _this.setState({ loader: true });
@@ -270,12 +285,13 @@ class EditableTable extends React.Component {
             <div className="isoLayoutContent">
                 {
                     allAssetLimit.length > 0 ?
-                        allAssetLimit.map((asset) => {
+                        allAssetLimit.map((asset,index) => {
                             return (
                                 <div>
-                                    <Divider orientation="left">Tier {asset.tier_step}</Divider>
-                                    <EditableContext.Provider value={this.props.form}>
+                                    <Divider key={"div"+index} orientation="left">Tier {asset.tier_step}</Divider>
+                                    <EditableContext.Provider key={index} value={this.props.form}>
                                         <Table
+                                            rowKey="id"
                                             components={components}
                                             bordered
                                             dataSource={[{ ...asset }]}

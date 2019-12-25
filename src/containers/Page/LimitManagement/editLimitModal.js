@@ -5,7 +5,6 @@ import { Modal, Input, notification } from "antd";
 import SimpleReactValidator from "simple-react-validator";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-
 const { logout } = authAction;
 
 class EditLimitModal extends Component {
@@ -72,10 +71,10 @@ class EditLimitModal extends Component {
       this.setState({ loader: true });
       let formData = {
         id: fields["value"],
-        daily_withdraw_crypto: fields["daily_withdraw_crypto"],
-        daily_withdraw_fiat: fields["daily_withdraw_fiat"],
-        min_withdrawl_crypto: fields["min_withdrawl_crypto"],
-        min_withdrawl_fiat: fields["min_withdrawl_fiat"]
+        daily_withdraw_crypto:parseFloat(fields["daily_withdraw_crypto"])>0?parseFloat(fields["daily_withdraw_crypto"]).toFixed(8):parseFloat(fields["daily_withdraw_crypto"]),
+        daily_withdraw_fiat: parseFloat(fields["daily_withdraw_fiat"])>0?parseFloat(fields["daily_withdraw_fiat"]).toFixed(8):parseFloat(fields["daily_withdraw_fiat"]),
+        min_withdrawl_crypto:parseFloat(fields["min_withdrawl_crypto"])>0?parseFloat(fields["min_withdrawl_crypto"]).toFixed(8):parseFloat(fields["min_withdrawl_crypto"]),
+        min_withdrawl_fiat: parseFloat(fields["min_withdrawl_fiat"])>0?parseFloat(fields["min_withdrawl_fiat"]).toFixed(8):parseFloat(fields["min_withdrawl_fiat"]),
       };
 
       ApiUtils.updateLimit(token, formData)
