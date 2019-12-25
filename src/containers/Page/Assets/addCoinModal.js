@@ -147,7 +147,6 @@ class AddCoinModal extends Component {
 
     _onChangeImg = e => {
         const { fields } = this.state;
-        debugger
         const file = this.refs.uploadImg.files[0];
         let size = file.size / 1024 / 1024;
         let type = file.type;
