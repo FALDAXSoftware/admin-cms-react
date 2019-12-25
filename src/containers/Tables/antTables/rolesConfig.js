@@ -33,7 +33,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
         case 'RoleSwitchCell':
             return RoleSwitchCell(value, name, users, assets, countries,
                 roles, employee, pairs, transaction_history, trade_history,
-                withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active);
+                withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active,!isAllowed("update_role"));
         case 'RolesActionCell':
             return RolesActionCell(value, name, users, assets, countries,
                 roles, employee, pairs, transaction_history, trade_history,
@@ -68,14 +68,10 @@ const columns = [
        align:"left",
         width: 200,
         render: object => {
-            if (isAllowed("update_role")) {
-                return renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
-                    'countries', 'roles', 'employee', 'pairs', 'transaction_history',
-                    'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
-                    'is_referral', 'add_user', 'is_active')
-            } else {
-                return <span>{object["is_active"]?"Active":"Inactive"}</span>
-            }
+            return renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
+                'countries', 'roles', 'employee', 'pairs', 'transaction_history',
+                'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
+                'is_referral', 'add_user', 'is_active')
         }
     }
 ];

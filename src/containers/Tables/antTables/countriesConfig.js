@@ -28,7 +28,7 @@ const renderCell = (object, type, key, c_name = null, legal = null, colorCode = 
         case 'LegalityCell':
             return LegalityCell(value, name, legality, color, stateCount, is_active);
         case 'CountrySwitchCell':
-            return CountrySwitchCell(value, name, legality, color, stateCount, is_active);
+            return CountrySwitchCell(value, name, legality, color, is_active,!isAllowed("activate_country"));
         case 'CountryActionCell':
             return CountryActionCell(value, name, legality, color, stateCount, is_active);
         default:
@@ -73,12 +73,8 @@ const columns = [{
     key: 'is_active',
     width: 100,
     render: object => {
-        if (isAllowed("activate_country")) {
-            return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
-            'color', 'stateCount', 'is_active')
-        }else{
-            return <span>{object["is_active"]?"Active":"inactive"}</span>
-        }
+        return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
+        'color', 'is_active', 'stateCount',)
     }
 },
 {

@@ -25,7 +25,7 @@ const renderCell = (object, type, key, title = null, loc = null, desc = null, jo
         case 'JobButtonCell':
             return JobButtonCell(value);
         case 'JobSwitchCell':
-            return JobSwitchCell(value, position, location, short_desc, job_desc, category_id, is_active, category);
+            return JobSwitchCell(value, position, location, short_desc, job_desc, category_id, is_active, category,!isAllowed("update_job"));
         case 'JobActionCell':
             return JobActionCell(value, position, location, short_desc, job_desc, category_id, is_active, category);
         default:
@@ -65,15 +65,11 @@ const columns = [{
 }, {
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
-   align:"left",
+    align:"left",
     width: 100,
     render: object =>{
-        if (isAllowed("update_job")) {
-            return renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
+        return renderCell(object, 'JobSwitchCell', 'id', 'position', 'location',
         'short_desc', 'job_desc', 'category_id', 'is_active', 'category')
-        } else {
-            return <span>{object["is_active"]?"Active":"inactive"}</span>
-        }
     } 
 }, {
     title: <IntlMessages id="jobTable.title.app" />,

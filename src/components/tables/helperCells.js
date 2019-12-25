@@ -1236,9 +1236,11 @@ const SwitchCell = (
   created_at,
   is_active,
   isERC,
-  coin_icon
+  coin_icon,
+  disabled=false
 ) => (
     <Switch
+      disabled={disabled}
       className="switch-cell"
       checkedChildren="Active"
       unCheckedChildren="Inactive"
@@ -1286,11 +1288,12 @@ const StaticSwitchCell = (
       }}
     />
   );
-const CountrySwitchCell = (value, name, legality, color, is_active) => (
+const CountrySwitchCell = (value, name, legality,color,is_active,disabled=false) => (
   <Switch
+    disabled={disabled}
     className="switch-cell"
     checkedChildren="Active"
-      unCheckedChildren="Inactive"
+    unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       countryStatus(value, name, legality, color, is_active);
@@ -1865,7 +1868,7 @@ const CountryButtonCell = (value, stateCount) => (
   <Button
     type="primary"
     onClick={() => showStates(value)}
-    disabled={!isAllowed("get_state_data")}
+    disabled={!(stateCount > 0 && isAllowed("get_state_data"))}
   >
     Show States
   </Button>
@@ -1889,9 +1892,11 @@ const RoleSwitchCell = (
   news,
   is_referral,
   add_user,
-  is_active
+  is_active,
+  disabled=false
 ) => (
     <Switch
+      disabled={disabled}
       className="switch-cell"
       checkedChildren="Active"
       unCheckedChildren="Inactive"
@@ -2138,9 +2143,11 @@ const JobSwitchCell = (
   job_desc,
   category_id,
   is_active,
-  category
+  category,
+  disabled=false
 ) => (
     <Switch
+      disabled={disabled}
       className="switch-cell"
       checkedChildren="Active"
       unCheckedChildren="Inactive"

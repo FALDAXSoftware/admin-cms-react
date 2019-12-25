@@ -19,7 +19,6 @@ const columns=[
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
         key:55,
         dataIndex:"coin_code",
-        sorter: true,
         width:100,
         render:data=><span>{data.toUpperCase()}</span>
     },
@@ -31,14 +30,13 @@ const columns=[
         width:100,
         render:data=><span>{DateTimeCell(data)}</span>
     },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
-        key:55,
-        dataIndex:"coin_code",
-        sorter: true,
-        width:100,
-        render:data=><span>{data.toUpperCase()}</span>
-    },
+    // {
+    //     title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
+    //     key:55,
+    //     dataIndex:"coin_code",
+    //     width:100,
+    //     render:data=><span>{data.toUpperCase()}</span>
+    // },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.amount"/>,
         key:2,
@@ -50,7 +48,6 @@ const columns=[
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.type"/>,
         key:3,
         dataIndex:"transaction_type",
-        sorter: true,
         width:100,
         render:type=><span className={"color-"+(type=="send"?"green":"blue")}>{type.charAt(0).toUpperCase()+type.slice(1)}</span>
     },
@@ -58,20 +55,17 @@ const columns=[
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
         key:4,
-        sorter: true,
         width:100,
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.destination_address"/>,
         dataIndex:"destination_address",
         key:5,
-        sorter: true,
         width:100,
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id"/>,
         key:6,
-        sorter: true,
         width:100,
         render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
        

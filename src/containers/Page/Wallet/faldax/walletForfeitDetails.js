@@ -17,11 +17,10 @@ const {Option}=Select;
 const columns=[
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.coin_code"/>,
-       align:"left",
+        align:"left",
         ellipsis: true,
         key:55,
         dataIndex:"coin_code",
-        sorter: true,
         width:100,
         render:data=><span>{data.toUpperCase()}</span>
     },
@@ -47,29 +46,26 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.full_name"/>,
-       align:"left",
+        align:"left",
         ellipsis: true,
         key:2,
-        sorter: true,
         dataIndex:"full_name",
         width:200,
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.email"/>,
-       align:"left",
+        align:"left",
         ellipsis: true,
         key:1,
         dataIndex:"email",
-        sorter: true,
         width:250,
         
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.balance"/>,
-       align:"left",
+        align:"left",
         key:2,
         ellipsis: true,
-        sorter: true,
         dataIndex:"balance",
         width:200,
         render:(data)=><span>{parseFloat(data.split(" ")[0]).toFixed(8) +" "+data.split(" ")[1]}</span>
@@ -84,18 +80,16 @@ const columns=[
     // },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.send_address"/>,
-       align:"left",
+        align:"left",
         dataIndex:"send_address",
         key:3,
-        sorter: true,
         width:300,
     },
     {
         title:<IntlMessages id="walletForfeitDetailsTable.title.receive_address"/>,
-       align:"left",
+        align:"left",
         dataIndex:"receive_address",
         key:4,
-        sorter: true,
         width:300,
     },
 ]
