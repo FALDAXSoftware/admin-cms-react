@@ -19,8 +19,7 @@ const columns=[
         title:<IntlMessages id="walletDetailsTable.title.coin_code"/>,
         key:55,
         dataIndex:"coin_code",
-        sorter: true,
-       align:"left",
+        align:"left",
         ellipsis: true,
         width:100,
         render:data=><span>{data.toUpperCase()}</span>
@@ -30,7 +29,7 @@ const columns=[
         key:1,
         dataIndex:"created_at",
         sorter: true,
-       align:"left",
+        align:"left",
         ellipsis: true,
         width:150,
         render:data=><span>{DateTimeCell(data)}</span>
@@ -48,7 +47,7 @@ const columns=[
         title:<IntlMessages id="walletDetailsTable.title.faldax_fee"/>,
         key:3,
         sorter: true,
-       align:"left",
+        align:"left",
         ellipsis: true,
         width:150,
         render:data=><span>{data["faldax_fee"]?(parseFloat(data["faldax_fee"]).toFixed(8)+" "+data["coin"]):"-"}</span>
@@ -57,8 +56,7 @@ const columns=[
         title:<IntlMessages id="walletDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
         key:4,
-        sorter: true,
-       align:"left",
+        align:"left",
         ellipsis: true,
         width:300,
     },
@@ -66,17 +64,15 @@ const columns=[
         title:<IntlMessages id="walletDetailsTable.title.destination_address"/>,
         dataIndex:"destination_address",
         key:5,
-        sorter: true,
-       align:"left",
+        align:"left",
         ellipsis: true,
         width:300,
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.transaction_id"/>,
         key:6,
-        sorter: true,
         width:500,
-       align:"left",
+        align:"left",
         ellipsis: true,
         render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
        

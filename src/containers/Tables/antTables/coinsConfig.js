@@ -58,10 +58,7 @@ const renderCell = (
         is_active,
         isERC,
         coin_icon,
-        warm_wallet_address,
-        hot_send_wallet_address,
-        hot_receive_wallet_address,
-        custody_wallet_address
+        !isAllowed("update_coins")
       );
     case "CoinActionCell":
       return CoinActionCell(
@@ -155,7 +152,6 @@ const columns = [
    align:"left",
     width:"20%",
     render: object =>{
-      if (isAllowed("update_coins")) {
         return renderCell(
           object,
           "SwitchCell",
@@ -174,9 +170,6 @@ const columns = [
           "hot_receive_wallet_address",
           "custody_wallet_address"
         )  
-      }else{
-        return <span>{object["is_active"]?"Active":"inactive"}</span>
-      }
     }
       
   }

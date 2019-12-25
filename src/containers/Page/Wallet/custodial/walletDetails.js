@@ -24,6 +24,7 @@ const columns=[
         title:<IntlMessages id="walletCustodialDetailsTable.title.created_on"/>,
         key:"createdTime",
         dataIndex:"createdTime",
+        sorter:true,
         width:100,
         render:data=><span>{DateTimeCell(data)}</span>
     },
@@ -31,6 +32,7 @@ const columns=[
         title:<IntlMessages id="walletCustodialDetailsTable.title.baseValue"/>,
         key:5,
         dataIndex:"baseValue",
+        sorter:true,
         width:100,
         render:data=><span>{data?parseFloat(data)>=0?parseFloat(data):parseFloat(data) * -1:""}</span>
     },
@@ -76,12 +78,23 @@ class WalletWarmDetailsComponent extends Component {
     }
 
     handleTableChange = (pagination,filter,sorter) => {
-        this.setState(
-            { sorterCol: sorter.field, sortOrder: sorter.order, page: 1 },
-            () => {
-              this.getWalletData();
+        let {transfers}=this.state;
+        if(sorter.field=='createdTime'){
+            this.loader.show();
+            if(sorter.order=="ascend"){
+                transfers=transfers.sort((a,b)=>new Date(a.createdTime)- new Date(b.createdTime))
+            }else if(sorter.order=="descend"){
+                transfers=transfers.sort((a,b)=>new Date(b.createdTime)- new Date(a.createdTime))
             }
-          );
+            this.setState(transfers,()=>this.loader.hide());
+        }else if(sorter.field=="baseValue"){
+            if(sorter.order=="ascend"){
+                transfers=transfers.sort((a,b)=>parseFloat(a.baseValue)-parseFloat(b.baseValue))
+            }else if(sorter.order=="descend"){
+                transfers=transfers.sort((a,b)=>parseFloat(b.baseValue)-parseFloat(a.baseValue))
+            }
+            this.setState(transfers,()=>this.loader.hide());
+        }
     };
 
     changePaginationSize = (current, pageSize) => {

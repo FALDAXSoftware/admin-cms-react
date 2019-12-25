@@ -4,7 +4,8 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell,
     DateCell,
-    TransactionHashCellUser
+    TransactionHashCellUser,
+    DateTimeCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, user = null, source = null, destination = null, amt = null,
@@ -21,7 +22,7 @@ const renderCell = (object, type, key, user = null, source = null, destination =
 
     switch (type) {
         case 'DateCell':
-            return DateCell(value, email, source_address, destination_address,
+            return DateTimeCell(value, email, source_address, destination_address,
                 amount, transaction_type, created_at, transaction_id, coin_id);
         case 'TransactionHashCellUser':
             return TransactionHashCellUser(value, email, source_address, destination_address,
