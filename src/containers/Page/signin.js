@@ -7,7 +7,7 @@ import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../helpers/apiUtills';
-import logo from '../../image/Footer_logo.png';
+import logo from '../../image/christmas.png';//import logo from '../../image/Footer_logo.png';
 import FaldaxLoader from '../Page/faldaxLoader';
 
 const { login, storeToken, checkRoles } = authAction;
