@@ -5,7 +5,8 @@ import {
   TextCell,
   DateCell,
   CoinActionCell,
-  SwitchCell
+  SwitchCell,
+  DateTimeCell
 } from "../../../components/tables/helperCells";
 import { isAllowed } from "../../../helpers/accessControl";
 
@@ -44,7 +45,7 @@ const renderCell = (
 
   switch (type) {
     case "DateCell":
-      return DateCell(value);
+      return DateTimeCell(value);
     case "SwitchCell":
       return SwitchCell(
         value,

@@ -20,7 +20,8 @@ class WalletOverview extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            walletUserData: []
+            walletUserData: [],
+            loader:false
         }
         this.validator = new SimpleReactValidator();
         this.PasswordValidator = new SimpleReactValidator();
@@ -36,22 +37,22 @@ class WalletOverview extends Component {
             coinReceive: asset_id
         }
         let _this = this;
-
+        _this.setState({loader:true})
         ApiUtils.getWalletDetails(token, formData)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ walletUserData: res.walletUserData })
+                    _this.setState({ walletUserData: res.walletUserData ,loader:false})
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error',loader:false }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' });
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error',loader:false });
                 }
             })
             .catch((err) => {
-                _this.setState({ errMsg: true, errMessage: err, errType: 'error' });
+                _this.setState({ errMsg: true, errMessage: err, errType: 'error',loader:false });
             });
     }
 

@@ -640,3 +640,18 @@ html[dir='rtl'] .dz-hidden-input {
 .form-container{
   height: 40px;
 }
+.cypher-text-container{
+  /* width: 90% !important; */
+  margin: 10px auto !important;
+}
+
+.cypher-text{
+  padding: 5px;
+    background: azure;
+    border: 2px dotted gainsboro;
+}
+
+
+.title-case{
+  text-transform: uppercase;
+}

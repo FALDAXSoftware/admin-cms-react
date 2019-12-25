@@ -15,6 +15,16 @@ const routes = [
         module: "assets"
     },
     {
+        path: "key",
+        component: asyncComponent(() => import("../Page/key/key")),
+        module: "key"
+    },
+    {
+        path: "terms-and-conditions",
+        component: asyncComponent(() => import("../Page/Terms/terms")),
+        module: "terms-and-conditions"
+    },
+    {
         path: "countries",
         component: asyncComponent(() => import("../Page/Country/countries")),
         module: "countries"
