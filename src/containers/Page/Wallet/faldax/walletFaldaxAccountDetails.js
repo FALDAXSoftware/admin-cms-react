@@ -4,7 +4,7 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import {  withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
@@ -138,7 +138,8 @@ class WalletFaldaxDetailsComponent extends Component {
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">
-                        <Row justify="end" type="flex">
+                       <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
+                        <Row justify="start" type="flex">
                             <Col className="table-column" xs={12} md={7}>
                                 <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
@@ -152,12 +153,13 @@ class WalletFaldaxDetailsComponent extends Component {
                                 </Select>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
-                                <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getWalletData()}>Search</Button>
+                                <Button type="primary" icon="search" className="filter-btn btn-full-width" htmlType="submit">Search</Button>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
                                 <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
                             </Col>
                         </Row>
+                        </Form>
                         <TableWrapper
                             rowKey="id"
                             {...this.state}

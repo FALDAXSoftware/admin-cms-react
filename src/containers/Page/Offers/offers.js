@@ -219,7 +219,7 @@ class Offers extends Component {
           {tblOffers.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
                 {isAllowed("create_campaigns") && (
-                  <Row type="flex" justify="end">
+                  <Row type="flex" justify="start">
                     <Col md={3.5} className="wallet-div">
                       <Button
                         type="primary"
@@ -237,7 +237,7 @@ class Offers extends Component {
                   </Row>
                 )}
               <TableDemoStyle className="isoLayoutContent">
-                <Row justify="end" type="flex">
+                <Row justify="start" type="flex">
                     <Col className="table-column" xs={12} md={7}>
                         <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                     </Col>

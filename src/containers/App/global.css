@@ -543,10 +543,10 @@ html[dir='rtl'] .dz-hidden-input {
   color: #5dade2;
 }
 .status-cancelled{
-  color:cadetblue;
+  color:red;
 }
 .status-filled{
-  color: darkgoldenrod;
+  color: green;
 }
 .fees-container{
   width:60%;
@@ -654,4 +654,21 @@ html[dir='rtl'] .dz-hidden-input {
 
 .title-case{
   text-transform: uppercase;
+}
+
+.table-filter-row .ant-col{
+  padding: 4px;
+}
+.order-2 {
+  color: green;
+  font-weight: 600;
+}
+
+.order-3 {
+  font-weight: 600;
+  color: orangered;
+}
+.order-1 {
+  font-weight: 600;
+  color: #174c7e;
 }

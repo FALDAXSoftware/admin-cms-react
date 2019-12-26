@@ -109,7 +109,7 @@ export default class extends Component {
         this.forceUpdate();
       }
     } catch (error) {
-      console.log("Error", error);
+      console.error("Error", error);
     }
   };
 

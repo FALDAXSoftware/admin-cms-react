@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Pagination, Input, DatePicker,Icon, Row, Button, Form } from 'antd';
+import { notification, Pagination, Input, DatePicker,Icon, Row, Button,Col,Form } from 'antd';
 import { ApprovedKYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -9,7 +9,6 @@ import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
-import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { RangePicker } = DatePicker;
@@ -175,15 +174,15 @@ class ApprovedKYC extends Component {
                     {ApprovedKYCInfos.map(tableInfo => (
                         <div key={tableInfo.value}>
                             <Form onSubmit={this._searchKYC}>
-                                <Row type="flex" justify="end">
-                                    <ColWithMarginBottom md={6}>
+                                <Row type="flex" justify="start" className="table-filter-row">
+                                    <Col md={7}>
                                         <Input
                                             placeholder="Search KYC"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom md={6}>
+                                    </Col>
+                                    <Col md={7}>
                                         <RangePicker
                                             value={rangeDate}
                                             disabledTime={this.disabledRangeTime}
@@ -191,13 +190,13 @@ class ApprovedKYC extends Component {
                                             format="YYYY-MM-DD"
                                             allowClear={false}
                                         />
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom xs={12} md={3}>
-                                        <Button htmlType="submit" className="search-btn" type="primary"><Icon type="search"/>Search</Button>
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom xs={12} md={3}>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
-                                    </ColWithMarginBottom>
+                                    </Col>
+                                    <Col xs={12} md={3}>
+                                        <Button htmlType="submit" className="filter-btn full-width" type="primary"><Icon type="search"/>Search</Button>
+                                    </Col>
+                                    <Col xs={12} md={3}>
+                                        <Button className="filter-btn full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
+                                    </Col>
                                 </Row>
                             </Form>
                             {loader && <FaldaxLoader />}
@@ -208,11 +207,12 @@ class ApprovedKYC extends Component {
                                     closeViewModal={this._closeViewKYCModal}
                                 />
                                 <TableWrapper
+                                    rowKey="id"
                                     {...this.state}
                                     columns={tableInfo.columns}
                                     pagination={false}
                                     dataSource={allKYCData}
-                                    className="isoCustomizedTable"
+                                    className="table-tb-margin"
                                     onChange={this._handleKYCTableChange}
                                     scroll={TABLE_SCROLL_HEIGHT}
                                     bordered

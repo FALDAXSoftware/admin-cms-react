@@ -304,7 +304,7 @@ class Transactions extends Component {
           >
             <TableDemoStyle className="isoLayoutContent">
               <Form onSubmit={this._searchTransaction}>
-                <Row type="flex" justify="end">
+                <Row type="flex" justify="start">
                   <ColWithMarginBottom md={6}>
                     <Input
                       placeholder="Search transactions"

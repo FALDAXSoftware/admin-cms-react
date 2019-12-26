@@ -167,72 +167,69 @@ class UserTransactionHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Form onSubmit={this._searchTransaction}>
-                                        <Row>
-                                            <Col sm={8}>
-                                                <Input
-                                                    placeholder="Search transactions"
-                                                    onChange={this._changeSearch.bind(this)}
-                                                    value={searchTransaction}
-                                                />
-                                            </Col>
-                                            <Col sm={7}>
-                                                <Select
-                                                    getPopupContainer={trigger => trigger.parentNode}
-                                                    placeholder="Select a type"
-                                                    onChange={this._changeFilter}
-                                                    value={filterVal}
-                                                >
-                                                    <Option value={''}>All</Option>
-                                                    <Option value={'receive'}>Receive</Option>
-                                                    <Option value={'send'}>Send</Option>
-                                                </Select>
-                                            </Col>
-                                            <Col xs={12} sm={3}>
-                                                <Button htmlType="submit" className="filter-btn full-width" icon="search" type="primary">Search</Button>
-                                            </Col>
-                                            <Col xs={12} sm={3}>
-                                                <Button className="filter-btn full-width" type="primary" icon="reload" onClick={this._resetFilters}>Reset</Button>
-                                            </Col>
-                                            <Col xs={12} sm={3}>
-                                                {allTransactions && allTransactions.length > 0 ?
-                                                    <CSVLink filename={'user_transactions_history.csv'} data={allTransactions} headers={transactionsHeaders}>
-                                                        <Button className="filter-btn full-width" type="primary" icon="export">Export</Button>
-                                                    </CSVLink>
-                                                    : ''}
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                </div>
-                                <div className="scroll-table">
-                                    {loader && <FaldaxLoader />}
-                                    < TableWrapper
-                                        rowId="id"
-                                        style={{ marginTop: '20px' }}
-                                        {...this.state}
-                                        columns={userTransactionTableInfos[0].columns}
-                                        pagination={false}
-                                        dataSource={allTransactions}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleUserTransactionChange}
-                                        scroll={TABLE_SCROLL_HEIGHT}
-                                        bordered
-                                    />
-                                    {allTransactionCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleTransactionPagination.bind(this)}
-                                            pageSize={limit}
-                                            current={page}
-                                            total={parseInt(allTransactionCount)}
-                                            showSizeChanger
-                                            onShowSizeChange={this._changePaginationSize}
-                                            pageSizeOptions={pageSizeOptions}
-                                        /> : ''
-                                    }
-                                </div>
+                    <Form onSubmit={this._searchTransaction}>
+                        <Row type="flex" justify="start" className="table-filter-row">
+                            <Col sm={8}>
+                                <Input
+                                    placeholder="Search transactions"
+                                    onChange={this._changeSearch.bind(this)}
+                                    value={searchTransaction}
+                                />
+                            </Col>
+                            <Col sm={7}>
+                                <Select
+                                    getPopupContainer={trigger => trigger.parentNode}
+                                    placeholder="Select a type"
+                                    onChange={this._changeFilter}
+                                    value={filterVal}
+                                >
+                                    <Option value={''}>All</Option>
+                                    <Option value={'receive'}>Receive</Option>
+                                    <Option value={'send'}>Send</Option>
+                                </Select>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                                <Button htmlType="submit" className="filter-btn full-width" icon="search" type="primary">Search</Button>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                                <Button className="filter-btn full-width" type="primary" icon="reload" onClick={this._resetFilters}>Reset</Button>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                                {allTransactions && allTransactions.length > 0 ?
+                                    <CSVLink filename={'user_transactions_history.csv'} data={allTransactions} headers={transactionsHeaders}>
+                                        <Button className="filter-btn full-width" type="primary" icon="export">Export</Button>
+                                    </CSVLink>
+                                    : ''}
+                            </Col>
+                        </Row>
+                    </Form>
+                    <div className="scroll-table">
+                        {loader && <FaldaxLoader />}
+                        < TableWrapper
+                            rowId="id"
+                            {...this.state}
+                            columns={userTransactionTableInfos[0].columns}
+                            pagination={false}
+                            dataSource={allTransactions}
+                            className="table-tb-margin float-clear"
+                            onChange={this._handleUserTransactionChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
+                        />
+                        {allTransactionCount > 0 ?
+                            <Pagination
+                                style={{ marginTop: '15px' }}
+                                className="ant-users-pagination"
+                                onChange={this._handleTransactionPagination.bind(this)}
+                                pageSize={limit}
+                                current={page}
+                                total={parseInt(allTransactionCount)}
+                                showSizeChanger
+                                onShowSizeChange={this._changePaginationSize}
+                                pageSizeOptions={pageSizeOptions}
+                            /> : ''
+                        }
+                    </div>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

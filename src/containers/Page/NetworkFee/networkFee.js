@@ -95,9 +95,15 @@ class NetworkFee extends Component {
     this.getNetworkFee();
   }
   handleNetworkChange = (pagination, filters, sorter) => {
-    this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
-      this.getNetworkFee();
-    })
+    let {coinFees}=this.state;
+    if(sorter.columnKey=="value"){
+      if(sorter.order =="descend"){
+        coinFees=coinFees.sort((a,b)=>parseFloat(a[sorter.columnKey])-parseFloat(b[sorter.columnKey]))
+      }else  if(sorter.order =="ascend"){
+        coinFees=coinFees.sort((a,b)=>parseFloat(b[sorter.columnKey])-parseFloat(a[sorter.columnKey]))
+      }
+    }
+    this.setState(coinFees)
   }
   render() {
     const { errType, errMsg, loader, coinFees, modalData, showEditNetworkFeeModal } = this.state;

@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/tables/helperCells';
+import { TextCell, RolesActionCell, RoleSwitchCell, DateTimeCell } from '../../../components/tables/helperCells';
 import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
@@ -47,8 +47,8 @@ const columns = [
     {
         title: <IntlMessages id="roleTable.title.actions" />,
         key: 'roleTable.title.actions',
-        width: 200,
-       align:"left",
+        width: 100,
+        align:"left",
         render: object => renderCell(object,
             'RolesActionCell', 'id', 'name', 'users', 'assets',
             'countries', 'roles', 'employee', 'pairs', 'transaction_history',
@@ -56,13 +56,21 @@ const columns = [
             'is_referral', 'add_user', 'is_active')
     },
     {
+        title: <IntlMessages id="antTable.title.created_on" />,
+        key: 'created_at',
+        width: 150,
+        align:"left",
+        sorter: true,
+        render: object => DateTimeCell(object['created_at'])
+    },{
         title: <IntlMessages id="roleTable.title.name" />,
-        key: 'roleTable.title.name',
+        key: 'name',
         width: 200,
-       align:"left",
+        align:"left",
         sorter: true,
         render: object => renderCell(object, 'TextCell', 'name')
-    }, {
+    }
+    , {
         title: <IntlMessages id="roleTable.title.status" />,
         key: 'roleTable.title.status',
        align:"left",

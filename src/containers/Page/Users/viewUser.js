@@ -15,6 +15,7 @@ import UserLimit from './userLimit';
 import AccountSummary from './accountSummary';
 import UserWallets from './userWallets';
 import { isAllowed } from '../../../helpers/accessControl';
+import { BackButton } from '../../Shared/backBttton';
 
 const { TabPane } = Tabs;
 
@@ -30,13 +31,8 @@ class ViewUser extends Component {
 
         return (
             <div>
-                <div style={{ "display": "inline-block", "width": "100%", marginLeft: '20px' }}>
-                    <Link to="/dashboard/users">
-                        <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
-                    </Link>
-                </div>
-                <Tabs defaultActiveKey="1" size={'large'} style={{ marginTop: '20px' }}>
+                <BackButton {...this.props}></BackButton>
+                <Tabs defaultActiveKey="1" size={'large'}>
                     {isAllowed("get_user_details") &&
 
                         <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>

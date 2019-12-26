@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Pagination, Input,Icon, DatePicker, Row, Form, Button } from 'antd';
+import { notification, Pagination, Input,Icon, DatePicker, Row, Form, Button, Col } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,6 @@ import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
-import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -172,18 +171,17 @@ class ReviewKYC extends Component {
         return (
             <TableDemoStyle>
                 <div className="isoLayoutContent">
-                    
                         <div key={KYCInfos[0].value}>
                             <Form onSubmit={this._searchKYC}>
-                                <Row type="flex" justify="end">
-                                    <ColWithMarginBottom md={6}>
+                                <Row type="flex" justify="start" className="table-filter-row">
+                                    <Col md={7}>
                                         <Input
                                             placeholder="Search KYC"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom md={6}>
+                                    </Col>
+                                    <Col md={7}>
                                         <RangePicker
                                             value={rangeDate}
                                             disabledTime={this.disabledRangeTime}
@@ -191,13 +189,13 @@ class ReviewKYC extends Component {
                                             format="YYYY-MM-DD"
                                             allowClear={false}
                                         />
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom xs={12} md={3}>
+                                    </Col>
+                                    <Col xs={12} md={3}>
                                         <Button htmlType="submit" className="filter-btn btn-full-width" type="primary"><Icon type="search"/>Search</Button>
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom xs={12} md={3}>
+                                    </Col>
+                                    <Col xs={12} md={3}>
                                         <Button className="filter-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"></Icon>Reset</Button>
-                                    </ColWithMarginBottom>
+                                    </Col>
                                 </Row>  
                             </Form>
                             {loader && <FaldaxLoader />}
@@ -208,9 +206,11 @@ class ReviewKYC extends Component {
                                     closeViewModal={this._closeViewKYCModal}
                                 />
                                 <TableWrapper
+                                    rowkey="id"
                                     {...this.state}
                                     columns={KYCInfos[0].columns}
                                     pagination={false}
+                                    className="table-tb-margin"
                                     dataSource={allKYCData}
                                     onChange={this._handleKYCTableChange}
                                     bordered
@@ -218,12 +218,11 @@ class ReviewKYC extends Component {
                                 />
                                 {allKYCCount > 0 ?
                                     <Pagination
-                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleKYCPagination.bind(this)}
                                         pageSize={limit}
                                         current={page}
-                                        total={allKYCCount}
+                                        total={parseInt(allKYCCount)}
                                         showSizeChanger
                                         onShowSizeChange={this._changePaginationSize}
                                         pageSizeOptions={pageSizeOptions}

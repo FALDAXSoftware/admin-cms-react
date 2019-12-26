@@ -126,7 +126,6 @@ class EditableNotificationTable extends React.Component {
     }
 
     _changeCheckbox(checked) {
-        console.log('_changeCheckbox', checked)
     }
 
     openNotificationWithIconError = (type) => {

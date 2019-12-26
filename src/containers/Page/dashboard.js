@@ -231,7 +231,7 @@ class Dashboard extends Component {
         }
       })
       .catch(err => {
-        console.log("error occured", err);
+        console.error("error occured", err);
       });
   };
 
@@ -261,7 +261,7 @@ class Dashboard extends Component {
         }
       })
       .catch(err => {
-        console.log("error occured", err);
+        console.error("error", err);
       });
   };
 

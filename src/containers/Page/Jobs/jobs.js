@@ -363,7 +363,7 @@ class Jobs extends Component {
         <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
-              <Row type="flex" justify="end">
+              <Row type="flex" justify="start">
                 <ColWithMarginBottom md={3}>
                   {isAllowed("add_job") && isAllowed("get_job_categories") && (
                     <Button
@@ -375,6 +375,7 @@ class Jobs extends Component {
                     </Button>
                   )}
                 </ColWithMarginBottom>
+                <ColWithMarginBottom md={13}></ColWithMarginBottom>
                 <ColWithMarginBottom md={8}>
                   <Search
                     placeholder="Search jobs"
