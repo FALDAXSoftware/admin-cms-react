@@ -218,14 +218,16 @@ class WalletFaldaxDashboard extends Component {
         return (
             <>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Row justify="end" type="flex">
-                        <Col className="table-column" xs={12} md={7}>
-                            <Input placeholder="Search Asset" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
-                        </Col>
-                        <Col className="table-column" xs={12} md={3}>
-                            <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getWalletData()}>Search</Button>
-                        </Col>
-                    </Row>
+                    <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}>
+                        <Row justify="start" type="flex">
+                            <Col className="table-column" xs={12} md={7}>
+                                <Input placeholder="Search Asset" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
+                            </Col>
+                            <Col className="table-column" xs={12} md={3}>
+                                <Button type="primary" htmlType="submit" icon="search" className="filter-btn btn-full-width">Search</Button>
+                            </Col>
+                        </Row>
+                    </Form>
                     <TableWrapper
                         rowKey="id"
                         {...this.state}

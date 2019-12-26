@@ -39,7 +39,8 @@ const columns = [
     {
         title: <IntlMessages id="networkFeeTable.title.value" />,
         key: 'value',
-       align:"left",
+        sorter:true,
+        align:"left",
         width: 100,
         render: object => renderCell(object, 'TextCell','value','name','slug','type','updated_at','value')
     },

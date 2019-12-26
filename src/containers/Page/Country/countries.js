@@ -266,7 +266,7 @@ class Countries extends Component {
           >
             <TableDemoStyle className="isoLayoutContent">
               <Form onSubmit={this._searchCountry}>
-                <Row gutter={[0, 16]} type="flex" justify="end">
+                <Row gutter={[0, 16]} type="flex" justify="start">
                   <ColWithMarginBottom lg={7}>
                     <Form.Item
                       validateStatus={this.state.searchValid}

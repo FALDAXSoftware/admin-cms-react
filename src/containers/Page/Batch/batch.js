@@ -516,7 +516,6 @@ class BatchBalance extends React.Component {
   _downloadBatch = () => {
     const { token } = this.props;
     const { selectedBatch, selectedOptions } = this.state;
-    // console.log('selectedOptions', selectedOptions)
     let _this = this;
     let formData = {
       batch_id: selectedBatch.batch_number,
@@ -627,7 +626,7 @@ class BatchBalance extends React.Component {
           <TabPane tab="Batch" key="1">
             <TableDemoStyle className="isoLayoutContent scroll-table">
               <Form layout="inline" onSubmit={this._createBatch}>
-                <Row type="flex" justify="end">
+                <Row type="flex" justify="start">
                   <ColWithMarginBottom md={6}>
                     <Input
                       placeholder="Enter Last Transaction ID"

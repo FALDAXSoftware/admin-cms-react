@@ -224,7 +224,7 @@ class OffersUsage extends Component {
           <p>{offerName}</p>
           </div>
           <Form onSubmit={this.searchOffer}>
-            <Row type="flex" justify="end">
+            <Row type="flex" justify="start">
               <ColWithMarginBottom sm={6}>
                 <Input
                   placeholder="Search Users"

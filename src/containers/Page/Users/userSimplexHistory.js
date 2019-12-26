@@ -140,85 +140,80 @@ class UserSimplexHistory extends Component {
 
         return (
                 <TableDemoStyle className="isoLayoutContent">
-                        <div>
-                            <div style={{ "display": "inline-block", "width": "100%" }}>
-                                <Form onSubmit={this._searchTrade}>
-                                    <Row>
-                                        <Col sm={7}>
-                                            <Input
-                                                placeholder="Search trades"
-                                                onChange={this._changeSearch.bind(this)}
-                                                value={searchTrade}
-                                            />
-                                        </Col>
-                                        <Col sm={4}>
-                                            <Select
-                                                getPopupContainer={trigger => trigger.parentNode}
-                                                placeholder="Select a type"
-                                                onChange={this._changeFilter}
-                                                value={filterVal}
-                                            >
-                                                <Option value={''}>All</Option>
-                                                <Option value={'Buy'}>Buy</Option>
-                                                <Option value={'Sell'}>Sell</Option>
-                                            </Select>
-                                        </Col>
-                                        <Col sm={4}>
-                                            <Select
-                                                getPopupContainer={trigger => trigger.parentNode}
-                                                placeholder="Select Status"
-                                                onChange={this._changeStatus}
-                                                value={simplex_payment_status}
-                                            >
-                                                <Option value={''}>All</Option>
-                                                <Option value={1}>Under Approval</Option>
-                                                <Option value={2}>Approved</Option>
-                                                <Option value={3}>Cancelled</Option>
-                                            </Select>
-                                        </Col>
-                                        <Col xs={12} sm={3}>
-                                            <Button htmlType="submit" icon="search" className="filter-btn full-width" type="primary" style={{ margin: "0px" }} >Search</Button>
-                                        </Col>
-                                        <Col xs={12} sm={3}>
-                                            <Button icon="reload" className="filter-btn full-width" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
-                                        </Col>
-                                        <Col xs={12} sm={3}>
-                                            {allTrades && allTrades.length > 0 ?
-                                                <CSVLink filename={'user_simplex_history.csv'} data={allTrades} headers={tradeHeaders}>
-                                                    <Button icon="export" type="primary" className="filter-btn full-width" style={{ margin: "0px" }}>Export</Button>
-                                                </CSVLink>
-                                                : ''}
-                                        </Col>
-                                    </Row>
-                                </Form>
-
-                            </div>
-                            {loader && <FaldaxLoader />}
-                            <div className="scroll-table">
-                                < TableWrapper
-                                    style={{ marginTop: '20px' }}
-                                    {...this.state}
-                                    columns={simplexTableInfos[0].columns}
-                                    pagination={false}
-                                    dataSource={allTrades}
-                                    bordered
-                                    scroll={TABLE_SCROLL_HEIGHT}
-                                    onChange={this._handleUserTradeChange}
+                    <Form onSubmit={this._searchTrade}>
+                        <Row type="flex" justify="start" className="table-filter-row">
+                            <Col sm={7}>
+                                <Input
+                                    placeholder="Search trades"
+                                    onChange={this._changeSearch.bind(this)}
+                                    value={searchTrade}
                                 />
-                                {allTradeCount > 0 ?
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleTradePagination.bind(this)}
-                                        pageSize={limit}
-                                        current={page}
-                                        total={parseInt(allTradeCount)}
-                                        showSizeChanger
-                                        onShowSizeChange={this._changePaginationSize}
-                                        pageSizeOptions={pageSizeOptions}
-                                    /> : ''}
-                            </div>
-                        </div>
+                            </Col>
+                            <Col sm={4}>
+                                <Select
+                                    getPopupContainer={trigger => trigger.parentNode}
+                                    placeholder="Select a type"
+                                    onChange={this._changeFilter}
+                                    value={filterVal}
+                                >
+                                    <Option value={''}>All</Option>
+                                    <Option value={'Buy'}>Buy</Option>
+                                    <Option value={'Sell'}>Sell</Option>
+                                </Select>
+                            </Col>
+                            <Col sm={4}>
+                                <Select
+                                    getPopupContainer={trigger => trigger.parentNode}
+                                    placeholder="Select Status"
+                                    onChange={this._changeStatus}
+                                    value={simplex_payment_status}
+                                >
+                                    <Option value={''}>All</Option>
+                                    <Option value={1}>Under Approval</Option>
+                                    <Option value={2}>Approved</Option>
+                                    <Option value={3}>Cancelled</Option>
+                                </Select>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                                <Button htmlType="submit" icon="search" className="filter-btn full-width" type="primary" style={{ margin: "0px" }} >Search</Button>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                                <Button icon="reload" className="filter-btn full-width" type="primary" onClick={this._resetFilters} style={{ margin: "0px" }}>Reset</Button>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                                {allTrades && allTrades.length > 0 ?
+                                    <CSVLink filename={'user_simplex_history.csv'} data={allTrades} headers={tradeHeaders}>
+                                        <Button icon="export" type="primary" className="filter-btn full-width" style={{ margin: "0px" }}>Export</Button>
+                                    </CSVLink>
+                                    : ''}
+                            </Col>
+                        </Row>
+                    </Form>
+                    {loader && <FaldaxLoader />}
+                    <div className="scroll-table">
+                        < TableWrapper
+                            rowKey="id"
+                            {...this.state}
+                            columns={simplexTableInfos[0].columns}
+                            pagination={false}
+                            dataSource={allTrades}
+                            bordered
+                            className="table-tb-margin"
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            onChange={this._handleUserTradeChange}
+                        />
+                        {allTradeCount > 0 ?
+                            <Pagination
+                                className="ant-users-pagination"
+                                onChange={this._handleTradePagination.bind(this)}
+                                pageSize={limit}
+                                current={page}
+                                total={parseInt(allTradeCount)}
+                                showSizeChanger
+                                onShowSizeChange={this._changePaginationSize}
+                                pageSizeOptions={pageSizeOptions}
+                            /> : ''}
+                    </div>
                 </TableDemoStyle>
         );
     }

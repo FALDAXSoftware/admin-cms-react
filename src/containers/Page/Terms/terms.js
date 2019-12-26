@@ -40,7 +40,7 @@ class TermsAndConditions extends Component {
                 this.showNotification("error",res.message)
             }
        }catch(error){
-           console.log(error);
+           console.error(error);
        }finally{
            this.loader.hide();
        }
@@ -74,7 +74,7 @@ class TermsAndConditions extends Component {
                this.forceUpdate();
            }
        }catch(error){
-           console.log("Error in file uploading")
+           console.error("Error in file uploading")
        }finally{
             this.loader.hide();
        }

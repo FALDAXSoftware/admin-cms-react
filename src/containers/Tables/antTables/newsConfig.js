@@ -27,7 +27,7 @@ const renderCell = (object, type, key, image = null, news_title = null, news_lin
         case 'NewsDescCell':
             return NewsDescCell(value, cover_image, title, link, posted_at, description, is_active, owner);
         case 'NewsSwitchCell':
-            return NewsSwitchCell(value, cover_image, title, link, posted_at, description, is_active, owner);
+            return NewsSwitchCell(value, cover_image, title, link, posted_at, description, is_active, owner,!isAllowed("update_news_status"));
         default:
             return TextCell(value);
     }
@@ -37,39 +37,35 @@ const columns = [{
     title: '',
     key: 'cover_image',
     width: 100,
-   align:"left",
+    align:"left",
     render: object => renderCell(object, 'StaticImageCell', 'cover_image')
 }, {
     title: <IntlMessages id="newsTable.title.title" />,
-   align:"left",
+    align:"left",
     key: 'title',
     width: 200,
     render: object => renderCell(object, 'NewsDescCell', 'title')
 }, {
     title: <IntlMessages id="newsTable.title.link" />,
-   align:"left",
+    align:"left",
     key: 'link',
     width: 200,
     render: object => renderCell(object, 'NewsLinkCell', 'link')
 }, {
     title: <IntlMessages id="newsTable.title.posted_at" />,
-   align:"left",
+    align:"left",
     key: 'posted_at',
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'posted_at')
 }, {
     title: <IntlMessages id="newsTable.title.active" />,
-   align:"left",
+    align:"left",
     key: 'is_active',
     width: 100,
     render: object => {
-        if (isAllowed("update_news_status")) {
-            return renderCell(object, 'NewsSwitchCell', 'id', 'cover_image', 'title',
-            'link', 'posted_at', 'description', 'is_active', 'owner')
-        } else {
-            return <span>{(object['is_active'])?"Active":"Inactive"}</span>
-        }
+        return renderCell(object, 'NewsSwitchCell', 'id', 'cover_image', 'title',
+        'link', 'posted_at', 'description', 'is_active', 'owner')
     }
 }];
 

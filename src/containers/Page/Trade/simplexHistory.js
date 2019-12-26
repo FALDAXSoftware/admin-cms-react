@@ -10,7 +10,7 @@ import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithMarginBottom from '../common.style';
+import Col from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
@@ -182,15 +182,15 @@ class SimplexHistory extends Component {
                         
                            
                                 <Form onSubmit={this._searchTrade}>
-                                    <Row>
-                                        <ColWithMarginBottom md={6} sm={24}>
+                                    <Row type="flex" justify="start" className="table-filter-row">
+                                        <Col md={6} sm={24}>
                                             <Input
                                                 placeholder="Search trades"
                                                 onChange={this._changeSearch.bind(this)}
                                                 value={searchTrade}
                                             />
-                                        </ColWithMarginBottom>
-                                        {/* <ColWithMarginBottom sm={3}>
+                                        </Col>
+                                        {/* <Col sm={3}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select type"
@@ -201,8 +201,8 @@ class SimplexHistory extends Component {
                                                 <Option value={'Sell'}>Sell</Option>
                                                 <Option value={'Buy'}>Buy</Option>
                                             </Select>
-                                        </ColWithMarginBottom> */}
-                                        <ColWithMarginBottom sm={24} md={3}>
+                                        </Col> */}
+                                        <Col sm={24} md={3}>
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select Status"
@@ -214,8 +214,8 @@ class SimplexHistory extends Component {
                                                 <Option value={2}>Approved</Option>
                                                 <Option value={3}>Cancelled</Option>
                                             </Select>
-                                        </ColWithMarginBottom>
-                                        <ColWithMarginBottom md={6} sm={24}>
+                                        </Col>
+                                        <Col md={6} sm={24}>
                                             <RangePicker
                                                 value={rangeDate}
                                                 disabledTime={this.disabledRangeTime}
@@ -224,20 +224,20 @@ class SimplexHistory extends Component {
                                                 allowClear={false}
                                                 style={{ width: "100%" }}
                                             />
-                                        </ColWithMarginBottom>
-                                        <ColWithMarginBottom xs={24} md={3} sm={24}>
+                                        </Col>
+                                        <Col xs={24} md={3} sm={24}>
                                             <Button htmlType="submit" className="search-btn btn-full-width" type="primary"><Icon type="search"></Icon>Search</Button>
-                                        </ColWithMarginBottom>
-                                        <ColWithMarginBottom xs={24} md={3} sm={24}>
+                                        </Col>
+                                        <Col xs={24} md={3} sm={24}>
                                             <Button className="search-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
-                                        </ColWithMarginBottom>
-                                        <ColWithMarginBottom xs={24} sm={24} md={3}>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={3}>
                                             {allSimplexTrades && allSimplexTrades.length > 0 ?
                                                 <CSVLink filename={'simplex_history.csv'} data={allSimplexTrades} headers={tradeHeaders}>
                                                     <Button className="search-btn btn-full-width" type="primary"><Icon type="export"></Icon>Export</Button>
                                                 </CSVLink>
                                                 : ''}
-                                        </ColWithMarginBottom>
+                                        </Col>
                                     </Row>
                                 </Form>
                             
@@ -248,7 +248,7 @@ class SimplexHistory extends Component {
                                 columns={simplexTableInfos[0].columns}
                                 pagination={false}
                                 dataSource={allSimplexTrades}
-                                className="isoCustomizedTable table-tb-margin float-clear"
+                                className="table-tb-margin float-clear"
                                 onChange={this._handleTradeTableChange}
                                 scroll={TABLE_SCROLL_HEIGHT}
                                 bordered

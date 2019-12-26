@@ -66,7 +66,6 @@ class EditLimitModal extends Component {
   _editLimit = () => {
     const { token, getAllLimits } = this.props;
     const { fields } = this.state;
-    // console.log(fields);
     if (this.validator.allValid()) {
       this.setState({ loader: true });
       let formData = {

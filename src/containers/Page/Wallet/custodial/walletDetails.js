@@ -4,7 +4,7 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import { withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
@@ -34,7 +34,7 @@ const columns=[
         dataIndex:"baseValue",
         sorter:true,
         width:100,
-        render:data=><span>{data?parseFloat(data)>=0?parseFloat(data):parseFloat(data) * -1:""}</span>
+        render:data=><span>{data?parseFloat(data)>=0?(parseFloat(data)*0.00000001).toFixed(8):((parseFloat(data) * -1)*0.00000001).toFixed(8):""}</span>
     },
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.type"/>,
@@ -134,22 +134,24 @@ class WalletWarmDetailsComponent extends Component {
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">
-                        <Row justify="end" type="flex">
-                            <Col className="table-column" xs={12} md={7}>
-                                <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
-                            </Col>
-                            <Col className="table-column" xs={12} md={4}>
-                                <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
-                                    {assetsList.map((ele)=><Option  key={ele} value={ele.value}>{ele.name}</Option>)}
-                                </Select>
-                            </Col>
-                            <Col className="table-column" xs={12} md={3}>
-                                <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getWalletData()}>Search</Button>
-                            </Col>
-                            <Col className="table-column" xs={12} md={3}>
-                                <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
-                            </Col>
-                        </Row>
+                        <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
+                            <Row justify="start" type="flex">
+                                <Col className="table-column" xs={12} md={7}>
+                                    <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
+                                </Col>
+                                <Col className="table-column" xs={12} md={4}>
+                                    <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
+                                        {assetsList.map((ele)=><Option  key={ele} value={ele.value}>{ele.name}</Option>)}
+                                    </Select>
+                                </Col>
+                                <Col className="table-column" xs={12} md={3}>
+                                    <Button type="primary" icon="search" className="filter-btn btn-full-width" htmlType="submit">Search</Button>
+                                </Col>
+                                <Col className="table-column" xs={12} md={3}>
+                                    <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
+                                </Col>
+                            </Row>
+                        </Form>
                         <TableWrapper
                             rowKey="id"
                             {...this.state}

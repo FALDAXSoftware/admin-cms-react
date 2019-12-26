@@ -149,12 +149,6 @@ class Employees extends Component {
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          for (var i = 0; i < res.data.employees.length; i++) {
-            res.data.employees[i].first_name =
-              res.data.employees[i].first_name +
-              " " +
-              res.data.employees[i].last_name;
-          }
           _this.setState({
             allEmployee: res.data.employees,
             employeeCount: res.data.employeeCount
@@ -343,7 +337,7 @@ class Employees extends Component {
             key={employeeTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-              <Row type="flex" justify="end">
+              <Row type="flex" justify="start">
                 <Col md={12}>
                   {isAllowed("add_employee") && (
                     <Button
@@ -383,7 +377,7 @@ class Employees extends Component {
                     className="isoCustomizedTable table-tb-margin"
                     bordered
                     scroll={TABLE_SCROLL_HEIGHT}
-                    expandedRowRender={record => (
+                    expandedRowRender={isAllowed("get_employee_details")?record => (
                       <div>
                         <b>Address</b> -{" "}
                         <span style={{ whiteSpace: "pre-line" }}>
@@ -395,7 +389,7 @@ class Employees extends Component {
                           {record.phone_number}
                         </span>
                       </div>
-                    )}
+                    ):undefined}
                     onChange={this._handleEmployeeChange}
                   />
                 {showEditEmpModal && (

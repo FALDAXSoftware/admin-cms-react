@@ -61,7 +61,7 @@ class ProfileWhitelist extends Component {
         }
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
       });
   };
 
@@ -299,7 +299,7 @@ class ProfileWhitelist extends Component {
         });
       }
     } catch (error) {
-      console.log("Error in whitelist",error);
+      console.error("Error in whitelist",error);
     }
   };
 

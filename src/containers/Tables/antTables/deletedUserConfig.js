@@ -60,7 +60,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'action',
     width: 150,
@@ -71,13 +71,23 @@ const columns = [{
         'deleted_at')
 }, {
     title: <IntlMessages id="userTable.title.created_at" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'created_at',
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
+},
+{
+    title: <IntlMessages id="userTable.title.deleted_at" />,
+    align:"left",
+    ellipsis:true,
+    key: 'deleted_at',
+    width: 150,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'deleted_at')
+}, 
+{
     title: "",
    align:"left",
     ellipsis:true,

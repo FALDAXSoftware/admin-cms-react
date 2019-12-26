@@ -315,7 +315,7 @@ class TwoFactorRequests extends Component {
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
                 <Form onSubmit={this._searchRequest}>
-                  <Row type="flex" justify="end">
+                  <Row type="flex" justify="start">
                     <ColWithMarginBottom md={6}>
                       <Input
                         placeholder="Search Requests"

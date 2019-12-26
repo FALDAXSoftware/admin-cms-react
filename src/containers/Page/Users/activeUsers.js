@@ -300,7 +300,7 @@ class ActiveUsers extends Component {
         <div className="isoTableDisplayTab">
             <div>
               <Form onSubmit={this._searchUser} className="cty-search">
-                <Row type="flex" justify="end">
+                <Row type="flex" justify="start">
                   <ColWithMarginBottom lg={7} xs={24}>
                     <Input
                       placeholder="Search users"
