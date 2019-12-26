@@ -51,7 +51,7 @@ class PersonalDetails extends Component {
                 }
             })
             .catch((err) => {
-                console.log('error', err)
+                console.error('error', err)
             });
     }
 

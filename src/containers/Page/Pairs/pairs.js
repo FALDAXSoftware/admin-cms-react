@@ -315,7 +315,7 @@ class Pairs extends Component {
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
               <TableDemoStyle className="isoLayoutContent">
                 <Form onSubmit={this._searchPair}>
-                  <Row type="flex" justify="end">
+                  <Row type="flex" justify="start">
                     {isAllowed('add_pair')&&<ColWithMarginBottom sm={3}>
                       <Button
                         type="primary"

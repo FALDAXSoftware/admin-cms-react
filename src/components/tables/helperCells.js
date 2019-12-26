@@ -934,7 +934,6 @@ const transactionDetailsUser = (
   } else {
     return "";
   }
-  // console.log("URL >>>>>>>>>>", url)
   // return url !== "" ? (
   //   <a target="_blank" href={url}>
   //     {created_at}
@@ -1319,12 +1318,14 @@ const NewsSwitchCell = (
   posted_at,
   description,
   is_active,
-  owner
+  owner,
+  disabled=false
 ) => (
     <Switch
       className="switch-cell"
       checkedChildren="Active"
       unCheckedChildren="Inactive"
+      disabled={disabled}
       checked={is_active}
       onChange={() => {
         newsStatus(
@@ -2168,11 +2169,9 @@ const JobSwitchCell = (
   );
 const JobButtonCell = value => (
   <div>
-    {isAllowed("get_job_applicants") &&
-      <Button type="primary" onClick={() => showApplicants(value)}>
+      <Button disabled={!isAllowed("get_job_applicants")} type="primary" onClick={() => showApplicants(value)}>
         Show Applications
         </Button>
-    }
   </div>
 );
 const JobAppActionCell = (
@@ -2274,7 +2273,6 @@ const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => (
       <Icon
         type="edit"
         className="btn-icon"
-        onClick={() => console.log()}
       />
     </Tooltip>
   </div>
@@ -2679,7 +2677,7 @@ const SimplexStatusCell = (
   simplex_payment_status,
   created_at
 ) => (
-    <div>
+    <div className={"order-"+simplex_payment_status}>
       {simplex_payment_status == 1
         ? "Under Approval"
         : simplex_payment_status == 2
@@ -2863,7 +2861,6 @@ const ExpireIpDateCell = (data) => <p>
 </p>
 
 const CollectedAmountCell = value =>
-  // console.log(value)
   value.map(ele => (
     <div>
       <span>{parseFloat(ele.collectedamount).toFixed(8) + " " + ele.coin_name}</span><br />

@@ -8,7 +8,8 @@ import {
   Form,
   Row,
   Tabs,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -19,7 +20,6 @@ import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
-import ColWithPadding from "../common.style";
 import { ExecutionUl } from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
@@ -34,7 +34,7 @@ class UserTradeHistory extends Component {
       allTrades: [],
       allTradeCount: 0,
       searchTrade: "",
-       limit: PAGESIZE,
+      limit: PAGESIZE,
       errMessage: "",
       errMsg: false,
       errType: "Success",
@@ -203,83 +203,77 @@ class UserTradeHistory extends Component {
     }
 
     return (
-        <TableDemoStyle className="isoLayoutContent">
-          <div className="isoTableDisplayTab">
-              <div>
-                <div style={{ display: "inline-block", width: "100%" }}>
-                  <Form onSubmit={this._searchTrade}>
-                    <Row type="flex" justify="end">
-                      <ColWithPadding sm={8}>
-                        <Input
-                          placeholder="Search trades"
-                          onChange={this._changeSearch.bind(this)}
-                          value={searchTrade}
-                        />
-                      </ColWithPadding>
-                      <ColWithPadding sm={7}>
-                        <Select
-                          getPopupContainer={trigger => trigger.parentNode}
-                          placeholder="Select a type"
-                          onChange={this._changeFilter}
-                          value={filterVal}
-                        >
-                          <Option value={""}>All</Option>
-                          <Option value={"Buy"}>Buy</Option>
-                          <Option value={"Sell"}>Sell</Option>
-                        </Select>
-                      </ColWithPadding>
-                      <ColWithPadding xs={12} sm={3}>
-                        <Button
-                          htmlType="submit"
-                          className="filter-btn btn-full-width"
-                          type="primary"
-                        >
-                         <Icon type="search"></Icon>Search
-                        </Button>
-                      </ColWithPadding>
-                      <ColWithPadding xs={12} sm={3}>
-                        <Button
-                          className="filter-btn btn-full-width"
-                          type="primary"
-                          onClick={this._resetFilters}
-                          style={{ margin: "0px" }}
-                        >
-                          <Icon type="reload"></Icon>Reset
-                        </Button>
-                      </ColWithPadding>
-                      <ColWithPadding xs={12} sm={3}>
-                        {allTrades && allTrades.length > 0 ? (
-                          <CSVLink
-                            filename={"user_trade_history.csv"}
-                            data={allTrades}
-                            headers={tradeHeaders}
-                          >
-                            <Button
-                              type="primary"
-                              icon ="export"
-                              className="search-btn"
-                              style={{ margin: "0px" }}
-                            >
-                              Export
-                            </Button>
-                          </CSVLink>
-                        ) : (
-                          ""
-                        )}
-                      </ColWithPadding>
-                    </Row>
-                  </Form>
-                </div>
+        <TableDemoStyle className="isoLayoutContent">   
+          <Form onSubmit={this._searchTrade}>
+            <Row type="flex" justify="start" className="table-filter-row">
+              <Col sm={8}>
+                <Input
+                  placeholder="Search trades"
+                  onChange={this._changeSearch.bind(this)}
+                  value={searchTrade}
+                />
+              </Col>
+              <Col sm={7}>
+                <Select
+                  getPopupContainer={trigger => trigger.parentNode}
+                  placeholder="Select a type"
+                  onChange={this._changeFilter}
+                  value={filterVal}
+                >
+                  <Option value={""}>All</Option>
+                  <Option value={"Buy"}>Buy</Option>
+                  <Option value={"Sell"}>Sell</Option>
+                </Select>
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  htmlType="submit"
+                  className="filter-btn btn-full-width"
+                  type="primary"
+                >
+                  <Icon type="search"></Icon>Search
+                </Button>
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  className="filter-btn btn-full-width"
+                  type="primary"
+                  onClick={this._resetFilters}
+                >
+                  <Icon type="reload"></Icon>Reset
+                </Button>
+              </Col>
+              <Col xs={12} sm={3}>
+                {allTrades && allTrades.length > 0 ? (
+                  <CSVLink
+                    filename={"user_trade_history.csv"}
+                    data={allTrades}
+                    headers={tradeHeaders}
+                  >
+                    <Button
+                      type="primary"
+                      icon ="export"
+                      className="filter-btn"
+                    >
+                      Export
+                    </Button>
+                  </CSVLink>
+                ) : (
+                  ""
+                )}
+              </Col>
+            </Row>
+          </Form>
+
                 {loader && <FaldaxLoader />}
                 <div className="scroll-table">
                   <TableWrapper
                     rowKey="id"
-                    style={{ marginTop: "20px" }}
                     {...this.state}
                     columns={tradeTableInfos[0].columns}
                     pagination={false}
                     dataSource={allTrades}
-                    className="isoCustomizedTable"
+                    className="table-tb-margin"
                     onChange={this._handleUserTradeChange}
                     scroll={TABLE_SCROLL_HEIGHT}
                     bordered
@@ -344,7 +338,6 @@ class UserTradeHistory extends Component {
                   />
                   {allTradeCount > 0 ? (
                     <Pagination
-                      style={{ marginTop: "15px" }}
                       className="ant-users-pagination"
                       onChange={this._handleTradePagination.bind(this)}
                       pageSize={50}
@@ -358,8 +351,6 @@ class UserTradeHistory extends Component {
                     ""
                   )}
                 </div>
-              </div>
-          </div>
         </TableDemoStyle>
     );
   }

@@ -264,7 +264,6 @@ class AddCampaign extends Component {
       .then(res => res.json())
       .then(res => {
         if (res.status == 200) {
-          // console.log(res.data);
           this.setState({
             userList: res.data
           });
@@ -481,7 +480,6 @@ class AddCampaign extends Component {
   getUserById(id){
   let {userList}= this.state;
   let index=userList.findIndex(user=>user.id==id)
-  console.log(index)
     if(index > -1){
         return userList[index]
     }else{
@@ -674,13 +672,11 @@ class AddCampaign extends Component {
     this.setState({ offerFields });
   }
   _campaignStatus(e) {
-    console.log(e);
     this.setState({
       is_active: e
     });
   }
   _offerStatus(e) {
-    console.log(e);
     this.setState({
       is_offer_active: e
     });
@@ -753,7 +749,6 @@ class AddCampaign extends Component {
     );
   };
   _changeUser = val => {
-    // console.log("user details", val);
     this.setState({ filterVal: val, userIdAssigned: val });
   };
   openNotificationWithIcon(type, head, desc) {
@@ -763,14 +758,12 @@ class AddCampaign extends Component {
     });
   }
   onSearch(val) {
-    console.log("search:", val);
     // this.setState({ filterVal: val });
   }
   getUserText(email, firstname, lastname) {
     return email + " ( " + firstname + " " + lastname + " )";
   }
   render() {
-    // console.log("errorMessage value", errMsg);
     // if (errMsg) {
     //   this.openNotificationWithIconError(errType.toLowerCase());
     // }

@@ -243,8 +243,9 @@ class Referrals extends Component {
 
         return (
             <div>
-                <Row type="flex" justify="end">
-                    <Col>
+                <Row type="flex" justify="start">
+                    <Col md={16}></Col>
+                    <Col md={8}>
                         <Search
                             placeholder="Search users"
                             onSearch={(value) => this._searchReferral(value)}

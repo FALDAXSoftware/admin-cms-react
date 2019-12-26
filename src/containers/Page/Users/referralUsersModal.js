@@ -83,13 +83,14 @@ class ReferralUsers extends Component {
 
         return (
             <LayoutWrapper>
-                <TableDemoStyle className="full-width">
+                <TableDemoStyle className="full-width isoLayoutContent">
                     <TableWrapper
                         rowKey="id"
                         {...this.state}
                         columns={userReferralInfos[0].columns}
                         pagination={false}
                         dataSource={allReferral}
+                        className="table-tb-margin"
                         onChange={this._handleReferralTableChange}
                         bordered
                         scroll={TABLE_SCROLL_HEIGHT}
@@ -97,7 +98,6 @@ class ReferralUsers extends Component {
                     {loader && <FaldaxLoader />}
                     {allReferralCount > 0 ?
                         <Pagination
-                            style={{ marginTop: '15px' }}
                             className="ant-users-pagination"
                             onChange={this._handleReferralPagination.bind(this)}
                             pageSize={limit}

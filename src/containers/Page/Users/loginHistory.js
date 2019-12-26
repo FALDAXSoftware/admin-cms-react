@@ -149,7 +149,7 @@ class LoginHistory extends Component {
                 <TabPane tab={historyTableInfos[0].title} key={historyTableInfos[0].value}>
                   <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchHistory} className="cty-search">
-                      <Row type="flex" justify="end">
+                      <Row type="flex" justify="start">
                         <ColWithMarginBottom sm={6}>
                           <Input
                             placeholder="Search history"

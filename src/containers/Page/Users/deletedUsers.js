@@ -212,7 +212,7 @@ class DeletedUsers extends Component {
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
               <Form onSubmit={this._searchUser}>
-                <Row type="flex" justify="end">
+                <Row type="flex" justify="start">
                   <ColWithMarginBottom lg={7} xs={24}>
                     <Input
                       placeholder="Search users"

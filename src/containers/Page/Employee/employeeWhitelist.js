@@ -70,7 +70,7 @@ class EmployeeWhitelist extends Component {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                console.error(err)
             });
     }
 
@@ -92,7 +92,7 @@ class EmployeeWhitelist extends Component {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                console.error(err)
             });
     }
 
@@ -197,7 +197,7 @@ class EmployeeWhitelist extends Component {
             });
           }
         } catch (error) {
-          console.log("Error in whitelist",error);
+          console.error("Error in whitelist",error);
         }
       };
     
@@ -237,7 +237,6 @@ class EmployeeWhitelist extends Component {
             });
           }
         } catch (error) {
-          console.log("Error in profileWhitelist", error);
           this.setState({
             errMsg: true,
             errMessage: "Some thing went to wrong",

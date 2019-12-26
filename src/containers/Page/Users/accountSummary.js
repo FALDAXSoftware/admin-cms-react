@@ -63,7 +63,6 @@ class AccountSummary extends Component {
           //     element["usd_price"] = res.usd_price;
           //     return element;
           //   });
-          //   console.log("element", res.data);
 
           for (var i = 0; i < res.data.length; i++) {
             res.data[i].fiat = parseFloat(res.data[i].totalAmount * res.data[i].fiat).toFixed(3) + ' USD'

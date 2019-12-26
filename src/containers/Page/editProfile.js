@@ -120,7 +120,7 @@ class EditProfile extends Component {
                     this.setState({errType:"Error",errMessage:response.message,errMsg:true})
                 }
             }catch(error){
-                console.log(error)
+                console.error(error)
             }finally{
                 this.setState({loader:false})
             }

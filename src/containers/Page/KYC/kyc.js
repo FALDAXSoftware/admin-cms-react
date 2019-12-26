@@ -13,7 +13,6 @@ import ApprovedKYC from './approvedKYC';
 import ReviewKYC from './reviewKYC';
 import DeclinedKYC from './declinedKYC';
 import moment from 'moment';
-import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from '../../Shared/backBttton';
@@ -206,15 +205,15 @@ class KYC extends Component {
           <TabPane tab={KYCInfos[0].title} key={KYCInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
               <Form onSubmit={this._searchKYC}>
-                <Row type="flex" justify="end">
-                  <ColWithMarginBottom md={6}>
+                <Row type="flex" justify="start" className="table-filter-row">
+                  <Col md={7}>
                     <Input
                       placeholder="Search KYC"
                       onChange={this._changeSearch.bind(this)}
                       value={searchKYC}
                     />
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom md={6}>
+                  </Col>
+                  <Col md={7}>
                     <RangePicker
                       value={rangeDate}
                       disabledTime={this.disabledRangeTime}
@@ -223,8 +222,8 @@ class KYC extends Component {
                       allowClear={false}
                       style={{ width: "100%" }}
                     />
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={24} md={3}>
+                  </Col>
+                  <Col xs={24} md={3}>
                     <Button
                       htmlType="submit"
                       className="filter-btn btn-full-width"
@@ -233,8 +232,8 @@ class KYC extends Component {
                       <Icon type="search" />
                       Search
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={24} md={3}>
+                  </Col>
+                  <Col xs={24} md={3}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
@@ -243,7 +242,7 @@ class KYC extends Component {
                       <Icon type="reload" />
                       Reset
                     </Button>
-                  </ColWithMarginBottom>
+                  </Col>
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}
@@ -258,7 +257,7 @@ class KYC extends Component {
                   columns={KYCInfos[0].columns}
                   pagination={false}
                   dataSource={allKYCData}
-                  className="isoCustomizedTable"
+                  className="table-tb-margin"
                   onChange={this._handleKYCTableChange}
                   bordered
                   scroll={TABLE_SCROLL_HEIGHT}

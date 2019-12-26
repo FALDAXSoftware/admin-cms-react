@@ -87,7 +87,6 @@ class EditNetworkFee extends Component {
                this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
             }
         }catch(error){
-            console.log(error)
             this.setState({loader:false})
         }
     } else {

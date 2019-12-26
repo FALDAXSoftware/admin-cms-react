@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Pagination, Input, Form,Icon, Button, DatePicker, Row } from 'antd';
+import { notification, Pagination, Input, Form,Icon, Button, DatePicker, Row, Col } from 'antd';
 import { ApprovedKYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -9,7 +9,6 @@ import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
-import ColWithMarginBottom from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
@@ -173,15 +172,15 @@ class DeclinedKYC extends Component {
             <TableDemoStyle>
                 <div className="isoLayoutContent">
                             <Form onSubmit={this._searchKYC}>
-                                <Row type="flex" justify="end">
-                                    <ColWithMarginBottom md={6}>
+                                <Row type="flex" justify="start" className="table-filter-row">
+                                    <Col md={6}>
                                         <Input
                                             placeholder="Search KYC"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom md={6}>
+                                    </Col>
+                                    <Col md={6}>
                                         <RangePicker
                                             value={rangeDate}
                                             disabledTime={this.disabledRangeTime}
@@ -189,13 +188,13 @@ class DeclinedKYC extends Component {
                                             format="YYYY-MM-DD"
                                             allowClear={false}
                                         />
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom xs={12} md={3}>
+                                    </Col>
+                                    <Col xs={12} md={3}>
                                         <Button htmlType="submit" className="filter-btn btn-full-width" type="primary"><Icon type="search"></Icon>Search</Button>
-                                    </ColWithMarginBottom>
-                                    <ColWithMarginBottom xs={12} md={3}>
+                                    </Col>
+                                    <Col xs={12} md={3}>
                                         <Button className="filter-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
-                                    </ColWithMarginBottom>
+                                    </Col>
                                 </Row>
                             </Form>
                             {loader && <FaldaxLoader />}
@@ -211,17 +210,17 @@ class DeclinedKYC extends Component {
                                     pagination={false}
                                     dataSource={allKYCData}
                                     bordered
+                                    className="table-tb-margin"
                                     scroll={TABLE_SCROLL_HEIGHT}
                                     onChange={this._handleKYCTableChange}
                                 />
                                 {allKYCCount > 0 ?
                                     <Pagination
-                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleKYCPagination.bind(this)}
                                         pageSize={limit}
                                         current={page}
-                                        total={allKYCCount}
+                                        total={parseInt(allKYCCount)}
                                         showSizeChanger
                                         onShowSizeChange={this._changePaginationSize}
                                         pageSizeOptions={pageSizeOptions}

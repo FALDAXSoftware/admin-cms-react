@@ -102,7 +102,7 @@ class ReferralDetailsComponent extends Component {
                 this.openNotificationWithIcon("Error",err)
             }
         }catch(error){
-            console.log("error",error);
+            console.error("error",error);
         }finally{
             this.loader.hide();
         }
@@ -113,7 +113,7 @@ class ReferralDetailsComponent extends Component {
                 <LayoutWrapper>
                     <BackButton {...this.props}></BackButton>
                    <TableDemoStyle className="isoLayoutContent">
-                        <Row justify="end" type="flex">
+                        <Row justify="start" type="flex">
                             <Col className="table-column" xs={12} md={7}>
                                 <Input placeholder="Search email" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
