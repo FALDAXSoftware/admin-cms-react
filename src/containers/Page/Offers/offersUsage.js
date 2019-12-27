@@ -53,7 +53,7 @@ const column = [
     key: "waived_fees",
     render: (data) => (
       <span>
-        {parseFloat(data["waived_fees"]).toFixed(8) +` USD (${data["faldax_fees"]})`}
+        {parseFloat(data["waived_fees"]).toFixed(2) +` USD (${(parseFloat(data["faldax_fees"].split(" ")[0])?parseFloat(data["faldax_fees"].split(" ")[0]).toFixed(8):0)+" "+data["faldax_fees"].split(" ")[1]})`}
       </span>
     )
   },

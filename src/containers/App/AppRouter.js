@@ -121,7 +121,7 @@ const routes = [
     },
     {
         path: "two-factor-requests",
-        component: asyncComponent(() => import("../Page/TwoFactorRequest/TwoFactorRequests")),
+        component: asyncComponent(() => import("../Page/TwoFactorRequest/TwoFactorRequestTab")),
         module: "two_factor_requests"
     },
     {

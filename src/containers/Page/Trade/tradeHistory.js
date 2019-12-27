@@ -8,7 +8,8 @@ import {
   Button,
   Form,
   Row,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -19,7 +20,6 @@ import moment from "moment";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import {ColWithMarginBottom} from "../common.style";
 import { withRouter} from "react-router-dom";
 import {ExecutionUl} from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
@@ -252,138 +252,128 @@ class TradeHistory extends Component {
     }
 
     return (
-      // <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent full-width">
-          
-            <div>
-              <div style={{ display: "inline-block", width: "100%" }}>
-                <Form onSubmit={this._searchTrade}>
-                  <Row>
-                    <ColWithMarginBottom sm={6}>
-                      <Input
-                        placeholder="Search trades"
-                        onChange={this._changeSearch.bind(this)}
-                        value={searchTrade}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom sm={3}>
-                      <Select
-                        getPopupContainer={trigger => trigger.parentNode}
-                        placeholder="Select type"
-                        onChange={this._changeFilter}
-                        value={filterVal}
-                      >
-                        <Option value={""}>All</Option>
-                        <Option value={"Sell"}>Sell</Option>
-                        <Option value={"Buy"}>Buy</Option>
-                      </Select>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom sm={6}>
-                      <RangePicker
-                        value={rangeDate}
-                        disabledTime={this.disabledRangeTime}
-                        onChange={this._changeDate}
-                        format="YYYY-MM-DD"
-                        allowClear={false}
-                        className='full-width'
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        htmlType="submit"
-                        className="search-btn btn-full-width"
-                        type="primary"
-                      >
-                        <Icon type="search"/>Search
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        className="search-btn full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      ><Icon type="reload"></Icon>
-                        Reset
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      {allTrades && allTrades.length > 0 ? (
-                        <CSVLink
-                          filename={"trade_history.csv"}
-                          data={allTrades}
-                          headers={tradeHeaders}
-                        >
-                          <Button className="search-btn" type="primary">
-                            <Icon type="export"></Icon>Export
-                          </Button>
-                        </CSVLink>
-                      ) : (
-                        ""
-                      )}
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
-              </div>
-              {loader && <FaldaxLoader />}
-              <TableWrapper
-                {...this.state}
-                rowKey="id"
-                columns={tradeTableInfos[0].columns}
-                pagination={false}
-                dataSource={allTrades}
-                className="isoCustomizedTable"
-                onChange={this._handleTradeTableChange}
-                scroll={TABLE_SCROLL_HEIGHT}
-                bordered
-                expandedRowRender={record => {
-                  return (
-                    <div>
-                      <span>
-                        {/* {JSON.stringify(record.execution_report)} */}
-                        {Object.keys(record.execution_report).length > 0 ? (
-                          <ExecutionUl>
-                            {Object.keys(record.execution_report).map(
-                              (element, index) => {
-                                return (
-                                  <li>
-                                    <span className="ex_head">
-                                      <b>{element} : </b>
-                                    </span>
-                                    <span className="ex_data">
-                                      {record.execution_report[element]}
-                                    </span>
-                                  </li>
-                                );
-                              }
-                            )}
-                          </ExecutionUl>
-                        ) : (
-                          <ExecutionUl>
-                          </ExecutionUl>
-                        )}
-                      </span>
-                    </div>
-                  );
-                }}
-              />
-              {allTradeCount > 0 ? (
-                <Pagination
-                  style={{ marginTop: "15px" }}
-                  className="ant-users-pagination"
-                  onChange={this._handleTradePagination.bind(this)}
-                  pageSize={limit}
-                  current={page}
-                  total={parseInt(allTradeCount)}
-                  showSizeChanger
-                  onShowSizeChange={this._changePaginationSize}
-                  pageSizeOptions={pageSizeOptions}
+          <div><Form onSubmit={this._searchTrade}>
+            <Row justify="start" type="flex" className="table-filter-row">
+              <Col sm={6}>
+                <Input
+                  placeholder="Search trades"
+                  onChange={this._changeSearch.bind(this)}
+                  value={searchTrade}
                 />
-              ) : (
-                ""
-              )}
-            </div>
+              </Col>
+              <Col sm={3}>
+                <Select
+                  getPopupContainer={trigger => trigger.parentNode}
+                  placeholder="Select type"
+                  onChange={this._changeFilter}
+                  value={filterVal}
+                >
+                  <Option value={""}>All</Option>
+                  <Option value={"Sell"}>Sell</Option>
+                  <Option value={"Buy"}>Buy</Option>
+                </Select>
+              </Col>
+              <Col sm={6}>
+                <RangePicker
+                  value={rangeDate}
+                  disabledTime={this.disabledRangeTime}
+                  onChange={this._changeDate}
+                  format="YYYY-MM-DD"
+                  allowClear={false}
+                  className='full-width'
+                />
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  htmlType="submit"
+                  className="filter-btn btn-full-width"
+                  type="primary"
+                >
+                  <Icon type="search"/>Search
+                </Button>
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  className="filter-btn full-width"
+                  type="primary"
+                  onClick={this._resetFilters}
+                ><Icon type="reload"></Icon>
+                  Reset
+                </Button>
+              </Col>
+              <Col xs={12} sm={3}>
+                {allTrades && allTrades.length > 0 ? (
+                  <CSVLink
+                    filename={"trade_history.csv"}
+                    data={allTrades}
+                    headers={tradeHeaders}
+                  >
+                    <Button className="filter-btn full-width" type="primary">
+                      <Icon type="export"></Icon>Export
+                    </Button>
+                  </CSVLink>
+                ) : (
+                  ""
+                )}
+              </Col>
+            </Row>
+          </Form></div>
+          <TableWrapper
+            {...this.state}
+            rowKey="id"
+            columns={tradeTableInfos[0].columns}
+            pagination={false}
+            dataSource={allTrades}
+            className="float-clear table-tb-margin"
+            onChange={this._handleTradeTableChange}
+            scroll={TABLE_SCROLL_HEIGHT}
+            bordered
+            expandedRowRender={record => {
+              return (
+                <div>
+                  <span>
+                    {/* {JSON.stringify(record.execution_report)} */}
+                    {Object.keys(record.execution_report).length > 0 ? (
+                      <ExecutionUl>
+                        {Object.keys(record.execution_report).map(
+                          (element, index) => {
+                            return (
+                              <li>
+                                <span className="ex_head">
+                                  <b>{element} : </b>
+                                </span>
+                                <span className="ex_data">
+                                  {record.execution_report[element]}
+                                </span>
+                              </li>
+                            );
+                          }
+                        )}
+                      </ExecutionUl>
+                    ) : (
+                      <ExecutionUl>
+                      </ExecutionUl>
+                    )}
+                  </span>
+                </div>
+              );
+            }}
+          />
+          {allTradeCount > 0 && (
+            <Pagination
+              className="ant-users-pagination"
+              onChange={this._handleTradePagination.bind(this)}
+              pageSize={limit}
+              current={page}
+              total={parseInt(allTradeCount)}
+              showSizeChanger
+              onShowSizeChange={this._changePaginationSize}
+              pageSizeOptions={pageSizeOptions}
+            />
+          )}
+          {loader && <FaldaxLoader />}
         </TableDemoStyle>
-      // </LayoutWrapper>
     );
   }
 }

@@ -672,3 +672,17 @@ html[dir='rtl'] .dz-hidden-input {
   font-weight: 600;
   color: #174c7e;
 }
+
+.permission-scroll{
+  height: 55vh;
+  overflow: scroll;
+}
+.campaign-user-inline {
+  display: inline-block;
+  width: 40% !important;
+}
+.inner-row{
+  padding: 25px;
+  border: 1px solid #e8e8e8;
+  margin-bottom: 15px;
+}

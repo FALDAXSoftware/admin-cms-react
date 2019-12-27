@@ -26,7 +26,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.created_on"/>,
-        key:1,
+        key:"created_at",
         dataIndex:"created_at",
         sorter: true,
         align:"left",
@@ -36,17 +36,17 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.amount"/>,
-        key:2,
-        sorter: true,
-       align:"left",
+        key:"amount",
+        // sorter: true,
+        align:"left",
         ellipsis: true,
         width:150,
         render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
     },
     {
         title:<IntlMessages id="walletDetailsTable.title.faldax_fee"/>,
-        key:3,
-        sorter: true,
+        key:"faldax_fee",
+        // sorter: true,
         align:"left",
         ellipsis: true,
         width:150,
@@ -100,7 +100,7 @@ class WalletDetailsComponent extends Component {
 
     handleTableChange = (pagination,filter,sorter) => {
         this.setState(
-            { sorterCol: sorter.field, sortOrder: sorter.order, page: 1 },
+            { sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 },
             () => {
               this.getWalletData();
             }
@@ -168,7 +168,7 @@ class WalletDetailsComponent extends Component {
                             </Row>
                         </Form>
                         <TableWrapper
-                            rowKey="id"
+                            rowKey="created_at"
                             {...this.state}
                             tableLayout="fixed"
                             columns={columns}
