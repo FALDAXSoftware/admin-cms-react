@@ -363,21 +363,22 @@ class Jobs extends Component {
         <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
-              <Row type="flex" justify="start">
-                <ColWithMarginBottom md={3}>
+              <Row type="flex" justify="start" >
                   {isAllowed("add_job") && isAllowed("get_job_categories") && (
+                <ColWithMarginBottom md={4}>
                     <Button
                       type="primary"
+                      className="full-width"
                       onClick={this._showAddJobModal}
                     >
                       <Icon type="plus" />
                       Add Job
                     </Button>
-                  )}
                 </ColWithMarginBottom>
-                <ColWithMarginBottom md={13}></ColWithMarginBottom>
+                  )}
                 <ColWithMarginBottom md={8}>
                   <Search
+                    className="full-width"
                     placeholder="Search jobs"
                     onSearch={value => this._searchJob(value)}
                     enterButton

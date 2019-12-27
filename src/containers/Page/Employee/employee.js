@@ -337,20 +337,21 @@ class Employees extends Component {
             key={employeeTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-              <Row type="flex" justify="start">
-                <Col md={12}>
+              <Row type="flex" justify="start" className="table-filter-row">
                   {isAllowed("add_employee") && (
+                <Col md={4}>
                     <Button
+                      className="full-width"
                       type="primary"
                       onClick={this._showAddEmpModal}
                     >
                       <Icon type="plus" /> Add Employee
                     </Button>
-                  )}
                 </Col>
-                <Col md={12} className="txt-align-right">  
+                  )}
+                <Col md={6} >  
                   <Search
-                    className="search-with-btn"
+                    className="search-with-btn full-width"
                     placeholder="Search employees"
                     onSearch={value => this._searchEmpoyee(value)}
                     enterButton

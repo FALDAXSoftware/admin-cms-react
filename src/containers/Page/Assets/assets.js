@@ -334,20 +334,20 @@ class Assets extends Component {
             <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
               <TableDemoStyle className="isoLayoutContent">
                 <Row type="flex" justify="start">
-                  <ColWithMarginBottom md={6}>
+                  <ColWithMarginBottom md={4}>
                     {isAllowed("create_coins") && (
-                      <Button type="primary" onClick={this._showAddCoinModal}>
+                      <Button type="primary" className="full-width" onClick={this._showAddCoinModal}>
                         <Icon type="plus" />
                         Add Asset
                       </Button>
                     )}
                   </ColWithMarginBottom>
-                  <ColWithMarginBottom md={12}></ColWithMarginBottom>
-                  <ColWithMarginBottom md={6}>
+                  <ColWithMarginBottom md={8}>
                     <Search
                       placeholder="Search assets"
                       onSearch={value => this._searchCoin(value)}
                       enterButton
+                      className="full-width"
                     />
                   </ColWithMarginBottom>
                 </Row>
