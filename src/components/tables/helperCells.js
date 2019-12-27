@@ -1299,11 +1299,12 @@ const CountrySwitchCell = (value, name, legality,color,is_active,disabled=false)
     }}
   />
 );
-const StateSwitchCell = (value, name, legality, color, is_active) => (
+const StateSwitchCell = (value, name, legality, color, is_active,disabled=false) => (
   <Switch
     className="switch-cell"
     checkedChildren="Active"
-      unCheckedChildren="Inactive"
+    disabled={disabled}
+    unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       stateStatus(value, name, legality, color, is_active);
@@ -2335,11 +2336,12 @@ const TemplateActionCell = (value, name, content, note) => (
     }
   </div >
 );
-const NewsSourceSwitchCell = (value, source_name, slug, is_active) => (
+const NewsSourceSwitchCell = (value, source_name, slug, is_active,disabled=false) => (
   <Switch
+    disabled={disabled}
     className="switch-cell"
     checkedChildren="Active"
-      unCheckedChildren="Inactive"
+    unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       newsSourceStatus(value, source_name, slug, is_active);
@@ -2434,11 +2436,12 @@ const WithdrawStatusCell = (
           : "Dis-Approved"}
     </p>
   );
-const JobCatSwitchCell = (value, category, is_active) => (
+const JobCatSwitchCell = (value, category, is_active,disabled=false) => (
   <Switch
+    disabled={disabled}
     className="switch-cell"
     checkedChildren="Active"
-      unCheckedChildren="Inactive"
+    unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
       jobCategoryStatus(value, category, is_active);

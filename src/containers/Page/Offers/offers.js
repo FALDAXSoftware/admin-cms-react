@@ -39,7 +39,9 @@ class Offers extends Component {
       metabaseUrl: "",
       searchData:"",
       rangeDate:"",
-      usage_type:""
+      usage_type:undefined,
+      sorterCol:"",
+      sortOrder:""
     };
     self = this;
     this.validator = new SimpleReactValidator({});
@@ -88,7 +90,7 @@ class Offers extends Component {
       } else if (res.status == 401 || res.status == 403) {
         self.setState({
           errMsg: true,
-          errMessage: res.message,
+          errMessage: res.err,
           errType: "error"
         });
         self.loader.hide();
@@ -108,12 +110,12 @@ class Offers extends Component {
   }
 
   async getAllCampaign() {
-    let { page, limit , searchData,rangeDate,usage_type} = this.state;
+    let { page, limit , searchData,rangeDate,usage_type,sortOrder,sorterCol} = this.state;
     let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
     this.loader.show();
     try {
       let offers = await (
-        await ApiUtils.offers(this.props.token).getCampaignList(page,limit,searchData,start_date,end_date,usage_type)
+        await ApiUtils.offers(this.props.token).getCampaignList(page,limit,searchData,start_date,end_date,usage_type,sortOrder,sorterCol)
       ).json();
       if (offers.status == 200) {
         this.setState({
@@ -123,7 +125,7 @@ class Offers extends Component {
       } else if (offers.status == 401 || offers.status == 403) {
         this.setState({
           errMsg: true,
-          errMessage: offers.message,
+          errMessage: offers.err,
           errType: "error"
         });
         this.props.logout();
@@ -187,6 +189,15 @@ class Offers extends Component {
     }
   }
 
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState(
+      { sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 },
+      () => {
+        this.getAllCampaign();
+      }
+    );
+  };
+
   render() {
     let {
       loader,
@@ -245,10 +256,10 @@ class Offers extends Component {
                         <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                     </Col>
                     <Col className="table-column" xs={12} md={4}>
-                        <Select className="full-width" placeholder="Type" value={usage_type} onChange={value => this.setState({usage_type:value})}>
-                            <Option value=""></Option>
-                            <Option value="1">Single Code Used</Option>
-                            <Option value="2">Multiple Code Used</Option>
+                        <Select className="full-width" placeholder="Type" placeholder="Select Type" value={usage_type} onChange={value => this.setState({usage_type:value})}>
+                            <Option value="">All</Option>
+                            <Option value="1">Single Code Use</Option>
+                            <Option value="2">Multiple Code Use</Option>
                         </Select>
                     </Col>
                     <Col className="table-column" xs={12} md={3}>

@@ -69,10 +69,10 @@ const columns = [{
 },
 {
   title: <IntlMessages id="CampaignTable.title.created_at" />,
- align:"left",
+  align:"left",
   key: 'created_at',
+  sorter:true,
   width: 150,
-  sorter: false,
   render: object => renderCell(object, 'DateTimeCell',"created_at")
 }, 
 {
@@ -80,7 +80,7 @@ const columns = [{
    align:"left",
     key: 'label',
     width: 200,
-    sorter: false,
+
     render: object => renderCell(object, 'TextCell', 'label',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 }, 
 {
@@ -88,7 +88,7 @@ const columns = [{
    align:"left",
     key: 'start_date',
     width: 150,
-    sorter: false,
+
     render: object => renderCell(object, 'DateCell', 'start_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
@@ -96,7 +96,7 @@ const columns = [{
    align:"left",
     key: 'end_date',
     width: 150,
-    sorter: false,
+
     render: object => renderCell(object, 'DateCell', 'end_date',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
@@ -104,15 +104,14 @@ const columns = [{
  align:"left",
   key: 'usage',
   width: 200,
-  sorter: false,
   render: object => renderCell(object, 'CampaignTypeCell', 'usage',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 {
     title: <IntlMessages id="CampaignTable.title.is_active" />,
-   align:"left",
+     align:"left",
     key: 'is_active',
     width: 100,
-    sorter: false,
+
     render: object => renderCell(object, 'CampaignSwitchCell', 'is_active',"id","label","start_date","end_date","is_active","created_at","updated_at","deleted_at",)
 },
 ]

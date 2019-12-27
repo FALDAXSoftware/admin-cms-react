@@ -71,7 +71,7 @@ const columns = [{
 
 const userWithdrawReqTableInfos = [
     {
-        title: 'User Withdraw Requests',
+        title: 'User Withdrawal Request',
         value: 'userWithdrawRequestTable',
         columns: clone(columns)
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification,Icon,Select, DatePicker, Button, Form, Row } from 'antd';
+import { Input, Pagination, notification,Icon,Select, DatePicker, Button, Form, Row,Col } from 'antd';
 import { simplexTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,7 +10,6 @@ import moment from 'moment';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import Col from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Option = Select.Option;
@@ -179,8 +178,6 @@ class SimplexHistory extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                        
-                           
                                 <Form onSubmit={this._searchTrade}>
                                     <Row type="flex" justify="start" className="table-filter-row">
                                         <Col md={6} sm={24}>
@@ -188,6 +185,7 @@ class SimplexHistory extends Component {
                                                 placeholder="Search trades"
                                                 onChange={this._changeSearch.bind(this)}
                                                 value={searchTrade}
+                                                className="full-width"
                                             />
                                         </Col>
                                         {/* <Col sm={3}>
@@ -206,6 +204,7 @@ class SimplexHistory extends Component {
                                             <Select
                                                 getPopupContainer={trigger => trigger.parentNode}
                                                 placeholder="Select Status"
+                                                className="full-width"
                                                 onChange={this._changeStatus}
                                                 value={simplex_payment_status}
                                             >
@@ -222,7 +221,7 @@ class SimplexHistory extends Component {
                                                 onChange={this._changeDate}
                                                 format="YYYY-MM-DD"
                                                 allowClear={false}
-                                                style={{ width: "100%" }}
+                                                className="full-width"
                                             />
                                         </Col>
                                         <Col xs={24} md={3} sm={24}>

@@ -3218,7 +3218,7 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token
       },
-      getCampaignList: function (page, limit,searchData="",startDate="",endDate="",type="") {
+      getCampaignList: function (page, limit,searchData="",startDate="",endDate="",type="",sortOrder="",sorterCol="") {
         let formData = new FormData();
         formData.append("page", page);
         formData.append("limit", limit);
@@ -3226,6 +3226,8 @@ const ApiUtils = {
         formData.append("start_date", startDate);
         formData.append("end_date",endDate);
         formData.append("type", type);
+        formData.append("sort_order", sortOrder);
+        formData.append("sort_col", sorterCol);
         return fetch(`${API_URL}${this.url}list`, {
           method: "POST",
           headers: this.headers,

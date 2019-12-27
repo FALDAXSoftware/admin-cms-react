@@ -8,6 +8,7 @@ import { Divider, Input,Button, Card, notification } from 'antd';
 import Loader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../../helpers/apiUtills';
+import { isAllowed } from '../../../helpers/accessControl';
 
 class TermsAndConditions extends Component {
    constructor(props){
@@ -100,7 +101,7 @@ class TermsAndConditions extends Component {
                             <input type="file" onChange={(e)=>this.onChangeImg(e,ele.slug)} accept="application/pdf" name="Upload Privacy Doc"></input>
                             <Input key={index} className="cypher-text-container"  ref={ele.slug} disabled="true" value={"https://s3.us-east-2.amazonaws.com/"+ele.value} placeholder="Enter the url"/>
                             {this[ele.slug].message(ele.name,fields[ele.slug],"required","error-danger")}
-                            <Button key={index} type="primary" onClick={()=>this.onSubmit(ele.slug)}>Submit</Button>
+                            <Button disabled={!isAllowed("update_static_page_pdf")} key={index} type="primary" onClick={()=>this.onSubmit(ele.slug)}>Submit</Button>
                         </Card></>
                         })
                     }

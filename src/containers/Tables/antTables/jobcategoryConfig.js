@@ -11,7 +11,7 @@ const renderCell = (object, type, key, jobCat = null, active = null) => {
 
     switch (type) {
         case 'JobCatSwitchCell':
-            return JobCatSwitchCell(value, category, is_active);
+            return JobCatSwitchCell(value, category, is_active,!isAllowed("update_job_category"));
         case 'JobCatActionCell':
             return JobCatActionCell(value, category, is_active);
         default:
@@ -29,19 +29,15 @@ const columns = [{
     title: <IntlMessages id="jobTable.title.category" />,
     key: 'category',
     width: 100,
-   align:"left",
+    align:"left",
     render: object => renderCell(object, 'TextCell', 'category')
 }, {
     title: <IntlMessages id="jobTable.title.active" />,
     key: 'is_active',
     width: 100,
-   align:"left",
+    align:"left",
     render: object => {
-        if (isAllowed("update_job_category")) {
-            return renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
-        } else {
-            return renderCell(object, 'TextCell', 'is_active')
-        }
+        return renderCell(object, 'JobCatSwitchCell', 'id', 'category', 'is_active')
     }
 }];
 

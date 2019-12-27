@@ -53,7 +53,7 @@ class ViewRequestModal extends Component {
                         <span><b>Uploaded Image:</b> </span><br />
                         <RequestImg alt="" src={BUCKET_URL + twoFactorReqDetails.uploaded_file} />
                     </div>
-                    : 'N/A'}
+                    : ''}
 
                 {twoFactorReqDetails.reason ?
                     <div>
