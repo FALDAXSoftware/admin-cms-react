@@ -645,8 +645,8 @@ class Dashboard extends Component {
                   <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/withdraw-requests">
                       <CardView
-                        cardText={"Last 7 Days Withdraw Requests"}
-                        cardTitle={"Withdraw Requests"}
+                        cardText={"Last 7 Days Withdrawal Request"}
+                        cardTitle={"Withdrawal Request"}
                         icon={"fa fa-server"}
                         countNumber={withdrawReqCount}
                       />
@@ -656,8 +656,8 @@ class Dashboard extends Component {
                   <Col lg={6} md={12} sm={12} xs={24} >
                     <Link to="/dashboard/withdraw-requests">
                       <CardView
-                        cardText={"Pending Withdraw Requests"}
-                        cardTitle={"Withdraw Requests"}
+                        cardText={"Pending Withdrawal Request"}
+                        cardTitle={"Withdrawal Request"}
                         icon={"fa fa-server"}
                         countNumber={withdrawReqCountValue}
                       />

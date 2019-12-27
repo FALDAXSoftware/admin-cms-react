@@ -19,7 +19,7 @@ const renderCell = (object, type, key, s_name = null, legal = null, colorCode = 
         case 'LegalityCell':
             return LegalityCell(value, name, legality, color, is_active);
         case 'StateSwitchCell':
-            return StateSwitchCell(value, name, legality, color, is_active);
+            return StateSwitchCell(value, name, legality, color, is_active,!isAllowed("activate_state"));
         case 'StateActionCell':
             return StateActionCell(value, name, legality, color, is_active);
         default:
@@ -59,11 +59,7 @@ const columns = [{
    align:"left",
     width: 100,
     render: object => {
-        if (isAllowed("activate_state")) {
-            return renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
-        }else{
-            return renderCell(object, 'TextCell', 'is_active')
-        }
+        return renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
     }
 }];
 

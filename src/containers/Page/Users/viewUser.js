@@ -64,7 +64,7 @@ class ViewUser extends Component {
                         <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_all_withdraw_request") &&
-                        <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
+                        <TabPane tab="Withdrawal Request" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_user_ticket") &&
                         <TabPane tab="Tickets" key="11"><UserTickets user_id={user_id} /></TabPane>

@@ -224,6 +224,7 @@ const options = [
     label: "sidebar.terms",
     leftIcon: "fas fa-file",
     module: "terms-and-conditions",
+    permssions:["get_static_page_links"]
   },
   {
     key: "wallet-dashboard",
@@ -276,7 +277,7 @@ const options = [
   {
     key: "campaign",
     label: "sidebar.offers",
-    leftIcon: "fas fa-percent",
+    leftIcon: "fas fa-percentage",
     module: "offers",
     permssions: [
       "list_campaigns",

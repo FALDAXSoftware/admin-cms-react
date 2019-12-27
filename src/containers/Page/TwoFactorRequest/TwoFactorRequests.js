@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { twoFactorReqInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
@@ -23,10 +22,7 @@ import ViewRequestModal from "./viewRequestModal";
 import RequestActionModal from "./requestActionModal";
 import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
-import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
 
-const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const Option = Select.Option;
 var self;
@@ -48,7 +44,6 @@ class TwoFactorRequests extends Component {
       showViewRequestModal: false,
       twoFactorReqDetails: [],
       filterVal: "",
-      metabaseUrl: ""
     };
     this.validator = new SimpleReactValidator();
     self = this;
@@ -211,22 +206,6 @@ class TwoFactorRequests extends Component {
       });
   };
 
-  async getMetaBaseUrl() {
-    try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getTwoFactorRequest()).json();
-      if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
-      } else if (response.statue == 400 || response.status == 403) {
-
-      }
-    } catch (error) {
-
-    } finally {
-      this.setState({ loader: false })
-    }
-  }
-
   _searchRequest = e => {
     e.preventDefault();
     this.setState({ page: 1 }, () => {
@@ -248,12 +227,6 @@ class TwoFactorRequests extends Component {
       }
     );
   };
-
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
-    }
-  }
 
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
@@ -300,7 +273,6 @@ class TwoFactorRequests extends Component {
       showViewRequestModal,
       searchReq,
       filterVal,
-      metabaseUrl
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -308,119 +280,91 @@ class TwoFactorRequests extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <BackButton {...this.props}/>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
-          {twoFactorReqInfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-              <TableDemoStyle className="isoLayoutContent">
-                <Form onSubmit={this._searchRequest}>
-                  <Row type="flex" justify="start">
-                    <ColWithMarginBottom md={6}>
-                      <Input
-                        placeholder="Search Requests"
-                        onChange={this._changeSearch.bind(this)}
-                        value={searchReq}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom md={6}>
-                      <Select
-                        getPopupContainer={trigger => trigger.parentNode}
-                        placeholder="Select a type"
-                        onChange={this._changeFilter}
-                        value={filterVal}
-                      >
-                        <Option value={""}>All</Option>
-                        <Option value={"open"}>Open</Option>
-                        <Option value={"closed"}>Closed</Option>
-                        <Option value={"rejected"}>Rejected</Option>
-                      </Select>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        htmlType="submit"
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                      >
-                        <Icon type="search" />
-                        Search
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      >
-                        <Icon type="reload" />
-                        Reset
-                      </Button>
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
-                {loader && <FaldaxLoader />}
-                <TableWrapper
-                  {...this.state}
-                  columns={tableInfo.columns}
-                  pagination={false}
-                  dataSource={all2FARequests}
-                  className="isoCustomizedTable float-clear"
-                  onChange={this._handleRequestTableChange}
-                  scroll={TABLE_SCROLL_HEIGHT}
-                  bordered
+        <TableDemoStyle className="isoLayoutContent">
+          <Form onSubmit={this._searchRequest}>
+            <Row type="flex" justify="start">
+              <ColWithMarginBottom md={6}>
+                <Input
+                  placeholder="Search Requests"
+                  onChange={this._changeSearch.bind(this)}
+                  value={searchReq}
                 />
-                <ViewRequestModal
-                  twoFactorReqDetails={twoFactorReqDetails}
-                  showViewRequestModal={showViewRequestModal}
-                  closeViewRequestModal={this._closeViewReqModal}
-                />
-                {allRequestsCount > 0 ? (
-                  <Pagination
-                    style={{ marginTop: "15px" }}
-                    className="ant-users-pagination"
-                    onChange={this._handleRequestPagination.bind(this)}
-                    pageSize={limit}
-                    current={page}
-                    total={allRequestsCount}
-                    showSizeChanger
-                    onShowSizeChange={this._changePaginationSize}
-                    pageSizeOptions={pageSizeOptions}
-                  />
-                ) : (
-                  ""
-                )}
-                <RequestActionModal
-                  showRejectForm={showRejectForm}
-                  twoFactorReqDetails={twoFactorReqDetails}
-                  closeActionReqModal={this._closeRejectForm}
-                  getAll2FARequests={this._getAll2FARequests}
-                />
-              </TableDemoStyle>
-            </TabPane>
-          ))}
-
-          {isAllowed("metabase_two_factor_request") && (
-            <TabPane
-              tab="Report"
-              key="metabase"
-            >
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl && (
-                  <div>
-                    <iframe
-                    className="metabase-iframe"
-                      src={metabaseUrl}
-                      frameborder="0"
-                      width="100%"
-                      allowtransparency
-                    ></iframe>
-                  </div>
-                )}
-              </TableDemoStyle>
-            </TabPane>
+              </ColWithMarginBottom>
+              <ColWithMarginBottom md={6}>
+                <Select
+                  getPopupContainer={trigger => trigger.parentNode}
+                  placeholder="Select a type"
+                  onChange={this._changeFilter}
+                  value={filterVal}
+                >
+                  <Option value={""}>All</Option>
+                  <Option value={"open"}>Open</Option>
+                  <Option value={"closed"}>Closed</Option>
+                  <Option value={"rejected"}>Rejected</Option>
+                </Select>
+              </ColWithMarginBottom>
+              <ColWithMarginBottom xs={12} sm={3}>
+                <Button
+                  htmlType="submit"
+                  className="filter-btn btn-full-width"
+                  type="primary"
+                >
+                  <Icon type="search" />
+                  Search
+                </Button>
+              </ColWithMarginBottom>
+              <ColWithMarginBottom xs={12} sm={3}>
+                <Button
+                  className="filter-btn btn-full-width"
+                  type="primary"
+                  onClick={this._resetFilters}
+                >
+                  <Icon type="reload" />
+                  Reset
+                </Button>
+              </ColWithMarginBottom>
+            </Row>
+          </Form>
+          {loader && <FaldaxLoader />}
+          <TableWrapper
+            rowKey="id"
+            {...this.state}
+            columns={twoFactorReqInfos[0].columns}
+            pagination={false}
+            dataSource={all2FARequests}
+            className="float-clear"
+            onChange={this._handleRequestTableChange}
+            scroll={TABLE_SCROLL_HEIGHT}
+            bordered
+          />
+          <ViewRequestModal
+            twoFactorReqDetails={twoFactorReqDetails}
+            showViewRequestModal={showViewRequestModal}
+            closeViewRequestModal={this._closeViewReqModal}
+          />
+          {allRequestsCount > 0 ? (
+            <Pagination
+              style={{ marginTop: "15px" }}
+              className="ant-users-pagination"
+              onChange={this._handleRequestPagination.bind(this)}
+              pageSize={limit}
+              current={page}
+              total={allRequestsCount}
+              showSizeChanger
+              onShowSizeChange={this._changePaginationSize}
+              pageSizeOptions={pageSizeOptions}
+            />
+          ) : (
+            ""
           )}
-        </Tabs>
-      </LayoutWrapper>
+          <RequestActionModal
+            showRejectForm={showRejectForm}
+            twoFactorReqDetails={twoFactorReqDetails}
+            closeActionReqModal={this._closeRejectForm}
+            getAll2FARequests={this._getAll2FARequests}
+          />
+        </TableDemoStyle>
+    
     );
   }
 }

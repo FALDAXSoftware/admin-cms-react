@@ -12,7 +12,7 @@ const renderCell = (object, type, key, source = null, news_slug = null, active =
 
     switch (type) {
         case 'NewsSourceSwitchCell':
-            return NewsSourceSwitchCell(value, source_name, slug, is_active);
+            return NewsSourceSwitchCell(value, source_name, slug, is_active,!isAllowed("edit_news_source"));
         default:
             return TextCell(value);
     }
@@ -36,11 +36,7 @@ const columns = [{
    align:"left",
     width: 100,
     render: object => {
-        if (isAllowed("edit_news_source")) {
-            return renderCell(object, 'NewsSourceSwitchCell', 'id', 'source_name', 'slug', 'is_active')
-        } else {
-            return renderCell(object, 'TextCell', 'is_active')
-        }
+        return renderCell(object, 'NewsSourceSwitchCell', 'id', 'source_name', 'slug', 'is_active')
     }
 }];
 

@@ -205,7 +205,7 @@ class AddCampaign extends Component {
         this.setState({disabledRadio:true,campaign_offers:res.data.campaign_offers,checkvalue:res.data.usage,startDate:res.data.start_date?moment(res.data.start_date):'',endDate:res.data.end_date?moment(res.data.end_date):'',is_active:res.data.is_active});
         this.setState(fields);
       }else if(res.status==400 || res.status==403){
-        this.setState({errMsg:true,errType:"error",errMessage:res.message});  
+        this.setState({errMsg:true,errType:"error",errMessage:res.err});  
       }
     }catch(error){
       this.setState({errMsg:true,errType:"error",errMessage:"Something went to wrong"});
@@ -799,7 +799,7 @@ class AddCampaign extends Component {
             key: "user_id",
             render:((id)=>{
               let user=this.getUserById(id);
-              return <a href={`/dashboard/users/${id}`}>{user.first_name + " " +user.last_name}</a>
+              return <a target="_blank" href={`/dashboard/users/${id}`}>{user.first_name + " " +user.last_name}</a>
             })
           })
         : columns_temp;
@@ -824,7 +824,7 @@ class AddCampaign extends Component {
           <CampForm onSubmit={this._addCampaign}>
             <Row>
               <CampaignCol>
-                <span>Name*:</span>
+                <span>Name:</span>
                 <Input
                   placeholder="Name"
                   onChange={this._handleChange.bind(this, "campaign_name")}
@@ -951,7 +951,7 @@ class AddCampaign extends Component {
                   <h2>{isOfferUpdate?'Update':'Add'} Offer Codes</h2>
                   <CampForm>
                     <CampaignCol>
-                      <span>Offer Code*:</span>
+                      <span>Offer Code:</span>
                       <Input
                         placeholder="Offer Code"
                         disabled={isOfferUpdate && isUpdate}
@@ -983,10 +983,8 @@ class AddCampaign extends Component {
                     </CampaignCol>
                     <CampaignCol>
                       <CampRow>
-                        <Col span={4}>
-                          <span>Offer Code Status:</span>
-                        </Col>
-                        <Col span={20}>
+                        <Col span={6}>
+                          <span>Offer Code Status:&nbsp;&nbsp;</span>
                           <Switch
                             className="switch-cell"
                             checked={is_offer_active}
@@ -994,17 +992,16 @@ class AddCampaign extends Component {
                             unCheckedChildren="Inactive"
                             size="large"
                             onChange={this._offerStatus.bind(this)}
-                          />
-                        </Col>
+                            />
+                          </Col>
+                      
                       </CampRow>
                     </CampaignCol>
                     {checkvalue === 1 && (
                       <CampaignCol>
                         <CampRow>
-                          <Col span={6}>
-                            <span>Start Date and End Date:</span>
-                          </Col>
-                          <Col span={18}>
+                          <Col>
+                            <span>Start Date and End Date:&nbsp;&nbsp;</span>
                             <RangePicker
                               disabled={false}
                               ranges={{
@@ -1035,7 +1032,7 @@ class AddCampaign extends Component {
                       </Radio.Group>
                     </CampaignCol>
                     {checkOfferValue === 2 && (
-                      <div>
+                      <div className="inner-row">
                         <CampaignCol>
                           <span>Default Total Number of Transactions:</span>
                           <Input
@@ -1080,17 +1077,16 @@ class AddCampaign extends Component {
                     )}
                     {checkvalue === 1 && (
                       <CampRow>
-                        <Col span={6}>
-                          <span>Select User:</span>
-                        </Col>
-                        <Col span={10}>
+                        <Col md={24}>
+                          <span>Select User:&nbsp;&nbsp;</span>
                           <Select
+                            className="campaign-user-inline"
                             disabled={isOfferUpdate && isUpdate}
                             placeholder="Select a user"
                             onSearch={this.onSearch}
                             onChange={this._changeUser}
                             optionFilterProp="children"
-                            value={(parseInt(filterVal)||"")}
+                            value={(parseInt(filterVal)||undefined)}
                             showSearch
                             filterOption={(input, option) =>
                               option.props.children

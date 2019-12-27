@@ -95,7 +95,7 @@ const tableColumns = [
     width:100,
     render: data =>
       data.id ? (
-        <a href={`/dashboard/users/${data.id}`}>
+        <a target="_blanck" href={`/dashboard/users/${data.id}`}>
           {data.first_name + " " + data.last_name}
         </a>
       ) : (
