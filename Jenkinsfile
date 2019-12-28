@@ -55,7 +55,7 @@ volumes: [
                         s3Delete(bucket:'mainnet-admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'mainnet-admin.faldax.com', path:'')
                 }
-                
+                }
                  }
 
          }
