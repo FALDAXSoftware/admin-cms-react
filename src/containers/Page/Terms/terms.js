@@ -54,10 +54,22 @@ class TermsAndConditions extends Component {
         });
    }
 
+   validateDocFormate(doc){
+       if(doc.type=="application/pdf"){
+           return true;
+       }else{
+           this.showNotification("error","Only PDF file format is supported")
+           return false;
+       }
+   }
+
    onSubmit=async(slug)=>{
        try{
            if(this[slug].allValid()){
             let formData=new FormData(),{fields}=this.state,{logout,token}=this.props;
+            if(!this.validateDocFormate(fields[slug])){
+                return false;
+            }
             this.loader.show();
             formData.append("slug",slug);
             formData.append("pdf_file",fields[slug])
@@ -96,12 +108,12 @@ class TermsAndConditions extends Component {
                     <div>
                        { policyUrlList.map((ele,index)=>{
                          return  <>
-                        <Divider className="title-case" key={index}>{ele.name}</Divider>
-                        <Card key={index}>
-                            <input type="file" onChange={(e)=>this.onChangeImg(e,ele.slug)} accept="application/pdf" name="Upload Privacy Doc"></input>
-                            <Input key={index} className="cypher-text-container"  ref={ele.slug} disabled="true" value={"https://s3.us-east-2.amazonaws.com/"+ele.value} placeholder="Enter the url"/>
+                        <Divider className="title-case" key={"divider"+index}>{ele.name}</Divider>
+                        <Card key={"card"+index}>
+                            <input key={"html_input"+index} type="file" onChange={(e)=>this.onChangeImg(e,ele.slug)} accept="application/pdf" name="Upload Privacy Doc"></input>
+                            <Input key={"input"+index} className="cypher-text-container"  ref={ele.slug} disabled={true} value={"https://s3.us-east-2.amazonaws.com/"+ele.value} placeholder="Enter the url"/>
                             {this[ele.slug].message(ele.name,fields[ele.slug],"required","error-danger")}
-                            <Button disabled={!isAllowed("update_static_page_pdf")} key={index} type="primary" onClick={()=>this.onSubmit(ele.slug)}>Submit</Button>
+                            <Button disabled={!isAllowed("update_static_page_pdf")} key={"btn"+index} type="primary" onClick={()=>this.onSubmit(ele.slug)}>Submit</Button>
                         </Card></>
                         })
                     }

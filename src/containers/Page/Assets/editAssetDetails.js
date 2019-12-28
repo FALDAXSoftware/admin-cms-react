@@ -61,26 +61,26 @@ class EditAssetDetails extends Component {
     ApiUtils.getAssetDetails(token, coin_id)
       .then(response => response.json())
       .then(function (res) {
-        _this.setBitGoLimit=res.coin.coin;
         if (res.status == 200) {
+          _this.setBitGoLimit=res.coin.coin;
           if (res.coin.max_limit > 0) {
             _this.setState({
               fields: res.coin,
-              selectedToken: res.coin.isERC,
+              selectedToken: res.coin.iserc,
               min_limit: res.coin.min_limit,
               max_limit: res.coin.max_limit.toFixed(8)
             });
           } else if (res.coin.min_limit) {
             _this.setState({
               fields: res.coin,
-              selectedToken: res.coin.isERC,
+              selectedToken: res.coin.iserc,
               min_limit: res.coin.min_limit.toFixed(8),
               max_limit: res.coin.max_limit
             });
           } else {
             _this.setState({
               fields: res.coin,
-              selectedToken: res.coin.isERC,
+              selectedToken: res.coin.iserc,
               min_limit: res.coin.min_limit,
               max_limit: res.coin.max_limit
             });
@@ -173,7 +173,7 @@ class EditAssetDetails extends Component {
         hot_send_wallet_address: fields["hot_send_wallet_address"],
         hot_receive_wallet_address: fields["hot_receive_wallet_address"],
         custody_wallet_address: fields["custody_wallet_address"],
-        isERC: selectedToken
+        iserc: selectedToken
       };
 
       ApiUtils.editCoin(token, formData)
