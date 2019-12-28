@@ -40,7 +40,6 @@ const columns=[
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.amount"/>,
         key:2,
-        sorter: true,
         width:100,
         render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
     },

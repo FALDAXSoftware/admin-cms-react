@@ -686,3 +686,8 @@ html[dir='rtl'] .dz-hidden-input {
   border: 1px solid #e8e8e8;
   margin-bottom: 15px;
 }
+.link-text{
+  cursor: pointer;
+  text-transform: capitalize;
+  color: #1890ff;
+}

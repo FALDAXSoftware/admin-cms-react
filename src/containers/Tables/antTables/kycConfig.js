@@ -40,7 +40,7 @@ const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null
 
 const columns = [{
     title: <IntlMessages id="kycTable.title.actions" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'action',
     width: 100,
@@ -99,7 +99,7 @@ const columns = [{
    align:"left",
     ellipsis:true,
     key: 'account_tier',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {

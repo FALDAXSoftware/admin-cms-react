@@ -32,7 +32,7 @@ class ViewUser extends Component {
         return (
             <div>
                 <BackButton {...this.props}></BackButton>
-                <Tabs defaultActiveKey="1" size={'large'}>
+                <Tabs size={'large'}>
                     {isAllowed("get_user_details") &&
 
                         <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
@@ -54,7 +54,7 @@ class ViewUser extends Component {
                     {isAllowed("get_all_trade") &&
                         <TabPane tab="History" key="6"><AllTrades user_id={user_id} /></TabPane>
                     }
-                    {isAllowed("update_user_referal") &&
+                    {(isAllowed("update_user_referal") && isAllowed("get_user_details")) &&
                         <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
                     }
                     {isAllowed("referred_users") &&

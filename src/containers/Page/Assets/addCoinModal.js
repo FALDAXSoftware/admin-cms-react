@@ -98,7 +98,7 @@ class AddCoinModal extends Component {
             formData.append('coin_code', fields['coin_code'])
             formData.append('min_limit', fields['min_limit']);
             formData.append('max_limit', fields['max_limit']);
-            formData.append('isERC', selectedToken);
+            formData.append('iserc', selectedToken);
             formData.append('deposit_method', ' ');
             formData.append('kraken_coin_name', ' ');
             formData.append('coin_icon', this.refs.uploadImg.files[0] ? this.refs.uploadImg.files[0] : fields['image']);
@@ -263,7 +263,7 @@ class AddCoinModal extends Component {
                         style={{ width: 125, "marginLeft": "15px" }}
                         placeholder="Select a type"
                         onChange={this._changeFilter}
-                        value={selectedToken}
+                        value={selectedToken.toString()}
                     >
                         <Option value="true">Yes</Option>
                         <Option value="false">No</Option>
