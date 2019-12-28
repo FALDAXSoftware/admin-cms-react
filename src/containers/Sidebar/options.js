@@ -265,15 +265,15 @@ const options = [
   //     "user_tier_request"
   //   ]
   // },
-  {
-    key: "simplex-token",
-    label: "sidebar.token",
-    leftIcon: "fas fa-file-invoice",
-    module: "simplex_token",
-    permssions: [
-      "get_token_value"
-    ]
-  },
+  // {
+  //   key: "simplex-token",
+  //   label: "sidebar.token",
+  //   leftIcon: "fas fa-file-invoice",
+  //   module: "simplex_token",
+  //   permssions: [
+  //     "get_token_value"
+  //   ]
+  // },
   {
     key: "campaign",
     label: "sidebar.offers",

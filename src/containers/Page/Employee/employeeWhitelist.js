@@ -13,6 +13,7 @@ import FaldaxLoader from '../faldaxLoader';
 import AddPermanentIPModal from './addPermanentIPModal';
 import styled from 'styled-components';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 var self;
@@ -263,7 +264,7 @@ class EmployeeWhitelist extends Component {
         return (
                 <TableDemoStyle className="isoLayoutContent">
                     <span>Whitelist:</span>
-                    <Switch className="whitelist-btn"   checkedChildren="Enabled" unCheckedChildren="Disabled" checked={isWhitelist} onChange={this.onClickOpenPermanentIpModal} />
+                    <Switch className="whitelist-btn" disabled={!isAllowed("update_employee")} checkedChildren="Enabled" unCheckedChildren="Disabled" checked={isWhitelist} onChange={this.onClickOpenPermanentIpModal} />
                     {showAddPermanentIPModal && <AddPermanentIPModal
                         emp_id={this.props.emp_id}
                         showAddPermanentIPModal={showAddPermanentIPModal}
@@ -276,7 +277,7 @@ class EmployeeWhitelist extends Component {
                                 whitelistTableInfos.map(tableInfo => (
                                     <div>
                                         <div style={{ "display": "inline-block", "width": "100%" }}>
-                                            <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._showAddIPModal}>Add IP Address</Button>
+                                            <Button type="primary" style={{ "marginBottom": "15px" }} disabled={!isAllowed("update_employee")} onClick={this._showAddIPModal}>Add IP Address</Button>
                                         </div>
                                         <AddIPModal
                                             emp_id={this.props.emp_id}
