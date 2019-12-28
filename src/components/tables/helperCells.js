@@ -1182,7 +1182,7 @@ const FullNameTextCell = (value, fname, lname) => (
 const DaysCell = text => <p>{text == 0 ? "Permanent" : text + " Days"}</p>;
 const TicketSubjectCell = text => (
   <p
-    style={{ cursor: "pointer" }}
+    className="link-text"
     dangerouslySetInnerHTML={{ __html: text }}
   ></p>
 );
@@ -2463,7 +2463,7 @@ const JobCatActionCell = (value, category, is_active) => (
 );
 const WhiteListActionCell = (value, ip, time, is_permanent) => (
   <div>
-    {!is_permanent ? (
+    {(!is_permanent && isAllowed("update_employee"))? (
       <Tooltip title="Delete">
         <Icon
           type="delete"

@@ -98,7 +98,7 @@ const columns = [{
    align:"left",
     ellipsis:true,
     key: 'account_tier',
-    width: 100,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {

@@ -55,7 +55,7 @@ const columns = [{
     key: 'status',
     dataIndex:"status",
     width: 200,
-    render: object => <span className={"kyc-status-"+object}>{object.toUpperCase()}</span>
+    render: object => <span className={"kyc-status-"+object}>{object.toLowerCase()=="closed"?"APPROVED":object.toUpperCase()}</span>
 }];
 
 const twoFactorReqInfos = [

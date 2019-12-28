@@ -4,7 +4,7 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import { withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Tooltip } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
@@ -41,7 +41,7 @@ const columns=[
         key:1,
         dataIndex:"deleted_at",
         sorter: true,
-        width:150,
+        width:160,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     {
@@ -166,7 +166,7 @@ class WalletForfeitDetailsComponent extends Component {
                                     <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                                 </Col>
                                 <Col className="table-column" xs={12} md={7}>
-                                    <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
+                                    <Tooltip title=" Account Deleted Start and End Date"><RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/></Tooltip>
                                 </Col>
                                 <Col className="table-column" xs={12} md={4}>
                                     <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
