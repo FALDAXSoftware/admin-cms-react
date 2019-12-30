@@ -314,7 +314,7 @@ class Offers extends Component {
                       src={metabaseUrl}
                       frameBorder="0"
                       width="100%"
-                      allowtransparency={true}
+                      allowtransparency={"true"}
                     ></iframe>
                 )}
               </TableDemoStyle>
