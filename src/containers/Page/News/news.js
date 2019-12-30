@@ -199,20 +199,20 @@ class News extends Component {
 
   _searchNews = e => {
     e.preventDefault();
-    var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
-    if (patt.test(this.state.searchNews)) {
+    // var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
+    // if (patt.test(this.state.searchNews)) {
       this.setState({ page: 1 }, () => {
         this._getAllNews();
       });
-    } else {
-      this.setState({
-        errMsg: true,
-        errMessage: "Special Characters are not allowed in search.",
-        errType: "error",
-        loader: false
-      });
-    }
-  };
+    // } else {
+    //   this.setState({
+    //     errMsg: true,
+    //     errMessage: "Special Characters are not allowed in search.",
+    //     errType: "error",
+    //     loader: false
+    //   });
+    // }
+  }
 
   _changeFilter = val => {
     this.setState({ filterVal: val });
@@ -220,12 +220,12 @@ class News extends Component {
 
   _changeSearch = (field, e) => {
     this.setState({ searchNews: field.target.value }, () => {
-      var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
-      if (patt.test(this.state.searchNews)) {
-        this.setState({ searchValid: "success" });
-      } else {
-        this.setState({ searchValid: "error" });
-      }
+      // var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
+      // if (patt.test(this.state.searchNews)) {
+      //   this.setState({ searchValid: "success" });
+      // } else {
+      //   this.setState({ searchValid: "error" });
+      // }
     });
   };
 

@@ -5,6 +5,7 @@ import { Card, Row, Col } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
+import { BackButton } from '../../Shared/backBttton';
 
 const { logout } = authAction;
 
@@ -68,24 +69,17 @@ class ReferredAmount extends Component {
 
         return (
             <div className="referral-div">
-                <div style={{ "display": "inline-block", "width": "100%" }}>
-                    <Link to="/dashboard/referral">
-                        <i style={{ marginBottom: '15px', marginRight: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <a onClick={() => { this.props.history.push('/dashboard/referral') }}>Back</a>
-                    </Link>
-                </div>
+                <BackButton {...this.props}/>
                 {result.length > 0 ?
-                    <Row>
+                    <Row className="table-tb-margin">
                         {
                             referredAmounts && referredAmounts.map((ref,index) => (
-                                <Col md={8} sm={12} xs={24}>
-                                    <Card key={index} className='assets-card' onClick={()=>this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}})}>
-                                        <div>
-                                            <div className="asset-coinatiner">
-                                                <img src={'https://s3.us-east-2.amazonaws.com/production-static-asset/' + ref.coin_icon}></img>&nbsp;&nbsp;
-                                                <span>{ref.coin_name}</span>
-                                                <span className="amount">{ref.amount}</span>
-                                            </div>
+                                <Col key={"col"+index} md={8} sm={12} xs={24}>
+                                    <Card key={"card"+index} className='assets-card' onClick={()=>this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}})}>
+                                        <div className="asset-coinatiner">
+                                            <img src={'https://s3.us-east-2.amazonaws.com/production-static-asset/' + ref.coin_icon}></img>&nbsp;&nbsp;
+                                            <span>{ref.coin_name}</span>
+                                            <span className="amount">{ref.amount?parseFloat(ref.amount).toFixed(8):""}</span>
                                         </div>
                                     </Card>
                                 </Col>

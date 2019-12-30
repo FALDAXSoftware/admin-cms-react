@@ -341,36 +341,32 @@ class EditProfile extends Component {
       >
         <Divider>Edit Profile</Divider>
         <div style={{ marginTop: "10px" }}>
-          <span>
-            <b>Name</b>
-          </span>
-          <Input
-            placeholder="Name"
-            style={{ marginBottom: "15px", width: "25%", display: "inherit" }}
-            onChange={this._onChangeFields.bind(this, "first_name")}
-            value={fields["first_name"]}
-          />
-          <span className="field-error">
-            {this.validator.message(
-              "Name",
-              fields["first_name"],
-              "required|max:30"
-            )}
-          </span>
-
-          <span>
-            <b>Email</b>
-          </span>
-          <Input
-            disabled
-            style={{
-              marginBottom: "15px",
-              width: "25%",
-              display: "inherit",
-              readonly: "readonly"
-            }}
-            value={fields["email"]}
-          />
+          <div className="edit-profile-input">
+            <span>
+              <b>Name</b>
+            </span>
+            <Input
+              placeholder="Name"
+              onChange={this._onChangeFields.bind(this, "first_name")}
+              value={fields["first_name"]}
+            />
+            <span className="field-error">
+              {this.validator.message(
+                "Name",
+                fields["first_name"],
+                "required|max:30"
+              )}
+            </span>
+          </div>
+          <div className="edit-profile-input">
+              <span>
+              <b>Email</b>
+            </span>
+            <Input
+              disabled
+              value={fields["email"]}
+            />
+          </div>
           <Button type="primary" onClick={this._editProfile}>
             {" "}
             Update{" "}

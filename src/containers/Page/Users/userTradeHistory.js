@@ -253,7 +253,7 @@ class UserTradeHistory extends Component {
                     <Button
                       type="primary"
                       icon ="export"
-                      className="filter-btn"
+                      className="filter-btn btn-full-width"
                     >
                       Export
                     </Button>

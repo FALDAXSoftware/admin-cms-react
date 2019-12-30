@@ -9,6 +9,7 @@ import {
   Form,
   Row,
   Icon,
+  Col
 } from "antd";
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -19,7 +20,6 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import EditCountryModal from "./editCountryModal";
 import FaldaxLoader from "../faldaxLoader";
-import {ColWithMarginBottom} from "../common.style";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import Metabase from "./countriesMetabase"
@@ -180,19 +180,19 @@ class Countries extends Component {
 
   _searchCountry = e => {
     e.preventDefault();
-    var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
-    if (patt.test(this.state.searchCountry)) {
+    // var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
+    // if (patt.test(this.state.searchCountry)) {
       this.setState({ page: 1 }, () => {
         this._getAllCountries();
       });
-    } else {
-      this.setState({
-        errMsg: true,
-        errMessage: "Special Characters are not allowed in search.",
-        errType: "error",
-        loader: false
-      });
-    }
+    // } else {
+    //   this.setState({
+    //     errMsg: true,
+    //     errMessage: "Special Characters are not allowed in search.",
+    //     errType: "error",
+    //     loader: false
+    //   });
+    // }
   };
 
   _resetFilters = () => {
@@ -266,8 +266,8 @@ class Countries extends Component {
           >
             <TableDemoStyle className="isoLayoutContent">
               <Form onSubmit={this._searchCountry}>
-                <Row gutter={[0, 16]} type="flex" justify="start">
-                  <ColWithMarginBottom lg={7}>
+                <Row gutter={[0, 16]} type="flex" justify="start" className="table-filter-row">
+                  <Col lg={7}>
                     <Form.Item
                       validateStatus={this.state.searchValid}
                       className="cty-search"
@@ -278,8 +278,8 @@ class Countries extends Component {
                         value={searchCountry}
                       />
                     </Form.Item>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={7}>
+                  </Col>
+                  <Col lg={7}>
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a locality"
@@ -292,27 +292,27 @@ class Countries extends Component {
                       <Option value={3}>Neutral</Option>
                       <Option value={4}>Partial Services Available</Option>
                     </Select>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={3}>
+                  </Col>
+                  <Col lg={3}>
                     <Button
                       htmlType="submit"
-                      className="search-btn btn-full-width"
+                      className="filter-btn btn-full-width"
                       type="primary"
                     >
                       <Icon type="search" />
                       Search
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={3}>
+                  </Col>
+                  <Col lg={3}>
                     <Button
-                      className="search-btn btn-full-width"
+                      className="filter-btn btn-full-width"
                       type="primary"
                       onClick={this._resetFilters}
                     >
                       <Icon type="reload" />
                       Reset
                     </Button>
-                  </ColWithMarginBottom>
+                  </Col>
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}

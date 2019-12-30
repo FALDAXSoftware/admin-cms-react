@@ -254,12 +254,12 @@ class Referrals extends Component {
                     </Col>
                 </Row>
                 <TableWrapper
-                    rowKey="id"
+                    rowKey="email"
                     {...this.state}
                     columns={referralInfos[0].columns}
                     pagination={false}
                     dataSource={allReferral}
-                    className="isoCustomizedTable table-tb-margin"
+                    className="table-tb-margin"
                     onChange={this._handleReferralChange}
                     bordered
                     scroll={TABLE_SCROLL_HEIGHT}

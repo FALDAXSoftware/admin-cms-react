@@ -17,23 +17,24 @@ export default class extends Component {
       errors: {},
       errMessage: "",
       errMsg: false,
-      errType: "Success"
+      errType: "Success",
+      formSubmitted:false
     };
     this.validator = new SimpleReactValidator();
   }
 
   _onChangeFields(field, e) {
-    let fields = this.state.fields;
+    let {fields,formSubmitted} = this.state;
     if (e.target.value.trim() == "") {
       fields[field] = "";
     } else {
       fields[field] = e.target.value;
     }
-    if (
-      field == "confirmPwd" &&
-      (e.target.value.trim() == "" || e.target.value == undefined)
-    ) {
+    if (field == "confirmPwd" && e.target.value==fields["newPwd"]) 
+    {
       this.setState({ errors: {} });
+    }else if(formSubmitted && fields["newPwd"]){
+      this.setState({errors:{"main":"New Password and Confirm Password doesn't match."}}) 
     }
     this.setState({ fields });
   }
@@ -48,6 +49,7 @@ export default class extends Component {
 
   resetPassword = e => {
     try {
+      this.setState({formSubmitted:true})
       e.preventDefault();
       const { fields, errors } = this.state;
       this.setState({ loader: true });

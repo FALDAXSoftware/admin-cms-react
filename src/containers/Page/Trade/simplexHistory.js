@@ -225,15 +225,15 @@ class SimplexHistory extends Component {
                                             />
                                         </Col>
                                         <Col xs={24} md={3} sm={24}>
-                                            <Button htmlType="submit" className="search-btn btn-full-width" type="primary"><Icon type="search"></Icon>Search</Button>
+                                            <Button htmlType="submit" className="filter-btn btn-full-width" type="primary"><Icon type="search"></Icon>Search</Button>
                                         </Col>
                                         <Col xs={24} md={3} sm={24}>
-                                            <Button className="search-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
+                                            <Button className="filter-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"/>Reset</Button>
                                         </Col>
                                         <Col xs={24} sm={24} md={3}>
                                             {allSimplexTrades && allSimplexTrades.length > 0 ?
                                                 <CSVLink filename={'simplex_history.csv'} data={allSimplexTrades} headers={tradeHeaders}>
-                                                    <Button className="search-btn btn-full-width" type="primary"><Icon type="export"></Icon>Export</Button>
+                                                    <Button className="filter-btn btn-full-width" type="primary"><Icon type="export"></Icon>Export</Button>
                                                 </CSVLink>
                                                 : ''}
                                         </Col>
