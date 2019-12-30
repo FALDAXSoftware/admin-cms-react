@@ -307,17 +307,17 @@ class Offers extends Component {
           ))}
           {isAllowed("metabase_offers_report") && (
             <TabPane tab="Report" key="metabase">
-              <TableWrapper className="isoLayoutContent">
+              <TableDemoStyle className="isoLayoutContent">
                 {metabaseUrl && (
                     <iframe
                       className="metabase-iframe"
                       src={metabaseUrl}
-                      frameborder="0"
+                      frameBorder="0"
                       width="100%"
-                      allowtransparency
+                      allowtransparency={true}
                     ></iframe>
                 )}
-              </TableWrapper>
+              </TableDemoStyle>
             </TabPane>
           )}
         </Tabs>
