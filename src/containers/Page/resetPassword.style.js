@@ -17,9 +17,9 @@ const ResetPasswordStyleWrapper = styled.div`
   &:before {
     content: '';
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
     position: absolute;
     z-index: 1;
     top: 0;

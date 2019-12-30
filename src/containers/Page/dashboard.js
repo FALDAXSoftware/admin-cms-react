@@ -546,36 +546,29 @@ class Dashboard extends Component {
                 <Divider/>
                 <Row style={rowStyle} gutter={0} justify="start">
                   <Col lg={6} md={12} sm={12} xs={24}>
-                    <Link to="/dashboard/users">
-                      <CountCard
-                        number={activeUsers}
-                        headcolor={"#1f2431"}
-                        number2={inactiveUsers}
-                        bgcolor={"#fff"}
-                        style={{
-                          boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
-                        }}
-                        title={"Users"}
-                        text={"Active Users"}
-                        text2={"Inactive Users"}
-                        icon="fa fa-users"
-                        fontColor="#2d3446"
-                      />
-                    </Link>
+                    <Link target="_blank" to="/dashboard/users">
+                        <CountCard
+                          number={activeUsers}
+                          headcolor={"#1f2431"}
+                          number2={inactiveUsers}
+                          number3={deletedUsers}
+                          bgcolor={"#fff"}
+                          style={{
+                            boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                          }}
+                          title={"Users"}
+                          text={"Active Users"}
+                          text2={"Inactive Users"}
+                          text3={"Deactivated Accounts"}
+                          icon="fa fa-users"
+                          fontColor="#2d3446"
+                          {...this.props}
+                        />
+                      </Link>
                   </Col>
-
-                  {/* Deleted Account */}
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <CardView 
-                      cardText={"Deleted Account"}
-                      cardTitle={"Deleted Account"}
-                      icon={"fa fa-users"}
-                      countNumber={deletedUsers}
-                    />
-                  </Col>
-
-                  <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/assets">
+                    <Link target="_blank" to="/dashboard/assets">
+                      
                       <CountCard
                         number={activeCoins}
                         headcolor={"#1f2431"}
@@ -594,7 +587,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/pairs">
+                    <Link target="_blank" to="/dashboard/pairs">
                       <CountCard
                         number={activePairs}
                         headcolor={"#1f2431"}
@@ -613,7 +606,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/employee">
+                    <Link target="_blank" to="/dashboard/employee">
                       <CountCard
                         number={activeEmployeeCount}
                         headcolor={"#1f2431"}
@@ -632,7 +625,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/jobs">
+                    <Link target="_blank" to="/dashboard/jobs">
                       <CardView
                         cardText={"Pending Job Applications"}
                         cardTitle={"Pending Job Applications"}
@@ -643,7 +636,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/withdraw-requests">
+                    <Link target="_blank" to="/dashboard/withdraw-requests">
                       <CardView
                         cardText={"Last 7 Days Withdrawal Request"}
                         cardTitle={"Withdrawal Request"}
@@ -654,7 +647,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/withdraw-requests">
+                    <Link target="_blank" to="/dashboard/withdraw-requests">
                       <CardView
                         cardText={"Pending Withdrawal Request"}
                         cardTitle={"Withdrawal Request"}
@@ -665,7 +658,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/users">
+                    <Link target="_blank" to="/dashboard/users">
                       <CardView
                         cardText={"Signed up Users"}
                         cardTitle={"24 hours Signed up Users"}

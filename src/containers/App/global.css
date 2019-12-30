@@ -541,12 +541,15 @@ html[dir='rtl'] .dz-hidden-input {
 }
 .status-open{
   color: #5dade2;
+  font-weight: 500;
 }
 .status-cancelled{
   color:red;
+  font-weight: 500;
 }
 .status-filled{
   color: green;
+  font-weight: 500;
 }
 .fees-container{
   width:60%;
@@ -661,15 +664,15 @@ html[dir='rtl'] .dz-hidden-input {
 }
 .order-2 {
   color: green;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .order-3 {
-  font-weight: 600;
+  font-weight: 500;
   color: orangered;
 }
 .order-1 {
-  font-weight: 600;
+  font-weight: 500;
   color: #174c7e;
 }
 
@@ -690,4 +693,20 @@ html[dir='rtl'] .dz-hidden-input {
   cursor: pointer;
   text-transform: capitalize;
   color: #1890ff;
+}
+.text-ellipsis{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edit-profile-input{
+  margin-bottom: 10px;
+}
+.edit-profile-input input{
+  display: block;
+  width: 30%;
+}
+.signin-link{
+  font-size: 12px;
 }

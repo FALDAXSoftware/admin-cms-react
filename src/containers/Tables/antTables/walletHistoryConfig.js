@@ -25,31 +25,31 @@ const renderCell = (object, type, key, createdOn = null, t_type = null, source =
 const columns = [{
     title: <IntlMessages id="walletTable.title.created_at" />,
     key: 'created_at',
-    ellipses:true,
+    ellipsis:true,
     width: 200,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
 }, {
     title: <IntlMessages id="walletTable.title.transaction_type" />,
     key: 'transaction_type',
-    ellipses:true,
+    ellipsis:true,
     width: 200,
     render: object => renderCell(object, 'TextCell', 'transaction_type')
 }, {
     title: <IntlMessages id="walletTable.title.source_address" />,
     key: 'source_address',
-    ellipses:true,
+    ellipsis:true,
     width: 100,
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: <IntlMessages id="walletTable.title.destination_address" />,
     key: 'destination_address',
-    ellipses:true,
+    ellipsis:true,
     width: 100,
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="walletTable.title.amount" />,
     key: 'amount',
-    ellipses:true,
+    ellipsis:true,
     width: 100,
     render: object => renderCell(object, 'TextCell', 'amount')
 }];

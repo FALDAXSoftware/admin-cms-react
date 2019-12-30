@@ -4,7 +4,7 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import { withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Tooltip } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
@@ -18,7 +18,7 @@ const columns=[
     {
         title:<IntlMessages id="ReferralDetailsTable.title.tx_date"/>,
         key:4,
-        ellipses:true,
+        ellipsis:true,
         dataIndex:"updated_at",
         width:150,
         render:(date)=>DateTimeCell(date)
@@ -26,21 +26,22 @@ const columns=[
     {
         title:<IntlMessages id="ReferralDetailsTable.title.amount"/>,
         key:5,
-        ellipses:true,
+        ellipsis:true,
         dataIndex:"amount",
         width:150,
     },
     {
         title:<IntlMessages id="ReferralDetailsTable.title.email"/>,
         key:1,
-        ellipses:true,
+        ellipsis:true,
         dataIndex:"email",
         width:250,
+        render:data=><span><Tooltip title={data} autoAdjustOverflow={true}><p className="text-ellipsis">{data}</p></Tooltip></span>
     },
     {
         title:<IntlMessages id="ReferralDetailsTable.title.txid"/>,
         key:0,
-        ellipses:true,
+        ellipsis:true,
         dataIndex:"txid",
         width:150,
         render:data=><a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":data+""}})}>{data}</a>
@@ -130,7 +131,7 @@ class ReferralDetailsComponent extends Component {
                             </Col>
                         </Row>
                         <TableWrapper
-                            rowKey="id"
+                            rowKey="updated_at"
                             {...this.state}
                             columns={columns}
                             pagination={false}

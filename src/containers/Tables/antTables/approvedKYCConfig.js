@@ -112,7 +112,7 @@ const columns = [{
 
 const ApprovedKYCInfos = [
     {
-        title: 'KYC',
+        title: 'Customer ID',
         value: 'KYCTable',
         columns: clone(columns)
     }

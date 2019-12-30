@@ -129,9 +129,9 @@ class PersonalDetails extends Component {
         {userDetails != null && (
           <ParentDiv className="parent-div">
             <Row type="flex" justify="end">
-              {isAllowed("user_activate") &&
                 <Col span={3}>
                   <Switch
+                    disabled={!isAllowed("user_activate")}
                     className="personal-btn"
                     checked={userDetails.is_active}
                     checkedChildren="Active"
@@ -141,10 +141,9 @@ class PersonalDetails extends Component {
                   />
                   <br />
                 </Col>
-              }
-              {isAllowed("user_activate") &&
                 <Col span={3}>
                   <Switch
+                    disabled={!isAllowed("user_activate")}  
                     className="personal-btn"
                     checked={userDetails.is_verified}
                     checkedChildren="Verified"
@@ -153,7 +152,6 @@ class PersonalDetails extends Component {
                     onChange={this._userStatus.bind(this, "is_verified")}
                   />
                 </Col>
-              }
               </Row>
             <Row>
               <Col>
