@@ -203,6 +203,7 @@ const AccessGrant = (props) => {
                     <Col md={3}>
                       <Tooltip>
                         <Button
+                          className="full-width"
                           onClick={() => {
                             checkAll();
                           }}
@@ -214,6 +215,7 @@ const AccessGrant = (props) => {
                     <Col md={3.5}>
                       <Tooltip>
                         <Button
+                          className="full-width"
                           onClick={() => {
                             uncheckAll();
                           }}

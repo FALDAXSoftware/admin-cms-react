@@ -113,7 +113,7 @@ const columns = [{
 
 const KYCInfos = [
     {
-        title: 'KYC',
+        title: 'Customer ID',
         value: 'KYCTable',
         columns: clone(columns)
     }

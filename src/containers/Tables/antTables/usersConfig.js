@@ -99,12 +99,12 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'last_name')
 }, {
     title: <IntlMessages id="antTable.title.email" />,
-   align:"left",
-    ellipsis:true,
+    align:"left",
     key: 'email',
     width: 250,
+    ellipsis:true,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
+    dataIndex:'email'
 }, {
     title: <IntlMessages id="antTable.title.country" />,
    align:"left",
@@ -115,7 +115,7 @@ const columns = [{
     render: object => renderCell(object, 'TextCell', 'country')
 }, {
     title: <IntlMessages id="antTable.title.state" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'state',
     width: 150,
@@ -124,14 +124,14 @@ const columns = [{
 },
 {
     title: <IntlMessages id="antTable.title.zip" />,
-   align:"left",
+     align:"left",
     ellipsis:true,
     key: 'postal_code',
     width: 150,
     render: object => renderCell(object, 'TextCell', 'postal_code')
 },{
     title: <IntlMessages id="antTable.title.tier" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'account_tier',
     width: 150,

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const antIcon = <img className="faldax-loader" src={Loader} alt="loading..." />
 
 const Overlay = styled.div`
-    width: 100%;
+    width: ${props => props.isSignUpPage ? "calc(100% - 500px)" : "100%"};
     height: 100vh;
     background-color: rgb(0,0,0,0.5);
     position: fixed;
@@ -25,9 +25,10 @@ class FaldaxLoader extends Component {
         }
     }
 
-    render() {
+    render() { 
+        console.log(this.props)
         return (
-            <Overlay>
+            <Overlay {...this.props}>
                 <Spin indicator={antIcon} />
             </Overlay>
         );

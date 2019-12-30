@@ -41,6 +41,7 @@ const columns_temp = [
     key: "id",
     align:"left",
     width:100,
+    ellipsis:true,
     render: id => (
       <Tooltip title="edit">
         <Icon
@@ -56,31 +57,34 @@ const columns_temp = [
     dataIndex: "code",
     key: "code",
     align:"left",
+    ellipsis:true,
     width:150,
   },
   {
     title: "Description",
     dataIndex: "description",
     align:"left",
-    ellipses:true,
-    width:100,
+    ellipsis:true,
+    width:300,
     key: "description",
-    render:(desc)=><p>{desc}</p>
+    render:data=><span><Tooltip title={data} autoAdjustOverflow={true}><p className="text-ellipsis">{data}</p></Tooltip></span>
   },
   {
     title: "No of transactions",
     dataIndex: "no_of_transactions",
     key: "no_of_transactions",
     align:"left",
-    width:100,
+    ellipsis:true,
+    width:150,
   },
   {
     title: "Total fees allowed",
     dataIndex: "fees_allowed",
     key: "fees_allowed",
+    ellipsis:true,
     render: fees => <span>{fees} USD</span>,
     align:"left",
-    width:100,
+    width:150,
   },
   {
     title: "Start Date",
@@ -88,6 +92,7 @@ const columns_temp = [
     key: "start_date",
     render: start_date => start_date?OfferDateCell(start_date):'-',
     align:"left",
+    ellipsis:true,
     width:150,
   },
   {
@@ -95,6 +100,7 @@ const columns_temp = [
     dataIndex: "end_date",
     key: "end_date",
     align:"left",
+    ellipsis:true,
     width:150,
     render: end_date => end_date?OfferDateCell(end_date):'-'
   },
@@ -102,7 +108,8 @@ const columns_temp = [
     title: "Status",
     key: "is_active",
     align:"left",
-    width:100,
+    ellipsis:true,
+    width:105,
     render: (object) =>{
       return (
         <Switch
@@ -787,6 +794,8 @@ class AddCampaign extends Component {
             title: "User",
             dataIndex: "user_id",
             key: "user_id",
+            ellipsis:true,
+            width:150,
             render:((id)=>{
               let user=this.getUserById(id);
               return <a target="_blank" href={`/dashboard/users/${id}`}>{user.first_name + " " +user.last_name}</a>

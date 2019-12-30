@@ -612,7 +612,7 @@ class AddUser extends Component {
           <Row style={{ marginBottom: "15px" }}>
             <Col>
               <Checkbox checked={isKYC} onChange={this._isKYCCompleted} />{" "}
-              <span>Do you want to accept KYC ?</span>
+              <span>Do you want to accept Customer ID ?</span>
               <br />
             </Col>
           </Row>

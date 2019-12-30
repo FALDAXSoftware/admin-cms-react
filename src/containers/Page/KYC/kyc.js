@@ -208,7 +208,7 @@ class KYC extends Component {
                 <Row type="flex" justify="start" className="table-filter-row">
                   <Col md={7}>
                     <Input
-                      placeholder="Search KYC"
+                      placeholder="Search Customer ID"
                       onChange={this._changeSearch.bind(this)}
                       value={searchKYC}
                     />
@@ -278,13 +278,13 @@ class KYC extends Component {
               )}
             </TableDemoStyle>
           </TabPane>
-          <TabPane tab="Approved KYC" key="2">
+          <TabPane tab="Approved Customer ID" key="2">
             <ApprovedKYC />
           </TabPane>
-          <TabPane tab="Under Review KYC" key="3">
+          <TabPane tab="Under Customer ID" key="3">
             <ReviewKYC />
           </TabPane>
-          <TabPane tab="Declined KYC" key="4">
+          <TabPane tab="Declined Customer ID" key="4">
             <DeclinedKYC />
           </TabPane>
           {isAllowed("metabase_kyc_report") && (
