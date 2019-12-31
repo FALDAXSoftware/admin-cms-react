@@ -9,9 +9,6 @@ import { connect } from 'react-redux';
 import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ApprovedKYC from './approvedKYC';
-import ReviewKYC from './reviewKYC';
-import DeclinedKYC from './declinedKYC';
 import moment from 'moment';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
@@ -183,15 +180,10 @@ class KYC extends Component {
     }
   }
 
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
-    }
-  }
 
   render() {
     const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,
-      allKYCCount, rangeDate, searchKYC, limit, metabaseUrl } = this.state;
+      allKYCCount, rangeDate, searchKYC, limit } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS
 
     if (errMsg) {
@@ -199,111 +191,80 @@ class KYC extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <BackButton {...this.props}/>
-        <Tabs className="isoTableDisplayTab" onChange={this.onChangeTabs}>
-          <TabPane tab={KYCInfos[0].title} key={KYCInfos[0].value}>
-            <TableDemoStyle className="isoLayoutContent">
-              <Form onSubmit={this._searchKYC}>
-                <Row type="flex" justify="start" className="table-filter-row">
-                  <Col md={7}>
-                    <Input
-                      placeholder="Search Customer ID"
-                      onChange={this._changeSearch.bind(this)}
-                      value={searchKYC}
-                    />
-                  </Col>
-                  <Col md={7}>
-                    <RangePicker
-                      value={rangeDate}
-                      disabledTime={this.disabledRangeTime}
-                      onChange={this._changeDate}
-                      format="YYYY-MM-DD"
-                      allowClear={false}
-                      style={{ width: "100%" }}
-                    />
-                  </Col>
-                  <Col xs={24} md={3}>
-                    <Button
-                      htmlType="submit"
-                      className="filter-btn btn-full-width"
-                      type="primary"
-                    >
-                      <Icon type="search" />
-                      Search
-                    </Button>
-                  </Col>
-                  <Col xs={24} md={3}>
-                    <Button
-                      className="filter-btn btn-full-width"
-                      type="primary"
-                      onClick={this._resetFilters}
-                    >
-                      <Icon type="reload" />
-                      Reset
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-              {loader && <FaldaxLoader />}
-              <ViewKYCModal
-                kycDetails={kycDetails}
-                showViewKYCModal={showViewKYCModal}
-                closeViewModal={this._closeViewKYCModal}
+      <TableDemoStyle className="isoLayoutContent">
+        <Form onSubmit={this._searchKYC}>
+          <Row type="flex" justify="start" className="table-filter-row">
+            <Col md={7}>
+              <Input
+                placeholder="Search Customer ID"
+                onChange={this._changeSearch.bind(this)}
+                value={searchKYC}
               />
-                <TableWrapper
-                  rowKey="id"
-                  {...this.state}
-                  columns={KYCInfos[0].columns}
-                  pagination={false}
-                  dataSource={allKYCData}
-                  className="table-tb-margin"
-                  onChange={this._handleKYCTableChange}
-                  bordered
-                  scroll={TABLE_SCROLL_HEIGHT}
-                />
-              {allKYCCount > 0 ? (
-                <Pagination
-                  className="ant-users-pagination"
-                  onChange={this._handleKYCPagination.bind(this)}
-                  pageSize={limit}
-                  current={page}
-                  total={parseInt(allKYCCount)}
-                  showSizeChanger
-                  onShowSizeChange={this._changePaginationSize}
-                  pageSizeOptions={pageSizeOptions}
-                />
-              ) : (
-                ""
-              )}
-            </TableDemoStyle>
-          </TabPane>
-          <TabPane tab="Approved Customer ID" key="2">
-            <ApprovedKYC />
-          </TabPane>
-          <TabPane tab="Under Customer ID" key="3">
-            <ReviewKYC />
-          </TabPane>
-          <TabPane tab="Declined Customer ID" key="4">
-            <DeclinedKYC />
-          </TabPane>
-          {isAllowed("metabase_kyc_report") && (
-            <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl && (
-                    <iframe
-                      className="metabase-iframe"
-                      src={metabaseUrl}
-                      frameBorder="0"
-                      width="100%"
-                      allowtransparency="true"
-                    ></iframe>
-                )}
-              </TableDemoStyle>
-            </TabPane>
-          )}
-        </Tabs>
-      </LayoutWrapper>
+            </Col>
+            <Col md={7}>
+              <RangePicker
+                value={rangeDate}
+                disabledTime={this.disabledRangeTime}
+                onChange={this._changeDate}
+                format="YYYY-MM-DD"
+                allowClear={false}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col xs={24} md={3}>
+              <Button
+                htmlType="submit"
+                className="filter-btn btn-full-width"
+                type="primary"
+              >
+                <Icon type="search" />
+                Search
+              </Button>
+            </Col>
+            <Col xs={24} md={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this._resetFilters}
+              >
+                <Icon type="reload" />
+                Reset
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+        {loader && <FaldaxLoader />}
+        <ViewKYCModal
+          kycDetails={kycDetails}
+          showViewKYCModal={showViewKYCModal}
+          closeViewModal={this._closeViewKYCModal}
+        />
+          <TableWrapper
+            rowKey="id"
+            {...this.state}
+            columns={KYCInfos[0].columns}
+            pagination={false}
+            dataSource={allKYCData}
+            className="table-tb-margin"
+            onChange={this._handleKYCTableChange}
+            bordered
+            scroll={TABLE_SCROLL_HEIGHT}
+          />
+        {allKYCCount > 0 ? (
+          <Pagination
+            className="ant-users-pagination"
+            onChange={this._handleKYCPagination.bind(this)}
+            pageSize={limit}
+            current={page}
+            total={parseInt(allKYCCount)}
+            showSizeChanger
+            onShowSizeChange={this._changePaginationSize}
+            pageSizeOptions={pageSizeOptions}
+          />
+        ) : (
+          ""
+        )}
+      </TableDemoStyle>
     );
   }
 }
@@ -314,4 +275,3 @@ export default connect(
     token: state.Auth.get('token')
   }), { logout })(KYC);
 
-export { KYC }

@@ -1,14 +1,22 @@
-import React, { Component } from "react";
-import ApiUtils from "../../../helpers/apiUtills";
-import authAction from "../../../redux/auth/actions";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { notification } from "antd";
+import React, { Component } from 'react';
+import ApiUtils from '../../../helpers/apiUtills';
+import authAction from '../../../redux/auth/actions';
+import { withRouter} from "react-router-dom";
+import { connect} from 'react-redux';
+import { notification } from 'antd';
+import FaldaxLoader from '../faldaxLoader';
 
 class CountryMetabase extends Component {
-  state = {
-    metabaseUrl: ""
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      metabaseUrl: "",
+      loader:false
+    };
+    this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})}
+  }
+
+  
 
   componentDidMount() {
     this.getIframeUrl();
@@ -23,48 +31,50 @@ class CountryMetabase extends Component {
 
   async getIframeUrl() {
     try {
+      this.loader.show();
       let response = await (
         await ApiUtils.metabase(this.props.token).getCountryMetabaseUrl()
       ).json();
       if (response.status == 200) {
         this.setState({ metabaseUrl: response.frameURL });
-      } else if (response.state == 400 || response.status == 403) {
+      } else if(response.status==400 || response.status==403){
         this.openNotificationWithIconError("Error", response.message);
+        this.loader.hide();
         this.props.logout();
       }
     } catch (error) {
+      this.loader.hide();
       this.openNotificationWithIconError(
         "Error",
         "Something went to wrong please try again later"
       );
     }
   }
+  
   render() {
     let { metabaseUrl } = this.state;
     return (
       <React.Fragment>
         {metabaseUrl && (
-          <div class="full-width">
+          <div className="full-width">
             <iframe
               className="metabase-iframe"
               src={metabaseUrl}
-              frameborder="0"
+              frameBorder="0"
               width="100%"
-              allowtransparency
+              onLoad={()=>{this.loader.hide()}}
+              allowtransparency="true"
             ></iframe>
           </div>
         )}
+        {this.state.loader && <FaldaxLoader/>}
       </React.Fragment>
     );
   }
 }
-
-export default withRouter(
-  connect(
+ 
+export default withRouter(connect(
     state => ({
-      token: state.Auth.get("token"),
-      user: state.Auth.get("user")
-    }),
-    { ...authAction }
-  )(CountryMetabase)
-);
+        token: state.Auth.get('token'),
+        user: state.Auth.get('user'),
+    }), { ...authAction })(CountryMetabase));

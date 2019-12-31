@@ -237,4 +237,4 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(DeclinedKYC);
 
-export { DeclinedKYC }
+

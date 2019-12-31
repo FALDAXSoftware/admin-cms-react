@@ -274,7 +274,7 @@ const AccessGrant = (props) => {
                                   onCheckedChange(e, per.main_module, index);
                                 }}
                               >
-                                {per.display_name.charAt(0).toUpperCase() + per.display_name.slice(1)}
+                                <span className="camel-case">{per.display_name}</span>
                               </Checkbox>
                             </Col>
                           ))}

@@ -110,7 +110,7 @@ const tableColumns = [
     key: "user_data",
     align:"left",
     ellipsis:true,
-    width:100,
+    width:200,
     render: data =>
       data.id ? (
         <a target="_blanck" href={`/dashboard/users/${data.id}`}>

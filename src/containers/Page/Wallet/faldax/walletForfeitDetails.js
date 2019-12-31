@@ -28,7 +28,7 @@ const columns=[
         title:<IntlMessages id="walletForfeitDetailsTable.title.created_at"/>,
        align:"left",
         ellipsis: true,
-        key:1,
+        key:"created_at",
         dataIndex:"created_at",
         sorter: true,
         width:150,
@@ -38,7 +38,7 @@ const columns=[
         title:<IntlMessages id="walletForfeitDetailsTable.title.deleted_at"/>,
        align:"left",
         ellipsis: true,
-        key:1,
+        key:"deleted_at",
         dataIndex:"deleted_at",
         sorter: true,
         width:160,
@@ -102,7 +102,7 @@ class WalletForfeitDetailsComponent extends Component {
     }
 
     componentDidMount(){
-        this.setState({coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state.assets)})
+        this.setState({coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state?this.props.location.state.assets:"[]")})
         this.getWalletData();
     }
 

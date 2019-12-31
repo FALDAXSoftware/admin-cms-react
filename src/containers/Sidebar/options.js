@@ -227,7 +227,7 @@ const options = [
     permssions:["get_static_page_links"]
   },
   {
-    key: "wallet-dashboard",
+    key: "wallet",
     label: "sidebar.wallet_dashboard",
     leftIcon: "fas fa-wallet",
     module: "wallet_dashboard",

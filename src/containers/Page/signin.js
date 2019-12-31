@@ -154,7 +154,7 @@ class SignIn extends Component {
                   <IntlMessages id="page.signInForgotPass" />
                 </Link>
               </div>
-              {loader && <FaldaxLoader/>}
+              {loader && <FaldaxLoader isSignUpPage={true}/>}
             </div>
           </div>
         </div>

@@ -242,4 +242,3 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(ReviewKYC);
 
-export { ReviewKYC }

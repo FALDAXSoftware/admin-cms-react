@@ -4,11 +4,19 @@ import authAction from '../../../redux/auth/actions';
 import { withRouter} from "react-router-dom";
 import { connect} from 'react-redux';
 import { notification } from 'antd';
+import FaldaxLoader from '../faldaxLoader';
 
-class RolesMetabase extends Component {
-  state = {
-    metabaseUrl: ""
-  };
+class Metabase extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      metabaseUrl: "",
+      loader:false
+    };
+    this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})}
+  }
+
+  
 
   componentDidMount() {
     this.getIframeUrl();
@@ -23,6 +31,7 @@ class RolesMetabase extends Component {
 
   async getIframeUrl() {
     try {
+      this.loader.show();
       let response = await (
         await ApiUtils.metabase(this.props.token).getRolesRequest()
       ).json();
@@ -30,9 +39,11 @@ class RolesMetabase extends Component {
         this.setState({ metabaseUrl: response.frameURL });
       } else if(response.status==400 || response.status==403){
         this.openNotificationWithIconError("Error", response.message);
+        this.loader.hide();
         this.props.logout();
       }
     } catch (error) {
+      this.loader.hide();
       this.openNotificationWithIconError(
         "Error",
         "Something went to wrong please try again later"
@@ -45,16 +56,18 @@ class RolesMetabase extends Component {
     return (
       <React.Fragment>
         {metabaseUrl && (
-          <div class="full-width">
+          <div className="full-width">
             <iframe
               className="metabase-iframe"
               src={metabaseUrl}
-              frameborder="0"
+              frameBorder="0"
               width="100%"
-              allowtransparency
+              onLoad={()=>{this.loader.hide()}}
+              allowtransparency="true"
             ></iframe>
           </div>
         )}
+        {this.state.loader && <FaldaxLoader/>}
       </React.Fragment>
     );
   }
@@ -64,4 +77,4 @@ export default withRouter(connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }), { ...authAction })(RolesMetabase));
+    }), { ...authAction })(Metabase));
