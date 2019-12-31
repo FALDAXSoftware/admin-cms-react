@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs } from 'antd';
-import { userTransactionTableInfos } from "../../Tables/antTables";
+import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -49,6 +49,17 @@ class UserTransactionHistory extends Component {
         this.setState({ errMsg: false });
     };
 
+    addTransactionFees(data, fees) {
+        return data.map(ele => {
+          ele["transaction_fees"] =
+            ele["transaction_type"] == "send"
+              ? ((parseFloat(ele.amount) * parseFloat(fees)) / 100).toFixed(8) +" "+ 
+              ele.coin
+              : "-";
+          return ele;
+        });
+      }
+
     _getUserTransactions = () => {
         const { token, user_id } = this.props;
         const { searchTransaction, page, limit, startDate, endDate, filterVal, sorterCol, sortOrder } = this.state;
@@ -58,6 +69,10 @@ class UserTransactionHistory extends Component {
         ApiUtils.getUserTransaction(page, limit, token, searchTransaction, startDate, endDate, user_id, filterVal, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
+                res.data = _this.addTransactionFees(
+                    res.data,
+                    res.default_send_Coin_fee
+                  );
                 if (res.status == 200) {
                     _this.setState({ allTransactions: res.data, allTransactionCount: res.transactionCount });
                 } else if (res.status == 403) {
@@ -208,7 +223,7 @@ class UserTransactionHistory extends Component {
                         < TableWrapper
                             rowId="id"
                             {...this.state}
-                            columns={userTransactionTableInfos[0].columns}
+                            columns={transactionTableInfos.columns}
                             pagination={false}
                             dataSource={allTransactions}
                             className="table-tb-margin float-clear"
@@ -241,4 +256,4 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(UserTransactionHistory);
 
-export { UserTransactionHistory, userTransactionTableInfos };
+export { UserTransactionHistory};

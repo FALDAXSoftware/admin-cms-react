@@ -8,6 +8,17 @@ const antIcon = <img className="faldax-loader" src={Loader} alt="loading..." />
 const Overlay = styled.div`
     width: ${props => props.isSignUpPage ? "calc(100% - 500px)" : "100%"};
     height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+const MainOverlay = styled.div`
+    width: 100%;
+    height: 100vh;
     background-color: rgb(0,0,0,0.5);
     position: fixed;
     top: 0;
@@ -28,9 +39,11 @@ class FaldaxLoader extends Component {
     render() { 
         console.log(this.props)
         return (
-            <Overlay {...this.props}>
-                <Spin indicator={antIcon} />
-            </Overlay>
+            <MainOverlay> 
+                <Overlay {...this.props}>
+                    <Spin indicator={antIcon} />
+                </Overlay>
+            </MainOverlay>
         );
     }
 }

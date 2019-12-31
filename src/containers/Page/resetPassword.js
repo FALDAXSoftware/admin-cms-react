@@ -186,7 +186,7 @@ export default class extends Component {
                   </Button>
                 </div>
                 </Form>
-                {loader && <FaldaxLoader />}
+                {loader && <FaldaxLoader isSignUpPage={true}/>}
                 <div className="isoCenterComponent isoHelperWrapper">
                   <Link to="/signin" className="isoForgotPass">
                     <IntlMessages id="page.signInButton" />

@@ -27,10 +27,10 @@ box-shadow: 0px 3px 4px 0px rgba(45, 52, 70,0.5);
   }
 
   & .count{
-    padding: 5px;
-    font-size: 20px;
+    padding: 2px;
+    font-size: 18px;
     color:#2d3446;
-    font-weight: bold;
+    font-weight: 500;
     width: 50px;
     display: inline-block;
   }

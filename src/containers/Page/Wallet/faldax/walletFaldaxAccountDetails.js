@@ -79,7 +79,7 @@ class WalletFaldaxDetailsComponent extends Component {
     }
 
     componentDidMount(){
-        this.setState({coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state.assets)})
+        this.setState({coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state?this.props.location.state.assets:"[]")})
         this.getWalletData();
     }
 

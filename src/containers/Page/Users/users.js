@@ -11,6 +11,7 @@ import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import ApiUtils from "../../../helpers/apiUtills";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { BackButton } from '../../Shared/backBttton';
+import Metabase from './metabase';
 const { TabPane } = Tabs;
 const { logout } = authAction;
 class Users extends Component {
@@ -21,32 +22,8 @@ class Users extends Component {
     }
   }
   componentDidMount() {
-    debugger
     if (!isAllowed("add_user") && !isAllowed("get_users") && !isAllowed("get_inactive_users") && !isAllowed("get_deleted_users")) {
       this.props.logout();
-    }
-  }
-
-  async getMetaBaseUrl() {
-    try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getUsersRequest()).json();
-      if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
-      } else if (response.statue == 400 || response.status == 403) {
-
-      }
-    } catch (error) {
-
-    } finally {
-      this.setState({ loader: false })
-    }
-  }
-
-
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
     }
   }
 
@@ -83,17 +60,7 @@ class Users extends Component {
             <TabPane tab="Deactivated Users" key="3"><DeletedUsers /></TabPane>
           }
          {isAllowed('metabase_users_report') && <TabPane tab="Report" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                  <iframe
-                    className="metabase-iframe"
-                    src={metabaseUrl}
-                    frameBorder="0"
-                    width="100%"
-                    allowtransparency="true"
-                  ></iframe>
-              }
-            </TableDemoStyle>
+              <Metabase/>
           </TabPane>
          }
         </Tabs>
