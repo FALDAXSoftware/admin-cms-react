@@ -299,7 +299,7 @@ class TwoFactorRequests extends Component {
                 >
                   <Option value={""}>All</Option>
                   <Option value={"open"}>Open</Option>
-                  <Option value={"closed"}>Closed</Option>
+                  <Option value={"closed"}>Approved</Option>
                   <Option value={"rejected"}>Rejected</Option>
                 </Select>
               </ColWithMarginBottom>

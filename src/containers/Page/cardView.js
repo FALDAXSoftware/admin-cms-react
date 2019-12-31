@@ -6,8 +6,7 @@ function CardView(props) {
         <CountCard
             headcolor={'#1f2431'}
             title={props.cardTitle}
-            number={props.countNumber}
-            text={props.cardText}
+            data={[{"name":props.cardText,"count":props.countNumber}]}
             icon={props.icon}
             fontColor="#ffffff"
             bgcolor={'#fff'}

@@ -238,10 +238,8 @@ class ApprovedKYC extends Component {
     }
 }
 
-export default connect(
+export default  connect(
     state => ({
         user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }), { logout })(ApprovedKYC);
-
-export { ApprovedKYC }

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import authAction from '../../../redux/auth/actions';
 import { BackButton } from '../../Shared/backBttton';
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Divider, Input,Button, Card, notification } from 'antd';
+import { Divider, Input,Button, Card, notification, Icon } from 'antd';
 import Loader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../../helpers/apiUtills';
@@ -114,6 +114,7 @@ class TermsAndConditions extends Component {
                             <Input key={"input"+index} className="cypher-text-container"  ref={ele.slug} disabled={true} value={"https://s3.us-east-2.amazonaws.com/"+ele.value} placeholder="Enter the url"/>
                             {this[ele.slug].message(ele.name,fields[ele.slug],"required","error-danger")}
                             <Button disabled={!isAllowed("update_static_page_pdf")} key={"btn"+index} type="primary" onClick={()=>this.onSubmit(ele.slug)}>Submit</Button>
+                            <div className="terms-note"><p><Icon type="info-circle"/>&nbsp;Note:&nbsp;Only PDF file format is supported.</p></div>
                         </Card></>
                         })
                     }

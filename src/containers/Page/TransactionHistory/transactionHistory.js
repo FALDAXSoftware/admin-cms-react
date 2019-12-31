@@ -34,13 +34,6 @@ const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
-  }
-`;
 
 class Transactions extends Component {
   constructor(props) {
@@ -205,23 +198,6 @@ class Transactions extends Component {
       }
     );
   };
-
-  async getMetaBaseUrl() {
-    try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getTransactionHistory()).json();
-      if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
-      } else if (response.statue == 400 || response.status == 403) {
-
-      }
-    } catch (error) {
-
-    } finally {
-      this.setState({ loader: false })
-    }
-  }
-
   openNotificationWithIconError = type => {
     notification[type]({
       message: this.state.errType,
@@ -245,11 +221,7 @@ class Transactions extends Component {
     });
   };
 
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
-    }
-  }
+
 
   _copyNotification = () => {
     this.setState({
@@ -291,17 +263,7 @@ class Transactions extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
 
-    return (
-      <LayoutWrapper>
-        <BackButton {...this.props}/>
-        <Tabs
-          className="isoTableDisplayTab full-width"
-          onChange={this.onChangeTabs}
-        >
-          <TabPane
-            tab={transactionTableInfos.title}
-            key={transactionTableInfos.value}
-          >
+    return (    
             <TableDemoStyle className="isoLayoutContent">
               <Form onSubmit={this._searchTransaction}>
                 <Row type="flex" justify="start">
@@ -472,30 +434,7 @@ class Transactions extends Component {
               ) : (
                 ""
               )}
-            </TableDemoStyle>
-          </TabPane>
-
-          {isAllowed("metabase_transaction_history_report") && (
-            <TabPane
-              tab="Report"
-              key="metabase"
-            >
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl && (
-                  <IframeCol>
-                    <iframe
-                      src={metabaseUrl}
-                      frameborder="0"
-                      width="100%"
-                      allowtransparency
-                    ></iframe>
-                  </IframeCol>
-                )}
-              </TableDemoStyle>
-            </TabPane>
-          )}
-        </Tabs>
-      </LayoutWrapper>
+            </TableDemoStyle>  
     );
   }
 }
@@ -507,4 +446,3 @@ export default connect(
   { logout }
 )(Transactions);
 
-export { Transactions, transactionTableInfos };

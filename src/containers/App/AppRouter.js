@@ -56,7 +56,7 @@ const routes = [
     // },
     {
         path: "transaction-history",
-        component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistory")),
+        component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistoryTabs")),
         module: "transaction_history"
     },
     {
@@ -66,7 +66,7 @@ const routes = [
     },
     {
         path: "withdraw-requests",
-        component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest")),
+        component: asyncComponent(() => import("../Page/WithdrawRequest/tabs")),
         module: "withdraw_requests"
     },
     {
@@ -76,7 +76,7 @@ const routes = [
     },
     {
         path: "kyc",
-        component: asyncComponent(() => import("../Page/KYC/kyc")),
+        component: asyncComponent(() => import("../Page/KYC/kycTabs")),
         module: "kyc"
     },
     {
@@ -130,7 +130,7 @@ const routes = [
         module: "notifications"
     },
     {
-        path: "wallet-dashboard",
+        path: "wallet",
         component: asyncComponent(() => import("../Page/Wallet/walletDashboard")),
         module: "wallet_dashboard"
     },

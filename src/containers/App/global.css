@@ -659,6 +659,16 @@ html[dir='rtl'] .dz-hidden-input {
   text-transform: uppercase;
 }
 
+.camel-case{
+  text-transform: capitalize;
+}
+
+.terms-note{
+  margin-top: 5px;
+    font-size: 13px;
+    font-style: italic
+}
+
 .table-filter-row .ant-col{
   padding: 4px;
 }
@@ -709,4 +719,9 @@ html[dir='rtl'] .dz-hidden-input {
 }
 .signin-link{
   font-size: 12px;
+}
+
+.limit-div
+{
+  background: #f1f3f6;
 }

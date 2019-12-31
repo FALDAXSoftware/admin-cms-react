@@ -9,6 +9,7 @@ import { isAllowed } from '../../../helpers/accessControl';
 import { messages } from '../../../helpers/messages'
 import styled from 'styled-components';
 import { BackButton } from '../../Shared/backBttton';
+import LayoutWrapper from '../../../components/utility/layoutWrapper';
 
 const SaveBtn = styled(Button)`
     float: right;
@@ -479,11 +480,11 @@ class EditableTable extends React.Component {
     });
 
     return (
-      <div>
+      <LayoutWrapper>
         {isAllowed("get_admin_thresholds_contacts") &&
-          <div>
+          <div className="full-width">
             <BackButton {...this.props}/>
-            <Divider orientation="left">Contact Information</Divider>
+            <Divider orientation="center">Contact Information</Divider>
             <div className="isoLayoutContent" style={{ marginTop: "10px" }}>
               <span>
                 <b>Email Address</b>
@@ -528,8 +529,9 @@ class EditableTable extends React.Component {
         }
         {isAllowed("get_admin_thresholds") &&
 
-          <div>
-            <Divider orientation="left">Notification Thresholds</Divider>
+          <div className="full-width table-tb-margin limit-div ">
+            <Divider orientation="center">Notification Thresholds</Divider>
+            
             <EditableContext.Provider value={this.props.form}>
               <Table
                 className="isoLayoutContent"
@@ -544,7 +546,7 @@ class EditableTable extends React.Component {
         }
 
         {loader && <FaldaxLoader />}
-      </div>
+      </LayoutWrapper>
     );
   }
 }
