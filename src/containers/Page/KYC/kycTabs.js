@@ -19,25 +19,15 @@ class KycTabs extends Component {
           <LayoutWrapper>
             <BackButton {...this.props} />
             <Tabs className="full-width">
-             {isAllowed("get_all_kyc_data") &&<> <TabPane tab="Customer ID" key="1">
-                <Kyc />
-              </TabPane>
-              <TabPane tab="Approved Customer ID" key="2">
-                <ApprovedKYC />
-              </TabPane>
-              <TabPane tab="Under Customer ID" key="3">
-                <ReviewKYC />
-              </TabPane>
-              <TabPane tab="Declined Customer ID" key="4">
-                <DeclinedKYC />
-              </TabPane></>}
-                {isAllowed("metabase_kyc_report") && <TabPane tab="Report" key="5">
-                <Metabase />
-              </TabPane>}
+             {isAllowed("get_all_kyc_data") && <TabPane tab="Customer ID" key="1"><Kyc/></TabPane>}
+             {isAllowed("get_all_kyc_data") && <TabPane tab="Approved Customer ID" key="2"><ApprovedKYC /></TabPane>}
+             {isAllowed("get_all_kyc_data") && <TabPane tab="Under Customer ID" key="3"><ReviewKYC /></TabPane>}
+             {isAllowed("get_all_kyc_data") &&<TabPane tab="Declined Customer ID" key="4"><DeclinedKYC /></TabPane>}
+             {isAllowed("metabase_kyc_report") && <TabPane tab="Report" key="5"><Metabase /></TabPane>}
             </Tabs>
           </LayoutWrapper>
         );
     }
 }
  
-export default withRouter(KycTabs);
+export default withRouter(KycTabs)
