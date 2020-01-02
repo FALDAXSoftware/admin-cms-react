@@ -92,7 +92,7 @@ class JobCategory extends Component {
     _getAllJobCategories = () => {
         const { token } = this.props;
         let _this = this;
-
+        this.setState({loader:true});
         ApiUtils.getAllJobCategories(token, false)
             .then((response) => response.json())
             .then(function (res) {

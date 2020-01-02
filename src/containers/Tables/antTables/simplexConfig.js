@@ -99,26 +99,12 @@ const columns = [
   {
     title: <IntlMessages id="simplexTradeTable.title.simplex_payment_status" />,
     key: "simplex_payment_status",
+    dataIndex: "simplex_payment_status",
     width: 150,
-   align:"left",
+    align:"left",
     sorter: true,
-    render: object =>
-      renderCell(
-        object,
-        "SimplexStatusCell",
-        "id",
-        "payment_id",
-        "quote_id",
-        "currency",
-        "settle_currency",
-        "email",
-        "side",
-        "quantity",
-        "fill_price",
-        "simplex_payment_status",
-        "created_at"
-      )
   }
+  
 ];
 
 const simplexTableInfos = [

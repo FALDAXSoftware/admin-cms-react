@@ -2170,7 +2170,7 @@ const JobSwitchCell = (
   );
 const JobButtonCell = value => (
   <div>
-      <Button disabled={!isAllowed("get_job_applicants")} type="primary" onClick={() => showApplicants(value)}>
+      <Button size={"small"} disabled={!isAllowed("get_job_applicants")} type="primary" onClick={() => showApplicants(value)}>
         Show Applications
         </Button>
   </div>
