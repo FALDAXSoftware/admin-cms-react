@@ -55,9 +55,6 @@ class Jobs extends Component {
 
   componentDidMount = () => {
     this._getAllJobs();
-    if (isAllowed("get_job_categories")) {
-      this._getAllJobCategories();
-    }
   };
 
   static jobStatus(
@@ -95,7 +92,6 @@ class Jobs extends Component {
             isDisabled: false
           });
           self._getAllJobs();
-          self._getAllJobCategories();
         } else if (res.status == 403) {
           self.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -143,7 +139,9 @@ class Jobs extends Component {
       is_active,
       category
     };
-    self.setState({ showEditJobModal: true, jobDetails });
+    self.setState({ showEditJobModal: true, jobDetails },()=>{if(isAllowed("get_job_categories")) {
+      self._getAllJobCategories();
+    }})
   }
 
   static viewJob(
@@ -217,7 +215,7 @@ class Jobs extends Component {
   _getAllJobCategories = () => {
     const { token } = this.props;
     let _this = this;
-
+    this.setState({loader:true})
     ApiUtils.getAllJobCategories(token, true)
       .then(response => response.json())
       .then(function (res) {
@@ -301,7 +299,9 @@ class Jobs extends Component {
   };
 
   _showAddJobModal = () => {
-    this.setState({ showAddJobModal: true });
+    this.setState({ showAddJobModal: true},()=>{if (isAllowed("get_job_categories")) {
+      this._getAllJobCategories();
+    }});
   };
 
   _closeAddJobModal = () => {
