@@ -26,31 +26,32 @@ const columns = [{
     title: <IntlMessages id="walletTable.title.created_at" />,
     key: 'created_at',
     ellipsis:true,
-    width: 200,
+    width: 150,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
 }, {
     title: <IntlMessages id="walletTable.title.transaction_type" />,
     key: 'transaction_type',
+    dataIndex:'transaction_type',
     ellipsis:true,
-    width: 200,
-    render: object => renderCell(object, 'TextCell', 'transaction_type')
+    width: 100,
+    render:(data)=><span className="camel-case">{data}</span>
 }, {
     title: <IntlMessages id="walletTable.title.source_address" />,
     key: 'source_address',
     ellipsis:true,
-    width: 100,
+    width: 300,
     render: object => renderCell(object, 'TextCell', 'source_address')
 }, {
     title: <IntlMessages id="walletTable.title.destination_address" />,
     key: 'destination_address',
     ellipsis:true,
-    width: 100,
+    width: 300,
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="walletTable.title.amount" />,
     key: 'amount',
     ellipsis:true,
-    width: 100,
+    width: 150,
     render: object => renderCell(object, 'TextCell', 'amount')
 }];
 

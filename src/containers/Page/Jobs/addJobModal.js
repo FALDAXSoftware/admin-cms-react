@@ -165,6 +165,9 @@ class AddJobModal extends Component {
                     >
                         {catOptions}
                     </Select>
+                    <span style={{ "color": "red" }}>
+                        {this.validator.message('category',selectedCategory, 'required', 'text-danger')}
+                    </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>

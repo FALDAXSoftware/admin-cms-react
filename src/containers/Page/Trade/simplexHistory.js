@@ -54,6 +54,10 @@ class SimplexHistory extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    res.data=res.data.map(ele=>{
+                        ele['simplex_payment_status']=ele['simplex_payment_status']==1?'Under Approval':(ele['simplex_payment_status']==2?'Approved':'Cancelled');
+                        return ele;
+                    })
                     _this.setState({ allSimplexTrades: res.data, allTradeCount: res.tradeCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {

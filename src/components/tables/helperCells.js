@@ -2170,7 +2170,7 @@ const JobSwitchCell = (
   );
 const JobButtonCell = value => (
   <div>
-      <Button disabled={!isAllowed("get_job_applicants")} type="primary" onClick={() => showApplicants(value)}>
+      <Button size={"small"} disabled={!isAllowed("get_job_applicants")} type="primary" onClick={() => showApplicants(value)}>
         Show Applications
         </Button>
   </div>
@@ -2863,6 +2863,13 @@ const ExpireIpDateCell = (data) => <p>
     : "Permanent"}
 </p>
 
+const isFloat=(n)=>{
+  return Number(n) === n && n % 1 !== 0;
+}
+
+const PrecisionCell=(data)=>{
+  return isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))
+}
 const CollectedAmountCell = value =>
   value.map(ele => (
     <div>
@@ -2959,6 +2966,7 @@ export {
   CampaignTypeCell,
   OfferDateCell,
   ExpireIpDateCell,
-  CollectedAmountCell
+  CollectedAmountCell,
+  PrecisionCell
 
 };

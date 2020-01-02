@@ -7,6 +7,7 @@ import { BUCKET_URL, BITGO_MIN_LIMIT } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
+import { PrecisionCell } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -67,22 +68,22 @@ class EditAssetDetails extends Component {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
-              min_limit: res.coin.min_limit,
-              max_limit: res.coin.max_limit.toFixed(8)
+              min_limit: PrecisionCell(res.coin.min_limit),
+              max_limit: PrecisionCell(res.coin.max_limit)
             });
           } else if (res.coin.min_limit) {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
-              min_limit: res.coin.min_limit.toFixed(8),
-              max_limit: res.coin.max_limit
+              min_limit: PrecisionCell(res.coin.min_limit),
+              max_limit: PrecisionCell(res.coin.max_limit)
             });
           } else {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
-              min_limit: res.coin.min_limit,
-              max_limit: res.coin.max_limit
+              min_limit: PrecisionCell(res.coin.min_limit),
+              max_limit: PrecisionCell(res.coin.max_limit)
             });
           }
         } else if (res.status == 403 || res.status==400) {

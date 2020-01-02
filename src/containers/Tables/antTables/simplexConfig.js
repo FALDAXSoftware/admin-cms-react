@@ -2,6 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, DateTimeCell, SimplexStatusCell } from '../../../components/tables/helperCells';
+import { SIMPLEX_PAYMENT_URL } from '../../../helpers/globals';
 
 const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = null,
     pair1 = null, emailID = null, buy = null, quant = null, fillPrice = null,
@@ -85,7 +86,7 @@ const columns = [
     width: 250,
    align:"left",
     sorter: true,
-    render: object => renderCell(object, "TextCell", "payment_id")
+    render: object => <a href={SIMPLEX_PAYMENT_URL+object['payment_id']} target="_blank">{object['payment_id']}</a>
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.quote_id" />,
@@ -98,26 +99,12 @@ const columns = [
   {
     title: <IntlMessages id="simplexTradeTable.title.simplex_payment_status" />,
     key: "simplex_payment_status",
+    dataIndex: "simplex_payment_status",
     width: 150,
-   align:"left",
+    align:"left",
     sorter: true,
-    render: object =>
-      renderCell(
-        object,
-        "SimplexStatusCell",
-        "id",
-        "payment_id",
-        "quote_id",
-        "currency",
-        "settle_currency",
-        "email",
-        "side",
-        "quantity",
-        "fill_price",
-        "simplex_payment_status",
-        "created_at"
-      )
   }
+  
 ];
 
 const simplexTableInfos = [

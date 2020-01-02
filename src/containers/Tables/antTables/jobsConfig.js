@@ -51,10 +51,17 @@ const columns = [{
 }, {
     title: <IntlMessages id="jobTable.title.position" />,
     key: 'position',
-    width: 150,
+    width: 200,
    align:"left",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'position')
+},
+{
+    title: <IntlMessages id="jobTable.title.category" />,
+    key: 'category',
+    width: 200,
+    align:"left",
+    render: object => renderCell(object, 'TextCell', 'category')
 }, {
     title: <IntlMessages id="jobTable.title.location" />,
     key: 'location',
