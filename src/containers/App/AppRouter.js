@@ -91,12 +91,12 @@ const routes = [
     },
     {
         path: "news",
-        component: asyncComponent(() => import("../Page/News/news")),
+        component: asyncComponent(() => import("../Page/News/tabs")),
         module: "news"
     },
     {
         path: "referral",
-        component: asyncComponent(() => import("../Page/Referral/referral")),
+        component: asyncComponent(() => import("../Page/Referral/tabs")),
         module: "is_referral"
     },
     {
@@ -106,7 +106,7 @@ const routes = [
     },
     {
         path: "account-class",
-        component: asyncComponent(() => import("../Page/AccountClass/accountClass")),
+        component: asyncComponent(() => import("../Page/AccountClass/tabs")),
         module: "account_class"
     },
     {

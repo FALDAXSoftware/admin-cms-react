@@ -52,7 +52,7 @@ class PersonalDetails extends Component {
         if (res.status == 200) {
           _this.setState({ userDetails: res.data[0] });
         } else if (res.status == 403) {
-          _this.props.logout();
+          _this.setState({ errMsg: true, errMessage: res.err },()=> _this.props.logout());
         } else {
           _this.setState({ errMsg: true, errMessage: res.message });
         }
@@ -194,18 +194,24 @@ class PersonalDetails extends Component {
             )}
             <Row>
               <Col>
-                <Address>
+                <div class="address">
                   <i class="fas fa-map-marker-alt"></i>
-                  {userDetails.street_address
+                  <span>&nbsp;&nbsp;&nbsp;{userDetails.street_address
                     ? userDetails.street_address_2
                       ? userDetails.street_address +
                         "," +
-                        userDetails.street_address_2
-                      : userDetails.street_address
-                    : "N/A"}
-                  {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
-                  {userDetails.country ? `, ${userDetails.country}` : ""}
-                </Address>
+                        userDetails.street_address_2+" (Street Address)"
+                      : userDetails.street_address+" (Street Address)"
+                    : "N/A"}</span>
+                  {/* {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
+                  {userDetails.country ? `, ${userDetails.country}` : ""} */}
+                <span class="address-text">
+                 {(userDetails.city_town?userDetails.city_town:"N/A")+", "+(userDetails.postal_code?userDetails.postal_code:"N/A")+" (City, State Zip)"}
+                </span>
+                <span class="address-text">
+                 {(userDetails.country?userDetails.country:"N/A")+" (Country)"}
+                </span>
+                </div>
               </Col>
             </Row>
             <Row>

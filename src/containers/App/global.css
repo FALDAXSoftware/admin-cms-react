@@ -685,6 +685,14 @@ html[dir='rtl'] .dz-hidden-input {
   font-weight: 500;
   color: #174c7e;
 }
+.address{
+  display: block;
+  color:grey;
+}
+.address-text{
+  display: block;
+  padding-left: 20px;
+}
 
 .permission-scroll{
   height: 55vh;

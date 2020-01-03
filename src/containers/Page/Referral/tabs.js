@@ -5,7 +5,7 @@ import { Tabs } from "antd";
 import Referrals from "./referrals";
 import ReferralPercentage from "./referralPercentage";
 import { isAllowed } from "../../../helpers/accessControl";
-import ReferralMetabase from "./referalMetabase";
+import Metabase from "./metabase";
 import { BackButton } from "../../Shared/backBttton";
 const TabPane = Tabs.TabPane;
 class Referral extends React.Component {
@@ -30,9 +30,7 @@ class Referral extends React.Component {
           }
            {isAllowed("metabase_referal_report") &&
            < TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                <ReferralMetabase></ReferralMetabase>
-              </TableDemoStyle>
+                <Metabase/>
             </TabPane>}
         </Tabs>
       </LayoutWrapper >

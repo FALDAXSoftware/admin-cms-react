@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Tabs, notification, Modal, Input, Icon } from "antd";
 import { accountClassTableinfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import {  withRouter} from "react-router-dom";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
@@ -12,7 +12,6 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from "../../Shared/backBttton";
 import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
@@ -201,27 +200,6 @@ class AccountClass extends Component {
     );
   };
 
-  async getMetaBaseUrl(){
-    try{
-      this.setState({loader:true})
-      let response= await (await ApiUtils.metabase(this.props.token).getAccountClassMetabase()).json();
-      if(response.status==200){
-         this.setState({metabaseUrl:response.frameURL})
-      }else if(response.statue==400 || response.status==403){
-
-      }
-    }catch(error){
-
-    }finally{
-      this.setState({loader:false})
-    }
-  }
-
-  onChangeTabs=(key)=>{
-    if(key=="metabase" && this.state.metabaseUrl==""){
-      this.getMetaBaseUrl();    
-    }
-  }
 
   render() {
     const {
@@ -233,8 +211,7 @@ class AccountClass extends Component {
       accountClassDetails,
       showEditAccountClassModal,
       showDeleteAccountClassModal,
-      fields,
-      metabaseUrl
+      fields
     } = this.state;
 
     if (errMsg) {
@@ -242,149 +219,127 @@ class AccountClass extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <BackButton {...this.props}/>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
-            <TabPane tab={accountClassTableinfos[0].title} key={accountClassTableinfos[0].value}>
-              <TableDemoStyle className="isoLayoutContent">
-                {isAllowed("add_account_class") &&
+    <TableDemoStyle className="isoLayoutContent">
+      {isAllowed("add_account_class") &&
+        <Button
+          type="primary"
+          style={{ marginBottom: "15px", float: "left" }}
+          onClick={this._showAddAccClassModal}
+        >
+          <Icon type="plus" />Add
+      </Button>
+      }
+      {showAddClassModal && (
+        <AddAccountClassModal
+          showAddClassModal={showAddClassModal}
+          closeAddModal={this._closeAddClassModal}
+          getAllAccountClass={this._getAllAccountClasses.bind(
+            this,
+            0
+          )}
+        />
+      )}
+      {showEditAccountClassModal && (
+        <EditAccountClassModal
+          fields={accountClassDetails}
+          showEditAccountClassModal={showEditAccountClassModal}
+          closeEditClassModal={this._closeEditClassModal}
+          getAllAccountClass={this._getAllAccountClasses.bind(
+            this,
+            1
+          )}
+        />
+      )}
+
+      {loader && <FaldaxLoader />}
+      <div className="float-clear">
+        <TableWrapper
+          rowKey="id"
+          {...this.state}
+          columns={accountClassTableinfos[0].columns}
+          pagination={false}
+          dataSource={allAccountClasses}
+          className="isoCustomizedTable"
+          onChange={this._handleClassTableChange}
+          scroll={TABLE_SCROLL_HEIGHT}
+          bordered
+        />
+        {showDeleteAccountClassModal && (
+          <Modal
+            title="Delete Account Class"
+            visible={showDeleteAccountClassModal}
+            onCancel={this._closeDeleteClassModal}
+            footer={[
+              <Button onClick={this._closeDeleteClassModal}>
+                Cancel
+              </Button>,
+              this.props.is_twofactor ? (
+                <Button onClick={this._deleteAccountClass}>
+                  Yes
+                </Button>
+              ) : (
+                  ""
+                )
+            ]}
+          >
+            {this.props.user.is_twofactor ? (
+              <div>
+                <span>Enter your two-factor code here:</span>
+                <div style={{ marginTop: "20px" }}>
+                  <Input
+                    style={{ width: "200px" }}
+                    value={fields["otp"]}
+                    onChange={this._onChangeFields.bind(this, "otp")}
+                  />
+                </div>
+                <span className="field-error">
+                  {this.validator.message(
+                    "OTP",
+                    fields["otp"],
+                    "required|numeric"
+                  )}
+                </span>
+                <Button
+                  type="primary"
+                  style={{ marginTop: "20px", marginBottom: "20px" }}
+                  onClick={this._deleteAccountClass}
+                >
+                  Delete Account Class
+                </Button>
+              </div>
+            ) : (
+                <div>
+                  <span>
+                    Enable 2FA authentication to remove the
+                    account class.
+                </span>
+                  <br />
                   <Button
                     type="primary"
-                    style={{ marginBottom: "15px", float: "left" }}
-                    onClick={this._showAddAccClassModal}
+                    onClick={() => {
+                      this.props.history.push(
+                        "/dashboard/edit-profile"
+                      );
+                    }}
                   >
-                    <Icon type="plus" />Add
+                    Enable Now
                 </Button>
-                }
-                {showAddClassModal && (
-                  <AddAccountClassModal
-                    showAddClassModal={showAddClassModal}
-                    closeAddModal={this._closeAddClassModal}
-                    getAllAccountClass={this._getAllAccountClasses.bind(
-                      this,
-                      0
-                    )}
-                  />
-                )}
-                {showEditAccountClassModal && (
-                  <EditAccountClassModal
-                    fields={accountClassDetails}
-                    showEditAccountClassModal={showEditAccountClassModal}
-                    closeEditClassModal={this._closeEditClassModal}
-                    getAllAccountClass={this._getAllAccountClasses.bind(
-                      this,
-                      1
-                    )}
-                  />
-                )}
-
-                {loader && <FaldaxLoader />}
-                <div className="float-clear">
-                  <TableWrapper
-                    rowKey="id"
-                    {...this.state}
-                    columns={accountClassTableinfos[0].columns}
-                    pagination={false}
-                    dataSource={allAccountClasses}
-                    className="isoCustomizedTable"
-                    onChange={this._handleClassTableChange}
-                    scroll={TABLE_SCROLL_HEIGHT}
-                    bordered
-                  />
-                  {showDeleteAccountClassModal && (
-                    <Modal
-                      title="Delete Account Class"
-                      visible={showDeleteAccountClassModal}
-                      onCancel={this._closeDeleteClassModal}
-                      footer={[
-                        <Button onClick={this._closeDeleteClassModal}>
-                          Cancel
-                        </Button>,
-                        this.props.is_twofactor ? (
-                          <Button onClick={this._deleteAccountClass}>
-                            Yes
-                          </Button>
-                        ) : (
-                            ""
-                          )
-                      ]}
-                    >
-                      {this.props.user.is_twofactor ? (
-                        <div>
-                          <span>Enter your two-factor code here:</span>
-                          <div style={{ marginTop: "20px" }}>
-                            <Input
-                              style={{ width: "200px" }}
-                              value={fields["otp"]}
-                              onChange={this._onChangeFields.bind(this, "otp")}
-                            />
-                          </div>
-                          <span className="field-error">
-                            {this.validator.message(
-                              "OTP",
-                              fields["otp"],
-                              "required|numeric"
-                            )}
-                          </span>
-                          <Button
-                            type="primary"
-                            style={{ marginTop: "20px", marginBottom: "20px" }}
-                            onClick={this._deleteAccountClass}
-                          >
-                            Delete Account Class
-                          </Button>
-                        </div>
-                      ) : (
-                          <div>
-                            <span>
-                              Enable two factor authentication to remove the
-                              account class.
-                          </span>
-                            <br />
-                            <Button
-                              type="primary"
-                              onClick={() => {
-                                this.props.history.push(
-                                  "/dashboard/edit-profile"
-                                );
-                              }}
-                            >
-                              Enable Now
-                          </Button>
-                          </div>
-                        )}
-                    </Modal>
-                  )}
                 </div>
-              </TableDemoStyle>
-            </TabPane>
-          <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl &&
-                <div className="full-width">
-                  <iframe
-                    className="metabase-iframe"
-                    src={metabaseUrl}
-                    frameBorder="0"
-                    width="100%"
-                    allowtransparency="true"
-                ></iframe>
-                </div>
-                }
-              </TableDemoStyle>
-          </TabPane>
-        </Tabs>
-      </LayoutWrapper>
+              )}
+          </Modal>
+        )}
+      </div>
+    </TableDemoStyle>
     );
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     token: state.Auth.get("token"),
     user: state.Auth.get("user")
   }),
   { logout }
-)(AccountClass);
+)(AccountClass));
 
-export { AccountClass, accountClassTableinfos };
+

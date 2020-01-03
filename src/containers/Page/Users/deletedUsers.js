@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithMarginBottom from '../common.style';
 import CountryData from 'country-state-city';
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 import { withRouter } from 'react-router-dom'
@@ -158,7 +157,7 @@ class DeletedUsers extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal: '', searchUser: '', page: 1, sorterCol: '', sortOrder: ''
+            filterVal:undefined, searchUser: '', page: 1, sorterCol: '', sortOrder: ''
         }, () => {
             this._getAllUsers();
         })
@@ -212,20 +211,21 @@ class DeletedUsers extends Component {
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
               <Form onSubmit={this._searchUser}>
-                <Row type="flex" justify="start">
-                  <ColWithMarginBottom lg={7} xs={24}>
+                <Row className="table-filter-row" type="flex" justify="start">
+                  <Col lg={7} xs={24}>
                     <Input
                       placeholder="Search users"
                       onChange={this._changeSearch.bind(this)}
                       value={searchUser}
                     />
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={7} xs={24}>
+                  </Col>
+                  <Col lg={8} xs={24}>
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a country"
                       onChange={this._changeCountry}
                       value={filterVal}
+                      showSearch
                     >
                       {allCountries &&
                         allCountries.map((country, index) => {
@@ -236,8 +236,8 @@ class DeletedUsers extends Component {
                           );
                         })}
                     </Select>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={3} xs={24}>
+                  </Col>
+                  <Col lg={3} xs={24}>
                     <Button
                       htmlType="submit"
                       className="filter-btn btn-full-width"
@@ -246,8 +246,8 @@ class DeletedUsers extends Component {
                       <Icon type="search" />
                       Search
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={3} xs={24}>
+                  </Col>
+                  <Col lg={3} xs={24}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
@@ -256,8 +256,8 @@ class DeletedUsers extends Component {
                       <Icon type="reload" />
                       Reset
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={24} lg={3}>
+                  </Col>
+                  <Col xs={24} lg={3}>
                     {allUsers && allUsers.length > 0 ? (
                       <CSVLink
                         data={allUsers}
@@ -275,7 +275,7 @@ class DeletedUsers extends Component {
                     ) : (
                       ""
                     )}
-                  </ColWithMarginBottom>
+                  </Col>
                 </Row>
               </Form>
 

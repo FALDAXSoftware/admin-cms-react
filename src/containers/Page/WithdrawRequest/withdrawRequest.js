@@ -395,6 +395,7 @@ class WithdrawRequest extends Component {
                         disabledTime={this.disabledRangeTime}
                         onChange={this._changeDate}
                         format="YYYY-MM-DD"
+                        className="full-width"
                       />
                     </ColWithMarginBottom>
                     <ColWithMarginBottom xs={12} sm={3}>

@@ -253,7 +253,7 @@ class Offers extends Component {
                         <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                     </Col>
                     <Col className="table-column" xs={12} md={7}>
-                        <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
+                        <RangePicker className="full-width" format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                     </Col>
                     <Col className="table-column" xs={12} md={4}>
                         <Select className="full-width" placeholder="Type" placeholder="Select Type" value={usage_type} onChange={value => this.setState({usage_type:value})}>

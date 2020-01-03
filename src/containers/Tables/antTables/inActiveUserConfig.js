@@ -9,7 +9,8 @@ import {
     DateCell,
     TierCell,
     ReferralCell,
-    DateTimeCell
+    DateTimeCell,
+    ToolTipsCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, image = null, fname = null, lname = null,
@@ -62,7 +63,7 @@ const columns = [{
    align:"left",
     ellipsis:true,
     key: 'action',
-    width: 200,
+    width: 120,
     render: object => renderCell(object,
         'ActiveUserActionCell', 'id', 'profile_pic', 'first_name', 'last_name', 'email', 'city_town',
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
@@ -73,39 +74,44 @@ const columns = [{
    align:"left",
     ellipsis:true,
     key: 'created_at',
-    width: 200,
+    width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
-    title: "",
-    key: 'profile_pic',
-    width: 75,
-    className: 'isoImageCell',
-    render: object => renderCell(object, 'UserImageCell', 'profile_pic')
-}, {
-    title: <IntlMessages id="antTable.title.firstName" />,
+},
+//  {
+//     title: "",
+//     key: 'profile_pic',
+//     width: 75,
+//     className: 'isoImageCell',
+//     render: object => renderCell(object, 'UserImageCell', 'profile_pic')
+// },
+ {
+    title: <IntlMessages id="antTable.title.name" />,
    align:"left",
     ellipsis:true,
     key: 'first_name',
-    width: 150,
+    width: 200,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'first_name')
-}, {
-    title: <IntlMessages id="antTable.title.lastName" />,
-   align:"left",
-    ellipsis:true,
-    key: 'last_name',
-    width: 150,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'last_name')
-}, {
+    render: object => <span>{object['first_name']+" "+object['last_name']}</span>
+},
+//  {
+//     title: <IntlMessages id="antTable.title.lastName" />,
+//    align:"left",
+//     ellipsis:true,
+//     key: 'last_name',
+//     width: 150,
+//     sorter: true,
+//     render: object => renderCell(object, 'TextCell', 'last_name')
+// }, 
+{
     title: <IntlMessages id="antTable.title.email" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'email',
     width: 250,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
+    dataIndex:"email",
+    render:(value)=>ToolTipsCell(value)
 }, {
     title: <IntlMessages id="antTable.title.country" />,
    align:"left",
