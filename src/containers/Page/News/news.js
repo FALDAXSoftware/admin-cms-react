@@ -50,7 +50,6 @@ class News extends Component {
       startDate: "",
       endDate: "",
       rangeDate: [],
-      metabaseUrl: ""
     };
     self = this;
     News.newsStatus = News.newsStatus.bind(this);
@@ -66,15 +65,12 @@ class News extends Component {
     is_active,
     owner
   ) {
-    const { token } = this.props;
+    const { token } = self.props;
     let formData = {
       id: value,
       is_active: !is_active
     };
 
-    let message = is_active
-      ? "News has been inactivated successfully."
-      : "News has been activated successfully.";
     self.setState({ loader: true });
     ApiUtils.changeNewsStatus(token, formData)
       .then(response => response.json())
@@ -83,7 +79,7 @@ class News extends Component {
           self._getAllNews();
           self.setState({
             errMsg: true,
-            errMessage: message,
+            errMessage: res.message,
             errType: "Success",
             loader: false
           });
@@ -302,28 +298,6 @@ class News extends Component {
     });
   };
 
-  async getMetaBaseUrl() {
-    try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getNewsRequest()).json();
-      if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
-      } else if (response.statue == 400 || response.status == 403) {
-
-      }
-    } catch (error) {
-
-    } finally {
-      this.setState({ loader: false })
-    }
-  }
-
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
-    }
-  }
-
   render() {
     const {
       allNews,
@@ -337,133 +311,106 @@ class News extends Component {
       filterVal,
       allNewsSources,
       limit,
-      metabaseUrl
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
-
     return (
-      <LayoutWrapper>
-        <BackButton {...this.props}/>
-        <Tabs
-          className="isoTableDisplayTab full-width"
-          onChange={this.onChangeTabs}
-        >
-            <TabPane tab={newsTableInfos[0].title} key={newsTableInfos[0].value}>
-              <TableDemoStyle className="isoLayoutContent">
-                <Form onSubmit={this._searchNews}>
-                  <Row>
-                    <ColWithMarginBottom md={6}>
-                      <Form.Item
-                        validateStatus={this.state.searchValid}
-                        className="news-search"
-                      >
-                        <Input
-                          placeholder="Search news"
-                          onChange={this._changeSearch.bind(this)}
-                          value={searchNews}
-                        />
-                      </Form.Item>
-                    </ColWithMarginBottom>
-                    {isAllowed("get_all_news_source") && (
-                      <ColWithMarginBottom md={6}>
-                        <Select
-                          getPopupContainer={trigger => trigger.parentNode}
-                          placeholder="Select a source"
-                          onChange={this._changeFilter}
-                          value={filterVal}
-                        >
-                          <Option value={""}>{"All"}</Option>
-                          {allNewsSources &&
-                            allNewsSources.map((news, index) => (
-                              <Option key={index} value={news.slug}>
-                                {news.source_name}
-                              </Option>
-                            ))}
-                        </Select>
-                      </ColWithMarginBottom>
-                    )}
-                    <ColWithMarginBottom md={6}>
-                      <RangePicker
-                        value={rangeDate}
-                        disabledTime={this.disabledRangeTime}
-                        onChange={this._changeDate}
-                        format="YYYY-MM-DD"
-                        allowClear={false}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} md={3}>
-                      <Button
-                        htmlType="submit"
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                      >
-                        <Icon type="search" />
-                        Search
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} md={3}>
-                      <Button
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      >
-                        <Icon type="reload" /> Reset
-                      </Button>
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
-                {loader && <FaldaxLoader />}
-                <div className="float-clear">
-                  <TableWrapper
-                    rowKey="id"
-                    {...this.state}
-                    columns={newsTableInfos[0].columns}
-                    pagination={false}
-                    dataSource={allNews}
-                    className="isoCustomizedTable"
-                    onChange={this._handleNewsTableChange}
-                    bordered
-                    scroll={TABLE_SCROLL_HEIGHT}
-                  />
-                </div>
-                {allNewsCount > 0 ? (
-                  <Pagination
-                    style={{ marginTop: "15px" }}
-                    className="ant-users-pagination"
-                    onChange={this._handleNewsPagination.bind(this)}
-                    pageSize={limit}
-                    current={page}
-                    total={parseInt(allNewsCount)}
-                    showSizeChanger
-                    onShowSizeChange={this._changePaginationSize}
-                    pageSizeOptions={pageSizeOptions}
-                  />
-                ) : (
-                  ""
-                )}
-              </TableDemoStyle>
-            </TabPane>
-          {isAllowed("metabase_news_report") && (
-            <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl && (
-                    <iframe
-                      src={metabaseUrl}
-                      className="metabase-iframe"
-                      frameBorder="0"
-                      width="100%"
-                      allowtransparency="true"
-                    ></iframe>
-                
-                )}
-              </TableDemoStyle>
-            </TabPane>
-          )}
-        </Tabs>
-      </LayoutWrapper>
+      <TableDemoStyle className="isoLayoutContent">
+        <Form onSubmit={this._searchNews}>
+          <Row>
+            <ColWithMarginBottom md={6}>
+              <Form.Item
+                validateStatus={this.state.searchValid}
+                className="news-search"
+              >
+                <Input
+                  placeholder="Search news"
+                  onChange={this._changeSearch.bind(this)}
+                  value={searchNews}
+                />
+              </Form.Item>
+            </ColWithMarginBottom>
+            {isAllowed("get_all_news_source") && (
+              <ColWithMarginBottom md={6}>
+                <Select
+                  getPopupContainer={trigger => trigger.parentNode}
+                  placeholder="Select a source"
+                  onChange={this._changeFilter}
+                  value={filterVal}
+                >
+                  <Option value={""}>{"All"}</Option>
+                  {allNewsSources &&
+                    allNewsSources.map((news, index) => (
+                      <Option key={index} value={news.slug}>
+                        {news.source_name}
+                      </Option>
+                    ))}
+                </Select>
+              </ColWithMarginBottom>
+            )}
+            <ColWithMarginBottom md={6}>
+              <RangePicker
+                value={rangeDate}
+                disabledTime={this.disabledRangeTime}
+                onChange={this._changeDate}
+                format="YYYY-MM-DD"
+                allowClear={false}
+                className="full-width"
+              />
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} md={3}>
+              <Button
+                htmlType="submit"
+                className="filter-btn btn-full-width"
+                type="primary"
+              >
+                <Icon type="search" />
+                Search
+              </Button>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} md={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this._resetFilters}
+              >
+                <Icon type="reload" /> Reset
+              </Button>
+            </ColWithMarginBottom>
+          </Row>
+        </Form>
+        {loader && <FaldaxLoader />}
+        <div className="float-clear">
+          <TableWrapper
+            rowKey="id"
+            {...this.state}
+            columns={newsTableInfos[0].columns}
+            pagination={false}
+            dataSource={allNews}
+            className="isoCustomizedTable"
+            onChange={this._handleNewsTableChange}
+            bordered
+            scroll={TABLE_SCROLL_HEIGHT}
+          />
+        </div>
+        {allNewsCount > 0 ? (
+          <Pagination
+            style={{ marginTop: "15px" }}
+            className="ant-users-pagination"
+            onChange={this._handleNewsPagination.bind(this)}
+            pageSize={limit}
+            current={page}
+            total={parseInt(allNewsCount)}
+            showSizeChanger
+            onShowSizeChange={this._changePaginationSize}
+            pageSizeOptions={pageSizeOptions}
+          />
+        ) : (
+          ""
+        )}
+      </TableDemoStyle>
     );
   }
 }
@@ -475,4 +422,3 @@ export default connect(
   { logout }
 )(News);
 
-export { News, newsTableInfos };

@@ -154,7 +154,7 @@ class PanicButton extends Component {
                                     onClick={this._panicButton}>Enable</Button>
                             </div>
                             : <div>
-                                <span>Enable two factor authentication to Enable Panic Button.</span><br />
+                                <span>Enable 2FA authentication to Enable Panic Button.</span><br />
                                 <Button type="primary" onClick={() => { this.props.history.push('/dashboard/edit-profile') }}>
                                     {!isPanic ? 'Enable Now' : 'Disable'}
                                 </Button>

@@ -8,7 +8,8 @@ import {
   Select,
   Form,
   Modal,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
@@ -18,7 +19,6 @@ import { connect } from "react-redux";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import {ColWithMarginBottom} from "../common.style";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
@@ -216,7 +216,7 @@ class ActiveUsers extends Component {
   _resetFilters = () => {
     this.setState(
       {
-        filterVal: "",
+        filterVal:undefined,
         searchUser: "",
         page: 1,
         sorterCol: "",
@@ -300,20 +300,21 @@ class ActiveUsers extends Component {
         <div className="isoTableDisplayTab">
             <div>
               <Form onSubmit={this._searchUser} className="cty-search">
-                <Row type="flex" justify="start">
-                  <ColWithMarginBottom lg={7} xs={24}>
+                <Row className="table-filter-row" type="flex" justify="start">
+                  <Col lg={7} xs={24}>
                     <Input
                       placeholder="Search users"
                       onChange={this._changeSearch.bind(this)}
                       value={searchUser}
                     />
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom lg={7} xs={24}>
+                  </Col>
+                  <Col lg={8} xs={24}>
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a country"
                       onChange={this._changeCountry}
                       value={filterVal}
+                      showSearch
                     >
                       {allCountries &&
                         allCountries.map((country, index) => {
@@ -324,8 +325,8 @@ class ActiveUsers extends Component {
                           );
                         })}
                     </Select>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={24} lg={3}>
+                  </Col>
+                  <Col xs={24} lg={3}>
                     <Button
                       htmlType="submit"
                       className="filter-btn btn-full-width"
@@ -334,8 +335,8 @@ class ActiveUsers extends Component {
                       <Icon type="search" />
                       Search
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={24} lg={3}>
+                  </Col>
+                  <Col xs={24} lg={3}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
@@ -343,8 +344,8 @@ class ActiveUsers extends Component {
                     >
                       <Icon type="reload" /> Reset
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={24} lg={3}>
+                  </Col>
+                  <Col xs={24} lg={3}>
                     {allUsers && allUsers.length > 0 ? (
                       <CSVLink
                         data={allUsers}
@@ -361,7 +362,7 @@ class ActiveUsers extends Component {
                     ) : (
                       ""
                     )}
-                  </ColWithMarginBottom>
+                  </Col>
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}
@@ -372,14 +373,13 @@ class ActiveUsers extends Component {
                   columns={tableinfos[0].columns}
                   pagination={false}
                   dataSource={allUsers}
-                  className="isoCustomizedTable"
+                  className="table-tb-margin"
                   onChange={this.handleTableChange}
                   bordered
                   scroll={TABLE_SCROLL_HEIGHT}
                 />
                 {allUserCount > 0 ? (
                   <Pagination
-                    style={{ marginTop: "15px" }}
                     className="ant-users-pagination"
                     onChange={this._handleUserPagination.bind(this)}
                     pageSize={limit}

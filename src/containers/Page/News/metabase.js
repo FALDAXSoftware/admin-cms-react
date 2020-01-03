@@ -4,18 +4,24 @@ import authAction from '../../../redux/auth/actions';
 import { withRouter} from "react-router-dom";
 import { connect} from 'react-redux';
 import { notification } from 'antd';
-class ReferralMetabase extends Component {
-  constructor(props) {
+import FaldaxLoader from '../faldaxLoader';
+
+class Metabase extends Component {
+  constructor(props){
     super(props);
     this.state = {
-      metabaseUrl: ""
+      metabaseUrl: "",
+      loader:false
     };
+    this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})}
   }
+
+  
 
   componentDidMount() {
     this.getIframeUrl();
   }
-  
+
   openNotificationWithIconError(type, message) {
     notification[type.toLowerCase()]({
       message: type,
@@ -25,23 +31,26 @@ class ReferralMetabase extends Component {
 
   async getIframeUrl() {
     try {
+      this.loader.show();
       let response = await (
-        await ApiUtils.metabase(this.props.token).getReferralMetabaseUrl()
+        await ApiUtils.metabase(this.props.token).getNewsRequest()
       ).json();
       if (response.status == 200) {
         this.setState({ metabaseUrl: response.frameURL });
-      } else if (response.status == 400 || response.status == 403) {
+      } else if(response.status==400 || response.status==403){
         this.openNotificationWithIconError("Error", response.message);
+        this.loader.hide();
         this.props.logout();
       }
     } catch (error) {
+      this.loader.hide();
       this.openNotificationWithIconError(
         "Error",
         "Something went to wrong please try again later"
       );
     }
   }
-
+  
   render() {
     let { metabaseUrl } = this.state;
     return (
@@ -53,17 +62,19 @@ class ReferralMetabase extends Component {
               src={metabaseUrl}
               frameBorder="0"
               width="100%"
+              onLoad={()=>{this.loader.hide()}}
               allowtransparency="true"
             ></iframe>
           </div>
         )}
+        {this.state.loader && <FaldaxLoader/>}
       </React.Fragment>
     );
   }
 }
-
+ 
 export default withRouter(connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }), { ...authAction })(ReferralMetabase));
+    }), { ...authAction })(Metabase));

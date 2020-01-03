@@ -60,7 +60,7 @@ const columns = [{
 
 const twoFactorReqInfos = [
     {
-        title: 'Two Factor Requests',
+        title: '2FA Requests',
        align:"left",
         value: 'twoFactorReqTable',
         columns: clone(columns)

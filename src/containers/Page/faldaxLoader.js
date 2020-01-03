@@ -36,8 +36,7 @@ class FaldaxLoader extends Component {
         }
     }
 
-    render() { 
-        console.log(this.props)
+    render() {
         return (
             <MainOverlay> 
                 <Overlay {...this.props}>

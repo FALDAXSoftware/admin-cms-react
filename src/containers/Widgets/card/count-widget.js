@@ -34,7 +34,7 @@ export default class extends Component {
                 title={<div><i className={icon} />   {title}</div>} bordered={false}>
         
                 {data && data.map((ele)=>(<div className="cursor-pointer">
-                    <span className="count">{ele.count}</span>
+                    <span className="count" >{ele.count}</span>
                     <span className="isoLabel">{ele.name}</span>
                 </div>))
                 }
