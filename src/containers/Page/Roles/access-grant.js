@@ -96,8 +96,8 @@ const AccessGrant = (props) => {
       return acc;
     }, {});
 
-    const handleClick = id =>{
-      setSelectedPermission(id)
+    const handleClick = (id) =>{
+      setSelectedPermission(id);
       refs[id].current.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
@@ -227,7 +227,7 @@ const AccessGrant = (props) => {
                     <Col md={6}>
                       <Select className="full-width" value={selectedPermission} placeholder="Select Permission">
                       { Object.keys(permissions).map((key, index) => (
-                        <Option key={index} onClick={() => handleClick(key)}>{key}</Option>))
+                        <Option key={index} value={key} onClick={() => handleClick(key)}>{key}</Option>))
                       }
                       </Select>
                     </Col>

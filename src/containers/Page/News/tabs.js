@@ -1,26 +1,25 @@
 import React, { Component } from 'react';
-import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import { Tabs } from 'antd';
 import {  withRouter} from "react-router-dom";
-import TwoFactorRequests from './TwoFactorRequests';
 import { BackButton } from '../../Shared/backBttton';
+import News from './news';
 import { TabPane } from '../../../components/uielements/tabs';
-import Metabase from './metabase';
+import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import { isAllowed } from '../../../helpers/accessControl';
-
-class TwoFactorRequestTab extends Component {
+import Metabase from "./metabase";
+class Wallets extends Component {
     state = {  }    
     render() { 
         return (
         <LayoutWrapper>
                 <BackButton {...this.props}/>   
                 <Tabs className="full-width">
-                   {isAllowed("get_twofactors_requests") &&<TabPane tab="2FA Requests" key="1"><TwoFactorRequests/></TabPane>}
-                   {isAllowed("metabase_two_factor_request") && <TabPane tab="Report" key="2"><Metabase/></TabPane>}
+                  {isAllowed('get_all_news')&& <TabPane tab="News" key="1"><News/></TabPane>}
+                  {isAllowed('metabase_news_report')&& <TabPane tab="Report" key="2"><Metabase/></TabPane>}
                 </Tabs>
         </LayoutWrapper>
         );
     }
 }
  
-export default withRouter(TwoFactorRequestTab);
+export default withRouter(Wallets);
