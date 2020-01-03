@@ -110,9 +110,7 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-              <Link to="/dashboard">
                 <img src={logo} />
-              </Link>
             </div>
             <div className="isoSignInForm">
             <Form onSubmit={this._handleLogin}>
@@ -152,11 +150,11 @@ class SignIn extends Component {
 
             </Form>
               <div className="isoCenterComponent isoHelperWrapper">
-                <Link to="/forgot-password" className="isoForgotPass">
+                <Link to="/forgot-password" className="signin-link">
                   <IntlMessages id="page.signInForgotPass" />
                 </Link>
               </div>
-              {loader && <FaldaxLoader />}
+              {loader && <FaldaxLoader isSignUpPage={true}/>}
             </div>
           </div>
         </div>

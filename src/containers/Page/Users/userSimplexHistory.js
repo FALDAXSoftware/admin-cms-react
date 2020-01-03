@@ -66,6 +66,10 @@ class UserSimplexHistory extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    res.data=res.data.map(ele=>{
+                        ele['simplex_payment_status']=ele['simplex_payment_status']==1?'Under Approval':(ele['simplex_payment_status']==2?'Approved':'Cancelled');
+                        return ele;
+                    })
                     _this.setState({ allTrades: res.data, allTradeCount: res.tradeCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -142,14 +146,14 @@ class UserSimplexHistory extends Component {
                 <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchTrade}>
                         <Row type="flex" justify="start" className="table-filter-row">
-                            <Col sm={7}>
+                            <Col sm={8}>
                                 <Input
                                     placeholder="Search trades"
                                     onChange={this._changeSearch.bind(this)}
                                     value={searchTrade}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            {/* <Col sm={4}>
                                 <Select
                                     getPopupContainer={trigger => trigger.parentNode}
                                     placeholder="Select a type"
@@ -160,8 +164,8 @@ class UserSimplexHistory extends Component {
                                     <Option value={'Buy'}>Buy</Option>
                                     <Option value={'Sell'}>Sell</Option>
                                 </Select>
-                            </Col>
-                            <Col sm={4}>
+                            </Col> */}
+                            <Col sm={7}>
                                 <Select
                                     getPopupContainer={trigger => trigger.parentNode}
                                     placeholder="Select Status"

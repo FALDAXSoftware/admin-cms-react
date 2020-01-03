@@ -48,7 +48,7 @@ class EditableCell extends React.Component {
 
                             ],
                             // initialValue: (parseFloat(record[dataIndex]) > 0)?(parseFloat(record[dataIndex])).toPrecision(8):"0",
-                            initialValue: isFloat(record[dataIndex])?parseFloat(record[dataIndex]).toFixed(8):parseFloat(record[dataIndex]),
+                            initialValue: isFloat(record[dataIndex])?parseFloat(record[dataIndex]).toFixed(8):(record[dataIndex]==0?0:(record[dataIndex]?parseFloat(record[dataIndex]):"")),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -72,42 +72,42 @@ class EditableTable extends React.Component {
                 title: 'Daily Withdraw Crypto',
                 dataIndex: 'daily_withdraw_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"2",
                 title: 'Daily Withdraw Fiat',
                 dataIndex: 'daily_withdraw_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"3",
                 title: 'Monthly Withdraw Crypto',
                 dataIndex: 'monthly_withdraw_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"4",
                 title: 'Monthly Withdraw Fiat',
                 dataIndex: 'monthly_withdraw_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"7",
                 title: 'Min Withdrawal Crypto',
                 dataIndex: 'min_withdrawl_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"5",
                 title: 'Min Withdrawal Fiat',
                 dataIndex: 'min_withdrawl_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):parseFloat(data)}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"6",

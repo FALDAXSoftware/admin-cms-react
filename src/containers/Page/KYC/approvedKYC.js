@@ -177,7 +177,7 @@ class ApprovedKYC extends Component {
                                 <Row type="flex" justify="start" className="table-filter-row">
                                     <Col md={7}>
                                         <Input
-                                            placeholder="Search KYC"
+                                            placeholder="Search Customer ID"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
@@ -238,10 +238,8 @@ class ApprovedKYC extends Component {
     }
 }
 
-export default connect(
+export default  connect(
     state => ({
         user: state.Auth.get('user'),
         token: state.Auth.get('token')
     }), { logout })(ApprovedKYC);
-
-export { ApprovedKYC }

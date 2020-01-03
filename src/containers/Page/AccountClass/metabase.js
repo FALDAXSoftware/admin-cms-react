@@ -33,7 +33,7 @@ class Metabase extends Component {
     try {
       this.loader.show();
       let response = await (
-        await ApiUtils.metabase(this.props.token).getTwoFactorRequest()
+        await ApiUtils.metabase(this.props.token).getAccountClassMetabase()
       ).json();
       if (response.status == 200) {
         this.setState({ metabaseUrl: response.frameURL });

@@ -218,7 +218,12 @@ class Dashboard extends Component {
               transactionCount
             });
           } else if (res.status == 403) {
-            _this.props.logout();
+            _this.setState({
+              errMsg: true,
+              message: res.err,
+              loader: false
+            },()=>_this.props.logout());
+            
           } else {
             _this.setState({
               errMsg: true,
@@ -248,7 +253,11 @@ class Dashboard extends Component {
               metabaseUrl: res.data
             });
           } else if (res.status == 403) {
-            _this.props.logout();
+            _this.setState({
+              errMsg: true,
+              message: res.err,
+              loader: false
+            },()=>_this.props.logout());
           } else {
             _this.setState({
               errMsg: true,
@@ -318,7 +327,11 @@ class Dashboard extends Component {
       if (response.status == 200) {
         this.setState({ metabaseUrl: response.frameURL })
       } else if (response.statue == 400 || response.status == 403) {
-
+        this.setState({
+          errMsg: true,
+          message: response.err,
+          loader: false
+        },()=>this.props.logout());
       }
     } catch (error) {
 
@@ -546,131 +559,132 @@ class Dashboard extends Component {
                 <Divider/>
                 <Row style={rowStyle} gutter={0} justify="start">
                   <Col lg={6} md={12} sm={12} xs={24}>
-                    <Link to="/dashboard/users">
-                      <CountCard
-                        number={activeUsers}
-                        headcolor={"#1f2431"}
-                        number2={inactiveUsers}
-                        bgcolor={"#fff"}
-                        style={{
-                          boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
-                        }}
-                        title={"Users"}
-                        text={"Active Users"}
-                        text2={"Inactive Users"}
-                        icon="fa fa-users"
-                        fontColor="#2d3446"
-                      />
-                    </Link>
+                    <Link target="_blank" to="/dashboard/users">
+                        <CountCard
+                          headcolor={"#1f2431"}
+                          bgcolor={"#fff"}
+                          style={{
+                            boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                          }}
+                          title={"Users"}
+                          data={[{name:"Active Users",count:activeUsers},{name:"Inactive Users",count:inactiveUsers},{name:"Deactivated Users",count:deletedUsers}]}
+                          icon="fa fa-users"
+                          fontColor="#2d3446"
+                          {...this.props}
+                        />
+                      </Link>
                   </Col>
-
-                  {/* Deleted Account */}
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <CardView 
-                      cardText={"Deleted Account"}
-                      cardTitle={"Deleted Account"}
-                      icon={"fa fa-users"}
-                      countNumber={deletedUsers}
-                    />
-                  </Col>
-
-                  <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/assets">
+                    <Link target="_blank" to="/dashboard/assets">
+                      
                       <CountCard
-                        number={activeCoins}
                         headcolor={"#1f2431"}
-                        number2={InactiveCoins}
                         bgcolor={"#fff"}
+                        data={[{name:"Active Assets",count:activeCoins},{name:"Inactive Assets",count:InactiveCoins}]}
                         style={{
                           boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
                         }}
                         title={"Assets"}
-                        text={"Active Assets"}
-                        text2={"Inactive Assets"}
                         icon="fa fa-coins"
                         fontColor="#ffffff"
                       />
                     </Link>
                   </Col>
 
-                  <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/pairs">
+                  {/* <Col lg={6} md={12} sm={12} xs={24} >
+                    <Link target="_blank" to="/dashboard/pairs">
                       <CountCard
-                        number={activePairs}
+                        data={[{name:"Active Pair",count:activePairs},{name:"Inactive Pair",count:InactivePairs}]}
                         headcolor={"#1f2431"}
-                        number2={InactivePairs}
                         bgcolor={"#fff"}
                         style={{
                           boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
                         }}
                         title={"Pairs"}
-                        text={"Active Pairs"}
-                        text2={"Inactive Pairs"}
                         icon="fa fa-coins"
                         fontColor="#ffffff"
                       />
                     </Link>
-                  </Col>
+                  </Col> */}
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/employee">
+                    <Link target="_blank" to="/dashboard/employee">
                       <CountCard
-                        number={activeEmployeeCount}
+                        data={[{name:"Active Employee",count:activeEmployeeCount},{name:"Inactive Employee",count:inactiveEmployeeCount}]}
                         headcolor={"#1f2431"}
-                        number2={inactiveEmployeeCount}
                         bgcolor={"#fff"}
                         style={{
                           boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
                         }}
                         title={"Employees"}
-                        text={"Active Employees"}
-                        text2={"Inactive Employees"}
-                        icon="fa fa-coins"
+                        icon="fas fa-user-tie"
                         fontColor="#ffffff"
                       />
                     </Link>
                   </Col>
 
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/jobs">
+                    <Link target="_blank" to="/dashboard/jobs">
                       <CardView
-                        cardText={"Pending Job Applications"}
-                        cardTitle={"Pending Job Applications"}
-                        icon={"fa fa-tasks"}
+                        cardText={"Active Job Applications"}
+                        cardTitle={"Job Applications"}
+                        icon={"fa fa-suitcase-rolling"}
                         countNumber={jobsCount}
                       />
                     </Link>
                   </Col>
-
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/withdraw-requests">
-                      <CardView
-                        cardText={"Last 7 Days Withdrawal Request"}
-                        cardTitle={"Withdrawal Request"}
-                        icon={"fa fa-server"}
-                        countNumber={withdrawReqCount}
+                    <Link target="_blank" to="/dashboard/kyc">
+                      <CountCard
+                      data={[{name:"Approved Customer ID",count:kyc_approved},{name:"Disapproved Customer ID",count:kyc_disapproved}]}
+                      headcolor={"#1f2431"}
+                      bgcolor={"#fff"}
+                      style={{
+                        boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                      }}
+                      title="Customer ID Verification"
+                      icon="fa fa-id-card"
+                      fontColor="#ffffff"
                       />
                     </Link>
                   </Col>
-
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/withdraw-requests">
-                      <CardView
-                        cardText={"Pending Withdrawal Request"}
-                        cardTitle={"Withdrawal Request"}
-                        icon={"fa fa-server"}
-                        countNumber={withdrawReqCountValue}
+                    <Link target="_blank" to="/dashboard/withdraw-requests">
+                    <CountCard
+                      data={[{name:"Last 7 Days Withdrawal Request",count:withdrawReqCount},{name:"Pending Withdrawal Request",count:withdrawReqCountValue}]}
+                      headcolor={"#1f2431"}
+                      bgcolor={"#fff"}
+                      style={{
+                        boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                      }}
+                      title="Withdrawal Request"
+                      icon="fa fa-id-card"
+                      fontColor="#ffffff"
                       />
                     </Link>
                   </Col>
-
                   <Col lg={6} md={12} sm={12} xs={24} >
-                    <Link to="/dashboard/users">
+                    <Link target="_blank" to="/dashboard/users">
                       <CardView
                         cardText={"Signed up Users"}
                         cardTitle={"24 hours Signed up Users"}
                         icon={"fa fa-users"}
                         countNumber={userSignUpCountValue}
+                      />
+                    </Link>
+                  </Col>
+                  <Col  lg={6} md={12} sm={12} xs={24}>
+                  <Link target="_blank" to="/dashboard/countries">
+                      <CountCard
+                      data={[{name:"Legal Countries",count:legalCountries},{name:"Illegal Countries",count:illegalCountries},{name:"Neutral Countries",count:neutralCountries},{name:"Partial Countries",count:PartialCountries}]}
+                      headcolor={"#1f2431"}
+                      bgcolor={"#fff"}
+                      style={{
+                        boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                      }}
+                      title="Countries"
+                      icon="fa fa-flag"
+                      fontColor="#ffffff"
                       />
                     </Link>
                   </Col>
@@ -685,9 +699,9 @@ class Dashboard extends Component {
                     <IframeCol>
                       <iframe
                         src={metabaseUrl}
-                        frameborder="0"
+                        frameBorder="0"
                         width="100%"
-                        allowtransparency
+                        allowtransparency={true}
                       ></iframe>
                     </IframeCol>}
                 </TableDemoStyle>

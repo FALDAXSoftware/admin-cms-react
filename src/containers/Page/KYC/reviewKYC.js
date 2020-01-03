@@ -176,7 +176,7 @@ class ReviewKYC extends Component {
                                 <Row type="flex" justify="start" className="table-filter-row">
                                     <Col md={7}>
                                         <Input
-                                            placeholder="Search KYC"
+                                            placeholder="Search Customer ID"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
@@ -242,4 +242,3 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(ReviewKYC);
 
-export { ReviewKYC }

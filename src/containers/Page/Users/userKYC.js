@@ -42,7 +42,7 @@ class UserKYCDetails extends Component {
             <div className="kyc-div user-profile">
                 {kycDetails && Object.entries(kycDetails).length != 0 ?
                     <div>
-                        <Divider>KYC Information</Divider>
+                        <Divider>Customer ID Verification</Divider>
                         <DetailDiv title="Status"
                             value={kycDetails && kycDetails.is_approve != undefined && kycDetails.is_approve ? 'APPROVED' :(kycDetails.direct_response?'DIS-APPROVED':'PENDING-APPROVAL')} />
                         <Divider>IDM Details</Divider>
@@ -50,12 +50,12 @@ class UserKYCDetails extends Component {
                             value={kycDetails && kycDetails.direct_response ? kycDetails.direct_response : 'N/A'} />
                         <DetailDiv title="Webhook Response"
                             value={kycDetails && kycDetails.webhook_response ? kycDetails.webhook_response : 'N/A'} />
-                        <DetailDiv title="KYC Document Details"
+                        <DetailDiv title="Customer ID Details"
                             value={kycDetails && kycDetails.kyc_doc_details ? kycDetails.kyc_doc_details : 'N/A'} />
                         <DetailDiv title="Comments"
                             value={kycDetails && kycDetails.comments ? kycDetails.comments : 'N/A'} />
                     </div>
-                    : <h2 style={{ textAlign: 'center', width: '100 %' }}>KYC data not submitted</h2>
+                    : <h2 style={{ textAlign: 'center', width: '100 %' }}>Customer id not submitted</h2>
                 }
             </div >
         );

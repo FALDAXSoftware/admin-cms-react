@@ -3,7 +3,8 @@
 export const messages = {
   campaign: {
     offer: {
-      added: "Offer added successfully"
+      added: "Offer added successfully",
+      updated: "Offer updated successfully"
     }
   },
   notification: {

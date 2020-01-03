@@ -99,7 +99,6 @@ const columns = [{
     ellipsis:true,
     key: 'account_tier',
     width: 150,
-    sorter: true,
     render: object => renderCell(object, 'TierCell', 'account_tier')
 }, {
     title: <IntlMessages id="kycTable.title.kycDoc_details" />,
@@ -112,7 +111,7 @@ const columns = [{
 
 const ApprovedKYCInfos = [
     {
-        title: 'KYC',
+        title: 'Customer ID',
         value: 'KYCTable',
         columns: clone(columns)
     }

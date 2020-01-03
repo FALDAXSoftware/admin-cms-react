@@ -506,7 +506,7 @@ class EditUser extends Component {
                   "error-danger"
                 )}
               </div>
-          <Row style={{ marginBottom: "15px", paddingTop: "16" }}>
+          <Row className="table-tb-margin">
             <Col>
               <span>Postal Code:</span>
               <Input

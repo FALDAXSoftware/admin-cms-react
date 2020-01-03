@@ -175,7 +175,7 @@ class DeclinedKYC extends Component {
                                 <Row type="flex" justify="start" className="table-filter-row">
                                     <Col md={6}>
                                         <Input
-                                            placeholder="Search KYC"
+                                            placeholder="Search Customer ID"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
@@ -237,4 +237,4 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(DeclinedKYC);
 
-export { DeclinedKYC }
+

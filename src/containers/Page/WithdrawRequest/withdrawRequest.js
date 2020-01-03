@@ -322,21 +322,6 @@ class WithdrawRequest extends Component {
     );
   };
 
-  async getMetaBaseUrl() {
-    try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getWithdrawRequest()).json();
-      if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
-      } else if (response.statue == 400 || response.status == 403) {
-
-      }
-    } catch (error) {
-
-    } finally {
-      this.setState({ loader: false })
-    }
-  }
 
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
@@ -347,12 +332,6 @@ class WithdrawRequest extends Component {
   _closeDeclineModal = () => {
     this.setState({ showDeclineModal: false });
   };
-
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
-    }
-  }
 
   render() {
     const {
@@ -387,10 +366,6 @@ class WithdrawRequest extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <BackButton {...this.props}/>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this.onChangeTabs}>
-          <TabPane tab={withdrawReqTableInfos[0].title} key={withdrawReqTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
                 <Form onSubmit={this._searchReq}>
                   <Row>
@@ -420,6 +395,7 @@ class WithdrawRequest extends Component {
                         disabledTime={this.disabledRangeTime}
                         onChange={this._changeDate}
                         format="YYYY-MM-DD"
+                        className="full-width"
                       />
                     </ColWithMarginBottom>
                     <ColWithMarginBottom xs={12} sm={3}>
@@ -516,24 +492,6 @@ class WithdrawRequest extends Component {
                 getAllWithdrawReqs={this._getAllWithdrawReqs}
               />
             </TableDemoStyle>
-          </TabPane>
-
-          {isAllowed('metabase_withdraw_request_report') &&
-         <TabPane tab="Report" key="metabase">
-            <TableDemoStyle className="isoLayoutContent">
-              {metabaseUrl &&
-                  <iframe
-                  className="metabase-iframe"
-                    src={metabaseUrl}
-                    frameBorder="0"
-                    width="100%"
-                    allowtransparency="true"
-                  ></iframe>}
-            </TableDemoStyle>
-          </TabPane>
-          }
-        </Tabs>
-      </LayoutWrapper>
     );
   }
 }
@@ -544,5 +502,3 @@ export default connect(
   }),
   { logout }
 )(WithdrawRequest);
-
-export { WithdrawRequest, withdrawReqTableInfos };

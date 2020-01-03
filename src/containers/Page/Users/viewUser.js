@@ -16,6 +16,7 @@ import AccountSummary from './accountSummary';
 import UserWallets from './userWallets';
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from '../../Shared/backBttton';
+import LayoutWrapper from '../../../components/utility/layoutWrapper';
 
 const { TabPane } = Tabs;
 
@@ -30,16 +31,16 @@ class ViewUser extends Component {
         let user_id = path[path.length - 1]
 
         return (
-            <div>
+            <LayoutWrapper>
                 <BackButton {...this.props}></BackButton>
-                <Tabs size={'large'}>
+                <Tabs className="full-width">
                     {isAllowed("get_user_details") &&
 
                         <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_kyc_detail") &&
 
-                        <TabPane tab="KYC" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
+                        <TabPane tab="Customer ID Verification" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_user_wallet_addresses") &&
 
@@ -76,7 +77,7 @@ class ViewUser extends Component {
                         (this.props.location.state && this.props.location.state.is_active) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
                     }
                 </Tabs>
-            </div>
+            </LayoutWrapper>
         );
     }
 }

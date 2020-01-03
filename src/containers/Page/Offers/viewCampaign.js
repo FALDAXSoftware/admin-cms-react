@@ -10,14 +10,16 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import moment from "moment";
 import styled from "styled-components";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { OfferDateCell} from "../../../components/tables/helperCells";
+import { OfferDateCell, DateTimeCell} from "../../../components/tables/helperCells";
 import { isAllowed } from "../../../helpers/accessControl";
+import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 const tableColumns = [
   {
     title: "Action",
     key: "action",
-    width:50,
+    width:100,
     align:"left",
+    ellipsis:true,
     render:(object)=>(
       <div>
         {isAllowed("view_campaign_offer_used")&&<Tooltip title="View Details">
@@ -34,40 +36,53 @@ const tableColumns = [
     )
   },
   {
+    title: "Created On",
+    dataIndex: "created_at",
+    align:"left",
+    ellipsis:true,
+    key: "created_at",
+    width:150,
+    render:(data)=>DateTimeCell(data)
+  },
+  {
     title: "Code",
     dataIndex: "code",
     align:"left",
+    ellipsis:true,
     key: "code",
-    width:100,
+    width:200,
   },
   {
     title: "Description",
     width:300,
-    align:"left",
-    ellipses:"true",
+    ellipsis:true,
     dataIndex: "description",
-    key: "description"
+    key: "description",
+    render:data=><span><Tooltip title={data} autoAdjustOverflow={true}><p className="text-ellipsis">{data}</p></Tooltip></span>
   },
   {
     title: "No of transactions",
     align:"left",
+    ellipsis:true,
     dataIndex: "no_of_transactions",
     key: "no_of_transactions",
-    width:100,
+    width:150,
     
   },
   {
     title: "Total fees allowed",
     align:"left",
+    ellipsis:true,
     dataIndex: "fees_allowed",
     key: "fees_allowed",
-    width:100,
+    width:150,
     render: fees => <span>{fees} USD</span>
   },
   {
     title: "Usage",
     dataIndex: "offercode_used",
     align:"left",
+    ellipsis:true,
     key: "offercode_used",
     width:75
   },
@@ -75,16 +90,18 @@ const tableColumns = [
     title: "Start Date",
     dataIndex: "start_date",
     align:"left",
+    ellipsis:true,
     key: "start_date",
-    width:100,
+    width:150,
     render: start_date => OfferDateCell(start_date)
   },
   {
     title: "End Date",
     dataIndex: "end_date",
     align:"left",
+    ellipsis:true,
     key: "end_date",
-    width:100,
+    width:150,
     render: end_date => OfferDateCell(end_date)
   },
   {
@@ -92,7 +109,8 @@ const tableColumns = [
     dataIndex: "user_data",
     key: "user_data",
     align:"left",
-    width:100,
+    ellipsis:true,
+    width:200,
     render: data =>
       data.id ? (
         <a target="_blanck" href={`/dashboard/users/${data.id}`}>
@@ -107,6 +125,7 @@ const tableColumns = [
     dataIndex: "is_active",
     key: "is_active",
     align:"left",
+    ellipsis:true,
     width:100,
     render: status => (
       <Tag
@@ -122,6 +141,7 @@ const tableColumns = [
     title: "Expired",
     dataIndex: "end_date",
     align:"left",
+    ellipsis:true,
     key: "end_date",
     width:100,
     render: (end_date) => {
@@ -137,11 +157,6 @@ const { logout } = authAction;
 
 const CampaignCol = styled(Col)`
   margin: 0 0 15px 0;
-`;
-
-const detailHead=styled.span`
-  font-weight:500;
-  font-size:15px;
 `;
 
 const CampRow = styled(Row)`
@@ -233,25 +248,31 @@ class ViewCampaign extends Component {
           <p>{campaignDetails.description}</p>
           <CampRow>
             <Col span={8}>
-              <detailHead>Total number of transactions allowed</detailHead>
+              <span>Created On</span>
+            </Col>
+            <Col span={16}>{DateTimeCell(campaignDetails.created_at)}</Col>
+          </CampRow>
+          <CampRow>
+            <Col span={8}>
+              <span>Total number of transactions allowed</span>
             </Col>
             <Col span={16}>{campaignDetails.no_of_transactions}</Col>
           </CampRow>
           <CampRow>
             <Col span={8}>
-              <detailHead>Total fees allowed</detailHead>
+              <span>Total fees allowed</span>
             </Col>
             <Col span={16}>{campaignDetails.fees_allowed} USD</Col>
           </CampRow>
           <CampRow>
             <Col span={8}>
-              <detailHead>Type</detailHead>
+              <span>Type</span>
             </Col>
             <Col span={16}>{campaignDetails.usage==1?'Single code use':'Multiple code use'}</Col>
           </CampRow>
           {campaignDetails.start_date && <CampRow>
             <Col span={8}>
-              <detailHead>Start Date</detailHead>
+              <span>Start Date</span>
             </Col>
             <Col span={16}>
               {OfferDateCell(campaignDetails.start_date)}
@@ -259,7 +280,7 @@ class ViewCampaign extends Component {
           </CampRow>}
           {campaignDetails.end_date && <CampRow>
             <Col span={8}>
-              <detailHead>End Date</detailHead>
+              <span>End Date</span>
             </Col>
             <Col span={16}>
               {OfferDateCell(campaignDetails.end_date)}
@@ -267,7 +288,7 @@ class ViewCampaign extends Component {
           </CampRow>}
           <CampRow>
             <Col span={8}>
-              <detailHead>Campaign Status</detailHead>
+              <span>Campaign Status</span>
             </Col>
             <Col span={16}>
               <Tag className="cursor-default" color={campaignDetails.is_active ?'geekblue' : 'grey'}> {campaignDetails.is_active ? "Active" : "Inactive"}</Tag>
@@ -275,7 +296,7 @@ class ViewCampaign extends Component {
           </CampRow>
           <div className='mg-top-15'>
             <Divider orientation="left">Offers</Divider>
-            <TableWrapper dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
+            <TableWrapper bordered scroll={TABLE_SCROLL_HEIGHT} dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
           </div>
         </TableDemoStyle>
         {loader && <Loader />}

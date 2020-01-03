@@ -96,8 +96,8 @@ const AccessGrant = (props) => {
       return acc;
     }, {});
 
-    const handleClick = id =>{
-      setSelectedPermission(id)
+    const handleClick = (id) =>{
+      setSelectedPermission(id);
       refs[id].current.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
@@ -203,6 +203,7 @@ const AccessGrant = (props) => {
                     <Col md={3}>
                       <Tooltip>
                         <Button
+                          className="full-width"
                           onClick={() => {
                             checkAll();
                           }}
@@ -214,6 +215,7 @@ const AccessGrant = (props) => {
                     <Col md={3.5}>
                       <Tooltip>
                         <Button
+                          className="full-width"
                           onClick={() => {
                             uncheckAll();
                           }}
@@ -225,7 +227,7 @@ const AccessGrant = (props) => {
                     <Col md={6}>
                       <Select className="full-width" value={selectedPermission} placeholder="Select Permission">
                       { Object.keys(permissions).map((key, index) => (
-                        <Option key={index} onClick={() => handleClick(key)}>{key}</Option>))
+                        <Option key={index} value={key} onClick={() => handleClick(key)}>{key}</Option>))
                       }
                       </Select>
                     </Col>
@@ -272,7 +274,7 @@ const AccessGrant = (props) => {
                                   onCheckedChange(e, per.main_module, index);
                                 }}
                               >
-                                {per.display_name.charAt(0).toUpperCase() + per.display_name.slice(1)}
+                                <span className="camel-case">{per.display_name}</span>
                               </Checkbox>
                             </Col>
                           ))}

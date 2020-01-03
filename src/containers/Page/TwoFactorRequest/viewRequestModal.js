@@ -36,7 +36,7 @@ class ViewRequestModal extends Component {
 
         return (
             <Modal
-                title="View Two Factor Request"
+                title="View 2FA Request"
                 visible={showViewRequestModal}
                 onCancel={this._closeViewRequestModal}
                 footer={[

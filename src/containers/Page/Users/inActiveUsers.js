@@ -19,7 +19,6 @@ import { connect } from "react-redux";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import {ColWithMarginBottom} from "../common.style";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
@@ -216,7 +215,7 @@ class InActiveUsers extends Component {
   _resetFilters = () => {
     this.setState(
       {
-        filterVal: "",
+        filterVal:undefined,
         searchUser: "",
         page: 1,
         sorterCol: "",
@@ -291,20 +290,21 @@ class InActiveUsers extends Component {
               {inActiveUserinfos.map(tableInfo => (
                 <div tab={tableInfo.title} key={tableInfo.value}>
                     <Form onSubmit={this._searchUser} className="cty-search">
-                      <Row type="flex" justify="start">
-                        <ColWithMarginBottom lg={7} xs={24}>
+                      <Row type="flex" className="table-filter-row" justify="start">
+                        <Col lg={7} xs={24}>
                           <Input
                             placeholder="Search users"
                             onChange={this._changeSearch.bind(this)}
                             value={searchUser}
                           />
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom  lg={7} xs={24}>
+                        </Col>
+                        <Col  lg={8} xs={24}>
                           <Select
                             getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a country"
                             onChange={this._changeCountry}
                             value={filterVal}
+                            showSearch
                           >
                             {allCountries &&
                               allCountries.map((country, index) => {
@@ -315,8 +315,8 @@ class InActiveUsers extends Component {
                                 );
                               })}
                           </Select>
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom lg={3} xs={24}>
+                        </Col>
+                        <Col lg={3} xs={24}>
                           <Button
                             htmlType="submit"
                             className="filter-btn btn-full-width"
@@ -324,8 +324,8 @@ class InActiveUsers extends Component {
                           >
                            <Icon type="search"/> Search
                           </Button>
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom  xs={24} lg={3}>
+                        </Col>
+                        <Col  xs={24} lg={3}>
                           <Button
                             className="filter-btn btn-full-width"
                             type="primary"
@@ -333,8 +333,8 @@ class InActiveUsers extends Component {
                           >
                             <Icon type="reload" />Reset
                           </Button>
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom  xs={24} lg={3}>
+                        </Col>
+                        <Col  xs={24} lg={3}>
                           {allUsers && allUsers.length > 0 ? (
                             <CSVLink
                               data={allUsers}
@@ -348,14 +348,14 @@ class InActiveUsers extends Component {
                           ) : (
                             ""
                           )}
-                        </ColWithMarginBottom>
+                        </Col>
                       </Row>
                     </Form>
                   {loader && <FaldaxLoader />}
                   <div className="scroll-table float-clear">
                     <TableWrapper
                       rowKey="id"
-                      className="table-tb-margin isoCustomizedTable"
+                      className="table-tb-margin"
                       {...this.state}
                       columns={tableInfo.columns}
                       pagination={false}

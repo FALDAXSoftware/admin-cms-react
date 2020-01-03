@@ -84,6 +84,7 @@ class AddIPModal extends Component {
 
         fields['ip'] = '';
         fields['time'] = '';
+        this.validator.hideMessages();
         this.setState({ fields,endDate:""});
     }
 

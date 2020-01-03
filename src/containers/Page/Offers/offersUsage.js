@@ -21,7 +21,7 @@ import ApiUtils from "../../../helpers/apiUtills";
 import {  DateTimeCell } from "../../../components/tables/helperCells";
 import {ColWithMarginBottom} from "../common.style";
 const OtherError = "Something went to wrong please try again after some time.";
-
+let self;
 let { Option } = Select;
 
 const column = [
@@ -45,7 +45,7 @@ const column = [
     title: "Order Id",
     key: "order_id",
     render: object => (
-      <span>{object.is_attempted ? "-" : object.order_id}</span>
+      <span>{object.is_attempted ? "-" : <a onClick={()=>self.props.history.push({pathname:"/dashboard/trade-history",state:{"orderId":object['order_id']+""}})}>{object['order_id']}</a>}</span>
     )
   },
   {
@@ -88,6 +88,7 @@ class OffersUsage extends Component {
       show: () => this.setState({ loader: true }),
       hide: () => this.setState({ loader: false })
     };
+    self=this;
   }
 
   componentDidMount() {
