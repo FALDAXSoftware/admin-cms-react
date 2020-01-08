@@ -38,7 +38,7 @@ const columns = [{
     width: 50,
     render: object => renderCell(object, 'referralActionCell', 'id')
 }, {
-    title: <IntlMessages id="antTable.title.Name" />,
+    title: <IntlMessages id="antTable.title.name" />,
     key: 'first_name',
    align:"left",
     width: 200,

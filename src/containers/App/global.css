@@ -468,6 +468,15 @@ html[dir='rtl'] .dz-hidden-input {
   float: right;
   line-height: 40px;
 }
+.inactive-asset-card {
+  font-weight: 700;
+  font-size: large;
+  margin-bottom: 10px;
+}
+.inactive-asset-card .amount{
+  float: right;
+  line-height: 40px;
+}
 .tier-tab{
   margin-left: 20px;
     /* background-color: white; */
@@ -732,4 +741,10 @@ html[dir='rtl'] .dz-hidden-input {
 .limit-div
 {
   background: #f1f3f6;
+}
+.ant-breadcrumb{
+  font-weight: 400;
+  width: 100%;
+  clear: both;
+  margin-left: 10px !important;
 }

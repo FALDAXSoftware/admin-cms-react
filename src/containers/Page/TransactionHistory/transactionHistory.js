@@ -25,9 +25,7 @@ import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
-import styled from "styled-components";
-import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
+import { PrecisionCell } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -388,7 +386,7 @@ class Transactions extends Component {
                         <span>
                           <b>Amount: </b>
                         </span>{" "}
-                        {record.amount}
+                        {PrecisionCell(record.amount)}
                         <br />
                         <span>
                           <b>Asset: </b>
@@ -414,6 +412,16 @@ class Transactions extends Component {
                           <b>Transaction Fees: </b>
                         </span>{" "}
                         {record.transaction_fees}
+                        <br />
+                        <span>
+                          <b>FALDAX Fees: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
+                        <br />
+                        <span>
+                          <b>Network Fees: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.network_fees):'-'}
                         <br />
                       </div>
                     );

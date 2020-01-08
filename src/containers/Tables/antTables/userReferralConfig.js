@@ -19,7 +19,7 @@ const renderCell = (object, type, key, Name = null, isDeleted = null) => {
 };
 
 const columns = [{
-    title: <IntlMessages id="antTable.title.Name" />,
+    title: <IntlMessages id="antTable.title.name" />,
    align:"left",
     ellipsis:true,
     key: 'full_name',

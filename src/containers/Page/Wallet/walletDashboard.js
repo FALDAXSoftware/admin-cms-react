@@ -8,12 +8,14 @@ import WalletWarmDashboard from './warm/walletWarmDashboard';
 import WalletCustodialDashboard from './custodial/walletCustodialDashboard';
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from '../../Shared/backBttton';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 class WalletDashboard extends Component {
     state = {  }    
     render() { 
         return (
         <LayoutWrapper>
             <BackButton {...this.props}/>
+            <BreadcrumbComponent {...this.props}/>
             <Tabs className="full-width">
                 {isAllowed("admin_wallet_fees_details") &&<TabPane tab="FALDAX Wallet" key="1"><WalletFaldaxDashboard/></TabPane>}
                 {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Warm Wallet" key="2"><WalletWarmDashboard/></TabPane>}

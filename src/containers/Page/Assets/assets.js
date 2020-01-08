@@ -24,6 +24,7 @@ import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
 import { ColWithMarginBottom } from "../common.style";
 import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -330,6 +331,7 @@ class Assets extends Component {
     return (
       <LayoutWrapper>
         <BackButton {...this.props}/>
+        <BreadcrumbComponent {...this.props} />
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
               <TableDemoStyle className="isoLayoutContent">
