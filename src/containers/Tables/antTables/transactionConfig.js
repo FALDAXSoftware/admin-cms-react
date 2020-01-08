@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, DateTimeCell, TransactionTypeCell, TagsCell, TransactionHashCell
+    TextCell, DateTimeCell, TransactionTypeCell, TagsCell, TransactionHashCell, PrecisionCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, user = null, source = null, destination = null, amt = null,
@@ -67,35 +67,51 @@ const columns = [{
     title: <IntlMessages id="transactionTable.title.destination_address" />,
     key: 'destination_address',
     width: 300,
-   align:"left",
+    align:"left",
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="transactionTable.title.amount" />,
     key: 'amount',
-    width: 200,
-   align:"left",
+    width: 100,
+    align:"left",
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'amount')
+    dataIndex:"amount",
+    render:(data)=>PrecisionCell(data)
 }, {
     title: <IntlMessages id="transactionTable.title.coin" />,
     key: 'coin',
     width: 100,
-   align:"left",
+    align:"left",
     render: object => renderCell(object, 'TextCell', 'coin')
 }, {
     title: <IntlMessages id="transactionTable.title.transactionType" />,
     key: 'transaction_type',
-    width: 200,
-   align:"left",
+    width: 100,
+    align:"left",
     render: object => renderCell(object, 'TransactionTypeCell', 'transaction_type')
 },
 {
     title: <IntlMessages id="transactionTable.title.transactionFees" />,
     key: 'transaction_fees',
-    width: 200,
-   align:"left",
-    render: object => renderCell(object, 'TextCell', 'transaction_fees')
-}
+    width: 150,
+    align:"left",
+    dataIndex:"transaction_fees",
+    // render:(data)=>PrecisionCell(data)
+},
+{
+    title: <IntlMessages id="tradeTable.title.faldax_fees" />,
+    key: 'faldax_fees',
+    width: 150,
+    align:"left",
+    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["faldax_fee"]):"-"
+},
+{
+    title: <IntlMessages id="tradeTable.title.network_fees" />,
+    key: 'network_fees',
+    width: 150,
+    align:"left",
+    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["network_fees"]):"-"
+},
 ];
 
 const transactionTableInfos =

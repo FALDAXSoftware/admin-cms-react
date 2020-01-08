@@ -7,12 +7,14 @@ import  ViewRoles  from './viewRoles';
 import RolesMetabase from './rolesMetabase';
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from '../../Shared/backBttton';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 class RolesTab extends Component {
     state = {  }    
     render() { 
         return (
         <LayoutWrapper>
                 <BackButton {...this.props}/>
+                <BreadcrumbComponent {...this.props}/>
                 <Tabs className="full-width">
                     {isAllowed("get_role")&&<TabPane tab="Roles" key="1"><ViewRoles/></TabPane>}
                     {isAllowed("metabase_roles_report")&&<TabPane tab="Report" key="2"><RolesMetabase/></TabPane>}

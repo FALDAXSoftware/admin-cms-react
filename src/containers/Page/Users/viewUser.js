@@ -17,6 +17,7 @@ import UserWallets from './userWallets';
 import { isAllowed } from '../../../helpers/accessControl';
 import { BackButton } from '../../Shared/backBttton';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const { TabPane } = Tabs;
 
@@ -33,6 +34,7 @@ class ViewUser extends Component {
         return (
             <LayoutWrapper>
                 <BackButton {...this.props}></BackButton>
+                <BreadcrumbComponent {...this.props}/>
                 <Tabs className="full-width">
                     {isAllowed("get_user_details") &&
 

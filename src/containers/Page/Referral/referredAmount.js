@@ -6,6 +6,8 @@ import FaldaxLoader from '../faldaxLoader';
 import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
 import { BackButton } from '../../Shared/backBttton';
+import { isAllowed } from '../../../helpers/accessControl';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const { logout } = authAction;
 
@@ -70,12 +72,13 @@ class ReferredAmount extends Component {
         return (
             <div className="referral-div">
                 <BackButton {...this.props}/>
+                <BreadcrumbComponent {...this.props} />
                 {result.length > 0 ?
                     <Row className="table-tb-margin">
                         {
                             referredAmounts && referredAmounts.map((ref,index) => (
                                 <Col key={"col"+index} md={8} sm={12} xs={24}>
-                                    <Card key={"card"+index} className='assets-card' onClick={()=>this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}})}>
+                                    <Card key={"card"+index} className={isAllowed("get_user_referral_list")?"assets-card":"inactive-asset-card"} onClick={()=>isAllowed("get_user_referral_list")?this.props.history.push({pathname:`./${this.props.match.params.id}/${ref.coin_name}`,state:{assets:this.getAssetList()}}):false}>
                                         <div className="asset-coinatiner">
                                             <img src={'https://s3.us-east-2.amazonaws.com/production-static-asset/' + ref.coin_icon}></img>&nbsp;&nbsp;
                                             <span>{ref.coin_name}</span>

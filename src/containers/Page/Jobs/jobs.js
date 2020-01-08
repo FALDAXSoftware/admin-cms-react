@@ -17,6 +17,7 @@ import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from "./jobsMetabase"
 import { ColWithMarginBottom } from "../common.style";
 import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -116,7 +117,7 @@ class Jobs extends Component {
   }
 
   static showApplicants(value) {
-    self.props.history.push("/dashboard/job-applications/" + value);
+    self.props.history.push("/dashboard/jobs/job-applications/" + value);
   }
 
   static editJob(
@@ -360,6 +361,7 @@ class Jobs extends Component {
     return (
       <LayoutWrapper>
         <BackButton {...this.props}/>
+        <BreadcrumbComponent {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">

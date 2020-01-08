@@ -135,17 +135,17 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/faldax/:coin",
+        path: "wallet/:faldax/:coin",
         component: asyncComponent(() => import("../Page/Wallet/faldax/wallet")),
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/warm/:coin",
+        path: "wallet/:warm/:coin",  
         component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/custodial/:coin",
+        path: "wallet/:custodial/:coin",
         component: asyncComponent(() => import("../Page/Wallet/custodial/wallet")),
         module: "wallet_dashboard"
     },
@@ -230,11 +230,11 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Users/userTrades"))
     },
     {
-        path: "country/:id/states",
+        path: "countries/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
     {
-        path: "job-applications/:id",
+        path: "jobs/job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
     },
     {
@@ -282,7 +282,7 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Tiers/editTier"))
     },
     {
-        path: "access-grant/:id",
+        path: "roles/access-grant/:id",
         component: asyncComponent(() => import("../Page/Roles/access-grant"))
     },
 ]

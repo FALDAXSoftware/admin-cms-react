@@ -48,7 +48,7 @@ class EditableCell extends React.Component {
 
                             ],
                             // initialValue: (parseFloat(record[dataIndex]) > 0)?(parseFloat(record[dataIndex])).toPrecision(8):"0",
-                            initialValue: isFloat(record[dataIndex])?parseFloat(record[dataIndex]).toFixed(8):(record[dataIndex]==0?0:(record[dataIndex]?parseFloat(record[dataIndex]):"")),
+                            initialValue: isFloat(record[dataIndex])?parseFloat(record[dataIndex]).toFixed(8):(record[dataIndex]===0?0:(record[dataIndex]?parseFloat(record[dataIndex]):undefined)),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -72,42 +72,42 @@ class EditableTable extends React.Component {
                 title: 'Daily Withdraw Crypto',
                 dataIndex: 'daily_withdraw_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"2",
                 title: 'Daily Withdraw Fiat',
                 dataIndex: 'daily_withdraw_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"3",
                 title: 'Monthly Withdraw Crypto',
                 dataIndex: 'monthly_withdraw_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"4",
                 title: 'Monthly Withdraw Fiat',
                 dataIndex: 'monthly_withdraw_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"7",
                 title: 'Min Withdrawal Crypto',
                 dataIndex: 'min_withdrawl_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"5",
                 title: 'Min Withdrawal Fiat',
                 dataIndex: 'min_withdrawl_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))}</span>
+                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
             },
             {
                 key:"6",
@@ -159,55 +159,29 @@ class EditableTable extends React.Component {
         this.setState({ editingKey: '' });
     };
 
-    save = (form, key) => {
+    save = async(form, key) => {
         const { token, coin_id } = this.props;
         let _this = this;
-        form.validateFields((error, row) => {
+        form.validateFields(async (error, row) => {
             if (error) {
                 return;
             }
             const newData = [...this.state.allAssetLimit];
             const index = newData.findIndex(item => key === item.id);
-
+            debugger
             let formData = {
                 id: newData[index].id,
                 coin_id: newData[index].coin_id,
-                daily_withdraw_crypto: parseFloat(row.daily_withdraw_crypto)>0?parseFloat(row.daily_withdraw_crypto).toFixed(8):parseFloat(row.daily_withdraw_crypto),
-                daily_withdraw_fiat: parseFloat(row.daily_withdraw_fiat)>0?parseFloat(row.daily_withdraw_fiat).toFixed(8):parseFloat(row.daily_withdraw_fiat),
-                min_withdrawl_crypto: parseFloat(row.min_withdrawl_crypto)>0?parseFloat(row.min_withdrawl_crypto).toFixed(8):parseFloat(row.min_withdrawl_crypto),
-                min_withdrawl_fiat:parseFloat(row.min_withdrawl_fiat)>0?parseFloat(row.min_withdrawl_fiat).toFixed(8):parseFloat(row.min_withdrawl_fiat),
-                monthly_withdraw_crypto: parseFloat(row.monthly_withdraw_crypto)>0?parseFloat(row.monthly_withdraw_crypto).toFixed(8):parseFloat(row.monthly_withdraw_crypto),
-                monthly_withdraw_fiat: parseFloat(row.monthly_withdraw_fiat)>0?parseFloat(row.monthly_withdraw_fiat).toFixed(8):parseFloat(row.monthly_withdraw_fiat),
+                daily_withdraw_crypto: isFloat(row.daily_withdraw_crypto)?parseFloat(row.daily_withdraw_crypto).toFixed(8):(row.daily_withdraw_crypto===0?0:(row.daily_withdraw_crypto?parseFloat(row.daily_withdraw_crypto):NaN)),
+                daily_withdraw_fiat: isFloat(row.daily_withdraw_fiat)?parseFloat(row.daily_withdraw_fiat).toFixed(8):(row.daily_withdraw_fiat===0?0:(row.daily_withdraw_fiat?parseFloat(row.daily_withdraw_fiat):NaN)),
+                min_withdrawl_crypto: isFloat(row.min_withdrawl_crypto)?parseFloat(row.min_withdrawl_crypto).toFixed(8):(row.min_withdrawl_crypto===0?0:(row.min_withdrawl_crypto?parseFloat(row.min_withdrawl_crypto):NaN)),
+                min_withdrawl_fiat:isFloat(row.min_withdrawl_fiat)?parseFloat(row.min_withdrawl_fiat).toFixed(8):(row.min_withdrawl_fiat===0?0:(row.min_withdrawl_fiat?parseFloat(row.min_withdrawl_fiat):NaN)),
+                monthly_withdraw_crypto: isFloat(row.monthly_withdraw_crypto)?parseFloat(row.monthly_withdraw_crypto).toFixed(8):(row.monthly_withdraw_crypto===0?0:(row.monthly_withdraw_crypto?parseFloat(row.monthly_withdraw_crypto):NaN)),
+                monthly_withdraw_fiat: isFloat(row.monthly_withdraw_fiat)?parseFloat(row.monthly_withdraw_fiat).toFixed(8):(row.monthly_withdraw_fiat===0?0:(row.monthly_withdraw_fiat?parseFloat(row.monthly_withdraw_fiat):NaN)),
             }
-
-            _this.setState({ loader: true });
-            ApiUtils.updateAssetLimits(token, formData)
-                .then((response) => response.json())
-                .then(function (res) {
-                    if (res.status == 200) {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'Success' }, () => {
-                            _this._getAllAssetLimit();
-                        });
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                    }
-                    _this.setState({ loader: false });
-                })
-                .catch(() => {
-                    _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                    });
-                });
-
-
             if (index > -1) {
-                const item = newData[index];
                 newData.splice(index, 1, {
-                    ...item,
+                    ...formData,
                     ...row,
                 });
                 this.setState({ allAssetLimit: newData, editingKey: '' });
@@ -215,6 +189,23 @@ class EditableTable extends React.Component {
                 newData.push(row);
                 this.setState({ allAssetLimit: newData, editingKey: '' });
             }
+           let res=await(await ApiUtils.updateAssetLimits(token, formData)).json();
+            if (res.status == 200) {
+                _this.setState({ errMsg: true, errMessage: res.message,editingKey: '', errType: 'Success' }, async() => {
+                    await _this._getAllAssetLimit();
+                });
+            } else if (res.status == 403) {
+                _this.setState({ errMsg: true, errMessage: res.err, errType: 'error',editingKey: '' }, async() => {
+                    _this.props.logout();
+                });
+            } else {
+                _this.setState({ errMsg: true, errMessage: res.message, errType: 'error',editingKey: '' });
+            }
+        })
+        .catch(() => {
+            _this.setState({
+                errMsg: true, errMessage: 'Something went wrong!!', errType: 'error',editingKey: ''
+            });
         });
     }
 

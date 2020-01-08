@@ -480,7 +480,7 @@
   "transactionTable.title.source_address": "Source Address",
   "transactionTable.title.destination_address": "Destination Address",
   "transactionTable.title.amount": "Amount",
-  "transactionTable.title.transactionType": "Transaction Type",
+  "transactionTable.title.transactionType": "Type",
   "transactionTable.title.transactionFees": "Transaction Fees",
   "transactionTable.title.coin": "Asset",
   "transactionTable.title.created_at": "Created On",
