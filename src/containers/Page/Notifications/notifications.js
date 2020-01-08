@@ -10,6 +10,7 @@ import { messages } from '../../../helpers/messages'
 import styled from 'styled-components';
 import { BackButton } from '../../Shared/backBttton';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const SaveBtn = styled(Button)`
     float: right;
@@ -484,6 +485,7 @@ class EditableTable extends React.Component {
         {isAllowed("get_admin_thresholds_contacts") &&
           <div className="full-width">
             <BackButton {...this.props}/>
+            <BreadcrumbComponent {...this.props}/>
             <Divider orientation="center">Contact Information</Divider>
             <div className="isoLayoutContent" style={{ marginTop: "10px" }}>
               <span>

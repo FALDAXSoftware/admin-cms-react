@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
 import { BackButton } from '../Shared/backBttton';
+import { BreadcrumbComponent } from '../Shared/breadcrumb';
 
 const { logout } = authAction;
 
@@ -127,6 +128,7 @@ class PanicButton extends Component {
         return (
             <LayoutWrapper>
                 <BackButton {...this.props}/>
+                <BreadcrumbComponent {...this.props} />
                 <div className="isoLayoutContent">
                    <div className="panic-container">
                         <Card title="Panic Button" bordered={false}>

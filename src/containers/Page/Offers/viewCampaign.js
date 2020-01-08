@@ -13,6 +13,8 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { OfferDateCell, DateTimeCell} from "../../../components/tables/helperCells";
 import { isAllowed } from "../../../helpers/accessControl";
 import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 const tableColumns = [
   {
     title: "Action",
@@ -229,21 +231,9 @@ class ViewCampaign extends Component {
     const { loader, campaignDetails } = this.state;
     return (
       <LayoutWrapper>
+         <BackButton {...this.props}/>
+         <BreadcrumbComponent {...this.props}/>
         <TableDemoStyle className="isoLayoutContent">
-          <Link to="/dashboard/campaign">
-            <i
-              style={{ marginRight: "10px", marginBottom: "10px" }}
-              className="fa fa-arrow-left"
-              aria-hidden="true"
-            ></i>
-            <a
-              onClick={() => {
-                this.props.history.push("/dashboard/campaign");
-              }}
-            >
-              Back
-            </a>
-          </Link>
           <h2>{campaignDetails.label}</h2>
           <p>{campaignDetails.description}</p>
           <CampRow>

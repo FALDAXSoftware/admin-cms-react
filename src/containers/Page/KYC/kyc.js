@@ -11,8 +11,6 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
-import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from '../../Shared/backBttton';
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;

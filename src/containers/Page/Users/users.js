@@ -12,6 +12,7 @@ import ApiUtils from "../../../helpers/apiUtills";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { BackButton } from '../../Shared/backBttton';
 import Metabase from './metabase';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 const { TabPane } = Tabs;
 const { logout } = authAction;
 class Users extends Component {
@@ -38,6 +39,7 @@ class Users extends Component {
     return (
       <LayoutWrapper>
         <BackButton {...this.props}/>
+        <BreadcrumbComponent {...this.props}/>  
         <div className="txt-align-right full-width">
           {isAllowed("add_user") &&
             <Button

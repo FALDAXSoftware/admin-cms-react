@@ -7,6 +7,7 @@ import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import Metabase from './metabase';
 import { isAllowed } from '../../../helpers/accessControl';
 import Transaction from "./transactionHistory"
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 
 class KycTabs extends Component {
@@ -15,6 +16,7 @@ class KycTabs extends Component {
         return (
           <LayoutWrapper>
             <BackButton {...this.props} />
+            <BreadcrumbComponent {...this.props}/>
             <Tabs className="full-width">
              {isAllowed("get_all_transactions") &&<TabPane tab="Transaction" key="1">
                 <Transaction/>

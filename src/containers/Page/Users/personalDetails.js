@@ -198,18 +198,17 @@ class PersonalDetails extends Component {
                   <i class="fas fa-map-marker-alt"></i>
                   <span>&nbsp;&nbsp;&nbsp;{userDetails.street_address
                     ? userDetails.street_address_2
-                      ? userDetails.street_address +
-                        "," +
-                        userDetails.street_address_2+" (Street Address)"
-                      : userDetails.street_address+" (Street Address)"
-                    : "N/A"}</span>
+                      ? (userDetails.street_address?userDetails.street_address+" , ":"") +
+                        userDetails.street_address_2
+                      : userDetails.street_address
+                    :""}</span>
                   {/* {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
                   {userDetails.country ? `, ${userDetails.country}` : ""} */}
                 <span class="address-text">
-                 {(userDetails.city_town?userDetails.city_town:"N/A")+", "+(userDetails.postal_code?userDetails.postal_code:"N/A")+" (City, State Zip)"}
+                 {(userDetails.city_town?userDetails.city_town+" , ":"")+(userDetails.postal_code?userDetails.postal_code:"")}
                 </span>
                 <span class="address-text">
-                 {(userDetails.country?userDetails.country:"N/A")+" (Country)"}
+                 {(userDetails.country?userDetails.country:"")}
                 </span>
                 </div>
               </Col>
@@ -220,7 +219,7 @@ class PersonalDetails extends Component {
                   <i class="fas fa-calendar-day"></i>
                   {userDetails.dob && userDetails.dob !== null
                     ? userDetails.dob
-                    : "N/A"}
+                    : ""}
                 </DateOfBirth>
               </Col>
             </Row>

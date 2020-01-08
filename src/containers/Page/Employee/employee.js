@@ -14,6 +14,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpe
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from './employeeMetabase'
 import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -331,6 +332,7 @@ class Employees extends Component {
     return (
       <LayoutWrapper>
         <BackButton {...this.props}/>
+        <BreadcrumbComponent {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={employeeTableinfos[0].title}

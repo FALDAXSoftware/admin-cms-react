@@ -165,7 +165,7 @@ class ViewRoles extends Component {
     self.setState({ showDeleteRoleModal: true, deleteRoleId: value });
   }
   static openAccessGrant(value) {
-    self.props.history.push(`access-grant/${value}`)
+    self.props.history.push(`roles/access-grant/${value}`)
   }
   componentDidMount = () => {
     this._getAllRoles();

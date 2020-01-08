@@ -19,6 +19,8 @@ import CountryFields from "./countryFields";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import PasswordGenerator from "./passwordGenerator";
+import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -335,20 +337,8 @@ class AddUser extends Component {
     return (
       <div className="isoLayoutContent">
         <div style={{ display: "inline-block", width: "100%" }}>
-          <Link to="/dashboard/users">
-            <i
-              style={{ marginRight: "10px", marginBottom: "10px" }}
-              className="fa fa-arrow-left"
-              aria-hidden="true"
-            ></i>
-            <a
-              onClick={() => {
-                this.props.history.push("/dashboard/users");
-              }}
-            >
-              Back
-            </a>
-          </Link>
+            <BackButton {...this.props}/>
+            <BreadcrumbComponent {...this.props}/>
         </div>
         <div>
           <h2>Add User</h2>

@@ -14,6 +14,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpe
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
 import moment from "moment";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -223,6 +224,7 @@ class Offers extends Component {
     return (
       <LayoutWrapper>
         <BackButton {...this.props}/>
+        <BreadcrumbComponent {...this.props} />
         <Tabs
           className="isoTableDisplayTab full-width"
           onChange={this.onChangeTabs}
