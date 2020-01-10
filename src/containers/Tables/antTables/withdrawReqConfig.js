@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, WithdrawStatusCell, WithdrawActionCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, WithdrawStatusCell, WithdrawActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, t_type = null, approve = null, userId = null, coinId = null, execute = null,
@@ -45,17 +45,27 @@ const columns = [{
    align:"left",
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
+},
+ {
+    title: <IntlMessages id="withdrawTable.title.email" />,
+    key: 'Email',
+    width: 200,
+    align:"left",
+    dataIndex:"email",
+    render: (data)=>ToolTipsCell(data)
+},
+{
     title: <IntlMessages id="withdrawTable.title.source_address" />,
     key: 'source_address',
     width: 300,
-   align:"left",
+    align:"left",
     render: object => renderCell(object, 'TextCell', 'source_address')
-}, {
+},
+ {
     title: <IntlMessages id="withdrawTable.title.destination_address" />,
     key: 'destination_address',
     width: 300,
-   align:"left",
+    align:"left",
     render: object => renderCell(object, 'TextCell', 'destination_address')
 }, {
     title: <IntlMessages id="withdrawTable.title.amount" />,

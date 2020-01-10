@@ -13,7 +13,7 @@ class RolesTab extends Component {
     render() { 
         return (
         <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props}/>
                 <Tabs className="full-width">
                     {isAllowed("get_role")&&<TabPane tab="Roles" key="1"><ViewRoles/></TabPane>}

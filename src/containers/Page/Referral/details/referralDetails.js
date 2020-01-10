@@ -12,6 +12,7 @@ import TableWrapper from "../../../Tables/antTables/antTable.style";
 import LayoutWrapper from '../../../../components/utility/layoutWrapper';
 import { BackButton } from '../../../Shared/backBttton';
 import { DateTimeCell } from '../../../../components/tables/helperCells';
+import { BreadcrumbComponent } from '../../../Shared/breadcrumb';
 var self;
 const {Option}=Select;
 const columns=[
@@ -112,7 +113,9 @@ class ReferralDetailsComponent extends Component {
         const [{loader,data,count,limit,page,searchData,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
                 <LayoutWrapper>
-                    <BackButton {...this.props}></BackButton>
+                    {/* <BackButton {...this.props}></BackButton> */}
+                    <BreadcrumbComponent {...this.props}/>
+                
                    <TableDemoStyle className="isoLayoutContent">
                         <Row justify="start" type="flex">
                             <Col className="table-column" xs={12} md={7}>

@@ -38,7 +38,7 @@ class Users extends Component {
     }
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props}/>  
         <div className="txt-align-right full-width">
           {isAllowed("add_user") &&

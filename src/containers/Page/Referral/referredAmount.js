@@ -71,7 +71,7 @@ class ReferredAmount extends Component {
 
         return (
             <div className="referral-div">
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props} />
                 {result.length > 0 ?
                     <Row className="table-tb-margin">

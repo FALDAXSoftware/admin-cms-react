@@ -33,7 +33,7 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "pairs",
     permssions: [
-      "get_all_pairs"
+      "get_all_pairs",
     ]
   },
   {

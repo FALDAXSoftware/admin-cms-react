@@ -15,7 +15,7 @@ class KycTabs extends Component {
     render() { 
         return (
           <LayoutWrapper>
-            <BackButton {...this.props} />
+            {/* <BackButton {...this.props} /> */}
             <BreadcrumbComponent {...this.props}/>
             <Tabs className="full-width">
              {isAllowed("get_all_transactions") &&<TabPane tab="Transaction" key="1">

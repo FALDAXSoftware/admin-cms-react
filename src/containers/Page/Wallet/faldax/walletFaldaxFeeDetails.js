@@ -10,7 +10,7 @@ import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
+import { DateTimeCell , TransactionIdHashCell} from '../../../../components/tables/helperCells';
 
 const {RangePicker}=DatePicker;
 const {Option}=Select;
@@ -74,7 +74,7 @@ const columns=[
         width:500,
         align:"left",
         ellipsis: true,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
+        render:data=>TransactionIdHashCell(data["coin_code"],data["transaction_id"],)
        
     }
 ]

@@ -13,7 +13,7 @@ class Wallets extends Component {
     render() { 
         return (
         <LayoutWrapper>
-                <BackButton {...this.props}/>   
+                {/* <BackButton {...this.props}/>    */}
                 <BreadcrumbComponent {...this.props} />
                 <Tabs className="full-width">
                   {isAllowed('get_all_news')&& <TabPane tab="News" key="1"><News/></TabPane>}

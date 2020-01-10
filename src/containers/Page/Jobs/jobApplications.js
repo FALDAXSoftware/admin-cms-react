@@ -129,7 +129,7 @@ class JobApplications extends Component {
         return (
             <LayoutWrapper>
                 {loader && <FaldaxLoader />}
-                <BackButton {...this.props}></BackButton>
+                {/* <BackButton {...this.props}></BackButton> */}
                 <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">

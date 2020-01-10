@@ -99,7 +99,7 @@ class EmailTemplates extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} ></BreadcrumbComponent>
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={templateTableinfos[0].title} key={templateTableinfos[0].value}>

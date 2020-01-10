@@ -484,7 +484,7 @@ class EditableTable extends React.Component {
       <LayoutWrapper>
         {isAllowed("get_admin_thresholds_contacts") &&
           <div className="full-width">
-            <BackButton {...this.props}/>
+            {/* <BackButton {...this.props}/> */}
             <BreadcrumbComponent {...this.props}/>
             <Divider orientation="center">Contact Information</Divider>
             <div className="isoLayoutContent" style={{ marginTop: "10px" }}>

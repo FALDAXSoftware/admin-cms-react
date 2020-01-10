@@ -104,7 +104,7 @@ class TermsAndConditions extends Component {
         let {loader,fields,policyUrlList}=this.state;
         return (<>
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props} />
                 <TableDemoStyle className="full-width">
                     <div>

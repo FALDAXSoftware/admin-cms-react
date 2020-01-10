@@ -360,7 +360,7 @@ class Jobs extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props}/>
         <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>

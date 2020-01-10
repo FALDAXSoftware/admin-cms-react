@@ -28,10 +28,18 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
                 email, side, quantity, fill_price, simplex_payment_status, created_at);
         default:
             return TextCell(value);
-    }
-};
-
-const columns = [
+          }
+        };
+        
+        const columns = [
+  {
+    title: <IntlMessages id="simplexTradeTable.title.created_at" />,
+    key: "created_at",
+    width: 150,
+    align:"left",
+    sorter: true,
+    render: object => renderCell(object, "DateTimeCell", "created_at")
+  },
   {
     title: <IntlMessages id="simplexTradeTable.title.email" />,
     key: "email",
@@ -47,14 +55,6 @@ const columns = [
     width: 150,
     sorter: true,
     render: object => renderCell(object, "TextCell", "currency")
-  },
-  {
-    title: <IntlMessages id="simplexTradeTable.title.created_at" />,
-    key: "created_at",
-    width: 150,
-   align:"left",
-    sorter: true,
-    render: object => renderCell(object, "DateTimeCell", "created_at")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.fill_price" />,
@@ -103,6 +103,7 @@ const columns = [
     width: 150,
     align:"left",
     sorter: true,
+    render:(data)=><span className={"withdrawal-status-"+data.toLowerCase()}>{data}</span>
   }
   
 ];

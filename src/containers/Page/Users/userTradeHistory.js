@@ -203,7 +203,7 @@ class UserTradeHistory extends Component {
     }
 
     return (
-        <TableDemoStyle className="isoLayoutContent">   
+      <>
           <Form onSubmit={this._searchTrade}>
             <Row type="flex" justify="start" className="table-filter-row">
               <Col sm={8}>
@@ -351,7 +351,8 @@ class UserTradeHistory extends Component {
                     ""
                   )}
                 </div>
-        </TableDemoStyle>
+                </>
+
     );
   }
 }

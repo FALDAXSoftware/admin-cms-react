@@ -11,8 +11,6 @@ import { isAllowed } from "../../../helpers/accessControl";
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
-  padding: 20px;
-  margin: 30px !important;
 `;
 const Image = styled.img`
   width: 25px;
@@ -155,7 +153,7 @@ class UserWallets extends Component {
 
         return (
             <ParentDiv>
-                <WalletRow class="main_wallet_row">
+                <WalletRow className="main_wallet_row">
                     {userWallets &&
                         userWallets.length > 0 &&
                         userWallets.map(wallet => {
