@@ -7,6 +7,7 @@ import {
   ObjectCell,
   DateTimeCell
 } from "../../../components/tables/helperCells";
+import { Icon } from "antd";
 
 const renderCell = (
   object,
@@ -101,10 +102,11 @@ const columns = [
   {
     title: <IntlMessages id="tradeTable.title.side" />,
     key: "side",
-    width: 100,
+    width: 75,
     sorter: true,
-   align:"left",
-    render: object => renderCell(object, "TextCell", "side")
+    align:"left",
+    dataIndex:"side",
+    render: (data)=><span className={data.toLowerCase()=="sell"?"field-error":"color-green"}><Icon type={data.toLowerCase()=="sell"?"arrow-up":"arrow-down"} />&nbsp;{data}</span>
   },
   {
     title: <IntlMessages id="tradeTable.title.email" />,

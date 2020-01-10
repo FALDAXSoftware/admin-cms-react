@@ -330,7 +330,7 @@ class Assets extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>

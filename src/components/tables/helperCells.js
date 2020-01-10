@@ -894,6 +894,27 @@ const transactionDetails = (
     );
 };
 
+const TransactionIdHashCell=(coin_id,transaction_id)=>{
+    let url="";
+    switch (coin_id) {
+      case "tbtc":
+        url = "https://blockstream.info/testnet/tx/" + transaction_id;
+        break;
+      case "txrp":
+        url = "https://test.bithomp.com/explorer/" + transaction_id;
+        break;
+      case "tltc":
+        url = "https://blockexplorer.one/litecoin/testnet/tx/" + transaction_id;
+        break;
+      case "tbch":
+        url = "https://explorer.bitcoin.com/tbch/tx/" + transaction_id;
+        break;
+      default:
+        url = "";
+      }
+      return url?<a target="_blank" href={url}>{transaction_id}</a>:<span></span>
+}
+
 const transactionDetailsUser = (
   value,
   email,
@@ -2428,12 +2449,12 @@ const WithdrawStatusCell = (
   is_executed,
   created_at
 ) => (
-    <p>
+    <p className={"withdrawal-status-"+(is_approve == null? "pending": is_approve == true? "approved": "declined")}>
       {is_approve == null
         ? "Pending"
         : is_approve == true
           ? "Approved"
-          : "Dis-Approved"}
+          : "Declined"}
     </p>
   );
 const JobCatSwitchCell = (value, category, is_active,disabled=false) => (
@@ -2688,59 +2709,6 @@ const SimplexStatusCell = (
           : "Cancelled"}
     </div>
   );
-const TransactionHashCell = (
-  value,
-  email,
-  source_address,
-  destination_address,
-  amount,
-  transaction_type,
-  created_at,
-  transaction_id,
-  coin_id,
-  coin_code
-) => (
-    <div>
-      {transactionDetails(
-        value,
-        email,
-        source_address,
-        destination_address,
-        amount,
-        transaction_type,
-        created_at,
-        transaction_id,
-        coin_id,
-        coin_code
-      )}
-    </div>
-  );
-
-const TransactionHashCellUser = (
-  value,
-  email,
-  source_address,
-  destination_address,
-  amount,
-  transaction_type,
-  created_at,
-  transaction_id,
-  coin_id
-) => (
-    <div>
-      {transactionDetailsUser(
-        value,
-        email,
-        source_address,
-        destination_address,
-        amount,
-        transaction_type,
-        created_at,
-        transaction_id,
-        coin_id
-      )}
-    </div>
-  );
 
 const ReferralNameCell = (value, full_name, deleted_at) => (
   <div>
@@ -2960,8 +2928,6 @@ export {
   TierReqActionCell,
   PendingTierReqActionCell,
   SimplexStatusCell,
-  TransactionHashCell,
-  TransactionHashCellUser,
   ReferralNameCell,
   ObjectCell,
   CoinFeesActionCell,
@@ -2973,6 +2939,7 @@ export {
   ExpireIpDateCell,
   CollectedAmountCell,
   PrecisionCell,
-  ToolTipsCell
+  ToolTipsCell,
+  TransactionIdHashCell
 
 };

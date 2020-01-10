@@ -185,7 +185,7 @@ const routes = [
         module: "offers"
     },
     {
-        path: "campaign/offer-usage/:id",
+        path: "campaign/:campaignId/offer-usage/:id",
         component: asyncComponent(() => import("../Page/Offers/offersUsage")),
         module: "offers"
     },

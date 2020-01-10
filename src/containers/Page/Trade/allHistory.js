@@ -21,7 +21,7 @@ class AllHistory extends Component {
     render() {
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props}/>
                 <Tabs className="isoTableDisplayTab full-width">
                     <TabPane tab="Crypto Only" key="1"><TradeHistory /></TabPane>

@@ -681,16 +681,23 @@ html[dir='rtl'] .dz-hidden-input {
 .table-filter-row .ant-col{
   padding: 4px;
 }
-.order-2 {
+.order-2,.withdrawal-status-approved {
   color: green;
   font-weight: 500;
 }
+.sub-tab-tabledemo{
+  margin: 0 !important;
+}
 
-.order-3 {
+.order-3,.withdrawal-status-declined{
   font-weight: 500;
   color: orangered;
 }
-.order-1 {
+.withdrawal-status-cancelled{
+  font-weight: 500;
+  color: orangered;
+}
+.order-1,.withdrawal-status-pending {
   font-weight: 500;
   color: #174c7e;
 }
@@ -747,4 +754,9 @@ html[dir='rtl'] .dz-hidden-input {
   width: 100%;
   clear: both;
   margin-left: 10px !important;
+}
+.copy-text-container{
+    padding: 5px;
+    border: 1.2px dashed #1790fe;
+    background: aliceblue;
 }

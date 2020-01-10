@@ -9,7 +9,7 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
-import { DateTimeCell, TransactionHashCellUser } from '../../../../components/tables/helperCells';
+import { DateTimeCell, TransactionIdHashCell } from '../../../../components/tables/helperCells';
 
 const {Option}=Select;
 const columns=[
@@ -48,7 +48,7 @@ const columns=[
         key:25,
         width:250,
         ellipsis:true,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["txid"],data["coin"])
+        render:data=>TransactionIdHashCell(data["coin"],data["txid"])
     },
     // {
     //     title:<IntlMessages id="walletWarmDetailsTable.title.normalizedTxHash"/>,

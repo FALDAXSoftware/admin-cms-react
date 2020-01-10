@@ -217,7 +217,7 @@ class ViewCampaign extends Component {
   }
 
   static viewOfferUsage(offerId,offerName){
-    self.props.history.push({pathname:`/dashboard/campaign/offer-usage/${offerId}`, state: JSON.stringify({ detail: self.state.campaignDetails.label,name:offerName})})
+    self.props.history.push({pathname:`/dashboard/campaign/${self.props.match.params.id}/offer-usage/${offerId}`, state: JSON.stringify({ detail: self.state.campaignDetails.label,name:offerName})})
   }
 
   getOfferNameById(id){
@@ -231,7 +231,7 @@ class ViewCampaign extends Component {
     const { loader, campaignDetails } = this.state;
     return (
       <LayoutWrapper>
-         <BackButton {...this.props}/>
+         {/* <BackButton {...this.props}/> */}
          <BreadcrumbComponent {...this.props}/>
         <TableDemoStyle className="isoLayoutContent">
           <h2>{campaignDetails.label}</h2>

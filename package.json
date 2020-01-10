@@ -1,6 +1,6 @@
 {
-  "name": "isomorphic",
-  "version": "2.6.0",
+  "name": "faldax",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "aes-js": "^3.1.2",

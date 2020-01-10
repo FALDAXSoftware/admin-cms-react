@@ -2,8 +2,9 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, DateTimeCell, TransactionTypeCell, TagsCell, TransactionHashCell, PrecisionCell
+    TextCell, DateTimeCell, TransactionTypeCell, TagsCell,PrecisionCell, ToolTipsCell, TransactionIdHashCell
 } from '../../../components/tables/helperCells';
+import { Icon } from 'antd';
 
 const renderCell = (object, type, key, user = null, source = null, destination = null, amt = null,
     tras_type = null, createdOn = null, transactionID = null, coin = null, code = null) => {
@@ -21,9 +22,6 @@ const renderCell = (object, type, key, user = null, source = null, destination =
     switch (type) {
         case 'DateTimeCell':
             return DateTimeCell(value);
-        case 'TransactionHashCell':
-            return TransactionHashCell(value, email, source_address, destination_address,
-                amount, transaction_type, created_at, transaction_id, coin_id, coin_code);
         case 'TransactionTypeCell':
             return TransactionTypeCell(value, email, source_address, destination_address,
                 amount, transaction_type, created_at, transaction_id, coin_id);
@@ -46,15 +44,13 @@ const columns = [{
     title: <IntlMessages id="transactionTable.title.transactionId" />,
     key: 'transaction_id',
     width: 450,
-   align:"left",
-    render: object => renderCell(object, 'TransactionHashCell', 'id', 'source_address',
-        'destination_address', 'amount', 'transaction_type', 'created_at',
-        'transaction_id', 'coin_id', 'coin_code')
+    align:"left",
+    render: object => ToolTipsCell(TransactionIdHashCell(object["coin_code"],object["transaction_id"]))
 }, {
     title: <IntlMessages id="transactionTable.title.email" />,
     key: 'email',
     width: 250,
-   align:"left",
+    align:"left",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, {
@@ -88,7 +84,8 @@ const columns = [{
     key: 'transaction_type',
     width: 100,
     align:"left",
-    render: object => renderCell(object, 'TransactionTypeCell', 'transaction_type')
+    dataIndex:"transaction_type",
+    render: object =><span className={"camel-case"+" "+(object.toLowerCase()=="send"?"field-error":"color-green")}><Icon type={"arrow-"+(object.toLowerCase()=="send"?"up":"down")} />&nbsp;{object}</span>
 },
 {
     title: <IntlMessages id="transactionTable.title.transactionFees" />,

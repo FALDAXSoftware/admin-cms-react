@@ -12,7 +12,7 @@ class Wallets extends Component {
     render() { 
         return (
         <LayoutWrapper>
-                <BackButton {...this.props}/>   
+                {/* <BackButton {...this.props}/>    */}
                 <BreadcrumbComponent {...this.props}/>
                 <Tabs className="full-width">
                    <TabPane tab="Wallet" key="1"><WalletWarmDetails/></TabPane>

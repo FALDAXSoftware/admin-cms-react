@@ -10,7 +10,7 @@ import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
+import { DateTimeCell , TransactionIdHashCell} from '../../../../components/tables/helperCells';
 
 const {RangePicker}=DatePicker;
 const {Option}=Select;
@@ -66,7 +66,7 @@ const columns=[
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id"/>,
         key:6,
         width:100,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
+        render:data=>TransactionIdHashCell(data["coin_code"],data["transaction_id"])
        
     }
 ]

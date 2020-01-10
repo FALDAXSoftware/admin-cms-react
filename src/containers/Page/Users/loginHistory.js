@@ -144,9 +144,7 @@ class LoginHistory extends Component {
         }
 
         return (
-          <LayoutWrapper>
-            <Tabs className="isoTableDisplayTab full-width">
-                <TabPane tab={historyTableInfos[0].title} key={historyTableInfos[0].value}>
+          
                   <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchHistory} className="cty-search">
                       <Row type="flex" justify="start">
@@ -215,9 +213,7 @@ class LoginHistory extends Component {
                       )}
                     </div>
                   </TableDemoStyle>
-                </TabPane>
-            </Tabs>
-          </LayoutWrapper>
+        
         );
     }
 }

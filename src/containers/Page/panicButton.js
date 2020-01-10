@@ -127,7 +127,7 @@ class PanicButton extends Component {
 
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props} />
                 <div className="isoLayoutContent">
                    <div className="panic-container">

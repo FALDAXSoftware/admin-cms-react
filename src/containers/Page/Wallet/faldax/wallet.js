@@ -12,10 +12,9 @@ import { BreadcrumbComponent } from '../../../Shared/breadcrumb';
 class Wallets extends Component {
     state = {  }    
     render() { 
-        console.log("enjoy with props",this.props)
         return (
         <LayoutWrapper>
-                <BackButton {...this.props}/>   
+                {/* <BackButton {...this.props}/>    */}
                 <BreadcrumbComponent {...this.props}/>
                 <Tabs className="full-width">
                     <TabPane tab="FALDAX Fee-Wallet" key="1"><WalletDetailsComponent/></TabPane>

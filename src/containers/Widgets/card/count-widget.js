@@ -30,12 +30,12 @@ export default class extends Component {
     render() {
         const { icon,data,bgcolor, title, headcolor } = this.props;
         return (
-            <CardWrapper headcolor={headcolor} bgcolor={bgcolor}
+            <CardWrapper key={title} headcolor={headcolor} bgcolor={bgcolor}
                 title={<div><i className={icon} />   {title}</div>} bordered={false}>
         
-                {data && data.map((ele)=>(<div className="cursor-pointer">
-                    <span className="count" >{ele.count}</span>
-                    <span className="isoLabel">{ele.name}</span>
+                {data && data.map((ele,index)=>(<div key={'cursor'+index} className="cursor-pointer">
+                    <span key={'count'+index} className="count" >{ele.count}</span>
+                    <span key={'label'+index} className="isoLabel">{ele.name}</span>
                 </div>))
                 }
             </CardWrapper>

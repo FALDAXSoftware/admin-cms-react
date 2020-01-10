@@ -15,7 +15,7 @@ class FeesComponent extends Component {
     render() { 
         return (
         <LayoutWrapper>
-            <BackButton {...this.props}/>
+            {/* <BackButton {...this.props}/> */}
             <BreadcrumbComponent {...this.props} />
             <Tabs className="full-width">
                 {isAllowed("get_withdrawl_faldax_fee") &&<TabPane tab="Withdrawal Fees" key="3"><FeesWithdrawal/></TabPane>}
