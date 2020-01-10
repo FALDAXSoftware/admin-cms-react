@@ -135,17 +135,17 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/:faldax/:coin",
+        path: "wallet/faldax/:coin",
         component: asyncComponent(() => import("../Page/Wallet/faldax/wallet")),
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/:warm/:coin",  
+        path: "wallet/warm/:coin",  
         component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/:custodial/:coin",
+        path: "wallet/custodial/:coin",
         component: asyncComponent(() => import("../Page/Wallet/custodial/wallet")),
         module: "wallet_dashboard"
     },

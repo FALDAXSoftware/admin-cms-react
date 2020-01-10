@@ -3,9 +3,9 @@ import { Breadcrumb } from 'antd';
 import React from 'react';
 const breadcrumbNameMap = {
     '/dashboard/wallet': ' Wallet Dashboard',
-    '/dashboard/wallet/:faldax/:coin': 'FALDAX Wallet',
-    '/dashboard/wallet/:warm/:coin': 'Warm Wallet',
-    '/dashboard/wallet/:custodial/:coin': 'Custodial Wallet',
+    '/dashboard/wallet/faldax/:coin': 'FALDAX Wallet',
+    '/dashboard/wallet/warm/:coin': 'Warm Wallet',
+    '/dashboard/wallet/custodial/:coin': 'Custodial Wallet',
     '/dashboard/users':" Users",
     '/dashboard/users/add-user':"Add User",
     '/dashboard/users/history/:id':"User Login History",
