@@ -52,7 +52,8 @@ const columns = [{
     width: 250,
     align:"left",
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
+    dataIndex:"email",
+    render:data=>ToolTipsCell(data)
 }, {
     title: <IntlMessages id="transactionTable.title.source_address" />,
     key: 'source_address',

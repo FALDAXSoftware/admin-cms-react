@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateTimeCell, SimplexStatusCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell, SimplexStatusCell, ToolTipsCell } from '../../../components/tables/helperCells';
 import { SIMPLEX_PAYMENT_URL } from '../../../helpers/globals';
 
 const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = null,
@@ -46,7 +46,8 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
    align:"left",
     width: 250,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "email")
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.currency" />,
