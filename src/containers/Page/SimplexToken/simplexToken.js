@@ -163,7 +163,7 @@ class SimplexToken extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane tab="Simplex Access Token" key="1">

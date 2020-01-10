@@ -114,7 +114,7 @@ class NewsSources extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={newsSourceTableInfos[0].title} key={newsSourceTableInfos[0].value}>

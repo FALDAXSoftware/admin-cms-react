@@ -57,7 +57,7 @@ class Keys extends Component {
         let {plainText,cypherText,loader,iv,key}=this.state;
         return (<>
         <LayoutWrapper className="full-width ">
-            <BackButton {...this.props}></BackButton>
+            {/* <BackButton {...this.props}></BackButton> */}
             <BreadcrumbComponent {...this.props}/>
             <TableDemoStyle className="isoLayoutContent full-width">
                 <div>

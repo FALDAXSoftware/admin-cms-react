@@ -14,7 +14,7 @@ class TwoFactorRequestTab extends Component {
     render() { 
         return (
         <LayoutWrapper>
-                <BackButton {...this.props}/>   
+                {/* <BackButton {...this.props}/>    */}
                 <BreadcrumbComponent {...this.props} />
                 <Tabs className="full-width">
                    {isAllowed("get_twofactors_requests") &&<TabPane tab="2FA Requests" key="1"><TwoFactorRequests/></TabPane>}

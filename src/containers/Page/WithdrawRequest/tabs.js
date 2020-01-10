@@ -13,7 +13,7 @@ class WalletDashboard extends Component {
     render() { 
         return (
         <LayoutWrapper>
-            <BackButton {...this.props}/>
+            {/* <BackButton {...this.props}/> */}
             <BreadcrumbComponent {...this.props}/>
             <Tabs className="full-width">
                 {isAllowed("get_all_withdraw_request") &&<TabPane tab="Withdrawal Request" key="1"><WithdrawalRequest/></TabPane>}

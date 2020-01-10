@@ -14,7 +14,7 @@ class WalletDashboard extends Component {
     render() { 
         return (
         <LayoutWrapper>
-            <BackButton {...this.props}/>
+            {/* <BackButton {...this.props}/> */}
             <BreadcrumbComponent {...this.props}/>
             <Tabs className="full-width">
                 {isAllowed("admin_wallet_fees_details") &&<TabPane tab="FALDAX Wallet" key="1"><WalletFaldaxDashboard/></TabPane>}

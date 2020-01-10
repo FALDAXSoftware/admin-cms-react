@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Input,
-  Tabs,
   Pagination,
   notification,
   Button,
@@ -10,11 +9,9 @@ import {
   Form,
   Row,
   Icon,
-  Col
 } from "antd";
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
@@ -25,12 +22,8 @@ import { CSVLink } from "react-csv";
 import {ColWithMarginBottom} from "../common.style";
 import DeclineActionModal from "./declineModal";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
-import styled from "styled-components";
-import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
 
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
 var self;

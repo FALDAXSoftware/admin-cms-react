@@ -7,6 +7,7 @@ import EditAssetLimit from './editAssetLimit';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from '../../Shared/backBttton';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const { logout } = authAction;
 const { TabPane } = Tabs;
@@ -26,7 +27,8 @@ class EditAsset extends Component {
 
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}></BackButton>
+                {/* <BackButton {...this.props}></BackButton> */}
+                <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
                 <Tabs  className="full-width">
                     {(isAllowed("update_coins") && isAllowed("get_coin_details"))&& <TabPane tab="Asset Details" key="1"><EditAssetDetails coin_id={coin_id} /></TabPane>}
                     {isAllowed("get_all_limits") && <TabPane tab="Limit Management" key="2"><EditAssetLimit coin_id={coin_id} /></TabPane>}

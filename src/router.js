@@ -20,13 +20,19 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   />
 );
 
-const PublicRoutes = ({ history, isLoggedIn }) => {
+const PublicRoutes = ({ history, isLoggedIn ,isSessionActive}) => {
   return (
     <ConnectedRouter history={history}>
       <div>
-        <Route
+        {isSessionActive && history.location.pathname=="/" && <Redirect push to="/dashboard"></Redirect>}
+        {!isSessionActive && <Route
           exact
           path={'/'}
+          component={asyncComponent(() => import('./containers/Page/signin'))}
+        />}
+        <Route
+          exact
+          path={'/login'}
           component={asyncComponent(() => import('./containers/Page/signin'))}
         />
         <Route
@@ -78,5 +84,6 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
 };
 
 export default connect(state => ({
+  isSessionActive:state.Auth.get("isSessionActive"),
   isLoggedIn: state.Auth.get('token') ? true : false,
 }))(PublicRoutes);

@@ -143,7 +143,7 @@ class StateList extends Component {
 
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props}/>
                 <TableDemoStyle className="isoLayoutContent">
                                 <div>

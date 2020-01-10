@@ -21,7 +21,7 @@ class AssetWallet extends Component {
 
         return (
             <LayoutContentWrapper>
-             <BackButton {...this.props}></BackButton>
+             {/* <BackButton {...this.props}></BackButton> */}
               <Tabs defaultActiveKey="1" size={"large"} className="full-width">
                 <TabPane tab="Wallet" key="1">
                   <WalletOverview asset_id={asset_id} />

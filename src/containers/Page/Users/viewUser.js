@@ -33,7 +33,7 @@ class ViewUser extends Component {
 
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}></BackButton>
+                {/* <BackButton {...this.props}></BackButton> */}
                 <BreadcrumbComponent {...this.props}/>
                 <Tabs className="full-width">
                     {isAllowed("get_user_details") &&

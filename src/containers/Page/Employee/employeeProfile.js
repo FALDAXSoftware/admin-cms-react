@@ -24,7 +24,7 @@ class EmployeeProfile extends Component {
 
         return (
                 <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props}/>
                 <Tabs   className="full-width">
                     {isAllowed("get_employee_details") &&<TabPane tab="Overview" key="1"><EmployeeOverview emp_id={emp_id} /></TabPane>}

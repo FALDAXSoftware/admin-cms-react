@@ -12,7 +12,7 @@ class Wallets extends Component {
     render() { 
         return (
         <LayoutWrapper>
-                <BackButton {...this.props}/>   
+                {/* <BackButton {...this.props}/>    */}
                 <BreadcrumbComponent {...this.props} />
                 <Tabs className="full-width">
                   {isAllowed('get_all_account_classes')&& <TabPane tab="Account Class Management" key="1"><AccountClass/></TabPane>}
