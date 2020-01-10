@@ -91,7 +91,7 @@ const columns = [{
     key: 'first_name',
     width: 200,
     sorter: true,
-    render: object => <span>{object['first_name']+" "+object['last_name']}</span>
+    render: object =>ToolTipsCell(object['first_name']+" "+object['last_name'])
 }, 
 {
     title: <IntlMessages id="antTable.title.email" />,
