@@ -5,7 +5,8 @@ import {
     TextCell,
     EmployeeActionCell,
     EmployeeSwitchCell,
-    DateTimeCell
+    DateTimeCell,
+    ToolTipsCell
 } from '../../../components/tables/helperCells';
 import { isAllowed } from '../../../helpers/accessControl';
 
@@ -58,7 +59,7 @@ const columns = [
         width: 200,
         sorter: true,
         align:"left",
-        render: object =><span>{object["last_name"]?object["first_name"]+" "+object["last_name"]:object['first_name']}</span>
+        render: object =>ToolTipsCell(object["last_name"]?object["first_name"]+" "+object["last_name"]:object['first_name'])
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
@@ -66,7 +67,8 @@ const columns = [
         align:"left",
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'email')
+        dataIndex:"email",
+        render:(data)=>ToolTipsCell(data)
     },
     {
         title: <IntlMessages id="antTable.title.role" />,

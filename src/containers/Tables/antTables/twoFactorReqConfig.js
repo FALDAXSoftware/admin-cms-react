@@ -1,6 +1,6 @@
 import React from 'react';
 import clone from 'clone';
-import { TextCell, DateCell, TwoFAActionCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, TwoFAActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, name = null, Email = null, file = null,
     Status = null, Reason = null, createdAt = null) => {
@@ -39,16 +39,18 @@ const columns = [{
     title: "Name",
    align:"left",
     key: 'full_name',
-    width: 100,
+    width: 150,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'full_name')
+    dataIndex:"full_name",
+    render: object => ToolTipsCell(object)
 }, {
     title: "Email",
    align:"left",
     key: 'email',
     width: 250,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
 }, {
     title: "Status",
    align:"left",

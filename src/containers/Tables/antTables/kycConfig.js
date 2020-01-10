@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, KYCActionCell, TierCell, DateCell, DateTimeCell
+    TextCell, KYCActionCell, TierCell, DateCell, DateTimeCell, ToolTipsCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null, emailId = null,
@@ -85,15 +85,17 @@ const columns = [{
     ellipsis:true,
     key: 'email',
     width: 300,
-    render: object => renderCell(object, 'TextCell', 'email')
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
 }, {
     title: <IntlMessages id="kycTable.title.country" />,
    align:"left",
     ellipsis:true,
     key: 'country',
-    width: 100,
+    width: 130,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'country')
+    dataIndex:"country",
+    render: object => ToolTipsCell(object)
 }, {
     title: <IntlMessages id="kycTable.title.account_tier" />,
    align:"left",

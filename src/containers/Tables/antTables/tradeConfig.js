@@ -5,7 +5,8 @@ import {
   TextCell,
   VolumeCell,
   ObjectCell,
-  DateTimeCell
+  DateTimeCell,
+  ToolTipsCell
 } from "../../../components/tables/helperCells";
 import { Icon } from "antd";
 
@@ -114,7 +115,8 @@ const columns = [
     width: 250,
    align:"left",
     sorter: true,
-    render: object => renderCell(object, "TextCell", "email")
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
   },
   {
     title: <IntlMessages id="tradeTable.title.order_id" />,
