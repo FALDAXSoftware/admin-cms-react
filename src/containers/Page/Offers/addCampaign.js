@@ -1079,7 +1079,7 @@ class AddCampaign extends Component {
                           <Select
                             className="campaign-user-inline"
                             disabled={isOfferUpdate && isUpdate}
-                            placeholder="Select a user"
+                            placeholder="Select user"
                             onSearch={this.onSearch}
                             onChange={this._changeUser}
                             optionFilterProp="children"

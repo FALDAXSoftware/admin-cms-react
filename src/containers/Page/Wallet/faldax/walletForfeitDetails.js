@@ -41,7 +41,7 @@ const columns=[
         key:"deleted_at",
         dataIndex:"deleted_at",
         sorter: true,
-        width:160,
+        width:200,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     {

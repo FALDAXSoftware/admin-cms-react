@@ -17,6 +17,7 @@ import SimpleReactValidator from "simple-react-validator";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -309,7 +310,7 @@ class EditUser extends Component {
 
     return (
       <div className="isoLayoutContent">
-        <div style={{ display: "inline-block", width: "100%" }}>
+        {/* <div style={{ display: "inline-block", width: "100%" }}>
           <Link to="/dashboard/users">
             <i
               style={{ marginRight: "10px", marginBottom: "10px" }}
@@ -324,7 +325,8 @@ class EditUser extends Component {
               Back
             </a>
           </Link>
-        </div>
+        </div> */}
+        <BreadcrumbComponent {...this.props}/>
         <div>
           <h2>Edit User</h2>
           <br />

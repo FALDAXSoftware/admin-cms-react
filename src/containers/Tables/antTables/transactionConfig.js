@@ -88,14 +88,14 @@ const columns = [{
     dataIndex:"transaction_type",
     render: object =><span className={"camel-case"+" "+(object.toLowerCase()=="send"?"field-error":"color-green")}><Icon type={"arrow-"+(object.toLowerCase()=="send"?"up":"down")} />&nbsp;{object}</span>
 },
-{
-    title: <IntlMessages id="transactionTable.title.transactionFees" />,
-    key: 'transaction_fees',
-    width: 150,
-    align:"left",
-    dataIndex:"transaction_fees",
-    // render:(data)=>PrecisionCell(data)
-},
+// {
+//     title: <IntlMessages id="transactionTable.title.transactionFees" />,
+//     key: 'transaction_fees',
+//     width: 150,
+//     align:"left",
+//     dataIndex:"transaction_fees",
+//     // render:(data)=>PrecisionCell(data)
+// },
 {
     title: <IntlMessages id="tradeTable.title.faldax_fees" />,
     key: 'faldax_fees',
