@@ -41,7 +41,9 @@ const breadcrumbNameMap = {
     "/dashboard/campaign/:campaignId":"Details",
     "/dashboard/campaign/:campaignId/offer-usage/:id":"Usage",
     "/dashboard/campaign/add-campaign":"Create Campaign",
-    "/dashboard/campaign/update-campaign/:id":"Update Campaign"
+    "/dashboard/campaign/update-campaign/:id":"Update Campaign",
+    "/dashboard/users/edit-user/:id":"Edit User",
+    "/dashboard/dashboard":"Dashboard"
   };
 
 

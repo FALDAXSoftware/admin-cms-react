@@ -6,6 +6,7 @@ import { Row, Col, Switch, notification } from "antd";
 import authAction from "../../../redux/auth/actions";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
+import FaldaxLoader from "../faldaxLoader";
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
@@ -34,7 +35,8 @@ class PersonalDetails extends Component {
     super(props);
     this.state = {
       userDetails: null,
-      errType: "error"
+      errType: "error",
+      loader:false
     };
   }
 
@@ -45,20 +47,22 @@ class PersonalDetails extends Component {
   _getUserDetail = () => {
     const { token, user_id } = this.props;
     let _this = this;
-
+    this.setState({"loader":true});
     ApiUtils.getUserDetails(token, user_id)
       .then(response => response.json())
       .then(function(res) {
+        
         if (res.status == 200) {
-          _this.setState({ userDetails: res.data[0] });
+          _this.setState({ userDetails: res.data[0],loader:false });
         } else if (res.status == 403) {
-          _this.setState({ errMsg: true, errMessage: res.err },()=> _this.props.logout());
+          _this.setState({ errMsg: true, errMessage: res.err ,loader:false},()=> _this.props.logout());
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message });
+          _this.setState({ errMsg: true, errMessage: res.message,loader:false });
         }
       })
       .catch(err => {
-        console.log(err);
+        _this.setState({"loader":true});
+        console.log("Error",err);
       });
   };
 
@@ -119,7 +123,7 @@ class PersonalDetails extends Component {
   };
 
   render() {
-    const { userDetails, errMsg, errType } = this.state;
+    const { userDetails, errMsg, errType ,loader} = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -186,7 +190,7 @@ class PersonalDetails extends Component {
               <Row>
                 <Col>
                   <DateOfBirth>
-                    <i class="fas fa-hashtag"></i>
+                    <i className="fas fa-hashtag"></i>
                     {userDetails.UUID}
                   </DateOfBirth>
                 </Col>
@@ -194,8 +198,8 @@ class PersonalDetails extends Component {
             )}
             <Row>
               <Col>
-                <div class="address">
-                  <i class="fas fa-map-marker-alt"></i>
+                <div className="address">
+                  <i className="fas fa-map-marker-alt"></i>
                   <span>&nbsp;&nbsp;&nbsp;{userDetails.street_address
                     ? userDetails.street_address_2
                       ? (userDetails.street_address?userDetails.street_address+" , ":"") +
@@ -204,10 +208,10 @@ class PersonalDetails extends Component {
                     :""}</span>
                   {/* {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
                   {userDetails.country ? `, ${userDetails.country}` : ""} */}
-                <span class="address-text">
+                <span className="address-text">
                  {(userDetails.city_town?userDetails.city_town+" , ":"")+(userDetails.postal_code?userDetails.postal_code:"")}
                 </span>
-                <span class="address-text">
+                <span className="address-text">
                  {(userDetails.country?userDetails.country:"")}
                 </span>
                 </div>
@@ -216,7 +220,7 @@ class PersonalDetails extends Component {
             <Row>
               <Col>
                 <DateOfBirth>
-                  <i class="fas fa-calendar-day"></i>
+                  <i className="fas fa-calendar-day"></i>
                   {userDetails.dob && userDetails.dob !== null
                     ? userDetails.dob
                     : ""}
@@ -227,7 +231,7 @@ class PersonalDetails extends Component {
               <Row>
                 <Col>
                   <DateOfBirth>
-                    <i class="fas fa-trash"></i>
+                    <i className="fas fa-trash"></i>
                     {userDetails.deleted_by == 1 ? (
                       <span>Deleted By User</span>
                     ) : (
@@ -241,6 +245,7 @@ class PersonalDetails extends Component {
             )}
           </ParentDiv>
         )}
+        {loader &&<FaldaxLoader/>}
       </div>
     );
   }

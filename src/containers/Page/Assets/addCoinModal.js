@@ -21,7 +21,7 @@ class AddCoinModal extends Component {
             errMessage: '',
             errType: 'Success',
             isDisabled: false,
-            selectedToken: false
+            selectedToken: false,
         }
         this.validator = new SimpleReactValidator();
         this.validator = new SimpleReactValidator({
@@ -79,7 +79,7 @@ class AddCoinModal extends Component {
 
     _resetAddForm = () => {
         const { fields } = this.state;
-
+        this.refs.uploadImg.value=null;
         fields['coin_name'] = '';
         fields['coin_code'] = '';
         fields['min_limit'] = '';
@@ -209,7 +209,7 @@ class AddCoinModal extends Component {
                     <Button disabled={isDisabled} onClick={this._addCoin}>Add</Button>,
                 ]}
             >
-                <div style={{ "marginBottom": "15px" }}>
+                <div style={{ "marginBottom": "10px" }}>
                     <span>Asset Icon:</span><br />
                     <input
                         ref="uploadImg"

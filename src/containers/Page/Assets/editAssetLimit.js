@@ -5,6 +5,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import { isAllowed } from "../../../helpers/accessControl";
+import { messages } from '../../../helpers/messages';
 const isFloat=(n)=>{
     return Number(n) === n && n % 1 !== 0;
   }
@@ -159,16 +160,38 @@ class EditableTable extends React.Component {
         this.setState({ editingKey: '' });
     };
 
+    validateMinCryptoLimit=(rowData,key)=>{
+        let {allAssetLimit}=this.state;
+        let data=allAssetLimit.find(ele=>ele.id==key)
+        if(rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            return false;
+        }if(rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'error' });
+            return false;
+        } if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            return false;
+        }
+        return true;
+    }
+
+
     save = async(form, key) => {
         const { token, coin_id } = this.props;
         let _this = this;
         form.validateFields(async (error, row) => {
+            try{
+
+            let isValid=this.validateMinCryptoLimit(row,key);
+            if(!isValid){
+                return false;
+            }
             if (error) {
                 return;
             }
             const newData = [...this.state.allAssetLimit];
             const index = newData.findIndex(item => key === item.id);
-            debugger
             let formData = {
                 id: newData[index].id,
                 coin_id: newData[index].coin_id,
@@ -189,7 +212,8 @@ class EditableTable extends React.Component {
                 newData.push(row);
                 this.setState({ allAssetLimit: newData, editingKey: '' });
             }
-           let res=await(await ApiUtils.updateAssetLimits(token, formData)).json();
+            this.setState({loader:true});
+            let res=await(await ApiUtils.updateAssetLimits(token, formData)).json();
             if (res.status == 200) {
                 _this.setState({ errMsg: true, errMessage: res.message,editingKey: '', errType: 'Success' }, async() => {
                     await _this._getAllAssetLimit();
@@ -201,6 +225,11 @@ class EditableTable extends React.Component {
             } else {
                 _this.setState({ errMsg: true, errMessage: res.message, errType: 'error',editingKey: '' });
             }
+        }catch(error){
+            throw error;
+        }finally{
+            this.setState({loader:false})
+        }
         })
         .catch(() => {
             _this.setState({
