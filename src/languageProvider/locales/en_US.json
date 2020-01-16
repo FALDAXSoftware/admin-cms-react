@@ -645,7 +645,7 @@
   "walletFaldaxAccountDetailsTable.title.created_on":"Created On",
   "walletForfeitDetailsTable.title.balance":"Balance",
   "walletForfeitDetailsTable.title.created_at":"Created On",
-  "walletForfeitDetailsTable.title.deleted_at":"Account Deleted On",
+  "walletForfeitDetailsTable.title.deleted_at":"Account Deactivated On",
   "walletForfeitDetailsTable.title.email":"Email",
   "walletForfeitDetailsTable.title.full_name":"User",
   "walletForfeitDetailsTable.title.placed_balance":"Placed Balance",

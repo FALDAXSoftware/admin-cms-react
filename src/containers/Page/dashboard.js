@@ -19,6 +19,7 @@ import FeeChart from "./feeChart";
 import TransactionMapChart from "./transactionMapChart";
 import { isAllowed } from "../../helpers/accessControl.js";
 import TableDemoStyle from "../Tables/antTables/demo.style.js";
+import { BreadcrumbComponent } from "../Shared/breadcrumb.js";
 const { TabPane } = Tabs;
 
 const { logout } = authAction;
@@ -451,6 +452,7 @@ class Dashboard extends Component {
     return (
       <LayoutWrapper>
           {loader && <FaldaxLoader />}
+          {/* <BreadcrumbComponent {...this.props}/> */}
           <Tabs defaultActiveKey="1"  style={{ marginTop: "20px" }} onChange={this.onChangeTabs}>
             {!isAllowed("get_dashboard_data") && !isAllowed("metabase_details") &&
               <TabPane tab="Admin-Dashboard" key="1">
@@ -658,7 +660,7 @@ class Dashboard extends Component {
                         boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
                       }}
                       title="Withdrawal Request"
-                      icon="fa fa-id-card"
+                      icon="fas fa-hand-holding-usd"
                       fontColor="#ffffff"
                       />
                     </Link>
