@@ -18,21 +18,22 @@ const renderCell = (object, type, key, name = null) => {
 const columns = [{
     title: <IntlMessages id="accountTable.title.actions" />,
     key: 'action',
-   align:"left",
-    width: 100,
+    align:"left",
+    width:75,
     render: object => renderCell(object, 'AccountClassActionCell', 'id', 'class_name')
-}, {
-    title: <IntlMessages id="accountTable.title.id" />,
-    key: 'id',
-    width: 100,
-   align:"left",
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'id')
-}, {
+},
+//  {
+//     title: <IntlMessages id="accountTable.title.id" />,
+//     key: 'id',
+//     width: 100,
+//    align:"left",
+//     sorter: true,
+//     render: object => renderCell(object, 'TextCell', 'id')
+// },
+ {
     title: <IntlMessages id="accountTable.title.name" />,
     key: 'class_name',
-    width: 250,
-   align:"left",
+    align:"left",
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'class_name')
 }];

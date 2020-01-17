@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
 import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
@@ -112,7 +112,7 @@ class EmailTemplates extends Component {
                     pagination={false}
                     dataSource={allTemplates}
                     className="isoCustomizedTable"
-                    scroll={TABLE_SCROLL_HEIGHT}
+                    // scroll={TABLE_SCROLL_HEIGHT}
                     bordered
                   />
                 </div>

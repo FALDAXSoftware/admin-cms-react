@@ -53,7 +53,7 @@ class Users extends Component {
             <TabPane tab="Active Users" key="1"><ActiveUsers /></TabPane>
           }
           {isAllowed("get_inactive_users") &&
-            <TabPane tab="Inactive Users" key="2"><InActiveUsers /></TabPane>
+            <TabPane tab="Suspended Users" key="2"><InActiveUsers /></TabPane>
           }
           {isAllowed("get_deleted_users") &&
             <TabPane tab="Deactivated Users" key="3"><DeletedUsers /></TabPane>

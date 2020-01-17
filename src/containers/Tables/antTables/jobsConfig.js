@@ -61,6 +61,7 @@ const columns = [{
     key: 'category',
     width: 200,
     align:"left",
+    sorter:true,
     render: object => renderCell(object, 'TextCell', 'category')
 }, {
     title: <IntlMessages id="jobTable.title.location" />,

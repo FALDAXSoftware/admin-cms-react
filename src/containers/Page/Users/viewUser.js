@@ -2,22 +2,23 @@ import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import LoginHistory from './loginHistory';
 import PersonalDetails from './personalDetails';
-import AllOrders from './allOrders';
 import Referral from './userReferral';
 import AllTrades from './userTrades';
 import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';
 import UserWithdrawRequest from './userWithdrawRequest';
 import UserKYCDetails from './userKYC';
-import { Link } from 'react-router-dom';
 import UserTickets from './userTickets';
 import UserLimit from './userLimit';
 import AccountSummary from './accountSummary';
 import UserWallets from './userWallets';
 import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
+import {connect} from "react-redux"
+import actions from "../../../redux/users/actions"
+const {removeUserDetails}=actions;
 
 const { TabPane } = Tabs;
 
@@ -26,6 +27,11 @@ class ViewUser extends Component {
     constructor(props){
         super(props)
     }
+
+    componentWillUnmount(){
+        this.props.removeUserDetails();
+    }
+
     render() {
         const { location } = this.props;
         let path = location.pathname.split('/');
@@ -84,4 +90,4 @@ class ViewUser extends Component {
     }
 }
 
-export default ViewUser;
+export default connect(()=>{},{removeUserDetails})(ViewUser);

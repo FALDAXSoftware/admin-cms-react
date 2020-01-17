@@ -5,10 +5,11 @@ import Contacts from './contacts/reducer';
 import DynamicChartComponent from './dynamicEchart/reducer';
 import ThemeSwitcher from './themeSwitcher/reducer';
 import LanguageSwitcher from './languageSwitcher/reducer';
-
+import SelectedTabInfo from './users/reducer'
 export default {
   Auth,
   App,
+  SelectedTabInfo,
   ThemeSwitcher,
   LanguageSwitcher,
   Mails,
