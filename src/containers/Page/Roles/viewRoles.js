@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, notification, Modal, Icon, Col } from 'antd';
+import { Button, notification, Modal, Icon} from 'antd';
 import { rolesTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import TableDemoStyle from '../../Tables/antTables/demo.style';

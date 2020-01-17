@@ -379,7 +379,7 @@ class WithdrawRequest extends Component {
                         <Option value={""}>All</Option>
                         <Option value={"null"}>Pending</Option>
                         <Option value={"true"}>Approved</Option>
-                        <Option value={"false"}>Declined</Option>
+                        <Option value={"false"}>Rejected</Option>
                       </Select>
                     </ColWithMarginBottom>
                     <ColWithMarginBottom sm={6}>
