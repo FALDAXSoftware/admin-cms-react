@@ -2451,10 +2451,10 @@ const WithdrawStatusCell = (
 ) => (
     <p className={"withdrawal-status-"+(is_approve == null? "pending": is_approve == true? "approved": "declined")}>
       {is_approve == null
-        ? "Pending"
+        ? "PENDING"
         : is_approve == true
-          ? "Approved"
-          : "Declined"}
+          ? "APPROVED"
+          : "REJECTED"}
     </p>
   );
 const JobCatSwitchCell = (value, category, is_active,disabled=false) => (
