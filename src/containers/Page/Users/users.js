@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Button, Col } from 'antd';
+import { Tabs, Button } from 'antd';
 import ActiveUsers from './activeUsers';
 import InActiveUsers from './inActiveUsers';
 import DeletedUsers from "./deletedUsers";
@@ -8,9 +8,6 @@ import { withRouter } from "react-router-dom";
 import { isAllowed } from '../../../helpers/accessControl';
 import authAction from "../../../redux/auth/actions";
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
-import ApiUtils from "../../../helpers/apiUtills";
-import TableDemoStyle from "../../Tables/antTables/demo.style";
-import { BackButton } from '../../Shared/backBttton';
 import Metabase from './metabase';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 const { TabPane } = Tabs;
