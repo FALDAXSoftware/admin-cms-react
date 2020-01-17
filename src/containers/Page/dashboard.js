@@ -569,7 +569,7 @@ class Dashboard extends Component {
                             boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
                           }}
                           title={"Users"}
-                          data={[{name:"Active Users",count:activeUsers},{name:"Inactive Users",count:inactiveUsers},{name:"Deactivated Users",count:deletedUsers}]}
+                          data={[{name:"Active Users",count:activeUsers},{name:"Suspended Users",count:inactiveUsers},{name:"Deactivated Users",count:deletedUsers}]}
                           icon="fa fa-users"
                           fontColor="#2d3446"
                           {...this.props}

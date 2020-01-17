@@ -13,6 +13,7 @@ const actions = {
   CHANGE_OPEN_KEYS: "CHANGE_OPEN_KEYS",
   TOGGLE_ALL: "TOGGLE_ALL",
   CHANGE_CURRENT: "CHANGE_CURRENT",
+  SELECTED_USER:"SELECTED_USERS",
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),
