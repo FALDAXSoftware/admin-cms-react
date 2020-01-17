@@ -38,7 +38,7 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
 
 const columns = [
     {
-        title: <IntlMessages id="antTable.title.details" />,
+        title: <IntlMessages id="antTable.title.actions" />,
         key: 'action',
         width: 100,
         align:"left",
@@ -74,6 +74,7 @@ const columns = [
         title: <IntlMessages id="antTable.title.role" />,
         key: 'role',
         width: 150,
+        // sorter:true,
         align:"left",
         render: (object)=>(isAllowed('get_role')?<a href={"access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
     },

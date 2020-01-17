@@ -253,7 +253,7 @@ class Transactions extends Component {
       { label: "Amount", key: "amount" },
       { label: "Assets", key: "coin" },
       { label: "Transaction Type", key: "transaction_type" },
-      { label: "Transaction Fees(%)", key: "transaction_fees" }
+      // { label: "Transaction Fees(%)", key: "transaction_fees" }
     ];
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -408,11 +408,11 @@ class Transactions extends Component {
                           {record.transaction_type}
                         </span>
                         <br />
-                        <span>
+                        {/* <span>
                           <b>Transaction Fees: </b>
                         </span>{" "}
                         {record.transaction_fees}
-                        <br />
+                        <br /> */}
                         <span>
                           <b>FALDAX Fees: </b>
                         </span>{" "}

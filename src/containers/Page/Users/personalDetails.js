@@ -4,10 +4,13 @@ import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
 import { Row, Col, Switch, notification } from "antd";
 import authAction from "../../../redux/auth/actions";
+import userAction from "../../../redux/users/actions";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
 import FaldaxLoader from "../faldaxLoader";
 const { logout } = authAction;
+const { showUserDetails } = userAction;
+
 
 const ParentDiv = styled.div`
   padding: 20px;
@@ -45,7 +48,7 @@ class PersonalDetails extends Component {
   };
 
   _getUserDetail = () => {
-    const { token, user_id } = this.props;
+    const { token, user_id ,showUserDetails} = this.props;
     let _this = this;
     this.setState({"loader":true});
     ApiUtils.getUserDetails(token, user_id)
@@ -53,6 +56,8 @@ class PersonalDetails extends Component {
       .then(function(res) {
         
         if (res.status == 200) {
+          let {email,full_name}=res.data[0]
+          showUserDetails({full_name,email});
           _this.setState({ userDetails: res.data[0],loader:false });
         } else if (res.status == 403) {
           _this.setState({ errMsg: true, errMessage: res.err ,loader:false},()=> _this.props.logout());
@@ -256,5 +261,5 @@ export default connect(
     token: state.Auth.get("token"),
     user: state.Auth.get("user")
   }),
-  { logout }
+  { logout,showUserDetails }
 )(PersonalDetails);

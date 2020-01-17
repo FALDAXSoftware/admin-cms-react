@@ -227,7 +227,14 @@ html[dir='rtl'] .dz-hidden-input {
   font-style: italic;
   font-size: 12px;
   color: gray;
-
+}
+.toolbar-header-text{
+  text-align: center;
+  line-height: 0px  !important;
+  margin-top: 20px;
+}
+.toolbar-header-text span{
+  line-height: 20px
 }
 .front-doc{
   border: 1px solid;
@@ -249,6 +256,13 @@ html[dir='rtl'] .dz-hidden-input {
   max-height: 200px;
   border: 1px solid;
   margin-left: 30px;
+}
+.sub-header-title{
+  font-size: small;
+}
+.header-title{
+  font-size: large;
+  font-weight: 600;
 }
 .back-doc img {
   width: 100%;

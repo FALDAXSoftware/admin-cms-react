@@ -309,10 +309,10 @@ class AccountClass extends Component {
               </div>
             ) : (
                 <div>
-                  <span>
+                  <p>
                     Enable 2FA authentication to remove the
                     account class.
-                </span>
+                </p>
                   <br />
                   <Button
                     type="primary"
