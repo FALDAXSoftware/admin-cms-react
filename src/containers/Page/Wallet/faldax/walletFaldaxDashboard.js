@@ -40,7 +40,7 @@ const columns=[
         key:5,
         dataIndex:"total",
         width:100,
-        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
+        render:data=><span>{data?(parseFloat(data)* 0.00000001).toFixed(8):"-"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_forfeit"/>,
@@ -48,7 +48,7 @@ const columns=[
         key:2,
         dataIndex:"total_earned_from_forfeit",
         width:100,
-        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
+        render:data=><span>{data?(parseFloat(data)* 0.00000001).toFixed(8):"-"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst"/>,
@@ -56,7 +56,7 @@ const columns=[
         key:3,
         dataIndex:"total_earned_from_jst",
         width:100,
-        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
+        render:data=><span>{data?(parseFloat(data)* 0.00000001).toFixed(8):"-"}</span>
 
     },
     {

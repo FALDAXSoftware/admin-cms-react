@@ -122,7 +122,7 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" onChange={this._onChangeFields.bind(this, "password")} />
+                <Input.Password size="large"  placeholder="Password" onChange={this._onChangeFields.bind(this, "password")} />
                 <span className="field-error">
                   {this.validator.message('Password', this.state.fields['password'], 'required')}
                 </span>
