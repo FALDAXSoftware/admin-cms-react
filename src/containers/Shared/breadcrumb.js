@@ -71,7 +71,7 @@ const  BreadcrumbComponent=({match})=> {
         </Breadcrumb.Item>}</>
         );
       });
-    return <Breadcrumb separator="/">{breadcrumbItems}</Breadcrumb>
+    return <Breadcrumb separator="/" key={new Date().getTime()}>{breadcrumbItems}</Breadcrumb>
 }
 
 

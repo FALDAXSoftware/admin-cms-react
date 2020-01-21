@@ -57,7 +57,7 @@ export default connect(
     ...state.App.toJS(),
     locale: state.LanguageSwitcher.toJS().language.locale,
     customizedTheme: state.ThemeSwitcher.toJS().topbarTheme,
-    selectedTabInfo:state.SelectedTabInfo.get('userData')?(window.location.pathname.search(/\/dashboard\/users\//gi)!=-1?state.SelectedTabInfo.get('userData'):false):false
+    selectedTabInfo:state.SelectedTabInfo.get('userData')?(window.location.pathname.search(/\/dashboard\/users\//gi)!=-1||window.location.pathname.search(/\/dashboard\/referral\//gi)!=-1?state.SelectedTabInfo.get('userData'):false):false
   }),
   { toggleCollapsed }
 )(Topbar);

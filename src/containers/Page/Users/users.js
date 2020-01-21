@@ -26,9 +26,6 @@ class Users extends Component {
   }
 
   render() {
-    const {
-      metabaseUrl
-    } = this.state;
     let tabOptionalProps={}
     if(this.props.location.state && this.props.location.state.selectedTab){
       tabOptionalProps.defaultActiveKey=this.props.location.state.selectedTab;

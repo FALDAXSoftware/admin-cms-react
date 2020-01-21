@@ -4,7 +4,7 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import {  withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
@@ -48,7 +48,7 @@ const columns=[
         key:3,
         dataIndex:"transaction_type",
         width:100,
-        render:type=><span className={"color-"+(type=="send"?"green":"blue")}>{type.charAt(0).toUpperCase()+type.slice(1)}</span>
+        render:data=><span className={data=="send"?"error-danger":"color-green"}><Icon type={data=="send"?"arrow-up":"arrow-down"}/>&nbsp;{data.charAt(0).toUpperCase()+data.slice(1)}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
