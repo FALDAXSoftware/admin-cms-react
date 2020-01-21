@@ -90,4 +90,4 @@ class ViewUser extends Component {
     }
 }
 
-export default connect(()=>{},{removeUserDetails})(ViewUser);
+export default connect(undefined,{removeUserDetails})(ViewUser);

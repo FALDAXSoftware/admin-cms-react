@@ -605,6 +605,9 @@ html[dir='rtl'] .dz-hidden-input {
   width: 18px !important;
   height: 18px !important;
 }
+.text-center{
+  text-align: center;
+}
 .panic-btn{
   width: 70px;
   text-align: center;

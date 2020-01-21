@@ -88,7 +88,7 @@ class ReferredAmount extends Component {
                                 </Col>
                             ))}
                     </Row>
-                    : ' No Referral Earning'
+                    : <p className="text-center table-tb-margin">No Referral Earning</p>
                 }
                 {loader && <FaldaxLoader />}
             </div>

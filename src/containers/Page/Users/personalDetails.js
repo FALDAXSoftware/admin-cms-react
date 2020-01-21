@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BUCKET_URL } from "../../../helpers/globals";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
-import { Row, Col, Switch, notification } from "antd";
+import { Row, Col, Switch, notification, Icon } from "antd";
 import authAction from "../../../redux/auth/actions";
 import userAction from "../../../redux/users/actions";
 import styled from "styled-components";
@@ -176,6 +176,7 @@ class PersonalDetails extends Component {
             <Row>
               <Col>
                 <UserName>
+                  <Icon type="user"></Icon>&nbsp;
                   {userDetails.first_name
                     ? userDetails.last_name
                       ? userDetails.first_name + " " + userDetails.last_name
@@ -186,7 +187,7 @@ class PersonalDetails extends Component {
             </Row>
             <Row>
               <Col>
-                <UserEmail>
+                <UserEmail><Icon type="mail"/>&nbsp;&nbsp;&nbsp;
                   {userDetails.email ? userDetails.email : ""}
                 </UserEmail>
               </Col>
@@ -214,7 +215,7 @@ class PersonalDetails extends Component {
                   {/* {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
                   {userDetails.country ? `, ${userDetails.country}` : ""} */}
                 <span className="address-text">
-                 {(userDetails.city_town?userDetails.city_town+" , ":"")+(userDetails.postal_code?userDetails.postal_code:"")}
+                 {(userDetails.city_town?userDetails.city_town+" , ":"")+(userDetails.state?userDetails.state+" , ":"")+(userDetails.postal_code?userDetails.postal_code:"")}
                 </span>
                 <span className="address-text">
                  {(userDetails.country?userDetails.country:"")}
