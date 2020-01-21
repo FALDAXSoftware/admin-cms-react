@@ -218,7 +218,7 @@ class Dashboard extends Component {
               transactionSymbols,
               transactionCount
             });
-          } else if (res.status == 403) {
+          } else if (res.status == 403 || res.status == 401) {
             _this.setState({
               errMsg: true,
               message: res.err,

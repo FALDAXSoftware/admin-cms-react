@@ -3505,7 +3505,27 @@ const ApiUtils = {
       body:formData
     }
     )
-  }
-
+  },
+  getAssetFeesAndLimits:function(token){
+    return fetch(`${API_URL}/admin/list-asset-fees-limits`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      }
+    }
+    )
+  },
+  editAssetFeesAndLimits: function (token, form) {
+    return fetch(API_URL + "/admin/update-asset-fees-limits", {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+},
 };
 export default ApiUtils;

@@ -1216,13 +1216,13 @@ const LocationCell = text => (
   </Tooltip>
 );
 const TierCell = text => <p>Tier {text}</p>;
-const referralActionCell = value => (
+const referralActionCell = (value,first_name,last_name,mail) => (
   <>
   {isAllowed("get_referred_id_data")&&<Tooltip title="View">
     <Icon
       type="info-circle"
       className="btn-icon"
-      onClick={() => referrals.edit(value)}
+      onClick={() => referrals.edit(value,first_name,last_name,mail)}
       disabled
     />
   </Tooltip>}
@@ -2836,7 +2836,10 @@ const isFloat=(n)=>{
 }
 
 const PrecisionCell=(data)=>{
+  if(!isNaN(parseFloat(data)))
+    data=parseFloat(data);
   return isFloat(data)?parseFloat(data).toFixed(8):(data==0?0:(data?parseFloat(data):""))
+
 }
 const CollectedAmountCell = value =>
   value.map(ele => (

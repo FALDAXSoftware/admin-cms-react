@@ -1,5 +1,6 @@
 import React from 'react';
 import clone from 'clone';
+import { Link } from "react-router-dom";
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell, referralActionCell, ReferralDateCell, ReferralCell, FullNameTextCell
@@ -27,27 +28,27 @@ const renderCell = (object, type, key, fName, lName, emailID, createdAt,
         case 'ReferralDateCell':
             return ReferralDateCell(value, first_name, last_name, email, created_at, referral_by_email, referred_id, refered_by, no_of_referral);
         case 'referralActionCell':
-            return referralActionCell(value);
+            return referralActionCell(value,first_name,last_name,email);
     }
 };
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
     key: 'action',
-   align:"left",
-    width: 50,
-    render: object => renderCell(object, 'referralActionCell', 'id')
+    align:"left",
+    width: 100,
+    render: object => renderCell(object, 'referralActionCell', 'id',"first_name","last_name","email")
 }, {
     title: <IntlMessages id="antTable.title.name" />,
     key: 'first_name',
-   align:"left",
-    width: 200,
-    render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
+    align:"left",
+    width: 300,
+    render: object => (<Link to={`./users/${object["id"]}`}>{object["first_name"]+" "+object["last_name"]}</Link>)
 }, {
     title: <IntlMessages id="antTable.title.email" />,
     key: 'email',
-   align:"left",
-    width: 200,
+    align:"left",
+    // width: 200,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'email')
 }, 
