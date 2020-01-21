@@ -6,6 +6,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import {connect} from 'react-redux'
 import { PrecisionCell } from '../../../components/tables/helperCells';
 import authAction from "../../../redux/auth/actions"
+import { isAllowed } from '../../../helpers/accessControl';
 
 const data = [];
 const EditableContext = React.createContext();
@@ -100,7 +101,7 @@ class EditableTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
+            <a disabled={(editingKey !== '' || !isAllowed("update_asset_fees_limits"))} onClick={() => this.edit(record.key)}>
               Edit
             </a>
           );
