@@ -84,6 +84,7 @@ class ActiveUsers extends Component {
   };
 
   _getAllUsers = () => {
+    
     const { token } = this.props;
     const {
       searchUser,
@@ -93,9 +94,7 @@ class ActiveUsers extends Component {
       sortOrder,
       filterVal
     } = this.state;
-    var _this = this;
-
-    _this.setState({ loader: true });
+    this.setState({ loader: true });
     ApiUtils.getAllUsers(
       page,
       limit,
@@ -106,23 +105,23 @@ class ActiveUsers extends Component {
       filterVal
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then((res)=>{
         if (res.status == 200) {
-          _this.setState({ allUsers: res.data, allUserCount: res.userCount });
+          this.setState({ allUsers: res.data, allUserCount: res.userCount });
         } else if (res.status == 403) {
-          _this.setState(
+          this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
             () => {
-              _this.props.logout();
+              this.props.logout();
             }
           );
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message });
+          this.setState({ errMsg: true, errMessage: res.message });
         }
-        _this.setState({ loader: false });
+        this.setState({ loader: false });
       })
       .catch(() => {
-        _this.setState({
+        this.setState({
           errMsg: true,
           errMessage: "Something went wrong!!",
           errType: "error",
@@ -256,6 +255,7 @@ class ActiveUsers extends Component {
       showDeleteUserModal,
       limit
     } = this.state;
+    console.log("all users",allUsers)
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     const headers = [

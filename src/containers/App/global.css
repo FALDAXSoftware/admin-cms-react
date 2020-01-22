@@ -608,6 +608,9 @@ html[dir='rtl'] .dz-hidden-input {
 .text-center{
   text-align: center;
 }
+.full-height{
+  height: 100%;
+}
 .panic-btn{
   width: 70px;
   text-align: center;
@@ -777,4 +780,10 @@ html[dir='rtl'] .dz-hidden-input {
     padding: 5px;
     border: 1.2px dashed #1790fe;
     background: aliceblue;
+}
+/* Disable print  */
+@media print {
+  html, body {
+     display: none;  /* hide whole page */
+  }
 }

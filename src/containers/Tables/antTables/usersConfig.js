@@ -71,9 +71,9 @@ const columns = [{
     title: <IntlMessages id="userTable.title.id" />,
     align:"left",
     ellipsis:true,
-    key: 'id',
+    key: 'uuid',
     width: 75,
-    render: object => renderCell(object, 'TextCell', 'id')
+    render: object => renderCell(object, 'TextCell', 'uuid')
 } , 
  {
     title: <IntlMessages id="userTable.title.created_at" />,
