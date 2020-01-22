@@ -69,7 +69,16 @@ const columns = [{
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
         'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
         'deleted_at')
-}, {
+},
+{
+    title: <IntlMessages id="userTable.title.id" />,
+    align:"left",
+    ellipsis:true,
+    key: 'uuid',
+    width: 75,
+    render: object => renderCell(object, 'TextCell', 'uuid')
+} ,
+ {
     title: <IntlMessages id="userTable.title.created_at" />,
    align:"left",
     ellipsis:true,

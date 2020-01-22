@@ -74,7 +74,8 @@ class Sidebar extends Component {
   getMenuItem = ({ singleOption, submenuStyle, submenuColor }) => {
     const { key, label, leftIcon, children } = singleOption;
     const url = stripTrailingSlash(this.props.url);
-
+    const {pathname}=this.props.location;
+    const urlReg=new RegExp(url+"/"+key,'ig')
     if (children) {
       return (
         <SubMenu
@@ -104,7 +105,8 @@ class Sidebar extends Component {
       );
     }
     return (
-      <Menu.Item key={`${url}/${key}`}>
+      
+      <Menu.Item key={`${url}/${key}`} className={urlReg.test(pathname)?"ant-menu-item-selected":""}>
         <Link to={`${url}/${key}`}>
           <span className="isoMenuHolder" style={submenuColor}>
             <i className={leftIcon} />
