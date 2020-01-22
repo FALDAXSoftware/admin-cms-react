@@ -56,8 +56,8 @@ class PersonalDetails extends Component {
       .then(function(res) {
         
         if (res.status == 200) {
-          let {email,full_name}=res.data[0]
-          showUserDetails({full_name,email});
+          let {email,first_name,last_name}=res.data[0]
+          showUserDetails({full_name:first_name+" "+last_name,email});
           _this.setState({ userDetails: res.data[0],loader:false });
         } else if (res.status == 403) {
           _this.setState({ errMsg: true, errMessage: res.err ,loader:false},()=> _this.props.logout());
