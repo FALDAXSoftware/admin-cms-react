@@ -1620,7 +1620,7 @@ const ActiveUserActionCell = (
       {!deleted_at ? (
         <React.Fragment>
           {isAllowed("delete_user") &&
-            <Tooltip title="Delete">
+            <Tooltip title="Deactivate user">
               <Icon
                 type="delete"
                 className="btn-icon"

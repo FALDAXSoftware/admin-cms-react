@@ -4,6 +4,7 @@ import { BackButton } from '../../Shared/backBttton';
 import WalletOverview from './walletOverview';
 import AssetWalletHistory from './assetWalletHistory';
 import { LayoutContentWrapper } from '../../../components/utility/layoutWrapper.style';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const { TabPane } = Tabs;
 
@@ -22,7 +23,8 @@ class AssetWallet extends Component {
         return (
             <LayoutContentWrapper>
              {/* <BackButton {...this.props}></BackButton> */}
-              <Tabs defaultActiveKey="1" size={"large"} className="full-width">
+             <BreadcrumbComponent {...this.props}/>
+              <Tabs className="full-width">
                 <TabPane tab="Wallet" key="1">
                   <WalletOverview asset_id={asset_id} />
                 </TabPane>

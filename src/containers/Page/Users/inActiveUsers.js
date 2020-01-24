@@ -9,7 +9,8 @@ import {
   Select,
   Form,
   Modal,
-  Icon
+  Icon,
+  DatePicker
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { inActiveUserinfos } from "../../Tables/antTables";
@@ -21,9 +22,11 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import moment from "moment";
 
 const Option = Select.Option;
 const { logout } = authAction;
+const { RangePicker } = DatePicker;
 var self;
 
 class InActiveUsers extends Component {
@@ -42,7 +45,10 @@ class InActiveUsers extends Component {
       loader: false,
       allCountries: [],
       deleteUserId: "",
-      showDeleteUserModal: false
+      showDeleteUserModal: false,
+      rangeDate:[],
+      startDate:"",
+      endDate:""
     };
     self = this;
     InActiveUsers.view = InActiveUsers.view.bind(this);
@@ -82,6 +88,14 @@ class InActiveUsers extends Component {
     this.setState({ allCountries });
   };
 
+  _changeDate = (date, dateString) => {
+    this.setState({
+      rangeDate: date,
+      startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
+      endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+    });
+  };
+
   _getAllUsers = () => {
     const { token } = this.props;
     const {
@@ -90,7 +104,9 @@ class InActiveUsers extends Component {
       page,
       sorterCol,
       sortOrder,
-      filterVal
+      filterVal,
+      startDate,
+      endDate
     } = this.state;
     var _this = this;
 
@@ -102,7 +118,9 @@ class InActiveUsers extends Component {
       searchUser,
       sorterCol,
       sortOrder,
-      filterVal
+      filterVal,
+      startDate,
+      endDate
     )
       .then(response => response.json())
       .then(function(res) {
@@ -219,7 +237,10 @@ class InActiveUsers extends Component {
         searchUser: "",
         page: 1,
         sorterCol: "",
-        sortOrder: ""
+        sortOrder: "",
+        startDate:"",
+        endDate:"",
+        rangeDate:[]
       },
       () => {
         this._getAllUsers();
@@ -253,7 +274,10 @@ class InActiveUsers extends Component {
       filterVal,
       allCountries,
       showDeleteUserModal,
-      limit
+      limit,
+      startDate,
+      endDate,
+      rangeDate
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -291,14 +315,14 @@ class InActiveUsers extends Component {
                 <div tab={tableInfo.title} key={tableInfo.value}>
                     <Form onSubmit={this._searchUser} className="cty-search">
                       <Row type="flex" className="table-filter-row" justify="start">
-                        <Col lg={7} xs={24}>
+                        <Col lg={5} xs={24}>
                           <Input
                             placeholder="Search users"
                             onChange={this._changeSearch.bind(this)}
                             value={searchUser}
                           />
                         </Col>
-                        <Col  lg={8} xs={24}>
+                        <Col  lg={5} xs={24}>
                           <Select
                             getPopupContainer={trigger => trigger.parentNode}
                             placeholder="Select a country"
@@ -315,6 +339,16 @@ class InActiveUsers extends Component {
                                 );
                               })}
                           </Select>
+                        </Col>
+                        <Col lg={5} xs={24}>
+                          <RangePicker
+                            value={rangeDate}
+                            disabledTime={this.disabledRangeTime}
+                            onChange={this._changeDate}
+                            format="YYYY-MM-DD"
+                            allowClear={false}
+                            className='full-width'
+                          />
                         </Col>
                         <Col lg={3} xs={24}>
                           <Button
@@ -334,7 +368,7 @@ class InActiveUsers extends Component {
                             <Icon type="reload" />Reset
                           </Button>
                         </Col>
-                        <Col  xs={24} lg={3}>
+                        <Col  md={24} lg={3}>
                           {allUsers && allUsers.length > 0 ? (
                             <CSVLink
                               data={allUsers}

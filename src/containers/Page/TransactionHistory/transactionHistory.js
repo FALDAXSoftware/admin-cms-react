@@ -405,7 +405,7 @@ class Transactions extends Component {
                           }}
                         >
                           {" "}
-                          {record.transaction_type}
+                          <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
                         </span>
                         <br />
                         {/* <span>
@@ -422,6 +422,16 @@ class Transactions extends Component {
                           <b>Network Fees: </b>
                         </span>{" "}
                         {record.transaction_type=="send"?PrecisionCell(record.network_fees):'-'}
+                        <br />
+                        <span>
+                          <b>Estimated Network Fees: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.estimated_network_fees):'-'}
+                        <br />
+                        <span>
+                          <b>Actual Network Fees: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.actual_network_fees):'-'}
                         <br />
                       </div>
                     );

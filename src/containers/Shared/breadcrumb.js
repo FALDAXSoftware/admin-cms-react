@@ -25,7 +25,7 @@ const breadcrumbNameMap = {
     "/dashboard/fees":" Fees",
     "/dashboard/panic-button":" Penic Button",
     "/dashboard/news":" News",
-    "/dashboard/news-source":" News Source",
+    "/dashboard/new's-source":" News Sources",
     "/dashboard/referral":" Affilite Program & Referral",
     "/dashboard/referral/:id":"Details",
     "/dashboard/account-class":" Account Class Management",
@@ -43,7 +43,8 @@ const breadcrumbNameMap = {
     "/dashboard/campaign/add-campaign":"Create Campaign",
     "/dashboard/campaign/update-campaign/:id":"Update Campaign",
     "/dashboard/users/edit-user/:id":"Edit User",
-    "/dashboard/dashboard":"Dashboard"
+    "/dashboard/dashboard":"Dashboard",
+    "/dashboard/assets/wallet/:id":"Wallet"
   };
 
 

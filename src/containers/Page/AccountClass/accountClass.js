@@ -284,7 +284,7 @@ class AccountClass extends Component {
           >
             {this.props.user.is_twofactor ? (
               <div>
-                <span>Enter your two-factor code here:</span>
+                <span>Enter your 2FA code here:</span>
                 <div style={{ marginTop: "20px" }}>
                   <Input
                     style={{ width: "200px" }}
@@ -310,7 +310,7 @@ class AccountClass extends Component {
             ) : (
                 <div>
                   <p>
-                    Enable 2FA authentication to remove the
+                    Enable 2FA to remove the
                     account class.
                 </p>
                   <br />

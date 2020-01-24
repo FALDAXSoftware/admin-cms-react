@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BUCKET_URL } from "../../../helpers/globals";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
-import { Row, Col, Switch, notification, Icon } from "antd";
+import { Row, Col, Switch, notification, Icon, Button } from "antd";
 import authAction from "../../../redux/auth/actions";
 import userAction from "../../../redux/users/actions";
 import styled from "styled-components";
@@ -119,6 +119,38 @@ class PersonalDetails extends Component {
       });
   };
 
+  sendResendPasswordLink=async()=>{
+    try {
+      let {email}=this.state.userDetails;
+      await this.setState({loader:true});
+      let res=await (await ApiUtils.sendResetPasswordLink(this.props.token,{email:email})).json();
+      let {status,message,err}=res;
+      if(status==200){
+        this.setState({
+          errMsg: true,
+          errMessage: message,
+          errType: "success",
+        })
+      }else if(status==400 || status==403){
+        this.setState({
+          errMsg: true,
+          errMessage: err,
+          errType: "error",
+        },()=>this.props.logout())
+      }else{
+        this.setState({
+          errMsg: true,
+          errMessage: message,
+          errType: "error",
+        })
+      }
+    }catch(error){
+      
+    }finally{
+      this.setState({loader:false})
+    }
+  }
+
   openNotificationWithIconError = type => {
     notification[type]({
       message: this.state.errType,
@@ -153,10 +185,10 @@ class PersonalDetails extends Component {
                 <Col span={3}>
                   <Switch
                     disabled={!isAllowed("user_activate")}  
-                    className="personal-btn"
+                    className="kyc-btn"
                     checked={userDetails.is_verified}
-                    checkedChildren="Verified"
-                    unCheckedChildren="Non-verified"
+                    checkedChildren="Email Verified"
+                    unCheckedChildren="Email Unverified"
                     size="large"
                     onChange={this._userStatus.bind(this, "is_verified")}
                   />
@@ -249,6 +281,11 @@ class PersonalDetails extends Component {
             ) : (
               ""
             )}
+             <Row>
+                <Col>
+                  <Button type="primary" onClick={this.sendResendPasswordLink}>Reset Password</Button>
+                </Col>
+              </Row>
           </ParentDiv>
         )}
         {loader &&<FaldaxLoader/>}
