@@ -115,7 +115,7 @@ const routes = [
         module: "email_templates"
     },
     {
-        path: "news-source",
+        path: "new's-source",
         component: asyncComponent(() => import("../Page/NewsSource/newsSources")),
         module: "news_source"
     },

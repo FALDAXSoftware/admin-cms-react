@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Button, Row,Icon, Col,Select, Form, Modal } from 'antd';
+import { Input, Pagination, notification, Button, Row,Icon, Col,Select, Form, Modal ,DatePicker} from 'antd';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { deletedUserinfos } from "../../Tables/antTables/deletedUserConfig";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -10,9 +10,11 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import CountryData from 'country-state-city';
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import moment from "moment";
 
 const Option = Select.Option;
+const {RangePicker}=DatePicker;
 const { logout } = authAction;
 var self;
 
@@ -32,7 +34,10 @@ class DeletedUsers extends Component {
             loader: false,
             allCountries: [],
             deleteUserId: '',
-            showDeleteUserModal: false
+            showDeleteUserModal: false,
+            rangeDate:[],
+            startDate:"",
+            endDate:""
         }
         self = this;
         DeletedUsers.view = DeletedUsers.view.bind(this);
@@ -64,11 +69,11 @@ class DeletedUsers extends Component {
 
     _getAllUsers = () => {
         const { token } = this.props;
-        const { searchUser, limit, page, sorterCol, sortOrder, filterVal } = this.state;
+        const { searchUser, limit, page, sorterCol, sortOrder, filterVal,startDate,endDate } = this.state;
         var _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllDeletedUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal)
+        ApiUtils.getAllDeletedUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal,startDate,endDate)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -133,6 +138,14 @@ class DeletedUsers extends Component {
         });
     }
 
+    _changeDate = (date, dateString) => {
+      this.setState({
+        rangeDate: date,
+        startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
+        endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+      });
+    };
+
     openNotificationWithIconError = (type) => {
         notification[type]({
             message: this.state.errType,
@@ -178,7 +191,7 @@ class DeletedUsers extends Component {
     }
 
     render() {
-        const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal,
+        const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal,rangeDate,
             allCountries, showDeleteUserModal, limit } = this.state;
         let pageSizeOptions = PAGE_SIZE_OPTIONS
 
@@ -212,14 +225,14 @@ class DeletedUsers extends Component {
             <div className="isoTableDisplayTab">
               <Form onSubmit={this._searchUser}>
                 <Row className="table-filter-row" type="flex" justify="start">
-                  <Col lg={7} xs={24}>
+                  <Col lg={5} xs={24}>
                     <Input
                       placeholder="Search users"
                       onChange={this._changeSearch.bind(this)}
                       value={searchUser}
                     />
                   </Col>
-                  <Col lg={8} xs={24}>
+                  <Col lg={5} xs={24}>
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a country"
@@ -236,6 +249,16 @@ class DeletedUsers extends Component {
                           );
                         })}
                     </Select>
+                  </Col>
+                  <Col lg={5} xs={24}>
+                    <RangePicker
+                      value={rangeDate}
+                      disabledTime={this.disabledRangeTime}
+                      onChange={this._changeDate}
+                      format="YYYY-MM-DD"
+                      allowClear={false}
+                      className='full-width'
+                    />
                   </Col>
                   <Col lg={3} xs={24}>
                     <Button

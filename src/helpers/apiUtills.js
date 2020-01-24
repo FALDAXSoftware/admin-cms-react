@@ -109,45 +109,13 @@ const ApiUtils = {
     searchUser,
     sorterCol,
     sortOrder,
-    filterVal
+    filterVal,
+    startDate,
+    endDate
   ) {
-    let url = "/admin/get-users?page=" + page + "&limit=" + limit;
-    searchUser = encodeURIComponent(searchUser);
-    if (sorterCol && sortOrder && searchUser && filterVal) {
-      url +=
-        "&data=" +
-        searchUser +
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&country=" +
-        filterVal;
-    } else if (sorterCol && sortOrder && filterVal) {
-      url +=
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&country=" +
-        filterVal;
-    } else if (sorterCol && sortOrder && searchUser) {
-      url +=
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&data=" +
-        searchUser;
-    } else if (sorterCol && sortOrder) {
-      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    } else if (searchUser && filterVal) {
-      url += "&data=" + searchUser + "&country=" + filterVal;
-    } else if (filterVal) {
-      url += "&country=" + filterVal;
-    } else {
-      url += "&data=" + searchUser;
-    }
+  
+    searchUser = encodeURIComponent(searchUser);  
+    let url =`/admin/get-users?page=${page}&limit=${limit}${searchUser?"&data="+searchUser:''}${sorterCol?"&sort_col="+sorterCol:''}${sortOrder?"&sort_order="+sortOrder:''}${filterVal?"&country="+filterVal:''}${startDate?"&start_date="+startDate:''}${endDate?"&end_date="+endDate:''}`
       return fetch(API_URL + url, {
         method: "GET",
         headers: {
@@ -165,45 +133,12 @@ const ApiUtils = {
     searchUser,
     sorterCol,
     sortOrder,
-    filterVal
+    filterVal,
+    startDate,
+    endDate
   ) {
-    let url = "/admin/get-inactive-users?page=" + page + "&limit=" + limit;
     searchUser = encodeURIComponent(searchUser);
-    if (sorterCol && sortOrder && searchUser && filterVal) {
-      url +=
-        "&data=" +
-        searchUser +
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&country=" +
-        filterVal;
-    } else if (sorterCol && sortOrder && filterVal) {
-      url +=
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&country=" +
-        filterVal;
-    } else if (sorterCol && sortOrder && searchUser) {
-      url +=
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&data=" +
-        searchUser;
-    } else if (sorterCol && sortOrder) {
-      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    } else if (searchUser && filterVal) {
-      url += "&data=" + searchUser + "&country=" + filterVal;
-    } else if (filterVal) {
-      url += "&country=" + filterVal;
-    } else {
-      url += "&data=" + searchUser;
-    }
+    let url = `/admin/get-inactive-users?page=${page}&limit=${limit}${searchUser?"&data="+searchUser:''}${sorterCol?"&sort_col="+sorterCol:''}${sortOrder?"&sort_order="+sortOrder:''}${filterVal?"&country="+filterVal:''}${startDate?"&start_date="+startDate:''}${endDate?"&end_date="+endDate:''}`;
       return fetch(API_URL + url, {
         method: "GET",
         headers: {
@@ -221,45 +156,12 @@ const ApiUtils = {
     searchUser,
     sorterCol,
     sortOrder,
-    filterVal
+    filterVal,
+    startDate,
+    endDate
   ) {
-    let url = "/admin/get-deleted-users?page=" + page + "&limit=" + limit;
     searchUser = encodeURIComponent(searchUser);
-    if (sorterCol && sortOrder && searchUser && filterVal) {
-      url +=
-        "&data=" +
-        searchUser +
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&country=" +
-        filterVal;
-    } else if (sorterCol && sortOrder && filterVal) {
-      url +=
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&country=" +
-        filterVal;
-    } else if (sorterCol && sortOrder && searchUser) {
-      url +=
-        "&sort_col=" +
-        sorterCol +
-        "&sort_order=" +
-        sortOrder +
-        "&data=" +
-        searchUser;
-    } else if (sorterCol && sortOrder) {
-      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
-    } else if (searchUser && filterVal) {
-      url += "&data=" + searchUser + "&country=" + filterVal;
-    } else if (filterVal) {
-      url += "&country=" + filterVal;
-    } else {
-      url += "&data=" + searchUser;
-    }
+    let url = `/admin/get-deleted-users?page=${page}&limit=${limit}${searchUser?"&data="+searchUser:''}${sorterCol?"&sort_col="+sorterCol:''}${sortOrder?"&sort_order="+sortOrder:''}${filterVal?"&country="+filterVal:''}${startDate?"&start_date="+startDate:''}${endDate?"&end_date="+endDate:''}`;
       return fetch(API_URL + url, {
         method: "GET",
         headers: {
@@ -3526,6 +3428,17 @@ const ApiUtils = {
       },
       body: JSON.stringify(form)
     });
-},
+  },
+  sendResetPasswordLink:function(token,form){
+    return fetch(API_URL + "/admin/forgot-user-password", {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+  }
 };
 export default ApiUtils;

@@ -33,7 +33,7 @@ const columns = [{
     key: 'transaction_type',
     dataIndex:'transaction_type',
     ellipsis:true,
-    width: 100,
+    width: 75,
     render:(data)=><span className="camel-case">{data}</span>
 }, {
     title: <IntlMessages id="walletTable.title.source_address" />,
