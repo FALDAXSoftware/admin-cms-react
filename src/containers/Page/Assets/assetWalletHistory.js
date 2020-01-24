@@ -71,8 +71,8 @@ class AssetWalletHistory extends Component {
         }
 
         return (
-            <LayoutWrapper >
-                <TableDemoStyle>
+            
+                <TableDemoStyle className="isoLayoutContent">
                     {loader && <FaldaxLoader />}
                     <TableWrapper
                         rowKey="id"
@@ -81,10 +81,10 @@ class AssetWalletHistory extends Component {
                         pagination={false}
                         dataSource={walletHistoryData}
                         bordered
-                        scroll={TABLE_SCROLL_HEIGHT}
+                        
                     />
                 </TableDemoStyle>
-            </LayoutWrapper>
+            
         );
     }
 }

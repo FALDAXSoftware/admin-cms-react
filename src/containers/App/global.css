@@ -644,7 +644,17 @@ html[dir='rtl'] .dz-hidden-input {
   width: 25px !important;
   height: 25px !important;
 }
-
+.kyc-btn{
+  width: 125px;
+  text-align: center;
+  height: 30px !important;
+  line-height: 22px !important;
+  border-radius: 100px !important;
+}
+.kyc-btn::after{
+  width: 25px !important;
+  height: 25px !important;
+}
 .search-with-btn{
   width: 300px !important;
 }
@@ -786,4 +796,11 @@ html[dir='rtl'] .dz-hidden-input {
   html, body {
      display: none;  /* hide whole page */
   }
+}
+
+.icon-img{
+  height: 30px;
+}
+.wallet-head{
+  font-size: x-large;
 }

@@ -74,9 +74,9 @@ const columns = [{
     title: <IntlMessages id="userTable.title.id" />,
     align:"left",
     ellipsis:true,
-    key: 'uuid',
+    key: 'customer_id',
     width: 75,
-    render: object => renderCell(object, 'TextCell', 'uuid')
+    render: object => renderCell(object, 'TextCell', 'customer_id')
 } ,
  {
     title: <IntlMessages id="userTable.title.created_at" />,
@@ -129,9 +129,10 @@ const columns = [{
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'country')
-}, {
+},
+ {
     title: <IntlMessages id="antTable.title.state" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'state',
     width: 150,
@@ -140,7 +141,7 @@ const columns = [{
 },
 {
     title: <IntlMessages id="antTable.title.zip" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'postal_code',
     width: 200,
