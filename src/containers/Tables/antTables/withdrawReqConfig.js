@@ -1,6 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
+import {Link} from "react-router-dom"
 import { TextCell, WithdrawStatusCell, WithdrawActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
@@ -46,13 +47,21 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 },
+{
+    title: <IntlMessages id="withdrawTable.title.asset" />,
+    key: 'coin_name',
+    width: 85,
+     align:"left",
+    sorter: true,
+    dataIndex:"coin_name",
+},
  {
     title: <IntlMessages id="withdrawTable.title.email" />,
     key: 'Email',
     width: 200,
     align:"left",
-    dataIndex:"email",
-    render: (data)=>ToolTipsCell(data)
+    // dataIndex:"email",
+    render: (data)=><Link to={`./users/${data["user_id"]}`}>{ToolTipsCell(data["email"])}</Link>
 },
 {
     title: <IntlMessages id="withdrawTable.title.source_address" />,

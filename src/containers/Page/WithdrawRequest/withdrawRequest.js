@@ -448,6 +448,7 @@ class WithdrawRequest extends Component {
                     <p style={{ margin: 0 }}>
                       {
                         <div>
+                          <b>Name</b> - {record.first_name +" "+record.last_name} <br /> 
                           <b>Email ID</b> - {record.email} <br /> <b>Fees</b> -{" "}
                           {record.fees}% <br /> <b>Asset</b> -{" "}
                           {record.coin_name}{" "}

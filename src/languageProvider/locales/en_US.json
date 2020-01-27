@@ -525,6 +525,7 @@
   "simplexTradeTable.title.quote_id": "Quote ID",
   "simplexTradeTable.title.simplex_payment_status": "Payment Status",
   "withdrawTable.title.email": "Email",
+  "withdrawTable.title.asset": "Asset",
   "withdrawTable.title.source_address": "Source Address",
   "withdrawTable.title.destination_address": "Destination Address",
   "withdrawTable.title.amount": "Amount",
