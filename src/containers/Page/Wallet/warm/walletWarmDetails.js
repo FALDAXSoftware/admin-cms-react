@@ -34,7 +34,7 @@ const columns=[
         dataIndex:"baseValue",
         sorter:true,
         width:75,
-        render:data=><span>{data?parseFloat(data)>=0?(parseFloat(data)*0.00000001).toFixed(8):((parseFloat(data) * -1)*0.00000001).toFixed(8):""}</span>
+        render:data=><span>{data?parseFloat(data)>=0?parseFloat(data).toFixed(8):parseFloat(data).toFixed(8):""}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.type"/>,

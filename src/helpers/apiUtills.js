@@ -131,8 +131,8 @@ const ApiUtils = {
     limit,
     token,
     searchUser,
-    sorterCol,
-    sortOrder,
+    sorterCol="updated_at",
+    sortOrder="descend",
     filterVal,
     startDate,
     endDate
@@ -154,8 +154,8 @@ const ApiUtils = {
     limit,
     token,
     searchUser,
-    sorterCol,
-    sortOrder,
+    sorterCol="deleted_at",
+    sortOrder="descend",
     filterVal,
     startDate,
     endDate
