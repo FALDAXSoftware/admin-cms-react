@@ -384,9 +384,14 @@ class Transactions extends Component {
                         {record.destination_address}
                         <br />
                         <span>
-                          <b>Amount: </b>
+                          <b>Transaction Amount: </b>
                         </span>{" "}
                         {PrecisionCell(record.amount)}
+                        <br />
+                        <span>
+                          <b>Base Amount: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.actual_amount):'-'}
                         <br />
                         <span>
                           <b>Asset: </b>
@@ -433,6 +438,7 @@ class Transactions extends Component {
                         </span>{" "}
                         {record.transaction_type=="send"?PrecisionCell(record.actual_network_fees):'-'}
                         <br />
+                       
                       </div>
                     );
                   }}

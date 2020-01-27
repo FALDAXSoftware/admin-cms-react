@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs } from 'antd';
+import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs, Icon } from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -11,6 +11,8 @@ import FaldaxLoader from '../faldaxLoader';
 import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PrecisionCell } from '../../../components/tables/helperCells';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -48,6 +50,14 @@ class UserTransactionHistory extends Component {
         });
         this.setState({ errMsg: false });
     };
+
+    _copyNotification = () => {
+        this.setState({
+          errMsg: true,
+          errType: "info",
+          errMessage: "Copied to Clipboard!!"
+        });
+      };
 
     addTransactionFees(data, fees) {
         return data.map(ele => {
@@ -221,7 +231,7 @@ class UserTransactionHistory extends Component {
                     <div className="scroll-table">
                         {loader && <FaldaxLoader />}
                         < TableWrapper
-                            rowId="id"
+                            rowKey="id"
                             {...this.state}
                             columns={transactionTableInfos.columns}
                             pagination={false}
@@ -230,6 +240,103 @@ class UserTransactionHistory extends Component {
                             onChange={this._handleUserTransactionChange}
                             scroll={TABLE_SCROLL_HEIGHT}
                             bordered
+                            expandedRowRender={record => {
+                                return (
+                                  <div>
+                                    <span>
+                                      {" "}
+                                      <b>Created On: </b>
+                                    </span>{" "}
+                                    {moment
+                                      .utc(record.created_at)
+                                      .local()
+                                      .format("DD MMM, YYYY HH:mm:ss")}
+                                    <br />
+                                    <span>
+                                      <b>Transaction Hash: </b>
+                                    </span>
+                                    <CopyToClipboard
+                                      style={{ cursor: "pointer" }}
+                                      text={record.transaction_id}
+                                      onCopy={this._copyNotification}
+                                    >
+                                      <span>{record.transaction_id}</span>
+                                    </CopyToClipboard>
+                                    <br />
+                                    <span>
+                                      <b>Email: </b>
+                                    </span>{" "}
+                                    {record.email}
+                                    <br />
+                                    <span>
+                                      <b>Source Address: </b>
+                                    </span>{" "}
+                                    {record.source_address}
+                                    <br />
+                                    <span>
+                                      <b>Destination Address: </b>
+                                    </span>{" "}
+                                    {record.destination_address}
+                                    <br />
+                                    <span>
+                                      <b>Transaction Amount: </b>
+                                    </span>{" "}
+                                    {PrecisionCell(record.amount)}
+                                    <br />
+                                    <span>
+                                        <b>Base Amount: </b>
+                                        </span>{" "}
+                                        {record.transaction_type=="send"?PrecisionCell(record.actual_amount):'-'}
+                                        <br />
+                                    <span>
+                                      <b>Asset: </b>
+                                    </span>{" "}
+                                    {record.coin}
+                                    <br />
+                                    <span>
+                                      <b>Transaction Type: </b>
+                                    </span>
+                                    <span
+                                      style={{
+                                        color:
+                                          record.transaction_type == "send"
+                                            ? "red"
+                                            : "green"
+                                      }}
+                                    >
+                                      {" "}
+                                      <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
+                                    </span>
+                                    <br />
+                                    {/* <span>
+                                      <b>Transaction Fees: </b>
+                                    </span>{" "}
+                                    {record.transaction_fees}
+                                    <br /> */}
+                                    <span>
+                                      <b>FALDAX Fees: </b>
+                                    </span>{" "}
+                                    {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
+                                    <br />
+                                    {/* <span>
+                                      <b>Network Fees: </b>
+                                    </span>{" "}
+                                    {record.transaction_type=="send"?PrecisionCell(record.network_fees):'-'}
+                                    <br /> */}
+                                    <span>
+                                      <b>Estimated Network Fees: </b>
+                                    </span>{" "}
+                                    {record.transaction_type=="send"?PrecisionCell(record.estimated_network_fees):'-'}
+                                    <br />
+                                    <span>
+                                      <b>Actual Network Fees: </b>
+                                    </span>{" "}
+                                    {record.transaction_type=="send"?PrecisionCell(record.actual_network_fees):'-'}
+                                    <br />
+                                 
+                                  </div>
+                                );
+                              }}
                         />
                         {allTransactionCount > 0 ?
                             <Pagination

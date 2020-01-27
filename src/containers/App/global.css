@@ -804,3 +804,9 @@ html[dir='rtl'] .dz-hidden-input {
 .wallet-head{
   font-size: x-large;
 }
+.wallet-address{
+  cursor: pointer;
+  padding: 5px;
+  background: #dcdcdc59;
+  border: 1px dotted #359afd9e;
+}
