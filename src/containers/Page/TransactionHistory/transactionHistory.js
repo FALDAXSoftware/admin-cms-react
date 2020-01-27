@@ -418,11 +418,11 @@ class Transactions extends Component {
                         </span>{" "}
                         {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
                         <br />
-                        <span>
+                        {/* <span>
                           <b>Network Fees: </b>
                         </span>{" "}
                         {record.transaction_type=="send"?PrecisionCell(record.network_fees):'-'}
-                        <br />
+                        <br /> */}
                         <span>
                           <b>Estimated Network Fees: </b>
                         </span>{" "}
