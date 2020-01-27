@@ -103,13 +103,13 @@ const columns = [{
     align:"left",
     render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["faldax_fee"]):"-"
 },
-{
-    title: <IntlMessages id="tradeTable.title.network_fees" />,
-    key: 'network_fees',
-    width: 150,
-    align:"left",
-    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["network_fees"]):"-"
-},
+// {
+//     title: <IntlMessages id="tradeTable.title.network_fees" />,
+//     key: 'network_fees',
+//     width: 150,
+//     align:"left",
+//     render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["network_fees"]):"-"
+// },
 ];
 
 const transactionTableInfos =
