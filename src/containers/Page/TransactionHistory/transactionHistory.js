@@ -369,6 +369,11 @@ class Transactions extends Component {
                         </CopyToClipboard>
                         <br />
                         <span>
+                          <b>Name: </b>
+                          </span>{" "}
+                          {record.first_name+" "+record.last_name}
+                          <br />
+                        <span>
                           <b>Email: </b>
                         </span>{" "}
                         {record.email}
@@ -391,7 +396,7 @@ class Transactions extends Component {
                         <span>
                           <b>Base Amount: </b>
                         </span>{" "}
-                        {record.transaction_type=="send"?PrecisionCell(record.actual_amount):'-'}
+                        {PrecisionCell(record.actual_amount)}
                         <br />
                         <span>
                           <b>Asset: </b>
@@ -418,11 +423,11 @@ class Transactions extends Component {
                         </span>{" "}
                         {record.transaction_fees}
                         <br /> */}
-                        <span>
+                       {record.transaction_type=="send" && <><span>
                           <b>FALDAX Fees: </b>
                         </span>{" "}
                         {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
-                        <br />
+                        <br /></>}
                         {/* <span>
                           <b>Network Fees: </b>
                         </span>{" "}
@@ -431,14 +436,13 @@ class Transactions extends Component {
                         <span>
                           <b>Estimated Network Fees: </b>
                         </span>{" "}
-                        {record.transaction_type=="send"?PrecisionCell(record.estimated_network_fees):'-'}
+                        {PrecisionCell(record.estimated_network_fees)}
                         <br />
                         <span>
                           <b>Actual Network Fees: </b>
                         </span>{" "}
-                        {record.transaction_type=="send"?PrecisionCell(record.actual_network_fees):'-'}
-                        <br />
-                       
+                        {PrecisionCell(record.actual_network_fees)}
+                        <br /> 
                       </div>
                     );
                   }}
