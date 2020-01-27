@@ -74,7 +74,15 @@ const columns = [{
     sorter: true,
     dataIndex:"amount",
     render:(data)=>PrecisionCell(data)
-}, {
+},
+{
+    title: <IntlMessages id="transactionTable.title.base" />,
+    key: 'actual_amount',
+    width: 150,
+    align:"left",
+    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["actual_amount"]):"-"
+} ,
+{
     title: <IntlMessages id="transactionTable.title.coin" />,
     key: 'coin',
     width: 100,
@@ -96,13 +104,13 @@ const columns = [{
 //     dataIndex:"transaction_fees",
 //     // render:(data)=>PrecisionCell(data)
 // },
-{
-    title: <IntlMessages id="tradeTable.title.faldax_fees" />,
-    key: 'faldax_fees',
-    width: 150,
-    align:"left",
-    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["faldax_fee"]):"-"
-},
+// {
+//     title: <IntlMessages id="tradeTable.title.faldax_fees" />,
+//     key: 'faldax_fees',
+//     width: 150,
+//     align:"left",
+//     render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["faldax_fee"]):"-"
+// },
 // {
 //     title: <IntlMessages id="tradeTable.title.network_fees" />,
 //     key: 'network_fees',

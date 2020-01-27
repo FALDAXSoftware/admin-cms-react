@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import FaldaxLoader from '../faldaxLoader';
 import { withRouter } from 'react-router';
 import { isAllowed } from '../../../helpers/accessControl';
-import TableDemoStyle from '../../Tables/antTables/demo.style';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { BUCKET_URL } from '../../../helpers/globals';
 
 const { logout } = authAction;
@@ -98,6 +98,13 @@ class WalletOverview extends Component {
                 });
             });
     }
+    _copyNotification = () => {
+        this.setState({
+          errMsg: true,
+          errType: "info",
+          errMessage: "Copied to Clipboard!!"
+        });
+      };
 
     render() {
         const { errMsg, errType, loader, walletUserData } = this.state;
@@ -111,18 +118,30 @@ class WalletOverview extends Component {
                 <Divider><span className="wallet-head"><img className="icon-img" src={BUCKET_URL+walletUserData.coin_icon}></img>&nbsp;{walletUserData.coin}</span></Divider>
                 {
                     Object.keys(walletUserData).length > 0 ? (walletUserData.is_admin && walletUserData.flag == 0) ?
-                        <Row>
+                        <Row className="text-center">
                             <Col lg={8}>
                                 <Card title="HOT Send Wallet Address" bordered={false}>
                                     <span style={{ wordWrap: 'break-word' }}>
-                                        {Object.keys(walletUserData).length > 0 ? walletUserData.send_address : ""}
+                                        {Object.keys(walletUserData).length > 0 ? 
+                                              <CopyToClipboard
+                                              className="wallet-address"
+                                              text={walletUserData.send_address}
+                                              onCopy={this._copyNotification}
+                                            >
+                                              <span>{walletUserData.send_address}</span>
+                                            </CopyToClipboard> : ""}
                                     </span>
                                 </Card>
                             </Col>
                             <Col lg={8}>
                                 <Card title="HOT Receive Wallet Address" bordered={false}>
                                     <span style={{ wordWrap: 'break-word' }}>
-                                        {Object.keys(walletUserData).length > 0 ? walletUserData.receive_address : ""}
+                                        {Object.keys(walletUserData).length > 0 ? 
+                                              <CopyToClipboard
+                                              className="wallet-address"
+                                              text={walletUserData.send_address}
+                                              onCopy={this._copyNotification}
+                                            ><span>{walletUserData.receive_address}</span></CopyToClipboard> : ""}
                                     </span>
                                 </Card>
                             </Col>
