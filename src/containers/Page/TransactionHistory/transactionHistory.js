@@ -448,6 +448,11 @@ class Transactions extends Component {
                         {PrecisionCell(record.actual_network_fees)}
                         <br /> 
                         <span>
+                          <b>Residual Amount:</b>
+                        </span>{" "}
+                        {PrecisionCell(record.residual_amount)}
+                        <br /> 
+                        <span>
                           <b>Transaction From: </b>
                         </span>{" "}
                         {record.transaction_from}
