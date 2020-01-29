@@ -61,16 +61,15 @@ const columns=[
         width:150,
         render:data=><span>{data["faldax_fee"]?(parseFloat(data["faldax_fee"]).toFixed(8)+" "+data["coin"]):"-"}</span>
     },
-    {
-        title:<IntlMessages id="walletDetailsTable.title.residual_amount"/>,
-        key:6,
-        width:150,
-        align:"left",
-        ellipsis: true,
-        dataIndex:"residual_amount",
-        render:data=><span>{data?data:"-"}</span>
-       
-    },
+    // {
+    //     title:<IntlMessages id="walletDetailsTable.title.residual_amount"/>,
+    //     key:6,
+    //     width:150,
+    //     align:"left",
+    //     ellipsis: true,
+    //     dataIndex:"residual_amount",
+    //     render:data=><span>{data?data:"-"}</span>
+    // },
     {
         title:<IntlMessages id="walletDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
