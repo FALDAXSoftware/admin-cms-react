@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import { PrecisionCell } from '../../../components/tables/helperCells';
 import authAction from "../../../redux/auth/actions"
 import { isAllowed } from '../../../helpers/accessControl';
+import { TwoFactorModal, TwoFactorEnableModal } from '../../Shared/2faModal';
 
 const data = [];
 const EditableContext = React.createContext();
@@ -63,7 +64,7 @@ class EditableCell extends React.Component {
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data, editingKey: '' ,loader:false};
+    this.state = { data, editingKey: '' ,loader:false,show2FAEnableModal:false,show2FAModal:false,form:undefined,key:undefined};
     this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})}
     this.columns = [
       {
@@ -89,7 +90,7 @@ class EditableTable extends React.Component {
               <EditableContext.Consumer>
                 {form => (
                   <a
-                    onClick={() => this.save(form, record.key)}
+                    onClick={() => this.onSubmit(form, record.key)}
                     style={{ marginRight: 8 }}
                   >
                     Save
@@ -130,12 +131,13 @@ class EditableTable extends React.Component {
     this.setState({ editingKey: '' });
   };
 
-  async updateAssetLimit(slug,value){
+  async updateAssetLimit(slug,value,otp){
     try{
         let {token}=this.props;
         let body={
             "slug":slug,
-            "value":parseFloat(value)
+            "value":parseFloat(value),
+            "otp":otp
         }
         this.loader.show();
         let res= await (await ApiUtils.editAssetFeesAndLimits(token,body)).json();
@@ -153,8 +155,16 @@ class EditableTable extends React.Component {
         this.loader.hide();
     }
   }
+  onSubmit=(form,key)=>{
+    let {user}=this.props;
+    if(user.is_twofactor){
+      this.setState({show2FAModal:true,form:form,key:key})
+    }else{
+      this.setState({show2FAEnableModal:true})
+    }
+  }
 
-  save(form, key) {
+  save(form, key,otp) {
     form.validateFields(async(error, row) => {
       if (error) {
         return;
@@ -167,11 +177,11 @@ class EditableTable extends React.Component {
             ...item,
             ...row,
           });
-        this.setState({ data: newData, editingKey: '' });
-        await this.updateAssetLimit(item.slug,row.value);
+        this.setState({ data: newData, editingKey: '' ,show2FAModal:false});
+        await this.updateAssetLimit(item.slug,row.value,otp);
       } else {
         newData.push(row);
-        this.setState({ data: newData, editingKey: '' });
+        this.setState({ data: newData, editingKey: '' ,show2FAModal:false});
       }
     });
   }
@@ -210,7 +220,7 @@ class EditableTable extends React.Component {
   }
 
   render() {
-    const {loader}=this.state;
+    const {loader,show2FAModal,show2FAEnableModal,form,key}=this.state;
     const components = {
       body: {
         cell: EditableCell,
@@ -235,6 +245,8 @@ class EditableTable extends React.Component {
 
     return (
     <>
+     {show2FAModal && <TwoFactorModal callback={(otp)=>this.save(form,key,otp)} title="Update Assets Fees" onClose={()=>this.setState({show2FAEnableModal:false,show2FAModal:false})}/>}
+     {show2FAEnableModal && <TwoFactorEnableModal title="Update Assets Fees" onClose={()=>this.setState({show2FAEnableModal:false,show2FAModal:false})}/>}
     <TableDemoStyle className="isoLayoutContent">
       <EditableContext.Provider value={this.props.form}>
         <Table
@@ -254,5 +266,5 @@ class EditableTable extends React.Component {
 }
 
 const EditableFormTable = Form.create()(EditableTable);
-const mapStateToProps = state => ({ token: state.Auth.get("token")})
+const mapStateToProps = state => ({ token: state.Auth.get("token"),user:state.Auth.get("user")})
 export default connect(mapStateToProps,{...authAction})(EditableFormTable);

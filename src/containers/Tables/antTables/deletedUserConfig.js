@@ -132,7 +132,7 @@ const columns = [{
     width: 250,
     sorter: true,
     dataIndex:"email",
-    render:(value)=>ToolTipsCell(value)
+    render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 }, {
     title: <IntlMessages id="antTable.title.country" />,
    align:"left",
