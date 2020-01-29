@@ -95,7 +95,7 @@ const columns = [{
 // },
  {
     title: <IntlMessages id="antTable.title.name" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'first_name',
     width: 200,
@@ -110,7 +110,7 @@ const columns = [{
     ellipsis:true,
     sorter: true,
     dataIndex:'email',
-    render:(value)=>ToolTipsCell(value)
+    render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 }, {
     title: <IntlMessages id="antTable.title.country" />,
    align:"left",
@@ -149,7 +149,15 @@ const columns = [{
     key: 'no_of_referrals',
     width: 150,
     render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
-}];
+},{
+    title: <IntlMessages id="antTable.title.last_login" />,
+    align:"left",
+    ellipsis:true,
+    key: 'last_login_datetime',
+    width: 150,
+    dataIndex:"last_login_datetime",
+    render: data => DateTimeCell(data)
+}]
 
 const tableinfos = [
     {

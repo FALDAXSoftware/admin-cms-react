@@ -810,3 +810,6 @@ html[dir='rtl'] .dz-hidden-input {
   background: #dcdcdc59;
   border: 1px dotted #359afd9e;
 }
+.lowercase{
+  text-transform: lowercase;
+}

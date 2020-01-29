@@ -276,7 +276,6 @@ class ActiveUsers extends Component {
       limit,
       rangeDate
     } = this.state;
-    console.log("all users",allUsers)
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     const headers = [
@@ -304,16 +303,7 @@ class ActiveUsers extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
 
-    const iframe = `<iframe
-        src="http://reports.faldax.com/public/question/c01b328a-d107-49e5-a01b-a6b3e2d7d2b5"
-        frameborder="0"
-        width="800"
-        height="600"
-        allowtransparency
-    ></iframe>`;
-    {
-      /* <div dangerouslySetInnerHTML={{ __html: iframe }} /> */
-    }
+
 
     return (
       // <LayoutContentWrapper>
