@@ -191,6 +191,14 @@ const columns = [
     sorter: true,
     render: object => (<span>{parseFloat(object["difference_faldax_commission"]).toFixed(8) + " " + (object["symbol"].split("/")[1])}</span>)
   },
+  {
+    title: <IntlMessages id="tradeTable.title.offer" />,
+    key: "apply_offer",
+    width: 100,
+    align:"left",
+    dataIndex:"offer_code",
+    render:(data)=><span className="color-green">{data}</span>
+  },
   // {
   //   title: <IntlMessages id="tradeTable.title.quantity" />,
   //   key: "quantity",

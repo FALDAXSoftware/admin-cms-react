@@ -338,7 +338,11 @@ class UserTransactionHistory extends Component {
                                     </span>{" "}
                                     {PrecisionCell(record.actual_network_fees)}
                                     <br />
-                                 
+                                    <span>
+                                    <b>Transaction From: </b>
+                                    </span>{" "}
+                                    {record.transaction_from}
+                                    <br /> 
                                   </div>
                                 );
                               }}

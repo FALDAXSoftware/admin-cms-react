@@ -899,8 +899,12 @@ class AddCampaign extends Component {
                         ranges={{
                           Today: [moment(), moment()],
                           "This Month": [
-                            moment().startOf("month"),
+                            moment().startOf("day"),
                             moment().endOf("month")
+                          ],
+                          "This Week": [
+                            moment().startOf("day"),
+                            moment().endOf("week")
                           ]
                         }}
                         allowClear={false}

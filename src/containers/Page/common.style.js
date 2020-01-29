@@ -28,7 +28,7 @@ export const ExecutionUl = styled.ul`
     width: 100%;
     margin: 0px 0px 5px;
     > span.ex_head {
-        width: 20%;
+        width: 5%;
         display: flex;
     }
     > span.ex_data {

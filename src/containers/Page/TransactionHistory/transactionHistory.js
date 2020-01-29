@@ -26,9 +26,9 @@ import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { PrecisionCell } from "../../../components/tables/helperCells";
+import {withRouter} from "react-router-dom";
 
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
@@ -55,7 +55,11 @@ class Transactions extends Component {
   }
 
   componentDidMount = () => {
-    this._getAllTransactions();
+    if(this.props.location.state){
+      this.setState({searchTransaction:this.props.location.state.transaction_hash},()=> this._getAllTransactions())
+    }else{
+      this._getAllTransactions();
+    }
   };
 
   _getAllTransactions = () => {
@@ -443,6 +447,11 @@ class Transactions extends Component {
                         </span>{" "}
                         {PrecisionCell(record.actual_network_fees)}
                         <br /> 
+                        <span>
+                          <b>Transaction From: </b>
+                        </span>{" "}
+                        {record.transaction_from}
+                        <br /> 
                       </div>
                     );
                   }}
@@ -467,10 +476,10 @@ class Transactions extends Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     token: state.Auth.get("token")
   }),
   { logout }
-)(Transactions);
+)(Transactions));
 

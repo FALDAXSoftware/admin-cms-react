@@ -68,7 +68,7 @@ const columns = [
         width: 200,
         sorter: true,
         dataIndex:"email",
-        render:(data)=>ToolTipsCell(data)
+        render:(data)=><span className="lowercase">{ToolTipsCell(data)}</span>
     },
     {
         title: <IntlMessages id="antTable.title.role" />,
@@ -76,7 +76,7 @@ const columns = [
         width: 150,
         // sorter:true,
         align:"left",
-        render: (object)=>(isAllowed('get_role')?<a href={"access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
+        render: (object)=>(isAllowed('get_role')?<a href={"roles/access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
     },
     {
         title: <IntlMessages id="antTable.title.Active" />,

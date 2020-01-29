@@ -14,6 +14,7 @@ class EditNetworkFee extends Component {
     this.state = {
       loader: false,
       fields: this.props.fields,
+      otp:"",
       errMsg: false,
       errMessage: "",
       errType: "Success",
@@ -50,7 +51,8 @@ class EditNetworkFee extends Component {
     const { fields } = this.state;
 
     fields["name"] = "";
-    this.setState({ fields, showError: false });
+    this.validator.hideMessages();
+    this.setState({ fields, showError: false ,otp:""});
   };
 
   onCloseModel = () => {
@@ -65,12 +67,13 @@ class EditNetworkFee extends Component {
 
   onEditFees = async() => {
     const {token} = this.props;
-    const {fields}=this.state;
+    const {fields,otp}=this.state;
     if (this.validator.allValid()) {
         try{
             let body={
                 "slug":fields['slug'],
-                "value":fields['value']
+                "value":fields['value'],
+                "otp":otp,
             }
             this.setState({loader:true})
             let res = await(await ApiUtils.updateNetworkFee(token,body)).json();
@@ -102,7 +105,7 @@ class EditNetworkFee extends Component {
       fields,
       errMsg,
       errType,
-      showEditNetworkFeeModal
+      showEditNetworkFeeModal,otp
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -123,6 +126,18 @@ class EditNetworkFee extends Component {
             <span>Name</span>
             <Input value={fields["name"]} disabled={true} />
           </div>
+          <div className="mg-top-15">
+            <span> 2FA code</span>
+            <Input value={otp}  onChange={(e)=>this.setState({otp:e.target.value})}/>
+          </div>
+          <span className="error-danger">
+              {this.validator.message(
+                "OTP",
+                otp,
+                "required|numeric",
+                "text-danger"
+              )}
+            </span>
           {/* <div className="mg-top-15">
             <span>Type</span>
             <Input value={fields["type"]} disabled={true} />
