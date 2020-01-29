@@ -84,6 +84,15 @@ const columns = [{
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
 },
+{
+    title: <IntlMessages id="antTable.title.last_login" />,
+    align:"left",
+    ellipsis:true,
+    key: 'last_login_datetime',
+    width: 150,
+    dataIndex:"last_login_datetime",
+    render: data => DateTimeCell(data)
+},
 // {
 //     title: "",
 //    align:"left",
@@ -149,15 +158,7 @@ const columns = [{
     key: 'no_of_referrals',
     width: 150,
     render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
-},{
-    title: <IntlMessages id="antTable.title.last_login" />,
-    align:"left",
-    ellipsis:true,
-    key: 'last_login_datetime',
-    width: 150,
-    dataIndex:"last_login_datetime",
-    render: data => DateTimeCell(data)
-}]
+},]
 
 const tableinfos = [
     {
