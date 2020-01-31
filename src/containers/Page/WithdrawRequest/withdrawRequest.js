@@ -8,7 +8,7 @@ import {
   Select,
   Form,
   Row,
-  Icon,
+  Icon
 } from "antd";
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -19,9 +19,13 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
-import {ColWithMarginBottom} from "../common.style";
+import { ColWithMarginBottom } from "../common.style";
 import DeclineActionModal from "./declineModal";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import {
+  PAGE_SIZE_OPTIONS,
+  PAGESIZE,
+  TABLE_SCROLL_HEIGHT
+} from "../../../helpers/globals";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -69,7 +73,11 @@ class WithdrawRequest extends Component {
     user_id,
     coin_id,
     is_executed,
-    created_at
+    created_at,
+    network_fee,
+    faldax_fee,
+    reason,
+    actual_amount
   ) {
     let requestData = {
       value,
@@ -83,7 +91,11 @@ class WithdrawRequest extends Component {
       coin_id,
       is_executed,
       created_at,
-      status: true
+      status: true,
+      network_fee,
+      faldax_fee,
+      reason,
+      actual_amount
     };
     self._updateWithdrawRequest(requestData);
   }
@@ -127,7 +139,11 @@ class WithdrawRequest extends Component {
       amount: requestData.amount,
       destination_address: requestData.destination_address,
       coin_id: requestData.coin_id,
-      user_id: requestData.user_id
+      user_id: requestData.user_id,
+      reason: requestData.reason,
+      faldax_fee: requestData.faldax_fee,
+      network_fee: requestData.network_fee,
+      actual_amount: requestData.actual_amount
     };
 
     this.setState({ loader: true });
@@ -199,7 +215,7 @@ class WithdrawRequest extends Component {
       sortOrder
     )
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
           _this.setState({
             allRequests: res.data,
@@ -315,7 +331,6 @@ class WithdrawRequest extends Component {
     );
   };
 
-
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
       this._getAllWithdrawReqs();
@@ -359,133 +374,151 @@ class WithdrawRequest extends Component {
     }
 
     return (
-            <TableDemoStyle className="isoLayoutContent">
-                <Form onSubmit={this._searchReq}>
-                  <Row>
-                    <ColWithMarginBottom sm={6}>
-                      <Input
-                        placeholder="Search Requests"
-                        onChange={this._changeSearch.bind(this)}
-                        value={searchReq}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom sm={3}>
-                      <Select
-                        getPopupContainer={trigger => trigger.parentNode}
-                        placeholder="Select a type"
-                        onChange={this._changeFilter}
-                        value={filterVal}
-                      >
-                        <Option value={""}>All</Option>
-                        <Option value={"null"}>Pending</Option>
-                        <Option value={"true"}>Approved</Option>
-                        <Option value={"false"}>Rejected</Option>
-                      </Select>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom sm={6}>
-                      <RangePicker
-                        value={rangeDate}
-                        disabledTime={this.disabledRangeTime}
-                        onChange={this._changeDate}
-                        format="YYYY-MM-DD"
-                        className="full-width"
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        htmlType="submit"
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                      >
-                        <Icon type="search"></Icon>Search
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      >
-                        <Icon type="reload" />
-                        Reset
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      {allRequests && allRequests.length > 0 ? (
-                        <CSVLink
-                          filename={"withdraw_requests.csv"}
-                          data={allRequests}
-                          headers={requestHeaders}
-                        >
-                          <Button
-                            type="primary"
-                            className="filter-btn btn-full-width"
-                            style={{ margin: "0px" }}
-                          >
-                            <Icon type="export" />
-                            Export
-                          </Button>
-                        </CSVLink>
-                      ) : (
-                          ""
-                        )}
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
-              {loader && <FaldaxLoader />}
-              
-                <TableWrapper
-                  {...this.state}
-                  rowKey="id"
-                  columns={withdrawReqTableInfos[0].columns}
-                  pagination={false}
-                  dataSource={allRequests}
-                  className="isoCustomizedTable table-tb-margin float-clear"
-                  onChange={this._handleWithdrawTableChange}
-                  bordered
-                  scroll={TABLE_SCROLL_HEIGHT}
-                  expandedRowRender={record => (
-                    <p style={{ margin: 0 }}>
-                      {
-                        <div>
-                          <b>Name</b> - {record.first_name +" "+record.last_name} <br /> 
-                          <b>Email ID</b> - {record.email} <br /> <b>Fees</b> -{" "}
-                          {record.fees}% <br /> <b>Asset</b> -{" "}
-                          {record.coin_name}{" "}
-                          {record.reason ? (
-                            <React.Fragment>
-                              <br />
-                              <b> Reason</b> - <span>{record.reason}</span>{" "}
-                            </React.Fragment>
-                          ) : (
-                              ""
-                            )}
-                        </div>
-                      }
-                    </p>
-                  )}
-                />
-              {allReqCount > 0 ? (
-                <Pagination
-                  className="ant-users-pagination"
-                  onChange={this._handleReqPagination.bind(this)}
-                  pageSize={limit}
-                  current={page}
-                  total={parseInt(allReqCount)}
-                  showSizeChanger
-                  onShowSizeChange={this._changePaginationSize}
-                  pageSizeOptions={pageSizeOptions}
-                />
-              ) : (
-                  ""
-                )}
-              <DeclineActionModal
-                showDeclineModal={showDeclineModal}
-                withdrawReqDetails={withdrawReqDetails}
-                closeDeclineModal={this._closeDeclineModal}
-                getAllWithdrawReqs={this._getAllWithdrawReqs}
+      <TableDemoStyle className="isoLayoutContent">
+        <Form onSubmit={this._searchReq}>
+          <Row>
+            <ColWithMarginBottom sm={6}>
+              <Input
+                placeholder="Search Requests"
+                onChange={this._changeSearch.bind(this)}
+                value={searchReq}
               />
-            </TableDemoStyle>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom sm={3}>
+              <Select
+                getPopupContainer={trigger => trigger.parentNode}
+                placeholder="Select a type"
+                onChange={this._changeFilter}
+                value={filterVal}
+              >
+                <Option value={""}>All</Option>
+                <Option value={"null"}>Pending</Option>
+                <Option value={"true"}>Approved</Option>
+                <Option value={"false"}>Rejected</Option>
+              </Select>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom sm={6}>
+              <RangePicker
+                value={rangeDate}
+                disabledTime={this.disabledRangeTime}
+                onChange={this._changeDate}
+                format="YYYY-MM-DD"
+                className="full-width"
+              />
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} sm={3}>
+              <Button
+                htmlType="submit"
+                className="filter-btn btn-full-width"
+                type="primary"
+              >
+                <Icon type="search"></Icon>Search
+              </Button>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} sm={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this._resetFilters}
+              >
+                <Icon type="reload" />
+                Reset
+              </Button>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} sm={3}>
+              {allRequests && allRequests.length > 0 ? (
+                <CSVLink
+                  filename={"withdraw_requests.csv"}
+                  data={allRequests}
+                  headers={requestHeaders}
+                >
+                  <Button
+                    type="primary"
+                    className="filter-btn btn-full-width"
+                    style={{ margin: "0px" }}
+                  >
+                    <Icon type="export" />
+                    Export
+                  </Button>
+                </CSVLink>
+              ) : (
+                ""
+              )}
+            </ColWithMarginBottom>
+          </Row>
+        </Form>
+        {loader && <FaldaxLoader />}
+
+        <TableWrapper
+          {...this.state}
+          rowKey="id"
+          columns={withdrawReqTableInfos[0].columns}
+          pagination={false}
+          dataSource={allRequests}
+          className="isoCustomizedTable table-tb-margin float-clear"
+          onChange={this._handleWithdrawTableChange}
+          bordered
+          scroll={TABLE_SCROLL_HEIGHT}
+          expandedRowRender={record => (
+            <p style={{ margin: 0 }}>
+              {
+                <div>
+                  <b>Name</b> - {record.first_name + " " + record.last_name}{" "}
+                  <br />
+                  <b>Email ID</b> - {record.email} <br /> <b>Fees</b> -{" "}
+                  {record.fees}% <br /> <b>Asset</b> - {record.coin_name}{" "}
+                  {record.reason ? (
+                    <React.Fragment>
+                      <br />
+                      <b> Reason</b> - <span>{record.reason}</span>{" "}
+                    </React.Fragment>
+                  ) : (
+                    ""
+                  )}
+                  <br />
+                  <b>Transaction ID</b> -{" "}
+                  {record.transaction_id ? record.transaction_id : "null"}
+                  <br />
+                  <b>Actual Amount</b> -{" "}
+                  {record.actual_amount
+                    ? `${record.actual_amount}${" "}${record.coin_code}`
+                    : "null"}
+                  <br />
+                  <b>Faldax Fee</b> -{" "}
+                  {record.faldax_fee
+                    ? `${record.faldax_fee}${" "}${record.coin_code}`
+                    : "null"}
+                  <br />
+                  <b>Network Fee</b> -{" "}
+                  {record.network_fee
+                    ? `${record.network_fee}${" "}${record.coin_code}`
+                    : "null"}
+                </div>
+              }
+            </p>
+          )}
+        />
+        {allReqCount > 0 ? (
+          <Pagination
+            className="ant-users-pagination"
+            onChange={this._handleReqPagination.bind(this)}
+            pageSize={limit}
+            current={page}
+            total={parseInt(allReqCount)}
+            showSizeChanger
+            onShowSizeChange={this._changePaginationSize}
+            pageSizeOptions={pageSizeOptions}
+          />
+        ) : (
+          ""
+        )}
+        <DeclineActionModal
+          showDeclineModal={showDeclineModal}
+          withdrawReqDetails={withdrawReqDetails}
+          closeDeclineModal={this._closeDeclineModal}
+          getAllWithdrawReqs={this._getAllWithdrawReqs}
+        />
+      </TableDemoStyle>
     );
   }
 }
