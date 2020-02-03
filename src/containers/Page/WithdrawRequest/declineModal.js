@@ -107,12 +107,12 @@ class DeclineRequestModal extends Component {
 
         return (
             <Modal
-                title="Decline Withdraw Request"
+                title="DisApprove Withdrawal Request"
                 onCancel={this._closeDeclineForm}
                 visible={showDeclineModal}
                 footer={[
                     <Button onClick={this._closeDeclineForm}>Cancel</Button>,
-                    <Button onClick={this._declineRequest}>Decline</Button>,
+                    <Button onClick={this._declineRequest}>DisApprove</Button>,
                 ]}
             >
                 {loader && <FaldaxLoader />}
