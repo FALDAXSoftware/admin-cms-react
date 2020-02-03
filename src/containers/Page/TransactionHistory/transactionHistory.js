@@ -458,12 +458,12 @@ class Transactions extends Component {
                         {record.transaction_from}
                         <br /> 
                        {record.transaction_from=="Warmwallet to Send" && <><span>
-                          <b>Sender User Balance: </b>
+                          <b>User (Sender) Balance Before Transaction: </b>
                         </span>
                         {record.sender_user_balance_before}
                        <br /></> }
                        {record.transaction_from=="Receive to Warmwallet" && <><span>
-                          <b>Receiver User Balance: </b>
+                          <b>User (Receiver) Balance Before Transaction: </b>
                         </span>
                         {record.receiver_user_balance_before}
                        <br /></> }

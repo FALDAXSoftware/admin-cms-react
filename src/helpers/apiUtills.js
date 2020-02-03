@@ -3476,6 +3476,16 @@ const ApiUtils = {
       },
       body: JSON.stringify(form)
     });
+  },
+  getResidualTransactions: function(token,page=1,limit=50) {
+    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+    });
   }
 };
 export default ApiUtils;

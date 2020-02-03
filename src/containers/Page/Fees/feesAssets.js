@@ -74,7 +74,7 @@ class EditableTable extends React.Component {
         editable: false,
       },
       {
-        title: 'Fees',
+        title: 'Value',
         dataIndex: 'value',
         width: '20%',
         editable: true,

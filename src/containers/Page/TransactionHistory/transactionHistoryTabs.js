@@ -8,6 +8,7 @@ import Metabase from './metabase';
 import { isAllowed } from '../../../helpers/accessControl';
 import Transaction from "./transactionHistory"
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
+import { ResidualTransactionHistory } from './residualTransactionHistory';
 
 
 class KycTabs extends Component {
@@ -23,6 +24,9 @@ class KycTabs extends Component {
               </TabPane>
             
             }
+              {isAllowed("get_residual_lists") && <TabPane tab="Residual Transaction" key="6">
+                <ResidualTransactionHistory />
+              </TabPane>}
                 {isAllowed("metabase_transaction_history_report") && <TabPane tab="Report" key="5">
                 <Metabase />
               </TabPane>}

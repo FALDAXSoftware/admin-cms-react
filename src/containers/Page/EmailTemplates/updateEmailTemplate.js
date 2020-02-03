@@ -5,9 +5,10 @@ import { Input, notification, Button, Form, Row, Col } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { Link } from 'react-router-dom';
 import CKEditor from "ckeditor4-react";
-import { isAllowed } from '../../../helpers/accessControl';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
+import TableDemoStyle from '../../Tables/antTables/demo.style';
+import LayoutWrapper from '../../../components/utility/layoutWrapper';
 
 const { logout } = authAction;
 
@@ -147,27 +148,28 @@ class UpdateEmailTemplate extends Component {
         }
 
         return (
-            <div className="isoLayoutContent">
-                <div style={{ "display": "inline-block", "width": "100%" }}>
-                    <Link to="/dashboard/email-templates">
-                        <i style={{ marginRight: '15px', marginBottom: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <a onClick={() => { this.props.history.push('/dashboard/email-templates') }}>Back</a>
-                    </Link>
-                </div>
-                <Form onSubmit={this._updateTemplate}>
-                    <Row style={{ "marginBottom": "15px" }}>
+            <>
+            <LayoutWrapper className="full-width">
+            <BreadcrumbComponent {...this.props} ></BreadcrumbComponent>
+                <div className="email-container full-width">
+
+                <Form onSubmit={this._updateTemplate} className="full-width">
+                    <Row gutter={[16,16]}>
                         <Col>
                             <strong>Template Name:</strong><br />
                             <Input placeholder="Template Name" value={fields["name"]} disabled />
                         </Col>
                     </Row>
 
-                    <div style={{ "marginBottom": "15px" }}>
+                    <Row gutter={[16,16]}>
+                        <Col>
                         <strong>Template Note:</strong>
                         <p dangerouslySetInnerHTML={{ __html: fields["note"] }}></p>
-                    </div>
+                        </Col>
+                    </Row>
 
-                    <div style={{ "marginBottom": "15px" }}>
+                    <Row gutter={[16,16]}>
+                        <Col>
                         <strong>Email Content:</strong>
                         <CKEditor
                             data={editorContent}
@@ -197,11 +199,12 @@ class UpdateEmailTemplate extends Component {
                                     { name: "about" }
                                 ]
                             }}
-                        />
+                            />
                         {showError && <span style={{ "color": "red" }}>
                             {'The content field is required.'}
                         </span>}
-                    </div>
+                        </Col>
+                    </Row>
                     {!isReadOnly &&
                         <Row>
                             <Col>
@@ -211,7 +214,9 @@ class UpdateEmailTemplate extends Component {
                     }
                     {loader && <FaldaxLoader />}
                 </Form>
-            </div>
+                </div>
+            </LayoutWrapper>
+            </>
         );
     }
 }
