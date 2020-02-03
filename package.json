@@ -85,5 +85,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "",
+  "main": "config-overrides.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.orderhive.plus/hardiksukhadiya/faldax-CMS.git"
+  },
+  "author": "",
+  "license": "ISC"
 }
