@@ -228,7 +228,7 @@ class Transactions extends Component {
   _copyNotification = () => {
     this.setState({
       errMsg: true,
-      errType: "info",
+      errType: "Info",
       errMessage: "Copied to Clipboard!!"
     });
   };
@@ -365,7 +365,7 @@ class Transactions extends Component {
                           <b>Transaction Hash: </b>
                         </span>
                         <CopyToClipboard
-                          style={{ cursor: "pointer" }}
+                          className="copy-text-container"
                           text={record.transaction_id}
                           onCopy={this._copyNotification}
                         >

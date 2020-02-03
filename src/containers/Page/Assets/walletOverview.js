@@ -101,7 +101,7 @@ class WalletOverview extends Component {
     _copyNotification = () => {
         this.setState({
           errMsg: true,
-          errType: "info",
+          errType: "Info",
           errMessage: "Copied to Clipboard!!"
         });
       };
@@ -153,7 +153,7 @@ class WalletOverview extends Component {
                         </Row>
                         :
                         walletUserData && walletUserData.flag == 1 ?
-                            <div className="kyc-div">
+                            <div className="kyc-div text-center">
                                 <div>
                                     <div>
                                         <p>Please wait for some time. As soon as your wallet is created , we'll let you know.</p>
@@ -161,7 +161,7 @@ class WalletOverview extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="kyc-div">
+                            <div className="kyc-div text-center">
                                 <p>Your wallet is not created yet. Please click on the button below to create your wallet for {walletUserData.coin_name}.</p>
                                 <Button type='primary' className="table-tb-margin" disabled={!isAllowed('coin_create_wallet')} onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
                             </div>
