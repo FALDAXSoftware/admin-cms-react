@@ -74,8 +74,8 @@ class WithdrawRequest extends Component {
     coin_id,
     is_executed,
     created_at,
-    network_fee,
     faldax_fee,
+    network_fee,
     reason,
     actual_amount
   ) {
@@ -132,7 +132,6 @@ class WithdrawRequest extends Component {
 
   _updateWithdrawRequest = requestData => {
     const { token } = this.props;
-
     let formData = {
       status: requestData.status,
       id: requestData.value,
@@ -215,7 +214,7 @@ class WithdrawRequest extends Component {
       sortOrder
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({
             allRequests: res.data,
@@ -442,8 +441,8 @@ class WithdrawRequest extends Component {
                   </Button>
                 </CSVLink>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </ColWithMarginBottom>
           </Row>
         </Form>
@@ -473,8 +472,8 @@ class WithdrawRequest extends Component {
                       <b> Reason</b> - <span>{record.reason}</span>{" "}
                     </React.Fragment>
                   ) : (
-                    ""
-                  )}
+                      ""
+                    )}
                   <br />
                   <b>Transaction ID</b> -{" "}
                   {record.transaction_id ? record.transaction_id : "null"}
@@ -510,8 +509,8 @@ class WithdrawRequest extends Component {
             pageSizeOptions={pageSizeOptions}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         <DeclineActionModal
           showDeclineModal={showDeclineModal}
           withdrawReqDetails={withdrawReqDetails}
