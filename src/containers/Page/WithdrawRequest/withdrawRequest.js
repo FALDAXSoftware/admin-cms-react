@@ -21,11 +21,13 @@ import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
 import { ColWithMarginBottom } from "../common.style";
 import DeclineActionModal from "./declineModal";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   PAGE_SIZE_OPTIONS,
   PAGESIZE,
   TABLE_SCROLL_HEIGHT
 } from "../../../helpers/globals";
+import { PrecisionCell } from "../../../components/tables/helperCells";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -339,6 +341,9 @@ class WithdrawRequest extends Component {
   _closeDeclineModal = () => {
     this.setState({ showDeclineModal: false });
   };
+  showCopyMsg=()=>{
+    this.setState({err:true,errMessage:"Copied to Clipboard",errMsg:true,errType:"Info"})
+  }
 
   render() {
     const {
@@ -461,38 +466,36 @@ class WithdrawRequest extends Component {
           expandedRowRender={record => (
             <p style={{ margin: 0 }}>
               {
-                <div>
+                <>
                   <b>Name</b> - {record.first_name + " " + record.last_name}{" "}
                   <br />
                   <b>Email ID</b> - {record.email} <br /> <b>Fees</b> -{" "}
                   {record.fees}% <br /> <b>Asset</b> - {record.coin_name}{" "}
                   {record.reason ? (
-                    <React.Fragment>
-                      <br />
-                      <b> Reason</b> - <span>{record.reason}</span>{" "}
-                    </React.Fragment>
+                   <span className="long-text-wrapper">
+                      <b> Reason</b> - {record.reason}
+                    </span>
                   ) : (
-                      ""
+                      <br/>
                     )}
-                  <br />
                   <b>Transaction ID</b> -{" "}
-                  {record.transaction_id ? record.transaction_id : "null"}
+                  {record.transaction_id &&<CopyToClipboard text={record.transaction_id} onCopy={this.showCopyMsg}><span className="copy-text-container">{ record.transaction_id}</span></CopyToClipboard>}
                   <br />
                   <b>Actual Amount</b> -{" "}
                   {record.actual_amount
-                    ? `${record.actual_amount}${" "}${record.coin_code}`
-                    : "null"}
+                    ? `${PrecisionCell(record.actual_amount)}${" "}${record.coin_code}`
+                    : ""}
                   <br />
                   <b>Faldax Fee</b> -{" "}
                   {record.faldax_fee
-                    ? `${record.faldax_fee}${" "}${record.coin_code}`
-                    : "null"}
+                    ? `${PrecisionCell(record.faldax_fee)}${" "}${record.coin_code}`
+                    : ""}
                   <br />
                   <b>Network Fee</b> -{" "}
                   {record.network_fee
-                    ? `${record.network_fee}${" "}${record.coin_code}`
-                    : "null"}
-                </div>
+                    ? `${PrecisionCell(record.network_fee)}${" "}${record.coin_code}`
+                    : ""}
+                </>
               }
             </p>
           )}

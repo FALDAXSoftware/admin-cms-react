@@ -83,7 +83,7 @@ const ResidualTransactionHistory = props => {
   const _copyNotification = () => {
     setError({
       errMsg: true,
-      errType: "info",
+      errType: "Info",
       errMessage: "Copied to Clipboard!!"
     });
   };
@@ -129,7 +129,7 @@ const ResidualTransactionHistory = props => {
                   <b>Transaction Hash: </b>
                 </span>
                 <CopyToClipboard
-                  style={{ cursor: "pointer" }}
+                  className="copy-text-container"
                   text={record.transaction_id}
                   onCopy={_copyNotification}
                 >

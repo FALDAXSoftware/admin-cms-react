@@ -787,9 +787,11 @@ html[dir='rtl'] .dz-hidden-input {
   margin-left: 10px !important;
 }
 .copy-text-container{
-    padding: 5px;
-    border: 1.2px dashed #1790fe;
-    background: aliceblue;
+  padding: 2px;
+  border: 1.2px dotted #1790fe;
+  border-radius: 3%;
+  cursor: pointer;
+  background: #7fffd42e;
 }
 /* Disable print  */
 @media print {
@@ -815,4 +817,12 @@ html[dir='rtl'] .dz-hidden-input {
 }
 .email-container{
   padding:16px 8px;
+}
+
+.long-text-wrapper{
+  word-wrap: break-word;
+  width: 50%;
+  text-align: justify;
+  display:block;
+  white-space: normal;
 }
