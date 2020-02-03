@@ -26,7 +26,7 @@ class TwoFactorModal extends Component
       let {fields}=this.state;
      return (
       <>
-      <Modal visible={true} title={this.props.title} onOk={this.close}
+      <Modal visible={true} title={this.props.title} footer={null} onOk={this.close}
       onCancel={this.close}>
         <div>
           <span>Enter your 2FA code here:</span>

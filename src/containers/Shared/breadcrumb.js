@@ -15,7 +15,7 @@ const breadcrumbNameMap = {
     "/dashboard/roles":" Roles",
     "/dashboard/roles/access-grant/:id":"Permissions",
     "/dashboard/employee":" Employees",
-    "/dashboard/employee/:id":"Details",
+    "/dashboard/employee/:id":"Edit",
     "/dashboard/transaction-history":" Transaction History",
     "/dashboard/trade-history":" History",
     "/dashboard/withdraw-requests":" Withdrawal Request",
@@ -23,10 +23,10 @@ const breadcrumbNameMap = {
     "/dashboard/jobs/job-applications/:id":"Details",
     "/dashboard/kyc":" Customer ID Verification",
     "/dashboard/fees":" Fees",
-    "/dashboard/panic-button":" Penic Button",
+    "/dashboard/panic-button":" Panic Button",
     "/dashboard/news":" News",
     "/dashboard/new's-source":" News Sources",
-    "/dashboard/referral":" Affilite Program & Referral",
+    "/dashboard/referral":" Affiliate Program & Referrals",
     "/dashboard/referral/:id":"Details",
     "/dashboard/account-class":" Account Class Management",
     "/dashboard/email-templates":" Email-Templates",
@@ -37,14 +37,16 @@ const breadcrumbNameMap = {
     "/dashboard/campaign":" Campaign",
     "/dashboard/campaign/:id":"Details",
     "/dashboard/assets":" Assets",
-    "/dashboard/assets/edit-asset/:id":"Details",
+    "/dashboard/assets/edit-asset/:id":"Edit",
     "/dashboard/campaign/:campaignId":"Details",
     "/dashboard/campaign/:campaignId/offer-usage/:id":"Usage",
     "/dashboard/campaign/add-campaign":"Create Campaign",
     "/dashboard/campaign/update-campaign/:id":"Update Campaign",
     "/dashboard/users/edit-user/:id":"Edit User",
     "/dashboard/dashboard":"Dashboard",
-    "/dashboard/assets/wallet/:id":"Wallet"
+    "/dashboard/assets/wallet/:id":"Wallet",
+    "/dashboard/email-templates":"Email Templates",
+    "/dashboard/email-templates/edit-template/:id":"Edit"
   };
 
 

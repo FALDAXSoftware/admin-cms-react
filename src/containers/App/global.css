@@ -813,3 +813,6 @@ html[dir='rtl'] .dz-hidden-input {
 .lowercase{
   text-transform: lowercase;
 }
+.email-container{
+  padding:16px 8px;
+}

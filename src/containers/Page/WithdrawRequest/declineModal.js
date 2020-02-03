@@ -112,7 +112,7 @@ class DeclineRequestModal extends Component {
                 visible={showDeclineModal}
                 footer={[
                     <Button onClick={this._closeDeclineForm}>Cancel</Button>,
-                    <Button onClick={this._declineRequest}>Reject</Button>,
+                    <Button onClick={this._declineRequest}>Decline</Button>,
                 ]}
             >
                 {loader && <FaldaxLoader />}

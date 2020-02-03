@@ -7,7 +7,7 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell , TransactionIdHashCell} from '../../../../components/tables/helperCells';
@@ -27,7 +27,7 @@ const columns=[
         key:1,
         dataIndex:"created_at",
         sorter: true,
-        width:100,
+        width:150,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     // {
@@ -54,18 +54,18 @@ const columns=[
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
         key:4,
-        width:100,
+        width:250,
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.destination_address"/>,
         dataIndex:"destination_address",
         key:5,
-        width:100,
+        width:250,
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id"/>,
         key:6,
-        width:100,
+        width:300,
         render:data=>TransactionIdHashCell(data["coin_code"],data["transaction_id"])
        
     }
@@ -167,6 +167,8 @@ class WalletFaldaxDetailsComponent extends Component {
                             dataSource={walletValue}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            bordered
+                            scroll={TABLE_SCROLL_HEIGHT}
                         />
                         <Pagination
                             className="ant-users-pagination"

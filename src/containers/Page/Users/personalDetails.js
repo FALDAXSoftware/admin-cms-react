@@ -271,9 +271,9 @@ class PersonalDetails extends Component {
                   <DateOfBirth>
                     <i className="fas fa-trash"></i>
                     {userDetails.deleted_by == 1 ? (
-                      <span>Deleted By User</span>
+                      <span>Deactivated By User</span>
                     ) : (
-                      <span>Deleted By Admin</span>
+                      <span>Deactivated By Admin</span>
                     )}
                   </DateOfBirth>
                 </Col>
