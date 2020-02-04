@@ -120,7 +120,7 @@ class WalletFaldaxDashboard extends Component {
         let {walletValue}=self.state;
         let assets=[]
         walletValue.map((ele)=>{
-            assets.push({name:ele.coin,value:ele.coin_code})
+            assets.push({name:ele.coin,value:ele.coin_code,icon:ele.coin_icon})
             return ele;
         })
         self.props.history.push({pathname:`./wallet/faldax/${coin_code}`,state:{assets:JSON.stringify(assets)}})

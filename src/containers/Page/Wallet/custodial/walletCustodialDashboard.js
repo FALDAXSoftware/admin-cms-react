@@ -59,7 +59,7 @@ class WalletCustodialDashboard extends Component {
         let {data}=self.state;
         let assets=[]
         data.map((ele)=>{
-            assets.push({name:ele.coin,value:ele.coin_code})
+            assets.push({name:ele.coin,value:ele.coin_code,icon:ele.coin_icon})
             return ele;
         })
         self.props.history.push({pathname:`./wallet/custodial/${coin_code}`,state:{assets:JSON.stringify(assets)}})
