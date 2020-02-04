@@ -3477,8 +3477,8 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-  getResidualTransactions: function(token,page=1,limit=50) {
-    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}`, {
+  getResidualTransactions: function(token,page=1,limit=50,data="",startDate="",endDate="",txType="") {
+    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}${data?"&data="+data:""}${txType?"&t_type="+txType:""}${startDate?"&start_date="+startDate:""}${endDate?"&end_date="+endDate:""}`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
