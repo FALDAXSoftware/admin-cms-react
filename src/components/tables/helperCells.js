@@ -864,47 +864,10 @@ const approvePendingReq = (
   );
 };
 
-const transactionDetails = (
-  value,
-  email,
-  source_address,
-  destination_address,
-  amount,
-  transaction_type,
-  created_at,
-  transaction_id,
-  coin_id,
-  coin_code
-) => {
-  let url = "";
-  switch (coin_id) {
-    case "tbtc":
-      url = "https://blockstream.info/testnet/tx/" + created_at;
-      break;
-    case "txrp":
-      url = "https://test.bithomp.com/explorer/" + created_at;
-      break;
-    case "tltc":
-      url = "https://blockexplorer.one/litecoin/testnet/tx/" + created_at;
-      break;
-    case "tbch":
-      url = "https://explorer.bitcoin.com/tbch/tx/" + created_at;
-      break;
-    default:
-      url = "";
-  }
-  return url !== "" ? (
-    <a target="_blank" href={url}>
-      {created_at}
-    </a>
-  ) : (
-    <span>{created_at}</span>
-  );
-};
-
 const TransactionIdHashCell = (coin_id, transaction_id) => {
   let url = "";
   switch (coin_id) {
+    // Fot Test Net
     case "tbtc":
       url = "https://blockstream.info/testnet/tx/" + transaction_id;
       break;
@@ -917,6 +880,26 @@ const TransactionIdHashCell = (coin_id, transaction_id) => {
     case "tbch":
       url = "https://explorer.bitcoin.com/tbch/tx/" + transaction_id;
       break;
+    case "teth":
+      url = "https://kovan.etherscan.io/block/" + transaction_id;
+      break;
+
+    // For Main Net
+    case "btc":
+      url = "https://www.blockchain.com/btc/tx/" + transaction_id;
+      break;
+    case "xrp":
+      url = "https://bithomp.com/explorer/" + transaction_id;
+      break;
+    case "ltc":
+      url = "https://blockchair.com/litecoin/block/" + transaction_id;
+      break;
+    case "eth":
+      url = "https://www.blockchain.com/eth/block/" + transaction_id;
+      break;
+    case "bch":
+      url = "https://explorer.bitcoin.com/bch/tx/" + transaction_id;
+      break;
     default:
       url = "";
   }
@@ -928,64 +911,6 @@ const TransactionIdHashCell = (coin_id, transaction_id) => {
     <span></span>
   );
 };
-
-const transactionDetailsUser = (
-  value,
-  email,
-  source_address,
-  destination_address,
-  amount,
-  transaction_type,
-  created_at,
-  transaction_id,
-  coin_id
-) => {
-  let url = "";
-  if (transaction_id) {
-    switch (coin_id) {
-      case "tbtc":
-        url = "https://blockstream.info/testnet/tx/" + transaction_id;
-        return (
-          <a target="_blank" href={url}>
-            {transaction_id}
-          </a>
-        );
-      case "txrp":
-        url = "https://test.bithomp.com/explorer/" + transaction_id;
-        return (
-          <a target="_blank" href={url}>
-            {transaction_id}
-          </a>
-        );
-      case "tltc":
-        url = "https://blockexplorer.one/litecoin/testnet/tx/" + transaction_id;
-        return (
-          <a target="_blank" href={url}>
-            {transaction_id}
-          </a>
-        );
-      case "tbch":
-        url = "https://explorer.bitcoin.com/tbch/tx/" + transaction_id;
-        return (
-          <a target="_blank" href={url}>
-            {transaction_id}
-          </a>
-        );
-      default:
-        url = "";
-    }
-  } else {
-    return "";
-  }
-  // return url !== "" ? (
-  //   <a target="_blank" href={url}>
-  //     {created_at}
-  //   </a>
-  // ) : (
-  //     <span>{created_at}</span>
-  //   );
-};
-
 const DateCell = data => (
   <p>
     {data
