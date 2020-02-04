@@ -353,7 +353,7 @@ class UserTransactionHistory extends Component {
                                         </span>
                                         {record.sender_user_balance_before}
                                     <br /></> }
-                                    {record.transaction_from=="Receive to Warmwallet" && <><span>
+                                    {record.transaction_from=="Destination To Receive" && <><span>
                                         <b>User (Receiver) Balance Before Transaction: </b>
                                         </span>
                                         {record.receiver_user_balance_before}

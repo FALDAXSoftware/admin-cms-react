@@ -120,6 +120,10 @@ class WalletFaldaxDetailsComponent extends Component {
         });
     };
 
+    _copyNotification = () => {
+        this.openNotificationWithIcon("Info","Copied to Clipboard!!");
+      };
+
     getWalletData=async ()=>{
         try{
             await this.loader.show()
@@ -208,7 +212,7 @@ class WalletFaldaxDetailsComponent extends Component {
                                       <span>{record.transaction_id}</span>
                                     </CopyToClipboard>
                                     <br />
-                                    <span>
+                                    {/* <span>
                                       <b>Name: </b>
                                       </span>{" "}
                                       {record.first_name+" "+record.last_name}
@@ -217,7 +221,7 @@ class WalletFaldaxDetailsComponent extends Component {
                                       <b>Email: </b>
                                     </span>{" "}
                                     {record.email}
-                                    <br />
+                                    <br /> */}
                                     <span>
                                       <b>Source Address: </b>
                                     </span>{" "}
@@ -258,21 +262,21 @@ class WalletFaldaxDetailsComponent extends Component {
                                       <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
                                     </span>
                                     <br />
-                                    <span>
+                                    {/* <span>
                                       <b>Estimated Network Fees: </b>
                                     </span>{" "}
                                     {PrecisionCell(record.estimated_network_fees)}
-                                    <br />
-                                    <span>
-                                      <b>Actual Network Fees: </b>
+                                    <br /> */}
+                                   {record.transaction_type == "send" && <><span>
+                                      <b>Network Fees: </b>
                                     </span>{" "}
                                     {PrecisionCell(record.actual_network_fees)}
-                                    <br /> 
-                                    <span>
+                                    <br /></> }
+                                    {/* <span>
                                       <b>Residual Amount:</b>
                                     </span>{" "}
                                     {PrecisionCell(record.residual_amount)}
-                                    <br /> 
+                                    <br />  */}
                                     <span>
                                       <b>Transaction From: </b>
                                     </span>{" "}
