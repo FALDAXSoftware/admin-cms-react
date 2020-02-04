@@ -10,12 +10,24 @@ import FaldaxLoader from "../faldaxLoader";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { transactionTableInfos } from "../../Tables/antTables";
 import moment from "moment";
 import { PrecisionCell } from "../../../components/tables/helperCells";
-import authAction from '../../../redux/auth/actions'; 
-import { Icon, Pagination, notification } from "antd";
+import authAction from "../../../redux/auth/actions";
+import {
+  Icon,
+  Pagination,
+  notification,
+  Form,
+  Row,
+  Select,
+  Input,
+  DatePicker,
+  Button
+} from "antd";
 import { residualTransactionTableColumn } from "../../Tables/antTables/transactionConfig";
+import { ColWithMarginBottom } from "../common.style";
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 const { logout } = authAction;
 const ResidualTransactionHistory = props => {
   const token = useSelector(state => state.Auth.get("token"));
@@ -24,7 +36,16 @@ const ResidualTransactionHistory = props => {
     [page, setPage] = useState(1),
     [limit, setLimit] = useState(PAGESIZE),
     [data, setData] = useState([]),
-    [dataCount, setDataCount] = useState(0);
+    [searchTransaction, setSearchTransaction] = useState(""),
+    [dataCount, setDataCount] = useState(0),
+    [filterVal, setFilterVal] = useState(""),
+    [dateRange, setDateRange] = useState({
+      rangeDate: [],
+      startDate: "",
+      endDate: ""
+    }),
+    [isReset,setIsReset]=useState(false),
+    [isInitLoad,setInitLoad]=useState(false);
   const [error, setError] = useState({
     errType: "",
     errMessage: "",
@@ -34,9 +55,9 @@ const ResidualTransactionHistory = props => {
   const getAllResidualTransactionHistory = async () => {
     try {
       setIsLoading(true);
-      console.log(page);
+      setIsReset(false);
       let res = await (
-        await ApiUtils.getResidualTransactions(token, page, limit)
+        await ApiUtils.getResidualTransactions(token, page, limit,searchTransaction,dateRange.startDate,dateRange.endDate,filterVal)
       ).json();
       let { status, data } = res;
       if (status == 200) {
@@ -62,6 +83,46 @@ const ResidualTransactionHistory = props => {
       setIsLoading(false);
     }
   };
+  
+
+  const _copyNotification = () => {
+    setError({
+      showError: true,
+      errType: "Info",
+      errMessage: "Copied to Clipboard!!"
+    });
+  };
+
+  const _changeFilter = val => {
+    setFilterVal(val);
+  };
+
+  const _handleTransactionPagination = p => {
+    setPage(p);
+  };
+
+  const _changeSearch = (field, e) => {
+    setSearchTransaction(field.target.value);
+  };
+
+  const _changeDate = (date, dateString) => {
+    setDateRange({
+      rangeDate: date,
+      startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
+      endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+    });
+  };
+
+  useEffect(() => {
+    getAllResidualTransactionHistory();
+    setInitLoad(true);
+  }, []);
+
+  useEffect(() => {
+    if(isInitLoad && isReset)
+      getAllResidualTransactionHistory();
+  }, [isReset]);
+
   useEffect(() => {
     if (error.showError) {
       notification[error.errType.toLowerCase()]({
@@ -77,34 +138,93 @@ const ResidualTransactionHistory = props => {
   }, [error]);
 
   useEffect(() => {
-    getAllResidualTransactionHistory();
+    if(isInitLoad)
+     getAllResidualTransactionHistory();
   }, [limit, page]);
-
-  const _copyNotification = () => {
-    setError({
-      errMsg: true,
-      errType: "Info",
-      errMessage: "Copied to Clipboard!!"
-    });
-  };
-
-  const _handleTransactionPagination = p => {
-    setPage(p);
-  };
-
-  useEffect(() => {
-    getAllResidualTransactionHistory();
-  }, []);
-
+  
   const _changePaginationSize = (current, pageSize) => {
     setPage(current);
     setLimit(pageSize);
   };
 
+  const _searchTransaction = e => {
+    e.preventDefault();
+    getAllResidualTransactionHistory();
+  };
+
+  const _resetFilters = () => {
+    setFilterVal("");
+    setSearchTransaction("");
+    setDateRange({
+      startDate: "",
+      rangeDate: "",
+      endDate: ""
+    });
+    setPage(1);
+    setIsReset(true);
+  };
+
   return (
     <>
-      {isLoading && <FaldaxLoader />}
       <TableDemoStyle className="isoLayoutContent">
+        <Form onSubmit={_searchTransaction}>
+          <Row type="flex" justify="start">
+            <ColWithMarginBottom md={6}>
+              <Input
+                placeholder="Search transactions"
+                onChange={(field, e) => _changeSearch(field, e)}
+                value={searchTransaction}
+              />
+            </ColWithMarginBottom>
+            <ColWithMarginBottom md={3}>
+              <Select
+                getPopupContainer={trigger => trigger.parentNode}
+                placeholder="Select a type"
+                onChange={val => _changeFilter(val)}
+                value={filterVal}
+              >
+                <Option value={""}>All</Option>
+                <Option value={"send"}>Send</Option>
+                <Option value={"receive"}>Receive</Option>
+              </Select>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom md={6}>
+              <RangePicker
+                value={dateRange.rangeDate}
+                onChange={_changeDate}
+                format="YYYY-MM-DD"
+                className="full-width"
+              />
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} md={3}>
+              <Button
+                htmlType="submit"
+                className="filter-btn btn-full-width"
+                type="primary"
+              >
+                <Icon type="search" />
+                Search
+              </Button>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} md={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={_resetFilters}
+              >
+                <Icon type="reload" />
+                Reset
+              </Button>
+            </ColWithMarginBottom>
+            <ColWithMarginBottom xs={12} md={3}>
+              <Button className="filter-btn btn-full-width" type="primary">
+                <Icon type="export"></Icon>
+                Export
+              </Button>
+            </ColWithMarginBottom>
+          </Row>
+        </Form>
+        {isLoading && <FaldaxLoader />}
         <TableWrapper
           className="float-clear"
           rowKey="id"
@@ -135,7 +255,7 @@ const ResidualTransactionHistory = props => {
                 >
                   <span>{record.transaction_id}</span>
                 </CopyToClipboard>
-                <br/>
+                <br />
                 <span>
                   <b>Source Address: </b>
                 </span>{" "}
