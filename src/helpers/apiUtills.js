@@ -3359,7 +3359,8 @@ const ApiUtils = {
         searchData = "",
         start_date = null,
         end_date = null,
-        walletType = 1
+        walletType = 1,
+        transaction_type=""
       ) {
         return fetch(
           `${API_URL}${
@@ -3372,7 +3373,7 @@ const ApiUtils = {
             searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
             end_date ? "&end_date=" + end_date : ""
-          }`,
+          }${transaction_type?"&t_type="+transaction_type:""}`,
           {
             method: "GET",
             headers: this.headers

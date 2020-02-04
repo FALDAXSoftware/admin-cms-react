@@ -7,10 +7,12 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
-import { DateTimeCell , TransactionIdHashCell} from '../../../../components/tables/helperCells';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { DateTimeCell , TransactionIdHashCell, PrecisionCell} from '../../../../components/tables/helperCells';
+
 
 const {RangePicker}=DatePicker;
 const {Option}=Select;
@@ -81,7 +83,7 @@ const columns=[
 class WalletFaldaxDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
+        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,transaction_type:"",sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
     }
 
@@ -121,9 +123,9 @@ class WalletFaldaxDetailsComponent extends Component {
     getWalletData=async ()=>{
         try{
             await this.loader.show()
-            const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code}=this.state;
+            const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code,transaction_type}=this.state;
             let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,2)).json();
+            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,2,transaction_type)).json();
             let [{status,walletValue,err,message,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
                 this.setState({walletValue,count:tradeCount});
@@ -140,22 +142,29 @@ class WalletFaldaxDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList,transaction_type},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">
-                       <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
+                       <Form onSubmit={(e)=>{e.preventDefault();this.setState({page:1},()=>this.getWalletData())}}> 
                         <Row justify="start" type="flex">
-                            <Col className="table-column" xs={12} md={7}>
+                            <Col className="table-column" xs={12} md={6}>
                                 <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={7}>
+                            <Col className="table-column" xs={12} md={6}>
                                 <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={4}>
+                            <Col className="table-column" xs={12} md={3}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     <Option value="">All</Option>
-                                    {assetsList.map((ele)=><Option key={ele} value={ele.value}>{ele.name}</Option>)}
+                                    {assetsList.map((ele)=><Option key={ele.key} value={ele.value}><span><img className="small-icon-img" src={S3BucketImageURL+ele.icon}/>&nbsp;{ele.name}</span></Option>)}
+                                </Select>
+                            </Col>
+                            <Col className="table-column" xs={12} md={3}>
+                                <Select className="full-width" value={transaction_type} onChange={value => this.setState({transaction_type:value})}>
+                                    <Option value="">All</Option>
+                                    <Option value="send"><span className="error-danger"><Icon type="arrow-up"/>&nbsp;Send</span></Option>
+                                    <Option value="receive"><span className="color-green"><Icon type="arrow-down"/>&nbsp;Receive</span></Option>
                                 </Select>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
@@ -176,6 +185,112 @@ class WalletFaldaxDetailsComponent extends Component {
                             onChange={this.handleTableChange}
                             bordered
                             scroll={TABLE_SCROLL_HEIGHT}
+                            expandedRowRender={record => {
+                                return (
+                                  <div>
+                                    <span>
+                                      {" "}
+                                      <b>Created On: </b>
+                                    </span>{" "}
+                                    {moment
+                                      .utc(record.created_at)
+                                      .local()
+                                      .format("DD MMM, YYYY HH:mm:ss")}
+                                    <br />
+                                    <span>
+                                      <b>Transaction Hash: </b>
+                                    </span>
+                                    <CopyToClipboard
+                                      className="copy-text-container"
+                                      text={record.transaction_id}
+                                      onCopy={this._copyNotification}
+                                    >
+                                      <span>{record.transaction_id}</span>
+                                    </CopyToClipboard>
+                                    <br />
+                                    <span>
+                                      <b>Name: </b>
+                                      </span>{" "}
+                                      {record.first_name+" "+record.last_name}
+                                      <br />
+                                    <span>
+                                      <b>Email: </b>
+                                    </span>{" "}
+                                    {record.email}
+                                    <br />
+                                    <span>
+                                      <b>Source Address: </b>
+                                    </span>{" "}
+                                    {record.source_address}
+                                    <br />
+                                    <span>
+                                      <b>Destination Address: </b>
+                                    </span>{" "}
+                                    {record.destination_address}
+                                    <br />
+                                    <span>
+                                      <b>Transaction Amount: </b>
+                                    </span>{" "}
+                                    {PrecisionCell(record.amount)}
+                                    <br />
+                                    <span>
+                                      <b>Base Amount: </b>
+                                    </span>{" "}
+                                    {PrecisionCell(record.actual_amount)}
+                                    <br />
+                                    <span>
+                                      <b>Asset: </b>
+                                    </span>{" "}
+                                    {record.coin}
+                                    <br />
+                                    <span>
+                                      <b>Transaction Type: </b>
+                                    </span>
+                                    <span
+                                      style={{
+                                        color:
+                                          record.transaction_type == "send"
+                                            ? "red"
+                                            : "green"
+                                      }}
+                                    >
+                                      {" "}
+                                      <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
+                                    </span>
+                                    <br />
+                                    <span>
+                                      <b>Estimated Network Fees: </b>
+                                    </span>{" "}
+                                    {PrecisionCell(record.estimated_network_fees)}
+                                    <br />
+                                    <span>
+                                      <b>Actual Network Fees: </b>
+                                    </span>{" "}
+                                    {PrecisionCell(record.actual_network_fees)}
+                                    <br /> 
+                                    <span>
+                                      <b>Residual Amount:</b>
+                                    </span>{" "}
+                                    {PrecisionCell(record.residual_amount)}
+                                    <br /> 
+                                    <span>
+                                      <b>Transaction From: </b>
+                                    </span>{" "}
+                                    {record.transaction_from}
+                                    <br /> 
+                                   {record.transaction_from=="Warmwallet to Send" && <><span>
+                                      <b>User (Sender) Balance Before Transaction: </b>
+                                    </span>
+                                    {record.sender_user_balance_before}
+                                   <br /></> }
+                                   {record.transaction_from=="Receive to Warmwallet" && <><span>
+                                      <b>User (Receiver) Balance Before Transaction: </b>
+                                    </span>
+                                    {record.receiver_user_balance_before}
+                                   <br /></> }
+                                  </div>
+                                );
+                              }}
                         />
                         <Pagination
                             className="ant-users-pagination"

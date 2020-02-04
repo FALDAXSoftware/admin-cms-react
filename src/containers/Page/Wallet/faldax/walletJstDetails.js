@@ -7,7 +7,7 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
@@ -224,7 +224,7 @@ class WalletJstDetailsComponent extends Component {
                                 <Col className="table-column" xs={12} md={4}>
                                     <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                         <Option value="">All</Option>
-                                        {assetsList.map((ele)=><Option key={ele} value={ele.value}>{ele.name}</Option>)}
+                                        {assetsList.map((ele)=><Option key={ele.key} value={ele.value}><span><img className="small-icon-img" src={S3BucketImageURL+ele.icon}/>&nbsp;{ele.name}</span></Option>)}
                                     </Select>
                                 </Col>
                                 <Col className="table-column" xs={12} md={3}>
