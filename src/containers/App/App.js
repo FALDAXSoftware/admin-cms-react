@@ -15,6 +15,7 @@ import { AppLocale } from "../../dashApp";
 import themes from "../../settings/themes";
 import AppHolder from "./commonStyle";
 import "./global.css";
+import IdleTimerComponent from "../Shared/idleTimer";
 
 const { Content, Footer } = Layout;
 const { logout } = authAction;
@@ -28,6 +29,7 @@ export class App extends Component {
 
     return (
       <ConfigProvider locale={currentAppLocale.antd}>
+        <IdleTimerComponent/>
         <IntlProvider
           locale={currentAppLocale.locale}
           messages={currentAppLocale.messages}

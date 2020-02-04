@@ -8,6 +8,8 @@ import styled from 'styled-components';
 import FaldaxLoader from '../faldaxLoader';
 import { withRouter } from 'react-router';
 import { isAllowed } from '../../../helpers/accessControl';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { BUCKET_URL } from '../../../helpers/globals';
 
 const { logout } = authAction;
 
@@ -96,6 +98,13 @@ class WalletOverview extends Component {
                 });
             });
     }
+    _copyNotification = () => {
+        this.setState({
+          errMsg: true,
+          errType: "Info",
+          errMessage: "Copied to Clipboard!!"
+        });
+      };
 
     render() {
         const { errMsg, errType, loader, walletUserData } = this.state;
@@ -105,36 +114,46 @@ class WalletOverview extends Component {
         }
 
         return (
-            <ParentDiv>
-                <Divider>{walletUserData.coin} Wallet</Divider>
+            <>
+                <Divider><span className="wallet-head"><img className="icon-img" src={BUCKET_URL+walletUserData.coin_icon}></img>&nbsp;{walletUserData.coin}</span></Divider>
                 {
                     Object.keys(walletUserData).length > 0 ? (walletUserData.is_admin && walletUserData.flag == 0) ?
-                        <div style={{ background: '#ECECEC' }}>
-                            <Row gutter={16}>
-                                <Col span={8}>
-                                    <Card title="HOT Send Wallet Address" bordered={false}>
-                                        <span style={{ wordWrap: 'break-word' }}>
-                                            {Object.keys(walletUserData).length > 0 ? walletUserData.send_address : ""}
-                                        </span>
-                                    </Card>
-                                </Col>
-                                <Col span={8}>
-                                    <Card title="HOT Receive Wallet Address" bordered={false}>
-                                        <span style={{ wordWrap: 'break-word' }}>
-                                            {Object.keys(walletUserData).length > 0 ? walletUserData.receive_address : ""}
-                                        </span>
-                                    </Card>
-                                </Col>
-                                <Col span={8}>
-                                    <Card title="Balance" bordered={false}>
-                                        {walletUserData.balance}  {walletUserData.coin_code}
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </div>
+                        <Row className="text-center">
+                            <Col lg={8}>
+                                <Card title="HOT Send Wallet Address" bordered={false}>
+                                    <span style={{ wordWrap: 'break-word' }}>
+                                        {Object.keys(walletUserData).length > 0 ? 
+                                              <CopyToClipboard
+                                              className="wallet-address"
+                                              text={walletUserData.send_address}
+                                              onCopy={this._copyNotification}
+                                            >
+                                              <span>{walletUserData.send_address}</span>
+                                            </CopyToClipboard> : ""}
+                                    </span>
+                                </Card>
+                            </Col>
+                            <Col lg={8}>
+                                <Card title="HOT Receive Wallet Address" bordered={false}>
+                                    <span style={{ wordWrap: 'break-word' }}>
+                                        {Object.keys(walletUserData).length > 0 ? 
+                                              <CopyToClipboard
+                                              className="wallet-address"
+                                              text={walletUserData.send_address}
+                                              onCopy={this._copyNotification}
+                                            ><span>{walletUserData.receive_address}</span></CopyToClipboard> : ""}
+                                    </span>
+                                </Card>
+                            </Col>
+                            <Col lg={8}>
+                                <Card title="Balance" bordered={false}>
+                                    {walletUserData.balance}  {walletUserData.coin_code}
+                                </Card>
+                            </Col>
+                        </Row>
                         :
                         walletUserData && walletUserData.flag == 1 ?
-                            <div className="kyc-div">
+                            <div className="kyc-div text-center">
                                 <div>
                                     <div>
                                         <p>Please wait for some time. As soon as your wallet is created , we'll let you know.</p>
@@ -142,14 +161,14 @@ class WalletOverview extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="kyc-div">
+                            <div className="kyc-div text-center">
                                 <p>Your wallet is not created yet. Please click on the button below to create your wallet for {walletUserData.coin_name}.</p>
                                 <Button type='primary' className="table-tb-margin" disabled={!isAllowed('coin_create_wallet')} onClick={this._createAssetWallet}>Create {walletUserData.coin_name} Wallet</Button>
                             </div>
                         : ''
                 }
                 {loader && <FaldaxLoader />}
-            </ParentDiv>
+            </>
         );
     }
 }

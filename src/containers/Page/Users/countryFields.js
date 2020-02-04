@@ -151,7 +151,7 @@ export default class CountryFields extends Component {
             <CountryWrap>
                 <Row>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
-                        <Country>Country:</Country>
+                        <Country>Country*</Country>
                         <SelectS
                             showSearch
                             value={selectedCountry}
@@ -167,7 +167,7 @@ export default class CountryFields extends Component {
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <SelectWrap>
-                            <Country>State:</Country>
+                            <Country>State*</Country>
                             <SelectS
                                 showSearch
                                 value={selectedState}
@@ -183,7 +183,7 @@ export default class CountryFields extends Component {
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <SelectWrap>
-                            <Country>City:</Country>
+                            <Country>City*</Country>
                             <SelectS
                                 showSearch
                                 value={selectedCity}

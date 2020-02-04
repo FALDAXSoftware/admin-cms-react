@@ -5,8 +5,10 @@ import {
   TextCell,
   VolumeCell,
   ObjectCell,
-  DateTimeCell
+  DateTimeCell,
+  ToolTipsCell
 } from "../../../components/tables/helperCells";
+import { Icon } from "antd";
 
 const renderCell = (
   object,
@@ -101,10 +103,11 @@ const columns = [
   {
     title: <IntlMessages id="tradeTable.title.side" />,
     key: "side",
-    width: 100,
+    width: 75,
     sorter: true,
-   align:"left",
-    render: object => renderCell(object, "TextCell", "side")
+    align:"left",
+    dataIndex:"side",
+    render: (data)=><span className={data.toLowerCase()=="sell"?"field-error":"color-green"}><Icon type={data.toLowerCase()=="sell"?"arrow-up":"arrow-down"} />&nbsp;{data}</span>
   },
   {
     title: <IntlMessages id="tradeTable.title.email" />,
@@ -112,7 +115,8 @@ const columns = [
     width: 250,
    align:"left",
     sorter: true,
-    render: object => renderCell(object, "TextCell", "email")
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
   },
   {
     title: <IntlMessages id="tradeTable.title.order_id" />,
@@ -186,6 +190,14 @@ const columns = [
    align:"left",
     sorter: true,
     render: object => (<span>{parseFloat(object["difference_faldax_commission"]).toFixed(8) + " " + (object["symbol"].split("/")[1])}</span>)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.offer" />,
+    key: "apply_offer",
+    width: 100,
+    align:"left",
+    dataIndex:"offer_code",
+    render:(data)=><span className="color-green">{data}</span>
   },
   // {
   //   title: <IntlMessages id="tradeTable.title.quantity" />,

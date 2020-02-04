@@ -9,7 +9,8 @@ import {
   Form,
   Modal,
   Icon,
-  Col
+  Col,
+  DatePicker
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { tableinfos } from "../../Tables/antTables";
@@ -22,11 +23,12 @@ import authAction from "../../../redux/auth/actions";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import moment from "moment";
 
 const Option = Select.Option;
 const { logout } = authAction;
 var self;
-
+const { RangePicker } = DatePicker;
 class ActiveUsers extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +45,10 @@ class ActiveUsers extends Component {
       loader: false,
       allCountries: [],
       deleteUserId: "",
-      showDeleteUserModal: false
+      showDeleteUserModal: false,
+      startDate:"",
+      endDate:"",
+      rangeDate:"",
     };
     self = this;
     ActiveUsers.vi = ActiveUsers.view.bind(this);
@@ -84,6 +89,7 @@ class ActiveUsers extends Component {
   };
 
   _getAllUsers = () => {
+    
     const { token } = this.props;
     const {
       searchUser,
@@ -91,11 +97,11 @@ class ActiveUsers extends Component {
       page,
       sorterCol,
       sortOrder,
-      filterVal
+      filterVal,
+      startDate,
+      endDate
     } = this.state;
-    var _this = this;
-
-    _this.setState({ loader: true });
+    this.setState({ loader: true });
     ApiUtils.getAllUsers(
       page,
       limit,
@@ -103,26 +109,28 @@ class ActiveUsers extends Component {
       searchUser,
       sorterCol,
       sortOrder,
-      filterVal
+      filterVal,
+      startDate,
+      endDate
     )
       .then(response => response.json())
-      .then(function(res) {
+      .then((res)=>{
         if (res.status == 200) {
-          _this.setState({ allUsers: res.data, allUserCount: res.userCount });
+          this.setState({ allUsers: res.data, allUserCount: res.userCount });
         } else if (res.status == 403) {
-          _this.setState(
+          this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
             () => {
-              _this.props.logout();
+              this.props.logout();
             }
           );
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message });
+          this.setState({ errMsg: true, errMessage: res.message });
         }
-        _this.setState({ loader: false });
+        this.setState({ loader: false });
       })
       .catch(() => {
-        _this.setState({
+        this.setState({
           errMsg: true,
           errMessage: "Something went wrong!!",
           errType: "error",
@@ -220,7 +228,10 @@ class ActiveUsers extends Component {
         searchUser: "",
         page: 1,
         sorterCol: "",
-        sortOrder: ""
+        sortOrder: "",
+        startDate:"",
+        endDate:"",
+        rangeDate:[]
       },
       () => {
         this._getAllUsers();
@@ -234,6 +245,14 @@ class ActiveUsers extends Component {
 
   _closeDeleteUserModal = () => {
     this.setState({ showDeleteUserModal: false });
+  };
+
+  _changeDate = (date, dateString) => {
+    this.setState({
+      rangeDate: date,
+      startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
+      endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+    });
   };
 
   _changePaginationSize = (current, pageSize) => {
@@ -254,7 +273,8 @@ class ActiveUsers extends Component {
       filterVal,
       allCountries,
       showDeleteUserModal,
-      limit
+      limit,
+      rangeDate
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -283,16 +303,7 @@ class ActiveUsers extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
 
-    const iframe = `<iframe
-        src="http://reports.faldax.com/public/question/c01b328a-d107-49e5-a01b-a6b3e2d7d2b5"
-        frameborder="0"
-        width="800"
-        height="600"
-        allowtransparency
-    ></iframe>`;
-    {
-      /* <div dangerouslySetInnerHTML={{ __html: iframe }} /> */
-    }
+
 
     return (
       // <LayoutContentWrapper>
@@ -301,14 +312,14 @@ class ActiveUsers extends Component {
             <div>
               <Form onSubmit={this._searchUser} className="cty-search">
                 <Row className="table-filter-row" type="flex" justify="start">
-                  <Col lg={7} xs={24}>
+                  <Col lg={5} xs={24}>
                     <Input
                       placeholder="Search users"
                       onChange={this._changeSearch.bind(this)}
                       value={searchUser}
                     />
                   </Col>
-                  <Col lg={8} xs={24}>
+                  <Col lg={5} xs={24}>
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a country"
@@ -326,6 +337,16 @@ class ActiveUsers extends Component {
                         })}
                     </Select>
                   </Col>
+                  <Col lg={5} xs={24}>
+                  <RangePicker
+                    value={rangeDate}
+                    disabledTime={this.disabledRangeTime}
+                    onChange={this._changeDate}
+                    format="YYYY-MM-DD"
+                    allowClear={false}
+                    className='full-width'
+                  />
+                </Col>
                   <Col xs={24} lg={3}>
                     <Button
                       htmlType="submit"

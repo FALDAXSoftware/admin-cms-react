@@ -4,17 +4,26 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import {  withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Tooltip, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
-
+import { DateTimeCell , TransactionIdHashCell} from '../../../../components/tables/helperCells';
+import { isAllowed } from '../../../../helpers/accessControl';
+var self;
 const {RangePicker}=DatePicker;
 const {Option}=Select;
 const columns=[
+    {
+        title:"",
+        key:"actions",
+        align:"left",
+        ellipsis: true,
+        width:45,
+        render:(data)=><>{isAllowed("get_all_transactions") &&<Tooltip title="View"><Icon type="info-circle" onClick={()=>self.viewTransactionHistory(data["transaction_id"])}></Icon></Tooltip>}</>
+    },
     {
         title:<IntlMessages id="walletDetailsTable.title.coin_code"/>,
         key:55,
@@ -34,15 +43,15 @@ const columns=[
         width:150,
         render:data=><span>{DateTimeCell(data)}</span>
     },
-    {
-        title:<IntlMessages id="walletDetailsTable.title.amount"/>,
-        key:"amount",
-        // sorter: true,
-        align:"left",
-        ellipsis: true,
-        width:150,
-        render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
-    },
+    // {
+    //     title:<IntlMessages id="walletDetailsTable.title.amount"/>,
+    //     key:"amount",
+    //     // sorter: true,
+    //     align:"left",
+    //     ellipsis: true,
+    //     width:150,
+    //     render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
+    // },
     {
         title:<IntlMessages id="walletDetailsTable.title.faldax_fee"/>,
         key:"faldax_fee",
@@ -52,6 +61,15 @@ const columns=[
         width:150,
         render:data=><span>{data["faldax_fee"]?(parseFloat(data["faldax_fee"]).toFixed(8)+" "+data["coin"]):"-"}</span>
     },
+    // {
+    //     title:<IntlMessages id="walletDetailsTable.title.residual_amount"/>,
+    //     key:6,
+    //     width:150,
+    //     align:"left",
+    //     ellipsis: true,
+    //     dataIndex:"residual_amount",
+    //     render:data=><span>{data?data:"-"}</span>
+    // },
     {
         title:<IntlMessages id="walletDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
@@ -74,9 +92,10 @@ const columns=[
         width:500,
         align:"left",
         ellipsis: true,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
+        render:data=>TransactionIdHashCell(data["coin_code"],data["transaction_id"],)
        
-    }
+    },
+    
 ]
 
 class WalletDetailsComponent extends Component {
@@ -84,6 +103,11 @@ class WalletDetailsComponent extends Component {
         super(props)
         this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
+        self=this;
+    }
+
+    viewTransactionHistory=(transaction_hash)=>{
+        this.props.history.push({pathname:'/dashboard/transaction-history',state:{"transaction_hash":transaction_hash}})
     }
 
     componentDidMount(){

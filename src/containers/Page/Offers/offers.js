@@ -14,6 +14,8 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpe
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
 import moment from "moment";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import Metabase from "./metabase"
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -167,27 +169,6 @@ class Offers extends Component {
     });
   };
 
-  async getMetaBaseUrl() {
-    try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getOffersRequest()).json();
-      if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
-      } else if (response.statue == 400 || response.status == 403) {
-
-      }
-    } catch (error) {
-
-    } finally {
-      this.setState({ loader: false })
-    }
-  }
-
-  onChangeTabs = (key) => {
-    if (key == "metabase" && this.state.metabaseUrl == "") {
-      this.getMetaBaseUrl();
-    }
-  }
 
   handleTableChange = (pagination, filters, sorter) => {
     this.setState(
@@ -222,7 +203,8 @@ class Offers extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
+        <BreadcrumbComponent {...this.props} />
         <Tabs
           className="isoTableDisplayTab full-width"
           onChange={this.onChangeTabs}
@@ -307,17 +289,7 @@ class Offers extends Component {
           ))}
           {isAllowed("metabase_offers_report") && (
             <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl && (
-                    <iframe
-                      className="metabase-iframe"
-                      src={metabaseUrl}
-                      frameBorder="0"
-                      width="100%"
-                      allowtransparency={"true"}
-                    ></iframe>
-                )}
-              </TableDemoStyle>
+                <Metabase/>
             </TabPane>
           )}
         </Tabs>

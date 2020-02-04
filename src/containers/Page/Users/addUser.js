@@ -16,9 +16,10 @@ import SimpleReactValidator from "simple-react-validator";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import CountryFields from "./countryFields";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import PasswordGenerator from "./passwordGenerator";
+// import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -172,7 +173,7 @@ class AddUser extends Component {
       let formData = {
         first_name: fields["first_name"],
         last_name: fields["last_name"],
-        middle_name: fields["middle_name"],
+        // middle_name: fields["middle_name"],
         email: fields["email"],
         street_address: fields["street_address"],
         street_address_2: fields["street_address_2"],
@@ -186,7 +187,7 @@ class AddUser extends Component {
         country_id: countryID,
         state_id:stateID,
         generate_wallet_coins: checkedList,
-        kyc_done: isKYC,
+        // kyc_done: isKYC,
         gender: selectedGender,
         password,
         dob:dob.format("DD-MM-YYYY")
@@ -335,20 +336,8 @@ class AddUser extends Component {
     return (
       <div className="isoLayoutContent">
         <div style={{ display: "inline-block", width: "100%" }}>
-          <Link to="/dashboard/users">
-            <i
-              style={{ marginRight: "10px", marginBottom: "10px" }}
-              className="fa fa-arrow-left"
-              aria-hidden="true"
-            ></i>
-            <a
-              onClick={() => {
-                this.props.history.push("/dashboard/users");
-              }}
-            >
-              Back
-            </a>
-          </Link>
+            {/* <BackButton {...this.props}/> */}
+            <BreadcrumbComponent {...this.props}/>
         </div>
         <div>
           <h2>Add User</h2>
@@ -357,7 +346,7 @@ class AddUser extends Component {
         <Form onSubmit={this._addUser}>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>First Name:</span>
+              <span>First Name*</span>
               <Input
                 placeholder="First Name"
                 onChange={this._handleChange.bind(this, "first_name")}
@@ -373,7 +362,7 @@ class AddUser extends Component {
               </span>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Middle Name:</span>
               <Input
@@ -382,10 +371,10 @@ class AddUser extends Component {
                 value={fields["middle_name"]}
               />
             </Col>
-          </Row>
+          </Row> */}
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Last Name:</span>
+              <span>Last Name*</span>
               <Input
                 placeholder="Last Name"
                 onChange={this._handleChange.bind(this, "last_name")}
@@ -403,7 +392,7 @@ class AddUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Email:</span>
+              <span>Email Address*</span>
               <Input
                 placeholder="Email"
                 onChange={this._handleChange.bind(this, "email")}
@@ -421,7 +410,7 @@ class AddUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
-              <span>Date of Birth:</span>
+              <span>Date of Birth*</span>
             </Col>
             <Col>
               <DatePicker
@@ -441,7 +430,7 @@ class AddUser extends Component {
           </Row>
           <Row>
             <Col sm={4}>
-              <span>Gender:</span>
+              <span>Gender*</span>
             </Col>
             <Col>
               <Select
@@ -465,7 +454,7 @@ class AddUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Street Address 1:</span>
+              <span>Street Address Line 1*</span>
               <Input
                 placeholder="Street Address 1"
                 onChange={this._handleChange.bind(this, "street_address")}
@@ -483,7 +472,7 @@ class AddUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Street Address 2:</span>
+              <span>Street Address Line 2</span>
               <Input
                 placeholder="Street Address 2"
                 onChange={this._handleChange.bind(this, "street_address_2")}
@@ -542,7 +531,7 @@ class AddUser extends Component {
               </div>
           <Row style={{ marginBottom: "15px", paddingTop: "15px" }}>
             <Col>
-              <span>Postal Code:</span>
+              <span>Postal Code*</span>
               <Input
                 placeholder="Postal Code"
                 onChange={this._handleChange.bind(this, "postal_code")}
@@ -560,7 +549,7 @@ class AddUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
-              <span>Account Tier:</span>
+              <span>Account Tier*</span>
             </Col>
             <Col>
               <Select
@@ -584,7 +573,7 @@ class AddUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
-              <span>Account Class:</span>
+              <span>Account Class*</span>
             </Col>
             <Col>
               <Select
@@ -609,16 +598,16 @@ class AddUser extends Component {
               )}
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <Checkbox checked={isKYC} onChange={this._isKYCCompleted} />{" "}
               <span>Do you want to accept Customer ID ?</span>
               <br />
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col>
-              <span>Select Assets to generate wallet address:</span>
+              <span>Select Assets to generate wallet address</span>
               <br />
               <Checkbox 
               className="mg-top-1"

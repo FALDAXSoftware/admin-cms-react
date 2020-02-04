@@ -5,6 +5,8 @@ import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import { isAllowed } from '../../../helpers/accessControl';
+import createNotification from '../../../components/notification';
+import { messages } from '../../../helpers/messages';
 
 const { logout } = authAction;
 const EditableContext = React.createContext();
@@ -151,10 +153,30 @@ class EditableUserLimitTable extends React.Component {
         this.setState({ editingKey: '' });
     };
 
+    validateMinCryptoLimit=(rowData,key)=>{
+        let {userAllLimits}=this.state;
+        let data=userAllLimits.find(ele=>ele.key==key)
+        if(rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            return false;
+        }if(rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'error' });
+            return false;
+        } if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            return false;
+        }
+        return true;
+    }
+
     save = (form, key) => {
         const { token, user_id } = this.props;
         let _this = this;
         form.validateFields((error, row) => {
+            let isValid=this.validateMinCryptoLimit(row,key);
+            if(!isValid){
+                return false;
+            }
             // console.log('error', error, row)
             if (error) {
                 return;

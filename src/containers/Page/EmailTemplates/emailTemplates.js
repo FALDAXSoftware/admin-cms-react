@@ -9,8 +9,9 @@ import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
 import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -98,7 +99,8 @@ class EmailTemplates extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
+        <BreadcrumbComponent {...this.props} ></BreadcrumbComponent>
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={templateTableinfos[0].title} key={templateTableinfos[0].value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -110,7 +112,7 @@ class EmailTemplates extends Component {
                     pagination={false}
                     dataSource={allTemplates}
                     className="isoCustomizedTable"
-                    scroll={TABLE_SCROLL_HEIGHT}
+                    // scroll={TABLE_SCROLL_HEIGHT}
                     bordered
                   />
                 </div>

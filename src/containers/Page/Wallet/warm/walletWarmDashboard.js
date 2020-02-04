@@ -32,7 +32,7 @@ const columns=[
         key:1,
         dataIndex:"balance",
         width:100,
-        render:data=><span>{(parseFloat(data)* 0.000000001).toFixed(8)}</span>
+        render:data=><span>{parseFloat(data).toFixed(8)}</span>
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.address"/>,

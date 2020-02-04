@@ -180,7 +180,6 @@ class SimplexHistory extends Component {
         }
 
         return (
-            <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                                 <Form onSubmit={this._searchTrade}>
                                     <Row type="flex" justify="start" className="table-filter-row">
@@ -270,7 +269,6 @@ class SimplexHistory extends Component {
                         
                     
                 </TableDemoStyle>
-            </LayoutWrapper>
         );
     }
 }

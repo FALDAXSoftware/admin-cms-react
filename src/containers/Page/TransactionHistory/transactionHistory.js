@@ -25,12 +25,10 @@ import authAction from "../../../redux/auth/actions";
 import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
-import styled from "styled-components";
-import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
+import { PrecisionCell } from "../../../components/tables/helperCells";
+import {withRouter} from "react-router-dom";
 
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
@@ -57,7 +55,11 @@ class Transactions extends Component {
   }
 
   componentDidMount = () => {
-    this._getAllTransactions();
+    if(this.props.location.state){
+      this.setState({searchTransaction:this.props.location.state.transaction_hash},()=> this._getAllTransactions())
+    }else{
+      this._getAllTransactions();
+    }
   };
 
   _getAllTransactions = () => {
@@ -226,7 +228,7 @@ class Transactions extends Component {
   _copyNotification = () => {
     this.setState({
       errMsg: true,
-      errType: "info",
+      errType: "Info",
       errMessage: "Copied to Clipboard!!"
     });
   };
@@ -255,7 +257,7 @@ class Transactions extends Component {
       { label: "Amount", key: "amount" },
       { label: "Assets", key: "coin" },
       { label: "Transaction Type", key: "transaction_type" },
-      { label: "Transaction Fees(%)", key: "transaction_fees" }
+      // { label: "Transaction Fees(%)", key: "transaction_fees" }
     ];
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -363,13 +365,18 @@ class Transactions extends Component {
                           <b>Transaction Hash: </b>
                         </span>
                         <CopyToClipboard
-                          style={{ cursor: "pointer" }}
+                          className="copy-text-container"
                           text={record.transaction_id}
                           onCopy={this._copyNotification}
                         >
                           <span>{record.transaction_id}</span>
                         </CopyToClipboard>
                         <br />
+                        <span>
+                          <b>Name: </b>
+                          </span>{" "}
+                          {record.first_name+" "+record.last_name}
+                          <br />
                         <span>
                           <b>Email: </b>
                         </span>{" "}
@@ -386,9 +393,14 @@ class Transactions extends Component {
                         {record.destination_address}
                         <br />
                         <span>
-                          <b>Amount: </b>
+                          <b>Transaction Amount: </b>
                         </span>{" "}
-                        {record.amount}
+                        {PrecisionCell(record.amount)}
+                        <br />
+                        <span>
+                          <b>Base Amount: </b>
+                        </span>{" "}
+                        {PrecisionCell(record.actual_amount)}
                         <br />
                         <span>
                           <b>Asset: </b>
@@ -407,14 +419,54 @@ class Transactions extends Component {
                           }}
                         >
                           {" "}
-                          {record.transaction_type}
+                          <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
                         </span>
                         <br />
-                        <span>
+                        {/* <span>
                           <b>Transaction Fees: </b>
                         </span>{" "}
                         {record.transaction_fees}
+                        <br /> */}
+                       {record.transaction_type=="send" && <><span>
+                          <b>FALDAX Fees: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
+                        <br /></>}
+                        {/* <span>
+                          <b>Network Fees: </b>
+                        </span>{" "}
+                        {record.transaction_type=="send"?PrecisionCell(record.network_fees):'-'}
+                        <br /> */}
+                        <span>
+                          <b>Estimated Network Fees: </b>
+                        </span>{" "}
+                        {PrecisionCell(record.estimated_network_fees)}
                         <br />
+                        <span>
+                          <b>Actual Network Fees: </b>
+                        </span>{" "}
+                        {PrecisionCell(record.actual_network_fees)}
+                        <br /> 
+                        <span>
+                          <b>Residual Amount:</b>
+                        </span>{" "}
+                        {PrecisionCell(record.residual_amount)}
+                        <br /> 
+                        <span>
+                          <b>Transaction From: </b>
+                        </span>{" "}
+                        {record.transaction_from}
+                        <br /> 
+                       {record.transaction_from=="Warmwallet to Send" && <><span>
+                          <b>User (Sender) Balance Before Transaction: </b>
+                        </span>
+                        {record.sender_user_balance_before}
+                       <br /></> }
+                       {record.transaction_from=="Receive to Warmwallet" && <><span>
+                          <b>User (Receiver) Balance Before Transaction: </b>
+                        </span>
+                        {record.receiver_user_balance_before}
+                       <br /></> }
                       </div>
                     );
                   }}
@@ -439,10 +491,10 @@ class Transactions extends Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     token: state.Auth.get("token")
   }),
   { logout }
-)(Transactions);
+)(Transactions));
 

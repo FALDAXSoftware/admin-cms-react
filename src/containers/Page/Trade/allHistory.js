@@ -7,6 +7,7 @@ import TradeHistory from './tradeHistory';
 import SimplexHistory from './simplexHistory';
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from '../../Shared/backBttton.js';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb.js';
 
 const TabPane = Tabs.TabPane;
 
@@ -20,7 +21,8 @@ class AllHistory extends Component {
     render() {
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
+                <BreadcrumbComponent {...this.props}/>
                 <Tabs className="isoTableDisplayTab full-width">
                     <TabPane tab="Crypto Only" key="1"><TradeHistory /></TabPane>
                     <TabPane tab="Credit Card" key="2"><SimplexHistory /></TabPane>

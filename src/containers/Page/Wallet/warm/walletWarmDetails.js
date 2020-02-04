@@ -4,12 +4,12 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import { withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
-import { DateTimeCell, TransactionHashCellUser } from '../../../../components/tables/helperCells';
+import { DateTimeCell, TransactionIdHashCell } from '../../../../components/tables/helperCells';
 
 const {Option}=Select;
 const columns=[
@@ -34,21 +34,21 @@ const columns=[
         dataIndex:"baseValue",
         sorter:true,
         width:75,
-        render:data=><span>{data?parseFloat(data)>=0?(parseFloat(data)*0.00000001).toFixed(8):((parseFloat(data) * -1)*0.00000001).toFixed(8):""}</span>
+        render:data=><span>{data?parseFloat(data)>=0?parseFloat(data).toFixed(8):parseFloat(data).toFixed(8):""}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.type"/>,
         key:1,
         dataIndex:"type",
-        width:75,
-        render:data=><span className={data=="send"?"error-danger":"color-green"}>{data.charAt(0).toUpperCase()+data.slice(1)}</span>
+        width:50,
+        render:data=><span className={data=="send"?"error-danger":"color-green"}><Icon type={data=="send"?"arrow-up":"arrow-down"}/>&nbsp;{data.charAt(0).toUpperCase()+data.slice(1)}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.txid"/>,
         key:25,
         width:250,
         ellipsis:true,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["txid"],data["coin"])
+        render:data=>TransactionIdHashCell(data["coin"],data["txid"])
     },
     // {
     //     title:<IntlMessages id="walletWarmDetailsTable.title.normalizedTxHash"/>,

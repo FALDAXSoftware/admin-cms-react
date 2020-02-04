@@ -373,18 +373,18 @@ class EditProfile extends Component {
           </Button>
         </div>
         <div style={{ marginTop: "50px" }}>
-          <Divider>Two-Factor Authentication</Divider>
+          <Divider>2FA</Divider>
           <div style={{ marginTop: "10px" }}>
             <div style={{ marginTop: "20px", textAlign: "center" }}>
               {isEnabled == "DISABLED" ? (
                 <span>
-                  Two-Factor Authentication significantly increases the security
+                  2FA significantly increases the security
                   of your account. We highly recommend that you enable it.{" "}
                 </span>
               ) : (
                 <span>
                   Way to go! You care about your security as much as we do.
-                  Thanks for enabling Two-Factor Authentication!
+                  Thanks for enabling 2FA!
                 </span>
               )}
             </div>
@@ -456,7 +456,7 @@ class EditProfile extends Component {
                       </li>
                     </ul>
                     <div>
-                      <span>Enter your two-factor code here:</span>
+                      <span>Enter your 2FA code here:</span>
                       <div style={{ marginTop: "20px" }}>
                         <Input
                           style={{ width: "200px" }}

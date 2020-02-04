@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import ApiUtils from "../../../helpers/apiUtills";
 import authAction from "../../../redux/auth/actions";
 import { connect } from "react-redux";
-import { notification, Row, Icon,Col ,Table,Divider,Tag,Tooltip} from "antd";
+import { notification, Row, Icon,Col,Divider,Tag,Tooltip} from "antd";
 import Loader from "../faldaxLoader";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -13,6 +12,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { OfferDateCell, DateTimeCell} from "../../../components/tables/helperCells";
 import { isAllowed } from "../../../helpers/accessControl";
 import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 const tableColumns = [
   {
     title: "Action",
@@ -215,7 +215,7 @@ class ViewCampaign extends Component {
   }
 
   static viewOfferUsage(offerId,offerName){
-    self.props.history.push({pathname:`/dashboard/campaign/offer-usage/${offerId}`, state: JSON.stringify({ detail: self.state.campaignDetails.label,name:offerName})})
+    self.props.history.push({pathname:`/dashboard/campaign/${self.props.match.params.id}/offer-usage/${offerId}`, state: JSON.stringify({ detail: self.state.campaignDetails.label,name:offerName})})
   }
 
   getOfferNameById(id){
@@ -229,21 +229,9 @@ class ViewCampaign extends Component {
     const { loader, campaignDetails } = this.state;
     return (
       <LayoutWrapper>
+         {/* <BackButton {...this.props}/> */}
+         <BreadcrumbComponent {...this.props}/>
         <TableDemoStyle className="isoLayoutContent">
-          <Link to="/dashboard/campaign">
-            <i
-              style={{ marginRight: "10px", marginBottom: "10px" }}
-              className="fa fa-arrow-left"
-              aria-hidden="true"
-            ></i>
-            <a
-              onClick={() => {
-                this.props.history.push("/dashboard/campaign");
-              }}
-            >
-              Back
-            </a>
-          </Link>
           <h2>{campaignDetails.label}</h2>
           <p>{campaignDetails.description}</p>
           <CampRow>

@@ -42,7 +42,7 @@ const columns = [{
 
 const newsSourceTableInfos = [
     {
-        title: 'News Source',
+        title: 'News Sources',
         value: 'NewsSourceTable',
         columns: clone(columns)
     }

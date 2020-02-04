@@ -66,15 +66,33 @@ const columns = [{
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
         'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
         'deleted_at')
-}, {
+},
+{
+    title: <IntlMessages id="userTable.title.id" />,
+    align:"left",
+    ellipsis:true,
+    key: 'customer_id',
+    width: 75,
+    render: object => renderCell(object, 'TextCell', 'customer_id')
+} , 
+ {
     title: <IntlMessages id="userTable.title.created_at" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'created_at',
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'DateCell', 'created_at')
-}, 
+},
+{
+    title: <IntlMessages id="antTable.title.last_login" />,
+    align:"left",
+    ellipsis:true,
+    key: 'last_login_datetime',
+    width: 150,
+    dataIndex:"last_login_datetime",
+    render: data => DateTimeCell(data)
+},
 // {
 //     title: "",
 //    align:"left",
@@ -86,12 +104,12 @@ const columns = [{
 // },
  {
     title: <IntlMessages id="antTable.title.name" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'first_name',
     width: 200,
     sorter: true,
-    render: object => <span>{object['first_name']+" "+object['last_name']}</span>
+    render: object =>ToolTipsCell(object['first_name']+" "+object['last_name'])
 }, 
 {
     title: <IntlMessages id="antTable.title.email" />,
@@ -101,7 +119,7 @@ const columns = [{
     ellipsis:true,
     sorter: true,
     dataIndex:'email',
-    render:(value)=>ToolTipsCell(value)
+    render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 }, {
     title: <IntlMessages id="antTable.title.country" />,
    align:"left",
@@ -140,7 +158,7 @@ const columns = [{
     key: 'no_of_referrals',
     width: 150,
     render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
-}];
+},]
 
 const tableinfos = [
     {

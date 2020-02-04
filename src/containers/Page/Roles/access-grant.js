@@ -7,7 +7,8 @@ import ApiUtils from "../../../helpers/apiUtills";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from '../../../redux/auth/actions';
 import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 const { logout } = authAction;
 const {Option}=Select;
 
@@ -99,7 +100,7 @@ const AccessGrant = (props) => {
     const handleClick = (id) =>{
       setSelectedPermission(id);
       refs[id].current.scrollIntoView({
-        behavior: 'smooth',
+        // behavior: 'smooth',
         block: 'start',
       });
     }
@@ -190,7 +191,8 @@ const AccessGrant = (props) => {
     return (
       <LayoutWrapper>
         <TableDemoStyle className="isoLayoutContent">
-          <BackButton {...props}></BackButton>
+          {/* <BackButton {...props}></BackButton> */}
+          <BreadcrumbComponent {...props}/>
           <Divider>{role.name && <h3>Role - {role.name}</h3>}</Divider>
                 <Row type="flex" justify="start" className="table-tb-margin table-filter-row">
                     <Col md={3}>
@@ -225,7 +227,7 @@ const AccessGrant = (props) => {
                       </Tooltip>
                     </Col>
                     <Col md={6}>
-                      <Select className="full-width" value={selectedPermission} placeholder="Select Permission">
+                      <Select className="full-width" value={selectedPermission} placeholder="Select Permission" showSearch>
                       { Object.keys(permissions).map((key, index) => (
                         <Option key={index} value={key} onClick={() => handleClick(key)}>{key}</Option>))
                       }

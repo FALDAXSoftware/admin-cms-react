@@ -25,6 +25,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpe
 import Metabase from "./countriesMetabase"
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -100,7 +101,7 @@ class Countries extends Component {
   }
 
   static showStates(value) {
-    self.props.history.push("/dashboard/country/" + value + "/states");
+    self.props.history.push("/dashboard/countries/" + value + "/states");
   }
 
   componentDidMount = () => {
@@ -258,7 +259,8 @@ class Countries extends Component {
 
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
+        <BreadcrumbComponent {...this.props}/> 
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={countryTableInfos[0].title}

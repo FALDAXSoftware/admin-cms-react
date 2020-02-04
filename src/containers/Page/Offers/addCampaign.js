@@ -29,6 +29,7 @@ import styled from "styled-components";
 import { OfferDateCell} from "../../../components/tables/helperCells";
 import { messages } from "../../../helpers/messages";
 import TableWrapper from "../../Tables/antTables/antTable.style";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 const { TextArea } = Input;
 const Option = Select.Option;
 const { logout } = authAction;
@@ -814,21 +815,8 @@ class AddCampaign extends Component {
         : columns_temp;
     return (
       <LayoutWrapper>
+        <BreadcrumbComponent {...this.props}/>
         <TableDemoStyle className="isoLayoutContent">
-          <Link to="/dashboard/campaign">
-            <i
-              style={{ marginRight: "10px", marginBottom: "10px" }}
-              className="fa fa-arrow-left"
-              aria-hidden="true"
-            ></i>
-            <a
-              onClick={() => {
-                this.props.history.push("/dashboard/campaign");
-              }}
-            >
-              Back
-            </a>
-          </Link>
           <h2>{isUpdate?'Update':'Add'} Campaign</h2>
           <CampForm onSubmit={this._addCampaign}>
             <Row>
@@ -911,8 +899,12 @@ class AddCampaign extends Component {
                         ranges={{
                           Today: [moment(), moment()],
                           "This Month": [
-                            moment().startOf("month"),
+                            moment().startOf("day"),
                             moment().endOf("month")
+                          ],
+                          "This Week": [
+                            moment().startOf("day"),
+                            moment().endOf("week")
                           ]
                         }}
                         allowClear={false}
@@ -1091,7 +1083,7 @@ class AddCampaign extends Component {
                           <Select
                             className="campaign-user-inline"
                             disabled={isOfferUpdate && isUpdate}
-                            placeholder="Select a user"
+                            placeholder="Select user"
                             onSearch={this.onSearch}
                             onChange={this._changeUser}
                             optionFilterProp="children"

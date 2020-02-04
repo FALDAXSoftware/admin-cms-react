@@ -6,13 +6,15 @@ import Referrals from "./referrals";
 import ReferralPercentage from "./referralPercentage";
 import { isAllowed } from "../../../helpers/accessControl";
 import Metabase from "./metabase";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 const TabPane = Tabs.TabPane;
 class Referral extends React.Component {
   render() {
     return (
       <LayoutWrapper>
-        <BackButton {...this.props}/>
+        {/* <BackButton {...this.props}/> */}
+        <BreadcrumbComponent {...this.props} />
         <Tabs className="isoTableDisplayTab full-width">
           {isAllowed("get_referal_list") &&
             <TabPane tab="Referral" key="ReferralTable">
@@ -38,4 +40,4 @@ class Referral extends React.Component {
   }
 }
 
-export default Referral
+export default Referral;

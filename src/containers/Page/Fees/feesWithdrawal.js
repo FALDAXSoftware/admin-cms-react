@@ -7,6 +7,7 @@ import FaldaxLoader from "../faldaxLoader";
 import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { isAllowed } from "../../../helpers/accessControl";
+import { TwoFactorModal, TwoFactorEnableModal } from "../../Shared/2faModal";
 const { logout } = authAction;
 
 class FeesWithdrawal extends Component {
@@ -20,7 +21,9 @@ class FeesWithdrawal extends Component {
       errType: "",
       loader: false,
       fields: {},
-      withdrawlFeesData: ""
+      withdrawlFeesData: "",
+      show2FAEnableModal:false,
+      show2FAModal:false
     };
     this.validator = new SimpleReactValidator({
       className: "text-danger",
@@ -89,13 +92,23 @@ class FeesWithdrawal extends Component {
     this.setState({ fields });
   }
 
-  _updateSendFee = async () => {
+  onSubmit=()=>{
+    let {user}=this.props;
+    if(user.is_twofactor){
+      this.setState({show2FAModal:true})
+    }else{
+      this.setState({show2FAEnableModal:true})
+    }
+  }
+
+  _updateSendFee = async (otp) => {
     const { token } = this.props;
     let fields = this.state.fields;
     if (this.validator.allValid()) {
       this.setState({ loader: true });
       const formData = {
-        send_coin_fee: fields["default_send_coin_fee"]
+        send_coin_fee: fields["default_send_coin_fee"],
+        otp: otp
       };
       try {
         let res = await (
@@ -107,7 +120,8 @@ class FeesWithdrawal extends Component {
               errMsg: true,
               errMessage: res.message,
               loader: false,
-              errType: "Success"
+              errType: "Success",
+              show2FAModal:false
             },
             () => {
               this._getWithdrawlFeeData();
@@ -115,7 +129,7 @@ class FeesWithdrawal extends Component {
           );
         } else if (res.status == 403) {
           this.setState(
-            { errMsg: true, errMessage: res.err, errType: "error" },
+            { errMsg: true, errMessage: res.err, errType: "error" ,show2FAModal:false},
             () => {
               this.props.logout();
             }
@@ -125,7 +139,8 @@ class FeesWithdrawal extends Component {
             errMsg: true,
             errMessage: res.message,
             loader: false,
-            errType: "error"
+            errType: "error",
+            show2FAModal:false
           });
         }
       } catch (error) {
@@ -147,12 +162,14 @@ class FeesWithdrawal extends Component {
   };
 
   render() {
-    const { errMsg, errType, loader, fields } = this.state;
+    const { errMsg, errType, loader, fields,show2FAModal,show2FAEnableModal } = this.state;
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());
     }
     return (
       <TableDemoStyle className="isoLayoutContent">
+        {show2FAModal && <TwoFactorModal callback={this._updateSendFee} title="Withdrawal Fees" onClose={()=>this.setState({show2FAEnableModal:false,show2FAModal:false})}/>}
+        {show2FAEnableModal && <TwoFactorEnableModal title="Withdrawal Fees" onClose={()=>this.setState({show2FAEnableModal:false,show2FAModal:false})}/>}
         <div className="fees-container">
           <span>
             <b>Withdrawal Fee</b>
@@ -175,7 +192,7 @@ class FeesWithdrawal extends Component {
             <>
                 <Button
                 type="primary"
-                onClick={this._updateSendFee}
+                onClick={this.onSubmit}
                 >
                 Update
                 </Button>

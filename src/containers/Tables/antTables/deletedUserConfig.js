@@ -70,7 +70,16 @@ const columns = [{
         'street_address', 'street_address_2', 'phone_number', 'country', 'dob', 'is_active', 'kyc',
         'date_format', 'account_tier', 'account_class', 'state', 'no_of_referrals', 'created_at',
         'deleted_at')
-}, {
+},
+{
+    title: <IntlMessages id="userTable.title.id" />,
+    align:"left",
+    ellipsis:true,
+    key: 'customer_id',
+    width: 75,
+    render: object => renderCell(object, 'TextCell', 'customer_id')
+} , 
+{
     title: <IntlMessages id="userTable.title.created_at" />,
     align:"left",
     ellipsis:true,
@@ -98,7 +107,7 @@ const columns = [{
 //     render: object => renderCell(object, 'UserImageCell', 'profile_pic')
 // }, 
 {
-    title: <IntlMessages id="antTable.title.firstName" />,
+    title: <IntlMessages id="antTable.title.name" />,
     align:"left",
     ellipsis:true,
     key: 'first_name',
@@ -123,7 +132,7 @@ const columns = [{
     width: 250,
     sorter: true,
     dataIndex:"email",
-    render:(value)=>ToolTipsCell(value)
+    render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 }, {
     title: <IntlMessages id="antTable.title.country" />,
    align:"left",

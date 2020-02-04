@@ -40,7 +40,7 @@ const columns=[
         key:5,
         dataIndex:"total",
         width:100,
-        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_forfeit"/>,
@@ -48,7 +48,7 @@ const columns=[
         key:2,
         dataIndex:"total_earned_from_forfeit",
         width:100,
-        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst"/>,
@@ -56,12 +56,12 @@ const columns=[
         key:3,
         dataIndex:"total_earned_from_jst",
         width:100,
-        render:data=><span>{data?(parseFloat(data)* 0.000000001).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
 
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_wallets"/>,
-       align:"left",
+        align:"left",
         key:4,
         dataIndex:"total_earned_from_wallets",
         width:100,
@@ -69,10 +69,11 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.send_address"/>,
-       align:"left",
+        align:"left",
         key:7,
         width:100,
-        render:data=><span>{data["send_address"]?data["send_address"]: <Button size="small" type="dashed" onClick={()=>self.props.history.push(`./assets/wallet/${data["coin_code"]}`)}>Create</Button>}</span>
+        render:data=><span>{data["send_address"]?data["send_address"]: <Button size="small" type="dashed" onClick={()=>self.props.history.push(`./assets/wallet/${data["coin_code"]}`)}>Create</Button>}</span>,
+        class:"copy-text-container"
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.receive_address"/>,
@@ -80,6 +81,7 @@ const columns=[
         key:8,
         dataIndex:"receive_address",
         width:100,
+        class:"copy-text-container"
         
     },
     

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Divider } from 'antd';
 import authAction from '../../../redux/auth/actions';
 import DetailDiv from './detailDiv';
+import Loader from '../faldaxLoader';
 
 const { logout } = authAction;
 
@@ -12,39 +13,42 @@ class UserKYCDetails extends Component {
         super(props)
         this.state = {
             kycDetails: {},
+            loader:false
+        }
+        this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})}
+    }
+
+    componentDidMount = async() => {
+        try{
+           this.loader.show(); 
+           const { token, user_id } = this.props;
+           let res=await(await ApiUtils.getKYCDetails(token, user_id)).json();
+           if (res.status == 200) {
+               this.setState({ kycDetails: res.data });
+           } else if (res.status == 403) {
+               this.props.logout();
+           } else {
+               this.setState({ errMsg: true, errMessage: res.message });
+           }
+
+        }catch(error){
+            console.log("error",error)
+        }finally{
+            this.loader.hide();
         }
     }
 
-    componentDidMount = () => {
-        const { token, user_id } = this.props;
-        let _this = this;
-
-        ApiUtils.getKYCDetails(token, user_id)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    _this.setState({ kycDetails: res.data });
-                } else if (res.status == 403) {
-                    _this.props.logout();
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            });
-    }
-
     render() {
-        const { kycDetails } = this.state;
+        const { kycDetails,loader } = this.state;
 
         return (
+            <>
             <div className="kyc-div user-profile">
                 {kycDetails && Object.entries(kycDetails).length != 0 ?
                     <div>
-                        <Divider>Customer ID Verification</Divider>
-                        <DetailDiv title="Status"
-                            value={kycDetails && kycDetails.is_approve != undefined && kycDetails.is_approve ? 'APPROVED' :(kycDetails.direct_response?'DIS-APPROVED':'PENDING-APPROVAL')} />
+                        {/* <Divider>Customer ID Verification</Divider> */}
+                        {/* <DetailDiv title="Status"
+                            value={kycDetails && kycDetails.is_approve != undefined && kycDetails.is_approve ? 'APPROVED' :(kycDetails.direct_response?'DIS-APPROVED':'PENDING-APPROVAL')} /> */}
                         <Divider>IDM Details</Divider>
                         <DetailDiv title="Direct Response"
                             value={kycDetails && kycDetails.direct_response ? kycDetails.direct_response : 'N/A'} />
@@ -58,6 +62,8 @@ class UserKYCDetails extends Component {
                     : <h2 style={{ textAlign: 'center', width: '100 %' }}>Customer id not submitted</h2>
                 }
             </div >
+                {loader &&<Loader/>}
+            </>
         );
     }
 }

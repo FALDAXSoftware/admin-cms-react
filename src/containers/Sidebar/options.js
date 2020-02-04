@@ -33,7 +33,7 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "pairs",
     permssions: [
-      "get_all_pairs"
+      "get_all_pairs",
     ]
   },
   {
@@ -155,7 +155,7 @@ const options = [
     ]
   },
   {
-    key: "news-source",
+    key: "new's-source",
     label: "sidebar.news_source",
     leftIcon: "fas fa-rss-square",
     module: "news_source",

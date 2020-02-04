@@ -17,6 +17,7 @@ import SimpleReactValidator from "simple-react-validator";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -194,7 +195,7 @@ class EditUser extends Component {
         user_id: fields["id"],
         first_name: fields["first_name"],
         last_name: fields["last_name"],
-        middle_name: fields["middle_name"],
+        // middle_name: fields["middle_name"],
         street_address: fields["street_address"],
         street_address_2: fields["street_address_2"],
         postal_code: fields["postal_code"],
@@ -206,7 +207,7 @@ class EditUser extends Component {
         country_code: countryCode,
         state_id:stateCode,
         country_id:countryID,
-        kyc_done: isKYC,
+        // kyc_done: isKYC,
         gender: selectedGender,
         dob: moment(dob).format("DD-MM-YYYY")
       };
@@ -309,7 +310,7 @@ class EditUser extends Component {
 
     return (
       <div className="isoLayoutContent">
-        <div style={{ display: "inline-block", width: "100%" }}>
+        {/* <div style={{ display: "inline-block", width: "100%" }}>
           <Link to="/dashboard/users">
             <i
               style={{ marginRight: "10px", marginBottom: "10px" }}
@@ -324,7 +325,8 @@ class EditUser extends Component {
               Back
             </a>
           </Link>
-        </div>
+        </div> */}
+        <BreadcrumbComponent {...this.props}/>
         <div>
           <h2>Edit User</h2>
           <br />
@@ -332,13 +334,13 @@ class EditUser extends Component {
         <Form onSubmit={this._updateUser}>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>UUID:</span>
+              <span>UUID</span>
               <Input placeholder="UUID" value={fields["UUID"]} disabled />
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>First Name:</span>
+              <span>First Name*</span>
               <Input
                 placeholder="First Name"
                 onChange={this._handleChange.bind(this, "first_name")}
@@ -354,7 +356,7 @@ class EditUser extends Component {
               </span>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Middle Name:</span>
               <Input
@@ -363,10 +365,10 @@ class EditUser extends Component {
                 value={fields["middle_name"]}
               />
             </Col>
-          </Row>
+          </Row> */}
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Last Name:</span>
+              <span>Last Name*</span>
               <Input
                 placeholder="Last Name"
                 onChange={this._handleChange.bind(this, "last_name")}
@@ -384,13 +386,13 @@ class EditUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Email:</span>
+              <span>Email Address*</span>
               <Input placeholder="Email" value={fields["email"]} disabled />
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
-              <span>Date of Birth:</span>
+              <span>Date of Birth*</span>
             </Col>
             <Col>
               <DatePicker
@@ -411,7 +413,7 @@ class EditUser extends Component {
           </Row>
           <Row>
             <Col sm={4}>
-              <span>Gender:</span>
+              <span>Gender*</span>
             </Col>
             <Col>
               <Select
@@ -434,7 +436,7 @@ class EditUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Street Address 1:</span>
+              <span>Street Address Line 1*</span>
               <Input
                 placeholder="Street Address 1"
                 onChange={this._handleChange.bind(this, "street_address")}
@@ -452,7 +454,7 @@ class EditUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Street Address 2:</span>
+              <span>Street Address Line 2</span>
               <Input
                 placeholder="Street Address 2"
                 onChange={this._handleChange.bind(this, "street_address_2")}
@@ -508,7 +510,7 @@ class EditUser extends Component {
               </div>
           <Row className="table-tb-margin">
             <Col>
-              <span>Postal Code:</span>
+              <span>Postal Code*</span>
               <Input
                 placeholder="Postal Code"
                 onChange={this._handleChange.bind(this, "postal_code")}
@@ -527,7 +529,7 @@ class EditUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
-              <span>Account Tier:</span>
+              <span>Account Tier*</span>
             </Col>
             <Col>
               <Select
@@ -552,7 +554,7 @@ class EditUser extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
-              <span>Account Class:</span>
+              <span>Account Class*</span>
             </Col>
             <Col>
               <Select

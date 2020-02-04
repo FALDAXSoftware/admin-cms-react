@@ -8,6 +8,7 @@ import EditNetworkFeeModal from './editNetworkFeeModal';
 import authAction from '../../../redux/auth/actions';
 import { withRouter} from "react-router-dom";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
+import { TwoFactorModal, TwoFactorEnableModal } from '../../Shared/2faModal';
 
 const { logout } = authAction;
 var self;
@@ -22,6 +23,8 @@ class NetworkFee extends Component {
       loader: false,
       modalData: {},
       showEditNetworkFeeModal: false,
+      show2FAModel:false,
+      show2FAEnableModel:false
     }
     self = this;
   }
@@ -38,7 +41,9 @@ class NetworkFee extends Component {
     this.setState({ errMsg: false });
   };
 
+
   static edit(value, name, slug, type, updated_at, fees_value) {
+    let {user}=self.props;
     let data = {
       id: value,
       name: name,
@@ -47,7 +52,11 @@ class NetworkFee extends Component {
       slug: slug,
       value: fees_value
     }
-    self.setState({ showEditNetworkFeeModal: true, modalData: data })
+    if(user.is_twofactor){
+      self.setState({ showEditNetworkFeeModal: true, modalData: data })
+    }else{
+      self.setState({ show2FAEnableModel: true, modalData: data })
+    }
   }
 
 
@@ -90,10 +99,22 @@ class NetworkFee extends Component {
     }
   }
 
+  // updateNetworkFees=(otp)=>{
+  //   let {modalData}=this.state;
+  //   this.setState({modalData:{...modalData,otp:otp},showEditNetworkFeeModal:true,show2FAModel:false})
+  // }
+
   onCloseEditModal = () => {
     this.setState({ showEditNetworkFeeModal: false })
     this.getNetworkFee();
   }
+  on2FAModalClose=()=>{
+    this.setState({show2FAModel:false})
+  }
+  on2FAEnableModalClose=()=>{
+    this.setState({show2FAEnableModel:false})
+  }
+
   handleNetworkChange = (pagination, filters, sorter) => {
     let {coinFees}=this.state;
     if(sorter.columnKey=="value"){
@@ -106,13 +127,14 @@ class NetworkFee extends Component {
     this.setState(coinFees)
   }
   render() {
-    const { errType, errMsg, loader, coinFees, modalData, showEditNetworkFeeModal } = this.state;
+    const { errType, errMsg, show2FAEnableModel, coinFees, modalData, showEditNetworkFeeModal ,show2FAModel} = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-
       <TableDemoStyle className="isoLayoutContent">
+        {/* {show2FAModel && <TwoFactorModal callback={this.updateNetworkFees} title="Update Network Fees" onClose={this.on2FAModalClose}/>} */}
+        {show2FAEnableModel && <TwoFactorEnableModal title="Update Network Fees" onClose={this.on2FAEnableModalClose}/>}
         <TableWrapper
           rowKey="id"
           {...this.state}
@@ -137,6 +159,7 @@ class NetworkFee extends Component {
 
 export default withRouter(connect(
   state => ({
-    token: state.Auth.get('token')
+    token: state.Auth.get('token'),
+    user:state.Auth.get('user')
   }), { logout })(NetworkFee));
 

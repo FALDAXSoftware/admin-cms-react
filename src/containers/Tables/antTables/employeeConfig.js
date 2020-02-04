@@ -5,7 +5,8 @@ import {
     TextCell,
     EmployeeActionCell,
     EmployeeSwitchCell,
-    DateTimeCell
+    DateTimeCell,
+    ToolTipsCell
 } from '../../../components/tables/helperCells';
 import { isAllowed } from '../../../helpers/accessControl';
 
@@ -37,7 +38,7 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
 
 const columns = [
     {
-        title: <IntlMessages id="antTable.title.details" />,
+        title: <IntlMessages id="antTable.title.actions" />,
         key: 'action',
         width: 100,
         align:"left",
@@ -58,7 +59,7 @@ const columns = [
         width: 200,
         sorter: true,
         align:"left",
-        render: object =><span>{object["last_name"]?object["first_name"]+" "+object["last_name"]:object['first_name']}</span>
+        render: object =>ToolTipsCell(object["last_name"]?object["first_name"]+" "+object["last_name"]:object['first_name'])
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
@@ -66,14 +67,16 @@ const columns = [
         align:"left",
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'email')
+        dataIndex:"email",
+        render:(data)=><span className="lowercase">{ToolTipsCell(data)}</span>
     },
     {
         title: <IntlMessages id="antTable.title.role" />,
         key: 'role',
         width: 150,
+        // sorter:true,
         align:"left",
-        render: (object)=>(isAllowed('get_role')?<a href={"access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
+        render: (object)=>(isAllowed('get_role')?<a href={"roles/access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
     },
     {
         title: <IntlMessages id="antTable.title.Active" />,

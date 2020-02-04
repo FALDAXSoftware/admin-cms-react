@@ -9,6 +9,7 @@ import FaldaxLoader from '../faldaxLoader';
 import aesjs from "aes-js"
 import SimpleReactValidator from 'simple-react-validator';
 import { BackButton } from '../../Shared/backBttton';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 class Keys extends Component {
     constructor(props){
@@ -56,7 +57,8 @@ class Keys extends Component {
         let {plainText,cypherText,loader,iv,key}=this.state;
         return (<>
         <LayoutWrapper className="full-width ">
-            <BackButton {...this.props}></BackButton>
+            {/* <BackButton {...this.props}></BackButton> */}
+            <BreadcrumbComponent {...this.props}/>
             <TableDemoStyle className="isoLayoutContent full-width">
                 <div>
                   <span>

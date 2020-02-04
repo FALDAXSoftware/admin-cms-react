@@ -7,6 +7,7 @@ import FaldaxLoader from "../faldaxLoader";
 import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
 import { isAllowed } from "../../../helpers/accessControl";
+import { TwoFactorEnableModal, TwoFactorModal } from "../../Shared/2faModal";
 const { logout } = authAction;
 
 class FeesFaldax extends Component {
@@ -20,7 +21,9 @@ class FeesFaldax extends Component {
       errType: "",
       loader: false,
       fields: {},
-      withdrawlFeesData: ""
+      withdrawlFeesData: "",
+      show2FAEnableModal:false,
+      show2FAModal:false
     };
     this.validator = new SimpleReactValidator({
       className: "text-danger",
@@ -48,6 +51,15 @@ class FeesFaldax extends Component {
   componentDidMount = () => {
     this._getWithdrawlFeeData();
   };
+
+  onSubmit=()=>{
+    let {user}=this.props;
+    if(user.is_twofactor){
+      this.setState({show2FAModal:true})
+    }else{
+      this.setState({show2FAEnableModal:true})
+    }
+  }
 
   _getWithdrawlFeeData = async () => {
     const { token } = this.props;
@@ -89,13 +101,14 @@ class FeesFaldax extends Component {
     this.setState({ fields });
   }
 
-  _updateSendFee = async () => {
+  _updateSendFee = async (otp) => {
     const { token } = this.props;
     let fields = this.state.fields;
     if (this.validator.allValid()) {
       this.setState({ loader: true });
       const formData = {
-        send_coin_fee: fields["defualt_faldax_fee"]
+        send_coin_fee: fields["defualt_faldax_fee"],
+        otp: otp
       };
       try {
         let res = await (
@@ -107,7 +120,8 @@ class FeesFaldax extends Component {
               errMsg: true,
               errMessage: res.message,
               loader: false,
-              errType: "Success"
+              errType: "Success",
+              show2FAModal:false
             },
             () => {
               this._getWithdrawlFeeData();
@@ -147,12 +161,14 @@ class FeesFaldax extends Component {
   };
 
   render() {
-    const { errMsg, errType, loader, fields } = this.state;
+    const { errMsg, errType, loader, fields,show2FAModal,show2FAEnableModal} = this.state;
     if (errMsg) {
       this.openNotificationWithIcon(errType.toLowerCase());
     }
     return (
       <TableDemoStyle className="isoLayoutContent">
+        {show2FAModal && <TwoFactorModal callback={this._updateSendFee} title="FALDAX Fees" onClose={()=>this.setState({show2FAEnableModal:false,show2FAModal:false})}/>}
+        {show2FAEnableModal && <TwoFactorEnableModal title="FALDAX Fees" onClose={()=>this.setState({show2FAEnableModal:false,show2FAModal:false})}/>}
         <div className="fees-container">
           <span>
             <b>Faldax Fee</b>
@@ -175,7 +191,7 @@ class FeesFaldax extends Component {
             <>
                 <Button
                 type="primary"
-                onClick={this._updateSendFee}
+                onClick={this.onSubmit}
                 >
                 Update
                 </Button>

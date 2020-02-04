@@ -20,6 +20,8 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import {  DateTimeCell } from "../../../components/tables/helperCells";
 import {ColWithMarginBottom} from "../common.style";
+import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 const OtherError = "Something went to wrong please try again after some time.";
 let self;
 let { Option } = Select;
@@ -207,19 +209,9 @@ class OffersUsage extends Component {
     }
     return (
       <LayoutWrapper>
+        {/* <BackButton {...this.props}/> */}
+         <BreadcrumbComponent {...this.props}/>
         <TableDemoStyle className="isoLayoutContent">
-          <a
-            onClick={() => {
-              this.props.history.goBack();
-            }}
-          >
-            <i
-              style={{ marginRight: "10px", marginBottom: "10px" }}
-              className="fa fa-arrow-left"
-              aria-hidden="true"
-            ></i>{" "}
-            Back
-          </a>
           <div className="mg-tb-16">
           <h2>{campaignLabel}</h2>
           <p>{offerName}</p>

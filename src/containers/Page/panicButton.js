@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
 import { BackButton } from '../Shared/backBttton';
+import { BreadcrumbComponent } from '../Shared/breadcrumb';
 
 const { logout } = authAction;
 
@@ -126,7 +127,8 @@ class PanicButton extends Component {
 
         return (
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
+                <BreadcrumbComponent {...this.props} />
                 <div className="isoLayoutContent">
                    <div className="panic-container">
                         <Card title="Panic Button" bordered={false}>
@@ -142,7 +144,7 @@ class PanicButton extends Component {
                     >
                         {this.props.user.is_twofactor ?
                             <div>
-                                <span>Enter your two-factor code here:</span>
+                                <span>Enter your 2FA code here:</span>
                                 <div style={{ marginTop: "20px" }}>
                                     <Input style={{ width: "200px" }} value={fields["otp"]}
                                         onChange={this._onChangeFields.bind(this, "otp")} />
@@ -154,7 +156,7 @@ class PanicButton extends Component {
                                     onClick={this._panicButton}>Enable</Button>
                             </div>
                             : <div>
-                                <span>Enable 2FA authentication to Enable Panic Button.</span><br />
+                                <span>Enable 2FA to Enable Panic Button.</span><br />
                                 <Button type="primary" onClick={() => { this.props.history.push('/dashboard/edit-profile') }}>
                                     {!isPanic ? 'Enable Now' : 'Disable'}
                                 </Button>

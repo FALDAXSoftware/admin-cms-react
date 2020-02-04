@@ -6,11 +6,11 @@ import { referralInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import { withRouter } from "react-router-dom";
 import FaldaxLoader from '../faldaxLoader';
-import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
+import userAction from '../../../redux/users/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 var self;
-const TabPane = Tabs.TabPane;
+const { showUserDetails } = userAction;
 const { logout } = authAction;
 const Search = Input.Search;
 
@@ -27,95 +27,18 @@ class Referrals extends Component {
             prevDefaultReferral: '',
             errType: 'Success'
         }
-        this.validator = new SimpleReactValidator({
-            className: 'text-danger',
-            custom_between: {
-                message: 'The :attribute must be between 1 to 100 %.',
-                rule: function (val, params, validator) {
-                    if (isNaN(val)) {
-                        return false;
-                    } else if (parseFloat(val) >= parseFloat(params[0]) && parseFloat(val) <= parseFloat(params[1])) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-                required: true
-            },
-            gtzero: {
-                // name the rule
-                message: "Amount must be greater than 0.",
-                rule: (val, params, validator) => {
-                    if (val > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-                required: true // optional
-            }
-        });
         self = this;
     }
 
-    static edit = id => {
+    static edit = (id,first_name,last_name,email) => {
+        let full_name=first_name +" "+last_name;
+        self.props.showUserDetails({full_name,email})
         self.props.history.push("/dashboard/referral/" + id);
     };
 
 
     componentDidMount = () => {
         this._getAllReferredAdmins();
-    }
-
-    _getReferalPercentage = () => {
-        let _this = this;
-        const { token } = this.props
-
-        //_this.setState({ loader: true });
-        ApiUtils.getReferPercentage(token)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    let fields = _this.state.fields;
-                    fields['percentage'] = res.data.value;
-                    _this.setState({ fields, prevDefaultReferral: res.data.value });
-                } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                }
-                // _this.setState({ loader: false });
-            })
-            .catch(() => {
-                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
-            })
-    }
-
-    _getContactDetails = () => {
-        let _this = this;
-
-        //_this.setState({ loader: true });
-        ApiUtils.getContactDetails()
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    let fields = _this.state.fields;
-                    // fields['percentage'] = res.data.default_referral_percentage;
-                    _this.setState({ fields, prevDefaultReferral: res.data.default_referral_percentage });
-                } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                }
-                // _this.setState({ loader: false });
-            })
-            .catch(() => {
-                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
-            });
     }
 
     _getAllReferredAdmins = () => {
@@ -176,44 +99,6 @@ class Referrals extends Component {
         })
     }
 
-    _updateDefaultReferral = () => {
-        const { token } = this.props;
-        let fields = this.state.fields;
-        let _this = this;
-
-        if (_this.validator.allValid()) {
-            _this.setState({ loader: true });
-
-            const formData = {
-                percentage: fields['percentage'],
-            }
-
-            ApiUtils.updateReferral(token, formData)
-                .then((response) => response.json())
-                .then(function (res) {
-                    if (res.status == 200) {
-                        _this.setState({
-                            errMsg: true, errMessage: res.message, loader: false, errType: 'Success'
-                        }, () => {
-                            // _this._getContactDetails();
-                        })
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, loader: false, errType: 'error' });
-                    }
-                })
-                .catch(() => {
-                    _this.setState({ loader: false });
-                });
-        } else {
-            this.validator.showMessages();
-            this.forceUpdate();
-        }
-    }
-
     openNotificationWithIconError = (type) => {
         notification[type]({
             message: this.state.errType,
@@ -261,8 +146,8 @@ class Referrals extends Component {
                     dataSource={allReferral}
                     className="table-tb-margin"
                     onChange={this._handleReferralChange}
-                    bordered
                     scroll={TABLE_SCROLL_HEIGHT}
+                    bordered
                 />
                 {loader && <FaldaxLoader />}
                 {allReferralCount > 0 ?
@@ -285,4 +170,4 @@ export default withRouter(connect(
     state => ({
         token: state.Auth.get('token'),
         user: state.Auth.get('user'),
-    }), { logout })(Referrals));
+    }), { logout,showUserDetails })(Referrals));

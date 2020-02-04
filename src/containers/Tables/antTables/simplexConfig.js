@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateTimeCell, SimplexStatusCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell, SimplexStatusCell, ToolTipsCell } from '../../../components/tables/helperCells';
 import { SIMPLEX_PAYMENT_URL } from '../../../helpers/globals';
 
 const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = null,
@@ -28,17 +28,26 @@ const renderCell = (object, type, key, paymentID = null, quoteID = null, pair = 
                 email, side, quantity, fill_price, simplex_payment_status, created_at);
         default:
             return TextCell(value);
-    }
-};
-
-const columns = [
+          }
+        };
+        
+        const columns = [
+  {
+    title: <IntlMessages id="simplexTradeTable.title.created_at" />,
+    key: "created_at",
+    width: 150,
+    align:"left",
+    sorter: true,
+    render: object => renderCell(object, "DateTimeCell", "created_at")
+  },
   {
     title: <IntlMessages id="simplexTradeTable.title.email" />,
     key: "email",
    align:"left",
     width: 250,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "email")
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.currency" />,
@@ -47,14 +56,6 @@ const columns = [
     width: 150,
     sorter: true,
     render: object => renderCell(object, "TextCell", "currency")
-  },
-  {
-    title: <IntlMessages id="simplexTradeTable.title.created_at" />,
-    key: "created_at",
-    width: 150,
-   align:"left",
-    sorter: true,
-    render: object => renderCell(object, "DateTimeCell", "created_at")
   },
   {
     title: <IntlMessages id="simplexTradeTable.title.fill_price" />,
@@ -103,6 +104,7 @@ const columns = [
     width: 150,
     align:"left",
     sorter: true,
+    render:(data)=><span className={"withdrawal-status-"+data.toLowerCase()}>{data}</span>
   }
   
 ];

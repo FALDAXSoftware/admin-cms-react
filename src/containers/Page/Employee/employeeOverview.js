@@ -264,8 +264,7 @@ class PersonalDetails extends Component {
                                 <span>
                                     <b>New Password</b>
                                 </span>
-                                <Input
-                                    type="password"
+                                <Input.Password
                                     placeholder="New Password"
                                     style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                                     onChange={this._onChangeFields.bind(this, "newPwd")}
@@ -278,8 +277,7 @@ class PersonalDetails extends Component {
                                 <span>
                                     <b>Confirm Password</b>
                                 </span>
-                                <Input
-                                    type="password"
+                                <Input.Password
                                     placeholder="Confirm Password"
                                     style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                                     onChange={this._onChangeFields.bind(this, "confirmPwd")}

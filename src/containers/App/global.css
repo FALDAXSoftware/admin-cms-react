@@ -223,10 +223,18 @@ html[dir='rtl'] .dz-hidden-input {
   list-style: circle inside;
 }
 .image-note{
-  margin-top: 10px;
-  display: inline-block;
+  margin-top: 8px;
+  font-style: italic;
   font-size: 12px;
   color: gray;
+}
+.toolbar-header-text{
+  text-align: center;
+  line-height: 0px  !important;
+  margin-top: 20px;
+}
+.toolbar-header-text span{
+  line-height: 20px
 }
 .front-doc{
   border: 1px solid;
@@ -248,6 +256,13 @@ html[dir='rtl'] .dz-hidden-input {
   max-height: 200px;
   border: 1px solid;
   margin-left: 30px;
+}
+.sub-header-title{
+  font-size: small;
+}
+.header-title{
+  font-size: large;
+  font-weight: 600;
 }
 .back-doc img {
   width: 100%;
@@ -468,6 +483,15 @@ html[dir='rtl'] .dz-hidden-input {
   float: right;
   line-height: 40px;
 }
+.inactive-asset-card {
+  font-weight: 700;
+  font-size: large;
+  margin-bottom: 10px;
+}
+.inactive-asset-card .amount{
+  float: right;
+  line-height: 40px;
+}
 .tier-tab{
   margin-left: 20px;
     /* background-color: white; */
@@ -581,6 +605,12 @@ html[dir='rtl'] .dz-hidden-input {
   width: 18px !important;
   height: 18px !important;
 }
+.text-center{
+  text-align: center;
+}
+.full-height{
+  height: 100%;
+}
 .panic-btn{
   width: 70px;
   text-align: center;
@@ -614,7 +644,17 @@ html[dir='rtl'] .dz-hidden-input {
   width: 25px !important;
   height: 25px !important;
 }
-
+.kyc-btn{
+  width: 125px;
+  text-align: center;
+  height: 30px !important;
+  line-height: 22px !important;
+  border-radius: 100px !important;
+}
+.kyc-btn::after{
+  width: 25px !important;
+  height: 25px !important;
+}
 .search-with-btn{
   width: 300px !important;
 }
@@ -672,16 +712,23 @@ html[dir='rtl'] .dz-hidden-input {
 .table-filter-row .ant-col{
   padding: 4px;
 }
-.order-2 {
+.order-2,.withdrawal-status-approved {
   color: green;
   font-weight: 500;
 }
+.sub-tab-tabledemo{
+  margin: 0 !important;
+}
 
-.order-3 {
+.order-3,.withdrawal-status-declined{
   font-weight: 500;
   color: orangered;
 }
-.order-1 {
+.withdrawal-status-cancelled{
+  font-weight: 500;
+  color: orangered;
+}
+.order-1,.withdrawal-status-pending {
   font-weight: 500;
   color: #174c7e;
 }
@@ -732,4 +779,50 @@ html[dir='rtl'] .dz-hidden-input {
 .limit-div
 {
   background: #f1f3f6;
+}
+.ant-breadcrumb{
+  font-weight: 400;
+  width: 100%;
+  clear: both;
+  margin-left: 10px !important;
+}
+.copy-text-container{
+  padding: 2px;
+  border: 1.2px dotted #1790fe;
+  border-radius: 3%;
+  cursor: pointer;
+  background: #7fffd42e;
+}
+/* Disable print  */
+@media print {
+  html, body {
+     display: none;  /* hide whole page */
+  }
+}
+
+.icon-img{
+  height: 30px;
+}
+.wallet-head{
+  font-size: x-large;
+}
+.wallet-address{
+  cursor: pointer;
+  padding: 5px;
+  background: #dcdcdc59;
+  border: 1px dotted #359afd9e;
+}
+.lowercase{
+  text-transform: lowercase;
+}
+.email-container{
+  padding:16px 8px;
+}
+
+.long-text-wrapper{
+  word-wrap: break-word;
+  width: 50%;
+  text-align: justify;
+  display:block;
+  white-space: normal;
 }

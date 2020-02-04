@@ -82,7 +82,7 @@ class ReferralUsers extends Component {
         let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
-            <LayoutWrapper>
+            <>
                 <TableDemoStyle className="full-width isoLayoutContent">
                     <TableWrapper
                         rowKey="id"
@@ -93,7 +93,7 @@ class ReferralUsers extends Component {
                         className="table-tb-margin"
                         onChange={this._handleReferralTableChange}
                         bordered
-                        scroll={TABLE_SCROLL_HEIGHT}
+                       
                     />
                     {loader && <FaldaxLoader />}
                     {allReferralCount > 0 ?
@@ -108,7 +108,7 @@ class ReferralUsers extends Component {
                             pageSizeOptions={pageSizeOptions}
                         /> : ''}
                 </TableDemoStyle>
-            </LayoutWrapper>
+            </>
         );
     }
 }

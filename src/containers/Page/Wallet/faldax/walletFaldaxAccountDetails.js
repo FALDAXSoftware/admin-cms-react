@@ -4,13 +4,13 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import {  withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
+import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
-import { DateTimeCell ,TransactionHashCellUser} from '../../../../components/tables/helperCells';
+import { DateTimeCell , TransactionIdHashCell} from '../../../../components/tables/helperCells';
 
 const {RangePicker}=DatePicker;
 const {Option}=Select;
@@ -20,6 +20,7 @@ const columns=[
         key:55,
         dataIndex:"coin_code",
         width:100,
+        ellipsis:true,
         render:data=><span>{data.toUpperCase()}</span>
     },
     {
@@ -27,7 +28,8 @@ const columns=[
         key:1,
         dataIndex:"created_at",
         sorter: true,
-        width:100,
+        ellipsis:true,
+        width:150,
         render:data=><span>{DateTimeCell(data)}</span>
     },
     // {
@@ -40,7 +42,8 @@ const columns=[
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.amount"/>,
         key:2,
-        width:100,
+        width:175,
+        ellipsis:true,
         render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
     },
     {
@@ -48,25 +51,29 @@ const columns=[
         key:3,
         dataIndex:"transaction_type",
         width:100,
-        render:type=><span className={"color-"+(type=="send"?"green":"blue")}>{type.charAt(0).toUpperCase()+type.slice(1)}</span>
+        ellipsis:true,
+        render:data=><span className={data=="send"?"error-danger":"color-green"}><Icon type={data=="send"?"arrow-up":"arrow-down"}/>&nbsp;{data.charAt(0).toUpperCase()+data.slice(1)}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
         key:4,
-        width:100,
+        ellipsis:true,
+        width:300,
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.destination_address"/>,
         dataIndex:"destination_address",
         key:5,
-        width:100,
+        ellipsis:true,
+        width:300,
     },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id"/>,
         key:6,
-        width:100,
-        render:data=>TransactionHashCellUser(undefined,undefined,undefined,undefined,undefined,undefined,undefined,data["transaction_id"],data["coin_code"])
+        width:300,
+        ellipsis:true,
+        render:data=>TransactionIdHashCell(data["coin_code"],data["transaction_id"])
        
     }
 ]
@@ -167,6 +174,8 @@ class WalletFaldaxDetailsComponent extends Component {
                             dataSource={walletValue}
                             className="isoCustomizedTable table-tb-margin"
                             onChange={this.handleTableChange}
+                            bordered
+                            scroll={TABLE_SCROLL_HEIGHT}
                         />
                         <Pagination
                             className="ant-users-pagination"

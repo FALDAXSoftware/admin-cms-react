@@ -11,6 +11,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { BackButton } from '../../Shared/backBttton';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const { logout } = authAction;
 const Search = Input.Search;
@@ -128,7 +129,8 @@ class JobApplications extends Component {
         return (
             <LayoutWrapper>
                 {loader && <FaldaxLoader />}
-                <BackButton {...this.props}></BackButton>
+                {/* <BackButton {...this.props}></BackButton> */}
+                <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
                 <TableDemoStyle className="isoLayoutContent">
                     <Tabs className="isoTableDisplayTab">
                             <TabPane tab={tableColumn.title} key={tableColumn.value}>

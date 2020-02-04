@@ -203,7 +203,7 @@ class UserTradeHistory extends Component {
     }
 
     return (
-        <TableDemoStyle className="isoLayoutContent">   
+      <>
           <Form onSubmit={this._searchTrade}>
             <Row type="flex" justify="start" className="table-filter-row">
               <Col sm={8}>
@@ -300,7 +300,7 @@ class UserTradeHistory extends Component {
                                 )}
                                 <li>
                                   <span className="ex_head">
-                                    <b>Faldax Fees : </b>
+                                    <b>FALDAX Fees : </b>
                                   </span>
                                   <span className="ex_data">
                                     {parseFloat(record.faldax_fees).toFixed(8)}
@@ -319,7 +319,7 @@ class UserTradeHistory extends Component {
                               <ExecutionUl>
                                 <li>
                                   <span className="ex_head">
-                                    <b>Faldax Fees : </b>
+                                    <b>FALDAX Fees : </b>
                                   </span>
                                   <span className="ex_data">{record.faldax_fees}</span>
                                 </li>
@@ -351,7 +351,8 @@ class UserTradeHistory extends Component {
                     ""
                   )}
                 </div>
-        </TableDemoStyle>
+                </>
+
     );
   }
 }

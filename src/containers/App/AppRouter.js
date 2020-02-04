@@ -115,7 +115,7 @@ const routes = [
         module: "email_templates"
     },
     {
-        path: "news-source",
+        path: "new's-source",
         component: asyncComponent(() => import("../Page/NewsSource/newsSources")),
         module: "news_source"
     },
@@ -140,7 +140,7 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
-        path: "wallet/warm/:coin",
+        path: "wallet/warm/:coin",  
         component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
         module: "wallet_dashboard"
     },
@@ -185,7 +185,7 @@ const routes = [
         module: "offers"
     },
     {
-        path: "campaign/offer-usage/:id",
+        path: "campaign/:campaignId/offer-usage/:id",
         component: asyncComponent(() => import("../Page/Offers/offersUsage")),
         module: "offers"
     },
@@ -230,11 +230,11 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Users/userTrades"))
     },
     {
-        path: "country/:id/states",
+        path: "countries/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
     {
-        path: "job-applications/:id",
+        path: "jobs/job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
     },
     {
@@ -282,7 +282,7 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Tiers/editTier"))
     },
     {
-        path: "access-grant/:id",
+        path: "roles/access-grant/:id",
         component: asyncComponent(() => import("../Page/Roles/access-grant"))
     },
 ]

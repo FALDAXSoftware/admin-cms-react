@@ -9,6 +9,7 @@ import Loader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../../helpers/apiUtills';
 import { isAllowed } from '../../../helpers/accessControl';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 class TermsAndConditions extends Component {
    constructor(props){
@@ -103,7 +104,8 @@ class TermsAndConditions extends Component {
         let {loader,fields,policyUrlList}=this.state;
         return (<>
             <LayoutWrapper>
-                <BackButton {...this.props}/>
+                {/* <BackButton {...this.props}/> */}
+                <BreadcrumbComponent {...this.props} />
                 <TableDemoStyle className="full-width">
                     <div>
                        { policyUrlList.map((ele,index)=>{

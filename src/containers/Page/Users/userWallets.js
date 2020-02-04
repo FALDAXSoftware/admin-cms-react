@@ -11,8 +11,6 @@ import { isAllowed } from "../../../helpers/accessControl";
 const { logout } = authAction;
 
 const ParentDiv = styled.div`
-  padding: 20px;
-  margin: 30px !important;
 `;
 const Image = styled.img`
   width: 25px;
@@ -74,24 +72,25 @@ class UserWallets extends Component {
     _getUserWallets = () => {
         const { token, user_id } = this.props;
         let _this = this;
-
+        this.setState({loader:true});
         ApiUtils.getUserWallets(token, user_id)
             .then(response => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ userWallets: res.data });
+                    _this.setState({ userWallets: res.data ,loader:false});
                 } else if (res.status == 403) {
                     _this.setState(
-                        { errMsg: true, errMessage: res.err, errType: "error" },
+                        { errMsg: true, errMessage: res.err, errType: "error" ,loader:false},
                         () => {
                             _this.props.logout();
                         }
                     );
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
+                    _this.setState({ errMsg: true, errMessage: res.message ,loader:false});
                 }
             })
             .catch(err => {
+                _this.setState({ errMsg: true, errMessage:"Something went to wrong",loader:false});
                 console.log(err);
             });
     };
@@ -155,7 +154,7 @@ class UserWallets extends Component {
 
         return (
             <ParentDiv>
-                <WalletRow class="main_wallet_row">
+                <WalletRow className="main_wallet_row">
                     {userWallets &&
                         userWallets.length > 0 &&
                         userWallets.map(wallet => {

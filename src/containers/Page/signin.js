@@ -122,7 +122,7 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" onChange={this._onChangeFields.bind(this, "password")} />
+                <Input.Password size="large"  placeholder="Password" onChange={this._onChangeFields.bind(this, "password")} />
                 <span className="field-error">
                   {this.validator.message('Password', this.state.fields['password'], 'required')}
                 </span>
@@ -130,7 +130,7 @@ class SignIn extends Component {
 
               {this.state.isOtpRequired &&
                 <div className="isoInputWrapper">
-                  <span>Two-Factor Authentication is enabled for this account. Please enter your 2FA code below to proceed.</span>
+                  <span>2FA is enabled for this account. Please enter your 2FA code below to proceed.</span>
                   <div>
                     <Input size="large" type="text" placeholder="OTP" onChange={this._onChangeFields.bind(this, "otp")} />
                     {this.validator.message('OTP', this.state.fields['otp'], 'required|numeric')}
