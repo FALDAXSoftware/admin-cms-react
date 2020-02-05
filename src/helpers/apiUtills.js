@@ -3487,6 +3487,17 @@ const ApiUtils = {
         "Content-Type": "application/json"
       },
     });
-  }
+  },
+  getNetworkFee: function(token, form) {
+    return fetch(API_URL + "/admin/wallet/get-network-fee", {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+  },
 };
 export default ApiUtils;
