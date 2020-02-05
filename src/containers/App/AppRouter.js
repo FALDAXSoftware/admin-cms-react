@@ -145,6 +145,16 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
+        path: "wallet/hotsend/:coin",  
+        component: asyncComponent(() => import("../Page/Wallet/hot-send/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/hotreceive/:coin",  
+        component: asyncComponent(() => import("../Page/Wallet/hot-receive/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
         path: "wallet/custodial/:coin",
         component: asyncComponent(() => import("../Page/Wallet/custodial/wallet")),
         module: "wallet_dashboard"

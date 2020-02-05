@@ -61,7 +61,7 @@ class WalletWarmDashboard extends Component {
             assets.push({name:ele.coin,value:ele.coin_code,icon:ele.coin_icon})
             return ele;
         })
-        self.props.history.push({pathname:`./wallet/warm/${coin_code}`,state:{assets:JSON.stringify(assets)}})
+        self.props.history.push({pathname:`./wallet/hotreceive/${coin_code}`,state:{assets:JSON.stringify(assets)}})
     }
     
     openNotificationWithIcon = (type="Error",message="Something went to wrong") => {
@@ -75,7 +75,7 @@ class WalletWarmDashboard extends Component {
         try{
             await this.loader.show()
             let {searchData}=this.state;
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletWarnDashboard(searchData)).json();
+            let res=await (await ApiUtils.walletDashboard(this.props.token).getHotReceiveWallet(searchData)).json();
             let [{status,data,err},logout]=[res,this.props.logout];
             if(status==200){
                 this.setState({data});

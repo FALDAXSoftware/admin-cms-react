@@ -5,6 +5,8 @@ const breadcrumbNameMap = {
     '/dashboard/wallet': ' Wallet Dashboard',
     '/dashboard/wallet/faldax/:coin': 'FALDAX Wallet',
     '/dashboard/wallet/warm/:coin': 'Warm Wallet',
+    '/dashboard/wallet/hotsend/:coin': 'Hot Send Wallet',
+    '/dashboard/wallet/hotreceive/:coin': 'Hot Receive Wallet',
     '/dashboard/wallet/custodial/:coin': 'Custodial Wallet',
     '/dashboard/users':" Users",
     '/dashboard/users/add-user':"Add User",
