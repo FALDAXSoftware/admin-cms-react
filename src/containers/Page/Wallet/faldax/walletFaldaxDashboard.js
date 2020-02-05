@@ -90,6 +90,8 @@ const columns=[
 class WalletFaldaxDashboard extends Component {
     constructor(props){
         super(props)
+        this.timer=1000;//1.5 seconds
+        this.timeCounter=undefined;
         this.state={loader:false,walletValue:[],searchData:"",sendModal:false,walletDetails:{}, fields: {},networkFee:0}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
         self=this;
@@ -155,6 +157,7 @@ class WalletFaldaxDashboard extends Component {
     }
 
     _handleChange = async(field, e) => {
+        clearTimeout(this.timeCounter);
         let {token}=this.props,
         {fields,walletDetails} = this.state;
         if (e.target.value.trim() == "") {
@@ -164,19 +167,21 @@ class WalletFaldaxDashboard extends Component {
         }
         this.setState({ fields },async ()=>{
             if(field=="amount" && this.validator.allValid()){
-                try{
-                    this.loader.show();
-                    let res=await(await ApiUtils.getNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
-                    if(res.status==200){
-                        this.setState({networkFee:res.data})
-                    }else if(res.status==400 || res.status==401 ||res.status==403){
+                this.timeCounter=setTimeout(async()=>{
+                        try{
+                        this.loader.show();
+                        let res=await(await ApiUtils.getNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
+                        if(res.status==200){
+                            this.setState({networkFee:res.data})
+                        }else if(res.status==400 || res.status==401 ||res.status==403){
+                            
+                        }
+                    }catch(error){
                         
+                    } finally{
+                        this.loader.hide();
                     }
-                }catch(error){
-                    
-                } finally{
-                    this.loader.hide();
-                }
+                    },this.timer)
             }else{
                 this.validator.showMessages();
                 this.forceUpdate();
@@ -200,7 +205,7 @@ class WalletFaldaxDashboard extends Component {
                 let res=await (await ApiUtils.sendWalletBalance(token, formData)).json();
                 let [{data,status,err,message},{logout}]=[res,this.props];
                 if (status == 200) {
-                    this.setState({ allWallets: data },()=>this.openNotificationWithIcon("Success",message));
+                    this.setState({ allWallets: data },()=>{this.openNotificationWithIcon("Success",message);this.getWalletData();});
                 } else if (status == 403) {
                     this.openNotificationWithIcon("Error",err)
                     logout();

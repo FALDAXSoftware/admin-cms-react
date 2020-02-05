@@ -262,21 +262,20 @@ class WalletFaldaxDetailsComponent extends Component {
                                       <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
                                     </span>
                                     <br />
-                                    {/* <span>
+                                    <span>
                                       <b>Estimated Network Fees: </b>
                                     </span>{" "}
                                     {PrecisionCell(record.estimated_network_fees)}
-                                    <br /> */}
+                                    <br />
                                    {record.transaction_type == "send" && <><span>
-                                      <b>Network Fees: </b>
+                                      <b>Actual Network Fees: </b>
                                     </span>{" "}
                                     {PrecisionCell(record.actual_network_fees)}
                                     <br /></> }
-                                    {/* <span>
+                                    {record.transaction_from=="Send to Destination" && <><span>
                                       <b>Residual Amount:</b>
-                                    </span>{" "}
-                                    {PrecisionCell(record.residual_amount)}
-                                    <br />  */}
+                                      {PrecisionCell(record.residual_amount)}
+                                    </span>{" "}<br /></>}
                                     <span>
                                       <b>Transaction From: </b>
                                     </span>{" "}
