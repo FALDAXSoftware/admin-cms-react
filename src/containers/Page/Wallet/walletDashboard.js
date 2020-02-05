@@ -5,9 +5,11 @@ import { TabPane } from '../../../components/uielements/tabs';
 import {  withRouter} from "react-router-dom";
 import WalletFaldaxDashboard from './faldax/walletFaldaxDashboard';
 import WalletWarmDashboard from './warm/walletWarmDashboard';
-import WalletCustodialDashboard from './custodial/walletCustodialDashboard';
+// import WalletCustodialDashboard from './custodial/walletCustodialDashboard';
 import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
+import WalletHotSendDashboard from "./hot-send/walletDashboard"
+import WalletHotReceiveDashboard from "./hot-receive/walletDashboard"
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 class WalletDashboard extends Component {
     state = {  }    
@@ -19,6 +21,8 @@ class WalletDashboard extends Component {
             <Tabs className="full-width">
                 {isAllowed("admin_wallet_fees_details") &&<TabPane tab="FALDAX Wallet" key="1"><WalletFaldaxDashboard/></TabPane>}
                 {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Warm Wallet" key="2"><WalletWarmDashboard/></TabPane>}
+                {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Hot Send Wallet" key="4"><WalletHotSendDashboard/></TabPane>}
+                {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Hot Receive Wallet" key="3"><WalletHotReceiveDashboard/></TabPane>}
                 {/* {isAllowed("admin_cold_wallet_data") &&<TabPane tab="Custodial Wallet" key="3"><WalletCustodialDashboard/></TabPane>} */}
             </Tabs>
         </LayoutWrapper>

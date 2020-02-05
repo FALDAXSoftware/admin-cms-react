@@ -66,7 +66,7 @@ class TwoFactorEnableModal extends Component
      return (
       <>
       <Modal visible={true} title={this.props.title} onOk={this.close}
-        onCancel={this.close}>
+        onCancel={this.close} footer={null}>
         <div>
           <Button type="primary"><Link to="./edit-profile">Enable your 2FA</Link></Button>
         </div>
