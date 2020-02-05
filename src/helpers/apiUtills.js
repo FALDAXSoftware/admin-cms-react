@@ -3359,7 +3359,8 @@ const ApiUtils = {
         searchData = "",
         start_date = null,
         end_date = null,
-        walletType = 1
+        walletType = 1,
+        transaction_type=""
       ) {
         return fetch(
           `${API_URL}${
@@ -3372,7 +3373,7 @@ const ApiUtils = {
             searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
             end_date ? "&end_date=" + end_date : ""
-          }`,
+          }${transaction_type?"&t_type="+transaction_type:""}`,
           {
             method: "GET",
             headers: this.headers
@@ -3486,6 +3487,17 @@ const ApiUtils = {
         "Content-Type": "application/json"
       },
     });
-  }
+  },
+  getNetworkFee: function(token, form) {
+    return fetch(API_URL + "/admin/wallet/get-network-fee", {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+  },
 };
 export default ApiUtils;

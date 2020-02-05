@@ -90,7 +90,9 @@ const columns=[
 class WalletFaldaxDashboard extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,walletValue:[],searchData:"",sendModal:false,walletDetails:{}, fields: {}}
+        this.timer=1000;//1.5 seconds
+        this.timeCounter=undefined;
+        this.state={loader:false,walletValue:[],searchData:"",sendModal:false,walletDetails:{}, fields: {},networkFee:0}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
         self=this;
         this.validator = new SimpleReactValidator({
@@ -120,7 +122,7 @@ class WalletFaldaxDashboard extends Component {
         let {walletValue}=self.state;
         let assets=[]
         walletValue.map((ele)=>{
-            assets.push({name:ele.coin,value:ele.coin_code})
+            assets.push({name:ele.coin,value:ele.coin_code,icon:ele.coin_icon})
             return ele;
         })
         self.props.history.push({pathname:`./wallet/faldax/${coin_code}`,state:{assets:JSON.stringify(assets)}})
@@ -154,23 +156,48 @@ class WalletFaldaxDashboard extends Component {
         }
     }
 
-    _handleChange = (field, e) => {
-        let fields = this.state.fields;
+    _handleChange = async(field, e) => {
+        clearTimeout(this.timeCounter);
+        let {token}=this.props,
+        {fields,walletDetails} = this.state;
         if (e.target.value.trim() == "") {
             fields[field] = "";
         } else {
             fields[field] = e.target.value;
         }
-        this.setState({ fields });
+        this.setState({ fields },async ()=>{
+            if(field=="amount" && this.validator.allValid()){
+                this.timeCounter=setTimeout(async()=>{
+                        try{
+                        this.loader.show();
+                        let res=await(await ApiUtils.getNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
+                        if(res.status==200){
+                            this.setState({networkFee:res.data})
+                        }else if(res.status==400 || res.status==401 ||res.status==403){
+                            
+                        }
+                    }catch(error){
+                        
+                    } finally{
+                        this.loader.hide();
+                    }
+                    },this.timer)
+            }else{
+                this.validator.showMessages();
+                this.forceUpdate();
+            }
+        });
     }
 
    sendWalletBal = async () => {
         const { token } = this.props;
-        const { fields, walletDetails } = this.state;
+        const { fields, walletDetails,networkFee } = this.state;
         let formData = {
             amount: fields['amount'],
             destination_address: fields['dest_address'],
-            coin_code: walletDetails.coin_code
+            coin_code: walletDetails.coin_code,
+            networkFees:parseFloat(networkFee)?parseFloat(networkFee):0,
+            total_fees:parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0
         };
         if (this.validator.allValid()) {
             try{
@@ -178,7 +205,7 @@ class WalletFaldaxDashboard extends Component {
                 let res=await (await ApiUtils.sendWalletBalance(token, formData)).json();
                 let [{data,status,err,message},{logout}]=[res,this.props];
                 if (status == 200) {
-                    this.setState({ allWallets: data },()=>this.openNotificationWithIcon("Success",message));
+                    this.setState({ allWallets: data },()=>{this.openNotificationWithIcon("Success",message);this.getWalletData();});
                 } else if (status == 403) {
                     this.openNotificationWithIcon("Error",err)
                     logout();
@@ -212,11 +239,11 @@ class WalletFaldaxDashboard extends Component {
                 required: true  // optional
             }
         });
-        this.setState({ sendModal: false, fields: {}, walletDetails: [] });
+        this.setState({ sendModal: false, fields: {}, walletDetails: [],networkFee:0 });
     }
 
     render() { 
-        const {loader,walletValue,walletDetails,searchData,sendModal,fields} =this.state;
+        const {loader,walletValue,walletDetails,searchData,sendModal,fields,networkFee} =this.state;
         return (
             <>
                 <TableDemoStyle className="isoLayoutContent">
@@ -260,12 +287,15 @@ class WalletFaldaxDashboard extends Component {
                                     <span>Amount:</span>
                                     <Input placeholder="Amount" onChange={this._handleChange.bind(this, "amount")} value={fields["amount"]} />
                                     <span style={{ "color": "red" }}>
-                                        {this.validator.message('amount', fields["amount"], 'required|numeric|gtzero', 'text-danger')}
+                                        {this.validator.message('amount', fields["amount"], `required|numeric|gte:${walletDetails.min_limit}`, 'text-danger')}
                                     </span>
                                 </div>
                                 <div>
+                                    <span style={{ float: 'left' }}>
+                                        <b>Network Fee* : {networkFee} {walletDetails.coin}</b>
+                                    </span>
                                     <span style={{ float: 'right' }}>
-                                        <b>Total Payout : {fields['amount']} {walletDetails.coin}</b>
+                                        <b>Total Payout : {parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</b>
                                     </span>
                                 </div>
                             </Form>
