@@ -374,9 +374,9 @@ class Transactions extends Component {
                         <br />
                         <span>
                           <b>Name: </b>
-                          </span>{" "}
-                          {record.first_name+" "+record.last_name}
-                          <br />
+                        </span>{" "}
+                        {record.first_name + " " + record.last_name}
+                        <br />
                         <span>
                           <b>Email: </b>
                         </span>{" "}
@@ -419,7 +419,17 @@ class Transactions extends Component {
                           }}
                         >
                           {" "}
-                          <Icon type={record.transaction_type=="send"?"arrow-up":"arrow-down"}/>&nbsp;{record.transaction_type=="send"?"Send":"Receive"}
+                          <Icon
+                            type={
+                              record.transaction_type == "send"
+                                ? "arrow-up"
+                                : "arrow-down"
+                            }
+                          />
+                          &nbsp;
+                          {record.transaction_type == "send"
+                            ? "Send"
+                            : "Receive"}
                         </span>
                         <br />
                         {/* <span>
@@ -427,46 +437,75 @@ class Transactions extends Component {
                         </span>{" "}
                         {record.transaction_fees}
                         <br /> */}
-                       {record.transaction_type=="send" && <><span>
-                          <b>FALDAX Fees: </b>
-                        </span>{" "}
-                        {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
-                        <br /></>}
+                        {record.transaction_type == "send" &&
+                          record.transaction_from != "Send to Destination" && (
+                            <>
+                              <span>
+                                <b>FALDAX Fees: </b>
+                              </span>{" "}
+                              {record.transaction_type == "send"
+                                ? PrecisionCell(record.faldax_fee)
+                                : "-"}
+                              <br />
+                            </>
+                          )}
                         {/* <span>
                           <b>Network Fees: </b>
                         </span>{" "}
                         {record.transaction_type=="send"?PrecisionCell(record.network_fees):'-'}
                         <br /> */}
-                        <span>
-                          <b>Estimated Network Fees: </b>
-                        </span>{" "}
-                        {PrecisionCell(record.estimated_network_fees)}
-                        <br />
-                        <span>
-                          <b>Actual Network Fees: </b>
-                        </span>{" "}
-                        {PrecisionCell(record.actual_network_fees)}
-                        <br /> 
-                        <span>
-                          <b>Residual Amount:</b>
-                        </span>{" "}
-                        {PrecisionCell(record.residual_amount)}
-                        <br /> 
+                        {record.transaction_from !=
+                          "Destination To Receive" && (
+                          <>
+                            {" "}
+                            <span>
+                              <b>Estimated Network Fees: </b>
+                            </span>{" "}
+                            {PrecisionCell(record.estimated_network_fees)}
+                            <br />
+                            <span>
+                              <b>Actual Network Fees: </b>
+                            </span>{" "}
+                            {PrecisionCell(record.actual_network_fees)}
+                            <br />
+                            {record.transaction_from !=
+                              "Warmwallet to Send" && (
+                              <>
+                                {" "}
+                                <span>
+                                  <b>Residual Amount:</b>
+                                </span>
+                                {PrecisionCell(record.residual_amount)}
+                                <br />{" "}
+                              </>
+                            )}
+                          </>
+                        )}
                         <span>
                           <b>Transaction From: </b>
                         </span>{" "}
                         {record.transaction_from}
-                        <br /> 
-                       {record.transaction_from=="Warmwallet to Send" && <><span>
-                          <b>User (Sender) Balance Before Transaction: </b>
-                        </span>
-                        {record.sender_user_balance_before}
-                       <br /></> }
-                       {record.transaction_from=="Receive to Warmwallet" && <><span>
-                          <b>User (Receiver) Balance Before Transaction: </b>
-                        </span>
-                        {record.receiver_user_balance_before}
-                       <br /></> }
+                        <br />
+                        {record.transaction_from == "Warmwallet to Send" && (
+                          <>
+                            <span>
+                              <b>User (Sender) Balance Before Transaction: </b>
+                            </span>
+                            {record.sender_user_balance_before}
+                            <br />
+                          </>
+                        )}
+                        {record.transaction_from == "Destination To Receive" && (
+                          <>
+                            <span>
+                              <b>
+                                User (Receiver) Balance Before Transaction:{" "}
+                              </b>
+                            </span>
+                            {record.receiver_user_balance_before}
+                            <br />
+                          </>
+                        )}
                       </div>
                     );
                   }}

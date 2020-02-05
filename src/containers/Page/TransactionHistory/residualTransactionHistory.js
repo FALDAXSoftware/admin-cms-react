@@ -305,7 +305,7 @@ const ResidualTransactionHistory = props => {
                         </span>{" "}
                         {record.transaction_fees}
                         <br /> */}
-                {record.transaction_type == "send" && (
+                {/* {record.transaction_type == "send" && (
                   <>
                     <span>
                       <b>FALDAX Fees: </b>
@@ -315,7 +315,7 @@ const ResidualTransactionHistory = props => {
                       : "-"}
                     <br />
                   </>
-                )}
+                )} */}
                 {/* <span>
                           <b>Network Fees: </b>
                         </span>{" "}
