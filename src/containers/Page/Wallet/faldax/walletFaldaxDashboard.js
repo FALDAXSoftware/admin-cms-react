@@ -170,7 +170,7 @@ class WalletFaldaxDashboard extends Component {
                 this.timeCounter=setTimeout(async()=>{
                         try{
                         this.loader.show();
-                        let res=await(await ApiUtils.getNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
+                        let res=await(await ApiUtils.getWalletNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
                         if(res.status==200){
                             this.setState({networkFee:res.data})
                         }else if(res.status==400 || res.status==401 ||res.status==403){

@@ -234,7 +234,9 @@ const options = [
     permssions: [
       "admin_wallet_fees_details",
       "admin_warm_wallet_data",
-      "admin_cold_wallet_data"
+      // "admin_cold_wallet_data",
+      "admin_hotreceive_wallet_details",
+      "admin_hotsend_wallet_details"
     ]
   },
   // {

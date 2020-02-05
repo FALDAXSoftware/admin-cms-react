@@ -112,7 +112,7 @@ class WalletWarmDetailsComponent extends Component {
         try{
             await this.loader.show()
             const {coin_code,searchData}=this.state;
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWarmWalletDetail(coin_code,searchData)).json();
+            let res=await (await ApiUtils.walletDashboard(this.props.token).getHotReceiveWalletDetails(coin_code,searchData)).json();
             let [{status,data,err,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
                 this.setState({transfers:data.transfers,count:tradeCount});
@@ -162,16 +162,6 @@ class WalletWarmDetailsComponent extends Component {
                             scroll={TABLE_SCROLL_HEIGHT}
                             bordered
                         />
-                        {/* <Pagination
-                            className="ant-users-pagination"
-                            onChange={this.handlePagination}
-                            pageSize={limit}
-                            current={page}
-                            total={count}
-                            showSizeChanger
-                            onShowSizeChange={this.changePaginationSize}
-                            pageSizeOptions={pageSizeOptions}
-                      /> */}
                     {loader && <Loader/>}
                    </TableDemoStyle>
                    </>
