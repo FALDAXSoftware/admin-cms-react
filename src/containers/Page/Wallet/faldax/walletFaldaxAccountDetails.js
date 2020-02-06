@@ -175,7 +175,7 @@ class WalletFaldaxDetailsComponent extends Component {
                                 <Button type="primary" icon="search" className="filter-btn btn-full-width" htmlType="submit">Search</Button>
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
-                                <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
+                                <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin,transaction_type:undefined},()=>this.getWalletData())}}>Reset</Button>
                             </Col>
                         </Row>
                         </Form>

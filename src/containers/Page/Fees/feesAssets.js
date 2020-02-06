@@ -111,13 +111,6 @@ class EditableTable extends React.Component {
     ];
   }
 
-  successNotification = (message) => {
-    notification["success"]({
-      message:"Success",
-      description:message||"Record fetch successfully"
-    });
-  };
-
   errorNotification = (message) => {
     notification["error"]({
       message:"Error",

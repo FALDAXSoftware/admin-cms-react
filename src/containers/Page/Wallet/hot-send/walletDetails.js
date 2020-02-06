@@ -33,7 +33,7 @@ const columns=[
         key:5,
         sorter:true,
         width:75,
-        render:data=><span>{data["coin"].toLowerCase()=="eth"|| data["coin"].toLowerCase()=="teth"?parseFloat(parseFloat(data["baseValue"]) / 100000000000000000).toFixed(8):data["coin"].toLowerCase()!="susu" || data["coin"].toLowerCase()!="tsusu"?parseFloat(parseFloat(data["baseValue"]) / 10000000).toFixed(8):parseFloat(data["baseValue"]).toFixed(8)}</span>
+        render:data=><span>{data["coin"].toLowerCase()=="eth"|| data["coin"].toLowerCase()=="teth"?parseFloat(parseFloat(data["baseValue"]) / 100000000000000000).toFixed(8):data["coin"].toLowerCase()!="susu" || data["coin"].toLowerCase()!="tsusu"?parseFloat(parseFloat(data["baseValue"]) / 100000000).toFixed(8):parseFloat(data["baseValue"]).toFixed(8)}</span>
     },
     {
         title:<IntlMessages id="walletWarmDetailsTable.title.type"/>,
