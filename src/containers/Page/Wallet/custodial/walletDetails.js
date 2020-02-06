@@ -9,7 +9,7 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
-import { DateTimeCell, TransactionIdHashCell } from '../../../../components/tables/helperCells';
+import { DateTimeCell, TransactionIdHashCell, ConvertSatoshiToAssetCell } from '../../../../components/tables/helperCells';
 
 const {Option}=Select;
 const columns=[
@@ -34,7 +34,7 @@ const columns=[
         dataIndex:"baseValue",
         sorter:true,
         width:75,
-        render:data=><span>{data?parseFloat(data)>=0?(parseFloat(data)*0.00000001).toFixed(8):((parseFloat(data) * -1)*0.00000001).toFixed(8):""}</span>
+        render:data=>ConvertSatoshiToAssetCell(data["coin"],data["baseValue"])
     },
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.type"/>,
