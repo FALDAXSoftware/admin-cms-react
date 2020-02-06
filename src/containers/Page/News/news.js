@@ -89,7 +89,7 @@ class News extends Component {
       .catch(err => {
         self.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           searchNews: "",
           errType: "error",
           loader: false
@@ -147,7 +147,7 @@ class News extends Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });
@@ -178,7 +178,7 @@ class News extends Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });

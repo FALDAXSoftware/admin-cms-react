@@ -84,7 +84,7 @@ class SignIn extends Component {
           }
         })
         .catch(err => {
-          _this.setState({ loader: false, errMsg: true, errMessage: 'Something went wrong!!' });
+          _this.setState({ loader: false, errMsg: true, errMessage: 'Unable to complete the requested action.' });
         });
     } else {
       this.setState({ loader: false });

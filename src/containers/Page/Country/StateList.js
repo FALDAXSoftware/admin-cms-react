@@ -67,7 +67,7 @@ class StateList extends Component {
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }
@@ -114,7 +114,7 @@ class StateList extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    loader: false, errMsg: true, errMessage: 'Something went wrong!!', errType: 'error'
+                    loader: false, errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error'
                 })
             });
     }

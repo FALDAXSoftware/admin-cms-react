@@ -72,7 +72,7 @@ class ReferralPercentage extends React.Component {
                 _this.setState({ loader: false });
             })
             .catch(() => {
-                _this.setState({ errMsg: true, errMessage: 'Something went wrong!!', errType: 'error' });
+                _this.setState({ errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error' });
             })
     }
     _onChangeFields(field, e) {

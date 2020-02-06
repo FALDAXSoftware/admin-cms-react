@@ -124,7 +124,7 @@ class AddIPModal extends Component {
                 .catch(() => {
                     _this._resetAddForm();
                     _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error'
                     });
                 });

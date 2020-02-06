@@ -68,7 +68,7 @@ class JobCategory extends Component {
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errMsg: true, errMessage: 'Unable to complete the requested action.',
                     loader: false, errType: 'error', showError: false, isDisabled: false
                 });
             });
@@ -109,7 +109,7 @@ class JobCategory extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }

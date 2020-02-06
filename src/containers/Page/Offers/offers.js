@@ -21,7 +21,7 @@ const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const {RangePicker}=DatePicker;
 const {Option}=Select;
-const OtherError = "Something went to wrong please try again after some time.";
+const OtherError = "Unable to complete the requested action.";
 var self;
 
 class Offers extends Component {

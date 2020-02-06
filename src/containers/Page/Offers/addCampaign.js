@@ -216,7 +216,7 @@ class AddCampaign extends Component {
         this.setState({errMsg:true,errType:"error",errMessage:res.err});  
       }
     }catch(error){
-      this.setState({errMsg:true,errType:"error",errMessage:"Something went to wrong"});
+      this.setState({errMsg:true,errType:"error",errMessage:"Unable to complete the requested action."});
     }finally{
       this.setState({loader:false})
     }
@@ -468,7 +468,7 @@ class AddCampaign extends Component {
         return false; 
       }
     } catch(error){
-      this.openNotificationWithIcon("error", "Error", "Something went to wrong please try again or contact support");
+      this.openNotificationWithIcon("error", "Error", "Unable to complete the requested action.");
       return false;
     } finally {
       this.setState({ loader: false });
