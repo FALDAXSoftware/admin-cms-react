@@ -864,6 +864,48 @@ const approvePendingReq = (
   );
 };
 
+const ConvertSatoshiToAssetCell=(coin,balance)=>{
+  coin=coin.toLowerCase();
+  let amount=0;
+  balance=parseFloat(balance);
+  
+  if(!parseFloat(balance)){
+    return <span>-</span>
+  }
+  switch (coin) {
+    case "btc":
+      amount = balance / 1e8;
+      break;
+    case "tbtc":
+      amount = balance / 1e8;
+      break;
+    case "eth":
+      amount = balance / 1e18;
+      break;
+    case "teth":
+      amount = balance / 1e18;
+      break;
+    case "ltc":
+      amount = balance / 1e8;
+      break;
+    case "tltc":
+      amount = balance / 1e8;
+      break;
+    case "xrp":
+      amount = balance / 1e6;
+      break;
+    case "txrp":
+      amount = balance / 1e6;
+      break;
+    case "susu":
+      amount = balance;
+      break;
+    default:
+      amount = balance;
+  }
+  return <span>{coin=="eth"||coin=="teth"?parseFloat(amount).toFixed(18):parseFloat(amount).toFixed(8)}</span>
+};
+
 const TransactionIdHashCell = (coin_id, transaction_id) => {
   let url = "";
   switch (coin_id.toLowerCase()) {
@@ -881,7 +923,7 @@ const TransactionIdHashCell = (coin_id, transaction_id) => {
       url = "https://explorer.bitcoin.com/tbch/tx/" + transaction_id;
       break;
     case "teth":
-      url = "https://kovan.etherscan.io/block/" + transaction_id;
+      url = "https://kovan.etherscan.io/tx/" + transaction_id;
       break;
 
     // For Main Net
@@ -2968,5 +3010,6 @@ export {
   CollectedAmountCell,
   PrecisionCell,
   ToolTipsCell,
-  TransactionIdHashCell
+  TransactionIdHashCell,
+  ConvertSatoshiToAssetCell
 };

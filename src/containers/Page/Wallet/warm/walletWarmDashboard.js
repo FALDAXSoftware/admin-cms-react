@@ -9,6 +9,7 @@ import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import { isAllowed } from '../../../../helpers/accessControl';
+import { ConvertSatoshiToAssetCell } from '../../../../components/tables/helperCells';
 var self;
 const columns=[
     {
@@ -31,7 +32,7 @@ const columns=[
         align:"left",
         key:1,
         width:100,
-        render:data=><span>{(data["coin"]).toLowerCase()=="eth"?parseFloat(parseFloat(data["balance"]) / 100000000000000000).toFixed(8):data["coin"].toLowerCase()!="susu"?parseFloat(parseFloat(data["balance"]) / 100000000).toFixed(8):parseFloat(data["balance"]).toFixed(8)}</span>
+        render:data=>ConvertSatoshiToAssetCell(data["coin"],data["balance"])
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.address"/>,
