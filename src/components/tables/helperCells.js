@@ -934,7 +934,7 @@ const TransactionIdHashCell = (coin_id, transaction_id) => {
       url = "https://blockchair.com/ripple/transaction/" + transaction_id;
       break;
     case "ltc":
-      url = "https://blockchair.com/litecoin/block/" + transaction_id;
+      url = "https://blockchair.com/litecoin/transaction/" + transaction_id;
       break;
     case "eth":
       url = "https://blockchair.com/ethereum/transaction/" + transaction_id;
