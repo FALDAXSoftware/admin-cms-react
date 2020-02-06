@@ -185,15 +185,15 @@ class UpdateEmailTemplate extends Component {
                   <Form onSubmit={this._updateTemplate} className="full-width">
                     <Row gutter={[16, 16]}>
                       <Col>
-                        <strong>Template Name:</strong>
+                        <strong>Subject:</strong>
                         <br />
                         <Input
-                          placeholder="Template Name"
+                          placeholder="Subject"
                           value={localizeTemplate[ele]["subject"]}
                           onChange={(e)=>this.onSubjectChange(ele,e)}
                           disabled={isReadOnly}
                         />
-                        {this.validator.message('Template Name',`${localizeTemplate[ele]["subject"]}`, 'required|max:60', 'text-danger')}
+                        {this.validator.message('Subject',`${localizeTemplate[ele]["subject"]}`, 'required|max:60', 'text-danger')}
                       </Col>
                     </Row>
                     

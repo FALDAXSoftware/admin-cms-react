@@ -28,11 +28,10 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletCustodialDashboardTable.title.balance"/>,
-       align:"left",
+        align:"left",
         key:0,
-        dataIndex:"balance",
         width:100,
-        render:data=><span>{(parseFloat(data)* 0.00000001).toFixed(8)}</span>
+        render:data=><span>{(data["coin"]).toLowerCase()=="eth"?parseFloat(parseFloat(data["balance"]) / 100000000000000000).toFixed(8):data["coin"].toLowerCase()!="susu"?parseFloat(parseFloat(data["balance"]) / 100000000).toFixed(8):parseFloat(data["balance"]).toFixed(8)}</span>
     },
     {
         title:<IntlMessages id="walletCustodialDashboardTable.title.address"/>,

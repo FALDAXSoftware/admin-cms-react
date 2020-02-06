@@ -16,7 +16,7 @@ const columns=[
        align:"left",
         key:3,
         width:100,
-        render:object=>(<>{isAllowed("admin_warm_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletWarmDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}</>)
+        render:object=>(<>{isAllowed("admin_hotreceive_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={()=>WalletWarmDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}</>)
     },
 
     {
@@ -31,7 +31,7 @@ const columns=[
         align:"left",
         key:1,
         width:100,
-        render:data=><span>{(data["coin"]).toLowerCase()=="eth"?parseFloat(parseFloat(data["balance"]) / 100000000000000000).toFixed(8):data["coin"].toLowerCase()!="susu"?parseFloat(parseFloat(data["balance"]) / 10000000).toFixed(8):parseFloat(data["balance"]).toFixed(8)}</span>
+        render:data=><span>{(data["coin"]).toLowerCase()=="eth"?parseFloat(parseFloat(data["balance"]) / 1000000000000000000).toFixed(8):data["coin"].toLowerCase()!="susu"?parseFloat(parseFloat(data["balance"]) / 1000000000).toFixed(8):parseFloat(data["balance"]).toFixed(8)}</span>
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.address"/>,

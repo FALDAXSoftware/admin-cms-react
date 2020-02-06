@@ -866,7 +866,7 @@ const approvePendingReq = (
 
 const TransactionIdHashCell = (coin_id, transaction_id) => {
   let url = "";
-  switch (coin_id) {
+  switch (coin_id.toLowerCase()) {
     // Fot Test Net
     case "tbtc":
       url = "https://blockstream.info/testnet/tx/" + transaction_id;
@@ -886,19 +886,22 @@ const TransactionIdHashCell = (coin_id, transaction_id) => {
 
     // For Main Net
     case "btc":
-      url = "https://www.blockchain.com/btc/tx/" + transaction_id;
+      url = "https://blockchair.com/bitcoin/transaction/" + transaction_id;
       break;
     case "xrp":
-      url = "https://bithomp.com/explorer/" + transaction_id;
+      url = "https://blockchair.com/ripple/transaction/" + transaction_id;
       break;
     case "ltc":
       url = "https://blockchair.com/litecoin/block/" + transaction_id;
       break;
     case "eth":
-      url = "https://www.blockchain.com/eth/block/" + transaction_id;
+      url = "https://blockchair.com/ethereum/transaction/" + transaction_id;
       break;
     case "bch":
-      url = "https://explorer.bitcoin.com/bch/tx/" + transaction_id;
+      url = "https://blockchair.com/bitcoin-cash/transaction/" + transaction_id;
+      break;
+    case "susu":
+      url = "https://explore.susukino.com/tx/" + transaction_id;
       break;
     default:
       url = "";
