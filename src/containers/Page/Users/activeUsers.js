@@ -132,7 +132,7 @@ class ActiveUsers extends Component {
       .catch(() => {
         this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });
@@ -177,7 +177,7 @@ class ActiveUsers extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong",
+          errMessage: "Unable to complete the requested action.",
           loader: false
         });
       });

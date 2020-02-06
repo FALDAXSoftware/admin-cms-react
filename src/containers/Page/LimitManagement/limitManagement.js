@@ -63,7 +63,7 @@ class LimitManagement extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.', loader: false
                 });
             });
     }

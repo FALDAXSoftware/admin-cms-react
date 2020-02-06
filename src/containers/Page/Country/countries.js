@@ -82,7 +82,7 @@ class Countries extends Component {
       .catch(() => {
         self.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error"
         });
       });
@@ -164,7 +164,7 @@ class Countries extends Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          message: "Something went wrong!!",
+          message: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });

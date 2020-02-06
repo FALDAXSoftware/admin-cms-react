@@ -64,7 +64,7 @@ const AccessGrant = (props) => {
             setIsLoading(false)
             setError({
                 errType: "Error",
-                errMessage: "Something went wrong!",
+                errMessage: "Unable to complete the requested action.!",
                 showError: true
             })
         })
@@ -143,7 +143,7 @@ const AccessGrant = (props) => {
                 setIsLoading(false)
                 setError({
                     errType: "Error",
-                    errMessage: "Something went wrong!",
+                    errMessage: "Unable to complete the requested action.!",
                     showError: true
                 })
             })

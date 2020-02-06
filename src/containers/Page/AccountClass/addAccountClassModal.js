@@ -97,7 +97,7 @@ class AddAccountClassModal extends Component {
                 }).catch(() => {
                     this._resetAddForm();
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', loader: false, errType: 'error'
+                        errMsg: true, errMessage: 'Unable to complete the requested action.', loader: false, errType: 'error'
                     });
                 });
         } else {

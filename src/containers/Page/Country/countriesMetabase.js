@@ -46,7 +46,7 @@ class CountryMetabase extends Component {
       this.loader.hide();
       this.openNotificationWithIconError(
         "Error",
-        "Something went to wrong please try again later"
+        "Unable to complete the requested action."
       );
     }
   }

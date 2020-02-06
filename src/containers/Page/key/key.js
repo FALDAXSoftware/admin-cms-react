@@ -46,7 +46,7 @@ class Keys extends Component {
         }catch(error){
             notification.error({
                 message: "Error",
-                description: "Something went to wrong"
+                description: "Unable to complete the requested action."
               });
         }finally{
             this.loader.hide();

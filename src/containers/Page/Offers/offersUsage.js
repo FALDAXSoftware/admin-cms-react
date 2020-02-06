@@ -22,7 +22,7 @@ import {  DateTimeCell } from "../../../components/tables/helperCells";
 import {ColWithMarginBottom} from "../common.style";
 import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
-const OtherError = "Something went to wrong please try again after some time.";
+const OtherError = "Unable to complete the requested action.";
 let self;
 let { Option } = Select;
 

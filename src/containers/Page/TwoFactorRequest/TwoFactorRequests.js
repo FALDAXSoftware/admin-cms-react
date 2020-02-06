@@ -96,7 +96,7 @@ class TwoFactorRequests extends Component {
       .catch(() => {
         self.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           loader: false,
           errType: "error",
           showError: false,
@@ -199,7 +199,7 @@ class TwoFactorRequests extends Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });

@@ -112,7 +112,7 @@ class EditCountryModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error', isDisabled: false
                     });
                 });
