@@ -318,10 +318,10 @@ class UserTransactionHistory extends Component {
                                     </span>{" "}
                                     {record.transaction_fees}
                                     <br /> */}
-                                  {record.transaction_type=="send" && <><span>
+                                  {record.transaction_type=="send" && (record.coin=="susu"||record.coin=="SUSU") && <><span>
                                       <b>FALDAX Fees: </b>
                                     </span>{" "}
-                                    {record.transaction_type=="send"?PrecisionCell(record.faldax_fee):"-"}
+                                    {PrecisionCell(record.faldax_fee)}
                                     <br /></>}
                                     {/* <span>
                                       <b>Network Fees: </b>
