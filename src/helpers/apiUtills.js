@@ -1,7 +1,6 @@
 // const API_URL = "http://192.168.0.213:1440"; // Local (Mansi) URL
-// const API_URL = "http://192.168.3.32:1337"; // Local (Krina) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
-// const API_URL = "http://192.168.1.96:1337"; //Local Jagdish URL
+// const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
@@ -3391,6 +3390,28 @@ const ApiUtils = {
           }
         );
       },
+      getHotSendWallet: function(search = "") {
+        return fetch(
+          `${API_URL}${this.url}get-hotsend-wallet-data${
+            search ? "?search=" + search : ""
+          }`,
+          {
+            method: "GET",
+            headers: this.headers
+          }
+        );
+      },
+      getHotReceiveWallet: function(search = "") {
+        return fetch(
+          `${API_URL}${this.url}get-hotreceive-wallet-data${
+            search ? "?search=" + search : ""
+          }`,
+          {
+            method: "GET",
+            headers: this.headers
+          }
+        );
+      },
       getWalletColdDashboard: function(searchData) {
         return fetch(
           `${API_URL}${this.url}get-cold-wallet-data${
@@ -3427,8 +3448,34 @@ const ApiUtils = {
             headers: this.headers
           }
         );
+      },
+      getHotReceiveWalletDetails: function(coin_code, search) {
+        return fetch(
+          `${API_URL}${
+            this.url
+          }get-hotreceive-wallet-transaction?coin_code=${coin_code}${
+            search ? "&searchLabel=" + search : ""
+          }`,
+          {
+            method: "GET",
+            headers: this.headers
+          }
+        );
       }
     };
+  },
+  getHotSendWalletDetails: function(coin_code, search) {
+    return fetch(
+      `${API_URL}${
+        this.url
+      }get-hotsend-wallet-transaction?coin_code=${coin_code}${
+        search ? "&searchLabel=" + search : ""
+      }`,
+      {
+        method: "GET",
+        headers: this.headers
+      }
+    );
   },
   getPolicyUrl: function(token) {
     return fetch(`${API_URL}/admin/get-static-page-links`, {
@@ -3488,7 +3535,7 @@ const ApiUtils = {
       },
     });
   },
-  getNetworkFee: function(token, form) {
+  getWalletNetworkFee: function(token, form) {
     return fetch(API_URL + "/admin/wallet/get-network-fee", {
       method: "post",
       headers: {
