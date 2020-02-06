@@ -90,7 +90,7 @@ class UserWallets extends Component {
                 }
             })
             .catch(err => {
-                _this.setState({ errMsg: true, errMessage:"Something went to wrong",loader:false});
+                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.",loader:false});
                 console.log(err);
             });
     };
@@ -131,7 +131,7 @@ class UserWallets extends Component {
             .catch(() => {
                 _this.setState({
                     errMsg: true,
-                    errMessage: "Something went wrong!!",
+                    errMessage: "Unable to complete the requested action.",
                     loader: false,
                     errType: "error"
                 });

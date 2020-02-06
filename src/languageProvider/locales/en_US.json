@@ -312,7 +312,7 @@
   "page403.backButton": "BACK LOGIN",
   "page500.title": "500",
   "page500.subTitle": "Internal Server Error",
-  "page500.description": "Something went wrong. Please try again later.",
+  "page500.description": "Unable to complete the requested action.",
   "page500.backButton": "BACK HOME",
   "page.forgetPassSubTitle": "Forgot Password?",
   "page.forgetPassDescription": "Enter your email address",

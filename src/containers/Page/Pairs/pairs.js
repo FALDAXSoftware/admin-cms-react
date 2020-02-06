@@ -111,7 +111,7 @@ class Pairs extends Component {
         self.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong"
+          errMessage: "Unable to complete the requested action."
         });
         self._resetEditForm();
       });
@@ -202,7 +202,7 @@ class Pairs extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong",
+          errMessage: "Unable to complete the requested action.",
           loader: false
         });
       });

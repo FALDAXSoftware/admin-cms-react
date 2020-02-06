@@ -65,7 +65,7 @@ class UpdateEmailTemplate extends Component {
         console.log("UpdateEmailTemplate Error =>",error);
         this.setState({
             errMsg: true,
-            errMessage: "Something went wrong!!",
+            errMessage: "Unable to complete the requested action.",
             errType: "error",
             loader: false
           });
@@ -149,7 +149,7 @@ class UpdateEmailTemplate extends Component {
         .catch(() => {
           this.setState({
             errMsg: true,
-            errMessage: "Something went wrong!!",
+            errMessage: "Unable to complete the requested action.",
             loader: false,
             errType: "error",
             showError: false

@@ -113,7 +113,7 @@ class AddEmployeeModal extends Component {
                 .catch(() => {
                     this.setState({
                         errType: 'error', errMsg: true, isDisabled: false,
-                        errMessage: 'Something went wrong', loader: false
+                        errMessage: 'Unable to complete the requested action.', loader: false
                     });
                 });
         } else {

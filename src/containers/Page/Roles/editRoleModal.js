@@ -94,7 +94,7 @@ class EditRoleModal extends Component {
                 
                 }catch(error){
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', loader: false,
+                        errMsg: true, errMessage: 'Unable to complete the requested action.', loader: false,
                         errType: 'error', isDisabled: false
                     });
                 }

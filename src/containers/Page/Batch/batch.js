@@ -308,7 +308,7 @@ class BatchBalance extends React.Component {
       .catch(err => {
         this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           loader: false,
           errType: "error"
         });
@@ -366,7 +366,7 @@ class BatchBalance extends React.Component {
       .catch(err => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });
@@ -429,7 +429,7 @@ class BatchBalance extends React.Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });
@@ -494,7 +494,7 @@ class BatchBalance extends React.Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });
@@ -553,7 +553,7 @@ class BatchBalance extends React.Component {
       .catch(() => {
         _this.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           errType: "error",
           loader: false
         });

@@ -100,7 +100,7 @@ class Employees extends Component {
       .catch(error => {
         self.setState({
           errMsg: true,
-          errMessage: "Something went wrong!!",
+          errMessage: "Unable to complete the requested action.",
           loader: false,
           errType: "error"
         });
@@ -174,7 +174,7 @@ class Employees extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong",
+          errMessage: "Unable to complete the requested action.",
           loader: false
         });
       });
@@ -213,7 +213,7 @@ class Employees extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong"
+          errMessage: "Unable to complete the requested action."
         });
       });
   };
@@ -256,7 +256,7 @@ class Employees extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong",
+          errMessage: "Unable to complete the requested action.",
           loader: false
         });
       });
