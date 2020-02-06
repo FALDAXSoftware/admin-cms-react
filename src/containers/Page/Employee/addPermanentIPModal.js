@@ -141,7 +141,7 @@ class AddPermanentIPModal extends Component {
               this._resetAddForm();
               this.setState({
                 errMsg: true,
-                errMessage: "Something went wrong!!",
+                errMessage: "Unable to complete the requested action.",
                 loader: false,
                 errType: "error"
               });

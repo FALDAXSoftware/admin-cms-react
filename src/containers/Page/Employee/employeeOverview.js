@@ -74,7 +74,7 @@ class PersonalDetails extends Component {
                 }
             })
             .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.' });
             });
     }
 
@@ -181,7 +181,7 @@ class PersonalDetails extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error', isDisabled: false
                     });
                 });

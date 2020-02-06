@@ -104,7 +104,7 @@ class AddRoleModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        loader: false, errType: 'error', errMsg: true, errMessage: 'Something went wrong', isDisabled: false
+                        loader: false, errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.', isDisabled: false
                     });
                     this._resetAddForm();
                 });

@@ -43,7 +43,7 @@ class PendingRequests extends Component {
             })
             .catch(() => {
                 self.setState({
-                    errType: 'error', errMsg: true, errMessage: 'Something went wrong', loader: false
+                    errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.', loader: false
                 });
             });
     }

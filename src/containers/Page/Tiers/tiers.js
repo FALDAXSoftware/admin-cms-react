@@ -80,7 +80,7 @@ class Tiers extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong",
+          errMessage: "Unable to complete the requested action.",
           loader: false
         });
       });

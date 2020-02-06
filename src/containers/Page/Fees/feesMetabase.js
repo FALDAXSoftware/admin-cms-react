@@ -38,7 +38,7 @@ class FeesMetabase extends Component {
     } catch (error) {
       this.openNotificationWithIconError(
         "Error",
-        "Something went to wrong please try again later"
+        "Unable to complete the requested action."
       );
     }
   }

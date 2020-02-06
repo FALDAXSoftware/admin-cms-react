@@ -132,7 +132,7 @@ class EditPairModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                        errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.',
                         isDisabled: false, loader: false
                     });
                     this._resetEditForm();

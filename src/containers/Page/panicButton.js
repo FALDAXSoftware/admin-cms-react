@@ -49,7 +49,7 @@ class PanicButton extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errType: 'error', notify: true, errMessage: 'Something went wrong', loader: false
+                    errType: 'error', notify: true, errMessage: 'Unable to complete the requested action.', loader: false
                 });
             });
     }
@@ -84,7 +84,7 @@ class PanicButton extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    notify: true, errMessage: 'Something went wrong!!', errType: 'error'
+                    notify: true, errMessage: 'Unable to complete the requested action.', errType: 'error'
                 });
                 _this._closeConfirmModal();
             });

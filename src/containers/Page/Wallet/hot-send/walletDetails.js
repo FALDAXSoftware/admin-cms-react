@@ -70,7 +70,7 @@ class WalletWarmDetailsComponent extends Component {
         this.getWalletData();
     }
 
-    openNotificationWithIcon = (type="Error",message="Something went to wrong") => {
+    openNotificationWithIcon = (type="Error",message="Unable to complete the requested action.") => {
         notification[(type).toLowerCase()]({
           message:type,
           description:message

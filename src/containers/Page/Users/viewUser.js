@@ -28,6 +28,10 @@ class ViewUser extends Component {
         super(props)
     }
 
+    componentWillMount(){
+        this.props.removeUserDetails();
+    }
+
     componentWillUnmount(){
         this.props.removeUserDetails();
     }

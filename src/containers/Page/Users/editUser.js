@@ -14,13 +14,14 @@ import {
 import CountryFields from "./countryFields";
 import authAction from "../../../redux/auth/actions";
 import SimpleReactValidator from "simple-react-validator";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import userAction from "../../../redux/users/actions";
 
 const Option = Select.Option;
 const { logout } = authAction;
+const { removeUserDetails } = userAction;
 
 class EditUser extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class EditUser extends Component {
   componentDidMount = () => {
     this._getAllAccountClasses();
     this._getUserDetails();
+    this.props.removeUserDetails();
   };
 
   _getUserDetails = () => {
@@ -98,7 +100,7 @@ class EditUser extends Component {
         _this.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Something went wrong",
+          errMessage: "Unable to complete the requested action.",
           loader: false
         });
       });
@@ -247,7 +249,7 @@ class EditUser extends Component {
           _this.setState({
             errType: "error",
             errMsg: true,
-            errMessage: "Something went wrong",
+            errMessage: "Unable to complete the requested action.",
             loader: false
           });
         });
@@ -602,5 +604,5 @@ export default connect(
   state => ({
     token: state.Auth.get("token")
   }),
-  { logout }
+  { logout ,removeUserDetails}
 )(EditUser);
