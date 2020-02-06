@@ -172,7 +172,7 @@ class PersonalDetails extends Component {
             <Row type="flex" justify="end">
                 <Col span={3}>
                   <Switch
-                    disabled={!isAllowed("user_activate")}
+                    disabled={!isAllowed("user_activate")|| (isAllowed("user_activate") && userDetails.deleted_by) }
                     className="personal-btn"
                     checked={userDetails.is_active}
                     checkedChildren="Active"
@@ -184,7 +184,7 @@ class PersonalDetails extends Component {
                 </Col>
                 <Col span={3}>
                   <Switch
-                    disabled={!isAllowed("user_activate")}  
+                    disabled={!isAllowed("user_activate")|| (isAllowed("user_activate") && userDetails.deleted_by)}  
                     className="kyc-btn"
                     checked={userDetails.is_verified}
                     checkedChildren="Email Verified"
