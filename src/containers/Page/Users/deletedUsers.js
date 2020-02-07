@@ -67,31 +67,53 @@ class DeletedUsers extends Component {
         this.setState({ allCountries });
     }
 
-    _getAllUsers = () => {
+    _getAllUsers = async() => {
+      try{
         const { token } = this.props;
-        const { searchUser, limit, page, sorterCol, sortOrder, filterVal,startDate,endDate } = this.state;
-        var _this = this;
-
-        _this.setState({ loader: true });
-        ApiUtils.getAllDeletedUsers(page, limit, token, searchUser, sorterCol, sortOrder, filterVal,startDate,endDate)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    _this.setState({ allUsers: res.data, allUserCount: res.userCount });
-                } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message });
-                }
-                _this.setState({ loader: false });
-            })
-            .catch(() => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
-                });
-            });
+        const {
+          searchUser,
+          limit,
+          page,
+          sorterCol,
+          sortOrder,
+          filterVal,
+          startDate,
+          endDate
+        } = this.state;
+        this.setState({ loader: true });
+        let response=await (await ApiUtils.getAllDeletedUsers(
+          page,
+          limit,
+          token,
+          searchUser,
+          sorterCol,
+          sortOrder,
+          filterVal,
+          startDate,
+          endDate
+        )).json();
+          if (response.status == 200) {
+            this.setState({ allUsers: response.data, allUserCount: response.userCount });
+          } else if (response.status == 403 || response.status==400 || response.status==401) {
+            this.setState(
+              { errMsg: true, errMessage: response.err, errType: "error" },
+              () => {
+                this.props.logout();
+              }
+            );
+          } else {
+            this.setState({ errMsg: true, errMessage: response.message });
+          }
+      }catch(error){
+        this.setState({
+          errMsg: true,
+          errMessage: "Unable to complete the requested action.",
+          errType: "error",
+          loader: false
+        });
+      }finally{
+        this.setState({loader:false});
+      }
     }
 
     _deleteUser = () => {
