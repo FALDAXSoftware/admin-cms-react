@@ -72,7 +72,7 @@ const columns = [{
         'deleted_at')
 },
 {
-    title: <IntlMessages id="userTable.title.id" />,
+    title: <IntlMessages id="userTable.title.customer_id" />,
     align:"left",
     ellipsis:true,
     key: 'customer_id',
@@ -111,9 +111,9 @@ const columns = [{
     align:"left",
     ellipsis:true,
     key: 'first_name',
-    width: 200,
+    width: 150,
     sorter: true,
-    render: object => <span>{object['first_name']+" "+object['last_name']}</span>
+    render: object => ToolTipsCell((object['first_name']+" "+object['last_name']))
 }, 
 // {
 //     title: <IntlMessages id="antTable.title.lastName" />,
@@ -140,15 +140,17 @@ const columns = [{
     key: 'country',
     width: 150,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'country')
+    dataIndex:"country",
+    render:data=><span>{data?data:"-"}</span>
 }, {
     title: <IntlMessages id="antTable.title.state" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'state',
     width: 150,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'state')
+    dataIndex:"state",
+    render:data=><span>{data?data:"-"}</span>
 },
 {
     title: <IntlMessages id="antTable.title.zip" />,
@@ -156,7 +158,8 @@ const columns = [{
     ellipsis:true,
     key: 'postal_code',
     width: 150,
-    render: object => renderCell(object, 'TextCell', 'postal_code')
+    dataIndex:"postal_code",
+    render:data=><span>{data?data:"-"}</span>
 }, 
 {
     title: <IntlMessages id="antTable.title.tier" />,
@@ -171,7 +174,8 @@ const columns = [{
     ellipsis:true,
     key: 'no_of_referrals',
     width: 150,
-    render: object => renderCell(object, 'ReferralCell', 'no_of_referrals')
+    dataIndex:"no_of_referrals",
+    render:data=><span>{data?data:"0"}</span>
 }
 ];
 

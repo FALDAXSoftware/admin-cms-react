@@ -11,7 +11,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } fr
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { DateTimeCell , TransactionIdHashCell, PrecisionCell} from '../../../../components/tables/helperCells';
+import { DateTimeCell , TransactionIdHashCell, PrecisionCell, ToolTipsCell} from '../../../../components/tables/helperCells';
 
 
 const {RangePicker}=DatePicker;
@@ -56,6 +56,14 @@ const columns=[
         ellipsis:true,
         render:data=><span className={data=="send"?"error-danger":"color-green"}><Icon type={data=="send"?"arrow-up":"arrow-down"}/>&nbsp;{data.charAt(0).toUpperCase()+data.slice(1)}</span>
     },
+    {
+      title:<IntlMessages id="transactionTable.title.tx_from"/>,
+      key:8,
+      width:200,
+      ellipsis:true,
+      dataIndex:"transaction_from",
+      render:data=>ToolTipsCell(data)
+  },
     {
         title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
         dataIndex:"source_address",
