@@ -46,6 +46,7 @@ const AppHolder = styled.div`
     background-color: #ffffff;
     border: 1px solid ${palette("border", 0)};
     height: 100%;
+    position:relative;
   }
 
   .isomorphicLayout {
