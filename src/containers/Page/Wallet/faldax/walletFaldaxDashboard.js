@@ -10,6 +10,7 @@ import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from './../../../../helpers/accessControl';
+import { PrecisionCell } from '../../../../components/tables/helperCells';
 
 var self
 
@@ -171,21 +172,22 @@ class WalletFaldaxDashboard extends Component {
         this.setState({ fields },async ()=>{
             if(this.validator.allValid()){
                 this.timeCounter=setTimeout(async()=>{
-                        try{
-                        this.loader.show();
-                        let res=await(await ApiUtils.getWalletNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
-                        if(res.status==200){
-                            this.setState({networkFee:res.data})
-                        }else if(res.status==400 || res.status==401 ||res.status==403){
-                            
-                        }
-                    }catch(error){
-                        
-                    } finally{
-                        this.loader.hide();
-                    }
-                    },this.timer)
+            try{
+            this.loader.show();
+            let res=await(await ApiUtils.getWalletNetworkFee(token,{dest_address:fields['dest_address'],amount:fields['amount'],coin:walletDetails.coin_code})).json();
+            if(res.status==200){
+                this.setState({networkFee:res.data})
+            }else if(res.status==400 || res.status==401 ||res.status==403){
+                
+                }
+            }catch(error){
+                
+            } finally{
+                this.loader.hide();
+            }
+            },this.timer)
             }else{
+                this.setState({networkFee:0})
                 this.validator.showMessages();
                 this.forceUpdate();
             }
@@ -278,8 +280,9 @@ class WalletFaldaxDashboard extends Component {
                                 <Button  key="submit-a" type="primary" onClick={this.sendWalletBal}>Send {walletDetails.coin}</Button>
                             ]}
                         >
+                            <span><b>Total Balance : </b></span><span>{PrecisionCell(walletDetails.total)} {walletDetails.coin}</span>
                             <Form onSubmit={this._sendWalletBal}>
-                                <div style={{ "marginBottom": "15px" }}>
+                                <div className="table-tb-margin">
                                     <span>Destination Address:</span>
                                     <Input placeholder="Destination Address" onChange={this._handleChange.bind(this, "dest_address")} value={fields["dest_address"]} />
                                     <span style={{ "color": "red" }}>
@@ -294,9 +297,9 @@ class WalletFaldaxDashboard extends Component {
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="wallet-send-summery-head"><b>Sending</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
+                                    <span className="wallet-send-summery-head"><b>Sending Amount</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
                                     <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>
-                                    <span className="wallet-send-summery-head"><b>Total</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
+                                    <span className="wallet-send-summery-head"><b>Total Payload</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
                                 </div>
                             </Form>
                         </Modal>

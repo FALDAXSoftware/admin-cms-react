@@ -439,7 +439,7 @@ class Dashboard extends Component {
     };
 
     const kycData = {
-      labels: ["Total Outstanding", "Total Approved", "Total Disapproved"],
+      labels: ["Total IDs under review", "Total IDs approved", "Total IDs declined"],
       datasets: [
         {
           data: [kyc_pending, kyc_approved, kyc_disapproved],
@@ -488,7 +488,7 @@ class Dashboard extends Component {
                         />
                         <Row style={{ width: "100%" }}>
                           <Col span={12}>
-                            <b>Total: {total_kyc}</b>
+                            <b>Total IDs: {total_kyc}</b>
                           </Col>
                           <Col span={12} style={{ textAlign: "right" }}>
                             <a

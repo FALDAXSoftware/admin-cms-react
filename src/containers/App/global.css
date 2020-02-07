@@ -449,6 +449,14 @@ html[dir='rtl'] .dz-hidden-input {
 .float-right{
   float:right;
 }
+.float-left{
+  float:left;
+}
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
 .cursor-default{
   cursor: default !important;
@@ -820,7 +828,7 @@ html[dir='rtl'] .dz-hidden-input {
 }
 .wallet-send-summery-head{
   display: inline-block;
-  width: 100px;
+  width: 120px;
 }
 .long-text-wrapper{
   word-wrap: break-word;
