@@ -79,6 +79,10 @@ class WalletWarmDashboard extends Component {
             let res=await (await ApiUtils.walletDashboard(this.props.token).getHotReceiveWallet(searchData)).json();
             let [{status,data,err},logout]=[res,this.props.logout];
             if(status==200){
+                // Remove susu coin wallet 
+                let index=data.findIndex((ele)=>ele.coin.toLowerCase()=="susu");
+                if(index>-1)
+                    data.splice(index,1)
                 this.setState({data});
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)

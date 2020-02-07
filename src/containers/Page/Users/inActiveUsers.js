@@ -13,7 +13,7 @@ import {
   DatePicker
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { inActiveUserinfos } from "../../Tables/antTables";
+import { tableinfos } from "../../Tables/antTables";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
@@ -58,18 +58,6 @@ class InActiveUsers extends Component {
 
   static view(
     value,
-    profile_pic,
-    first_name,
-    last_name,
-    email,
-    city_town,
-    street_address,
-    street_address_2,
-    phone_number,
-    country,
-    dob,
-    is_active,
-    kyc
   ) {
     self.props.history.push("/dashboard/users/" + value);
   }
@@ -96,56 +84,53 @@ class InActiveUsers extends Component {
     });
   };
 
-  _getAllUsers = () => {
-    const { token } = this.props;
-    const {
-      searchUser,
-      limit,
-      page,
-      sorterCol,
-      sortOrder,
-      filterVal,
-      startDate,
-      endDate
-    } = this.state;
-    var _this = this;
-
-    _this.setState({ loader: true });
-    ApiUtils.getAllInActiveUsers(
-      page,
-      limit,
-      token,
-      searchUser,
-      sorterCol,
-      sortOrder,
-      filterVal,
-      startDate,
-      endDate
-    )
-      .then(response => response.json())
-      .then(function(res) {
-        if (res.status == 200) {
-          _this.setState({ allUsers: res.data, allUserCount: res.userCount });
-        } else if (res.status == 403) {
-          _this.setState(
-            { errMsg: true, errMessage: res.err, errType: "error" },
+  _getAllUsers = async() => {
+    try{
+      const { token } = this.props;
+      const {
+        searchUser,
+        limit,
+        page,
+        sorterCol,
+        sortOrder,
+        filterVal,
+        startDate,
+        endDate
+      } = this.state;
+      this.setState({ loader: true });
+      let response=await (await ApiUtils.getAllInActiveUsers(
+        page,
+        limit,
+        token,
+        searchUser,
+        sorterCol,
+        sortOrder,
+        filterVal,
+        startDate,
+        endDate
+      )).json();
+        if (response.status == 200) {
+          this.setState({ allUsers: response.data, allUserCount: response.userCount });
+        } else if (response.status == 403 || response.status==400 || response.status==401) {
+          this.setState(
+            { errMsg: true, errMessage: response.err, errType: "error" },
             () => {
-              _this.props.logout();
+              this.props.logout();
             }
           );
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message });
+          this.setState({ errMsg: true, errMessage: response.message });
         }
-        _this.setState({ loader: false });
-      })
-      .catch(() => {
-        _this.setState({
-          errMsg: true,
-          errMessage: "Unable to complete the requested action.",
-          errType: "error",
-          loader: false
-        });
+    }catch(error){
+      this.setState({
+        errMsg: true,
+        errMessage: "Unable to complete the requested action.",
+        errType: "error",
+        loader: false
       });
+    }finally{
+      this.setState({loader:false});
+    }
   };
 
   _deleteUser = () => {
@@ -311,8 +296,8 @@ class InActiveUsers extends Component {
       //   <LayoutContentWrapper>
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
-              {inActiveUserinfos.map(tableInfo => (
-                <div tab={tableInfo.title} key={tableInfo.value}>
+              {tableinfos.map(tableinfos => (
+                <div tab={tableinfos.title} key={tableinfos.value}>
                     <Form onSubmit={this._searchUser} className="cty-search">
                       <Row type="flex" className="table-filter-row" justify="start">
                         <Col lg={5} xs={24}>
@@ -391,7 +376,7 @@ class InActiveUsers extends Component {
                       rowKey="id"
                       className="table-tb-margin"
                       {...this.state}
-                      columns={tableInfo.columns}
+                      columns={tableinfos.columns}
                       pagination={false}
                       dataSource={allUsers}
                       bordered
@@ -445,4 +430,4 @@ export default connect(
   { logout }
 )(InActiveUsers);
 
-export { InActiveUsers, inActiveUserinfos };
+export { InActiveUsers,tableinfos };

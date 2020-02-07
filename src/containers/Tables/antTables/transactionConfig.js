@@ -40,13 +40,8 @@ const columns = [{
    align:"left",
     sorter: true,
     render: object => renderCell(object, 'DateTimeCell', 'created_at')
-}, {
-    title: <IntlMessages id="transactionTable.title.transactionId" />,
-    key: 'transaction_id',
-    width: 450,
-    align:"left",
-    render: object => ToolTipsCell(TransactionIdHashCell(object["coin_code"],object["transaction_id"]))
-}, {
+},
+{
     title: <IntlMessages id="transactionTable.title.email" />,
     key: 'email',
     width: 250,
@@ -54,19 +49,38 @@ const columns = [{
     sorter: true,
     dataIndex:"email",
     render:data=>ToolTipsCell(data)
-}, {
-    title: <IntlMessages id="transactionTable.title.source_address" />,
-    key: 'source_address',
-    width: 300,
-   align:"left",
-    render: object => renderCell(object, 'TextCell', 'source_address')
-}, {
-    title: <IntlMessages id="transactionTable.title.destination_address" />,
-    key: 'destination_address',
-    width: 300,
+},
+{
+    title: <IntlMessages id="transactionTable.title.coin" />,
+    key: 'coin',
+    width: 100,
     align:"left",
-    render: object => renderCell(object, 'TextCell', 'destination_address')
-}, {
+    render: object => renderCell(object, 'TextCell', 'coin')
+},
+ {
+    title: <IntlMessages id="transactionTable.title.transactionType" />,
+    key: 'transaction_type',
+    width: 100,
+    align:"left",
+    dataIndex:"transaction_type",
+    render: object =><span className={"camel-case"+" "+(object.toLowerCase()=="send"?"field-error":"color-green")}><Icon type={"arrow-"+(object.toLowerCase()=="send"?"up":"down")} />&nbsp;{object}</span>
+},
+{
+    title: <IntlMessages id="transactionTable.title.tx_from" />,
+    key: 'transaction_from',
+    width: 175,
+    align:"left",
+    dataIndex:"transaction_from",
+    render:data=>ToolTipsCell(data)
+},
+{
+    title: <IntlMessages id="transactionTable.title.base" />,
+    key: 'actual_amount',
+    width: 150,
+    align:"left",
+    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["actual_amount"]):"-"
+},
+{
     title: <IntlMessages id="transactionTable.title.amount" />,
     key: 'amount',
     width: 100,
@@ -75,27 +89,27 @@ const columns = [{
     dataIndex:"amount",
     render:(data)=>PrecisionCell(data)
 },
-{
-    title: <IntlMessages id="transactionTable.title.base" />,
-    key: 'actual_amount',
-    width: 150,
+ {
+    title: <IntlMessages id="transactionTable.title.source_address" />,
+    key: 'source_address',
+    width: 300,
+   align:"left",
+    render: object => renderCell(object, 'TextCell', 'source_address')
+},{
+    title: <IntlMessages id="transactionTable.title.destination_address" />,
+    key: 'destination_address',
+    width: 300,
     align:"left",
-    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["actual_amount"]):"-"
-} ,
-{
-    title: <IntlMessages id="transactionTable.title.coin" />,
-    key: 'coin',
-    width: 100,
-    align:"left",
-    render: object => renderCell(object, 'TextCell', 'coin')
-}, {
-    title: <IntlMessages id="transactionTable.title.transactionType" />,
-    key: 'transaction_type',
-    width: 100,
-    align:"left",
-    dataIndex:"transaction_type",
-    render: object =><span className={"camel-case"+" "+(object.toLowerCase()=="send"?"field-error":"color-green")}><Icon type={"arrow-"+(object.toLowerCase()=="send"?"up":"down")} />&nbsp;{object}</span>
+    render: object => renderCell(object, 'TextCell', 'destination_address')
 },
+{
+    title: <IntlMessages id="transactionTable.title.transactionId" />,
+    key: 'transaction_id',
+    width: 450,
+    align:"left",
+    render: object => ToolTipsCell(TransactionIdHashCell(object["coin_code"],object["transaction_id"]))
+},
+
 // {
 //     title: <IntlMessages id="transactionTable.title.transactionFees" />,
 //     key: 'transaction_fees',

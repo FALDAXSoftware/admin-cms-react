@@ -88,55 +88,54 @@ class ActiveUsers extends Component {
     this.setState({ allCountries });
   };
 
-  _getAllUsers = () => {
-    
-    const { token } = this.props;
-    const {
-      searchUser,
-      limit,
-      page,
-      sorterCol,
-      sortOrder,
-      filterVal,
-      startDate,
-      endDate
-    } = this.state;
-    this.setState({ loader: true });
-    ApiUtils.getAllUsers(
-      page,
-      limit,
-      token,
-      searchUser,
-      sorterCol,
-      sortOrder,
-      filterVal,
-      startDate,
-      endDate
-    )
-      .then(response => response.json())
-      .then((res)=>{
-        if (res.status == 200) {
-          this.setState({ allUsers: res.data, allUserCount: res.userCount });
-        } else if (res.status == 403) {
+  _getAllUsers = async() => {
+    try{
+      const { token } = this.props;
+      const {
+        searchUser,
+        limit,
+        page,
+        sorterCol,
+        sortOrder,
+        filterVal,
+        startDate,
+        endDate
+      } = this.state;
+      this.setState({ loader: true });
+      let response=await (await ApiUtils.getAllUsers(
+        page,
+        limit,
+        token,
+        searchUser,
+        sorterCol,
+        sortOrder,
+        filterVal,
+        startDate,
+        endDate
+      )).json();
+        if (response.status == 200) {
+          this.setState({ allUsers: response.data, allUserCount: response.userCount });
+        } else if (response.status == 403 || response.status==400 || response.status==401) {
           this.setState(
-            { errMsg: true, errMessage: res.err, errType: "error" },
+            { errMsg: true, errMessage: response.err, errType: "error" },
             () => {
               this.props.logout();
             }
           );
         } else {
-          this.setState({ errMsg: true, errMessage: res.message });
+          this.setState({ errMsg: true, errMessage: response.message });
         }
-        this.setState({ loader: false });
-      })
-      .catch(() => {
-        this.setState({
-          errMsg: true,
-          errMessage: "Unable to complete the requested action.",
-          errType: "error",
-          loader: false
-        });
+    }catch(error){
+      this.setState({
+        errMsg: true,
+        errMessage: "Unable to complete the requested action.",
+        errType: "error",
+        loader: false
       });
+    }finally{
+      this.setState({loader:false});
+    }
+    
   };
 
   _deleteUser = () => {
