@@ -13,7 +13,7 @@ import {
   DatePicker
 } from "antd";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { tableinfos } from "../../Tables/antTables";
+import { inActiveUserinfos } from "../../Tables/antTables";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
@@ -296,8 +296,8 @@ class InActiveUsers extends Component {
       //   <LayoutContentWrapper>
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
-              {tableinfos.map(tableinfos => (
-                <div tab={tableinfos.title} key={tableinfos.value}>
+              {inActiveUserinfos.map(inActiveUserinfos => (
+                <div tab={inActiveUserinfos.title} key={inActiveUserinfos.value}>
                     <Form onSubmit={this._searchUser} className="cty-search">
                       <Row type="flex" className="table-filter-row" justify="start">
                         <Col lg={5} xs={24}>
@@ -376,7 +376,7 @@ class InActiveUsers extends Component {
                       rowKey="id"
                       className="table-tb-margin"
                       {...this.state}
-                      columns={tableinfos.columns}
+                      columns={inActiveUserinfos.columns}
                       pagination={false}
                       dataSource={allUsers}
                       bordered
@@ -430,4 +430,4 @@ export default connect(
   { logout }
 )(InActiveUsers);
 
-export { InActiveUsers,tableinfos };
+export { InActiveUsers,inActiveUserinfos };

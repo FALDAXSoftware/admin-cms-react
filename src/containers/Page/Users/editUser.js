@@ -21,7 +21,7 @@ import userAction from "../../../redux/users/actions";
 
 const Option = Select.Option;
 const { logout } = authAction;
-const { removeUserDetails } = userAction;
+const { removeUserDetails ,showUserDetails} = userAction;
 
 class EditUser extends Component {
   constructor(props) {
@@ -35,8 +35,11 @@ class EditUser extends Component {
   componentDidMount = () => {
     this._getAllAccountClasses();
     this._getUserDetails();
-    this.props.removeUserDetails();
   };
+
+  componentWillUnmount=()=>{
+    this.props.removeUserDetails();
+  }
 
   _getUserDetails = () => {
     const { token } = this.props;
@@ -45,6 +48,7 @@ class EditUser extends Component {
       .then(response => response.json())
       .then((res)=> {
         if (res.status == 200) {
+          this.props.showUserDetails({full_name:res.data[0].first_name+" "+res.data[0].last_name,email:res.data[0].email});
           res=res.data[0]
           this.setState({
             fields: res,
@@ -604,5 +608,5 @@ export default connect(
   state => ({
     token: state.Auth.get("token")
   }),
-  { logout ,removeUserDetails}
+  { logout ,showUserDetails,removeUserDetails}
 )(EditUser);
