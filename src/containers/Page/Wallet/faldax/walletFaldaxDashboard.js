@@ -291,12 +291,9 @@ class WalletFaldaxDashboard extends Component {
                                     </span>
                                 </div>
                                 <div>
-                                    <span style={{ float: 'left' }}>
-                                        <b>Network Fee* : {networkFee} {walletDetails.coin}</b>
-                                    </span>
-                                    <span style={{ float: 'right' }}>
-                                        <b>Total Payout : {parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</b>
-                                    </span>
+                                    <span className="wallet-send-summery-head"><b>Sending</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
+                                    <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>>
+                                    <span className="wallet-send-summery-head"><b>Total</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
                                 </div>
                             </Form>
                         </Modal>
