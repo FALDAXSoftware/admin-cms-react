@@ -68,7 +68,7 @@ const columns = [{
         'deleted_at')
 },
 {
-    title: <IntlMessages id="userTable.title.id" />,
+    title: <IntlMessages id="userTable.title.customer_id" />,
     align:"left",
     ellipsis:true,
     key: 'customer_id',
