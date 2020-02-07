@@ -40,7 +40,7 @@ const columns=[
         key:5,
         dataIndex:"total",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"0"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_forfeit"/>,
@@ -48,7 +48,7 @@ const columns=[
         key:2,
         dataIndex:"total_earned_from_forfeit",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"0"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst"/>,
@@ -56,7 +56,7 @@ const columns=[
         key:3,
         dataIndex:"total_earned_from_jst",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"0"}</span>
 
     },
     {
@@ -65,7 +65,7 @@ const columns=[
         key:4,
         dataIndex:"total_earned_from_wallets",
         width:100,
-        render:data=><span>{data?parseFloat(data).toFixed(8):"-"}</span>
+        render:data=><span>{data?parseFloat(data).toFixed(8):"0"}</span>
     },
     {
         title:<IntlMessages id="walletFaldaxDashboardTable.title.send_address"/>,
@@ -157,6 +157,9 @@ class WalletFaldaxDashboard extends Component {
     }
 
     _handleChange = async(field, e) => {
+        if(this.state.loader){
+            return false;
+        }
         clearTimeout(this.timeCounter);
         let {token}=this.props,
         {fields,walletDetails} = this.state;
@@ -166,7 +169,7 @@ class WalletFaldaxDashboard extends Component {
             fields[field] = e.target.value;
         }
         this.setState({ fields },async ()=>{
-            if(field=="amount" && this.validator.allValid()){
+            if(this.validator.allValid()){
                 this.timeCounter=setTimeout(async()=>{
                         try{
                         this.loader.show();
@@ -292,7 +295,7 @@ class WalletFaldaxDashboard extends Component {
                                 </div>
                                 <div>
                                     <span className="wallet-send-summery-head"><b>Sending</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
-                                    <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>>
+                                    <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>
                                     <span className="wallet-send-summery-head"><b>Total</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
                                 </div>
                             </Form>

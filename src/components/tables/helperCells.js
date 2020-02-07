@@ -870,7 +870,7 @@ const ConvertSatoshiToAssetCell=(coin,balance)=>{
   balance=parseFloat(balance);
   
   if(!parseFloat(balance)){
-    return <span>-</span>
+    return <span>0</span>
   }
   switch (coin) {
     case "btc":
