@@ -818,7 +818,10 @@ html[dir='rtl'] .dz-hidden-input {
 .email-container{
   padding:16px 8px;
 }
-
+.wallet-send-summery-head{
+  display: inline-block;
+  width: 100px;
+}
 .long-text-wrapper{
   word-wrap: break-word;
   width: 50%;
