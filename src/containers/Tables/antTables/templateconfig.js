@@ -28,7 +28,7 @@ const columns = [{
     render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',
         'note')
 }, {
-    title: <IntlMessages id="antTable.title.name" />,
+    title: <IntlMessages id="antTable.title.template_name" />,
     key: 'name',
     align:"left",
     render: object => renderCell(object, 'TextCell', 'name')
