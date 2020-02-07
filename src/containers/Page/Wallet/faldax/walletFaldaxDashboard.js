@@ -280,7 +280,7 @@ class WalletFaldaxDashboard extends Component {
                                 <Button  key="submit-a" type="primary" onClick={this.sendWalletBal}>Send {walletDetails.coin}</Button>
                             ]}
                         >
-                            <span><b>Total Balance : </b></span><span>{PrecisionCell(walletDetails.total)} {walletDetails.coin}</span>
+                            <span><b>Total Balance  </b></span><span>{PrecisionCell(walletDetails.total)} {walletDetails.coin}</span>
                             <Form onSubmit={this._sendWalletBal}>
                                 <div className="table-tb-margin">
                                     <span>Destination Address:</span>
@@ -299,7 +299,7 @@ class WalletFaldaxDashboard extends Component {
                                 <div>
                                     <span className="wallet-send-summery-head"><b>Sending Amount</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
                                     <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>
-                                    <span className="wallet-send-summery-head"><b>Total Payload</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
+                                    <span className="wallet-send-summery-head"><b>Total Payout</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
                                 </div>
                             </Form>
                         </Modal>
