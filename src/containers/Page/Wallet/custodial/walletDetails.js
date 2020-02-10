@@ -30,7 +30,7 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.baseValue"/>,
-        key:5,
+        key:"baseValue",
         dataIndex:"baseValue",
         sorter:true,
         width:75,
@@ -38,14 +38,14 @@ const columns=[
     },
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.type"/>,
-        key:1,
+        key:'key',
         dataIndex:"type",
         width:50,
         render:data=><span className={data=="send"?"error-danger":"color-green"}><Icon type={data=="send"?"arrow-up":"arrow-down"}/>&nbsp;{data.charAt(0).toUpperCase()+data.slice(1)}</span>
     },
     {
         title:<IntlMessages id="walletCustodialDetailsTable.title.txid"/>,
-        key:0,
+        key:'txid',
         width:250,
         render:data=>TransactionIdHashCell(data["coin"],data["txid"])
     },
@@ -79,7 +79,7 @@ class WalletWarmDetailsComponent extends Component {
 
     handleTableChange = (pagination,filter,sorter) => {
         let {transfers}=this.state;
-        if(sorter.field=='createdTime'){
+        if(sorter.columnKey=='createdTime'){
             this.loader.show();
             if(sorter.order=="ascend"){
                 transfers=transfers.sort((a,b)=>new Date(a.createdTime)- new Date(b.createdTime))
@@ -87,7 +87,7 @@ class WalletWarmDetailsComponent extends Component {
                 transfers=transfers.sort((a,b)=>new Date(b.createdTime)- new Date(a.createdTime))
             }
             this.setState(transfers,()=>this.loader.hide());
-        }else if(sorter.field=="baseValue"){
+        }else if(sorter.columnKey=="baseValue"){
             if(sorter.order=="ascend"){
                 transfers=transfers.sort((a,b)=>parseFloat(a.baseValue)-parseFloat(b.baseValue))
             }else if(sorter.order=="descend"){

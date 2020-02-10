@@ -44,9 +44,10 @@ const columns = [{
     title: <IntlMessages id="countryTable.title.legality" />,
     key: 'legality',
     width: 100,
-   align:"left",
+    align:"left",
+    dataIndex:'legality',
     sorter: true,
-    render: object => renderCell(object, 'LegalityCell', 'legality')
+    
 }, {
     title: <IntlMessages id="countryTable.title.color" />,
     key: 'color',

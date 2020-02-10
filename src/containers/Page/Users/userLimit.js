@@ -157,13 +157,13 @@ class EditableUserLimitTable extends React.Component {
         let {userAllLimits}=this.state;
         let data=userAllLimits.find(ele=>ele.key==key)
         if(rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
             return false;
         }if(rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'error' });
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'Error' });
             return false;
         } if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
             return false;
         }
         return true;
@@ -205,17 +205,17 @@ class EditableUserLimitTable extends React.Component {
                             _this._getUserLimit();
                         });
                     } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error' }, () => {
                             _this.props.logout();
                         });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error' });
                     }
                     _this.setState({ loader: false });
                 })
                 .catch(() => {
                     _this.setState({
-                        errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
+                        errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error', loader: false
                     });
                 });
 
@@ -253,17 +253,17 @@ class EditableUserLimitTable extends React.Component {
                     _this.setState({ userAllLimits: data });
 
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error', loader: false
                 });
             });
     }

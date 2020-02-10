@@ -164,13 +164,13 @@ class EditableTable extends React.Component {
         let {allAssetLimit}=this.state;
         let data=allAssetLimit.find(ele=>ele.id==key)
         if(rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
             return false;
         }if(rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'error' });
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'Error' });
             return false;
         } if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'error' });
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
             return false;
         }
         return true;
@@ -219,11 +219,11 @@ class EditableTable extends React.Component {
                     await _this._getAllAssetLimit();
                 });
             } else if (res.status == 403) {
-                _this.setState({ errMsg: true, errMessage: res.err, errType: 'error',editingKey: '' }, async() => {
+                _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error',editingKey: '' }, async() => {
                     _this.props.logout();
                 });
             } else {
-                _this.setState({ errMsg: true, errMessage: res.message, errType: 'error',editingKey: '' });
+                _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error',editingKey: '' });
             }
         }catch(error){
             throw error;
@@ -233,7 +233,7 @@ class EditableTable extends React.Component {
         })
         .catch(() => {
             _this.setState({
-                errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error',editingKey: ''
+                errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error',editingKey: ''
             });
         });
     }
@@ -250,17 +250,17 @@ class EditableTable extends React.Component {
                 if (res.status == 200) {
                     _this.setState({ allAssetLimit: res.data });
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error', loader: false
                 });
             });
     }

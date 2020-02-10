@@ -2899,10 +2899,10 @@ const PrecisionCell = data => {
   return isFloat(data)
     ? parseFloat(data).toFixed(8)
     : data == 0
-    ? 0
+    ? "-"
     : data
     ? parseFloat(data)
-    : "";
+    : "-";
 };
 const CollectedAmountCell = value =>
   value.map(ele => (
