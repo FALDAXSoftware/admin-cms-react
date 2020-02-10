@@ -837,3 +837,7 @@ html[dir='rtl'] .dz-hidden-input {
   display:block;
   white-space: normal;
 }
+.country-search-bar{
+  width: 300px !important;
+  float: left;
+}

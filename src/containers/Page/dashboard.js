@@ -477,7 +477,7 @@ class Dashboard extends Component {
                   </Col>
 
                   <Col md={12} xs={24}>
-                    <CardWrapper title="Pending Identity Verifications">
+                    <CardWrapper title="Customer ID Verifications">
                       <ChartWrapper>
                         <RangePicker
                           value={rangeDate}

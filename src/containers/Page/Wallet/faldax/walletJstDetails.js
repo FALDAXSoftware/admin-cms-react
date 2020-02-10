@@ -222,10 +222,15 @@ class WalletJstDetailsComponent extends Component {
                                     <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                                 </Col>
                                 <Col className="table-column" xs={12} md={4}>
-                                    <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
-                                        <Option value="">All</Option>
-                                        {assetsList.map((ele)=><Option key={ele.key} value={ele.value}><span><img className="small-icon-img" src={S3BucketImageURL+ele.icon}/>&nbsp;{ele.name}</span></Option>)}
-                                    </Select>
+                                <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
+                                    <Option value="">All</Option>
+                                    {assetsList.map((ele)=>{
+                                      if(ele.name.toLowerCase()!="susu"){
+                                        return <Option key={ele.key} value={ele.value}><span><img className="small-icon-img" src={S3BucketImageURL+ele.icon}/>&nbsp;{ele.name}</span></Option>
+                                      }
+                                      })
+                                    }
+                                </Select>
                                 </Col>
                                 <Col className="table-column" xs={12} md={3}>
                                     <Button type="primary" icon="search" className="filter-btn btn-full-width" htmlType="submit">Search</Button>
