@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs, Icon } from 'antd';
+import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs, Icon,DatePicker} from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -17,6 +17,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
+const {RangePicker}=DatePicker;
 
 class UserTransactionHistory extends Component {
     constructor(props) {
@@ -171,8 +172,16 @@ class UserTransactionHistory extends Component {
         });
     }
 
+    _changeDate = (date, dateString) => {
+        this.setState({
+          rangeDate: date,
+          startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
+          endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+        });
+      };
+
     render() {
-        const { allTransactions, allTransactionCount, errType, errMsg, page, loader, filterVal,
+        const { allTransactions, allTransactionCount, errType, errMsg, page, loader,rangeDate,filterVal,
             searchTransaction, limit } = this.state;
        let pageSizeOptions = PAGE_SIZE_OPTIONS
         const transactionsHeaders = [
@@ -194,14 +203,14 @@ class UserTransactionHistory extends Component {
                 <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchTransaction}>
                         <Row type="flex" justify="start" className="table-filter-row">
-                            <Col sm={8}>
+                            <Col sm={6} xs={24}>
                                 <Input
                                     placeholder="Search transactions"
                                     onChange={this._changeSearch.bind(this)}
                                     value={searchTransaction}
                                 />
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={3} xs={24}>
                                 <Select
                                     getPopupContainer={trigger => trigger.parentNode}
                                     placeholder="Select a type"
@@ -212,6 +221,15 @@ class UserTransactionHistory extends Component {
                                      <Option value={"send"}><span className="camel-case color-green"><Icon type="arrow-up"/>&nbsp;Send</span></Option>
                                      <Option value={"receive"}><span className="camel-case field-error"><Icon type="arrow-down"/>&nbsp;Receive</span></Option>
                                 </Select>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <RangePicker
+                                value={rangeDate}
+                                disabledTime={this.disabledRangeTime}
+                                onChange={this._changeDate}
+                                format="YYYY-MM-DD"
+                                className="full-width"
+                                />
                             </Col>
                             <Col xs={12} sm={3}>
                                 <Button htmlType="submit" className="filter-btn full-width" icon="search" type="primary">Search</Button>

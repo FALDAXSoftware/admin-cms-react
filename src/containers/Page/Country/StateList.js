@@ -102,6 +102,11 @@ class StateList extends Component {
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    // Map to legality
+                    res.data=res.data.map((ele)=>{
+                        ele.legality=ele.legality==1?"Legal":ele.legality==2?"Illegal":ele.legality==3?'Neutral':"Partial Services Available";
+                        return ele;
+                    })
                     _this.setState({ allStates: res.data });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -129,10 +134,35 @@ class StateList extends Component {
         });
     }
 
+    compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        const legalityA = a.legality.toUpperCase();
+        const legalityB = b.legality.toUpperCase();
+      
+        let comparison = 0;
+        if (legalityA > legalityB) {
+          comparison = 1;
+        } else if (legalityA < legalityB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
     _handleStateChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
-            this._getAllStates();
-        })
+        if(sorter.columnKey=="legality"){
+            let {allStates}=this.state;
+            if(sorter.order=="ascend"){
+                allStates=allStates.sort(this.compare)
+            }else if(sorter.order=="descend"){
+                allStates=allStates.sort(this.compare)
+                allStates=allStates.reverse()
+            }
+            this.setState({allStates});
+        }else{
+            this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order }, () => {
+                this._getAllStates();
+            })
+        }
     }
 
     render() {
@@ -150,7 +180,7 @@ class StateList extends Component {
                                     <Search
                                         placeholder="Search states"
                                         onSearch={(value) => this._searchState(value)}
-                                        className='search-btn-back'
+                                        className='country-search-bar edit-profile-input'
                                         enterButton
                                     />
                                 </div>
