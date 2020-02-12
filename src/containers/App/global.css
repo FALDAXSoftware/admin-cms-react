@@ -830,6 +830,10 @@ html[dir='rtl'] .dz-hidden-input {
   display: inline-block;
   width: 120px;
 }
+.wallet-send-summery-title{
+  display: inline-block;
+  min-width: 130px;
+}
 .long-text-wrapper{
   word-wrap: break-word;
   width: 50%;
@@ -840,4 +844,9 @@ html[dir='rtl'] .dz-hidden-input {
 .country-search-bar{
   width: 300px !important;
   float: left;
+}
+
+
+.main_wallet_row{
+  width: 100%;
 }

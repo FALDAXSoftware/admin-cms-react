@@ -6,7 +6,9 @@ import authAction from "../../../redux/auth/actions";
 import styled from "styled-components";
 import { BUCKET_URL } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { isAllowed } from "../../../helpers/accessControl";
+import { PrecisionCell } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 
@@ -33,6 +35,12 @@ const WalletCol = styled(Col)`
       display: flex;
       width: 100%;
       align-self: flex-start;
+      > .ant-card-head-wrapper{
+            width:100%;
+          > .ant-card-head-title{
+              width:100%;
+          }
+      }
     }
     > .ant-card-body {
       display: flex;
@@ -137,6 +145,13 @@ class UserWallets extends Component {
                 });
             });
     };
+    _copyNotification = () => {
+        this.setState({
+          errMsg: true,
+          errType: "Info",
+          errMessage: "Copied to Clipboard!!"
+        });
+      };
 
     openNotificationWithIconError = type => {
         notification[type]({
@@ -160,8 +175,13 @@ class UserWallets extends Component {
                         userWallets.map(wallet => {
                             let coinTitle = (
                                 <div>
-                                    <Image src={BUCKET_URL + wallet.coin_icon} />
-                                    <span>{wallet.coin_code}</span>
+                                    <div className="float-left">
+                                        <Image src={BUCKET_URL + wallet.coin_icon} />
+                                        <span>{wallet.coin_code}</span>
+                                    </div>
+                                    <div className="float-right">
+                                        <span>{PrecisionCell(wallet.balance)}</span>
+                                    </div>
                                 </div>
                             );
                             return (
@@ -169,7 +189,7 @@ class UserWallets extends Component {
                                     <Card
                                         title={coinTitle}
                                         actions={[
-                                            wallet.send_address == "" && wallet.send_address == "" && isAllowed("create_wallet") ? (
+                                            wallet.send_address == "" && isAllowed("create_wallet") ? (
                                                isAllowed("create_wallet") && (<Button
                                                     type="primary"
                                                     onClick={this._createUserWallet.bind(this, wallet)}
@@ -183,11 +203,23 @@ class UserWallets extends Component {
                                     >
                                         <p>
                                             <b>HOT Send Address : </b>{" "}
+                                            <CopyToClipboard
+                                              className="cursor-pointer"
+                                              text={wallet.send_address}
+                                              onCopy={this._copyNotification}
+                                            >
                                             <span>{wallet.send_address}</span>
+                                            </CopyToClipboard>
                                         </p>
                                         <p>
                                             <b>HOT Receive Address : </b>
+                                            <CopyToClipboard
+                                            className="cursor-pointer"
+                                              text={wallet.receive_address}
+                                              onCopy={this._copyNotification}
+                                            >
                                             <span>{wallet.receive_address}</span>
+                                            </CopyToClipboard>
                                         </p>
                                     </Card>
                                 </WalletCol>
