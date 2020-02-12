@@ -3546,5 +3546,15 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
+  getAvailableBalance:function(token,asset="tbtc"){
+    return fetch(API_URL+`/admin/get-admin-available-balance?coin=${asset}`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  }
 };
 export default ApiUtils;
