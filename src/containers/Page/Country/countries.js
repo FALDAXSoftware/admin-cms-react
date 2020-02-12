@@ -26,6 +26,7 @@ import Metabase from "./countriesMetabase"
 import { isAllowed } from "../../../helpers/accessControl";
 import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -267,8 +268,9 @@ class Countries extends Component {
             key={countryTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
+            <PageCounterComponent page={page} limit={limit} dataCount={allCountryCount} syncCallBack={this._resetFilters}/>
               <Form onSubmit={this._searchCountry}>
-                <Row gutter={[0, 16]} type="flex" justify="start" className="table-filter-row">
+                <Row  type="flex" justify="start" className="table-filter-row">
                   <Col lg={7}>
                     <Form.Item
                       validateStatus={this.state.searchValid}

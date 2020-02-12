@@ -21,11 +21,11 @@ import { connect } from "react-redux";
 import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import styled from "styled-components";
 import { BackButton } from "../../Shared/backBttton";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -318,9 +318,10 @@ class News extends Component {
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     return (
       <TableDemoStyle className="isoLayoutContent">
+        <PageCounterComponent page={page} limit={limit} dataCount={allNewsCount} syncCallBack={this._resetFilters}/>
         <Form onSubmit={this._searchNews}>
-          <Row>
-            <ColWithMarginBottom md={6}>
+          <Row type="flex" justify="start" className="table-filter-row">
+            <Col md={6}>
               <Form.Item
                 validateStatus={this.state.searchValid}
                 className="news-search"
@@ -331,9 +332,9 @@ class News extends Component {
                   value={searchNews}
                 />
               </Form.Item>
-            </ColWithMarginBottom>
+            </Col>
             {isAllowed("get_all_news_source") && (
-              <ColWithMarginBottom md={6}>
+              <Col md={6}>
                 <Select
                   getPopupContainer={trigger => trigger.parentNode}
                   placeholder="Select a source"
@@ -348,9 +349,9 @@ class News extends Component {
                       </Option>
                     ))}
                 </Select>
-              </ColWithMarginBottom>
+              </Col>
             )}
-            <ColWithMarginBottom md={6}>
+            <Col md={6}>
               <RangePicker
                 value={rangeDate}
                 disabledTime={this.disabledRangeTime}
@@ -359,8 +360,8 @@ class News extends Component {
                 allowClear={false}
                 className="full-width"
               />
-            </ColWithMarginBottom>
-            <ColWithMarginBottom xs={12} md={3}>
+            </Col>
+            <Col xs={12} md={3}>
               <Button
                 htmlType="submit"
                 className="filter-btn btn-full-width"
@@ -369,8 +370,8 @@ class News extends Component {
                 <Icon type="search" />
                 Search
               </Button>
-            </ColWithMarginBottom>
-            <ColWithMarginBottom xs={12} md={3}>
+            </Col>
+            <Col xs={12} md={3}>
               <Button
                 className="filter-btn btn-full-width"
                 type="primary"
@@ -378,7 +379,7 @@ class News extends Component {
               >
                 <Icon type="reload" /> Reset
               </Button>
-            </ColWithMarginBottom>
+            </Col>
           </Row>
         </Form>
         {loader && <FaldaxLoader />}
@@ -389,7 +390,7 @@ class News extends Component {
             columns={newsTableInfos[0].columns}
             pagination={false}
             dataSource={allNews}
-            className="isoCustomizedTable"
+            className="table-tb-margin"
             onChange={this._handleNewsTableChange}
             bordered
             scroll={TABLE_SCROLL_HEIGHT}

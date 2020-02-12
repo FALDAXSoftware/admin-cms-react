@@ -11,6 +11,7 @@ import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import ColWithPadding from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -144,6 +145,7 @@ class UserSimplexHistory extends Component {
 
         return (
                 <>
+                        <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
                     <Form onSubmit={this._searchTrade}>
                         <Row type="flex" justify="start" className="table-filter-row">
                             <Col sm={8}>

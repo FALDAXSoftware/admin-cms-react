@@ -9,6 +9,7 @@ import {
   Button,
   Select,
   Icon,
+  Col
 } from "antd";
 import { twoFactorReqInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -20,8 +21,8 @@ import authAction from "../../../redux/auth/actions";
 import SimpleReactValidator from "simple-react-validator";
 import ViewRequestModal from "./viewRequestModal";
 import RequestActionModal from "./requestActionModal";
-import {ColWithMarginBottom} from "../common.style";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -281,16 +282,17 @@ class TwoFactorRequests extends Component {
 
     return (
         <TableDemoStyle className="isoLayoutContent">
+          <PageCounterComponent page={page} limit={limit} dataCount={allRequestsCount} syncCallBack={this._resetFilters}/>
           <Form onSubmit={this._searchRequest}>
-            <Row type="flex" justify="start">
-              <ColWithMarginBottom md={6}>
+            <Row type="flex" justify="start" className="table-filter-row">
+              <Col md={6}>
                 <Input
                   placeholder="Search Requests"
                   onChange={this._changeSearch.bind(this)}
                   value={searchReq}
                 />
-              </ColWithMarginBottom>
-              <ColWithMarginBottom md={6}>
+              </Col>
+              <Col md={6}>
                 <Select
                   getPopupContainer={trigger => trigger.parentNode}
                   placeholder="Select a type"
@@ -302,8 +304,8 @@ class TwoFactorRequests extends Component {
                   <Option value={"closed"}>Approved</Option>
                   <Option value={"rejected"}>Rejected</Option>
                 </Select>
-              </ColWithMarginBottom>
-              <ColWithMarginBottom xs={12} sm={3}>
+              </Col>
+              <Col xs={12} sm={3}>
                 <Button
                   htmlType="submit"
                   className="filter-btn btn-full-width"
@@ -312,8 +314,8 @@ class TwoFactorRequests extends Component {
                   <Icon type="search" />
                   Search
                 </Button>
-              </ColWithMarginBottom>
-              <ColWithMarginBottom xs={12} sm={3}>
+              </Col>
+              <Col xs={12} sm={3}>
                 <Button
                   className="filter-btn btn-full-width"
                   type="primary"
@@ -322,7 +324,7 @@ class TwoFactorRequests extends Component {
                   <Icon type="reload" />
                   Reset
                 </Button>
-              </ColWithMarginBottom>
+              </Col>
             </Row>
           </Form>
           {loader && <FaldaxLoader />}
@@ -332,7 +334,7 @@ class TwoFactorRequests extends Component {
             columns={twoFactorReqInfos[0].columns}
             pagination={false}
             dataSource={all2FARequests}
-            className="float-clear"
+            className="table-tb-margin"
             onChange={this._handleRequestTableChange}
             scroll={TABLE_SCROLL_HEIGHT}
             bordered

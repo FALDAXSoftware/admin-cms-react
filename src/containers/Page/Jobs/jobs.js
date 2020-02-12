@@ -15,9 +15,9 @@ import JobCategory from "./jobsCategory";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from "./jobsMetabase"
-import { ColWithMarginBottom } from "../common.style";
 // import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -365,9 +365,10 @@ class Jobs extends Component {
         <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
-              <Row type="flex" justify="start" >
+            <PageCounterComponent page={page} limit={limit} dataCount={allJobsCount} syncCallBack={()=>{this.setState({page:1,searchJob:""},()=>this._getAllJobs())}}/>
+              <Row className="table-filter-row" type="flex" justify="start" >
                   {isAllowed("add_job") && isAllowed("get_job_categories") && (
-                <ColWithMarginBottom md={4}>
+                <Col md={4}>
                     <Button
                       type="primary"
                       className="full-width"
@@ -376,16 +377,16 @@ class Jobs extends Component {
                       <Icon type="plus" />
                       Add Job
                     </Button>
-                </ColWithMarginBottom>
+                </Col>
                   )}
-                <ColWithMarginBottom md={8}>
+                <Col md={8}>
                   <Search
                     className="full-width"
                     placeholder="Search jobs"
                     onSearch={value => this._searchJob(value)}
                     enterButton
                   />  
-                </ColWithMarginBottom>
+                </Col>
               </Row>
                 <AddJobModal
                   showAddJobModal={showAddJobModal}
