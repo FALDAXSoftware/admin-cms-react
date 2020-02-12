@@ -93,7 +93,7 @@ class WalletFaldaxDashboard extends Component {
         super(props)
         this.timer=1000;//1.5 seconds
         this.timeCounter=undefined;
-        this.state={loader:false,walletValue:[],searchData:"",sendModal:false,walletDetails:{}, fields: {},networkFee:0}
+        this.state={loader:false,walletValue:[],availableBalance:"",searchData:"",sendModal:false,walletDetails:{}, fields: {},networkFee:0}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
         self=this;
         this.validator = new SimpleReactValidator({
@@ -115,7 +115,8 @@ class WalletFaldaxDashboard extends Component {
         this.getWalletData();
     }
 
-    static openSendModal = (values) => {
+    static openSendModal = async(values) => {
+        await self.getAssetAvailableBalance(values.coin);
         self.setState({ sendModal: true, walletDetails: values });
     }
 
@@ -229,6 +230,26 @@ class WalletFaldaxDashboard extends Component {
         }
     }
 
+     getAssetAvailableBalance=async(asset)=>{
+        try{
+            this.setState({loader:true});
+            let res=await (await ApiUtils.getAvailableBalance(this.props.token)).json();
+            let {status,data,err,message}=res;
+            if(status==200){
+                this.setState({availableBalance:data})
+            }else if(status==403){
+                this.openNotificationWithIcon("Error",err);
+                this.props.logout();
+            }else{
+                this.openNotificationWithIcon("Error",message);
+            }
+        }catch(error){
+            console.log(error)
+        }finally{
+            this.setState({loader:false});
+        }
+    }
+
 
     closeSendModal = () => {
         this.validator = new SimpleReactValidator({
@@ -248,7 +269,7 @@ class WalletFaldaxDashboard extends Component {
     }
 
     render() { 
-        const {loader,walletValue,walletDetails,searchData,sendModal,fields,networkFee} =this.state;
+        const {loader,walletValue,walletDetails,searchData,sendModal,fields,networkFee,availableBalance} =this.state;
         return (
             <>
                 <TableDemoStyle className="isoLayoutContent">
@@ -280,7 +301,8 @@ class WalletFaldaxDashboard extends Component {
                                 <Button  key="submit-a" type="primary" onClick={this.sendWalletBal}>Send {walletDetails.coin}</Button>
                             ]}
                         >
-                            <span><b>Total Balance  </b></span><span>{PrecisionCell(walletDetails.total)} {walletDetails.coin}</span>
+                            <span className="wallet-send-summery-title"><b>Total Balance  </b></span><span>{PrecisionCell(walletDetails.total_earned_from_wallets)} {walletDetails.coin}</span><br/>
+                            <span className="wallet-send-summery-title"><b>Available Balance </b></span><span>{PrecisionCell(availableBalance)} {walletDetails.coin}</span>
                             <Form onSubmit={this._sendWalletBal}>
                                 <div className="table-tb-margin">
                                     <span>Destination Address:</span>
@@ -293,13 +315,18 @@ class WalletFaldaxDashboard extends Component {
                                     <span>Amount:</span>
                                     <Input placeholder="Amount" onChange={this._handleChange.bind(this, "amount")} value={fields["amount"]} />
                                     <span style={{ "color": "red" }}>
-                                        {this.validator.message('amount', fields["amount"], `required|numeric|gte:${walletDetails.min_limit}`, 'text-danger')}
+                                        {this.validator.message('amount', fields["amount"], `required|numeric|gte:${walletDetails.min_limit}|lte:${availableBalance}`, 'text-danger')}
                                     </span>
                                 </div>
-                                <div>
-                                    <span className="wallet-send-summery-head"><b>Sending Amount</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
-                                    <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>
-                                    <span className="wallet-send-summery-head"><b>Total Payout</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
+                                <div className="clearfix">
+                                    <div className="float-left">
+                                        <span className="wallet-send-summery-head"><b>Sending Amount</b></span><span>{fields["amount"]||0} {walletDetails.coin}</span><br/>
+                                        <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br/>
+                                        <span className="wallet-send-summery-head"><b>Total Payload</b></span><span>{parseFloat(fields['amount'])&& parseFloat(networkFee)?(parseFloat(fields['amount'])+parseFloat(networkFee)).toFixed(8):0} {walletDetails.coin}</span><br/>
+                                    </div>
+                                    <div className="float-right">
+                                        <span className="wallet-send-summery-head"><b>Fiat Value</b></span><span>$&nbsp;{parseFloat(walletDetails.fiat||0)}</span><br/>
+                                    </div>
                                 </div>
                             </Form>
                         </Modal>
