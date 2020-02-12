@@ -13,6 +13,7 @@ import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { PrecisionCell } from '../../../components/tables/helperCells';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -191,7 +192,7 @@ class UserTransactionHistory extends Component {
             { label: "Transaction Type", key: "transaction_type" },
             { label: "Amount", key: "amount" },
             { label: "Email", key: "email" },
-            { label: "Created On", key: "craeted_at" },
+            { label: "Created On", key: "created_at" },
         ];
 
         if (errMsg) {
@@ -202,6 +203,7 @@ class UserTransactionHistory extends Component {
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchTransaction}>
+                        <PageCounterComponent page={page} limit={limit} dataCount={allTransactionCount} syncCallBack={this._resetFilters}/>
                         <Row type="flex" justify="start" className="table-filter-row">
                             <Col sm={6} xs={24}>
                                 <Input

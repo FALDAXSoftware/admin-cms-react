@@ -7,7 +7,8 @@ import {
   Button,
   Modal,
   notification,
-  Row
+  Row,
+  Col
 } from "antd";
 import { assetTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -22,9 +23,9 @@ import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
-import { ColWithMarginBottom } from "../common.style";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -335,23 +336,24 @@ class Assets extends Component {
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
               <TableDemoStyle className="isoLayoutContent">
-                <Row type="flex" justify="start">
-                  <ColWithMarginBottom md={4}>
+              <PageCounterComponent page={page} limit={limit} dataCount={allCoinCount} syncCallBack={()=>{this.setState({searchCoin:"",page:1},()=>this._getAllCoins())}}/>
+                <Row type="flex" className="table-filter-row" justify="start">
+                  <Col md={4}>
                     {isAllowed("create_coins") && (
                       <Button type="primary" className="full-width" onClick={this._showAddCoinModal}>
                         <Icon type="plus" />
                         Add Asset
                       </Button>
                     )}
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom md={8}>
+                  </Col>
+                  <Col md={8}>
                     <Search
                       placeholder="Search assets"
                       onSearch={value => this._searchCoin(value)}
                       enterButton
                       className="full-width"
                     />
-                  </ColWithMarginBottom>
+                  </Col>
                 </Row>
                 <AddCoinModal
                   showAddCoinModal={showAddCoinModal}

@@ -11,6 +11,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } fr
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
+import { PageCounterComponent } from '../../../Shared/pageCounter';
 var self;
 
 const {RangePicker}=DatePicker;
@@ -214,14 +215,15 @@ class WalletJstDetailsComponent extends Component {
             <>
                    <TableDemoStyle className="isoLayoutContent">
                         <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
-                            <Row justify="start" type="flex">
-                                <Col className="table-column" xs={12} md={7}>
+                        <PageCounterComponent page={page} limit={limit} dataCount={count} syncCallBack={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin,transaction_type:undefined},()=>this.getWalletData())}}/>
+                            <Row justify="start" type="flex" className="table-filter-row">
+                                <Col xs={12} md={7}>
                                     <Input placeholder="Search" value={searchData} onChange={(value) => { this.setState({searchData:value.target.value})}}/>
                                 </Col>
-                                <Col className="table-column" xs={12} md={7}>
+                                <Col xs={12} md={7}>
                                     <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                                 </Col>
-                                <Col className="table-column" xs={12} md={4}>
+                                <Col xs={12} md={4}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     <Option value="">All</Option>
                                     {assetsList.map((ele)=>{
@@ -232,10 +234,10 @@ class WalletJstDetailsComponent extends Component {
                                     }
                                 </Select>
                                 </Col>
-                                <Col className="table-column" xs={12} md={3}>
+                                <Col xs={12} md={3}>
                                     <Button type="primary" icon="search" className="filter-btn btn-full-width" htmlType="submit">Search</Button>
                                 </Col>
-                                <Col className="table-column" xs={12} md={3}>
+                                <Col xs={12} md={3}>
                                     <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
                                 </Col>
                             </Row>

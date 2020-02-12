@@ -24,6 +24,7 @@ import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import moment from "moment";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -308,6 +309,7 @@ class ActiveUsers extends Component {
       // <LayoutContentWrapper>
       <TableDemoStyle className="isoLayoutContent">
         <div className="isoTableDisplayTab">
+          <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div>
               <Form onSubmit={this._searchUser} className="cty-search">
                 <Row className="table-filter-row" type="flex" justify="start">

@@ -78,7 +78,7 @@ const columns = [{
     key: 'actual_amount',
     width: 150,
     align:"left",
-    render:(data)=>data["transaction_type"]=="send"?PrecisionCell(data["actual_amount"]):"-"
+    render:(data)=>PrecisionCell(data["actual_amount"])
 },
 {
     title: <IntlMessages id="transactionTable.title.amount" />,

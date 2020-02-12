@@ -15,6 +15,7 @@ import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from './employeeMetabase'
 import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
@@ -339,6 +340,7 @@ class Employees extends Component {
             key={employeeTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
+              <PageCounterComponent page={page} limit={limit} dataCount={employeeCount} syncCallBack={()=>{this.setState({page:1,searchEmp:""},()=>{this._getAllEmployees()})}}/>
               <Row type="flex" justify="start" className="table-filter-row">
                   {isAllowed("add_employee") && (
                 <Col md={4}>

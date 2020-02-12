@@ -11,6 +11,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -190,6 +191,7 @@ class KYC extends Component {
 
     return (
       <TableDemoStyle className="isoLayoutContent">
+        <PageCounterComponent page={page} limit={limit} dataCount={allKYCCount} syncCallBack={this._resetFilters}/>
         <Form onSubmit={this._searchKYC}>
           <Row type="flex" justify="start" className="table-filter-row">
             <Col md={7}>

@@ -22,11 +22,12 @@ import moment from "moment";
 import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import {ColWithMarginBottom} from "../common.style";
+// import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { PrecisionCell } from "../../../components/tables/helperCells";
 import {withRouter} from "react-router-dom";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -267,16 +268,17 @@ class Transactions extends Component {
 
     return (    
             <TableDemoStyle className="isoLayoutContent">
+              <PageCounterComponent page={page} limit={limit} dataCount={allTransactionCount} syncCallBack={this._resetFilters}/>
               <Form onSubmit={this._searchTransaction}>
-                <Row type="flex" justify="start">
-                  <ColWithMarginBottom md={6}>
+                <Row type="flex" justify="start" className="table-filter-row">
+                  <Col md={6}>
                     <Input
                       placeholder="Search transactions"
                       onChange={this._changeSearch.bind(this)}
                       value={searchTransaction}
                     />
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom md={3}>
+                  </Col>
+                  <Col md={3}>
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a type"
@@ -287,8 +289,8 @@ class Transactions extends Component {
                       <Option value={"send"}><span className="camel-case color-green"><Icon type="arrow-up"/>&nbsp;Send</span></Option>
                       <Option value={"receive"}><span className="camel-case field-error"><Icon type="arrow-down"/>&nbsp;Receive</span></Option>
                     </Select>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom md={6}>
+                  </Col>
+                  <Col md={6}>
                     <RangePicker
                       value={rangeDate}
                       disabledTime={this.disabledRangeTime}
@@ -296,8 +298,8 @@ class Transactions extends Component {
                       format="YYYY-MM-DD"
                       className="full-width"
                     />
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  </Col>
+                  <Col xs={12} md={3}>
                     <Button
                       htmlType="submit"
                       className="filter-btn btn-full-width"
@@ -306,8 +308,8 @@ class Transactions extends Component {
                       <Icon type="search" />
                       Search
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  </Col>
+                  <Col xs={12} md={3}>
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
@@ -316,8 +318,8 @@ class Transactions extends Component {
                       <Icon type="reload" />
                       Reset
                     </Button>
-                  </ColWithMarginBottom>
-                  <ColWithMarginBottom xs={12} md={3}>
+                  </Col>
+                  <Col xs={12} md={3}>
                     {allTransactions && allTransactions.length > 0 ? (
                       <CSVLink
                         filename={"transaction_history.csv"}
@@ -335,12 +337,12 @@ class Transactions extends Component {
                     ) : (
                       ""
                     )}
-                  </ColWithMarginBottom>
+                  </Col>
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}
                 <TableWrapper
-                  className="float-clear"
+                  className="float-clear table-tb-margin"
                   rowKey="id"
                   {...this.state}
                   columns={transactionTableInfos.columns}

@@ -9,6 +9,7 @@ import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import userAction from '../../../redux/users/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from '../../Shared/pageCounter';
 var self;
 const { showUserDetails } = userAction;
 const { logout } = authAction;
@@ -128,7 +129,8 @@ class Referrals extends Component {
 
         return (
             <div>
-                <Row type="flex" justify="start">
+                <PageCounterComponent page={page} limit={limit} dataCount={allReferralCount} syncCallBack={()=>{this.setState({searchReferral:"",page:1},()=>this._getAllReferredAdmins())}}/>
+                <Row type="flex" justify="start" className="table-filter-row">
                     <Col md={8}>
                         <Search
                             placeholder="Search users"

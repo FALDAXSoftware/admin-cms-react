@@ -16,6 +16,7 @@ import { BackButton } from "../../Shared/backBttton";
 import moment from "moment";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import Metabase from "./metabase"
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -230,24 +231,25 @@ class Offers extends Component {
                   </Row>
                 )}
               <TableDemoStyle className="isoLayoutContent">
-                <Row justify="start" type="flex">
-                    <Col className="table-column" xs={12} md={7}>
+              <PageCounterComponent page={page} limit={limit} dataCount={campaignCount} syncCallBack={()=>{this.setState({rangeDate:"",searchData:"",usage_type:""},()=>this.getAllCampaign())}}/>
+                <Row justify="start" type="flex"  className="table-filter-row">
+                    <Col xs={12} md={7}>
                         <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                     </Col>
-                    <Col className="table-column" xs={12} md={7}>
+                    <Col xs={12} md={7}>
                         <RangePicker className="full-width" format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                     </Col>
-                    <Col className="table-column" xs={12} md={4}>
+                    <Col xs={12} md={4}>
                         <Select className="full-width" placeholder="Type" placeholder="Select Type" value={usage_type} onChange={value => this.setState({usage_type:value})}>
                             <Option value="">All</Option>
                             <Option value="1">Single Code Use</Option>
                             <Option value="2">Multiple Code Use</Option>
                         </Select>
                     </Col>
-                    <Col className="table-column" xs={12} md={3}>
+                    <Col xs={12} md={3}>
                         <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getAllCampaign()}>Search</Button>
                     </Col>
-                    <Col className="table-column" xs={12} md={3}>
+                    <Col xs={12} md={3}>
                         <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",usage_type:""},()=>this.getAllCampaign())}}>Reset</Button>
                     </Col>
                 </Row>
