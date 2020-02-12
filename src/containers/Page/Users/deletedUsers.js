@@ -12,6 +12,7 @@ import CountryData from 'country-state-city';
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 import { withRouter } from 'react-router-dom';
 import moment from "moment";
+import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const Option = Select.Option;
 const {RangePicker}=DatePicker;
@@ -244,6 +245,7 @@ class DeletedUsers extends Component {
 
         return (
           <TableDemoStyle className="isoLayoutContent">
+            <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div className="isoTableDisplayTab">
               <Form onSubmit={this._searchUser}>
                 <Row className="table-filter-row" type="flex" justify="start">

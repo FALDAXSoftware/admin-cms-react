@@ -12,6 +12,7 @@ import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { DateTimeCell , TransactionIdHashCell, PrecisionCell, ToolTipsCell} from '../../../../components/tables/helperCells';
+import { PageCounterComponent } from '../../../Shared/pageCounter';
 
 
 const {RangePicker}=DatePicker;
@@ -158,31 +159,32 @@ class WalletFaldaxDetailsComponent extends Component {
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">
+                   <PageCounterComponent page={page} limit={limit} dataCount={count} syncCallBack={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin,transaction_type:undefined},()=>this.getWalletData())}}/>
                        <Form onSubmit={(e)=>{e.preventDefault();this.setState({page:1},()=>this.getWalletData())}}> 
-                        <Row justify="start" type="flex">
-                            <Col className="table-column" xs={12} md={6}>
+                        <Row justify="start" type="flex" className="table-filter-row">
+                            <Col xs={12} md={6}>
                                 <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={6}>
+                            <Col xs={12} md={6}>
                                 <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={12} md={3}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     <Option value="">All</Option>
                                     {assetsList.map((ele)=><Option key={ele.key} value={ele.value}><span><img className="small-icon-img" src={S3BucketImageURL+ele.icon}/>&nbsp;{ele.name}</span></Option>)}
                                 </Select>
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={12} md={3}>
                                 <Select className="full-width" value={transaction_type} onChange={value => this.setState({transaction_type:value})}>
                                     <Option value="">All</Option>
                                     <Option value="send"><span className="error-danger"><Icon type="arrow-up"/>&nbsp;Send</span></Option>
                                     <Option value="receive"><span className="color-green"><Icon type="arrow-down"/>&nbsp;Receive</span></Option>
                                 </Select>
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={12} md={3}>
                                 <Button type="primary" icon="search" className="filter-btn btn-full-width" htmlType="submit">Search</Button>
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={12} md={3}>
                                 <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin,transaction_type:undefined},()=>this.getWalletData())}}>Reset</Button>
                             </Col>
                         </Row>

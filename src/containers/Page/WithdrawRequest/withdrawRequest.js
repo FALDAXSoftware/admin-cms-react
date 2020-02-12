@@ -8,7 +8,8 @@ import {
   Select,
   Form,
   Row,
-  Icon
+  Icon,
+  Col
 } from "antd";
 import { withdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -19,7 +20,6 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { CSVLink } from "react-csv";
-import { ColWithMarginBottom } from "../common.style";
 import DeclineActionModal from "./declineModal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
@@ -28,6 +28,7 @@ import {
   TABLE_SCROLL_HEIGHT
 } from "../../../helpers/globals";
 import { PrecisionCell } from "../../../components/tables/helperCells";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -379,16 +380,17 @@ class WithdrawRequest extends Component {
 
     return (
       <TableDemoStyle className="isoLayoutContent">
+        <PageCounterComponent page={page} limit={limit} dataCount={allReqCount} syncCallBack={this._resetFilters}/>
         <Form onSubmit={this._searchReq}>
-          <Row>
-            <ColWithMarginBottom sm={6}>
+          <Row className="table-filter-row" type="flex" justify="start"> 
+            <Col sm={6}>
               <Input
                 placeholder="Search Requests"
                 onChange={this._changeSearch.bind(this)}
                 value={searchReq}
               />
-            </ColWithMarginBottom>
-            <ColWithMarginBottom sm={3}>
+            </Col>
+            <Col sm={3}>
               <Select
                 getPopupContainer={trigger => trigger.parentNode}
                 placeholder="Select a type"
@@ -400,8 +402,8 @@ class WithdrawRequest extends Component {
                 <Option value={"true"}>Approved</Option>
                 <Option value={"false"}>Rejected</Option>
               </Select>
-            </ColWithMarginBottom>
-            <ColWithMarginBottom sm={6}>
+            </Col>
+            <Col sm={6}>
               <RangePicker
                 value={rangeDate}
                 disabledTime={this.disabledRangeTime}
@@ -409,8 +411,8 @@ class WithdrawRequest extends Component {
                 format="YYYY-MM-DD"
                 className="full-width"
               />
-            </ColWithMarginBottom>
-            <ColWithMarginBottom xs={12} sm={3}>
+            </Col>
+            <Col xs={12} sm={3}>
               <Button
                 htmlType="submit"
                 className="filter-btn btn-full-width"
@@ -418,8 +420,8 @@ class WithdrawRequest extends Component {
               >
                 <Icon type="search"></Icon>Search
               </Button>
-            </ColWithMarginBottom>
-            <ColWithMarginBottom xs={12} sm={3}>
+            </Col>
+            <Col xs={12} sm={3}>
               <Button
                 className="filter-btn btn-full-width"
                 type="primary"
@@ -428,8 +430,8 @@ class WithdrawRequest extends Component {
                 <Icon type="reload" />
                 Reset
               </Button>
-            </ColWithMarginBottom>
-            <ColWithMarginBottom xs={12} sm={3}>
+            </Col>
+            <Col xs={12} sm={3}>
               {allRequests && allRequests.length > 0 ? (
                 <CSVLink
                   filename={"withdraw_requests.csv"}
@@ -448,7 +450,7 @@ class WithdrawRequest extends Component {
               ) : (
                   ""
                 )}
-            </ColWithMarginBottom>
+            </Col>
           </Row>
         </Form>
         {loader && <FaldaxLoader />}

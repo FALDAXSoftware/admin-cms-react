@@ -23,6 +23,7 @@ import authAction from "../../../redux/auth/actions";
 import { withRouter} from "react-router-dom";
 import {ExecutionUl} from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -253,6 +254,7 @@ class TradeHistory extends Component {
 
     return (
         <TableDemoStyle className="isoLayoutContent full-width">
+          <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
           <div><Form onSubmit={this._searchTrade}>
             <Row justify="start" type="flex" className="table-filter-row">
               <Col sm={6}>
