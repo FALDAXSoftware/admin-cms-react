@@ -23,6 +23,7 @@ import authAction from "../../../redux/auth/actions";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import moment from "moment";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
 const { logout } = authAction;
@@ -296,6 +297,7 @@ class InActiveUsers extends Component {
       //   <LayoutContentWrapper>
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
+            <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
               {inActiveUserinfos.map(inActiveUserinfos => (
                 <div tab={inActiveUserinfos.title} key={inActiveUserinfos.value}>
                     <Form onSubmit={this._searchUser} className="cty-search">

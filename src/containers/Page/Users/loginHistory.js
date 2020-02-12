@@ -5,12 +5,12 @@ import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, Input, Pagination, DatePicker,Row, Button, Form, notification,Icon } from 'antd';
-import {ColWithMarginBottom} from "../common.style";
+import { Tabs, Input, Pagination, DatePicker,Row, Button, Form, notification,Icon,Col } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const { logout } = authAction;
 
@@ -147,23 +147,24 @@ class LoginHistory extends Component {
           
                   <TableDemoStyle className="isoLayoutContent">
                     <Form onSubmit={this._searchHistory} className="cty-search">
-                      <Row type="flex" justify="start">
-                        <ColWithMarginBottom sm={6}>
+                    <PageCounterComponent page={page} limit={limit} dataCount={allHistoryCount} syncCallBack={this._resetFilters}/>
+                        <Row justify="start" type="flex" className="table-filter-row">
+                        <Col sm={6}>
                           <Input
                             placeholder="Search history"
                             onChange={this._changeSearch.bind(this)}
                             value={searchHistory}
                           />
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom sm={6}>
+                        </Col>
+                        <Col sm={6}>
                           <RangePicker
                             value={rangeDate}
                             disabledTime={this.disabledRangeTime}
                             onChange={this._changeDate}
                             format="YYYY-MM-DD"
                           />
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom sm={3}>
+                        </Col>
+                        <Col sm={3}>
                           <Button
                             className="filter-btn btn-full-width"
                             htmlType="submit"
@@ -172,8 +173,8 @@ class LoginHistory extends Component {
                             <Icon type="search" />
                             Search
                           </Button>
-                        </ColWithMarginBottom>
-                        <ColWithMarginBottom sm={3}>
+                        </Col>
+                        <Col sm={3}>
                           <Button
                             className="filter-btn btn-full-width"
                             type="primary"
@@ -181,7 +182,7 @@ class LoginHistory extends Component {
                           >
                             <Icon type="reload"></Icon>Reset
                           </Button>
-                        </ColWithMarginBottom>
+                        </Col>
                       </Row>
                     </Form>
 
@@ -193,6 +194,7 @@ class LoginHistory extends Component {
                         pagination={false}
                         dataSource={allHistory}
                         bordered
+                        className="table-tb-margin"
                         scroll={TABLE_SCROLL_HEIGHT}
                       />
                       {loader && <FaldaxLoader />}

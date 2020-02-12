@@ -22,6 +22,7 @@ import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
 import { ExecutionUl } from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -205,6 +206,7 @@ class UserTradeHistory extends Component {
     return (
       <>
           <Form onSubmit={this._searchTrade}>
+          <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
             <Row type="flex" justify="start" className="table-filter-row">
               <Col sm={8}>
                 <Input
