@@ -153,14 +153,16 @@ class Dashboard extends Component {
       .then(function (res) {
         if (res) {
           if (res.status == 200) {
-            let feeSymbols = [];
-            let feeSum = [];
+            let feesLabels = [];
+            let faldaxFees = [];
+            let residualFees = [];
             let transactionSymbols = [];
             let transactionCount = [];
-            res.feesTransactionValue &&
-              res.feesTransactionValue.forEach(function (value, key) {
-                feeSymbols.push(value.symbol);
-                feeSum.push(value.sum);
+            res.walletFeesTransactionValue &&
+              res.walletFeesTransactionValue.forEach((value)=> {
+                feesLabels.push(value.coin_code.toUpperCase());
+                faldaxFees.push(value.faldax_fee);
+                residualFees.push(value.residual_amount);
               });
             res.transactionValue &&
               res.transactionValue.forEach(function (value, key) {
@@ -213,8 +215,9 @@ class Dashboard extends Component {
               loader: false,
               withdrawReqCountValue,
               userSignUpCountValue,
-              feeSymbols,
-              feeSum,
+              feesLabels,
+              faldaxFees,
+              residualFees,
               transactionSymbols,
               transactionCount
             });
@@ -372,8 +375,9 @@ class Dashboard extends Component {
       loader,
       withdrawReqCountValue,
       userSignUpCountValue,
-      feeSymbols,
-      feeSum,
+      feesLabels,
+      faldaxFees,
+      residualFees,
       deletedUsers,
       transactionSymbols,
       transactionCount,
@@ -524,10 +528,10 @@ class Dashboard extends Component {
                   <Col md={12} xs={24}>
                     <CardWrapper>
                       <span>
-                        <b>Fees collected in last 30 days:</b>
+                        <b>Fees collected in last 30 days</b>
                       </span>
                       <ChartWrapper>
-                        <FeeChart feeSymbols={feeSymbols} feeSum={feeSum} />
+                        <FeeChart feesLabels={feesLabels} faldaxFees={faldaxFees} residualFees={residualFees}/>
                       </ChartWrapper>
                     </CardWrapper>
                   </Col>
