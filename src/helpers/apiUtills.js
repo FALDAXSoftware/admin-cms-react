@@ -1,8 +1,8 @@
-const API_URL = "http://192.168.0.213:1440"; // Local (Mansi) URL
+// const API_URL = "http://192.168.0.213:1440"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
-// const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
+const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
 
