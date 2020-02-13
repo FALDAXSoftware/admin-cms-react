@@ -116,7 +116,7 @@ class WalletFaldaxDashboard extends Component {
     }
 
     static openSendModal = async(values) => {
-        await self.getAssetAvailableBalance(values.coin);
+        await self.getAssetAvailableBalance(values.coin_code);
         self.setState({ sendModal: true, walletDetails: values });
     }
 
@@ -233,7 +233,7 @@ class WalletFaldaxDashboard extends Component {
      getAssetAvailableBalance=async(asset)=>{
         try{
             this.setState({loader:true});
-            let res=await (await ApiUtils.getAvailableBalance(this.props.token)).json();
+            let res=await (await ApiUtils.getAvailableBalance(this.props.token,asset)).json();
             let {status,data,err,message}=res;
             if(status==200){
                 this.setState({availableBalance:data})
