@@ -27,9 +27,10 @@ class Users extends Component {
 
   render() {
     let tabOptionalProps={}
-    if(this.props.location.state && this.props.location.state.selectedTab){
-      tabOptionalProps.defaultActiveKey=this.props.location.state.selectedTab;
+    if(this.props.location.state && JSON.parse(this.props.location.state).selectedTab){
+      tabOptionalProps.defaultActiveKey=JSON.parse(this.props.location.state).selectedTab;
     }
+    console.log(tabOptionalProps)
     return (
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}

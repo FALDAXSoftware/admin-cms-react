@@ -47,10 +47,18 @@ class DeletedUsers extends Component {
     }
 
     static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
-        street_address_2, phone_number, country, dob, is_active, kyc) {    
+        street_address_2, phone_number, country, dob, is_active, kyc) {   
+          let { searchUser,
+            limit,
+            page,
+            sorterCol,
+            sortOrder,
+            filterVal,
+            startDate,
+            endDate}=self.state; 
         self.props.history.push({
           pathname: `/dashboard/users/${value}`,
-          state: { is_active: is_active }
+          state: { is_active: is_active,selectedTab:"3",searchUser,limit,page,sorterCol,sortOrder,filterVal,startDate,endDate }
         });
     }
 
@@ -63,7 +71,28 @@ class DeletedUsers extends Component {
     }
 
     componentDidMount = () => {
-        this._getAllUsers();
+        let state = this.props.location.state
+          ? JSON.parse(this.props.location.state)
+          : undefined;
+        if (state && state.selectedTab == "3") {
+          this.setState(
+            {
+              searchUser: state.searchUser,
+              limit: state.limit,
+              filterVal: state.filterVal,
+              page: state.page,
+              startDate: state.startDate,
+              endDate: state.endDate,
+              rangeDate: state.startDate
+                ? [moment(state.startDate), moment(state.endDate)]
+                : []
+            },
+            () => this._getAllUsers()
+          );
+        } else {
+          this._getAllUsers();
+        }
+
         let allCountries = CountryData.getAllCountries();
         this.setState({ allCountries });
     }
@@ -193,7 +222,7 @@ class DeletedUsers extends Component {
 
     _resetFilters = () => {
         this.setState({
-            filterVal:undefined, searchUser: '', page: 1, sorterCol: '', sortOrder: ''
+            filterVal:undefined, searchUser: '', page: 1, sorterCol: '', sortOrder: '',startDate:"",endDate:"",rangeDate:[]
         }, () => {
             this._getAllUsers();
         })
@@ -234,7 +263,7 @@ class DeletedUsers extends Component {
             { label: "Verified/Non Verified", key: "is_verified" },
             { label: "Fiat Currency", key: "fiat" },
             { label: "Referral Percentage", key: "referal_percentage" },
-            { label: "No Of Referrals", key: "no_of_referrals" },
+            // { label: "No Of Referrals", key: "no_of_referrals" },
             { label: "Account Tier", key: "account_tier" },
             { label: "Created On", key: "created_at" }
         ];

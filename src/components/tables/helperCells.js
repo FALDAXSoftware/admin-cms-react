@@ -76,6 +76,46 @@ const viewActiveUser = (
   );
 };
 
+const viewInActiveUser = (
+  value,
+  profile_pic,
+  first_name,
+  last_name,
+  email,
+  city_town,
+  street_address,
+  street_address_2,
+  phone_number,
+  country,
+  dob,
+  is_active,
+  kyc,
+  date_format,
+  account_tier,
+  account_class,
+  state
+) => {
+  InActiveUsers.view(
+    value,
+    profile_pic,
+    first_name,
+    last_name,
+    email,
+    city_town,
+    street_address,
+    street_address_2,
+    phone_number,
+    country,
+    dob,
+    is_active,
+    kyc,
+    date_format,
+    account_tier,
+    account_class,
+    state
+  );
+};
+
 const editActiveUser = (
   value,
   profile_pic,
@@ -1683,6 +1723,111 @@ const ActiveUserActionCell = (
     )}
   </div>
 );
+const InActiveUserActionCell = (
+  value,
+  profile_pic,
+  first_name,
+  last_name,
+  email,
+  city_town,
+  street_address,
+  street_address_2,
+  phone_number,
+  country,
+  dob,
+  is_active,
+  kyc,
+  date_format,
+  account_tier,
+  account_class,
+  state,
+  no_of_referrals,
+  created_at,
+  deleted_at
+) => (
+  <div>
+    {(isAllowed("get_users") ||
+      isAllowed("get_inactive_users") ||
+      isAllowed("get_deleted_users")) && (
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          className="btn-icon"
+          onClick={() =>
+            viewInActiveUser(
+              value,
+              profile_pic,
+              first_name,
+              last_name,
+              email,
+              city_town,
+              street_address,
+              street_address_2,
+              phone_number,
+              country,
+              dob,
+              is_active,
+              kyc,
+              date_format,
+              account_tier,
+              account_class,
+              state,
+              no_of_referrals,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+    )}
+    {!deleted_at ? (
+      <React.Fragment>
+        {isAllowed("delete_user") && (
+          <Tooltip title="Deactivate user">
+            <Icon
+              type="delete"
+              className="btn-icon"
+              onClick={() => deleteActiveUser(value)}
+            />
+          </Tooltip>
+        )}
+        {isAllowed("update_user") && (
+          <Tooltip title="Edit">
+            <Icon
+              type="edit"
+              className="btn-icon"
+              onClick={() =>
+                editActiveUser(
+                  value,
+                  profile_pic,
+                  first_name,
+                  last_name,
+                  email,
+                  city_town,
+                  street_address,
+                  street_address_2,
+                  phone_number,
+                  country,
+                  dob,
+                  is_active,
+                  kyc,
+                  date_format,
+                  account_tier,
+                  account_class,
+                  state,
+                  no_of_referrals,
+                  created_at,
+                  deleted_at
+                )
+              }
+            />
+          </Tooltip>
+        )}
+      </React.Fragment>
+    ) : (
+      ""
+    )}
+  </div>
+);
 const CoinActionCell = (
   value,
   coin_name,
@@ -3011,5 +3156,6 @@ export {
   PrecisionCell,
   ToolTipsCell,
   TransactionIdHashCell,
-  ConvertSatoshiToAssetCell
+  ConvertSatoshiToAssetCell,
+  InActiveUserActionCell
 };

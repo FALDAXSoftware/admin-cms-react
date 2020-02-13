@@ -70,14 +70,20 @@ class EditableTable extends React.Component {
       {
         title: 'Name',
         dataIndex: 'name',
-        width: '60%',
+        width: '55%',
         editable: false,
       },
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '20%',
+        width: '15%',
         editable: true,
+      },
+      {
+        title: 'Notes',
+        dataIndex: 'formula',
+        width: '20%',
+        editable: false,
       },
       {
         title: 'Action',
@@ -179,6 +185,32 @@ class EditableTable extends React.Component {
     });
   }
 
+  getAssetSatoshiFormula(coin){
+    switch (coin.toLowerCase()) {
+      case "btc_static_fees":
+        return <span>{`Asset Value = Value / 1e8`}</span>
+      case "tbtc_static_fees":
+          return <span>{`Asset Value = Value / 1e8`}</span>
+      case "eth_static_fees":
+          return <span>{`Asset Value = Value / 1e18`}</span>
+      case "teth_static_fees":
+          return <span>{`Asset Value = Value / 1e18`}</span>
+      case "ltc_static_fees":
+          return <span>{`Asset Value = Value / 1e8`}</span>
+      case "tltc_static_fees":
+          return <span>{`Asset Value = Value / 1e8`}</span>
+      case "xrp_static_fees":
+          return <span>{`Asset Value = Value / 1e6`}</span>
+      case "txrp_static_fees":
+          return <span>{`Asset Value = Value / 1e6`}</span>
+      case "susu_static_fees":
+          return <span>{`Asset Value = Value`}</span>
+        break;
+      default:
+          return <span>-</span>
+    }
+  }
+
    componentDidMount(){
        this.getAssetFeesAndLimits();
       
@@ -192,6 +224,7 @@ class EditableTable extends React.Component {
       data=data.map((ele,index)=>{
           ele["key"]=index;
           ele["value"]=PrecisionCell(ele.value)
+          ele["formula"]=this.getAssetSatoshiFormula(ele.slug);
           return ele;
       })
       if(status===200){

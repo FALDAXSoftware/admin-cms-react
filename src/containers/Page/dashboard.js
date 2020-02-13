@@ -394,8 +394,8 @@ class Dashboard extends Component {
             neutralCountries,
             PartialCountries
           ],
-          backgroundColor: ["#62d0c5", "#f6776e", "#b6cbfa", "#BA55D3"],
-          hoverBackgroundColor: ["#62d0c5", "#f6776e", "#b6cbfa", "#BA55D3"]
+          backgroundColor: ["#00a9fa", "#f6776e", "#00a9fb", "#FCD26E"],
+          hoverBackgroundColor: ["#00a9fa", "#f6776e", "#00a9fb", "#FCD26E"]
         }
       ]
     };
