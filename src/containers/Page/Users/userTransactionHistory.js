@@ -220,8 +220,8 @@ class UserTransactionHistory extends Component {
                                     value={filterVal}
                                 >
                                     <Option value={''}>All</Option>
-                                     <Option value={"send"}><span className="camel-case color-green"><Icon type="arrow-up"/>&nbsp;Send</span></Option>
-                                     <Option value={"receive"}><span className="camel-case field-error"><Icon type="arrow-down"/>&nbsp;Receive</span></Option>
+                                     <Option value={"send"}><span className="camel-case field-error"><Icon type="arrow-up"/>&nbsp;Send</span></Option>
+                                     <Option value={"receive"}><span className="camel-case color-green"><Icon type="arrow-down"/>&nbsp;Receive</span></Option>
                                 </Select>
                             </Col>
                             <Col xs={12} md={6}>

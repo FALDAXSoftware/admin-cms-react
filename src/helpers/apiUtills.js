@@ -2910,6 +2910,16 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
+  sendWarmWalletBalance: function(token, form) {
+    return fetch(API_URL + "/admin/send-warm-balance", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+  },
 
   getAllBatches: function(token, page, limit) {
     let url = "/admin/batches/list?page=" + page + "&limit=" + limit;
@@ -3548,6 +3558,16 @@ const ApiUtils = {
   },
   getAvailableBalance:function(token,asset="tbtc"){
     return fetch(API_URL+`/admin/get-admin-available-balance?coin=${asset}`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  },
+  getAvailableWarmBalance:function(token,asset="tbtc"){
+    return fetch(API_URL+`/admin/get-warm-available-balance?coin=${asset}`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,

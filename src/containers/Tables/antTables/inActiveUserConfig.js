@@ -5,7 +5,7 @@ import {
     UserImageCell,
     LinkCell,
     TextCell,
-    ActiveUserActionCell,
+    InActiveUserActionCell,
     DateCell,
     TierCell,
     ReferralCell,
@@ -50,7 +50,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
         case 'ReferralCell':
             return ReferralCell(value);
         case 'ActiveUserActionCell':
-            return ActiveUserActionCell(value, profile_pic, first_name, last_name, email, city_town,
+            return InActiveUserActionCell(value, profile_pic, first_name, last_name, email, city_town,
                 street_address, street_address_2, phone_number, country, dob, is_active, kyc,
                 date_format, account_tier, account_class, state, no_of_referrals, created_at, deleted_at);
         default:
@@ -156,15 +156,17 @@ const columns = [{
     key: 'account_tier',
     width: 150,
     render: object => renderCell(object, 'TierCell', 'account_tier')
-}, {
-    title: <IntlMessages id="antTable.title.numReferral" />,
-   align:"left",
-    ellipsis:true,
-    key: 'no_of_referrals',
-    width: 150,
-    dataIndex:"no_of_referrals",
-    render:data=><span>{data?data:"0"}</span>
-}];
+}, 
+// {
+//     title: <IntlMessages id="antTable.title.numReferral" />,
+//    align:"left",
+//     ellipsis:true,
+//     key: 'no_of_referrals',
+//     width: 150,
+//     dataIndex:"no_of_referrals",
+//     render:data=><span>{data?data:"0"}</span>
+// }
+];
 
 const inActiveUserinfos = [
     {

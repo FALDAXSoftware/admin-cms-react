@@ -168,15 +168,16 @@ const columns = [{
     key: 'account_tier',
     width: 150,
     render: object => renderCell(object, 'TierCell', 'account_tier')
-}, {
-    title: <IntlMessages id="antTable.title.numReferral" />,
-   align:"left",
-    ellipsis:true,
-    key: 'no_of_referrals',
-    width: 150,
-    dataIndex:"no_of_referrals",
-    render:data=><span>{data?data:"0"}</span>
-}
+},
+//  {
+//     title: <IntlMessages id="antTable.title.numReferral" />,
+//    align:"left",
+//     ellipsis:true,
+//     key: 'no_of_referrals',
+//     width: 150,
+//     dataIndex:"no_of_referrals",
+//     render:data=><span>{data?data:"0"}</span>
+// }
 ];
 
 const deletedUserinfos = [
