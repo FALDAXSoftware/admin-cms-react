@@ -72,7 +72,15 @@ class ActiveUsers extends Component {
     is_active,
     kyc
   ) {
-    self.props.history.push("/dashboard/users/" + value);
+    let { searchUser,
+      limit,
+      page,
+      sorterCol,
+      sortOrder,
+      filterVal,
+      startDate,
+      endDate}=self.state;
+      self.props.history.push({pathname:"/dashboard/users/" + value,state:{selectedTab:"1",searchUser,limit,page,sorterCol,sortOrder,filterVal,startDate,endDate}});
   }
 
   static deleteUser(value) {
@@ -84,7 +92,12 @@ class ActiveUsers extends Component {
   }
 
   componentDidMount = () => {
-    this._getAllUsers();
+    let state=this.props.location.state?JSON.parse(this.props.location.state):undefined;
+    if(state && state.selectedTab=="1"){
+      this.setState({searchUser:state.searchUser,limit:state.limit,filterVal:state.filterVal,page:state.page,startDate:state.startDate,endDate:state.endDate,rangeDate:state.startDate?[moment(state.startDate),moment(state.endDate)]:[]},()=>this._getAllUsers())
+    }else{
+      this._getAllUsers();
+    }
     let allCountries = CountryData.getAllCountries();
     this.setState({ allCountries });
   };
@@ -344,7 +357,7 @@ class ActiveUsers extends Component {
                     disabledTime={this.disabledRangeTime}
                     onChange={this._changeDate}
                     format="YYYY-MM-DD"
-                    allowClear={false}
+                    allowClear={true}
                     className='full-width'
                   />
                 </Col>

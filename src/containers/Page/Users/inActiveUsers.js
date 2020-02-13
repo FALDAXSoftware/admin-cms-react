@@ -23,6 +23,7 @@ import authAction from "../../../redux/auth/actions";
 import CountryData from "country-state-city";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import moment from "moment";
+import { withRouter } from "react-router-dom";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 
 const Option = Select.Option;
@@ -49,7 +50,10 @@ class InActiveUsers extends Component {
       showDeleteUserModal: false,
       rangeDate:[],
       startDate:"",
-      endDate:""
+      endDate:"",
+      filterVal:undefined,
+      sortOrder:"",
+      sorterCol:""
     };
     self = this;
     InActiveUsers.view = InActiveUsers.view.bind(this);
@@ -60,7 +64,15 @@ class InActiveUsers extends Component {
   static view(
     value,
   ) {
-    self.props.history.push("/dashboard/users/" + value);
+    let { searchUser,
+      limit,
+      page,
+      sorterCol,
+      sortOrder,
+      filterVal,
+      startDate,
+      endDate}=self.state;
+    self.props.history.push({pathname:"/dashboard/users/" + value,state:{selectedTab:"2",searchUser,limit,page,sorterCol,sortOrder,filterVal,startDate,endDate}});
   }
 
   static deleteUser(value) {
@@ -72,7 +84,12 @@ class InActiveUsers extends Component {
   }
 
   componentDidMount = () => {
-    this._getAllUsers();
+    let state=this.props.location.state?JSON.parse(this.props.location.state):undefined;
+    if(state && state.selectedTab=="2"){
+      this.setState({searchUser:state.searchUser,limit:state.limit,filterVal:state.filterVal,page:state.page,startDate:state.startDate,endDate:state.endDate,rangeDate:state.startDate?[moment(state.startDate),moment(state.endDate)]:[]},()=>this._getAllUsers())
+    }else{
+      this._getAllUsers();
+    }
     let allCountries = CountryData.getAllCountries();
     this.setState({ allCountries });
   };
@@ -283,7 +300,7 @@ class InActiveUsers extends Component {
       { label: "Verified/Non Verified", key: "is_verified" },
       { label: "Fiat Currency", key: "fiat" },
       { label: "Referral Percentage", key: "referal_percentage" },
-      { label: "No Of Referrals", key: "no_of_referrals" },
+      // { label: "No Of Referrals", key: "no_of_referrals" },
       { label: "Account Tier", key: "account_tier" },
       { label: "Created On", key: "created_at" }
     ];
@@ -430,6 +447,6 @@ export default connect(
     token: state.Auth.get("token")
   }),
   { logout }
-)(InActiveUsers);
+)(withRouter(InActiveUsers));
 
 export { InActiveUsers,inActiveUserinfos };
