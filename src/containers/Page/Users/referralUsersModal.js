@@ -85,7 +85,7 @@ class ReferralUsers extends Component {
         return (
             <>
                 <TableDemoStyle className="full-width isoLayoutContent">
-            <PageCounterComponent page={page} limit={limit} dataCount={allReferralCount} syncCallBack={()=>this.setState({page:1})}/>
+                <PageCounterComponent page={page} limit={limit} dataCount={allReferralCount} syncCallBack={()=>this.setState({page:1})}/>
                     <TableWrapper
                         rowKey="id"
                         {...this.state}
