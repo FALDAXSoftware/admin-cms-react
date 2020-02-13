@@ -65,14 +65,14 @@ const getUrl=(url,params)=>{
     }
     return url
 }  
-const  BreadcrumbComponent=({match})=> {
+const  BreadcrumbComponent=({match,location})=> {
     const pathSnippets = match.path.split('/').filter(i => i);
     const breadcrumbItems = pathSnippets.map((_, index) => {
         const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
         return (
           <>
           {breadcrumbNameMap[url] &&<Breadcrumb.Item key={breadcrumbNameMap[url]}>
-            <Link className="breadcrumb-link" to={getUrl(url,match.params)}>{breadcrumbNameMap[url]}</Link>
+            <Link className="breadcrumb-link" to={{pathname: getUrl(url,match.params),state:JSON.stringify(location.state)}}>{breadcrumbNameMap[url]}</Link>
         </Breadcrumb.Item>}</>
         );
       });

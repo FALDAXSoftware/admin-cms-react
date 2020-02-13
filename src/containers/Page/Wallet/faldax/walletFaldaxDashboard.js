@@ -301,8 +301,8 @@ class WalletFaldaxDashboard extends Component {
                                 <Button  key="submit-a" type="primary" onClick={this.sendWalletBal}>Send {walletDetails.coin}</Button>
                             ]}
                         >
-                            <span className="wallet-send-summery-title"><b>Total Balance  </b></span><span>{PrecisionCell(walletDetails.total_earned_from_wallets)} {walletDetails.coin}</span><br/>
-                            <span className="wallet-send-summery-title"><b>Available Balance </b></span><span>{PrecisionCell(availableBalance)} {walletDetails.coin}</span>
+                            <span className="wallet-send-summery-title"><b>Total Balance  </b></span><span>{PrecisionCell(walletDetails.total_earned_from_wallets)=="-"?0:PrecisionCell(walletDetails.total_earned_from_wallets)} {walletDetails.coin}</span><br/>
+                            <span className="wallet-send-summery-title"><b>Available Balance </b></span><span>{PrecisionCell(availableBalance)=="-"?0:PrecisionCell(availableBalance)} {walletDetails.coin}</span>
                             <Form onSubmit={this._sendWalletBal}>
                                 <div className="table-tb-margin">
                                     <span>Destination Address:</span>
@@ -315,7 +315,7 @@ class WalletFaldaxDashboard extends Component {
                                     <span>Amount:</span>
                                     <Input placeholder="Amount" onChange={this._handleChange.bind(this, "amount")} value={fields["amount"]} />
                                     <span style={{ "color": "red" }}>
-                                        {this.validator.message('amount', fields["amount"], `required|numeric|gte:${walletDetails.min_limit}|lte:${availableBalance}`, 'text-danger')}
+                                        {this.validator.message('amount', fields["amount"], `required|numeric|gte:${walletDetails.min_limit==0?0:walletDetails.min_limit?parseFloat(walletDetails.min_limit).toFixed(8):0}|lte:${availableBalance}`, 'text-danger')}
                                     </span>
                                 </div>
                                 <div className="clearfix">
