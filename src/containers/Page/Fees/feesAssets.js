@@ -69,9 +69,33 @@ class EditableTable extends React.Component {
     this.columns = [
       {
         title: 'Name',
-        dataIndex: 'name',
+        key:"name",
         width: '55%',
         editable: false,
+        render:(ele)=>{
+          switch (ele.slug.toLowerCase()) {
+            case "btc_static_fees":
+              return <><span><b>{ele.name}</b></span><br/><span>This are the Static Fees in the Satoshis. This values are used for the estimate of the amount to send from Hot Receive to Warm Wallet</span></>
+            case "eth_static_fees":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the Static Fees in Wei. This value are used for the estimate of the amount to be send from Hot Receive to Warm Wallet</span></>
+            case "ltc_static_fees":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the Static Fees in Litoshi. This value are used for the estimate of the amount to be send from Hot Receive to Warm Wallet</span></>
+            case "xrp_static_fees":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the Static Fees in Lowest Form of Ripple. This value are used for the estimate of the amount to be send from Hot Receive to Warm Wallet</span></>
+            case "susu_static_fees":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the Static Fees in SUSU coin.</span></>
+            case "xrp_limit_wallet_transfer":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the threshold value in Ripple(XRP). This value are for the transfer of Residual Funds from Hot Receive to Warm Wallet OR Hot Send to Warm Wallet</span></>
+            case "ltc_limit_wallet_transfer":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the threshold value in Litecoin(LTC). This value are for the transfer of Residual Funds from Hot Receive to Warm Wallet OR Hot Send to Warm Wallet</span></>
+            case "eth_limit_wallet_transfer":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the threshold value in Ethereum(ETH). This value are for the transfer of Residual Funds from Hot Receive to Warm Wallet OR Hot Send to Warm Wallet</span></>
+            case "btc_limit_wallet_transfer":
+                return <><span><b>{ele.name}</b></span><br/><span>This are the threshold value in Bitcoin(BTC). This value are for the transfer of Residual Funds from Hot Receive to Warm Wallet OR Hot Send to Warm Wallet</span></>
+            default:
+                return <span><b>{ele.name}</b></span>
+          }
+        }
       },
       {
         title: 'Value',
@@ -188,21 +212,21 @@ class EditableTable extends React.Component {
   getAssetSatoshiFormula(coin){
     switch (coin.toLowerCase()) {
       case "btc_static_fees":
-        return <span>{`Asset Value = Value / 1e8`}</span>
+        return <span>{`Asset Value = Value / 10,00,00,000`}</span>
       case "tbtc_static_fees":
-          return <span>{`Asset Value = Value / 1e8`}</span>
+          return <span>{`Asset Value = Value / 10,00,00,000`}</span>
       case "eth_static_fees":
-          return <span>{`Asset Value = Value / 1e18`}</span>
+          return <span>{`Asset Value = Value / 10,00,00,00,00,00,00,00,000`}</span>
       case "teth_static_fees":
-          return <span>{`Asset Value = Value / 1e18`}</span>
+          return <span>{`Asset Value = Value / 10,00,00,00,00,00,00,00,000`}</span>
       case "ltc_static_fees":
-          return <span>{`Asset Value = Value / 1e8`}</span>
+          return <span>{`Asset Value = Value / 10,00,00,000`}</span>
       case "tltc_static_fees":
-          return <span>{`Asset Value = Value / 1e8`}</span>
+          return <span>{`Asset Value = Value / 10,00,00,000`}</span>
       case "xrp_static_fees":
-          return <span>{`Asset Value = Value / 1e6`}</span>
+          return <span>{`Asset Value = Value / 10,00,000`}</span>
       case "txrp_static_fees":
-          return <span>{`Asset Value = Value / 1e6`}</span>
+          return <span>{`Asset Value = Value / 10,00,000`}</span>
       case "susu_static_fees":
           return <span>{`Asset Value = Value`}</span>
         break;
