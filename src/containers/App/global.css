@@ -856,3 +856,8 @@ html[dir='rtl'] .dz-hidden-input {
 .main_wallet_row{
   width: 100%;
 }
+.csvContainer{
+  height: 60vh;
+  margin-top: 5px;
+    overflow: scroll;
+}
