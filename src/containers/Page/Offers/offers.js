@@ -10,13 +10,15 @@ import authAction from "../../../redux/auth/actions";
 import { tblOffers } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import ConfirmDeleteModalComponent from "../../Modal/confirmDelete";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
 import moment from "moment";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import Metabase from "./metabase"
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportOffers } from "../../../helpers/exportToCsv/headers";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -44,7 +46,9 @@ class Offers extends Component {
       rangeDate:"",
       usage_type:undefined,
       sorterCol:"",
-      sortOrder:""
+      sortOrder:"",
+      openCsvModal:false,
+      csvData:[]
     };
     self = this;
     this.validator = new SimpleReactValidator({});
@@ -112,15 +116,18 @@ class Offers extends Component {
     }
   }
 
-  async getAllCampaign() {
+  async getAllCampaign(isExportCsv=false) {
     let { page, limit , searchData,rangeDate,usage_type,sortOrder,sorterCol} = this.state;
     let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
     this.loader.show();
     try {
       let offers = await (
-        await ApiUtils.offers(this.props.token).getCampaignList(page,limit,searchData,start_date,end_date,usage_type,sortOrder,sorterCol)
+        await (isExportCsv?ApiUtils.offers(this.props.token).getCampaignList(1,EXPORT_LIMIT_SIZE,"","","","","",""):ApiUtils.offers(this.props.token).getCampaignList(page,limit,searchData,start_date,end_date,usage_type,sortOrder,sorterCol))
       ).json();
       if (offers.status == 200) {
+        if(isExportCsv)
+        this.setState({csvData:offers.data.campaigns})
+        else
         this.setState({
           campaignList: offers.data.campaigns,
           campaignCount: offers.data.total
@@ -194,7 +201,9 @@ class Offers extends Component {
       metabaseUrl,
       searchData,
       rangeDate,
-      usage_type
+      usage_type,
+      csvData,
+      openCsvModal
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -205,6 +214,15 @@ class Offers extends Component {
     return (
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
+        <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="offers"
+              data={csvData}
+              header={exportOffers}
+            />
         <BreadcrumbComponent {...this.props} />
         <Tabs
           className="isoTableDisplayTab full-width"
@@ -212,80 +230,140 @@ class Offers extends Component {
         >
           {tblOffers.map(tableInfo => (
             <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                {isAllowed("create_campaigns") && (
-                  <Row type="flex" justify="start">
-                    <Col md={3.5} className="wallet-div">
-                      <Button
-                        type="primary"
-                        onClick={() =>
-                          this.props.history.push(
-                            "/dashboard/campaign/add-campaign"
-                          )
-                        }
-                      >
-                        {" "}
-                        <Icon type="plus" />
-                        Add Campaign
-                      </Button>
-                    </Col>
-                  </Row>
-                )}
+              {isAllowed("create_campaigns") && (
+                <Row type="flex" justify="start">
+                  <Col md={3.5} className="wallet-div">
+                    <Button
+                      type="primary"
+                      onClick={() =>
+                        this.props.history.push(
+                          "/dashboard/campaign/add-campaign"
+                        )
+                      }
+                    >
+                      {" "}
+                      <Icon type="plus" />
+                      Add Campaign
+                    </Button>
+                  </Col>
+                </Row>
+              )}
               <TableDemoStyle className="isoLayoutContent">
-              <PageCounterComponent page={page} limit={limit} dataCount={campaignCount} syncCallBack={()=>{this.setState({rangeDate:"",searchData:"",usage_type:""},()=>this.getAllCampaign())}}/>
-                <Row justify="start" type="flex"  className="table-filter-row">
-                    <Col xs={12} md={7}>
-                        <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
-                    </Col>
-                    <Col xs={12} md={7}>
-                        <RangePicker className="full-width" format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
-                    </Col>
-                    <Col xs={12} md={4}>
-                        <Select className="full-width" placeholder="Type" placeholder="Select Type" value={usage_type} onChange={value => this.setState({usage_type:value})}>
-                            <Option value="">All</Option>
-                            <Option value="1">Single Code Use</Option>
-                            <Option value="2">Multiple Code Use</Option>
-                        </Select>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getAllCampaign()}>Search</Button>
-                    </Col>
-                    <Col xs={12} md={3}>
-                        <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",usage_type:""},()=>this.getAllCampaign())}}>Reset</Button>
-                    </Col>
+                <PageCounterComponent
+                  page={page}
+                  limit={limit}
+                  dataCount={campaignCount}
+                  syncCallBack={() => {
+                    this.setState(
+                      { rangeDate: "", searchData: "", usage_type: "" },
+                      () => this.getAllCampaign()
+                    );
+                  }}
+                />
+                <Row justify="start" type="flex" className="table-filter-row">
+                  <Col xs={12} md={6}>
+                    <Input
+                      placeholder="Search"
+                      value={searchData}
+                      onChange={value =>
+                        this.setState({ searchData: value.target.value })
+                      }
+                    />
+                  </Col>
+                  <Col xs={12} md={5}>
+                    <RangePicker
+                      className="full-width"
+                      format="YYYY-MM-DD"
+                      value={rangeDate}
+                      onChange={date => this.setState({ rangeDate: date })}
+                    />
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <Select
+                      className="full-width"
+                      placeholder="Type"
+                      placeholder="Select Type"
+                      value={usage_type}
+                      onChange={value => this.setState({ usage_type: value })}
+                    >
+                      <Option value="">All</Option>
+                      <Option value="1">Single Code Use</Option>
+                      <Option value="2">Multiple Code Use</Option>
+                    </Select>
+                  </Col>
+                  <Col xs={12} md={3}>
+                    <Button
+                      type="primary"
+                      icon="search"
+                      className="filter-btn btn-full-width"
+                      onClick={() => this.getAllCampaign()}
+                    >
+                      Search
+                    </Button>
+                  </Col>
+                  <Col xs={12} md={3}>
+                    <Button
+                      type="primary"
+                      icon="reload"
+                      className="filter-btn btn-full-width"
+                      onClick={() => {
+                        this.setState(
+                          { rangeDate: "", searchData: "", usage_type: "" },
+                          () => this.getAllCampaign()
+                        );
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </Col>
+                  <Col xs={12} md={3}>
+                    <Button
+                      type="primary"
+                      icon="export"
+                      className="filter-btn full-width"
+                      onClick={() => {
+                        this.setState({ openCsvModal: true }, () =>
+                          this.getAllCampaign(true)
+                        );
+                      }}
+                    >
+                      Export
+                    </Button>
+                  </Col>
                 </Row>
                 {loader && <Loader />}
-                  <TableWrapper
-                    rowKey="id"
-                    {...this.state}
-                    columns={tableInfo.columns}
-                    pagination={false}
-                    dataSource={campaignList}
-                    className="isoCustomizedTable table-tb-margin float-clear"
-                    onChange={this.handleTableChange}
-                    bordered
-                    scroll={TABLE_SCROLL_HEIGHT}
+                <TableWrapper
+                  rowKey="id"
+                  {...this.state}
+                  columns={tableInfo.columns}
+                  pagination={false}
+                  dataSource={campaignList}
+                  className="isoCustomizedTable table-tb-margin float-clear"
+                  onChange={this.handleTableChange}
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
+                />
+                {campaignCount > 0 ? (
+                  <Pagination
+                    className="ant-users-pagination"
+                    onChange={this.handleUserPagination.bind(this)}
+                    pageSize={limit}
+                    current={page}
+                    total={campaignCount}
+                    showSizeChanger={true}
+                    onShowSizeChange={this.changePaginationSize}
+                    pageSizeOptions={pageSizeOptions}
                   />
-                  {campaignCount > 0 ? (
-                    <Pagination
-                      className="ant-users-pagination"
-                      onChange={this.handleUserPagination.bind(this)}
-                      pageSize={limit}
-                      current={page}
-                      total={campaignCount}
-                      showSizeChanger={true}
-                      onShowSizeChange={this.changePaginationSize}
-                      pageSizeOptions={pageSizeOptions}
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {
-                    <ConfirmDeleteModalComponent
-                      visible={showDeleteModal}
-                      callbackFn={this.onDeleteConfirm}
-                      callbackData={campaignId}
-                    />
-                  }
+                ) : (
+                  ""
+                )}
+                {
+                  <ConfirmDeleteModalComponent
+                    visible={showDeleteModal}
+                    callbackFn={this.onDeleteConfirm}
+                    callbackData={campaignId}
+                  />
+                }
               </TableDemoStyle>
             </TabPane>
           ))}

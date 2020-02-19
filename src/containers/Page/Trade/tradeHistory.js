@@ -22,8 +22,10 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter} from "react-router-dom";
 import {ExecutionUl} from "../common.style";
-import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportCryptoOnly } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -48,7 +50,9 @@ class TradeHistory extends Component {
       rangeDate: [],
       trade_type: 1,
       sorterCol: "created_at",
-      sortOrder: "descend"
+      sortOrder: "descend",
+      openCsvModal:false,
+      csvData:[]
     };
   }
 
@@ -59,7 +63,7 @@ class TradeHistory extends Component {
     this._getAllTrades();
   };
 
-  _getAllTrades = () => {
+  _getAllTrades = (isExportCsv=false) => {
     const { token } = this.props;
     const {
       searchTrade,
@@ -75,25 +79,32 @@ class TradeHistory extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllTrades(
-      page,
-      limit,
-      token,
-      searchTrade,
-      filterVal,
-      startDate,
-      endDate,
-      sorterCol,
-      sortOrder,
-      trade_type
+    (isExportCsv
+      ? ApiUtils.getAllTrades(1, EXPORT_LIMIT_SIZE, token, "", "", "", "", "", "", 1)
+      : ApiUtils.getAllTrades(
+          page,
+          limit,
+          token,
+          searchTrade,
+          filterVal,
+          startDate,
+          endDate,
+          sorterCol,
+          sortOrder,
+          trade_type
+        )
     )
       .then(response => response.json())
       .then(function(res) {
         if (res.status == 200) {
-          _this.setState({
-            allTrades: res.data,
-            allTradeCount: res.tradeCount
-          });
+          if (isExportCsv) {
+            _this.setState({ csvData: res.data });
+          } else {
+            _this.setState({
+              allTrades: res.data,
+              allTradeCount: res.tradeCount
+            });
+          }
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -166,6 +177,9 @@ class TradeHistory extends Component {
     });
   };
 
+  onExport=()=>{
+    this.setState({openCsvModal:true},()=>this._getAllTrades(true));
+  }
   _resetFilters = () => {
     this.setState(
       {
@@ -220,33 +234,10 @@ class TradeHistory extends Component {
       limit,
       searchTrade,
       rangeDate,
-      filterVal
+      filterVal,
+      csvData,
+      openCsvModal
     } = this.state;
-    const tradeHeaders = [
-      { label: "Created On", key: "created_at" },
-      { label: "Coin", key: "symbol" },
-      { label: "Side", key: "side" },
-      { label: "Email", key: "email" },
-      { label: "Amount", key: "quantity" },
-      { label: "Filled Price", key: "fill_price" },
-      { label: "Network Fees", key: "network_fees" },
-      { label: "Faldax Fees", key: "faldax_fees" },
-      { label: "Order Id", key: "order_id" }
-      //   { label: "Execution Report", key: "execution_report" }
-      // { label: "Currency", key: "currency" },
-      // { label: "Settle Currency", key: "settle_currency" },
-      // { label: "Type", key: "side" },
-      // { label: "Pair", key: "symbol" },
-      // { label: "Quantity", key: "quantity" },
-      // { label: "Order Id", key: "order_id" },
-      // { label: "Price", key: "price" },
-      // { label: "Fill Price", key: "fill_price" },
-      // { label: "Maker Fee", key: "maker_fee" },
-      // { label: "Taker Fee", key: "taker_fee" },
-      // { label: "Maker Email", key: "reqested_user_email" },
-      // { label: "Taker Email", key: "email" },
-      // { label: "Created On", key: "created_at" }
-    ];
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -254,6 +245,7 @@ class TradeHistory extends Component {
 
     return (
         <TableDemoStyle className="isoLayoutContent full-width">
+          <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="crypto_only" data={csvData} header={exportCryptoOnly}/>
           <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
           <div><Form onSubmit={this._searchTrade}>
             <Row justify="start" type="flex" className="table-filter-row">
@@ -305,19 +297,9 @@ class TradeHistory extends Component {
                 </Button>
               </Col>
               <Col xs={12} sm={3}>
-                {allTrades && allTrades.length > 0 ? (
-                  <CSVLink
-                    filename={"trade_history.csv"}
-                    data={allTrades}
-                    headers={tradeHeaders}
-                  >
-                    <Button className="filter-btn full-width" type="primary">
-                      <Icon type="export"></Icon>Export
-                    </Button>
-                  </CSVLink>
-                ) : (
-                  ""
-                )}
+                <Button className="filter-btn full-width" onClick={this.onExport} icon="export" type="primary">
+                  Export
+                </Button>
               </Col>
             </Row>
           </Form></div>

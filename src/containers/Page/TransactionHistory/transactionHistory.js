@@ -14,26 +14,24 @@ import {
 } from "antd";
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
 import moment from "moment";
-import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 // import {ColWithMarginBottom} from "../common.style";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PrecisionCell } from "../../../components/tables/helperCells";
 import {withRouter} from "react-router-dom";
 import { PageCounterComponent } from "../../Shared/pageCounter";
-
+import clone from "clone";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportTransactionHistory } from "../../../helpers/exportToCsv/headers";
 const { logout } = authAction;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-
-
 class Transactions extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +49,9 @@ class Transactions extends Component {
       startDate: "",
       endDate: "",
       rangeDate: [],
-      metabaseUrl: ""
+      metabaseUrl: "",
+      openCsvModal:false,
+      csvData:[]
     };
   }
 
@@ -63,7 +63,7 @@ class Transactions extends Component {
     }
   };
 
-  _getAllTransactions = () => {
+  _getAllTransactions = (isExportCsv=false) => {
     const { token } = this.props;
     const {
       searchTransaction,
@@ -73,12 +73,17 @@ class Transactions extends Component {
       startDate,
       endDate,
       sorterCol,
-      sortOrder
+      sortOrder,
     } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllTransaction(
+    (isExportCsv?ApiUtils.getAllTransaction(
+      1,
+      EXPORT_LIMIT_SIZE,
+      token,
+      ""
+    ):ApiUtils.getAllTransaction(
       page,
       limit,
       token,
@@ -88,7 +93,7 @@ class Transactions extends Component {
       endDate,
       sorterCol,
       sortOrder
-    )
+    ))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
@@ -96,11 +101,16 @@ class Transactions extends Component {
             res.data,
             res.default_send_Coin_fee
           );
-          _this.setState({
-            allTransactions: res.data,
-            allTransactionCount: res.transactionCount,
-            fees: res.default_send_Coin_fee
-          });
+          if(isExportCsv){
+            let csvData=clone(res.data);
+            _this.setState({csvData});
+          }else{
+            _this.setState({
+              allTransactions: res.data,
+              allTransactionCount: res.transactionCount,
+              fees: res.default_send_Coin_fee
+            });
+          } 
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -247,19 +257,11 @@ class Transactions extends Component {
       filterVal,
       limit,
       fees,
-      metabaseUrl
+      metabaseUrl,
+      openCsvModal,
+      csvData
     } = this.state;
-    const transactionsHeaders = [
-      { label: "Created On", key: "created_at" },
-      { label: "Transaction Hash", key: "transaction_id" },
-      { label: "Email", key: "email" },
-      { label: "Source Address", key: "source_address" },
-      { label: "Destination Address", key: "destination_address" },
-      { label: "Amount", key: "amount" },
-      { label: "Assets", key: "coin" },
-      { label: "Transaction Type", key: "transaction_type" },
-      // { label: "Transaction Fees(%)", key: "transaction_fees" }
-    ];
+
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
@@ -268,6 +270,7 @@ class Transactions extends Component {
 
     return (    
             <TableDemoStyle className="isoLayoutContent">
+              <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="transaction_history" data={csvData} header={exportTransactionHistory}/>
               <PageCounterComponent page={page} limit={limit} dataCount={allTransactionCount} syncCallBack={this._resetFilters}/>
               <Form onSubmit={this._searchTransaction}>
                 <Row type="flex" justify="start" className="table-filter-row">
@@ -320,23 +323,14 @@ class Transactions extends Component {
                     </Button>
                   </Col>
                   <Col xs={12} md={3}>
-                    {allTransactions && allTransactions.length > 0 ? (
-                      <CSVLink
-                        filename={"transaction_history.csv"}
-                        data={allTransactions}
-                        headers={transactionsHeaders}
-                      >
-                        <Button
-                          className="filter-btn btn-full-width"
-                          type="primary"
-                        >
-                          <Icon type="export"></Icon>
-                          Export
-                        </Button>
-                      </CSVLink>
-                    ) : (
-                      ""
-                    )}
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      icon="export"
+                      onClick={()=>{this.setState({openCsvModal:true},()=>{this._getAllTransactions(true)})}}
+                    >
+                      Export
+                    </Button>
                   </Col>
                 </Row>
               </Form>

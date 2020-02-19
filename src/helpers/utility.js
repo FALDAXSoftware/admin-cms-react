@@ -66,16 +66,3 @@ export function timeDifference(givenTime) {
   };
   return getTime();
 }
-
-export function stringToInt(value, defValue = 0) {
-  if (!value) {
-    return 0;
-  } else if (!isNaN(value)) {
-    return parseInt(value, 10);
-  }
-  return defValue;
-}
-export function stringToPosetiveInt(value, defValue = 0) {
-  const val = stringToInt(value, defValue);
-  return val > -1 ? val : defValue;
-}

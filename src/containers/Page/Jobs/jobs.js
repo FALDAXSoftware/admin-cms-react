@@ -12,12 +12,14 @@ import EditJobModal from "./editJobModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import JobCategory from "./jobsCategory";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from "./jobsMetabase"
 // import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportJobs } from "../../../helpers/exportToCsv/headers";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -44,7 +46,9 @@ class Jobs extends Component {
       showDeleteJobModal: false,
       deleteJobId: "",
       allJobCategories: [],
-      activeTab: 1
+      activeTab: 1,
+      csvData:[],
+      openCsvModal:false,
     };
     self = this;
     Jobs.jobStatus = Jobs.jobStatus.bind(this);
@@ -180,16 +184,19 @@ class Jobs extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAllJobs = () => {
+  _getAllJobs = (isExportToCsv=false) => {
     const { token } = this.props;
     const { limit, searchJob, page, sorterCol, sortOrder } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllJobs(page, limit, token, searchJob, sorterCol, sortOrder)
+    (isExportToCsv?ApiUtils.getAllJobs(1,EXPORT_LIMIT_SIZE, token, "", "", ""):ApiUtils.getAllJobs(page, limit, token, searchJob, sorterCol, sortOrder))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
+          if(isExportToCsv)
+          _this.setState({csvData:res.data})
+          else
           _this.setState({ allJobs: res.data, allJobsCount: res.allJobsCount });
         } else if (res.status == 403) {
           _this.setState(
@@ -351,7 +358,9 @@ class Jobs extends Component {
       jobDetails,
       allJobCategories,
       activeTab,
-      limit
+      limit,
+      csvData,
+      openCsvModal
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -360,15 +369,36 @@ class Jobs extends Component {
 
     return (
       <LayoutWrapper>
+        <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="jobs"
+              data={csvData}
+              header={exportJobs}
+            />
         {/* <BackButton {...this.props}/> */}
-        <BreadcrumbComponent {...this.props}/>
-        <Tabs className="isoTableDisplayTab full-width" onChange={this._changeTab}>
+        <BreadcrumbComponent {...this.props} />
+        <Tabs
+          className="isoTableDisplayTab full-width"
+          onChange={this._changeTab}
+        >
           <TabPane tab={jobsTableInfos[0].title} key={jobsTableInfos[0].value}>
             <TableDemoStyle className="isoLayoutContent">
-            <PageCounterComponent page={page} limit={limit} dataCount={allJobsCount} syncCallBack={()=>{this.setState({page:1,searchJob:""},()=>this._getAllJobs())}}/>
-              <Row className="table-filter-row" type="flex" justify="start" >
-                  {isAllowed("add_job") && isAllowed("get_job_categories") && (
-                <Col md={4}>
+              <PageCounterComponent
+                page={page}
+                limit={limit}
+                dataCount={allJobsCount}
+                syncCallBack={() => {
+                  this.setState({ page: 1, searchJob: "" }, () =>
+                    this._getAllJobs()
+                  );
+                }}
+              />
+              <Row className="table-filter-row" type="flex" justify="start">
+                {isAllowed("add_job") && isAllowed("get_job_categories") && (
+                  <Col md={4}>
                     <Button
                       type="primary"
                       className="full-width"
@@ -377,23 +407,37 @@ class Jobs extends Component {
                       <Icon type="plus" />
                       Add Job
                     </Button>
-                </Col>
-                  )}
+                  </Col>
+                )}
                 <Col md={8}>
                   <Search
                     className="full-width"
                     placeholder="Search jobs"
                     onSearch={value => this._searchJob(value)}
                     enterButton
-                  />  
+                  />
+                </Col>
+                <Col xs={24} md={3}>
+                  <Button
+                    type="primary"
+                    icon="export"
+                    className="full-width"
+                    onClick={() => {
+                      this.setState({ openCsvModal: true }, () =>
+                        this._getAllJobs(true)
+                      );
+                    }}
+                  >
+                    Export
+                  </Button>
                 </Col>
               </Row>
-                <AddJobModal
-                  showAddJobModal={showAddJobModal}
-                  closeAddModal={this._closeAddJobModal}
-                  getAllJobs={this._getAllJobs.bind(this, 1)}
-                  allJobCategories={allJobCategories}
-                />
+              <AddJobModal
+                showAddJobModal={showAddJobModal}
+                closeAddModal={this._closeAddJobModal}
+                getAllJobs={this._getAllJobs.bind(this, 1)}
+                allJobCategories={allJobCategories}
+              />
               {loader && <FaldaxLoader />}
               <ViewJobModal
                 jobDetails={jobDetails}
@@ -443,7 +487,6 @@ class Jobs extends Component {
                   showSizeChanger
                   onShowSizeChange={this._changePaginationSize}
                   pageSizeOptions={pageSizeOptions}
-                  
                 />
               ) : (
                 ""

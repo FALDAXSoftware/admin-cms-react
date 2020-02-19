@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Pagination } from 'antd';
+import { Pagination, Row, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { userReferralInfos } from "../../Tables/antTables";
@@ -8,8 +8,10 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from '../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { exportCreditCard, exportReferralUsers } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 
@@ -22,6 +24,8 @@ class ReferralUsers extends Component {
             userId: this.props.userId,
             page: 1,
             limit: PAGESIZE,
+            openCsvModal:false,
+            csvData:[]
         }
     }
 
@@ -29,17 +33,20 @@ class ReferralUsers extends Component {
         this._getAllUserReferral();
     }
 
-    _getAllUserReferral = () => {
+    _getAllUserReferral = (isExportToCsv=false) => {
         const { token, user_id } = this.props;
         const { limit, page, sorterCol, sortOrder } = this.state;
 
         let _this = this;
 
-        this.setState({ loader: true })
-        ApiUtils.getAllUserReferrals(page, limit, token, user_id, sorterCol, sortOrder)
+        this.setState({ loader: true });
+        (isExportToCsv?ApiUtils.getAllUserReferrals(1,EXPORT_LIMIT_SIZE, token, user_id, "", ""):ApiUtils.getAllUserReferrals(page, limit, token, user_id, sorterCol, sortOrder))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    if(isExportToCsv)
+                    _this.setState({csvData:res.data})
+                    else
                     _this.setState({
                         allReferral: res.data, allReferralCount: res.referralCount,
                         showReferralModal: true, userId: user_id
@@ -79,13 +86,38 @@ class ReferralUsers extends Component {
     }
 
     render() {
-        const { allReferral, allReferralCount, loader, page, limit } = this.state;
+        const { allReferral, allReferralCount, loader, page, limit ,openCsvModal,csvData} = this.state;
         let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
             <>
+                <ExportToCSVComponent
+                isOpenCSVModal={openCsvModal}
+                onClose={() => {
+                    this.setState({ openCsvModal: false });
+                }}
+                filename="referral_users"
+                data={csvData}
+                header={exportReferralUsers}
+            />
                 <TableDemoStyle className="full-width isoLayoutContent">
                 <PageCounterComponent page={page} limit={limit} dataCount={allReferralCount} syncCallBack={()=>this.setState({page:1})}/>
+                <Row type="flex" justify="start" className="table-filter-row">
+                <Col xs={12} sm={3}>
+                  <Button
+                    type="primary"
+                    icon="export"
+                    className="filter-btn btn-full-width"
+                    onClick={() => {
+                      this.setState({ openCsvModal: true }, () =>
+                        this._getAllUserReferral(true)
+                      );
+                    }}
+                  >
+                    Export
+                  </Button>
+                </Col>
+                </Row>
                     <TableWrapper
                         rowKey="id"
                         {...this.state}
