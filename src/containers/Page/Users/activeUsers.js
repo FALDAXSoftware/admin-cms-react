@@ -17,90 +17,22 @@ import { tableinfos } from "../../Tables/antTables";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
-import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import moment from "moment";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { DateTimeCell } from "../../../components/tables/helperCells";
+import { exportUsers } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const { logout } = authAction;
 var self;
 const { RangePicker } = DatePicker;
-const CSVHeaders=[
-{key:"id",label:"ID"},
-{key:"email",label:"Email"},
-{key:"password",label:"Password"},
-{key:"phone_number",label:"Phone Number"},
-{key:"full_name",label:"Full Name"},
-{key:"first_name",label:"First Name"},
-{key:"last_name",label:"Last Name"},
-{key:"country",label:"Country"},
-{key:"street_address",label:"Street Address"},
-{key:"city_town",label:"City"},
-{key:"updated_at",label:"Updated At"},
-{key:"deleted_at",label:"Deleted At"},
-{key:"created_at",label:"Created At"},
-{key:"referred_id",label:"Referred Id"},
-{key:"is_active",label:"Is Active"},
-{key:"is_verified",label:"Is Verified"},
-{key:"email_verify_token",label:"Email Verify Token"},
-{key:"reset_token",label:"Reset Token"},
-{key:"dob",label:"Date of Birth"},
-{key:"is_twofactor",label:"Is Enable 2FA"},
-{key:"twofactor_secret",label:"2FA Secret"},
-{key:"auth_code",label:"Auth Code"},
-{key:"referral_code",label:"Referral Code"},
-{key:"zip",label:"Zip"},
-{key:"street_address_2",label:"Street Address 2"},
-{key:"postal_code",label:"Postal Code"},
-{key:"reset_token_expire",label:"Reset Token Expire"},
-{key:"device_token",label:"Device token"},
-{key:"device_type",label:"Device Type"},
-{key:"fiat",label:"Fiat"},
-{key:"state",label:"State"},
-{key:"country_id",label:"Country Id"},
-{key:"state_id",label:"State Id"},
-{key:"diffrence_fiat",label:"Different Fiat"},
-{key:"total_value",label:"Total Value"},
-{key:"percent_wallet",label:"Percent Wallet"},
-{key:"date_format",label:"Date Formate"},
-{key:"referal_percentage",label:"Referral Percentage"},
-{key:"hubspot_id",label:"Hobspot ID"},
-{key:"new_ip_verification_token",label:"New Ip Verification Token"},
-{key:"new_ip",label:"New Ip"},
-{key:"requested_email",label:"Requested Email Label"},
-{key:"new_email_token",label:"New Email Token"},
-{key:"is_new_email_verified",label:"Is New Email Verified"},
-{key:"account_tier",label:"Account Tier"},
-{key:"account_class",label:"Account Class"},
-{key:"country_code",label:"Country Code"},
-{key:"gender",label:"Gender"},
-{key:"middle_name",label:"Middle Name"},
-{key:"deleted_by",label:"Deleted By"},
-{key:"whitelist_ip",label:"WhiteList Ip"},
-{key:"security_feature",label:"Security Feature"},
-{key:"security_feature_expired_time",label:"Security Feature Expired Time"},
-{key:"is_whitelist_ip",label:"Is Whitelist Ip"},
-{key:"twofactor_backup_code",label:"2FA Backup Code"},
-{key:"is_terms_agreed",label:"Is Terms Agreed"},
-{key:"signup_token_expiration",label:"SignUp Token Expiration"},
-{key:"forgot_token_expiration",label:"Forgot Token Expiration"},
-{key:"device_token_expiration",label:"Device Token Expiration"},
-{key:"default_language",label:"Default Language"},
-{key:"customer_id",label:"Customer ID"},
-{key:"send_address",label:"Send Address"},
-{key:"receive_address",label:"Receive Address"},
-{key:"uuid",label:"UUID"},
-{key:"no_of_referrals",label:"No of Referrals"},
-{key:"ip",label:"Ip"},
-{key:"is_logged_in",label:"Is Logged In"},
-{key:"last_login_datetime",label:"Last Seen"},
-]
+
 class ActiveUsers extends Component {
   constructor(props) {
     super(props);
@@ -167,7 +99,7 @@ class ActiveUsers extends Component {
   onExportCSV=async()=>{
     try{
       this.setState({loader:true})
-      let res = await await (await ApiUtils.getAllUsers(1,100000000000,this.props.token,"")).json();
+      let res = await await (await ApiUtils.getAllUsers(1,EXPORT_LIMIT_SIZE,this.props.token,"")).json();
       if(res.status==200){
         this.setState({csvData:res.data,openCsvExportModal:true})
       }
@@ -388,7 +320,7 @@ class ActiveUsers extends Component {
     return (
       // <LayoutContentWrapper>
       <TableDemoStyle className="isoLayoutContent">
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} filename="active_users" data={csvData} header={CSVHeaders}/>
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="active_users" data={csvData} header={exportUsers}/>
         <div className="isoTableDisplayTab">
           <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div>

@@ -1006,8 +1006,8 @@ const ApiUtils = {
     filterVal,
     startDate,
     endDate,
-    sorterCol,
-    sortOrder,
+    sorterCol="created_at",
+    sortOrder="descend",
     trade_type
   ) {
     let url = "page=" + page + "&limit=" + limit + "&trade_type=" + trade_type;

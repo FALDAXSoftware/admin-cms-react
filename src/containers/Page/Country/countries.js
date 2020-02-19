@@ -21,18 +21,21 @@ import { withRouter } from "react-router";
 import EditCountryModal from "./editCountryModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import Metabase from "./countriesMetabase"
 import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import clone from "clone";
+import { DateTimeCell } from "../../../components/tables/helperCells";
+import { exportCountry } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 var self;
-
 class Countries extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +51,9 @@ class Countries extends Component {
       page: 1,
       showEditCountryModal: false,
       countryDetails: [],
-      localityVal: ""
+      localityVal: "",
+      openCsvExportModal:"",
+      csvData:[]
     };
     self = this;
     Countries.countryStatus = Countries.countryStatus.bind(this);
@@ -117,7 +122,7 @@ class Countries extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAllCountries = () => {
+  _getAllCountries = (isExportToCsv) => {
     const { token } = this.props;
     const {
       limit,
@@ -130,7 +135,13 @@ class Countries extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllCountries(
+    (isExportToCsv?ApiUtils.getAllCountries(
+      1,
+      EXPORT_LIMIT_SIZE,
+      token,
+      "",
+      ""
+    ):ApiUtils.getAllCountries(
       page,
       limit,
       token,
@@ -138,14 +149,32 @@ class Countries extends Component {
       localityVal,
       sorterCol,
       sortOrder
-    )
+    ))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setState({
-            allCountries: res.data,
-            allCountryCount: res.CountryCount
-          });
+          if(isExportToCsv){
+            let csvData=clone(res.data);
+              csvData=csvData.map((ele)=>{
+              ele["updated_at"]=DateTimeCell(ele["updated_at"],'string');
+              ele["created_at"]=DateTimeCell(ele["created_at"],'string');
+              ele["deleted_at"]=DateTimeCell(ele["deleted_at"],'string');
+              ele["legality"]= ele["legality"] == 1
+              ? "Legal"
+              :  ele["legality"] == 2
+              ? "Illegal"
+              :  ele["legality"] == 3
+              ? "Neutral"
+              : "Partial Services Available"
+              return ele;
+            });
+            _this.setState({csvData});
+          }else{
+            _this.setState({
+              allCountries: res.data,
+              allCountryCount: res.CountryCount,
+            });
+          }
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, message: res.err, errType: "error" },
@@ -232,6 +261,10 @@ class Countries extends Component {
     );
   };
 
+  onExport=()=>{
+    this.setState({openCsvExportModal:true},()=>this._getAllCountries(true));
+  }
+
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
       this._getAllCountries();
@@ -250,7 +283,9 @@ class Countries extends Component {
       showEditCountryModal,
       countryDetails,
       searchCountry,
-      localityVal
+      localityVal,
+      openCsvExportModal,
+      csvData
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -262,6 +297,7 @@ class Countries extends Component {
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props}/> 
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="country" data={csvData} header={exportCountry}/>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={countryTableInfos[0].title}
@@ -271,7 +307,7 @@ class Countries extends Component {
             <PageCounterComponent page={page} limit={limit} dataCount={allCountryCount} syncCallBack={this._resetFilters}/>
               <Form onSubmit={this._searchCountry}>
                 <Row  type="flex" justify="start" className="table-filter-row">
-                  <Col lg={7}>
+                  <Col lg={8}>
                     <Form.Item
                       validateStatus={this.state.searchValid}
                       className="cty-search"
@@ -315,6 +351,16 @@ class Countries extends Component {
                     >
                       <Icon type="reload" />
                       Reset
+                    </Button>
+                  </Col>
+                  <Col lg={3}>
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      onClick={this.onExport}
+                      icon="export"
+                    >
+                      Export
                     </Button>
                   </Col>
                 </Row>

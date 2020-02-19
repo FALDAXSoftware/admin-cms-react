@@ -21,3 +21,4 @@ export const BITGO_MIN_LIMIT={
     "ETH":50,
     "LTC":0.0001
 }
+export const EXPORT_LIMIT_SIZE=100000;

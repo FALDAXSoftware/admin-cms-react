@@ -7,11 +7,13 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Tooltip } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL, EXPORT_LIMIT_SIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
 import { PageCounterComponent } from '../../../Shared/pageCounter';
+import { exportForfietFund } from '../../../../helpers/exportToCsv/headers';
+import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
 
 const {RangePicker}=DatePicker;
 const {Option}=Select;
@@ -103,9 +105,12 @@ class WalletForfeitDetailsComponent extends Component {
     }
 
     componentDidMount(){
-        this.setState({coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state?this.props.location.state.assets:"[]")})
+        this.setState({openCsvModal:false,csvData:[],coin_code:this.props.match.params.coin,assetsList:JSON.parse(this.props.location.state?this.props.location.state.assets:"[]")})
         this.getWalletData();
     }
+    onExport = () => {
+        this.setState({ openCsvModal: true }, () => this.getWalletData(true));
+      };
 
     openNotificationWithIcon = (type="Error",message="Unable to complete the requested action.") => {
         notification[(type).toLowerCase()]({
@@ -135,15 +140,20 @@ class WalletForfeitDetailsComponent extends Component {
         });
     };
 
-    getWalletData=async ()=>{
+    getWalletData=async (isExportToCsv=false)=>{
         try{
             await this.loader.show()
             const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code}=this.state;
             let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,4)).json();
+            let res=await (await (isExportToCsv?ApiUtils.walletDashboard(this.props.token).getWalletDetailByName("",1,EXPORT_LIMIT_SIZE,"created_at","descend","","","",4):ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,4))).json();
             let [{status,walletValue,err,message,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
-                this.setState({walletValue,count:tradeCount});
+                if(isExportToCsv){
+                    this.setState({csvData:walletValue})
+                }else{
+                    this.setState({walletValue,count:tradeCount});
+                }
+                    
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)
                 logout();
@@ -157,17 +167,26 @@ class WalletForfeitDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList,csvData,openCsvModal},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
+                    <ExportToCSVComponent
+                        isOpenCSVModal={openCsvModal}
+                        onClose={() => {
+                            this.setState({ openCsvModal: false });
+                        }}
+                        filename="forfeit_wallet"
+                        data={csvData}
+                        header={exportForfietFund}
+                    />
                    <TableDemoStyle className="isoLayoutContent">
                         <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
                         <PageCounterComponent page={page} limit={limit} dataCount={count} syncCallBack={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin,transaction_type:undefined},()=>this.getWalletData())}}/>
                             <Row justify="start" type="flex" className="table-filter-row">
-                                <Col xs={12} md={7}>
+                                <Col xs={12} md={6}>
                                     <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                                 </Col>
-                                <Col xs={12} md={7}>
+                                <Col xs={12} md={5}>
                                     <Tooltip title=" Account Deleted Start and End Date"><RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/></Tooltip>
                                 </Col>
                                 <Col xs={12} md={4}>
@@ -181,6 +200,9 @@ class WalletForfeitDetailsComponent extends Component {
                                 </Col>
                                 <Col xs={12} md={3}>
                                     <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
+                                </Col>
+                                <Col xs={12} md={3}>
+                                    <Button type="primary" icon="export" onClick={this.onExport} className="filter-btn btn-full-width">Export</Button>
                                 </Col>
                             </Row>
                         </Form>
