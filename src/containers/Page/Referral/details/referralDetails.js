@@ -7,12 +7,15 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Tooltip } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import LayoutWrapper from '../../../../components/utility/layoutWrapper';
 import { BackButton } from '../../../Shared/backBttton';
 import { DateTimeCell } from '../../../../components/tables/helperCells';
 import { BreadcrumbComponent } from '../../../Shared/breadcrumb';
+import { PageCounterComponent } from '../../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
+import { exportReferralDetails } from '../../../../helpers/exportToCsv/headers';
 var self;
 const {Option}=Select;
 const columns=[
@@ -51,7 +54,7 @@ const columns=[
 class ReferralDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,data:[],count:0,searchData:"",coin_code:"",assetsList:[],page:1,limit:PAGESIZE,userId:""}
+        this.state={openCsvModal:false,csvData:[],loader:false,data:[],count:0,searchData:"",coin_code:"",assetsList:[],page:1,limit:PAGESIZE,userId:""}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
         self=this;
     }
@@ -89,13 +92,16 @@ class ReferralDetailsComponent extends Component {
         });
     };
 
-    getReferralDetails=async ()=>{
+    getReferralDetails=async (isExportToCsv=false)=>{
         try{
             await this.loader.show()
             const {coin_code,searchData,userId,page,limit}=this.state;
-            let res=await (await ApiUtils.getUserReferData(this.props.token,coin_code,userId,page,limit,searchData,)).json();
+            let res=await (await (isExportToCsv?ApiUtils.getUserReferData(this.props.token,"",userId,1,EXPORT_LIMIT_SIZE,""):ApiUtils.getUserReferData(this.props.token,coin_code,userId,page,limit,searchData,))).json();
             let [{status,data,err,count},logout]=[res,this.props.logout];
             if(status==200){
+                if(isExportToCsv)
+                this.setState({csvData:data})
+                else
                 this.setState({data,count:count});
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)
@@ -110,27 +116,49 @@ class ReferralDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,data,count,limit,page,searchData,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,csvData,openCsvModal,data,count,limit,page,searchData,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
                 <LayoutWrapper>
+                     <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="referral_details"
+              data={csvData}
+              header={exportReferralDetails}
+            />
                     {/* <BackButton {...this.props}></BackButton> */}
                     <BreadcrumbComponent {...this.props}/>
-                
-                   <TableDemoStyle className="isoLayoutContent">
-                        <Row justify="start" type="flex">
-                            <Col className="table-column" xs={12} md={7}>
+                    <TableDemoStyle className="isoLayoutContent">
+                    <PageCounterComponent page={page} limit={limit} dataCount={count} syncCallBack={()=>{this.setState({searchData:"",coin_code:this.props.match.params.coin_code},()=>this.getReferralDetails())}}/>
+                        <Row justify="start" type="flex" className="table-filter-row">
+                            <Col xs={24} md={8}>
                                 <Input placeholder="Search email" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                             </Col>
-                            <Col className="table-column" xs={12} md={4}>
+                            <Col xs={24} md={7}>
                                 <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     {assetsList.map((ele)=><Option key={ele} value={ele}>{ele}</Option>)}
                                 </Select> 
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={24} md={3}>
                                 <Button type="primary" icon="search" className="filter-btn btn-full-width" onClick={()=>this.getReferralDetails()}>Search</Button>
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={24} md={3}>
                                 <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({searchData:"",coin_code:this.props.match.params.coin_code},()=>this.getReferralDetails())}}>Reset</Button>
+                            </Col>
+                            <Col xs={24} md={3}>
+                                <Button type="primary"
+                                icon="export"
+                                className="filter-btn full-width"
+                                onClick={() => {
+                                    this.setState({ openCsvModal: true }, () =>
+                                    this.getReferralDetails(true)
+                                    );
+                                }}
+                                >
+                                Export
+                                </Button>
                             </Col>
                         </Row>
                         <TableWrapper

@@ -9,8 +9,10 @@ import { Tabs, Input, Pagination, DatePicker,Row, Button, Form, notification,Ico
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from '../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { exportLoginHistory } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 
@@ -33,6 +35,8 @@ class LoginHistory extends Component {
             errMessage: '',
             errMsg: false,
             errType: 'Success',
+            openCsvModal:false,
+            csvData:[]
         }
     }
 
@@ -40,16 +44,19 @@ class LoginHistory extends Component {
         this._getAllLoginHistory();
     }
 
-    _getAllLoginHistory = () => {
+    _getAllLoginHistory = (isExportCsv=false) => {
         const { token, user_id } = this.props;
         const { page, limit, searchHistory, startDate, endDate } = this.state;
         let _this = this;
 
-        _this.setState({ loader: true })
-        ApiUtils.getUserHistory(token, user_id, page, limit, searchHistory, startDate, endDate)
+        _this.setState({ loader: true });
+        (isExportCsv?ApiUtils.getUserHistory(token, user_id, 1, EXPORT_LIMIT_SIZE, "", "", ""):ApiUtils.getUserHistory(token, user_id, page, limit, searchHistory, startDate, endDate))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    if(isExportCsv)
+                    _this.setState({csvData:res.data,loader: false})
+                    else
                     _this.setState({ allHistory: res.data, loader: false, allHistoryCount: res.allHistoryCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -136,7 +143,7 @@ class LoginHistory extends Component {
 
     render() {
         const { allHistory, loader, allHistoryCount, page, rangeDate, searchHistory,
-            errMsg, errType, limit } = this.state;
+            errMsg, errType, limit,openCsvModal,csvData} = this.state;
        let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
@@ -146,17 +153,26 @@ class LoginHistory extends Component {
         return (
           
                   <TableDemoStyle className="isoLayoutContent">
+                    <ExportToCSVComponent
+                    isOpenCSVModal={openCsvModal}
+                    onClose={() => {
+                        this.setState({ openCsvModal: false });
+                    }}
+                    filename="user_login_history"
+                    data={csvData}
+                    header={exportLoginHistory}
+                    />
                     <Form onSubmit={this._searchHistory} className="cty-search">
                     <PageCounterComponent page={page} limit={limit} dataCount={allHistoryCount} syncCallBack={this._resetFilters}/>
                         <Row justify="start" type="flex" className="table-filter-row">
-                        <Col sm={6}>
+                        <Col sm={7}>
                           <Input
                             placeholder="Search history"
                             onChange={this._changeSearch.bind(this)}
                             value={searchHistory}
                           />
                         </Col>
-                        <Col sm={6}>
+                        <Col sm={8}>
                           <RangePicker
                             value={rangeDate}
                             disabledTime={this.disabledRangeTime}
@@ -183,6 +199,20 @@ class LoginHistory extends Component {
                             <Icon type="reload"></Icon>Reset
                           </Button>
                         </Col>
+                        <Col xs={12} md={3}>
+                        <Button
+                        type="primary"
+                        icon="export"
+                        className="filter-btn full-width"
+                        onClick={() => {
+                            this.setState({ openCsvModal: true }, () =>
+                            this._getAllLoginHistory(true)
+                            );
+                        }}
+                        >
+                      Export
+                    </Button>
+                  </Col>
                       </Row>
                     </Form>
 

@@ -21,8 +21,10 @@ import authAction from "../../../redux/auth/actions";
 import SimpleReactValidator from "simple-react-validator";
 import ViewRequestModal from "./viewRequestModal";
 import RequestActionModal from "./requestActionModal";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { export2faRequest } from "../../../helpers/exportToCsv/headers";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -45,6 +47,8 @@ class TwoFactorRequests extends Component {
       showViewRequestModal: false,
       twoFactorReqDetails: [],
       filterVal: "",
+      openCsvModal:false,
+      csvData:[]
     };
     this.validator = new SimpleReactValidator();
     self = this;
@@ -156,7 +160,7 @@ class TwoFactorRequests extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAll2FARequests = () => {
+  _getAll2FARequests = (isExportToCsv=false) => {
     const { token } = this.props;
     const {
       limit,
@@ -169,18 +173,24 @@ class TwoFactorRequests extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAll2FARequests(
-      token,
-      page,
-      limit,
-      searchReq,
-      filterVal,
-      sorterCol,
-      sortOrder
+    (isExportToCsv
+      ? ApiUtils.getAll2FARequests(token, 1, EXPORT_LIMIT_SIZE, "", "", "", "")
+      : ApiUtils.getAll2FARequests(
+          token,
+          page,
+          limit,
+          searchReq,
+          filterVal,
+          sorterCol,
+          sortOrder
+        )
     )
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
+          if(isExportToCsv)
+          _this.setState({csvData:res.data})
+          else
           _this.setState({
             all2FARequests: res.data,
             allRequestsCount: res.requests_counts
@@ -274,6 +284,8 @@ class TwoFactorRequests extends Component {
       showViewRequestModal,
       searchReq,
       filterVal,
+      csvData,
+      openCsvModal
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -282,17 +294,26 @@ class TwoFactorRequests extends Component {
 
     return (
         <TableDemoStyle className="isoLayoutContent">
+           <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="2fa_request"
+              data={csvData}
+              header={export2faRequest}
+            />
           <PageCounterComponent page={page} limit={limit} dataCount={allRequestsCount} syncCallBack={this._resetFilters}/>
           <Form onSubmit={this._searchRequest}>
             <Row type="flex" justify="start" className="table-filter-row">
-              <Col md={6}>
+              <Col md={8}>
                 <Input
                   placeholder="Search Requests"
                   onChange={this._changeSearch.bind(this)}
                   value={searchReq}
                 />
               </Col>
-              <Col md={6}>
+              <Col md={7}>
                 <Select
                   getPopupContainer={trigger => trigger.parentNode}
                   placeholder="Select a type"
@@ -323,6 +344,20 @@ class TwoFactorRequests extends Component {
                 >
                   <Icon type="reload" />
                   Reset
+                </Button>
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  type="primary"
+                  icon="export"
+                  className="filter-btn full-width"
+                  onClick={() => {
+                    this.setState({ openCsvModal: true }, () =>
+                      this._getAll2FARequests(true)
+                    );
+                  }}
+                >
+                  Export
                 </Button>
               </Col>
             </Row>

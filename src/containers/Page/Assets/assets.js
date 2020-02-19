@@ -10,6 +10,7 @@ import {
   Row,
   Col
 } from "antd";
+import clone from "clone";
 import { assetTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -20,12 +21,15 @@ import ViewCoinModal from "./viewCoinModal";
 import AddCoinModal from "./addCoinModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import AssetsMetabase from "./assetsMetabase";
 // import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { DateTimeCell, PrecisionCell } from "../../../components/tables/helperCells";
+import { exportAsset } from "../../../helpers/exportToCsv/headers";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -49,7 +53,9 @@ class Assets extends Component {
       errMsg: false,
       errType: "Success",
       page: 1,
-      loader: false
+      loader: false,
+      openCsvExportModal:false,
+      csvData:[]
     };
     self = this;
     Assets.view = Assets.view.bind(this);
@@ -179,17 +185,31 @@ class Assets extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAllCoins = () => {
+  _getAllCoins = (exportToCsv=false) => {
     const { token } = this.props;
     const { limit, searchCoin, page, sorterCol, sortOrder } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder)
+    (exportToCsv?ApiUtils.getAllCoins(1,EXPORT_LIMIT_SIZE, token,""):ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount });
+          if(exportToCsv){
+            let csvData=clone(res.data);
+            csvData=csvData.map((ele)=>{
+              ele["updated_at"]=DateTimeCell(ele["updated_at"],'string');
+              ele["created_at"]=DateTimeCell(ele["created_at"],'string');
+              ele["deleted_at"]=DateTimeCell(ele["deleted_at"],'string');
+              ele["type"]=ele['type']==1?"bitgo":"node setup";
+              ele["min_limit"]=PrecisionCell(ele["min_limit"]);
+              ele["max_limit"]=PrecisionCell(ele["max_limit"]);
+              return ele;
+            })
+            _this.setState({csvData})
+          }else{
+            _this.setState({ allCoins: res.data,allCoinCount: res.CoinsCount });
+          }
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -309,6 +329,10 @@ class Assets extends Component {
     });
   };
 
+  onExport=()=>{
+    this.setState({openCsvExportModal:true},()=>this._getAllCoins(true));
+  }
+
   render() {
     const {
       allCoins,
@@ -321,7 +345,9 @@ class Assets extends Component {
       showDeleteCoinModal,
       errMsg,
       page,
-      limit
+      limit,
+      openCsvExportModal,
+      csvData
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -333,6 +359,7 @@ class Assets extends Component {
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="assets" data={csvData} header={exportAsset}/>
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
               <TableDemoStyle className="isoLayoutContent">
@@ -354,7 +381,10 @@ class Assets extends Component {
                       className="full-width"
                     />
                   </Col>
-                </Row>
+                  <Col md={3}>
+                    <Button onClick={this.onExport} icon="export" type="primary">Export</Button>
+                  </Col>
+                  </Row>
                 <AddCoinModal
                   showAddCoinModal={showAddCoinModal}
                   closeAddModal={this._closeAddCoinModal}
