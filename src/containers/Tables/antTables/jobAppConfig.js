@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, JobAppActionCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, DateCell, JobAppActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailId = null, phone = null,
     created = null, resumeDoc = null, cover = null, linkedin = null, url = null) => {
@@ -31,7 +31,7 @@ const columns = [{
     title: <IntlMessages id="jobTable.title.Actions" />,
     key: 'action',
     width: 100,
-   align:"left",
+    align:"left",
     ellipsis:true,
     render: object => renderCell(object,
         'JobAppActionCell', 'id', 'first_name', 'last_name', 'email', 'phone_number',
@@ -40,14 +40,14 @@ const columns = [{
     title: <IntlMessages id="jobTable.title.applied_at" />,
     key: 'created_at',
     sorter: true,
-   align:"left",
+    align:"left",
     ellipsis:true,
     width: 200,
     render: object => renderCell(object, 'DateCell', 'created_at')
 }, {
     title: <IntlMessages id="jobTable.title.first_name" />,
     key: 'first_name',
-   align:"left",
+    align:"left",
     ellipsis:true,
     width: 100,
     sorter: true,
@@ -55,7 +55,7 @@ const columns = [{
 }, {
     title: <IntlMessages id="jobTable.title.last_name" />,
     key: 'last_name',
-   align:"left",
+    align:"left",
     ellipsis:true,
     width: 200,
     sorter: true,
@@ -63,15 +63,16 @@ const columns = [{
 }, {
     title: <IntlMessages id="jobTable.title.email" />,
     key: 'email',
-   align:"left",
+    align:"left",
     ellipsis:true,
     width: 200,
     sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
+    dataIndex:"email",
+    render:data=>ToolTipsCell(data)
 }, {
     title: <IntlMessages id="jobTable.title.phone_number" />,
     key: 'phone_number',
-   align:"left",
+    align:"left",
     ellipsis:true,
     width: 200,
     sorter: true,

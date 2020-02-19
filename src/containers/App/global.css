@@ -567,7 +567,7 @@ html[dir='rtl'] .dz-hidden-input {
   margin: 0px 10px;
 }
 .table-tb-margin{
-  margin:15px auto;
+  margin:5px auto;
 }
 
 .table-column{
@@ -724,7 +724,7 @@ html[dir='rtl'] .dz-hidden-input {
 }
 
 .table-filter-row .ant-col{
-  padding: 4px;
+  padding:4px 2px;
 }
 .order-2,.withdrawal-status-approved {
   color: green;
@@ -855,4 +855,9 @@ html[dir='rtl'] .dz-hidden-input {
 
 .main_wallet_row{
   width: 100%;
+}
+.csvContainer{
+  height: 60vh;
+  margin-top: 5px;
+  overflow-y: scroll;
 }
