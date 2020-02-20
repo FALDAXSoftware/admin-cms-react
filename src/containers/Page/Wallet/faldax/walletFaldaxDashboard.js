@@ -11,6 +11,8 @@ import TableWrapper from "../../../Tables/antTables/antTable.style";
 import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from './../../../../helpers/accessControl';
 import { PrecisionCell } from '../../../../components/tables/helperCells';
+import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
+import { exportWallet } from '../../../../helpers/exportToCsv/headers';
 
 var self
 
@@ -93,7 +95,7 @@ class WalletFaldaxDashboard extends Component {
         super(props)
         this.timer = 1000;//1.5 seconds
         this.timeCounter = undefined;
-        this.state = { loader: false, walletValue: [], availableBalance: "", searchData: "", sendModal: false, walletDetails: {}, fields: {}, networkFee: 0 }
+        this.state = { openCsvModal: false, csvData: [], loader: false, walletValue: [], availableBalance: "", searchData: "", sendModal: false, walletDetails: {}, fields: {}, networkFee: 0 }
         this.loader = { show: () => this.setState({ loader: true }), hide: () => this.setState({ loader: false }) };
         self = this;
         this.validator = new SimpleReactValidator({
@@ -109,6 +111,10 @@ class WalletFaldaxDashboard extends Component {
                 required: true
             }
         });
+    }
+
+    onExport = () => {
+        this.setState({ openCsvModal: true }, () => this.getWalletData(true));
     }
 
     componentDidMount() {
@@ -137,14 +143,18 @@ class WalletFaldaxDashboard extends Component {
         });
     }
 
-    getWalletData = async () => {
+    getWalletData = async (isExportToCsv = false) => {
         try {
             await this.loader.show()
             const { searchData } = this.state;
-            let res = await (await ApiUtils.getAllWallets(this.props.token, searchData)).json();
+            let res = await (await (isExportToCsv ? ApiUtils.getAllWallets(this.props.token) : ApiUtils.getAllWallets(this.props.token, searchData))).json();
             let [{ status, data, err, message }, logout] = [res, this.props.logout];
             if (status == 200) {
-                this.setState({ walletValue: data });
+                if (isExportToCsv) {
+                    this.setState({ csvData: data })
+                } else {
+                    this.setState({ walletValue: data });
+                }
             } else if (status == 400 || status == 403) {
                 this.openNotificationWithIcon("Error", err)
                 logout();
@@ -269,10 +279,19 @@ class WalletFaldaxDashboard extends Component {
     }
 
     render() {
-        const { loader, walletValue, walletDetails, searchData, sendModal, fields, networkFee, availableBalance } = this.state;
+        const { loader, walletValue, walletDetails, searchData, sendModal, fields, networkFee, availableBalance, openCsvModal, csvData } = this.state;
         return (
             <>
                 <TableDemoStyle className="isoLayoutContent">
+                    <ExportToCSVComponent
+                        isOpenCSVModal={openCsvModal}
+                        onClose={() => {
+                            this.setState({ openCsvModal: false });
+                        }}
+                        filename="under_review_customer_id_verification"
+                        data={csvData}
+                        header={exportWallet}
+                    />
                     <Form onSubmit={(e) => { e.preventDefault(); this.getWalletData(); }}>
                         <Row justify="start" type="flex">
                             <Col className="table-column" xs={12} md={7}>
@@ -280,6 +299,9 @@ class WalletFaldaxDashboard extends Component {
                             </Col>
                             <Col className="table-column" xs={12} md={3}>
                                 <Button type="primary" htmlType="submit" icon="search" className="filter-btn btn-full-width">Search</Button>
+                            </Col>
+                            <Col className="table-column" xs={12} md={3}>
+                                <Button type="primary" icon="export" onClick={this.onExport} className="filter-btn btn-full-width">Export</Button>
                             </Col>
                         </Row>
                     </Form>

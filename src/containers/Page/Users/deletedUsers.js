@@ -9,16 +9,18 @@ import { CSVLink } from "react-csv";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import CountryData from 'country-state-city';
-import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from '../../../helpers/globals';
 import { withRouter } from 'react-router-dom';
 import moment from "moment";
 import { PageCounterComponent } from '../../Shared/pageCounter';
-
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { DateTimeCell } from '../../../components/tables/helperCells';
+import clone from "clone";
+import { exportUsers } from '../../../helpers/exportToCsv/headers';
 const Option = Select.Option;
 const {RangePicker}=DatePicker;
 const { logout } = authAction;
 var self;
-
 class DeletedUsers extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +40,9 @@ class DeletedUsers extends Component {
             showDeleteUserModal: false,
             rangeDate:[],
             startDate:"",
-            endDate:""
+            endDate:"",
+            openCsvExportModal:false,
+            csvData:[]
         }
         self = this;
         DeletedUsers.view = DeletedUsers.view.bind(this);
@@ -62,6 +66,11 @@ class DeletedUsers extends Component {
         });
     }
 
+
+    onExport=()=>{
+      this.setState({openCsvExportModal:true},()=>this._getAllUsers(true));
+    }
+    
     static deleteUser(value) {
         self.setState({ showDeleteUserModal: true, deleteUserId: value });
     }
@@ -97,7 +106,7 @@ class DeletedUsers extends Component {
         this.setState({ allCountries });
     }
 
-    _getAllUsers = async() => {
+    _getAllUsers = async(exportToCsv=false) => {
       try{
         const { token } = this.props;
         const {
@@ -111,37 +120,52 @@ class DeletedUsers extends Component {
           endDate
         } = this.state;
         this.setState({ loader: true });
-        let response=await (await ApiUtils.getAllDeletedUsers(
-          page,
-          limit,
-          token,
-          searchUser,
-          sorterCol,
-          sortOrder,
-          filterVal,
-          startDate,
-          endDate
-        )).json();
-          if (response.status == 200) {
-            this.setState({ allUsers: response.data, allUserCount: response.userCount });
-          } else if (response.status == 403 || response.status==400 || response.status==401) {
-            this.setState(
-              { errMsg: true, errMessage: response.err, errType: "error" },
-              () => {
-                this.props.logout();
-              }
-            );
-          } else {
-            this.setState({ errMsg: true, errMessage: response.message });
+        let response="";
+        if(exportToCsv){
+          response=await (await ApiUtils.getAllDeletedUsers(
+            1,
+            EXPORT_LIMIT_SIZE,
+            token,
+            ""
+            )).json();
+        }else{
+          response=await (await ApiUtils.getAllDeletedUsers(
+            page,
+            limit,
+            token,
+            searchUser,
+            sorterCol,
+            sortOrder,
+            filterVal,
+            startDate,
+            endDate
+            )).json();
           }
-      }catch(error){
-        this.setState({
-          errMsg: true,
-          errMessage: "Unable to complete the requested action.",
-          errType: "error",
-          loader: false
-        });
-      }finally{
+            if (response.status == 200) {
+              if(exportToCsv){
+                let csvData=clone(response.data)
+                this.setState({csvData});
+              }else{
+                this.setState({ allUsers: response.data, allUserCount: response.userCount });
+              }
+            } else if (response.status == 403 || response.status==400 || response.status==401) {
+              this.setState(
+                { errMsg: true, errMessage: response.err, errType: "error" },
+                () => {
+                  this.props.logout();
+                }
+                );
+              } else {
+                this.setState({ errMsg: true, errMessage: response.message });
+              }
+            }catch(error){
+              this.setState({
+                errMsg: true,
+                errMessage: "Unable to complete the requested action.",
+                errType: "error",
+                loader: false
+              });
+            }finally{
         this.setState({loader:false});
       }
     }
@@ -243,30 +267,9 @@ class DeletedUsers extends Component {
     }
 
     render() {
-        const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser, filterVal,rangeDate,
+        const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser,openCsvExportModal,csvData, filterVal,rangeDate,
             allCountries, showDeleteUserModal, limit } = this.state;
         let pageSizeOptions = PAGE_SIZE_OPTIONS
-
-        const headers = [
-            { label: "First Name", key: "first_name" },
-            { label: "Last Name", key: "last_name" },
-            { label: "Full Name", key: "full_name" },
-            { label: "Email", key: "email" },
-            { label: "Country", key: "country" },
-            { label: "State", key: "state" },
-            { label: "City", key: "city_town" },
-            { label: "Street Address Line 1", key: "street_address" },
-            { label: "Street Address Line 2", key: "street_address_2" },
-            { label: "Postal Code", key: "postal_code" },
-            { label: "DOB", key: "dob" },
-            { label: "Active/Inactive", key: "is_active" },
-            { label: "Verified/Non Verified", key: "is_verified" },
-            { label: "Fiat Currency", key: "fiat" },
-            { label: "Referral Percentage", key: "referal_percentage" },
-            // { label: "No Of Referrals", key: "no_of_referrals" },
-            { label: "Account Tier", key: "account_tier" },
-            { label: "Created On", key: "created_at" }
-        ];
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -274,6 +277,7 @@ class DeletedUsers extends Component {
 
         return (
           <TableDemoStyle className="isoLayoutContent">
+            <ExportToCSVComponent isOpenCSVModal={openCsvExportModal}  onClose={()=>{this.setState({openCsvExportModal:false})}} filename="deactivated_users" data={csvData} header={exportUsers}/>
             <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div className="isoTableDisplayTab">
               <Form onSubmit={this._searchUser}>
@@ -334,23 +338,14 @@ class DeletedUsers extends Component {
                     </Button>
                   </Col>
                   <Col xs={24} lg={3}>
-                    {allUsers && allUsers.length > 0 ? (
-                      <CSVLink
-                        data={allUsers}
-                        filename={"users.csv"}
-                        headers={headers}
-                      >
-                        <Button
-                          className="filter-btn btn-full-width"
-                          type="primary"
-                        >
-                          <Icon type="export" />
-                          Export
-                        </Button>
-                      </CSVLink>
-                    ) : (
-                      ""
-                    )}
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      onClick={this.onExport}
+                    >
+                      <Icon type="export" />
+                      Export
+                    </Button>
                   </Col>
                 </Row>
               </Form>

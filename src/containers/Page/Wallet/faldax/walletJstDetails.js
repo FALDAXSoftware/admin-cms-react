@@ -7,11 +7,13 @@ import Loader from "../../faldaxLoader"
 import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL, EXPORT_LIMIT_SIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
 import { PageCounterComponent } from '../../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
+import { exportCryptoOnly, exportCryptoOnlyWallet } from '../../../../helpers/exportToCsv/headers';
 var self;
 
 const {RangePicker}=DatePicker;
@@ -150,7 +152,7 @@ const columns=[
 class WalletJstDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,walletValue:[],limit:PAGESIZE,page:1,sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
+        this.state={loader:false,walletValue:[],openCsvModal:false,csvData:[],limit:PAGESIZE,page:1,sortOrder:"descend",sorterCol:"created_at",count:0,searchData:"",coin_code:"",rangeDate:"",assetsList:[]}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
         self=this;
     }
@@ -188,15 +190,23 @@ class WalletJstDetailsComponent extends Component {
         });
     };
 
-    getWalletData=async ()=>{
+    onExport = () => {
+        this.setState({ openCsvModal: true }, () => this.getWalletData(true));
+      };
+
+    getWalletData=async (isExportToCsv=false)=>{
         try{
             await this.loader.show()
             const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code}=this.state;
             let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,3)).json();
+            let res=await (await (isExportToCsv?ApiUtils.walletDashboard(this.props.token).getWalletDetailByName("",1,EXPORT_LIMIT_SIZE,"","","","","",3):ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,3))).json();
             let [{status,walletValue,err,message,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
-                this.setState({walletValue,count:tradeCount});
+                if(isExportToCsv){
+                    this.setState({csvData:walletValue})
+                }else{
+                    this.setState({walletValue,count:tradeCount});
+                }
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)
                 logout();
@@ -210,17 +220,26 @@ class WalletJstDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,walletValue,count,limit,page,searchData,rangeDate,coin_code,assetsList,csvData,openCsvModal},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
+                    <ExportToCSVComponent
+                    isOpenCSVModal={openCsvModal}
+                    onClose={() => {
+                        this.setState({ openCsvModal: false });
+                    }}
+                    filename="crypto_only_wallet"
+                    data={csvData}
+                    header={exportCryptoOnlyWallet}
+                    />
                    <TableDemoStyle className="isoLayoutContent">
                         <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
                         <PageCounterComponent page={page} limit={limit} dataCount={count} syncCallBack={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin,transaction_type:undefined},()=>this.getWalletData())}}/>
                             <Row justify="start" type="flex" className="table-filter-row">
-                                <Col xs={12} md={7}>
+                                <Col xs={12} md={6}>
                                     <Input placeholder="Search" value={searchData} onChange={(value) => { this.setState({searchData:value.target.value})}}/>
                                 </Col>
-                                <Col xs={12} md={7}>
+                                <Col xs={12} md={5}>
                                     <RangePicker format="YYYY-MM-DD" value={rangeDate}  onChange={(date)=>this.setState({rangeDate:date})}/>
                                 </Col>
                                 <Col xs={12} md={4}>
@@ -239,6 +258,9 @@ class WalletJstDetailsComponent extends Component {
                                 </Col>
                                 <Col xs={12} md={3}>
                                     <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
+                                </Col>
+                                <Col xs={12} md={3}>
+                                    <Button type="primary" icon="export" onClick={this.onExport} className="filter-btn btn-full-width">Export</Button>
                                 </Col>
                             </Row>
                         </Form>

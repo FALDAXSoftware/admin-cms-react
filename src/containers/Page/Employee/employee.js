@@ -10,13 +10,16 @@ import AddEmployeeModal from "./addEmployeeModal";
 import EditEmployeeModal from "./editEmployeeModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
 import Metabase from './employeeMetabase'
 import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import { PageCounterComponent } from "../../Shared/pageCounter";
-
+import clone from "clone"
+import { DateTimeCell } from "../../../components/tables/helperCells";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportEmployee } from "../../../helpers/exportToCsv/headers";
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 const Search = Input.Search;
@@ -39,7 +42,9 @@ class Employees extends Component {
       deleteEmpId: "",
       searchEmp: "",
       page: 1,
-      limit: PAGESIZE
+      limit: PAGESIZE,
+      csvData:[],
+      openCsvExportModal:false
     };
     self = this;
     Employees.employeeStatus = Employees.employeeStatus.bind(this);
@@ -141,20 +146,33 @@ class Employees extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAllEmployees = () => {
+  _getAllEmployees = (isExportToCsv=false) => {
     const { token } = this.props;
     const { searchEmp, sorterCol, sortOrder, page, limit } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllEmployee(page, limit, token, sorterCol, sortOrder, searchEmp)
+    (isExportToCsv?ApiUtils.getAllEmployee(1,EXPORT_LIMIT_SIZE, token,"","",""):ApiUtils.getAllEmployee(page, limit, token, sorterCol, sortOrder, searchEmp))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
+          let csvData=clone(res.data.employees);
+          if(isExportToCsv){
+            csvData=csvData.map((ele)=>{
+              ele["created_at"]=isExportToCsv?DateTimeCell(ele["created_at"],'string'): ele["created_at"];
+              ele["updated_at"]=isExportToCsv?DateTimeCell(ele["updated_at"],'string'): ele["updated_at"];
+              ele["deleted_at"]=isExportToCsv?DateTimeCell(ele["deleted_at"],'string'): ele["deleted_at"];
+              return ele;
+          })
           _this.setState({
-            allEmployee: res.data.employees,
-            employeeCount: res.data.employeeCount
+            csvData
           });
+          }else{
+            _this.setState({
+              allEmployee: res.data.employees,
+              employeeCount: res.data.employeeCount,
+            });
+          }
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -310,6 +328,10 @@ class Employees extends Component {
     });
   };
 
+  onExport=()=>{
+    this.setState({openCsvExportModal:true},()=>this._getAllEmployees(true));
+  }
+
   render() {
     const {
       allEmployee,
@@ -323,7 +345,9 @@ class Employees extends Component {
       showEditEmpModal,
       empDetails,
       showDeleteEmpModal,
-      allRoles
+      allRoles,
+      openCsvExportModal,
+      csvData
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -340,10 +364,11 @@ class Employees extends Component {
             key={employeeTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
+            <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="employees" data={csvData} header={exportEmployee}/>
               <PageCounterComponent page={page} limit={limit} dataCount={employeeCount} syncCallBack={()=>{this.setState({page:1,searchEmp:""},()=>{this._getAllEmployees()})}}/>
               <Row type="flex" justify="start" className="table-filter-row">
                   {isAllowed("add_employee") && (
-                <Col md={4}>
+                <Col md={4} xs={24}>
                     <Button
                       className="full-width"
                       type="primary"
@@ -353,13 +378,23 @@ class Employees extends Component {
                     </Button>
                 </Col>
                   )}
-                <Col md={6} >  
+                <Col md={8} xs={24}>  
                   <Search
-                    className="search-with-btn full-width"
+                    className="full-width"
                     placeholder="Search employees"
                     onSearch={value => this._searchEmpoyee(value)}
                     enterButton
                   />
+                </Col>
+                <Col md={3} xs={24}>
+                  <Button
+                    type="primary"
+                    onClick={this.onExport}
+                    icon="export"
+                    className="full-width"
+                  >
+                    Export
+                  </Button>
                 </Col>
               </Row>
 

@@ -1177,9 +1177,9 @@ const ObjectCell = (value, execution_report) => (
       )}
   </span>
 );
-const DateTimeCell = data => (
-  <p>
-    {data
+const DateTimeCell = (data, type) => {
+  if (type == "string") {
+    return data
       ? moment
         .utc(data)
         .local()
@@ -1189,9 +1189,26 @@ const DateTimeCell = data => (
           .local()
           .format("DD MMM, YYYY HH:mm:ss")
         : ""
-      : ""}
-  </p>
-);
+      : "";
+  } else {
+    return (
+      <p>
+        {data
+          ? moment
+              .utc(data)
+              .local()
+              .format("DD MMM YYYY HH:mm:ss")
+            ? moment
+                .utc(data)
+                .local()
+                .format("DD MMM, YYYY HH:mm:ss")
+            : ""
+          : ""}
+      </p>
+    );
+  }
+};
+
 const DateTimeSecCell = data => (
   <p>
     {data
@@ -2454,7 +2471,7 @@ const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => (
           .local()
           .format("DD MMM, YYYY HH:mm")
         : ""
-      : ""}
+      : "-"}
   </p>
 );
 const FeesActionCell = (value, trade_volume, maker_fee, taker_fee) => (
