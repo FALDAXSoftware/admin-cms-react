@@ -158,7 +158,7 @@ class LoginHistory extends Component {
                     onClose={() => {
                         this.setState({ openCsvModal: false });
                     }}
-                    filename="user_login_history"
+                    filename="user_login_history.csv"
                     data={csvData}
                     header={exportLoginHistory}
                     />

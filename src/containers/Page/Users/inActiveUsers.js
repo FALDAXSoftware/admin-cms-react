@@ -317,7 +317,7 @@ class InActiveUsers extends Component {
       //   <LayoutContentWrapper>
           <TableDemoStyle className="isoLayoutContent">
             <div className="isoTableDisplayTab">
-            <ExportToCSVComponent onClose={()=>{this.setState({openCsvExportModal:false})}} isOpenCSVModal={openCsvExportModal} filename="suspended_users" data={csvData} header={exportUsers}/>
+            <ExportToCSVComponent onClose={()=>{this.setState({openCsvExportModal:false})}} isOpenCSVModal={openCsvExportModal} filename="suspended_users.csv" data={csvData} header={exportUsers}/>
             <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
               {inActiveUserinfos.map(inActiveUserinfos => (
                 <div tab={inActiveUserinfos.title} key={inActiveUserinfos.value}>

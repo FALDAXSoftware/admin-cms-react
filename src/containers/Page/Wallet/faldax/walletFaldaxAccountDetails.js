@@ -252,7 +252,7 @@ class WalletFaldaxDetailsComponent extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="direct_deposit"
+              filename="direct_deposit.csv"
               data={csvData}
               header={exportDirectDeposit}
             />

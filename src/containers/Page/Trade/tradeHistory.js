@@ -245,7 +245,7 @@ class TradeHistory extends Component {
 
     return (
         <TableDemoStyle className="isoLayoutContent full-width">
-          <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="crypto_only" data={csvData} header={exportCryptoOnly}/>
+          <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="crypto_only.csv" data={csvData} header={exportCryptoOnly}/>
           <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
           <div><Form onSubmit={this._searchTrade}>
             <Row justify="start" type="flex" className="table-filter-row">
