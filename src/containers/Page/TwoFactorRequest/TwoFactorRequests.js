@@ -299,7 +299,7 @@ class TwoFactorRequests extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="2fa_request"
+              filename="2fa_request.csv"
               data={csvData}
               header={export2faRequest}
             />

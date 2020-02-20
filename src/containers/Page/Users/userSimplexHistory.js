@@ -146,7 +146,7 @@ class UserSimplexHistory extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="user_credit_card_history"
+              filename="user_credit_card_history.csv"
               data={csvData}
               header={exportCreditCard}
             />

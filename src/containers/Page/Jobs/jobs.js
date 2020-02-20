@@ -374,7 +374,7 @@ class Jobs extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="jobs"
+              filename="jobs.csv"
               data={csvData}
               header={exportJobs}
             />

@@ -215,7 +215,7 @@ class WalletWarmDashboard extends Component {
                         onClose={() => {
                         this.setState({ openCsvModal: false });
                         }}
-                        filename="under_review_customer_id_verification"
+                        filename="under_review_customer_id_verification.csv"
                         data={csvData}
                         header={exportWallet}
                     />

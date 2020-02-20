@@ -228,7 +228,7 @@ class WalletJstDetailsComponent extends Component {
                     onClose={() => {
                         this.setState({ openCsvModal: false });
                     }}
-                    filename="crypto_only_wallet"
+                    filename="crypto_only_wallet.csv"
                     data={csvData}
                     header={exportCryptoOnlyWallet}
                     />

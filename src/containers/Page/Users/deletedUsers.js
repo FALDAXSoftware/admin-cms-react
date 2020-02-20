@@ -277,7 +277,7 @@ class DeletedUsers extends Component {
 
         return (
           <TableDemoStyle className="isoLayoutContent">
-            <ExportToCSVComponent isOpenCSVModal={openCsvExportModal}  onClose={()=>{this.setState({openCsvExportModal:false})}} filename="deactivated_users" data={csvData} header={exportUsers}/>
+            <ExportToCSVComponent isOpenCSVModal={openCsvExportModal}  onClose={()=>{this.setState({openCsvExportModal:false})}} filename="deactivated_users.csv" data={csvData} header={exportUsers}/>
             <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div className="isoTableDisplayTab">
               <Form onSubmit={this._searchUser}>

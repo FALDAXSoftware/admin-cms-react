@@ -175,7 +175,7 @@ class WalletForfeitDetailsComponent extends Component {
                         onClose={() => {
                             this.setState({ openCsvModal: false });
                         }}
-                        filename="forfeit_wallet"
+                        filename="forfeit_wallet.csv"
                         data={csvData}
                         header={exportForfietFund}
                     />

@@ -180,7 +180,7 @@ const ResidualTransactionHistory = props => {
   return (
     <>
       <TableDemoStyle className="isoLayoutContent">
-      <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{setOpenCsvModal(false)}} filename="residual_transaction_history" data={csvData} header={exportResidualHeaders}/>
+      <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{setOpenCsvModal(false)}} filename="residual_transaction_history.csv" data={csvData} header={exportResidualHeaders}/>
         <Form onSubmit={_searchTransaction}>
           <Row type="flex" justify="start">
             <ColWithMarginBottom md={6}>

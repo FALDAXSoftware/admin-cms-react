@@ -205,7 +205,7 @@ class StateList extends Component {
                 dataCount={stateCount}
                 syncCallBack={this._getAllStates}
               />
-              <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="states" data={csvData} header={exportState}/>
+              <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="states.csv" data={csvData} header={exportState}/>
               <Row type="flex" justify="start" className="table-filter-row">
                 <Col lg={8}>
                   <Search

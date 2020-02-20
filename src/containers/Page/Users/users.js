@@ -26,15 +26,15 @@ class Users extends Component {
   }
 
   render() {
-    let tabOptionalProps={}
-    if(this.props.location.state && JSON.parse(this.props.location.state).selectedTab){
-      tabOptionalProps.defaultActiveKey=JSON.parse(this.props.location.state).selectedTab;
+    let tabOptionalProps = {}
+    if (this.props.location.state && JSON.parse(this.props.location.state).selectedTab) {
+      tabOptionalProps.defaultActiveKey = JSON.parse(this.props.location.state).selectedTab;
     }
     console.log(tabOptionalProps)
     return (
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
-        <BreadcrumbComponent {...this.props}/>  
+        <BreadcrumbComponent {...this.props} />
         <div className="txt-align-right full-width">
           {isAllowed("add_user") &&
             <Button
@@ -56,10 +56,10 @@ class Users extends Component {
           {isAllowed("get_deleted_users") &&
             <TabPane tab="Deactivated Users" key="3"><DeletedUsers /></TabPane>
           }
-         {isAllowed('metabase_users_report') && <TabPane tab="Report" key="metabase">
-              <Metabase/>
+          {isAllowed('metabase_users_report') && <TabPane tab="Report" key="metabase">
+            <Metabase />
           </TabPane>
-         }
+          }
         </Tabs>
       </LayoutWrapper>
     );

@@ -204,7 +204,7 @@ class UserTransactionHistory extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="user_transaction_history"
+              filename="user_transaction_history.csv"
               data={csvData}
               header={exportTransactionHistory}
             />
