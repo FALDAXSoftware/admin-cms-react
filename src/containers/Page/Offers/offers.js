@@ -219,7 +219,7 @@ class Offers extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="offers"
+              filename="offers.csv"
               data={csvData}
               header={exportOffers}
             />

@@ -276,7 +276,7 @@ class SimplexHistory extends Component {
 
     return (
       <TableDemoStyle className="isoLayoutContent">
-        <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="credit_card" data={csvData} header={exportCreditCard}/>
+        <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="credit_card.csv" data={csvData} header={exportCreditCard}/>
         <PageCounterComponent
           page={page}
           limit={limit}

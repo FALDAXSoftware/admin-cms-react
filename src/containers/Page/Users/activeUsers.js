@@ -320,7 +320,7 @@ class ActiveUsers extends Component {
     return (
       // <LayoutContentWrapper>
       <TableDemoStyle className="isoLayoutContent">
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="active_users" data={csvData} header={exportUsers}/>
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="active_users.csv" data={csvData} header={exportUsers}/>
         <div className="isoTableDisplayTab">
           <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div>

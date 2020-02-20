@@ -345,7 +345,7 @@ class News extends Component {
           onClose={() => {
             this.setState({ openCsvModal: false });
           }}
-          filename="news"
+          filename="news.csv"
           data={csvData}
           header={exportNews}
         />

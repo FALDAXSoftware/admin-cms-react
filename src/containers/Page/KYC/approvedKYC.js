@@ -189,7 +189,7 @@ class ApprovedKYC extends Component {
                 onClose={() => {
                   this.setState({ openCsvModal: false });
                 }}
-                filename="approved_customer_id_verification"
+                filename="approved_customer_id_verification.csv"
                 data={csvData}
                 header={exportCustomerIdVerification}
               />

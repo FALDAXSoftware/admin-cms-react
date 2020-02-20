@@ -359,7 +359,7 @@ class Assets extends Component {
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="assets" data={csvData} header={exportAsset}/>
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="assets.csv" data={csvData} header={exportAsset}/>
         <Tabs className="isoTableDisplayTab full-width">
             <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
               <TableDemoStyle className="isoLayoutContent">

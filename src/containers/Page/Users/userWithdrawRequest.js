@@ -130,7 +130,7 @@ class UserWithdrawRequest extends Component {
 
         return (
             <LayoutWrapper>
-                <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="user_withdrawal_request" data={csvData} header={export2faRequest}/>
+                <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="user_withdrawal_request.csv" data={csvData} header={export2faRequest}/>
                 <TableDemoStyle className="isoLayoutContent full-width">
 
                                     <div className="form-container">

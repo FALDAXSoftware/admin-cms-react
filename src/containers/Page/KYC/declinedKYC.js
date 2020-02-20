@@ -189,7 +189,7 @@ class DeclinedKYC extends Component {
                 onClose={() => {
                   this.setState({ openCsvModal: false });
                 }}
-                filename="declined_customer_id_verification"
+                filename="declined_customer_id_verification.csv"
                 data={csvData}
                 header={exportCustomerIdVerification}
               />

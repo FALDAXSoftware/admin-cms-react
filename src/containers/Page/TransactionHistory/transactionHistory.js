@@ -270,7 +270,7 @@ class Transactions extends Component {
 
     return (    
             <TableDemoStyle className="isoLayoutContent">
-              <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="transaction_history" data={csvData} header={exportTransactionHistory}/>
+              <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="transaction_history.csv" data={csvData} header={exportTransactionHistory}/>
               <PageCounterComponent page={page} limit={limit} dataCount={allTransactionCount} syncCallBack={this._resetFilters}/>
               <Form onSubmit={this._searchTransaction}>
                 <Row type="flex" justify="start" className="table-filter-row">

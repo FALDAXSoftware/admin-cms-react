@@ -207,7 +207,7 @@ class KYC extends Component {
           onClose={() => {
             this.setState({ openCsvModal: false });
           }}
-          filename="customer_id_verification"
+          filename="customer_id_verification.csv"
           data={csvData}
           header={exportCustomerIdVerification}
         />

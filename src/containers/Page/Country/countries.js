@@ -297,7 +297,7 @@ class Countries extends Component {
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props}/> 
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="country" data={csvData} header={exportCountry}/>
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="country.csv" data={csvData} header={exportCountry}/>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={countryTableInfos[0].title}
