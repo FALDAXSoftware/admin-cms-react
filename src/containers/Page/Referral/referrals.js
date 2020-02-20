@@ -142,7 +142,7 @@ class Referrals extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="referrals"
+              filename="referrals.csv"
               data={csvData}
               header={exportReferrals}
             />

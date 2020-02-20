@@ -364,7 +364,7 @@ class Employees extends Component {
             key={employeeTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-            <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="employees" data={csvData} header={exportEmployee}/>
+            <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="employees.csv" data={csvData} header={exportEmployee}/>
               <PageCounterComponent page={page} limit={limit} dataCount={employeeCount} syncCallBack={()=>{this.setState({page:1,searchEmp:""},()=>{this._getAllEmployees()})}}/>
               <Row type="flex" justify="start" className="table-filter-row">
                   {isAllowed("add_employee") && (

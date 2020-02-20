@@ -399,7 +399,7 @@ class WithdrawRequest extends Component {
           onClose={() => {
             this.setState({ openCsvModal: false });
           }}
-          filename="withdrawal_request"
+          filename="withdrawal_request.csv"
           data={csvData}
           header={exportWithdrawalRequest}
         />

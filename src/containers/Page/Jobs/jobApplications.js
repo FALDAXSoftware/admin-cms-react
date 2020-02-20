@@ -142,7 +142,7 @@ class JobApplications extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="job_applicants"
+              filename="job_applicants.csv"
               data={csvData}
               header={exportJobApplicants}
             />

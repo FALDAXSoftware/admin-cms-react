@@ -184,7 +184,7 @@ class WalletDetailsComponent extends Component {
               onClose={() => {
                 this.setState({ openCsvModal: false });
               }}
-              filename="faldax_fee_wallet"
+              filename="faldax_fee_wallet.csv"
               data={csvData}
               header={exportFaldaxFeeWallet}
             />

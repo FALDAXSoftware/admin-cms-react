@@ -204,7 +204,7 @@ class UserTradeHistory extends Component {
           onClose={() => {
               this.setState({ openCsvModal: false });
           }}
-          filename="user_crypto_only_history"
+          filename="user_crypto_only_history.csv"
           data={csvData}  
           header={exportCryptoOnly}
           />
