@@ -56,7 +56,7 @@ class ViewUser extends Component {
                     }
                     {isAllowed("get_user_wallet_addresses") &&
 
-                        <TabPane tab="Wallets" key="3"><UserWallets user_id={user_id} /></TabPane>
+                        <TabPane tab="Wallets" key="3"><UserWallets is_deleted={this.props.location.state.is_deleted} user_id={user_id} /></TabPane>
                     }
                     {/* {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
                         <TabPane tab="Orders" key="4"><AllOrders user_id={user_id} /></TabPane>
@@ -86,7 +86,7 @@ class ViewUser extends Component {
                         <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_delete_account_summary") &&
-                        (this.props.location.state && this.props.location.state.is_active) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
+                        (this.props.location.state && this.props.location.state.is_deleted) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
                     }
                 </Tabs>
             </LayoutWrapper>

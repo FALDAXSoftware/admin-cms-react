@@ -50,8 +50,7 @@ class DeletedUsers extends Component {
         DeletedUsers.editUser = DeletedUsers.editUser.bind(this);
     }
 
-    static view(value, profile_pic, first_name, last_name, email, city_town, street_address,
-        street_address_2, phone_number, country, dob, is_active, kyc) {   
+    static view(value) {   
           let { searchUser,
             limit,
             page,
@@ -60,12 +59,11 @@ class DeletedUsers extends Component {
             filterVal,
             startDate,
             endDate}=self.state; 
-        self.props.history.push({
+            self.props.history.push({
           pathname: `/dashboard/users/${value}`,
-          state: { is_active: is_active,selectedTab:"3",searchUser,limit,page,sorterCol,sortOrder,filterVal,startDate,endDate }
+          state: { is_deleted: true,selectedTab:"3",searchUser,limit,page,sorterCol,sortOrder,filterVal,startDate,endDate }
         });
     }
-
 
     onExport=()=>{
       this.setState({openCsvExportModal:true},()=>this._getAllUsers(true));
@@ -120,31 +118,26 @@ class DeletedUsers extends Component {
           endDate
         } = this.state;
         this.setState({ loader: true });
-        let response="";
-        if(exportToCsv){
-          response=await (await ApiUtils.getAllDeletedUsers(
-            1,
-            EXPORT_LIMIT_SIZE,
-            token,
-            ""
-            )).json();
-        }else{
-          response=await (await ApiUtils.getAllDeletedUsers(
-            page,
-            limit,
-            token,
-            searchUser,
-            sorterCol,
-            sortOrder,
-            filterVal,
-            startDate,
-            endDate
-            )).json();
-          }
+  
+
+          let response = await (
+            await (exportToCsv
+              ? ApiUtils.getAllDeletedUsers(1, EXPORT_LIMIT_SIZE, token, "")
+              : ApiUtils.getAllDeletedUsers(
+                  page,
+                  limit,
+                  token,
+                  searchUser,
+                  sorterCol,
+                  sortOrder,
+                  filterVal,
+                  startDate,
+                  endDate
+                ))
+          ).json();
             if (response.status == 200) {
               if(exportToCsv){
-                let csvData=clone(response.data)
-                this.setState({csvData});
+                this.setState({csvData:response.data});
               }else{
                 this.setState({ allUsers: response.data, allUserCount: response.userCount });
               }
@@ -270,7 +263,7 @@ class DeletedUsers extends Component {
         const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser,openCsvExportModal,csvData, filterVal,rangeDate,
             allCountries, showDeleteUserModal, limit } = this.state;
         let pageSizeOptions = PAGE_SIZE_OPTIONS
-
+        console.log(allUsers)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -351,10 +344,9 @@ class DeletedUsers extends Component {
               </Form>
 
               {loader && <FaldaxLoader />}
-              <div className="scroll-table float-clear">
+              
                 <TableWrapper
                  rowKey="id"
-                  {...this.state}
                   columns={deletedUserinfos[0].columns}
                   pagination={false}
                   dataSource={allUsers}
@@ -391,7 +383,6 @@ class DeletedUsers extends Component {
                   </Modal>
                 )}
               </div>
-            </div>
           </TableDemoStyle>
         );
     }

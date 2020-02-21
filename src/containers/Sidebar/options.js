@@ -1,9 +1,13 @@
 const options = [
   {
-    key: "dashboard",
+    key: "",
     label: "sidebar.dashboard",
     leftIcon: "fas fa-tachometer-alt",
     module: "dashboard",
+    permssions: [
+      "get_dashboard_data",
+      "metabase_dashboard_report",
+    ]
   },
   {
     key: "users",
