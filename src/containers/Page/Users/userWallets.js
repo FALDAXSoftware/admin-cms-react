@@ -193,6 +193,7 @@ class UserWallets extends Component {
                                             wallet.receive_address == "" && isAllowed("create_wallet") ? (
                                                 isAllowed("create_wallet") && (<Button
                                                     type="primary"
+                                                    disabled={this.props.is_deleted}
                                                     onClick={this._createUserWallet.bind(this, wallet)}
                                                 >
                                                     Create Wallet
