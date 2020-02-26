@@ -92,15 +92,19 @@ const columns = [{
  {
     title: <IntlMessages id="transactionTable.title.source_address" />,
     key: 'source_address',
+    dataIndex:'source_address',
     width: 300,
    align:"left",
-    render: object => renderCell(object, 'TextCell', 'source_address')
+   ellipses:true,
+   render: object => ToolTipsCell(object)
 },{
     title: <IntlMessages id="transactionTable.title.destination_address" />,
     key: 'destination_address',
     width: 300,
+    ellipses:true,
+    dataIndex:'destination_address',
     align:"left",
-    render: object => renderCell(object, 'TextCell', 'destination_address')
+    render: object => ToolTipsCell(object)
 },
 {
     title: <IntlMessages id="transactionTable.title.transactionId" />,
