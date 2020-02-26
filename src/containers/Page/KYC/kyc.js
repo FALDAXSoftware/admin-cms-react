@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Tabs, notification, Pagination, Input, DatePicker, Row, Form, Button, Icon, Col } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
@@ -10,8 +9,10 @@ import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from '../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { exportCustomerIdVerification } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
@@ -36,7 +37,9 @@ class KYC extends Component {
       startDate: '',
       endDate: '',
       rangeDate: [],
-      metabaseUrl: ""
+      metabaseUrl: "",
+      csvData:[],
+      openCsvModal:false
     }
     self = this;
     KYC.viewKYC = KYC.viewKYC.bind(this);
@@ -55,17 +58,25 @@ class KYC extends Component {
     this._getAllKYCData();
   }
 
-  _getAllKYCData = () => {
+  onExport=()=>{
+    this.setState({openCsvModal:true},()=>this._getAllKYCData(true));
+  }
+
+  _getAllKYCData = (isExportToCsv=false) => {
     const { token } = this.props;
     const { page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate)
+    (isExportToCsv?ApiUtils.getKYCData(token, 1, EXPORT_LIMIT_SIZE,"", "", "", "", ""):ApiUtils.getKYCData(token, 1, limit, searchKYC, sorterCol, sortOrder, startDate, endDate))
       .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setState({ allKYCData: res.data, allKYCCount: parseInt(res.KYCCount) });
+          if(isExportToCsv){
+            _this.setState({csvData:res.data})
+          }else{
+            _this.setState({ allKYCData: res.data, allKYCCount: parseInt(res.KYCCount) });
+          }
         } else if (res.status == 403) {
           _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
             _this.props.logout();
@@ -181,7 +192,7 @@ class KYC extends Component {
 
 
   render() {
-    const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,
+    const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page,csvData,openCsvModal,
       allKYCCount, rangeDate, searchKYC, limit } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS
 
@@ -191,10 +202,19 @@ class KYC extends Component {
 
     return (
       <TableDemoStyle className="isoLayoutContent">
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+            this.setState({ openCsvModal: false });
+          }}
+          filename="customer_id_verification.csv"
+          data={csvData}
+          header={exportCustomerIdVerification}
+        />
         <PageCounterComponent page={page} limit={limit} dataCount={allKYCCount} syncCallBack={this._resetFilters}/>
         <Form onSubmit={this._searchKYC}>
           <Row type="flex" justify="start" className="table-filter-row">
-            <Col md={7}>
+            <Col md={8}>
               <Input
                 placeholder="Search Customer ID"
                 onChange={this._changeSearch.bind(this)}
@@ -229,6 +249,16 @@ class KYC extends Component {
               >
                 <Icon type="reload" />
                 Reset
+              </Button>
+            </Col>
+            <Col xs={24} md={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this.onExport}
+                icon="export"
+              >
+               Export
               </Button>
             </Col>
           </Row>

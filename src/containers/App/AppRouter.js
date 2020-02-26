@@ -209,12 +209,12 @@ const routes = [
 const mandatoryRoutes = [
     {
         path: "",
-        component: asyncComponent(() => import("../Page/dashboard"))
+        component: asyncComponent(() => import("../Page/Dashboard/tabs"))
     },
-    {
-        path: "dashboard",
-        component: asyncComponent(() => import("../Page/dashboard"))
-    },
+    // {
+    //     path: "dashboard",
+    //     component: asyncComponent(() => import("../Page/Dashboard/tabs"))
+    // },
     {
         path: "change-password",
         component: asyncComponent(() => import("../Page/changePassword"))

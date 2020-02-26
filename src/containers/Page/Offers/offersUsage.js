@@ -13,15 +13,18 @@ import {
   Select,
   Button,
   Divider,
-  notification
+  notification,
+  Col
 } from "antd";
-import { PAGESIZE, PAGE_SIZE_OPTIONS } from "../../../helpers/globals";
+import { PAGESIZE, PAGE_SIZE_OPTIONS, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import {  DateTimeCell } from "../../../components/tables/helperCells";
-import {ColWithMarginBottom} from "../common.style";
 import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportOffersUsages } from "../../../helpers/exportToCsv/headers";
+import { PageCounterComponent } from "../../Shared/pageCounter";
 const OtherError = "Unable to complete the requested action.";
 let self;
 let { Option } = Select;
@@ -84,7 +87,9 @@ class OffersUsage extends Component {
       campaignLabel: "",
       errMsg: false,
       errType: "Success",
-      offerName:""
+      offerName:"",
+      csvData:[],
+      openCsvModal:false
     };
     this.loader = {
       show: () => this.setState({ loader: true }),
@@ -114,7 +119,7 @@ class OffersUsage extends Component {
     );
   };
 
-  async getOfferCodeHistory() {
+  async getOfferCodeHistory(isCsvExport=false) {
     try {
       this.loader.show();
       let [{ page, limit, searchData, searchFilter }, offerId] = [
@@ -122,15 +127,26 @@ class OffersUsage extends Component {
         this.props.match.params.id,
       ];
       let response = await (
-        await ApiUtils.offers(this.props.token).getOfferCodeHistory(
-          offerId,
-          page,
-          limit,
-          searchData,
-          searchFilter
-        )
+        await (isCsvExport
+          ? ApiUtils.offers(this.props.token).getOfferCodeHistory(
+              offerId,
+              1,
+              EXPORT_LIMIT_SIZE,
+              "",
+              ""
+            )
+          : ApiUtils.offers(this.props.token).getOfferCodeHistory(
+              offerId,
+              page,
+              limit,
+              searchData,
+              searchFilter
+            ))
       ).json();
       if (response.status == 200) {
+        if(isCsvExport)
+        this.setState({csvData:response.data.used_data});
+        else
         this.setState({
           dataSet: response.data.used_data,
           dataSetCount: response.data.total
@@ -199,7 +215,9 @@ class OffersUsage extends Component {
         searchData,
         searchFilter,
         campaignLabel,
-        offerName
+        offerName,
+        csvData,
+        openCsvModal
       },
       pageSizeOptions
     ] = [this.state, PAGE_SIZE_OPTIONS];
@@ -209,23 +227,33 @@ class OffersUsage extends Component {
     }
     return (
       <LayoutWrapper>
+        <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="offer_usage.csv"
+              data={csvData}
+              header={exportOffersUsages}
+            />
         {/* <BackButton {...this.props}/> */}
-         <BreadcrumbComponent {...this.props}/>
+        <BreadcrumbComponent {...this.props} />
         <TableDemoStyle className="isoLayoutContent">
           <div className="mg-tb-16">
-          <h2>{campaignLabel}</h2>
-          <p>{offerName}</p>
+            <h2>{campaignLabel}</h2>
+            <p>{offerName}</p>
           </div>
+          <PageCounterComponent page={page} limit={limit} dataCount={dataSetCount} syncCallBack={this.resetFilters}/>
           <Form onSubmit={this.searchOffer}>
-            <Row type="flex" justify="start">
-              <ColWithMarginBottom sm={6}>
+            <Row type="flex" justify="start" className="table-filter-row">
+              <Col xs={24} md={8}>
                 <Input
                   placeholder="Search Users"
                   onChange={this.changeSearch.bind(this)}
                   value={searchData}
                 />
-              </ColWithMarginBottom>
-              <ColWithMarginBottom sm={5}>
+              </Col>
+              <Col xs={24} md={7}>
                 <Select
                   getPopupContainer={trigger => trigger.parentNode}
                   placeholder="Select type"
@@ -236,8 +264,8 @@ class OffersUsage extends Component {
                   <Option value={"attempted"}>Attempted</Option>
                   <Option value={"applied"}>Applied</Option>
                 </Select>
-              </ColWithMarginBottom>
-              <ColWithMarginBottom xs={12} sm={4}>
+              </Col>
+              <Col xs={24} md={3}>
                 <Button
                   htmlType="submit"
                   className="filter-btn btn-full-width"
@@ -246,8 +274,8 @@ class OffersUsage extends Component {
                   <Icon type="search" />
                   Search
                 </Button>
-              </ColWithMarginBottom>
-              <ColWithMarginBottom xs={12} sm={4}>
+              </Col>
+              <Col xs={24} md={3}>
                 <Button
                   className="filter-btn full-width"
                   type="primary"
@@ -256,7 +284,21 @@ class OffersUsage extends Component {
                   <Icon type="reload"></Icon>
                   Reset
                 </Button>
-              </ColWithMarginBottom>
+              </Col>
+              <Col xs={24} md={3}>
+                <Button
+                  type="primary"
+                  icon="export"
+                  className="filter-btn full-width"
+                  onClick={() => {
+                    this.setState({ openCsvModal: true }, () =>
+                      this.getOfferCodeHistory(true)
+                    );
+                  }}
+                >
+                  Export
+                </Button>
+              </Col>
             </Row>
           </Form>
           <TableWrapper

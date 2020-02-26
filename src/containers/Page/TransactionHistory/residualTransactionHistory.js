@@ -4,7 +4,8 @@ import ApiUtils from "../../../helpers/apiUtills";
 import {
   PAGESIZE,
   TABLE_SCROLL_HEIGHT,
-  PAGE_SIZE_OPTIONS
+  PAGE_SIZE_OPTIONS,
+  EXPORT_LIMIT_SIZE
 } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -26,6 +27,8 @@ import {
 } from "antd";
 import { residualTransactionTableColumn } from "../../Tables/antTables/transactionConfig";
 import { ColWithMarginBottom } from "../common.style";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportResidualHeaders } from "../../../helpers/exportToCsv/headers";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
@@ -34,6 +37,8 @@ const ResidualTransactionHistory = props => {
   const dispatch = useDispatch();
   let [isLoading, setIsLoading] = useState(false),
     [page, setPage] = useState(1),
+    [openCsvModal,setOpenCsvModal]=useState(false),
+    [csvData,setCsvData]=useState([]),
     [limit, setLimit] = useState(PAGESIZE),
     [data, setData] = useState([]),
     [searchTransaction, setSearchTransaction] = useState(""),
@@ -52,17 +57,21 @@ const ResidualTransactionHistory = props => {
     showError: false
   });
 
-  const getAllResidualTransactionHistory = async () => {
+  const getAllResidualTransactionHistory = async (isExportToCsv=false) => {
     try {
       setIsLoading(true);
       setIsReset(false);
       let res = await (
-        await ApiUtils.getResidualTransactions(token, page, limit,searchTransaction,dateRange.startDate,dateRange.endDate,filterVal)
+        await(isExportToCsv?ApiUtils.getResidualTransactions(token,1,EXPORT_LIMIT_SIZE):ApiUtils.getResidualTransactions(token, page, limit,searchTransaction,dateRange.startDate,dateRange.endDate,filterVal))
       ).json();
       let { status, data } = res;
       if (status == 200) {
-        setData(data.transactions);
-        setDataCount(data.total);
+        if(isExportToCsv){
+          setCsvData(data.transactions);
+        }else{
+          setData(data.transactions);
+          setDataCount(data.total);
+        }
       } else if (status == 400 || status == 403 || status == 401) {
         setError({
           errType: "Error",
@@ -84,6 +93,10 @@ const ResidualTransactionHistory = props => {
     }
   };
   
+  const onExport=()=>{
+    setOpenCsvModal(true);
+    getAllResidualTransactionHistory(true);
+  }
 
   const _copyNotification = () => {
     setError({
@@ -167,6 +180,7 @@ const ResidualTransactionHistory = props => {
   return (
     <>
       <TableDemoStyle className="isoLayoutContent">
+      <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{setOpenCsvModal(false)}} filename="residual_transaction_history.csv" data={csvData} header={exportResidualHeaders}/>
         <Form onSubmit={_searchTransaction}>
           <Row type="flex" justify="start">
             <ColWithMarginBottom md={6}>
@@ -217,8 +231,7 @@ const ResidualTransactionHistory = props => {
               </Button>
             </ColWithMarginBottom>
             <ColWithMarginBottom xs={12} md={3}>
-              <Button className="filter-btn btn-full-width" type="primary">
-                <Icon type="export"></Icon>
+              <Button className="filter-btn btn-full-width" type="primary" icon="export" onClick={onExport}>
                 Export
               </Button>
             </ColWithMarginBottom>

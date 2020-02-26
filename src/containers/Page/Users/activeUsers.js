@@ -17,19 +17,22 @@ import { tableinfos } from "../../Tables/antTables";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
-import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import CountryData from "country-state-city";
 import { withRouter } from "react-router-dom";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import moment from "moment";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { DateTimeCell } from "../../../components/tables/helperCells";
+import { exportUsers } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const { logout } = authAction;
 var self;
 const { RangePicker } = DatePicker;
+
 class ActiveUsers extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +52,9 @@ class ActiveUsers extends Component {
       showDeleteUserModal: false,
       startDate:"",
       endDate:"",
+      openCsvExportModal:false,
       rangeDate:"",
+      csvData:[]
     };
     self = this;
     ActiveUsers.vi = ActiveUsers.view.bind(this);
@@ -89,6 +94,20 @@ class ActiveUsers extends Component {
 
   static editUser(value) {
     self.props.history.push("/dashboard/users/edit-user/" + value);
+  }
+
+  onExportCSV=async()=>{
+    try{
+      this.setState({loader:true})
+      let res = await await (await ApiUtils.getAllUsers(1,EXPORT_LIMIT_SIZE,this.props.token,"")).json();
+      if(res.status==200){
+        this.setState({csvData:res.data,openCsvExportModal:true})
+      }
+    }catch(error){
+      console.log(error)
+    }finally{
+      this.setState({loader:false})
+    }
   }
 
   componentDidMount = () => {
@@ -287,31 +306,11 @@ class ActiveUsers extends Component {
       allCountries,
       showDeleteUserModal,
       limit,
-      rangeDate
+      rangeDate,
+      csvData,
+      openCsvExportModal
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
-
-    const headers = [
-      { label: "First Name", key: "first_name" },
-      { label: "Last Name", key: "last_name" },
-      { label: "Full Name", key: "full_name" },
-      { label: "Email", key: "email" },
-      { label: "Country", key: "country" },
-      { label: "State", key: "state" },
-      { label: "City", key: "city_town" },
-      { label: "Street Address Line 1", key: "street_address" },
-      { label: "Street Address Line 2", key: "street_address_2" },
-      { label: "Postal Code", key: "postal_code" },
-      { label: "DOB", key: "dob" },
-      { label: "Active/Inactive", key: "is_active" },
-      { label: "Verified/Non Verified", key: "is_verified" },
-      { label: "Fiat Currency", key: "fiat" },
-      { label: "Referral Percentage", key: "referal_percentage" },
-      { label: "No Of Referrals", key: "no_of_referrals" },
-      { label: "Account Tier", key: "account_tier" },
-      { label: "Created On", key: "created_at" }
-    ];
-
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -321,6 +320,7 @@ class ActiveUsers extends Component {
     return (
       // <LayoutContentWrapper>
       <TableDemoStyle className="isoLayoutContent">
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="active_users.csv" data={csvData} header={exportUsers}/>
         <div className="isoTableDisplayTab">
           <PageCounterComponent page={page} limit={limit} dataCount={allUserCount} syncCallBack={this._resetFilters}/>
             <div>
@@ -381,22 +381,15 @@ class ActiveUsers extends Component {
                     </Button>
                   </Col>
                   <Col xs={24} lg={3}>
-                    {allUsers && allUsers.length > 0 ? (
-                      <CSVLink
-                        data={allUsers}
-                        filename={"users.csv"}
-                        headers={headers}
-                      >
-                        <Button
-                          className="filter-btn btn-full-width"
-                          type="primary"
-                        >
-                          <Icon type="export" /> Export
-                        </Button>
-                      </CSVLink>
-                    ) : (
-                      ""
-                    )}
+                  
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      onClick={this.onExportCSV}
+                    >
+                      <Icon type="export" /> Export
+                    </Button>
+              
                   </Col>
                 </Row>
               </Form>

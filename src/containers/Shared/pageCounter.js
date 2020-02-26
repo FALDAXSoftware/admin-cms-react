@@ -23,9 +23,9 @@ class PageCounterComponent extends Component {
                <span className="float-left">
                     <Tooltip title="Sync Data"><Icon  className="cursor-pointer" type="sync" onClick={this.props.syncCallBack}/></Tooltip>
                </span>
-               <span className="float-right">
+              {dataCount!=0 &&<span className="float-right">
                    {(parseFloat(page)-1)*parseFloat(limit)+1}-{(parseFloat(page)*parseFloat(limit))>parseFloat(dataCount)?dataCount:(parseFloat(page)*parseFloat(limit))}&nbsp;of&nbsp;{dataCount}
-                </span>    
+        </span>}
            </div>
         );
     }

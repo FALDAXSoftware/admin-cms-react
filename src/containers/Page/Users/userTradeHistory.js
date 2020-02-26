@@ -21,8 +21,10 @@ import FaldaxLoader from "../faldaxLoader";
 import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
 import { ExecutionUl } from "../common.style";
-import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportCryptoOnly } from "../../../helpers/exportToCsv/headers";
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -44,7 +46,9 @@ class UserTradeHistory extends Component {
       filterVal: "",
       trade_type: 1,
       sorterCol: "created_at",
-      sortOrder: "descend"
+      sortOrder: "descend",
+      csvData:[],
+      openCsvModal:false
     };
   }
 
@@ -68,7 +72,7 @@ class UserTradeHistory extends Component {
     this.setState({ filterVal: val });
   };
 
-  _getUserAllTrades = () => {
+  _getUserAllTrades = (isExportToCsv=false) => {
     const { token, user_id } = this.props;
     const {
       searchTrade,
@@ -82,7 +86,17 @@ class UserTradeHistory extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getUserTrades(
+    (isExportToCsv?ApiUtils.getUserTrades(
+      1,
+      EXPORT_LIMIT_SIZE,
+      token,
+      "",
+      user_id,
+      "",
+      "",
+      "",
+      trade_type
+    ):ApiUtils.getUserTrades(
       page,
       limit,
       token,
@@ -92,10 +106,13 @@ class UserTradeHistory extends Component {
       sorterCol,
       sortOrder,
       trade_type
-    )
+    ))
       .then(response => response.json())
       .then(function(res) {
         if (res.status == 200) {
+          if(isExportToCsv)
+          _this.setState({csvData:res.data})
+          else
           _this.setState({
             allTrades: res.data,
             allTradeCount: res.tradeCount
@@ -170,41 +187,27 @@ class UserTradeHistory extends Component {
       loader,
       filterVal,
       searchTrade,
-      limit
+      limit,
+      csvData,
+      openCsvModal
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
-    const tradeHeaders = [
-      { label: "Created On", key: "created_at" },
-      { label: "Coin", key: "symbol" },
-      { label: "Side", key: "side" },
-      { label: "Email", key: "email" },
-      { label: "Amount", key: "quantity" },
-      { label: "Filled Price", key: "fill_price" },
-      { label: "Network Fees", key: "network_fees" },
-      { label: "Faldax Fees", key: "faldax_fees" },
-      { label: "Order Id", key: "order_id" }
-      //   { label: "Execution Report", key: "execution_report" }
-      // { label: "Currency", key: "currency" },
-      // { label: "Settle Currency", key: "settle_currency" },
-      // { label: "Type", key: "side" },
-      // { label: "Pair", key: "symbol" },
-      // { label: "Quantity", key: "quantity" },
-      // { label: "Order Id", key: "order_id" },
-      // { label: "Price", key: "price" },
-      // { label: "Fill Price", key: "fill_price" },
-      // { label: "Maker Fee", key: "maker_fee" },
-      // { label: "Taker Fee", key: "taker_fee" },
-      // { label: "Maker Email", key: "reqested_user_email" },
-      // { label: "Taker Email", key: "email" },
-      // { label: "Created On", key: "created_at" }
-    ];
-
+  
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
 
     return (
       <>
+          <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+              this.setState({ openCsvModal: false });
+          }}
+          filename="user_crypto_only_history.csv"
+          data={csvData}  
+          header={exportCryptoOnly}
+          />
           <Form onSubmit={this._searchTrade}>
           <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
             <Row type="flex" justify="start" className="table-filter-row">
@@ -246,23 +249,20 @@ class UserTradeHistory extends Component {
                 </Button>
               </Col>
               <Col xs={12} sm={3}>
-                {allTrades && allTrades.length > 0 ? (
-                  <CSVLink
-                    filename={"user_trade_history.csv"}
-                    data={allTrades}
-                    headers={tradeHeaders}
-                  >
+                
                     <Button
                       type="primary"
                       icon ="export"
                       className="filter-btn btn-full-width"
+                      onClick={() => {
+                        this.setState({ openCsvModal: true }, () =>
+                        this._getUserAllTrades(true)
+                        );
+                    }}
                     >
                       Export
                     </Button>
-                  </CSVLink>
-                ) : (
-                  ""
-                )}
+                
               </Col>
             </Row>
           </Form>

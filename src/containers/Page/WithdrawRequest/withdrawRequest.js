@@ -25,10 +25,13 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   PAGE_SIZE_OPTIONS,
   PAGESIZE,
-  TABLE_SCROLL_HEIGHT
+  TABLE_SCROLL_HEIGHT,
+  EXPORT_LIMIT_SIZE
 } from "../../../helpers/globals";
 import { PrecisionCell } from "../../../components/tables/helperCells";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportWithdrawalRequest } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -54,7 +57,9 @@ class WithdrawRequest extends Component {
       rangeDate: [],
       showDeclineModal: false,
       withdrawReqDetails: [],
-      metabaseUrl: ""
+      metabaseUrl: "",
+      openCsvModal:false,
+      csvData:[]
     };
     self = this;
     WithdrawRequest.approveWithdrawReq = WithdrawRequest.approveWithdrawReq.bind(
@@ -101,6 +106,10 @@ class WithdrawRequest extends Component {
       actual_amount
     };
     self._updateWithdrawRequest(requestData);
+  }
+
+  onExport=()=>{
+    this.setState({openCsvModal:true},()=>this._getAllWithdrawReqs(true))
   }
 
   static declineWithdrawReq(
@@ -190,7 +199,7 @@ class WithdrawRequest extends Component {
     this._getAllWithdrawReqs();
   };
 
-  _getAllWithdrawReqs = () => {
+  _getAllWithdrawReqs = (isExportCsv=false) => {
     const { token } = this.props;
     const {
       searchReq,
@@ -205,7 +214,17 @@ class WithdrawRequest extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllWithdrawRequests(
+    (isExportCsv?ApiUtils.getAllWithdrawRequests(
+      1,
+      EXPORT_LIMIT_SIZE,
+      token,
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ):ApiUtils.getAllWithdrawRequests(
       page,
       limit,
       token,
@@ -215,14 +234,18 @@ class WithdrawRequest extends Component {
       endDate,
       sorterCol,
       sortOrder
-    )
+    ))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setState({
-            allRequests: res.data,
-            allReqCount: res.withdrawReqCount
-          });
+          if (isExportCsv) {
+            _this.setState({ csvData: res.data });
+          } else {
+            _this.setState({
+              allRequests: res.data,
+              allReqCount: res.withdrawReqCount
+            });
+          }
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -360,18 +383,9 @@ class WithdrawRequest extends Component {
       filterVal,
       showDeclineModal,
       withdrawReqDetails,
-      metabaseUrl
+      csvData,
+      openCsvModal
     } = this.state;
-    const requestHeaders = [
-      { label: "Source Address", key: "source_address" },
-      { label: "Destination Address", key: "destination_address" },
-      { label: "Transaction Type", key: "transaction_type" },
-      { label: "Amount", key: "amount" },
-      { label: "Email", key: "email" },
-      { label: "Asset", key: "coin_name" },
-      { label: "Fees", key: "fees" },
-      { label: "Created On", key: "created_at" }
-    ];
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
@@ -380,9 +394,23 @@ class WithdrawRequest extends Component {
 
     return (
       <TableDemoStyle className="isoLayoutContent">
-        <PageCounterComponent page={page} limit={limit} dataCount={allReqCount} syncCallBack={this._resetFilters}/>
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+            this.setState({ openCsvModal: false });
+          }}
+          filename="withdrawal_request.csv"
+          data={csvData}
+          header={exportWithdrawalRequest}
+        />
+        <PageCounterComponent
+          page={page}
+          limit={limit}
+          dataCount={allReqCount}
+          syncCallBack={this._resetFilters}
+        />
         <Form onSubmit={this._searchReq}>
-          <Row className="table-filter-row" type="flex" justify="start"> 
+          <Row className="table-filter-row" type="flex" justify="start">
             <Col sm={6}>
               <Input
                 placeholder="Search Requests"
@@ -432,24 +460,14 @@ class WithdrawRequest extends Component {
               </Button>
             </Col>
             <Col xs={12} sm={3}>
-              {allRequests && allRequests.length > 0 ? (
-                <CSVLink
-                  filename={"withdraw_requests.csv"}
-                  data={allRequests}
-                  headers={requestHeaders}
-                >
-                  <Button
-                    type="primary"
-                    className="filter-btn btn-full-width"
-                    style={{ margin: "0px" }}
-                  >
-                    <Icon type="export" />
-                    Export
-                  </Button>
-                </CSVLink>
-              ) : (
-                  ""
-                )}
+              <Button
+                type="primary"
+                className="filter-btn btn-full-width"
+                icon="export"
+                onClick={this.onExport}
+              >
+                Export
+              </Button>
             </Col>
           </Row>
         </Form>
@@ -474,28 +492,43 @@ class WithdrawRequest extends Component {
                   <b>Email ID</b> - {record.email} <br /> <b>Fees</b> -{" "}
                   {record.fees}% <br /> <b>Asset</b> - {record.coin_name}{" "}
                   {record.reason ? (
-                   <span className="long-text-wrapper">
+                    <span className="long-text-wrapper">
                       <b> Reason</b> - {record.reason}
                     </span>
                   ) : (
-                      <br/>
-                    )}
+                    <br />
+                  )}
                   <b>Transaction ID</b> -{" "}
-                  {record.transaction_id &&<CopyToClipboard text={record.transaction_id} onCopy={this.showCopyMsg}><span className="copy-text-container">{ record.transaction_id}</span></CopyToClipboard>}
+                  {record.transaction_id && (
+                    <CopyToClipboard
+                      text={record.transaction_id}
+                      onCopy={this.showCopyMsg}
+                    >
+                      <span className="copy-text-container">
+                        {record.transaction_id}
+                      </span>
+                    </CopyToClipboard>
+                  )}
                   <br />
                   <b>Actual Amount</b> -{" "}
                   {record.actual_amount
-                    ? `${PrecisionCell(record.actual_amount)}${" "}${record.coin_code}`
+                    ? `${PrecisionCell(record.actual_amount)}${" "}${
+                        record.coin_code
+                      }`
                     : ""}
                   <br />
                   <b>Faldax Fee</b> -{" "}
                   {record.faldax_fee
-                    ? `${PrecisionCell(record.faldax_fee)}${" "}${record.coin_code}`
+                    ? `${PrecisionCell(record.faldax_fee)}${" "}${
+                        record.coin_code
+                      }`
                     : ""}
                   <br />
                   <b>Network Fee</b> -{" "}
                   {record.network_fee
-                    ? `${PrecisionCell(record.network_fee)}${" "}${record.coin_code}`
+                    ? `${PrecisionCell(record.network_fee)}${" "}${
+                        record.coin_code
+                      }`
                     : ""}
                 </>
               }
@@ -514,8 +547,8 @@ class WithdrawRequest extends Component {
             pageSizeOptions={pageSizeOptions}
           />
         ) : (
-            ""
-          )}
+          ""
+        )}
         <DeclineActionModal
           showDeclineModal={showDeclineModal}
           withdrawReqDetails={withdrawReqDetails}

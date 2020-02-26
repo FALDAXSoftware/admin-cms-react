@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Pagination, Input, notification, Row, Col } from 'antd';
+import { Tabs, Pagination, Input, notification, Row, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { referralInfos } from "../../Tables/antTables";
@@ -8,8 +8,10 @@ import { withRouter } from "react-router-dom";
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import userAction from '../../../redux/users/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from '../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { exportReferrals } from '../../../helpers/exportToCsv/headers';
 var self;
 const { showUserDetails } = userAction;
 const { logout } = authAction;
@@ -26,7 +28,9 @@ class Referrals extends Component {
             searchReferral: '',
             fields: {},
             prevDefaultReferral: '',
-            errType: 'Success'
+            errType: 'Success',
+            openCsvModal:false,
+            csvData:[]
         }
         self = this;
     }
@@ -42,19 +46,23 @@ class Referrals extends Component {
         this._getAllReferredAdmins();
     }
 
-    _getAllReferredAdmins = () => {
+    _getAllReferredAdmins = (isExportToCsv=false) => {
         const { token } = this.props;
         const { limit, page, searchReferral, sorterCol, sortOrder } = this.state;
         let _this = this;
 
-        this.setState({ loader: true })
-        ApiUtils.getAllReferrals(page, limit, token, searchReferral, sorterCol, sortOrder)
+        this.setState({ loader: true });
+        (isExportToCsv?ApiUtils.getAllReferrals(1, EXPORT_LIMIT_SIZE, token, "", "", ""):ApiUtils.getAllReferrals(page, limit, token, searchReferral, sorterCol, sortOrder))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({
-                        allReferral: res.data, allReferralCount: res.referralCount, showReferralModal: true
-                    });
+                    if (isExportToCsv) _this.setState({ csvData: res.data });
+                    else
+                      _this.setState({
+                        allReferral: res.data,
+                        allReferralCount: res.referralCount,
+                        showReferralModal: true
+                      });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -121,49 +129,83 @@ class Referrals extends Component {
     }
 
     render() {
-        const { allReferral, allReferralCount, loader, fields, errMsg, errType, page, limit } = this.state;
+        const { allReferral, allReferralCount, loader, fields, errMsg, errType, page, limit,openCsvModal,csvData} = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
         let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         return (
-            <div>
-                <PageCounterComponent page={page} limit={limit} dataCount={allReferralCount} syncCallBack={()=>{this.setState({searchReferral:"",page:1},()=>this._getAllReferredAdmins())}}/>
-                <Row type="flex" justify="start" className="table-filter-row">
-                    <Col md={8}>
-                        <Search
-                            placeholder="Search users"
-                            onSearch={(value) => this._searchReferral(value)}
-                            className="full-width"
-                            enterButton
-                        />
-                    </Col>
-                </Row>
-                <TableWrapper
-                    rowKey="email"
-                    {...this.state}
-                    columns={referralInfos[0].columns}
-                    pagination={false}
-                    dataSource={allReferral}
-                    className="table-tb-margin"
-                    onChange={this._handleReferralChange}
-                    scroll={TABLE_SCROLL_HEIGHT}
-                    bordered
+          <div>
+            <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="referrals.csv"
+              data={csvData}
+              header={exportReferrals}
+            />
+            <PageCounterComponent
+              page={page}
+              limit={limit}
+              dataCount={allReferralCount}
+              syncCallBack={() => {
+                this.setState({ searchReferral: "", page: 1 }, () =>
+                  this._getAllReferredAdmins()
+                );
+              }}
+            />
+            <Row type="flex" justify="start" className="table-filter-row">
+              <Col md={8}>
+                <Search
+                  placeholder="Search users"
+                  onSearch={value => this._searchReferral(value)}
+                  className="full-width"
+                  enterButton
                 />
-                {loader && <FaldaxLoader />}
-                {allReferralCount > 0 ?
-                    <Pagination
-                        className="ant-users-pagination"
-                        onChange={this._handleReferralPagination.bind(this)}
-                        pageSize={limit}
-                        current={page}
-                        total={parseInt(allReferralCount)}
-                        showSizeChanger
-                        onShowSizeChange={this._changePaginationSize}
-                        pageSizeOptions={pageSizeOptions}
-                    /> : ''}
-            </div>
+              </Col>
+              <Col md={3}>
+                <Button
+                  type="primary"
+                  icon="export"
+                  onClick={() => {
+                    this.setState({ openCsvModal: true }, () =>
+                      this._getAllReferredAdmins(true)
+                    );
+                  }}
+                >
+                  Export
+                </Button>
+              </Col>
+            </Row>
+            <TableWrapper
+              rowKey="email"
+              {...this.state}
+              columns={referralInfos[0].columns}
+              pagination={false}
+              dataSource={allReferral}
+              className="table-tb-margin"
+              onChange={this._handleReferralChange}
+              scroll={TABLE_SCROLL_HEIGHT}
+              bordered
+            />
+            {loader && <FaldaxLoader />}
+            {allReferralCount > 0 ? (
+              <Pagination
+                className="ant-users-pagination"
+                onChange={this._handleReferralPagination.bind(this)}
+                pageSize={limit}
+                current={page}
+                total={parseInt(allReferralCount)}
+                showSizeChanger
+                onShowSizeChange={this._changePaginationSize}
+                pageSizeOptions={pageSizeOptions}
+              />
+            ) : (
+              ""
+            )}
+          </div>
         );
     }
 }

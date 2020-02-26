@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { newsTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
@@ -23,13 +23,15 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { isAllowed } from '../../../helpers/accessControl';
-import styled from "styled-components";
-import { BackButton } from "../../Shared/backBttton";
+// import styled from "styled-components";
+// import { BackButton } from "../../Shared/backBttton";
 import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { exportNews } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 var self;
 
@@ -50,6 +52,8 @@ class News extends Component {
       startDate: "",
       endDate: "",
       rangeDate: [],
+      openCsvModal:false,
+      csvData:[]
     };
     self = this;
     News.newsStatus = News.newsStatus.bind(this);
@@ -70,7 +74,7 @@ class News extends Component {
       id: value,
       is_active: !is_active
     };
-
+    
     self.setState({ loader: true });
     ApiUtils.changeNewsStatus(token, formData)
       .then(response => response.json())
@@ -96,13 +100,16 @@ class News extends Component {
         });
       });
   }
+  onExport=()=>{
+    this.setState({openCsvModal:true},()=>this._getAllNews(true));
+  }
 
   componentDidMount = () => {
     this._getAllNews();
     if(isAllowed("get_all_news_source"))this._getAllNewsSources()
   };
 
-  _getAllNews = () => {
+  _getAllNews = (isExportToCsv=false) => {
     const { token } = this.props;
     const {
       searchNews,
@@ -117,7 +124,17 @@ class News extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllNews(
+    (isExportToCsv?ApiUtils.getAllNews(
+      1,
+      1000,
+      token,
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ):ApiUtils.getAllNews(
       page,
       limit,
       token,
@@ -127,10 +144,13 @@ class News extends Component {
       endDate,
       sorterCol,
       sortOrder
-    )
+    ))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
+          if(isExportToCsv)
+            _this.setState({csvData:res.data});
+          else
           _this.setState({ allNews: res.data, allNewsCount: res.newsCount });
         } else if (res.status == 403) {
           _this.setState(
@@ -311,6 +331,8 @@ class News extends Component {
       filterVal,
       allNewsSources,
       limit,
+      openCsvModal,
+      csvData
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -318,10 +340,24 @@ class News extends Component {
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     return (
       <TableDemoStyle className="isoLayoutContent">
-        <PageCounterComponent page={page} limit={limit} dataCount={allNewsCount} syncCallBack={this._resetFilters}/>
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+            this.setState({ openCsvModal: false });
+          }}
+          filename="news.csv"
+          data={csvData}
+          header={exportNews}
+        />
+        <PageCounterComponent
+          page={page}
+          limit={limit}
+          dataCount={allNewsCount}
+          syncCallBack={this._resetFilters}
+        />
         <Form onSubmit={this._searchNews}>
           <Row type="flex" justify="start" className="table-filter-row">
-            <Col md={6}>
+            <Col md={5}>
               <Form.Item
                 validateStatus={this.state.searchValid}
                 className="news-search"
@@ -334,7 +370,7 @@ class News extends Component {
               </Form.Item>
             </Col>
             {isAllowed("get_all_news_source") && (
-              <Col md={6}>
+              <Col md={5}>
                 <Select
                   getPopupContainer={trigger => trigger.parentNode}
                   placeholder="Select a source"
@@ -351,7 +387,7 @@ class News extends Component {
                 </Select>
               </Col>
             )}
-            <Col md={6}>
+            <Col md={5}>
               <RangePicker
                 value={rangeDate}
                 disabledTime={this.disabledRangeTime}
@@ -378,6 +414,15 @@ class News extends Component {
                 onClick={this._resetFilters}
               >
                 <Icon type="reload" /> Reset
+              </Button>
+            </Col>
+            <Col xs={12} md={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this.onExport}
+              >
+                <Icon type="export" /> Export
               </Button>
             </Col>
           </Row>

@@ -68,7 +68,7 @@ class SignIn extends Component {
             storeToken({ token: res.token });
             checkRoles({ roles: res.user.roles })
             if (res.user.roleAllowedData.length > 0) {
-              _this.props.history.push('/dashboard/dashboard');
+              _this.props.history.push('/dashboard');
             } else {
               _this.props.history.push('/403');
             }

@@ -10,6 +10,8 @@ import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import { DateTimeCell, TransactionIdHashCell, ConvertSatoshiToAssetCell } from '../../../../components/tables/helperCells';
+import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
+import { exportWallet, exportHotReceiveWalletDetails } from '../../../../helpers/exportToCsv/headers';
 
 const {Option}=Select;
 const columns=[
@@ -61,8 +63,11 @@ const columns=[
 class WalletWarmDetailsComponent extends Component {
     constructor(props){
         super(props)
-        this.state={loader:false,transfers:[],count:0,searchData:"",coin_code:"",assetsList:[]}
+        this.state={csvData:[],openCsvModal:false,loader:false,transfers:[],count:0,searchData:"",coin_code:"",assetsList:[]}
         this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})};
+    }
+    onExport = () => {
+        this.setState({ openCsvModal: true }, () => this.getWalletData(true));
     }
 
     componentDidMount(){
@@ -108,13 +113,16 @@ class WalletWarmDetailsComponent extends Component {
         });
     };
 
-    getWalletData=async ()=>{
+    getWalletData=async (isExportToCsv=false)=>{
         try{
             await this.loader.show()
             const {coin_code,searchData}=this.state;
-            let res=await (await ApiUtils.walletDashboard(this.props.token).getHotReceiveWalletDetails(coin_code,searchData)).json();
+            let res=await (await (isExportToCsv?ApiUtils.walletDashboard(this.props.token).getHotReceiveWalletDetails(coin_code,""):ApiUtils.walletDashboard(this.props.token).getHotReceiveWalletDetails(coin_code,searchData))).json();
             let [{status,data,err,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
+                if(isExportToCsv)
+                this.setState({csvData:data.transfers})
+                else
                 this.setState({transfers:data.transfers,count:tradeCount});
             }else if(status==400 || status==403){
                 this.openNotificationWithIcon("Error",err)
@@ -129,25 +137,37 @@ class WalletWarmDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,transfers,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,transfers,count,limit,page,searchData,rangeDate,coin_code,assetsList,csvData,openCsvModal},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
+                    <ExportToCSVComponent
+                    isOpenCSVModal={openCsvModal}
+                    onClose={() => {
+                    this.setState({ openCsvModal: false });
+                    }}
+                    filename="hot_receive_wallet_details.csv"
+                    data={csvData}
+                    header={exportHotReceiveWalletDetails}
+                />
                    <TableDemoStyle className="isoLayoutContent">
                         <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}> 
-                            <Row justify="start" type="flex">
-                                <Col className="table-column" xs={12} md={7}>
+                            <Row justify="start" type="flex" className="table-filter-row">
+                                <Col xs={12} md={8}>
                                     <Input placeholder="Search" value={searchData} onChange={value => this.setState({searchData:value.target.value})}/>
                                 </Col>
-                                <Col className="table-column" xs={12} md={4}>
+                                <Col xs={12} md={7}>
                                     <Select className="full-width" value={coin_code} onChange={value => this.setState({coin_code:value})}>
                                     {assetsList.map((ele)=><Option key={ele.key} value={ele.value}><span><img className="small-icon-img" src={S3BucketImageURL+ele.icon}/>&nbsp;{ele.name}</span></Option>)}
                                     </Select>
                                 </Col>
-                                <Col className="table-column" xs={12} md={3}>
+                                <Col xs={12} md={3}>
                                     <Button type="primary" icon="search" htmlType="submit" className="filter-btn btn-full-width">Search</Button>
                                 </Col>
-                                <Col className="table-column" xs={12} md={3}>
+                                <Col xs={12} md={3}>
                                     <Button type="primary" icon="reload" className="filter-btn btn-full-width" onClick={()=>{this.setState({rangeDate:"",searchData:"",coin_code:this.props.match.params.coin},()=>this.getWalletData())}}>Reset</Button>
+                                </Col>
+                                <Col xs={12} md={3}>
+                                    <Button type="primary" icon="export" onClick={this.onExport} className="filter-btn btn-full-width">Export</Button>
                                 </Col>
                             </Row>
                         </Form>

@@ -104,10 +104,10 @@ class Sidebar extends Component {
         </SubMenu>
       );
     }
+    let buildKey=key?(url+"/"+key):url;
     return (
-      
-      <Menu.Item key={`${url}/${key}`} className={urlReg.test(pathname)?"ant-menu-item-selected":""}>
-        <Link to={`${url}/${key}`}>
+      <Menu.Item key={buildKey}>
+        <Link to={buildKey}>
           <span className="isoMenuHolder" style={submenuColor}>
             <i className={leftIcon} />
             <span className="nav-text">

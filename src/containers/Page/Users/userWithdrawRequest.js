@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { CSVLink } from "react-csv";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import { export2faRequest } from '../../../helpers/exportToCsv/headers';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -29,6 +31,8 @@ class UserWithdrawRequest extends Component {
             page: 1,
             loader: false,
             filterVal: '',
+            openCsvModal:false,
+            csvData:[]
         }
     }
 
@@ -44,16 +48,19 @@ class UserWithdrawRequest extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getUserRequests = () => {
+    _getUserRequests = (isExportToCsv=false) => {
         const { token, user_id } = this.props;
         const { searchReq, page, limit, startDate, endDate, filterVal, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserWithdrawReq(page, limit, token, searchReq, startDate, endDate, user_id, filterVal, sorterCol, sortOrder)
+        (isExportToCsv?ApiUtils.getUserWithdrawReq(1, EXPORT_LIMIT_SIZE, token, "", "", "", user_id, "", "", ""):ApiUtils.getUserWithdrawReq(page, limit, token, searchReq, startDate, endDate, user_id, filterVal, sorterCol, sortOrder))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    if(isExportToCsv)
+                    _this.setState({csvData:res.data})
+                    else
                     _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -114,17 +121,8 @@ class UserWithdrawRequest extends Component {
 
     render() {
         const { allRequests, allReqCount, errType, errMsg, page, loader, filterVal,
-            searchReq, limit } = this.state;
+            searchReq, limit,openCsvModal,csvData} = this.state;
        let pageSizeOptions = PAGE_SIZE_OPTIONS
-
-        const requestHeaders = [
-            { label: "Source Address", key: "source_address" },
-            { label: "Destination Address", key: "destination_address" },
-            { label: "Transaction Type", key: "transaction_type" },
-            { label: "Amount", key: "amount" },
-            { label: "Email", key: "email" },
-            { label: "Created On", key: "created_at" }
-        ];
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -132,7 +130,9 @@ class UserWithdrawRequest extends Component {
 
         return (
             <LayoutWrapper>
+                <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="user_withdrawal_request.csv" data={csvData} header={export2faRequest}/>
                 <TableDemoStyle className="isoLayoutContent full-width">
+
                                     <div className="form-container">
                                     <Form onSubmit={this._searchReq}>
                                         <Row>
@@ -162,11 +162,8 @@ class UserWithdrawRequest extends Component {
                                                 <Button className="filter-btn full-width" type="primary" icon="reload" onClick={this._resetFilters}>Reset</Button>
                                             </Col>
                                             <Col xs={12} sm={3}>
-                                                {allRequests && allRequests.length > 0 ?
-                                                    <CSVLink filename={'user_withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
-                                                        <Button icon="export" className="filter-btn full-width" type="primary">Export</Button>
-                                                    </CSVLink>
-                                                    : ''}
+                                                <Button icon="export" className="filter-btn full-width" type="primary" 
+                                                 onClick={()=>{this.setState({openCsvModal:true},()=>{this._getUserRequests(true)})}}>Export</Button>
                                             </Col>
                                         </Row>
                                     </Form>

@@ -79,26 +79,27 @@ class UserWallets extends Component {
 
     _getUserWallets = () => {
         const { token, user_id } = this.props;
+        console.log(this.props)
         let _this = this;
-        this.setState({loader:true});
+        this.setState({ loader: true });
         ApiUtils.getUserWallets(token, user_id)
             .then(response => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ userWallets: res.data ,loader:false});
+                    _this.setState({ userWallets: res.data, loader: false });
                 } else if (res.status == 403) {
                     _this.setState(
-                        { errMsg: true, errMessage: res.err, errType: "error" ,loader:false},
+                        { errMsg: true, errMessage: res.err, errType: "error", loader: false },
                         () => {
                             _this.props.logout();
                         }
                     );
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message ,loader:false});
+                    _this.setState({ errMsg: true, errMessage: res.message, loader: false });
                 }
             })
             .catch(err => {
-                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.",loader:false});
+                _this.setState({ errMsg: true, errMessage: "Unable to complete the requested action.", loader: false });
                 console.log(err);
             });
     };
@@ -147,11 +148,11 @@ class UserWallets extends Component {
     };
     _copyNotification = () => {
         this.setState({
-          errMsg: true,
-          errType: "Info",
-          errMessage: "Copied to Clipboard!!"
+            errMsg: true,
+            errType: "Info",
+            errMessage: "Copied to Clipboard!!"
         });
-      };
+    };
 
     openNotificationWithIconError = type => {
         notification[type]({
@@ -180,7 +181,7 @@ class UserWallets extends Component {
                                         <span>{wallet.coin_code}</span>
                                     </div>
                                     <div className="float-right">
-                                        <span>{wallet.balance?PrecisionCell(wallet.balance):0}</span>
+                                        <span>{wallet.placed_balance ? PrecisionCell(wallet.placed_balance) : 0.0}</span>
                                     </div>
                                 </div>
                             );
@@ -189,9 +190,10 @@ class UserWallets extends Component {
                                     <Card
                                         title={coinTitle}
                                         actions={[
-                                            wallet.send_address == "" && isAllowed("create_wallet") ? (
-                                               isAllowed("create_wallet") && (<Button
+                                            wallet.receive_address == "" && isAllowed("create_wallet") ? (
+                                                isAllowed("create_wallet") && (<Button
                                                     type="primary"
+                                                    disabled={this.props.is_deleted}
                                                     onClick={this._createUserWallet.bind(this, wallet)}
                                                 >
                                                     Create Wallet
@@ -201,24 +203,24 @@ class UserWallets extends Component {
                                                 )
                                         ]}
                                     >
-                                        <p>
+                                        {/* <p>
                                             <b>HOT Send Address : </b>{" "}
                                             <CopyToClipboard
-                                              className="cursor-pointer"
-                                              text={wallet.send_address}
-                                              onCopy={this._copyNotification}
+                                                className="cursor-pointer"
+                                                text={wallet.send_address}
+                                                onCopy={this._copyNotification}
                                             >
-                                            <span>{wallet.send_address}</span>
+                                                <span>{wallet.send_address}</span>
                                             </CopyToClipboard>
-                                        </p>
+                                        </p> */}
                                         <p>
-                                            <b>HOT Receive Address : </b>
+                                            <b>Address : </b>
                                             <CopyToClipboard
-                                            className="cursor-pointer"
-                                              text={wallet.receive_address}
-                                              onCopy={this._copyNotification}
+                                                className="cursor-pointer"
+                                                text={wallet.receive_address}
+                                                onCopy={this._copyNotification}
                                             >
-                                            <span>{wallet.receive_address}</span>
+                                                <span>{wallet.receive_address}</span>
                                             </CopyToClipboard>
                                         </p>
                                     </Card>
