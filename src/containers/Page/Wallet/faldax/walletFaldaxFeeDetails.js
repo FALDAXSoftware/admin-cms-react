@@ -276,7 +276,7 @@ class WalletDetailsComponent extends Component {
                       Reset
                     </Button>
                   </Col>
-                  <Col className="table-column" xs={12} md={3}>
+                  <Col xs={12} md={3}>
                     <Button
                       type="primary"
                       onClick={this.onExport}

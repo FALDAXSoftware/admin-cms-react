@@ -12,7 +12,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from './../../../../helpers/accessControl';
 import { PrecisionCell } from '../../../../components/tables/helperCells';
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
-import { exportWallet } from '../../../../helpers/exportToCsv/headers';
+import { exportWallet, exportHotReceiveWallet } from '../../../../helpers/exportToCsv/headers';
 
 var self
 
@@ -184,17 +184,30 @@ class WalletFaldaxDashboard extends Component {
             if (this.validator.allValid()) {
                 this.timeCounter = setTimeout(async () => {
                     try {
-                        this.loader.show();
-                        let res = await (await ApiUtils.getWalletNetworkFee(token, { dest_address: fields['dest_address'], amount: fields['amount'], coin: walletDetails.coin_code })).json();
-                        if (res.status == 200) {
-                            this.setState({ networkFee: res.data })
-                        } else if (res.status == 400 || res.status == 401 || res.status == 403) {
-
-                        }
+                      this.loader.show();
+                      let res = await (
+                        await ApiUtils.getWalletNetworkFee(token, {
+                          dest_address: fields["dest_address"],
+                          amount: fields["amount"],
+                          coin: walletDetails.coin_code
+                        })
+                      ).json();
+                      if (res.status == 200) {
+                        this.setState({ networkFee: res.data });
+                      } else if (
+                        res.status == 400 ||
+                        res.status == 401 ||
+                        res.status == 403
+                      ) {
+                        this.openNotificationWithIcon("Error", res.err);
+                        this.props.logout();
+                      } else {
+                        this.openNotificationWithIcon("Error", res.err?res.err:res.message);
+                      }
                     } catch (error) {
-
+                        console.log("error",error);
                     } finally {
-                        this.loader.hide();
+                      this.loader.hide();
                     }
                 }, this.timer)
             } else {
@@ -226,7 +239,7 @@ class WalletFaldaxDashboard extends Component {
                     this.openNotificationWithIcon("Error", err)
                     logout();
                 } else {
-                    this.openNotificationWithIcon("Error", message)
+                    this.openNotificationWithIcon("Error", message?message:err)
                 }
                 this.closeSendModal();
             } catch (err) {
@@ -288,19 +301,19 @@ class WalletFaldaxDashboard extends Component {
                     onClose={() => {
                     this.setState({ openCsvModal: false });
                     }}
-                    filename="under_review_customer_id_verification.csv"
+                    filename="FALDAX_wallet.csv"
                     data={csvData}
-                    header={exportWallet}
+                    header={exportHotReceiveWallet}
                 />
                     <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}>
-                        <Row justify="start" type="flex">
-                            <Col className="table-column" xs={12} md={7}>
+                        <Row justify="start" type="flex" className="table-filter-row">
+                            <Col xs={12} md={10}>
                                 <Input placeholder="Search Asset" value={searchData} onChange={value => this.setState({ searchData: value.target.value })} />
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={12} md={3}>
                                 <Button type="primary" htmlType="submit" icon="search" className="filter-btn btn-full-width">Search</Button>
                             </Col>
-                            <Col className="table-column" xs={12} md={3}>
+                            <Col xs={12} md={3}>
                                 <Button type="primary" icon="export" onClick={this.onExport} className="filter-btn btn-full-width">Export</Button>
                             </Col>
                         </Row>
@@ -342,7 +355,7 @@ class WalletFaldaxDashboard extends Component {
                             </div>
                             <div className="clearfix">
                                 <div className="float-left">
-                                    <span className="wallet-send-summery-head"><b>Sending Amount</b></span><span>{fields["amount"] || 0} {walletDetails.coin}</span><br />
+                                    {/* <span className="wallet-send-summery-head"><b>Sending Amount</b></span><span>{fields["amount"] || 0} {walletDetails.coin}</span><br /> */}
                                     <span className="wallet-send-summery-head"><b>Network Fee</b></span><span>{networkFee} {walletDetails.coin}</span><br />
                                     <span className="wallet-send-summery-head"><b>Total Payload</b></span><span>{parseFloat(fields['amount']) && parseFloat(networkFee) ? (parseFloat(fields['amount']) + parseFloat(networkFee)).toFixed(8) : 0} {walletDetails.coin}</span><br />
                                 </div>

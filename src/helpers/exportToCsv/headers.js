@@ -281,6 +281,17 @@ const exportOffers = [
   { key: "usage", label: "Usage" }
 ];
 
+const exportHotReceiveWallet = [
+  { key: "id", label: "ID" },
+  { key: "coin_icon", label: "Asset Icon" },
+  { key: "coin_name", label: "Asset Name" },
+  { key: "coin_code", label: "Asset Code" },
+  { key: "coin", label: "Asset" },
+  { key: "hot_receive_wallet_address", label: "Hot Receive Wallet Address" },
+  { key: "balance", label: "Balance" },
+  { key: "address", label: "Address" }
+];
+
 const exportOffersUsages = [
   { key: "id", label: "ID" },
   { key: "user_id", label: "User ID" },
@@ -600,6 +611,40 @@ const exportReferralUsers = [
   { key: "collected_amount", label: "Collected Amount" }
 ];
 
+const exportHotReceiveWalletDetails = [
+  { key: "id", label: "ID" },
+  { key: "coin", label: "Asset" },
+  { key: "wallet", label: "Wallet" },
+  { key: "enterprise", label: "Enterprise" },
+  { key: "txid", label: "Txid" },
+  { key: "height", label: "Height" },
+  { key: "date", label: "Date" },
+  { key: "confirmations", label: "Confirmations" },
+  { key: "type", label: "Type" },
+  { key: "value", label: "Value" },
+  { key: "valueString", label: "Value String" },
+  { key: "baseValue", label: "Base Value" },
+  { key: "baseValueString", label: "Base Value String" },
+  { key: "feeString", label: "Fee String" },
+  { key: "payGoFee", label: "Pay Go Fee" },
+  { key: "payGoFeeString", label: "Pay Go Fee String" },
+  { key: "usd", label: "USD" },
+  { key: "usdRate", label: "USD Rate" },
+  { key: "state", label: "State" },
+  { key: "instant", label: "Instant" },
+  { key: "isReward", label: "isReward" },
+  { key: "isFee", label: "Is Fee" },
+  { key: "tags", label: "Tags" },
+  { key: "history", label: "History" },
+  { key: "entries", label: "Entries" },
+  { key: "unconfirmedTime", label: "Unconfirmed Time" },
+  { key: "createdTime", label: "Created Time" },
+  { key: "label", label: "Label" },
+  { key: "outputs", label: "Outputs" },
+  { key: "inputs", label: "Inputs" },
+  { key: "normalizedTxHash", label: "Normalized Tx Hash" }
+];
+
 export {
   exportResidualHeaders,
   exportLoginHistory,
@@ -626,5 +671,7 @@ export {
   exportState,
   exportEmployee,
   exportUsers,
-  exportReferralUsers
+  exportReferralUsers,
+  exportHotReceiveWallet,
+  exportHotReceiveWalletDetails
 };

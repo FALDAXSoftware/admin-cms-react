@@ -381,17 +381,15 @@ class ActiveUsers extends Component {
                     </Button>
                   </Col>
                   <Col xs={24} lg={3}>
-                    {allUsers && allUsers.length > 0 ? (
-                        <Button
-                          className="filter-btn btn-full-width"
-                          type="primary"
-                          onClick={this.onExportCSV}
-                        >
-                          <Icon type="export" /> Export
-                        </Button>
-                    ) : (
-                      ""
-                    )}
+                  
+                    <Button
+                      className="filter-btn btn-full-width"
+                      type="primary"
+                      onClick={this.onExportCSV}
+                    >
+                      <Icon type="export" /> Export
+                    </Button>
+              
                   </Col>
                 </Row>
               </Form>
