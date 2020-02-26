@@ -360,7 +360,7 @@ class WalletFaldaxDashboard extends Component {
                                     <span className="wallet-send-summery-head"><b>Total Payload</b></span><span>{parseFloat(fields['amount']) && parseFloat(networkFee) ? (parseFloat(fields['amount']) + parseFloat(networkFee)).toFixed(8) : 0} {walletDetails.coin}</span><br />
                                 </div>
                                 <div className="float-right">
-                                    <span className="wallet-send-summery-head"><b>Fiat Value</b></span><span>$&nbsp;{parseFloat(walletDetails.fiat || 0)}</span><br />
+                                    <span className="wallet-send-summery-head"><b>Fiat Value</b></span><span>$&nbsp;{(parseFloat(walletDetails.fiat || 0) * parseFloat(fields['amount']||0))}</span><br />
                                 </div>
                             </div>
                         </Form>
