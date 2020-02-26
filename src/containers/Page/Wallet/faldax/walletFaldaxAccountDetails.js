@@ -283,6 +283,7 @@ class WalletFaldaxDetailsComponent extends Component {
               <Col xs={12} md={5}>
                 <Input
                   placeholder="Search"
+                  className="full-width"
                   value={searchData}
                   onChange={value =>
                     this.setState({ searchData: value.target.value })
@@ -367,7 +368,7 @@ class WalletFaldaxDetailsComponent extends Component {
                   Reset
                 </Button>
               </Col>
-              <Col className="table-column" xs={12} md={3}>
+              <Col xs={12} md={3}>
                     <Button
                       type="primary"
                       onClick={this.onExport}
@@ -467,11 +468,15 @@ class WalletFaldaxDetailsComponent extends Component {
                     {record.transaction_type == "send" ? "Send" : "Receive"}
                   </span>
                   <br />
-                  <span>
-                    <b>Estimated Network Fees: </b>
-                  </span>{" "}
-                  {PrecisionCell(record.estimated_network_fees)}
-                  <br />
+                  {record.transaction_type == "send" && (
+                    <>
+                      <span>
+                        <b>Estimated Network Fees: </b>
+                      </span>
+                      {PrecisionCell(record.estimated_network_fees)}
+                      <br />
+                    </>
+                  )}
                   {record.transaction_type == "send" && (
                     <>
                       <span>
