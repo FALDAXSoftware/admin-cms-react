@@ -948,6 +948,9 @@ const ConvertSatoshiToAssetCell = (coin, balance) => {
 
 const TransactionIdHashCell = (coin_id, transaction_id) => {
   let url = "";
+  if(!transaction_id){
+    return <span>-</span>
+  }
   switch (coin_id.toLowerCase()) {
     // Fot Test Net
     case "tbtc":
