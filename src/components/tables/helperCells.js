@@ -943,7 +943,7 @@ const ConvertSatoshiToAssetCell = (coin, balance) => {
     default:
       amount = balance;
   }
-  return <span>{coin == "eth" || coin == "teth" ? parseFloat(amount).toFixed(18) : parseFloat(amount).toFixed(8)}</span>
+  return <span>{coin == "eth" || coin == "teth" ? parseFloat(amount).toFixed(8) : parseFloat(amount).toFixed(8)}</span>
 };
 
 const TransactionIdHashCell = (coin_id, transaction_id) => {
