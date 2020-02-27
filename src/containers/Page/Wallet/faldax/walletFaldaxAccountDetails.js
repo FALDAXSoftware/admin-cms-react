@@ -2,93 +2,93 @@ import React, { Component } from 'react';
 import ApiUtils from '../../../../helpers/apiUtills';
 import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
-import {  withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
+import { notification, Pagination, Row, Col, Input, DatePicker, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL, EXPORT_LIMIT_SIZE } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { DateTimeCell , TransactionIdHashCell, PrecisionCell, ToolTipsCell} from '../../../../components/tables/helperCells';
+import { DateTimeCell, TransactionIdHashCell, PrecisionCell, ToolTipsCell } from '../../../../components/tables/helperCells';
 import { PageCounterComponent } from '../../../Shared/pageCounter';
 import { exportCreditCard, exportResidualHeaders, exportDirectDeposit } from '../../../../helpers/exportToCsv/headers';
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
 
 
-const {RangePicker}=DatePicker;
-const {Option}=Select;
-const columns=[
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
-        key:55,
-        dataIndex:"coin_code",
-        width:100,
-        ellipsis:true,
-        render:data=><span>{data.toUpperCase()}</span>
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.created_on"/>,
-        key:1,
-        dataIndex:"created_at",
-        sorter: true,
-        ellipsis:true,
-        width:150,
-        render:data=><span>{DateTimeCell(data)}</span>
-    },
-    // {
-    //     title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
-    //     key:55,
-    //     dataIndex:"coin_code",
-    //     width:100,
-    //     render:data=><span>{data.toUpperCase()}</span>
-    // },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.amount"/>,
-        key:2,
-        width:175,
-        ellipsis:true,
-        render:data=><span>{data?parseFloat(data["amount"]).toFixed(8)+" "+data["coin"]:"-"}</span>
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.type"/>,
-        key:3,
-        dataIndex:"transaction_type",
-        width:100,
-        ellipsis:true,
-        render:data=><span className={data=="send"?"error-danger":"color-green"}><Icon type={data=="send"?"arrow-up":"arrow-down"}/>&nbsp;{data.charAt(0).toUpperCase()+data.slice(1)}</span>
-    },
-    {
-      title:<IntlMessages id="transactionTable.title.tx_from"/>,
-      key:8,
-      width:200,
-      ellipsis:true,
-      dataIndex:"transaction_from",
-      render:data=>ToolTipsCell(data)
+const { RangePicker } = DatePicker;
+const { Option } = Select;
+const columns = [
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code" />,
+    key: 55,
+    dataIndex: "coin_code",
+    width: 100,
+    ellipsis: true,
+    render: data => <span>{data.toUpperCase()}</span>
   },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address"/>,
-        dataIndex:"source_address",
-        key:4,
-        ellipsis:true,
-        width:300,
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.destination_address"/>,
-        dataIndex:"destination_address",
-        key:5,
-        ellipsis:true,
-        width:300,
-    },
-    {
-        title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id"/>,
-        key:6,
-        width:300,
-        ellipsis:true,
-        render:data=>TransactionIdHashCell(data["coin_code"],data["transaction_id"])
-       
-    }
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.created_on" />,
+    key: 1,
+    dataIndex: "created_at",
+    sorter: true,
+    ellipsis: true,
+    width: 150,
+    render: data => <span>{DateTimeCell(data)}</span>
+  },
+  // {
+  //     title:<IntlMessages id="walletFaldaxAccountDetailsTable.title.coin_code"/>,
+  //     key:55,
+  //     dataIndex:"coin_code",
+  //     width:100,
+  //     render:data=><span>{data.toUpperCase()}</span>
+  // },
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.amount" />,
+    key: 2,
+    width: 175,
+    ellipsis: true,
+    render: data => <span>{data ? parseFloat(data["amount"]).toFixed(8) + " " + data["coin"] : "-"}</span>
+  },
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.type" />,
+    key: 3,
+    dataIndex: "transaction_type",
+    width: 100,
+    ellipsis: true,
+    render: data => <span className={data == "send" ? "error-danger" : "color-green"}><Icon type={data == "send" ? "arrow-up" : "arrow-down"} />&nbsp;{data.charAt(0).toUpperCase() + data.slice(1)}</span>
+  },
+  {
+    title: <IntlMessages id="transactionTable.title.tx_from" />,
+    key: 8,
+    width: 200,
+    ellipsis: true,
+    dataIndex: "transaction_from",
+    render: data => ToolTipsCell(data)
+  },
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.source_address" />,
+    dataIndex: "source_address",
+    key: 4,
+    ellipsis: true,
+    width: 300,
+  },
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.destination_address" />,
+    dataIndex: "destination_address",
+    key: 5,
+    ellipsis: true,
+    width: 300,
+  },
+  {
+    title: <IntlMessages id="walletFaldaxAccountDetailsTable.title.transaction_id" />,
+    key: 6,
+    width: 300,
+    ellipsis: true,
+    render: data => TransactionIdHashCell(data["coin_code"], data["transaction_id"])
+
+  }
 ]
 
 class WalletFaldaxDetailsComponent extends Component {
@@ -165,7 +165,7 @@ class WalletFaldaxDetailsComponent extends Component {
     this.openNotificationWithIcon("Info", "Copied to Clipboard!!");
   };
 
-  getWalletData = async (isExportCsv=false) => {
+  getWalletData = async (isExportCsv = false) => {
     try {
       await this.loader.show();
       const {
@@ -181,7 +181,7 @@ class WalletFaldaxDetailsComponent extends Component {
       let start_date = rangeDate ? moment(rangeDate[0]).toISOString() : "",
         end_date = rangeDate ? moment(rangeDate[1]).toISOString() : "";
       let res = await (
-        await (isExportCsv?ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
+        await (isExportCsv ? ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
           "",
           1,
           EXPORT_LIMIT_SIZE,
@@ -192,7 +192,7 @@ class WalletFaldaxDetailsComponent extends Component {
           "",
           2,
           ""
-        ):ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
+        ) : ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
           coin_code,
           page,
           limit,
@@ -204,15 +204,15 @@ class WalletFaldaxDetailsComponent extends Component {
           2,
           transaction_type
         )
-      )).json();
+        )).json();
       let [{ status, walletValue, err, message, tradeCount }, logout] = [
         res,
         this.props.logout
       ];
       if (status == 200) {
-        if(isExportCsv){
-          this.setState({csvData:walletValue});
-        }else{
+        if (isExportCsv) {
+          this.setState({ csvData: walletValue });
+        } else {
           this.setState({ walletValue, count: tradeCount });
         }
       } else if (status == 400 || status == 403) {
@@ -247,15 +247,15 @@ class WalletFaldaxDetailsComponent extends Component {
     ] = [this.state, PAGE_SIZE_OPTIONS];
     return (
       <>
-       <ExportToCSVComponent
-              isOpenCSVModal={openCsvModal}
-              onClose={() => {
-                this.setState({ openCsvModal: false });
-              }}
-              filename="direct_deposit.csv"
-              data={csvData}
-              header={exportDirectDeposit}
-            />
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+            this.setState({ openCsvModal: false });
+          }}
+          filename="direct_deposit.csv"
+          data={csvData}
+          header={exportDirectDeposit}
+        />
         <TableDemoStyle className="isoLayoutContent">
           <PageCounterComponent
             page={page}
@@ -369,15 +369,15 @@ class WalletFaldaxDetailsComponent extends Component {
                 </Button>
               </Col>
               <Col xs={12} md={3}>
-                    <Button
-                      type="primary"
-                      onClick={this.onExport}
-                      icon="export"
-                      className="filter-btn btn-full-width"
-                    >
-                      Export
+                <Button
+                  type="primary"
+                  onClick={this.onExport}
+                  icon="export"
+                  className="filter-btn btn-full-width"
+                >
+                  Export
                     </Button>
-                  </Col>
+              </Col>
             </Row>
           </Form>
           <TableWrapper
@@ -441,7 +441,7 @@ class WalletFaldaxDetailsComponent extends Component {
                   <span>
                     <b>Base Amount: </b>
                   </span>{" "}
-                  {PrecisionCell(record.actual_amount)}
+                  {(record.transaction_type == "send") ? PrecisionCell(record.actual_amount) : (PrecisionCell(record.amount))}
                   <br />
                   <span>
                     <b>Asset: </b>
@@ -486,7 +486,7 @@ class WalletFaldaxDetailsComponent extends Component {
                       <br />
                     </>
                   )}
-                  {record.transaction_from == "Send to Destination" && (
+                  {/* {record.transaction_from == "Send to Destination" && (
                     <>
                       <span>
                         <b>Residual Amount:</b>
@@ -494,7 +494,7 @@ class WalletFaldaxDetailsComponent extends Component {
                       </span>{" "}
                       <br />
                     </>
-                  )}
+                  )} */}
                   <span>
                     <b>Transaction From: </b>
                   </span>{" "}
@@ -540,7 +540,7 @@ class WalletFaldaxDetailsComponent extends Component {
 }
 
 export default withRouter(connect(
-    state => ({
-      token: state.Auth.get("token")
-    }),{ ...authAction})(WalletFaldaxDetailsComponent))
- 
+  state => ({
+    token: state.Auth.get("token")
+  }), { ...authAction })(WalletFaldaxDetailsComponent))
+
