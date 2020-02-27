@@ -181,7 +181,7 @@ class UserWallets extends Component {
                                         <span>{wallet.coin_code}</span>
                                     </div>
                                     <div className="float-right">
-                                        <span>{wallet.placed_balance ? PrecisionCell(wallet.placed_balance) : 0.0}</span>
+                                        <span>{wallet.balance ? PrecisionCell(wallet.balance) : 0.0}</span>
                                     </div>
                                 </div>
                             );
