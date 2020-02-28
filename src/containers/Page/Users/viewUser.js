@@ -16,23 +16,23 @@ import { isAllowed } from '../../../helpers/accessControl';
 // import { BackButton } from '../../Shared/backBttton';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
-import {connect} from "react-redux"
+import { connect } from "react-redux"
 import actions from "../../../redux/users/actions"
-const {removeUserDetails}=actions;
+const { removeUserDetails } = actions;
 
 const { TabPane } = Tabs;
 
 class ViewUser extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.props.removeUserDetails();
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.removeUserDetails();
     }
 
@@ -44,7 +44,7 @@ class ViewUser extends Component {
         return (
             <LayoutWrapper>
                 {/* <BackButton {...this.props}></BackButton> */}
-                <BreadcrumbComponent {...this.props}/>
+                <BreadcrumbComponent {...this.props} />
                 <Tabs className="full-width">
                     {isAllowed("get_user_details") &&
 
@@ -56,7 +56,7 @@ class ViewUser extends Component {
                     }
                     {isAllowed("get_user_wallet_addresses") &&
 
-                        <TabPane tab="Wallets" key="3"><UserWallets is_deleted={this.props.location.state?this.props.location.state.is_deleted:false} user_id={user_id} /></TabPane>
+                        <TabPane tab="Wallets" key="3"><UserWallets is_deleted={this.props.location.state ? this.props.location.state.is_deleted : false} user_id={user_id} /></TabPane>
                     }
                     {/* {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
                         <TabPane tab="Orders" key="4"><AllOrders user_id={user_id} /></TabPane>
@@ -68,7 +68,7 @@ class ViewUser extends Component {
                         <TabPane tab="History" key="6"><AllTrades user_id={user_id} /></TabPane>
                     }
                     {(isAllowed("update_user_referal") && isAllowed("get_user_details")) &&
-                        <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
+                        <TabPane tab="User Referral Percentage" key="7"><Referral user_id={user_id} /></TabPane>
                     }
                     {isAllowed("referred_users") &&
                         <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
@@ -86,7 +86,7 @@ class ViewUser extends Component {
                         <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
                     }
                     {isAllowed("get_delete_account_summary") &&
-                        (this.props.location.state && this.props.location.state.is_deleted) &&<TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
+                        (this.props.location.state && this.props.location.state.is_deleted) && <TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
                     }
                 </Tabs>
             </LayoutWrapper>
@@ -94,4 +94,4 @@ class ViewUser extends Component {
     }
 }
 
-export default connect(undefined,{removeUserDetails})(ViewUser);
+export default connect(undefined, { removeUserDetails })(ViewUser);
