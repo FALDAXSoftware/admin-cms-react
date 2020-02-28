@@ -32,7 +32,7 @@ volumes: [
               sh "apk upgrade "
               sh "apk add --no-cache bash git openssh"
               sh "npm install"
-              sh "npm run build${getEnvConfig()}"
+              sh "npm run build${getEnvConfig(myRepo.GIT_BRANCH)}"
               sh "ls -la" 
               if (env.BRANCH_NAME == 'development') {
                         withAWS(credentials:'jenkins_s3_upload') {
