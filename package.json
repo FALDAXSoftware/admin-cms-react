@@ -13,6 +13,7 @@
     "connected-react-router": "^6.6.1",
     "country-state-city": "0.0.5",
     "d3-shape": "^1.0.6",
+    "env-cmd": "^10.1.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "express": "^4.15.3",
     "frappe-charts": "^0.0.8",
@@ -72,7 +73,9 @@
     "start": "react-scripts --max_old_space_size=4096 start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:preprod": "env-cmd -f .env.preprod react-scripts build",
+    "build:mainnet": "env-cmd -f .env.mainnet react-scripts build"
   },
   "browserslist": {
     "production": [
