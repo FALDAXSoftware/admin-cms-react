@@ -39,7 +39,7 @@ class PersonalDetails extends Component {
     this.state = {
       userDetails: null,
       errType: "error",
-      loader:false
+      loader: false
     };
   }
 
@@ -48,26 +48,26 @@ class PersonalDetails extends Component {
   };
 
   _getUserDetail = () => {
-    const { token, user_id ,showUserDetails} = this.props;
+    const { token, user_id, showUserDetails } = this.props;
     let _this = this;
-    this.setState({"loader":true});
+    this.setState({ "loader": true });
     ApiUtils.getUserDetails(token, user_id)
       .then(response => response.json())
-      .then(function(res) {
-        
+      .then(function (res) {
+
         if (res.status == 200) {
-          let {email,first_name,last_name}=res.data[0]
-          showUserDetails({full_name:first_name+" "+last_name,email});
-          _this.setState({ userDetails: res.data[0],loader:false });
+          let { email, first_name, last_name } = res.data[0]
+          showUserDetails({ full_name: first_name + " " + last_name, email });
+          _this.setState({ userDetails: res.data[0], loader: false });
         } else if (res.status == 403) {
-          _this.setState({ errMsg: true, errMessage: res.err ,loader:false},()=> _this.props.logout());
+          _this.setState({ errMsg: true, errMessage: res.err, loader: false }, () => _this.props.logout());
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message,loader:false });
+          _this.setState({ errMsg: true, errMessage: res.message, loader: false });
         }
       })
       .catch(err => {
-        _this.setState({"loader":true});
-        console.log("Error",err);
+        _this.setState({ "loader": true });
+        console.log("Error", err);
       });
   };
 
@@ -94,7 +94,7 @@ class PersonalDetails extends Component {
           this._getUserDetail();
           this.setState({
             errMsg: true,
-            errMessage:res.message,
+            errMessage: res.message,
             errType: "Success",
             loader: false
           });
@@ -119,35 +119,42 @@ class PersonalDetails extends Component {
       });
   };
 
-  sendResendPasswordLink=async()=>{
+  sendResendPasswordLink = async () => {
     try {
-      let {email}=this.state.userDetails;
-      await this.setState({loader:true});
-      let res=await (await ApiUtils.sendResetPasswordLink(this.props.token,{email:email})).json();
-      let {status,message,err}=res;
-      if(status==200){
+      let { email } = this.state.userDetails;
+      await this.setState({ loader: true });
+      let res = await (await ApiUtils.sendResetPasswordLink(this.props.token, { email: email })).json();
+      let { status, message, err } = res;
+      if (status == 200) {
         this.setState({
           errMsg: true,
           errMessage: message,
           errType: "success",
         })
-      }else if(status==400 || status==403){
+      } else if (status == 400 || status == 403) {
         this.setState({
           errMsg: true,
           errMessage: err,
           errType: "error",
-        },()=>this.props.logout())
-      }else{
+        }, () => this.props.logout())
+      } else if (status == 401) {
+        this.setState({
+          errMsg: true,
+          errMessage: err,
+          errType: "error",
+        });
+      }
+      else {
         this.setState({
           errMsg: true,
           errMessage: message,
           errType: "error",
         })
       }
-    }catch(error){
-      
-    }finally{
-      this.setState({loader:false})
+    } catch (error) {
+
+    } finally {
+      this.setState({ loader: false })
     }
   }
 
@@ -160,7 +167,7 @@ class PersonalDetails extends Component {
   };
 
   render() {
-    const { userDetails, errMsg, errType ,loader} = this.state;
+    const { userDetails, errMsg, errType, loader } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -170,30 +177,30 @@ class PersonalDetails extends Component {
         {userDetails != null && (
           <ParentDiv className="parent-div">
             <Row type="flex" justify="end">
-                <Col span={3}>
-                  <Switch
-                    disabled={!isAllowed("user_activate")|| (isAllowed("user_activate") && userDetails.deleted_by) }
-                    className="personal-btn"
-                    checked={userDetails.is_active}
-                    checkedChildren="Active"
-                    unCheckedChildren="Inactive"
-                    size="large"
-                    onChange={this._userStatus.bind(this, "is_active")}
-                  />
-                  <br />
-                </Col>
-                <Col span={3}>
-                  <Switch
-                    disabled={!isAllowed("user_activate")|| (isAllowed("user_activate") && userDetails.deleted_by)}  
-                    className="kyc-btn"
-                    checked={userDetails.is_verified}
-                    checkedChildren="Email Verified"
-                    unCheckedChildren="Email Unverified"
-                    size="large"
-                    onChange={this._userStatus.bind(this, "is_verified")}
-                  />
-                </Col>
-              </Row>
+              <Col span={3}>
+                <Switch
+                  disabled={!isAllowed("user_activate") || (isAllowed("user_activate") && userDetails.deleted_by)}
+                  className="personal-btn"
+                  checked={userDetails.is_active}
+                  checkedChildren="Active"
+                  unCheckedChildren="Inactive"
+                  size="large"
+                  onChange={this._userStatus.bind(this, "is_active")}
+                />
+                <br />
+              </Col>
+              <Col span={3}>
+                <Switch
+                  disabled={!isAllowed("user_activate") || (isAllowed("user_activate") && userDetails.deleted_by)}
+                  className="kyc-btn"
+                  checked={userDetails.is_verified}
+                  checkedChildren="Email Verified"
+                  unCheckedChildren="Email Unverified"
+                  size="large"
+                  onChange={this._userStatus.bind(this, "is_verified")}
+                />
+              </Col>
+            </Row>
             <Row>
               <Col>
                 <UserPic
@@ -219,7 +226,7 @@ class PersonalDetails extends Component {
             </Row>
             <Row>
               <Col>
-                <UserEmail><Icon type="mail"/>&nbsp;&nbsp;&nbsp;
+                <UserEmail><Icon type="mail" />&nbsp;&nbsp;&nbsp;
                   {userDetails.email ? userDetails.email : ""}
                 </UserEmail>
               </Col>
@@ -240,18 +247,18 @@ class PersonalDetails extends Component {
                   <i className="fas fa-map-marker-alt"></i>
                   <span>&nbsp;&nbsp;&nbsp;{userDetails.street_address
                     ? userDetails.street_address_2
-                      ? (userDetails.street_address?userDetails.street_address+" , ":"") +
-                        userDetails.street_address_2
+                      ? (userDetails.street_address ? userDetails.street_address + " , " : "") +
+                      userDetails.street_address_2
                       : userDetails.street_address
-                    :""}</span>
+                    : ""}</span>
                   {/* {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
                   {userDetails.country ? `, ${userDetails.country}` : ""} */}
-                <span className="address-text">
-                 {(userDetails.city_town?userDetails.city_town+" , ":"")+(userDetails.state?userDetails.state+" , ":"")+(userDetails.postal_code?userDetails.postal_code:"")}
-                </span>
-                <span className="address-text">
-                 {(userDetails.country?userDetails.country:"")}
-                </span>
+                  <span className="address-text">
+                    {(userDetails.city_town ? userDetails.city_town + " , " : "") + (userDetails.state ? userDetails.state + " , " : "") + (userDetails.postal_code ? userDetails.postal_code : "")}
+                  </span>
+                  <span className="address-text">
+                    {(userDetails.country ? userDetails.country : "")}
+                  </span>
                 </div>
               </Col>
             </Row>
@@ -273,22 +280,22 @@ class PersonalDetails extends Component {
                     {userDetails.deleted_by == 1 ? (
                       <span>Deactivated By User</span>
                     ) : (
-                      <span>Deactivated By Admin</span>
-                    )}
+                        <span>Deactivated By Admin</span>
+                      )}
                   </DateOfBirth>
                 </Col>
               </Row>
             ) : (
-              ""
-            )}
-             <Row>
-                <Col>
-                  <Button type="primary" onClick={this.sendResendPasswordLink}>Reset Password</Button>
-                </Col>
-              </Row>
+                ""
+              )}
+            <Row>
+              <Col>
+                <Button type="primary" onClick={this.sendResendPasswordLink}>Reset Password</Button>
+              </Col>
+            </Row>
           </ParentDiv>
         )}
-        {loader &&<FaldaxLoader/>}
+        {loader && <FaldaxLoader />}
       </div>
     );
   }
@@ -299,5 +306,5 @@ export default connect(
     token: state.Auth.get("token"),
     user: state.Auth.get("user")
   }),
-  { logout,showUserDetails }
+  { logout, showUserDetails }
 )(PersonalDetails);

@@ -25,7 +25,7 @@ const columns = [
         // fixed: 'left',
         render: object => (
             <>
-                {isAllowed("send_coin_admin") && <Tooltip className="cursor-pointer" title="Send"><Icon type="export" onClick={() => WalletFaldaxDashboard.openSendModal(object)}></Icon></Tooltip>}
+                {isAllowed("send_coin_admin") && (object["is_active"] == true) && <Tooltip className="cursor-pointer" title="Send"><Icon type="export" onClick={() => WalletFaldaxDashboard.openSendModal(object)}></Icon></Tooltip>}
                 {isAllowed("admin_faldax_wallet_details") && <Tooltip className="btn-icon" title="View"><Icon onClick={() => WalletFaldaxDashboard.navigateToView(object["coin_code"])} type="info-circle"></Icon></Tooltip>}
             </>
         )
@@ -122,8 +122,8 @@ class WalletFaldaxDashboard extends Component {
     }
 
     static openSendModal = async (values) => {
-        await self.getAssetAvailableBalance(values.coin_code);
-        self.setState({ sendModal: true, walletDetails: values });
+        await self.getAssetAvailableBalance(values.coin_code, values);
+        // self.setState({ sendModal: true, walletDetails: values });
     }
 
     static navigateToView = (coin_code) => {
@@ -149,6 +149,7 @@ class WalletFaldaxDashboard extends Component {
             const { searchData } = this.state;
             let res = await (await (isExportToCsv ? ApiUtils.getAllWallets(this.props.token) : ApiUtils.getAllWallets(this.props.token, searchData))).json();
             let [{ status, data, err, message }, logout] = [res, this.props.logout];
+            console.log(res)
             if (status == 200) {
                 if (isExportToCsv) {
                     this.setState({ csvData: data })
@@ -184,30 +185,30 @@ class WalletFaldaxDashboard extends Component {
             if (this.validator.allValid()) {
                 this.timeCounter = setTimeout(async () => {
                     try {
-                      this.loader.show();
-                      let res = await (
-                        await ApiUtils.getWalletNetworkFee(token, {
-                          dest_address: fields["dest_address"],
-                          amount: fields["amount"],
-                          coin: walletDetails.coin_code
-                        })
-                      ).json();
-                      if (res.status == 200) {
-                        this.setState({ networkFee: res.data });
-                      } else if (
-                        res.status == 400 ||
-                        res.status == 401 ||
-                        res.status == 403
-                      ) {
-                        this.openNotificationWithIcon("Error", res.err);
-                        this.props.logout();
-                      } else {
-                        this.openNotificationWithIcon("Error", res.err?res.err:res.message);
-                      }
+                        this.loader.show();
+                        let res = await (
+                            await ApiUtils.getWalletNetworkFee(token, {
+                                dest_address: fields["dest_address"],
+                                amount: fields["amount"],
+                                coin: walletDetails.coin_code
+                            })
+                        ).json();
+                        if (res.status == 200) {
+                            this.setState({ networkFee: res.data });
+                        } else if (
+                            res.status == 400 ||
+                            res.status == 401 ||
+                            res.status == 403
+                        ) {
+                            this.openNotificationWithIcon("Error", res.err);
+                            this.props.logout();
+                        } else {
+                            this.openNotificationWithIcon("Error", res.err ? res.err : res.message);
+                        }
                     } catch (error) {
-                        console.log("error",error);
+                        console.log("error", error);
                     } finally {
-                      this.loader.hide();
+                        this.loader.hide();
                     }
                 }, this.timer)
             } else {
@@ -239,7 +240,7 @@ class WalletFaldaxDashboard extends Component {
                     this.openNotificationWithIcon("Error", err)
                     logout();
                 } else {
-                    this.openNotificationWithIcon("Error", message?message:err)
+                    this.openNotificationWithIcon("Error", message ? message : err)
                 }
                 this.closeSendModal();
             } catch (err) {
@@ -253,17 +254,23 @@ class WalletFaldaxDashboard extends Component {
         }
     }
 
-    getAssetAvailableBalance = async (asset) => {
+    getAssetAvailableBalance = async (asset, values) => {
         try {
             this.setState({ loader: true });
             let res = await (await ApiUtils.getAvailableBalance(this.props.token, asset)).json();
             let { status, data, err, message } = res;
+            console.log(res);
             if (status == 200) {
                 this.setState({ availableBalance: data })
+                self.setState({ sendModal: true, walletDetails: values });
             } else if (status == 403) {
                 this.openNotificationWithIcon("Error", err);
                 this.props.logout();
-            } else {
+            } else if (status == 401) {
+                this.openNotificationWithIcon("Error", message);
+                this.setState({ sendModal: false })
+            }
+            else {
                 this.openNotificationWithIcon("Error", message);
             }
         } catch (error) {
@@ -296,16 +303,16 @@ class WalletFaldaxDashboard extends Component {
         return (
             <>
                 <TableDemoStyle className="isoLayoutContent">
-                <ExportToCSVComponent
-                    isOpenCSVModal={openCsvModal}
-                    onClose={() => {
-                    this.setState({ openCsvModal: false });
-                    }}
-                    filename="FALDAX_wallet.csv"
-                    data={csvData}
-                    header={exportHotReceiveWallet}
-                />
-                    <Form onSubmit={(e)=>{e.preventDefault();this.getWalletData();}}>
+                    <ExportToCSVComponent
+                        isOpenCSVModal={openCsvModal}
+                        onClose={() => {
+                            this.setState({ openCsvModal: false });
+                        }}
+                        filename="FALDAX_wallet.csv"
+                        data={csvData}
+                        header={exportHotReceiveWallet}
+                    />
+                    <Form onSubmit={(e) => { e.preventDefault(); this.getWalletData(); }}>
                         <Row justify="start" type="flex" className="table-filter-row">
                             <Col xs={12} md={10}>
                                 <Input placeholder="Search Asset" value={searchData} onChange={value => this.setState({ searchData: value.target.value })} />
@@ -360,7 +367,7 @@ class WalletFaldaxDashboard extends Component {
                                     <span className="wallet-send-summery-head"><b>Total Payload</b></span><span>{parseFloat(fields['amount']) && parseFloat(networkFee) ? (parseFloat(fields['amount']) + parseFloat(networkFee)).toFixed(8) : 0} {walletDetails.coin}</span><br />
                                 </div>
                                 <div className="float-right">
-                                    <span className="wallet-send-summery-head"><b>Fiat Value</b></span><span>$&nbsp;{parseFloat((parseFloat(walletDetails.fiat || 0) * parseFloat(fields['amount']||0))).toFixed(2)}</span><br />
+                                    <span className="wallet-send-summery-head"><b>Fiat Value</b></span><span>$&nbsp;{parseFloat((parseFloat(walletDetails.fiat || 0) * parseFloat(fields['amount'] || 0))).toFixed(2)}</span><br />
                                 </div>
                             </div>
                         </Form>

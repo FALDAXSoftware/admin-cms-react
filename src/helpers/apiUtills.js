@@ -4,7 +4,8 @@
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
-const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
+// const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
+const API_URL=process.env.REACT_APP_API_ENDPOINT;
 
 const ApiUtils = {
   //super admin sign in api
