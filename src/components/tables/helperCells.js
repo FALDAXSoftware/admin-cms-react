@@ -948,7 +948,7 @@ const ConvertSatoshiToAssetCell = (coin, balance) => {
 
 const TransactionIdHashCell = (coin_id, transaction_id) => {
   let url = "";
-  if(!transaction_id){
+  if (!transaction_id) {
     return <span>-</span>
   }
   switch (coin_id.toLowerCase()) {
@@ -1198,13 +1198,13 @@ const DateTimeCell = (data, type) => {
       <p>
         {data
           ? moment
+            .utc(data)
+            .local()
+            .format("DD MMM YYYY HH:mm:ss")
+            ? moment
               .utc(data)
               .local()
-              .format("DD MMM YYYY HH:mm:ss")
-            ? moment
-                .utc(data)
-                .local()
-                .format("DD MMM, YYYY HH:mm:ss")
+              .format("DD MMM, YYYY HH:mm:ss")
             : ""
           : ""}
       </p>

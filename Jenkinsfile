@@ -32,7 +32,7 @@ volumes: [
               sh "apk upgrade "
               sh "apk add --no-cache bash git openssh"
               sh "npm install"
-              sh "npm run build"
+              sh "npm run build${getEnvConfig()}"
               sh "ls -la" 
               if (env.BRANCH_NAME == 'development') {
                         withAWS(credentials:'jenkins_s3_upload') {
@@ -81,4 +81,13 @@ def getNamespace(branch){
         default : return null;
     }
 }
+def getEnvConfig(branch){
+  switch(branch){
+      case 'development' :  return ":preprod";
+      case 'preprod' :  return ":preprod";
+      case 'mainnet' :  return ":mainnet";
+      default : return "";
+  }
+}
+
 

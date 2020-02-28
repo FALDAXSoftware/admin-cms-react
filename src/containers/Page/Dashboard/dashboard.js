@@ -127,7 +127,7 @@ class Dashboard extends Component {
     this.setState({ errMsg: false });
   };
 
-  componentDidMount() {
+  componentDidMount() { 
       this._getAllCount();
   }
 
