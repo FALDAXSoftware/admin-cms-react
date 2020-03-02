@@ -25,7 +25,7 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } f
 import moment from "moment";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
-import { DateTimeCell } from "../../../components/tables/helperCells";
+// import { DateTimeCell } from "../../../components/tables/helperCells";
 import { exportUsers } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;

@@ -198,7 +198,6 @@ class Offers extends Component {
       limit,
       campaignId,
       showDeleteModal,
-      metabaseUrl,
       searchData,
       rangeDate,
       usage_type,
@@ -281,7 +280,6 @@ class Offers extends Component {
                   <Col xs={12} md={4}>
                     <Select
                       className="full-width"
-                      placeholder="Type"
                       placeholder="Select Type"
                       value={usage_type}
                       onChange={value => this.setState({ usage_type: value })}

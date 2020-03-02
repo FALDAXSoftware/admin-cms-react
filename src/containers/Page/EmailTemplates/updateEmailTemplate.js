@@ -7,7 +7,6 @@ import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import CKEditor from "ckeditor4-react";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
-import TableDemoStyle from "../../Tables/antTables/demo.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 
 const { logout } = authAction;

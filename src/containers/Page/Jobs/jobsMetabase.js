@@ -50,6 +50,7 @@ class JobsMetabase extends Component {
               className="metabase-iframe"
               src={metabaseUrl}
               frameBorder="0"
+              title="job metabase"
               width="100%"
               allowtransparency="true"
             ></iframe>

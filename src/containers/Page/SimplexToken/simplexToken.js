@@ -8,7 +8,7 @@ import FaldaxLoader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from "../../Shared/backBttton";
+// import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 
 const TabPane = Tabs.TabPane;

@@ -1,6 +1,6 @@
 import React from 'react';
 import clone from 'clone';
-import { TextCell, DateCell, TwoFAActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
+import { TextCell,TwoFAActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, name = null, Email = null, file = null,
     Status = null, Reason = null, createdAt = null) => {

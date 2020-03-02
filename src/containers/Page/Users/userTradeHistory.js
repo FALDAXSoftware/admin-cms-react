@@ -13,12 +13,12 @@ import {
 } from "antd";
 import { tradeTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
-import TableDemoStyle from "../../Tables/antTables/demo.style";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
 import { ExecutionUl } from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";

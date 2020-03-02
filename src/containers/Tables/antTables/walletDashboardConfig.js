@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key) => {
     const value = object[key];

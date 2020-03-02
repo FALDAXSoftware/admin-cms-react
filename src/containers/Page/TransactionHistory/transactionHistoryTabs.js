@@ -8,7 +8,7 @@ import Metabase from './metabase';
 import { isAllowed } from '../../../helpers/accessControl';
 import Transaction from "./transactionHistory"
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
-import { ResidualTransactionHistory } from './residualTransactionHistory';
+// import { ResidualTransactionHistory } from './residualTransactionHistory';
 
 
 class KycTabs extends Component {

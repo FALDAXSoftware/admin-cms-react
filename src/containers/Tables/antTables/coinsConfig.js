@@ -3,7 +3,6 @@ import clone from "clone";
 import IntlMessages from "../../../components/utility/intlMessages";
 import {
   TextCell,
-  DateCell,
   CoinActionCell,
   SwitchCell,
   DateTimeCell
@@ -121,7 +120,7 @@ const columns = [
     width:"20%",
    align:"left",
     sorter: true,
-    render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
+    render:object=><span><img className="small-icon-img" alt="asset" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
   },
   // {
   //   title: <IntlMessages id="coinTable.title.code" />,

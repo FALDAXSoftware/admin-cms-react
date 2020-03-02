@@ -26,7 +26,7 @@ import moment from "moment";
 import { withRouter } from "react-router-dom";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
-import { DateTimeCell } from "../../../components/tables/helperCells";
+// import { DateTimeCell } from "../../../components/tables/helperCells";
 import { exportUsers } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
@@ -301,8 +301,8 @@ class InActiveUsers extends Component {
       allCountries,
       showDeleteUserModal,
       limit,
-      startDate,
-      endDate,
+      // startDate,
+      // endDate,
       rangeDate,openCsvExportModal,
       csvData
     } = this.state;

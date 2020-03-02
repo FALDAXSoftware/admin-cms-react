@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification, Row, Col, Button } from 'antd';
+import { Input, Pagination, notification, Row, Col, Button } from 'antd';
 import { jobAppTableInfos as tableColumn } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -10,15 +10,15 @@ import ViewJobAppModal from './viewJobAppModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
-import { exportJobs, exportJobApplicants } from '../../../helpers/exportToCsv/headers';
+import { exportJobApplicants } from '../../../helpers/exportToCsv/headers';
 import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const { logout } = authAction;
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 var self;
 
 class JobApplications extends Component {

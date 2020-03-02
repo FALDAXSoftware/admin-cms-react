@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import UserTradeHistory from './userTradeHistory';
 import UserSimplexHistory from './userSimplexHistory';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 
 const { TabPane } = Tabs;

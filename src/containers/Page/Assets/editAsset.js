@@ -6,7 +6,7 @@ import EditAssetDetails from './editAssetDetails';
 import EditAssetLimit from './editAssetLimit';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 const { logout } = authAction;

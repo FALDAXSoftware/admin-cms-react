@@ -4,7 +4,7 @@ import { Tabs } from 'antd';
 import { TabPane } from '../../../components/uielements/tabs';
 import WithdrawalRequest from './withdrawRequest'
 import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import {  withRouter} from "react-router-dom";
 import Metabase from "./metabase";
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';

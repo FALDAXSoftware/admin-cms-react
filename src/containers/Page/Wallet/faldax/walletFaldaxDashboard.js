@@ -12,7 +12,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from './../../../../helpers/accessControl';
 import { PrecisionCell } from '../../../../components/tables/helperCells';
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
-import { exportWallet, exportHotReceiveWallet } from '../../../../helpers/exportToCsv/headers';
+import { exportHotReceiveWallet } from '../../../../helpers/exportToCsv/headers';
 
 var self
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Row, Col, notification, Card, Progress, Tabs, Divider } from "antd";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js"
+import { Row, Col, notification, Card, Divider } from "antd";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js"
 import basicStyle from "../../../settings/basicStyle";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
@@ -25,13 +25,6 @@ const CardWrapper = styled(Card)`
   width: 100%;
   & .ant-card-body {
     min-height: 219px;
-  }
-`;
-const IframeCol = styled(Col)`
-  width: 100%;
-  > iframe {
-    height: calc(100vh - 326px);
-    min-height: 500px;
   }
 `;
 const ChartWrapper = styled.div`
@@ -280,14 +273,14 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { rowStyle, colStyle, colStyle2 } = basicStyle;
+    const { rowStyle } = basicStyle;
     const {
       activeUsers,
       inactiveUsers,
       activeCoins,
       InactiveCoins,
-      activePairs,
-      InactivePairs,
+      // activePairs,
+      // InactivePairs,
       legalCountries,
       illegalCountries,
       PartialCountries,
@@ -328,47 +321,47 @@ class Dashboard extends Component {
       ]
     };
 
-    const transactionData = {
-      labels: [
-        "Total Last 7 days",
-        "Grand Total Last 7 days",
-        "Average Per day",
-        "Total Last 30 days"
-      ],
-      datasets: [
-        {
-          data: [
-            legalCountries,
-            illegalCountries,
-            neutralCountries,
-            neutralCountries
-          ],
-          backgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"],
-          hoverBackgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"]
-        }
-      ]
-    };
+    // const transactionData = {
+    //   labels: [
+    //     "Total Last 7 days",
+    //     "Grand Total Last 7 days",
+    //     "Average Per day",
+    //     "Total Last 30 days"
+    //   ],
+    //   datasets: [
+    //     {
+    //       data: [
+    //         legalCountries,
+    //         illegalCountries,
+    //         neutralCountries,
+    //         neutralCountries
+    //       ],
+    //       backgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"],
+    //       hoverBackgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"]
+    //     }
+    //   ]
+    // };
 
-    const tradeData = {
-      labels: [
-        "Total Last 7 days",
-        "Grand Total Last 7 days",
-        "Average Per day",
-        "Total Last 30 days"
-      ],
-      datasets: [
-        {
-          data: [
-            legalCountries,
-            illegalCountries,
-            neutralCountries,
-            neutralCountries
-          ],
-          backgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"],
-          hoverBackgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"]
-        }
-      ]
-    };
+    // const tradeData = {
+    //   labels: [
+    //     "Total Last 7 days",
+    //     "Grand Total Last 7 days",
+    //     "Average Per day",
+    //     "Total Last 30 days"
+    //   ],
+    //   datasets: [
+    //     {
+    //       data: [
+    //         legalCountries,
+    //         illegalCountries,
+    //         neutralCountries,
+    //         neutralCountries
+    //       ],
+    //       backgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"],
+    //       hoverBackgroundColor: ["#B04387", "#EDED16", "#D2601F", "#B95671"]
+    //     }
+    //   ]
+    // };
 
     const kycData = {
       labels: ["Total IDs under review", "Total IDs approved", "Total IDs declined"],
