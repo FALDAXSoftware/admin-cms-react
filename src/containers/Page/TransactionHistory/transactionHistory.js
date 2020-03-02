@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Input,
-  Tabs,
   Pagination,
   Select,
   Button,
@@ -256,8 +255,8 @@ class Transactions extends Component {
       rangeDate,
       filterVal,
       limit,
-      fees,
-      metabaseUrl,
+      // fees,
+      // metabaseUrl,
       openCsvModal,
       csvData
     } = this.state;

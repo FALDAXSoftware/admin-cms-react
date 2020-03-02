@@ -5,14 +5,14 @@ import { ticketsTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, notification } from 'antd';
+import { notification } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { withRouter } from 'react-router';
 import { TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 
 class UserTickets extends Component {
     constructor(props) {

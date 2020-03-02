@@ -27,7 +27,7 @@ const columns=[
        align:"left",
         key:4,
         width:100,
-        render:object=><span><img className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
+        render:object=><span><img alt="assets" className="small-icon-img" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
     },
     {
         title:<IntlMessages id="walletWarmDashboardTable.title.balance"/>,

@@ -17,7 +17,7 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
 import moment from "moment";
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter} from "react-router-dom";

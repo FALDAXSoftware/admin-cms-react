@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, JobAppActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
+import { TextCell, JobAppActionCell, DateTimeCell, ToolTipsCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailId = null, phone = null,
     created = null, resumeDoc = null, cover = null, linkedin = null, url = null) => {

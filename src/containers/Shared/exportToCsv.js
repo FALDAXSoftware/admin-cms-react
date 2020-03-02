@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Checkbox, Button, Row, Col, Tooltip, Icon, Spin } from "antd";
+import { Modal, Checkbox, Button, Row, Col, Tooltip, Icon } from "antd";
 import { CSVLink } from "react-csv";
 import clone from "clone";
-import { Select } from "antd";
+// import { Select } from "antd";
 import {
   DateTimeCell,
   PrecisionCell
 } from "../../components/tables/helperCells";
-const { Option } = Select;
+// const { Option } = Select;
 const ExportToCSVComponent = props => {
   // let [columns,setColumns]=useState([])
   let [isOpen, setIsOpen] = useState(props.isOpenCSVModal);

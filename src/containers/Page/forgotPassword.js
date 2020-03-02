@@ -84,7 +84,7 @@ export default class extends Component {
           <div className="isoFormContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <img src={logo} />
+                <img src={logo} alt=""/>
               </Link>
             </div>
 

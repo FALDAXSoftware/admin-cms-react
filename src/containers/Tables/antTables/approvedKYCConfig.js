@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, KYCActionCell, TierCell, DateCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, KYCActionCell, TierCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null, emailId = null,
     response = null, details = null, w_response = null, add = null, countryName = null,

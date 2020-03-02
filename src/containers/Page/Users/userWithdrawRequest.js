@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Row, Form, Col,Tabs } from 'antd';
+import { Input, Pagination, notification, Select, Button, Row, Form, Col } from 'antd';
 import { userWithdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,13 +8,13 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { export2faRequest } from '../../../helpers/exportToCsv/headers';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class UserWithdrawRequest extends Component {
