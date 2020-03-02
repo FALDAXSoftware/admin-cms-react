@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import { TabPane } from '../../../components/uielements/tabs';
 import {  withRouter} from "react-router-dom";
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import  ApprovedKYC  from './approvedKYC';
 import  ReviewKYC  from './reviewKYC';

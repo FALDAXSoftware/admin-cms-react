@@ -103,7 +103,8 @@ export default class extends Component {
           fields["confirmPwd"] != "" &&
           fields["confirmPwd"] != undefined
         ) {
-          this.state.errors["main"] =
+          let {errors}=this.state;
+          errors["main"] =
             "New Password and Confirm Password doesn't match.";
         }
         this.setState({ errors, loader: false });
@@ -128,7 +129,7 @@ export default class extends Component {
           <div className="isoFormContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <img src={logo} />
+                <img alt="reset password" src={logo} />
               </Link>
             </div>
 

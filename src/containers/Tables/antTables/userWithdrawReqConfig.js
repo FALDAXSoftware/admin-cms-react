@@ -1,7 +1,7 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, DateCell, ApproveCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { TextCell, ApproveCell, DateTimeCell } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, m_email = null, source = null, destination = null,
     coinAmt = null, approve = null, createdOn = null) => {

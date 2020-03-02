@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Tag,
   notification,
   Input,
   Form,
@@ -24,7 +23,7 @@ import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import SimpleReactValidator from "simple-react-validator";
 import authAction from "../../../redux/auth/actions";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { OfferDateCell} from "../../../components/tables/helperCells";
 import { messages } from "../../../helpers/messages";
@@ -244,12 +243,12 @@ class AddCampaign extends Component {
     }
   }
 
-  _resetAddForm = () => {
-    const { fields, endDate, startDate } = this.state;
-  };
+  // _resetAddForm = () => {
+  //   const { fields, endDate, startDate } = this.state;
+  // };
 
   _resetAddOfferForm = () => {
-    const { offerFields, startOfferDate, endOfferDate } = this.state;
+    const { offerFields} = this.state;
     offerFields["offer_name"] = "";
     offerFields["offer_code_description"] = "";
     offerFields["no_of_transactions"] = "";
@@ -768,7 +767,7 @@ class AddCampaign extends Component {
     const {
       loader,
       fields,
-      is_active,
+      // is_active,
       checkvalue,
       dateErrMsg,
       startDate,
@@ -783,9 +782,9 @@ class AddCampaign extends Component {
       campaign_offers,
       filterVal,
       userList,
-      errMsg,
+      // errMsg,
       isUpdate,
-      errType,
+      // errType,
       isOfferUpdate
     } = this.state;
 

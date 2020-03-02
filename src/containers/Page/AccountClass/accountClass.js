@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Tabs, notification, Modal, Input, Icon } from "antd";
+import { Button,notification, Modal, Input, Icon } from "antd";
 import { accountClassTableinfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 import {  withRouter} from "react-router-dom";
@@ -15,7 +15,7 @@ import { isAllowed } from '../../../helpers/accessControl';
 import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 var self;
 
 class AccountClass extends Component {

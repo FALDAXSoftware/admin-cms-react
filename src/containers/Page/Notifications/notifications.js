@@ -8,14 +8,14 @@ import SimpleReactValidator from 'simple-react-validator';
 import { isAllowed } from '../../../helpers/accessControl';
 import { messages } from '../../../helpers/messages'
 import styled from 'styled-components';
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
-const SaveBtn = styled(Button)`
-    float: right;
-    margin: 10px !important;
-`
+// const SaveBtn = styled(Button)`
+//     float: right;
+//     margin: 10px !important;
+// `
 const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
 
 const EditableContext = React.createContext();

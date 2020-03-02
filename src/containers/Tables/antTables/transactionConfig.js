@@ -17,7 +17,7 @@ const renderCell = (object, type, key, user = null, source = null, destination =
     const created_at = object[createdOn];
     const transaction_id = object[transactionID];
     const coin_id = object[coin];
-    const coin_code = object[code];
+    // const coin_code = object[code];
 
     switch (type) {
         case 'DateTimeCell':

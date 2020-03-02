@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, notification } from 'antd';
+import { notification } from 'antd';
 import { networkFeeTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import TableWrapper from "../../Tables/antTables/antTable.style";
@@ -8,7 +8,7 @@ import EditNetworkFeeModal from './editNetworkFeeModal';
 import authAction from '../../../redux/auth/actions';
 import { withRouter} from "react-router-dom";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { TwoFactorModal, TwoFactorEnableModal } from '../../Shared/2faModal';
+import {TwoFactorEnableModal } from '../../Shared/2faModal';
 
 const { logout } = authAction;
 var self;
@@ -127,7 +127,7 @@ class NetworkFee extends Component {
     this.setState(coinFees)
   }
   render() {
-    const { errType, errMsg, show2FAEnableModel, coinFees, modalData, showEditNetworkFeeModal ,show2FAModel} = this.state;
+    const { errType, errMsg, show2FAEnableModel, coinFees, modalData, showEditNetworkFeeModal} = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -141,9 +141,8 @@ class NetworkFee extends Component {
           columns={networkFeeTableInfos[0].columns}
           pagination={false}
           dataSource={coinFees}
-          className="isoCustomizedTable"
+          className="isoCustomizedTable fill-width"
           onChange={this.handleNetworkChange}
-          className="fill-width"
           bordered
         />
         <EditNetworkFeeModal

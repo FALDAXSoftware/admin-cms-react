@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select,Col, Button, Form, Row, Tabs, Icon,DatePicker} from 'antd';
+import { Input, Pagination, notification, Select,Col, Button, Form, Row, Icon,DatePicker} from 'antd';
 import { transactionTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,17 +8,17 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import moment from 'moment';
 import FaldaxLoader from '../faldaxLoader';
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PrecisionCell } from '../../../components/tables/helperCells';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { PageCounterComponent } from '../../Shared/pageCounter';
-import { exportCreditCard, exportTransactionHistory } from '../../../helpers/exportToCsv/headers';
+import {  exportTransactionHistory } from '../../../helpers/exportToCsv/headers';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 const {RangePicker}=DatePicker;
 

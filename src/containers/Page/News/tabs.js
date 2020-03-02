@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import {  withRouter} from "react-router-dom";
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import News from './news';
 import { TabPane } from '../../../components/uielements/tabs';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';

@@ -31,7 +31,6 @@ const breadcrumbNameMap = {
     "/dashboard/referral":" Affiliate Program & Referrals",
     "/dashboard/referral/:id":"Details",
     "/dashboard/account-class":" Account Class Management",
-    "/dashboard/email-templates":" Email-Templates",
     "/dashboard/two-factor-requests":" 2FA Requests",
     "/dashboard/notifications":" Notifications",
     "/dashboard/key":" Encrypt Key",

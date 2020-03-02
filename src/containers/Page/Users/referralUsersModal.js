@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { userReferralInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
-import { exportCreditCard, exportReferralUsers } from '../../../helpers/exportToCsv/headers';
+import {exportReferralUsers } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 

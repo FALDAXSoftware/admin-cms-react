@@ -43,6 +43,7 @@ class BatchMetabase extends Component {
         {metabaseUrl && (
           <div class="full-width">
             <iframe
+              title="Metabase"
               className="metabase-iframe"
               src={metabaseUrl}
               frameborder="0"

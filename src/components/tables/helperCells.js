@@ -14,7 +14,7 @@ import { Jobs } from "../../containers/Page/Jobs/jobs";
 import { JobApplications } from "../../containers/Page/Jobs/jobApplications";
 import { LimitManagement } from "../../containers/Page/LimitManagement/limitManagement";
 import KYC from "../../containers/Page/KYC/kyc";
-import Fees from "../../containers/Page/Fees/feesWithdrawal";
+// import Fees from "../../containers/Page/Fees/feesWithdrawal";
 import News from "../../containers/Page/News/news";
 import AccountClass from "../../containers/Page/AccountClass/accountClass";
 import { EmailTemplates } from "../../containers/Page/EmailTemplates/emailTemplates";

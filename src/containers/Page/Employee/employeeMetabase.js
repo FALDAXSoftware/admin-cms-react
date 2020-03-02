@@ -58,6 +58,7 @@ class EmployeeMetabase extends Component {
         {metabaseUrl && (
           <div className="full-width">
             <iframe
+            title="Employee Metabase"
               className="metabase-iframe"
               src={metabaseUrl}
               frameBorder="0"

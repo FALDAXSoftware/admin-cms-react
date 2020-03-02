@@ -13,7 +13,7 @@ import moment from "moment";
 import { DateTimeCell} from '../../../../components/tables/helperCells';
 import { PageCounterComponent } from '../../../Shared/pageCounter';
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
-import { exportCryptoOnly, exportCryptoOnlyWallet } from '../../../../helpers/exportToCsv/headers';
+import { exportCryptoOnlyWallet } from '../../../../helpers/exportToCsv/headers';
 var self;
 
 const {RangePicker}=DatePicker;
@@ -200,7 +200,7 @@ class WalletJstDetailsComponent extends Component {
             const {page,sortOrder,sorterCol,limit,searchData,rangeDate,coin_code}=this.state;
             let start_date=rangeDate?moment(rangeDate[0]).toISOString():"",end_date=rangeDate?moment(rangeDate[1]).toISOString():"";
             let res=await (await (isExportToCsv?ApiUtils.walletDashboard(this.props.token).getWalletDetailByName("",1,EXPORT_LIMIT_SIZE,"","","","","",3):ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(coin_code,page,limit,sorterCol,sortOrder,searchData,start_date,end_date,3))).json();
-            let [{status,walletValue,err,message,tradeCount},logout]=[res,this.props.logout];
+            let [{status,walletValue,err,tradeCount},logout]=[res,this.props.logout];
             if(status==200){
                 if(isExportToCsv){
                     this.setState({csvData:walletValue})

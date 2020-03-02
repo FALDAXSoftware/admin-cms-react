@@ -4,10 +4,10 @@ import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import { withRouter} from "react-router-dom";
 import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row,Col,Input,DatePicker, Button, Select, Form, Icon } from 'antd';
+import { notification, Row,Col,Input, Button, Select, Form, Icon } from 'antd';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
+import { PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, S3BucketImageURL } from '../../../../helpers/globals';
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import { DateTimeCell, TransactionIdHashCell, ConvertSatoshiToAssetCell } from '../../../../components/tables/helperCells';
 
@@ -129,7 +129,7 @@ class WalletWarmDetailsComponent extends Component {
         }
     }
     render() { 
-        const [{loader,transfers,count,limit,page,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
+        const [{loader,transfers,searchData,rangeDate,coin_code,assetsList},pageSizeOptions] =[this.state,PAGE_SIZE_OPTIONS];
         return (
             <>
                    <TableDemoStyle className="isoLayoutContent">

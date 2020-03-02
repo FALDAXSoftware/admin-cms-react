@@ -184,7 +184,7 @@ class EditUser extends Component {
       fields,
       selectedTier,
       selectedClass,
-      isKYC,
+      // isKYC,
       countryCode,
       countrySelected,
       stateSelected,

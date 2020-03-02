@@ -3,9 +3,9 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { historyTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, Input, Pagination, DatePicker,Row, Button, Form, notification,Icon,Col } from 'antd';
+import {Input, Pagination, DatePicker,Row, Button, Form, notification,Icon,Col } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import moment from 'moment';
 import authAction from '../../../redux/auth/actions';
@@ -16,7 +16,7 @@ import { exportLoginHistory } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 
 class LoginHistory extends Component {
