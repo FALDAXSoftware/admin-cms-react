@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import LayoutWrapper from "../../../components/utility/layoutWrapper"
 import TableDemoStyle from "../../Tables/antTables/demo.style"
-import { Tabs, Card, Row, Col, Checkbox, Button, notification, Tooltip, Icon, Divider, Select } from "antd"
+import { Card, Row, Col, Checkbox, Button, notification, Tooltip, Icon, Divider, Select } from "antd"
 import ApiUtils from "../../../helpers/apiUtills";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from '../../../redux/auth/actions';

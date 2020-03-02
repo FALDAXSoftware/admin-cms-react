@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Tabs, notification, Row,Button ,Col } from 'antd';
+import { Input,notification, Row,Button ,Col } from 'antd';
 import { stateTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";

@@ -155,9 +155,9 @@ const tableColumns = [
 
 const { logout } = authAction;
 
-const CampaignCol = styled(Col)`
-  margin: 0 0 15px 0;
-`;
+// const CampaignCol = styled(Col)`
+//   margin: 0 0 15px 0;
+// `;
 
 const CampRow = styled(Row)`
   display: flex !important;
@@ -284,7 +284,7 @@ class ViewCampaign extends Component {
           </CampRow>
           <div className='mg-top-15'>
             <Divider orientation="left">Offers</Divider>
-            <TableWrapper bordered scroll={TABLE_SCROLL_HEIGHT} dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
+            <TableWrapper  scroll={TABLE_SCROLL_HEIGHT} dataSource={campaignDetails.campaign_offers} bordered pagination={false} columns={tableColumns}/>
           </div>
         </TableDemoStyle>
         {loader && <Loader />}

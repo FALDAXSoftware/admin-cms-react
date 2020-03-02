@@ -9,11 +9,11 @@ import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 import {
   Tabs,
-  Input,
-  Pagination,
+  // Input,
+  // Pagination,
   DatePicker,
-  Button,
-  Form,
+  // Button,
+  // Form,
   notification
 } from "antd";
 import FaldaxLoader from "../faldaxLoader";
@@ -22,8 +22,8 @@ import authAction from "../../../redux/auth/actions";
 
 const { logout } = authAction;
 
-const TabPane = Tabs.TabPane;
-const { RangePicker } = DatePicker;
+// const TabPane = Tabs.TabPane;
+// const { RangePicker } = DatePicker;
 
 class AccountSummary extends Component {
   constructor(props) {
@@ -51,7 +51,7 @@ class AccountSummary extends Component {
 
   _getAllLoginHistory = () => {
     const { token, user_id } = this.props;
-    const { page, limit, searchHistory, startDate, endDate } = this.state;
+    // const { page, limit, searchHistory, startDate, endDate } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
@@ -182,15 +182,15 @@ class AccountSummary extends Component {
       allHistory,
       loader,
       totalCount,
-      page,
-      rangeDate,
-      searchHistory,
+      // page,
+      // rangeDate,
+      // searchHistory,
       errMsg,
       errType,
-      limit,
+      // limit,
       deleteDate
     } = this.state;
-    let pageSizeOptions = PAGE_SIZE_OPTIONS;
+    // let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());

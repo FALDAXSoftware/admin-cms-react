@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import WalletOverview from './walletOverview';
 import AssetWalletHistory from './assetWalletHistory';
 import { LayoutContentWrapper } from '../../../components/utility/layoutWrapper.style';

@@ -13,7 +13,7 @@ import moment from "moment";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { DateTimeCell, TransactionIdHashCell, PrecisionCell, ToolTipsCell } from '../../../../components/tables/helperCells';
 import { PageCounterComponent } from '../../../Shared/pageCounter';
-import { exportCreditCard, exportResidualHeaders, exportDirectDeposit } from '../../../../helpers/exportToCsv/headers';
+import { exportDirectDeposit } from '../../../../helpers/exportToCsv/headers';
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
 
 
@@ -205,7 +205,7 @@ class WalletFaldaxDetailsComponent extends Component {
           transaction_type
         )
         )).json();
-      let [{ status, walletValue, err, message, tradeCount }, logout] = [
+      let [{ status, walletValue, err, tradeCount }, logout] = [
         res,
         this.props.logout
       ];
@@ -309,6 +309,7 @@ class WalletFaldaxDetailsComponent extends Component {
                       <span>
                         <img
                           className="small-icon-img"
+                          alt=""
                           src={S3BucketImageURL + ele.icon}
                         />
                         &nbsp;{ele.name}

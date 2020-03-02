@@ -10,7 +10,7 @@ export default ({ collapsed }) => {
         <div>
           <h3>
             <Link to="/dashboard">
-              <img style={{ width: '50px' }} alt="site-logo" src={siteLogo} />
+              <img alt="" style={{ width: '50px' }} alt="site-logo" src={siteLogo} />
             </Link>
           </h3>
         </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, notification, Checkbox, Button } from 'antd';
+import { Modal, Input, notification, Button } from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';

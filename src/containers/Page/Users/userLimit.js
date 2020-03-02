@@ -5,7 +5,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import { isAllowed } from '../../../helpers/accessControl';
-import createNotification from '../../../components/notification';
+// import createNotification from '../../../components/notification';
 import { messages } from '../../../helpers/messages';
 
 const { logout } = authAction;

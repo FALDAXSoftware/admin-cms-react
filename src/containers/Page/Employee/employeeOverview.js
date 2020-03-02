@@ -102,7 +102,7 @@ class PersonalDetails extends Component {
 
     _changePassword = () => {
         const { token } = this.props;
-        let { fields, errors } = this.state;
+        let { fields } = this.state;
         let _this = this;
 
         if (this.PasswordValidator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
@@ -192,7 +192,7 @@ class PersonalDetails extends Component {
     }
 
     render() {
-        const { fields, errors, selectedRole, allRoles, errMsg, errType, loader, pwdError } = this.state;
+        const { fields, selectedRole, allRoles, errMsg, errType, loader, pwdError } = this.state;
         let roleOptions = allRoles && allRoles.map((role) => {
             return (
                 <Option value={role.key}>{role.value}</Option>

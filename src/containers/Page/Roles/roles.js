@@ -6,7 +6,7 @@ import {  withRouter} from "react-router-dom";
 import  ViewRoles  from './viewRoles';
 import RolesMetabase from './rolesMetabase';
 import { isAllowed } from '../../../helpers/accessControl';
-import { BackButton } from '../../Shared/backBttton';
+// import { BackButton } from '../../Shared/backBttton';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 class RolesTab extends Component {
     state = {  }    

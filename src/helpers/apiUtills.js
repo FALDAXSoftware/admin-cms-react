@@ -2662,7 +2662,7 @@ const ApiUtils = {
     });
   },
 
-  getAllWhitelistIP: function(token, user_id, page, limit) {
+  getAllUserWhitelistIP: function(token, user_id, page, limit) {
     return fetch(
       API_URL +
         "/admin/get-user-whitelist-ip?user_id=" +

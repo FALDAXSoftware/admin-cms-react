@@ -6,7 +6,7 @@ import Metabase from './tradeMatabase'
 import TradeHistory from './tradeHistory';
 import SimplexHistory from './simplexHistory';
 import { isAllowed } from "../../../helpers/accessControl";
-import { BackButton } from '../../Shared/backBttton.js';
+// import { BackButton } from '../../Shared/backBttton.js';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb.js';
 
 const TabPane = Tabs.TabPane;

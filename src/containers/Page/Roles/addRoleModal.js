@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
-import { Modal, Input, Checkbox, notification, Button, Form, Row, Col } from 'antd';
+import { Modal, Input, Checkbox, notification, Button, Form} from 'antd';
 import SimpleReactValidator from 'simple-react-validator';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 
 const { logout } = authAction;
-const CheckboxGroup = Checkbox.Group;
 
 class AddRoleModal extends Component {
     constructor(props) {
@@ -72,7 +71,7 @@ class AddRoleModal extends Component {
 
     _addRole = () => {
         const { token, getAllRoles } = this.props;
-        let { fields, showError, checkedList } = this.state;
+        let { fields} = this.state;
         let roles = {}
         let _this = this;
 
@@ -117,7 +116,7 @@ class AddRoleModal extends Component {
 
     render() {
         const {
-            loader, showAddRoleModal, fields, errMsg, errType, isDisabled, showError, allRoles
+            loader, showAddRoleModal, fields, errMsg, errType, isDisabled, allRoles
         } = this.state;
         let allRoleOptions = []
 

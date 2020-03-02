@@ -9,7 +9,7 @@ import TableDemoStyle from '../Tables/antTables/demo.style';
 import TableWrapper from "../Tables/antTables/antTable.style";
 import AddProfileIPModal from './addProfileIPModal';
 import FaldaxLoader from './faldaxLoader';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import AddProfilePermanentIPModal from './addProfilePermanentIPModal';
 import { PAGE_SIZE_OPTIONS, PAGESIZE } from '../../helpers/globals';
 
@@ -23,7 +23,7 @@ class ProfileWhitelist extends Component {
       IPCount: 0,
       page: 1,
       limit: PAGESIZE,
-      allIPAddresses: "",
+      allIPAddresses: [],
       showDeleteIPModal: false,
       showAddProfileIPModal: false
     };
@@ -45,7 +45,7 @@ class ProfileWhitelist extends Component {
     const { page, limit } = this.state;
     let _this = this;
 
-    ApiUtils.getAllWhitelistIP(token, user.id, page, limit)
+    ApiUtils.getAllUserWhitelistIP(token, user.id, page, limit)
       .then(response => response.json())
       .then(function(res) {
         if (res.status == 200) {
@@ -370,6 +370,7 @@ class ProfileWhitelist extends Component {
               />
               {loader && <FaldaxLoader />}
               <TableWrapper
+                rowKey="id"
                 {...this.state}
                 columns={tableInfo.columns}
                 pagination={false}

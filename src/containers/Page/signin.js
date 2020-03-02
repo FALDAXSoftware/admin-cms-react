@@ -110,7 +110,7 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-                <img src={logo} />
+                <img src={logo} alt="signin"/>
             </div>
             <div className="isoSignInForm">
             <Form onSubmit={this._handleLogin}>

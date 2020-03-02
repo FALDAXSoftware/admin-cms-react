@@ -572,7 +572,7 @@ class BatchBalance extends React.Component {
       transactionID,
       showDownloadPopup,
       selectedExport,
-      purchaseDownloadData,
+      // purchaseDownloadData,
       summaryDownloadData
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;

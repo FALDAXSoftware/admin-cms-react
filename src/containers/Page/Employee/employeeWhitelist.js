@@ -57,7 +57,7 @@ class EmployeeWhitelist extends Component {
         const { page, limit } = this.state;
         let _this = this;
 
-        ApiUtils.getAllWhitelistIP(token, emp_id, page, limit)
+        ApiUtils.getAllUserWhitelistIP(token, emp_id, page, limit)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -287,6 +287,7 @@ class EmployeeWhitelist extends Component {
                                         />
                                         {loader && <FaldaxLoader />}
                                         < TableWrapper
+                                            rowKey="id"
                                             {...this.state}
                                             columns={tableInfo.columns}
                                             pagination={false}

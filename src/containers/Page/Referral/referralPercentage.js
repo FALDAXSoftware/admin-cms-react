@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Pagination, Input, Button, notification } from 'antd';
+import { Pagination, Input, Button, notification } from 'antd';
 import { connect } from 'react-redux';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from "../faldaxLoader";

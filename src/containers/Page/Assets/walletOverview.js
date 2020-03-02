@@ -13,10 +13,10 @@ import { BUCKET_URL } from '../../../helpers/globals';
 
 const { logout } = authAction;
 
-const ParentDiv = styled.div`
-    background-color: white;
-    margin: 30px !important;
-`
+// const ParentDiv = styled.div`
+//     background-color: white;
+//     margin: 30px !important;
+// `
 
 class WalletOverview extends Component {
     constructor(props) {
@@ -115,7 +115,7 @@ class WalletOverview extends Component {
 
         return (
             <>
-                <Divider><span className="wallet-head"><img className="icon-img" src={BUCKET_URL+walletUserData.coin_icon}></img>&nbsp;{walletUserData.coin}</span></Divider>
+                <Divider><span className="wallet-head"><img  alt="" className="icon-img" src={BUCKET_URL+walletUserData.coin_icon}></img>&nbsp;{walletUserData.coin}</span></Divider>
                 {
                     Object.keys(walletUserData).length > 0 ? (walletUserData.is_admin && walletUserData.flag == 0) ?
                         <Row className="text-center">

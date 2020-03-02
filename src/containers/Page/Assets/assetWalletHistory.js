@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { Tabs, notification } from 'antd';
+import {  notification } from 'antd';
 import {walletTableInfos} from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
+import { PAGESIZE } from "../../../helpers/globals";
 
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class AssetWalletHistory extends Component {

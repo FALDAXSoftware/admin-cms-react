@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Input, Pagination, notification, Select, Button, Form, Row, Col } from 'antd';
 import { simplexTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
-import TableDemoStyle from '../../Tables/antTables/demo.style';
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import authAction from '../../../redux/auth/actions';
-import ColWithPadding from '../common.style';
+// import ColWithPadding from '../common.style';
 import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
@@ -131,7 +131,7 @@ class UserSimplexHistory extends Component {
     }
 
     render() {
-        const { allTrades, allTradeCount, errType, errMsg, page, loader, filterVal,
+        const { allTrades, allTradeCount, errType, errMsg, page, loader,
             searchTrade, limit, simplex_payment_status,csvData,openCsvModal } = this.state;
        let pageSizeOptions = PAGE_SIZE_OPTIONS
 

@@ -58,6 +58,7 @@ class Metabase extends Component {
         {metabaseUrl && (
           <div className="full-width">
             <iframe
+            title="2FA Metabase"
               className="metabase-iframe"
               src={metabaseUrl}
               frameBorder="0"

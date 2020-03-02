@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, notification, Input, Button } from "antd";
+import { notification, Input, Button } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { connect } from "react-redux";
