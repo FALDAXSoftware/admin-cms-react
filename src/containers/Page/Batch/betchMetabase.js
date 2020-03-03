@@ -33,7 +33,7 @@ class BatchMetabase extends Component {
         this.props.logout();
       }
     } catch (error) {
-      console.error("error", error);
+      this.openNotificationWithIconError("Error","Unable to complete the requested action.");
     }
   }
   render() {

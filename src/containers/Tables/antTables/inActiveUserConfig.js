@@ -60,7 +60,7 @@ const renderCell = (object, type, key, image = null, fname = null, lname = null,
 
 const columns = [{
     title: <IntlMessages id="antTable.title.Actions" />,
-   align:"left",
+    align:"left",
     ellipsis:true,
     key: 'action',
     width: 120,

@@ -84,7 +84,15 @@ class InActiveUsers extends Component {
   }
 
   static editUser(value) {
-    self.props.history.push("/dashboard/users/edit-user/" + value);
+    let { searchUser,
+      limit,
+      page,
+      sorterCol,
+      sortOrder,
+      filterVal,
+      startDate,
+      endDate}=self.state;
+      self.props.history.push({pathname:"/dashboard/users/edit-user/" + value,state:{selectedTab:"2",searchUser,limit,page,sorterCol,sortOrder,filterVal,startDate,endDate}});
   }
 
   onExport=()=>{
