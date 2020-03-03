@@ -30,7 +30,6 @@ class Users extends Component {
     if (this.props.location.state && JSON.parse(this.props.location.state).selectedTab) {
       tabOptionalProps.defaultActiveKey = JSON.parse(this.props.location.state).selectedTab;
     }
-    console.log(tabOptionalProps)
     return (
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
