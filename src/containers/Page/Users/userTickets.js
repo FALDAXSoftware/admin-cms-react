@@ -65,8 +65,7 @@ class UserTickets extends Component {
                 }
             })
             .catch((err) => {
-                console.log("errror", err);
-                _this.setState({ loader: false })
+                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.",loader:false});
             });
     }
 

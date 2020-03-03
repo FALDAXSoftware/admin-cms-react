@@ -149,7 +149,6 @@ class WalletFaldaxDashboard extends Component {
             const { searchData } = this.state;
             let res = await (await (isExportToCsv ? ApiUtils.getAllWallets(this.props.token) : ApiUtils.getAllWallets(this.props.token, searchData))).json();
             let [{ status, data, err, message }, logout] = [res, this.props.logout];
-            console.log(res)
             if (status == 200) {
                 if (isExportToCsv) {
                     this.setState({ csvData: data })
@@ -163,7 +162,7 @@ class WalletFaldaxDashboard extends Component {
                 this.openNotificationWithIcon("Error", err)
             }
         } catch (error) {
-            console.log("error", error);
+            this.openNotificationWithIcon("Error", "Unable to complete the requested action.")
         } finally {
             this.loader.hide();
         }
@@ -206,7 +205,7 @@ class WalletFaldaxDashboard extends Component {
                             this.openNotificationWithIcon("Error", res.err ? res.err : res.message);
                         }
                     } catch (error) {
-                        console.log("error", error);
+                        this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
                     } finally {
                         this.loader.hide();
                     }
@@ -244,7 +243,7 @@ class WalletFaldaxDashboard extends Component {
                 }
                 this.closeSendModal();
             } catch (err) {
-                console.log(err)
+                this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
             } finally {
                 this.loader.hide();
             }
@@ -259,7 +258,6 @@ class WalletFaldaxDashboard extends Component {
             this.setState({ loader: true });
             let res = await (await ApiUtils.getAvailableBalance(this.props.token, asset)).json();
             let { status, data, err, message } = res;
-            console.log(res);
             if (status == 200) {
                 this.setState({ availableBalance: data })
                 self.setState({ sendModal: true, walletDetails: values });
@@ -274,7 +272,7 @@ class WalletFaldaxDashboard extends Component {
                 this.openNotificationWithIcon("Error", message);
             }
         } catch (error) {
-            console.log(error)
+            this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
         } finally {
             this.setState({ loader: false });
         }

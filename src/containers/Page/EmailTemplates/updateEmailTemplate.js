@@ -61,7 +61,6 @@ class UpdateEmailTemplate extends Component {
           });
         }
     }catch(error){
-        console.log("UpdateEmailTemplate Error =>",error);
         this.setState({
             errMsg: true,
             errMessage: "Unable to complete the requested action.",
