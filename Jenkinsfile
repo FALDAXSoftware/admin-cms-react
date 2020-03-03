@@ -7,9 +7,9 @@ podTemplate(label: label, nodeSelector: 'env=jenkins' , containers: [
      containerTemplate(
         name: 'node', 
         resourceRequestCpu: '50m',
-        resourceLimitCpu: '2000m',
+        resourceLimitCpu: '3000m',
         resourceRequestMemory: '100Mi',
-        resourceLimitMemory: '2500Mi',
+        resourceLimitMemory: '5000Mi',
         image: 'node:8.15.0-alpine', 
         command: 'cat', 
         ttyEnabled: true),
