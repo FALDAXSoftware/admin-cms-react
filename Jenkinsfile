@@ -2,7 +2,7 @@
 def label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_').take(63)
 def gitCredentialsId = "github"
 def imageRepo = "100.69.158.196"
-podTemplate(label: label, containers: [
+podTemplate(label: label, nodeSelector: 'env: jenkins' , containers: [
      containerTemplate(name: 'build-container', image: imageRepo + '/buildtool:deployer', command: 'cat', ttyEnabled: true),
      containerTemplate(name: 'node', image: 'node:8.15.0-alpine', command: 'cat', ttyEnabled: true),
 ], 
@@ -71,7 +71,7 @@ def getNamespace(branch){
         case 'master' : return "prod";
         case 'development' :  return "dev";
         case 'preprod' :  return "preprod";
-        default : return null;
+        default : return "dev";
     }
 }
 def getEnvConfig(branch){
