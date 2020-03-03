@@ -53,8 +53,8 @@ class EditUser extends Component {
           this.setState({
             fields: res,
             dob: res.dob
-              ? moment(res.dob, "DD-MM-YYYY").local()
-              : "",
+              ? (res.dob=="Invalid date")?null:moment(res.dob, "DD-MM-YYYY").local()
+              : null,
             selectedClass: res.account_class,
             selectedTier: res.account_tier,
             countrySelected: res.country,
@@ -196,7 +196,7 @@ class EditUser extends Component {
     } = this.state;
     let _this = this;
 
-    if (this.validator.allValid() && selectedTier && selectedClass) {
+    if (this.validator.allValid() && selectedTier && selectedClass && moment(dob).format("DD-MM-YYYY")!=="Invalid date") {
       let formData = {
         user_id: fields["id"],
         first_name: fields["first_name"],
@@ -262,7 +262,7 @@ class EditUser extends Component {
         showTierError: selectedTier ? false : true,
         showClassError: selectedClass ? false : true,
         loader: false,
-        showDOBErr: dob ? false : true
+        showDOBErr: moment(dob).format("DD-MM-YYYY")=="Invalid date"? true : false
       });
       this.validator.showMessages();
       this.forceUpdate();

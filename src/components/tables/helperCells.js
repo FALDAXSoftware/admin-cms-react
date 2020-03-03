@@ -162,6 +162,52 @@ const editActiveUser = (
   );
 };
 
+const editInactiveUser = (
+  value,
+  profile_pic,
+  first_name,
+  last_name,
+  email,
+  city_town,
+  street_address,
+  street_address_2,
+  phone_number,
+  country,
+  dob,
+  is_active,
+  kyc,
+  date_format,
+  account_tier,
+  account_class,
+  state,
+  no_of_referrals,
+  created_at,
+  deleted_at
+) => {
+  InActiveUsers.editUser(
+    value,
+    profile_pic,
+    first_name,
+    last_name,
+    email,
+    city_town,
+    street_address,
+    street_address_2,
+    phone_number,
+    country,
+    dob,
+    is_active,
+    kyc,
+    date_format,
+    account_tier,
+    account_class,
+    state,
+    no_of_referrals,
+    created_at,
+    deleted_at
+  );
+};
+
 const deleteActiveUser = value => {
   ActiveUsers.deleteUser(value);
 };
@@ -1816,7 +1862,7 @@ const InActiveUserActionCell = (
                 type="edit"
                 className="btn-icon"
                 onClick={() =>
-                  editActiveUser(
+                  editInactiveUser(
                     value,
                     profile_pic,
                     first_name,

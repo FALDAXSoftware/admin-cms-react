@@ -71,7 +71,7 @@ class EmployeeWhitelist extends Component {
                 }
             })
             .catch((err) => {
-                console.error(err)
+                _this.setState({ errMsg: true, errMessage: "Unable to complete the requested action.", errType: 'error' });
             });
     }
 
@@ -93,7 +93,7 @@ class EmployeeWhitelist extends Component {
                 }
             })
             .catch((err) => {
-                console.error(err)
+                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.", errType: 'error' });
             });
     }
 

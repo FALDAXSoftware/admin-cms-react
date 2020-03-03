@@ -51,7 +51,7 @@ class PersonalDetails extends Component {
                 }
             })
             .catch((err) => {
-                console.error('error', err)
+                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.", errType: 'error' })
             });
     }
 
