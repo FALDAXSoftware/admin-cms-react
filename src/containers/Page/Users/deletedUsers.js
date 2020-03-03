@@ -263,7 +263,6 @@ class DeletedUsers extends Component {
         const { allUsers, allUserCount, page, loader, errMsg, errType, searchUser,openCsvExportModal,csvData, filterVal,rangeDate,
             allCountries, showDeleteUserModal, limit } = this.state;
         let pageSizeOptions = PAGE_SIZE_OPTIONS
-        console.log(allUsers)
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }

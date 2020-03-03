@@ -32,7 +32,7 @@ class UserKYCDetails extends Component {
            }
 
         }catch(error){
-            console.log("error",error)
+            this.setState({ errMsg: true, errMessage:"Unable to complete the requested action."});
         }finally{
             this.loader.hide();
         }

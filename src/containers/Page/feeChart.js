@@ -8,7 +8,6 @@ class FeeChart extends Component {
 
     render() {
         const { feesLabels, faldaxFees,residualFees } = this.props;
-        console.log(faldaxFees,residualFees,feesLabels)
         const data = {
             labels: feesLabels,
             datasets: [

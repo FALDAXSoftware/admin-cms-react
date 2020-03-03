@@ -87,7 +87,11 @@ const ResidualTransactionHistory = props => {
         });
       }
     } catch (error) {
-      console.log("Error in getAllResidualTransactionHistory api", error);
+      setError({
+        errType: "Error",
+        errMessage: "Unable to complete the requested action.",
+        showError: true
+      });
     } finally {
       setIsLoading(false);
     }
