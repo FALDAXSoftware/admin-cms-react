@@ -110,7 +110,7 @@ class ReferralDetailsComponent extends Component {
                 this.openNotificationWithIcon("Error",err)
             }
         }catch(error){
-            console.error("error",error);
+            this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
         }finally{
             this.loader.hide();
         }

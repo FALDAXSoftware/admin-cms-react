@@ -74,7 +74,7 @@ class EditProfile extends Component {
             login({ user: { ..._this.props.user, ...res.data[0] } });
             _this.setState({
               errMsg: true,
-              errMessage:res.message,
+              errMessage: res.message,
               loader: false,
               errType: "Success"
             });
@@ -104,27 +104,34 @@ class EditProfile extends Component {
   };
 
   _getAdminDetails = async () => {
-      try{
-
-          const { token, user, login } = this.props;
-          let response = await (
-              await ApiUtils.getAdminDetails(token, user.id)
-              ).json();
-              if (response.status == 200) {
-                  login({ user: { ...this.props.user, ...response.data } });
-                  this.setState({
-                      isEnabled: response.data.is_twofactor ? "ENABLED" : "DISABLED",
-                      is_twofactor: response.data.is_twofactor
-                    });
-                }else if(response.status==400 || response.status==403){
-                    this.setState({errType:"Error",errMessage:response.message,errMsg:true})
-                }
-            }catch(error){
-                console.error(error)
-            }finally{
-                this.setState({loader:false})
-            }
-            };
+    try {
+      const { token, user, login } = this.props;
+      let response = await (
+        await ApiUtils.getAdminDetails(token, user.id)
+      ).json();
+      if (response.status == 200) {
+        login({ user: { ...this.props.user, ...response.data } });
+        this.setState({
+          isEnabled: response.data.is_twofactor ? "ENABLED" : "DISABLED",
+          is_twofactor: response.data.is_twofactor
+        });
+      } else if (response.status == 400 || response.status == 403) {
+        this.setState({
+          errType: "Error",
+          errMessage: response.message,
+          errMsg: true
+        });
+      }
+    } catch (error) {
+      this.setState({
+        errType: "Error",
+        errMessage: "Unable to complete the requested action.",
+        errMsg: true,
+      });
+    } finally {
+      this.setState({ loader: false });
+    }
+  };
 
   _setupTwoFactor = () => {
     const { token, user } = this.props;
@@ -359,13 +366,10 @@ class EditProfile extends Component {
             </span>
           </div>
           <div className="edit-profile-input">
-              <span>
+            <span>
               <b>Email</b>
             </span>
-            <Input
-              disabled
-              value={fields["email"]}
-            />
+            <Input disabled value={fields["email"]} />
           </div>
           <Button type="primary" onClick={this._editProfile}>
             {" "}
@@ -378,8 +382,8 @@ class EditProfile extends Component {
             <div style={{ marginTop: "20px", textAlign: "center" }}>
               {isEnabled == "DISABLED" ? (
                 <span>
-                  2FA significantly increases the security
-                  of your account. We highly recommend that you enable it.{" "}
+                  2FA significantly increases the security of your account. We
+                  highly recommend that you enable it.{" "}
                 </span>
               ) : (
                 <span>

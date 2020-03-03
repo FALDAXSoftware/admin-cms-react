@@ -222,7 +222,7 @@ class Dashboard extends Component {
         }
       })
       .catch(err => {
-        console.error("error occured", err);
+        _this.setState({ errMsg: true, message: "Unable to complete the requested action.", loader: false });
       });
   };
 

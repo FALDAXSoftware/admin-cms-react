@@ -172,6 +172,13 @@ class EditableTable extends React.Component {
         } if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
             this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
             return false;
+        }if(rowData.daily_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto)>parseFloat(rowData.daily_withdraw_crypto)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto_lte_daily_withdraw_crypto, errType: 'Error' });
+            return false;
+        }
+        if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto)>parseFloat(rowData.monthly_withdraw_crypto)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_withdraw_crypto_lte_monthly_withdraw_crypto, errType: 'Error' });
+            return false;
         }
         return true;
     }
