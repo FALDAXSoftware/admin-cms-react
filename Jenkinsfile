@@ -4,7 +4,15 @@ def gitCredentialsId = "github"
 def imageRepo = "100.69.158.196"
 podTemplate(label: label, nodeSelector: 'env=jenkins' , containers: [
     //  containerTemplate(name: 'build-container', image: imageRepo + '/buildtool:deployer', command: 'cat', ttyEnabled: true),
-     containerTemplate(name: 'node', image: 'node:8.15.0-alpine', command: 'cat', ttyEnabled: true),
+     containerTemplate(
+        name: 'node', 
+        resourceRequestCpu: '50m',
+        resourceLimitCpu: '2000m',
+        resourceRequestMemory: '100Mi',
+        resourceLimitMemory: '2048Mi',
+        image: 'node:8.15.0-alpine', 
+        command: 'cat', 
+        ttyEnabled: true),
 ], 
 volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
