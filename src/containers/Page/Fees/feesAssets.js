@@ -173,7 +173,7 @@ class EditableTable extends React.Component {
             this.errorNotification(res.message);
         }
     }catch(error){
-        console.log("error",error);
+        this.errorNotification('Unable to complete the requested action.');
     }finally{
         this.loader.hide();
     }
@@ -260,7 +260,7 @@ class EditableTable extends React.Component {
           this.errorNotification(res.message)
       }
     }catch(error){
-      console.log(error)
+      this.errorNotification("Unable to complete the requested action.")
     }finally{
       this.loader.hide();
     }

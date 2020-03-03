@@ -205,7 +205,6 @@ class Sidebar extends Component {
             >
               {
                 options.map(singleOption => {
-                  // console.log(options)
                   if (singleOption.permssions) {
                     if (this.isModulePermited(singleOption.permssions)) {
                       return (

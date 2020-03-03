@@ -161,7 +161,7 @@ class WalletForfeitDetailsComponent extends Component {
                 this.openNotificationWithIcon("Error",err)
             }
         }catch(error){
-            console.log("error",error);
+            this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
         }finally{
             this.loader.hide();
         }

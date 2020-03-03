@@ -79,7 +79,6 @@ class UserWallets extends Component {
 
     _getUserWallets = () => {
         const { token, user_id } = this.props;
-        console.log(this.props)
         let _this = this;
         this.setState({ loader: true });
         ApiUtils.getUserWallets(token, user_id)
@@ -100,7 +99,6 @@ class UserWallets extends Component {
             })
             .catch(err => {
                 _this.setState({ errMsg: true, errMessage: "Unable to complete the requested action.", loader: false });
-                console.log(err);
             });
     };
 

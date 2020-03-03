@@ -99,7 +99,7 @@ class WalletWarmDashboard extends Component {
                 this.openNotificationWithIcon("Error",message);
             }
         }catch(error){
-            console.log(error)
+            this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
         }finally{
             this.setState({loader:false});
         }
@@ -157,7 +157,7 @@ class WalletWarmDashboard extends Component {
                 this.openNotificationWithIcon("Error",err)
             }
         }catch(error){
-            console.log("error",error);
+            this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
         }finally{
             this.loader.hide();
         }
@@ -185,7 +185,7 @@ class WalletWarmDashboard extends Component {
                 }
                 this.closeSendModal();
             }catch(err) {
-                console.log(err)       
+                this.openNotificationWithIcon("Error", "Unable to complete the requested action.");   
             }finally{
                 this.loader.hide();
             }

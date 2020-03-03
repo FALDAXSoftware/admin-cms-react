@@ -66,8 +66,7 @@ class PersonalDetails extends Component {
         }
       })
       .catch(err => {
-        _this.setState({ "loader": true });
-        console.log("Error", err);
+        _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.", loader: false });
       });
   };
 

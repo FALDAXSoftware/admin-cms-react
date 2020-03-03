@@ -104,7 +104,7 @@ class ActiveUsers extends Component {
         this.setState({csvData:res.data,openCsvExportModal:true})
       }
     }catch(error){
-      console.log(error)
+      this.setState({ errMsg: true, errMessage: "Unable to complete the requested action."});
     }finally{
       this.setState({loader:false})
     }

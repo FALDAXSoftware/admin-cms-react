@@ -278,7 +278,7 @@ class EditUser extends Component {
       countryCode,
       countryID,
       stateCode:stateID
-    },()=>console.log("State Changed => ",this.state));
+    });
     
   }
 

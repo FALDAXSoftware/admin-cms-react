@@ -62,7 +62,7 @@ class Referral extends Component {
                 _this.setState({ loader: false });
             })
             .catch((err) => {
-                console.log(err)
+                _this.setState({ errMsg: true, errMessage: "Unable to complete the requested action."});
             });
     }
 
