@@ -21,7 +21,11 @@ export const messages = {
       min_monthly_withdraw_crypto:
         "Monthly Crypto Withdraw limit should be greater then or equal",
       min_monthly_max_daily_withdraw_crypto:
-      "Monthly withdraw crypto limit should be greater than the Daily withdraw crypto limit"
+      "Monthly withdraw crypto limit should be greater than the Daily withdraw crypto limit",
+      min_daily_withdraw_crypto_lte_daily_withdraw_crypto:
+      "Daily withdraw limit should be greater than or equal the minimum withdraw crypto limit",
+      min_withdraw_crypto_lte_monthly_withdraw_crypto:
+      "Monthly withdraw limit should be greater than or equal the minimum withdraw crypto limit",
     }
   }
 };

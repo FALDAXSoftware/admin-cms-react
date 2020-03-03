@@ -112,7 +112,11 @@ export default class extends Component {
         this.forceUpdate();
       }
     } catch (error) {
-      console.error("Error", error);
+      this.setState({
+        errMsg: true,
+        errMessage:  "Unable to complete the requested action.",
+        loader: false
+      });
     }
   };
 
