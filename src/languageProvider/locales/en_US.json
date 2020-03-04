@@ -679,6 +679,7 @@
   "walletFaldaxDashboardTable.title.receive_address": "Receive Address",
   "walletFaldaxDashboardTable.title.send_address": "Send Address",
   "walletFaldaxDashboardTable.title.total": "Total",
+  "walletFaldaxDashboardTable.title.balance":"Balance",
   "walletFaldaxDashboardTable.title.total_earned_from_forfeit": "Forfeit",
   "walletFaldaxDashboardTable.title.total_earned_from_jst": "Crypto",
   "walletFaldaxDashboardTable.title.total_earned_from_wallets": "Wallets",
