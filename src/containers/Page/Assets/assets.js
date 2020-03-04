@@ -1,15 +1,35 @@
-import React, { Component } from 'react';
-import { Input, Tabs, Pagination, Button, Modal, notification } from 'antd';
+import React, { Component } from "react";
+import {
+  Input,
+  Tabs,
+  Pagination,
+  Icon,
+  Button,
+  Modal,
+  notification,
+  Row,
+  Col
+} from "antd";
+import clone from "clone";
 import { assetTableInfos } from "../../Tables/antTables";
-import ApiUtils from '../../../helpers/apiUtills';
+import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
-import TableDemoStyle from '../../Tables/antTables/demo.style';
+import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { connect } from 'react-redux';
-import ViewCoinModal from './viewCoinModal';
-import AddCoinModal from './addCoinModal';
-import FaldaxLoader from '../faldaxLoader';
-import authAction from '../../../redux/auth/actions';
+import { connect } from "react-redux";
+import ViewCoinModal from "./viewCoinModal";
+import AddCoinModal from "./addCoinModal";
+import FaldaxLoader from "../faldaxLoader";
+import authAction from "../../../redux/auth/actions";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import { isAllowed } from '../../../helpers/accessControl';
+import AssetsMetabase from "./assetsMetabase";
+// import { BackButton } from "../../Shared/backBttton";
+import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { PageCounterComponent } from "../../Shared/pageCounter";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import { DateTimeCell, PrecisionCell } from "../../../components/tables/helperCells";
+import { exportAsset } from "../../../helpers/exportToCsv/headers";
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
@@ -17,278 +37,428 @@ const { logout } = authAction;
 var self;
 
 class Assets extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            allCoins: [],
-            allCoinCount: 0,
-            showAddCoinModal: false,
-            showViewCoinModal: false,
-            showDeleteCoinModal: false,
-            searchCoin: '',
-            limit: 50,
-            coinDetails: [],
-            deleteCoinId: '',
-            errMessage: '',
-            errMsg: false,
-            errType: 'Success',
-            page: 1,
-            loader: false
-        }
-        self = this;
-        Assets.view = Assets.view.bind(this);
-        Assets.edit = Assets.edit.bind(this);
-        Assets.deleteCoin = Assets.deleteCoin.bind(this);
-        Assets.changeStatus = Assets.changeStatus.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      allCoins: [],
+      allCoinCount: 0,
+      showAddCoinModal: false,
+      showViewCoinModal: false,
+      showDeleteCoinModal: false,
+      searchCoin: "",
+      limit: PAGESIZE,
+      coinDetails: [],
+      deleteCoinId: "",
+      errMessage: "",
+      errMsg: false,
+      errType: "Success",
+      page: 1,
+      loader: false,
+      openCsvExportModal:false,
+      csvData:[]
+    };
+    self = this;
+    Assets.view = Assets.view.bind(this);
+    Assets.edit = Assets.edit.bind(this);
+    Assets.deleteCoin = Assets.deleteCoin.bind(this);
+    Assets.changeStatus = Assets.changeStatus.bind(this);
+    Assets.assetWallet = Assets.assetWallet.bind(this);
+  }
 
-    static view(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC,
-        coin_icon, warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address) {
-        let coinDetails = {
-            value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon,
-            warm_wallet_address, hot_send_wallet_address, hot_receive_wallet_address, custody_wallet_address
-        }
-        self.setState({ coinDetails, showViewCoinModal: true });
-    }
+  static view(
+    value,
+    coin_name,
+    coin_code,
+    min_limit,
+    max_limit,
+    wallet_address,
+    created_at,
+    is_active,
+    isERC,
+    coin_icon,
+    warm_wallet_address,
+    hot_send_wallet_address,
+    hot_receive_wallet_address,
+    custody_wallet_address
+  ) {
+    let coinDetails = {
+      value,
+      coin_name,
+      coin_code,
+      min_limit,
+      max_limit,
+      wallet_address,
+      created_at,
+      is_active,
+      isERC,
+      coin_icon,
+      warm_wallet_address,
+      hot_send_wallet_address,
+      hot_receive_wallet_address,
+      custody_wallet_address
+    };
+    self.setState({ coinDetails, showViewCoinModal: true });
+  }
 
-    static edit(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
-        self.props.history.push('/dashboard/assets/edit-asset/' + value);
-    }
+  static edit(value) {
+    self.props.history.push("/dashboard/assets/edit-asset/" + value);
+  }
 
-    static changeStatus(value, coin_name, coin_code, min_limit, max_limit, wallet_address, created_at, is_active, isERC, coin_icon) {
-        const { token } = this.props;
+  static changeStatus(
+    value,
+    coin_name,
+    coin_code,
+    min_limit,
+    max_limit,
+    wallet_address,
+    created_at,
+    is_active
+  ) {
+    const { token } = this.props;
 
-        let formData = {
-            coin_id: value,
-            is_active: !is_active
-        };
-
-        self.setState({ loader: true })
-        let message = is_active ? 'Asset has been inactivated successfully.' : 'Asset has been activated successfully.'
-        ApiUtils.editCoin(token, formData)
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.status == 200) {
-                    self.setState({
-                        page: 1, errMsg: true, errMessage: message, errType: 'Success', loader: false
-                    })
-                    self._getAllCoins();
-                } else if (res.status == 403) {
-                    self.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false }, () => {
-                        self.props.logout();
-                    });
-                } else {
-                    self.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                    });
-                }
-            })
-            .catch(() => {
-                self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
-    }
-
-    static deleteCoin(value) {
-        self.setState({ showDeleteCoinModal: true, deleteCoinId: value });
-    }
-
-    componentDidMount = () => {
-        this._getAllCoins();
-    }
-
-    openNotificationWithIconError = (type) => {
-        notification[type]({
-            message: this.state.errType,
-            description: this.state.errMessage
-        });
-        this.setState({ errMsg: false });
+    let formData = {
+      coin_id: value,
+      is_active: !is_active
     };
 
-    _getAllCoins = () => {
-        const { token } = this.props;
-        const { limit, searchCoin, page, sorterCol, sortOrder } = this.state;
-        let _this = this;
-
-        _this.setState({ loader: true });
-        ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res.status == 200) {
-                    _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount });
-                } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                        _this.props.logout();
-                    });
-                } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                }
-                _this.setState({ loader: false });
-            })
-            .catch(() => {
-                _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
-                });
-            });
-    }
-
-    _searchCoin = (val) => {
-        this.setState({ searchCoin: val, page: 1 }, () => {
-            this._getAllCoins();
-        });
-    }
-
-    _handleCoinPagination = (page) => {
-        this.setState({ page }, () => {
-            this._getAllCoins();
-        })
-    }
-
-    _showAddCoinModal = () => {
-        this.setState({ showAddCoinModal: true });
-    }
-
-    _closeViewCoinModal = () => {
-        this.setState({ showViewCoinModal: false });
-    }
-
-    _closeAddCoinModal = () => {
-        this.setState({ showAddCoinModal: false });
-    }
-
-    _deleteCoin = () => {
-        const { token } = this.props;
-        const { deleteCoinId } = this.state;
-        let _this = this;
-
-        this.setState({ loader: true })
-        ApiUtils.deleteCoin(deleteCoinId, token)
-            .then((response) => response.json())
-            .then(function (res) {
-                if (res) {
-                    if (res.status == 200) {
-                        _this.setState({
-                            deleteCoinId: '', showDeleteCoinModal: false, errMessage: res.message, errMsg: true
-                        }, () => {
-                            _this._getAllCoins();
-                        });
-                    } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
-                            _this.props.logout();
-                        });
-                    } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
-                    }
-                } else {
-                    _this.setState({ deleteCoinId: '', showDeleteCoinModal: false });
-                }
-                this.setState({ loader: false })
-            }).catch(() => {
-                _this.setState({ deleteCoinId: '', showDeleteCoinModal: false, loader: false });
-            });
-    }
-
-    _closeDeleteCoinModal = () => {
-        this.setState({ showDeleteCoinModal: false });
-    }
-
-    handleTableChange = (pagination, filters, sorter) => {
-        this.setState({ sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 }, () => {
-            this._getAllCoins();
-        })
-    }
-
-    _changeRow = (e) => {
-        console.log('>>>>>>>>>>.', e);
-        e.preventDefault();
-    }
-
-    render() {
-        const { allCoins, allCoinCount, showAddCoinModal, coinDetails, errType, loader,
-            showViewCoinModal, showDeleteCoinModal, errMsg, page
-        } = this.state;
-
-        if (errMsg) {
-            this.openNotificationWithIconError(errType.toLowerCase());
+    self.setState({ loader: true });
+    ApiUtils.editCoin(token, formData)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status == 200) {
+          self.setState({
+            page: 1,
+            errMsg: true,
+            errMessage: res.message,
+            errType: "Success",
+            loader: false
+          });
+          self._getAllCoins();
+        } else if (res.status == 403) {
+          self.setState(
+            {
+              errMsg: true,
+              errMessage: res.err,
+              errType: "error",
+              loader: false
+            },
+            () => {
+              self.props.logout();
+            }
+          );
+        } else {
+          self.setState({
+            errMsg: true,
+            errMessage: "Unable to complete the requested action.",
+            errType: "error",
+            loader: false
+          });
         }
+      })
+      .catch(() => {
+        self.setState({
+          errMsg: true,
+          errMessage: "Unable to complete the requested action.",
+          errType: "error",
+          loader: false
+        });
+      });
+  }
 
-        return (
-            <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {assetTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddCoinModal}>Add Asset</Button>
-                                    <AddCoinModal
-                                        showAddCoinModal={showAddCoinModal}
-                                        closeAddModal={this._closeAddCoinModal}
-                                        getAllCoins={this._getAllCoins.bind(this, 1)}
-                                    />
-                                    <Search
-                                        placeholder="Search assets"
-                                        onSearch={(value) => this._searchCoin(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <div>
-                                    <ViewCoinModal
-                                        coinDetails={coinDetails}
-                                        showViewCoinModal={showViewCoinModal}
-                                        closeViewCoinModal={this._closeViewCoinModal}
-                                    />
-                                    {
-                                        showDeleteCoinModal &&
-                                        <Modal
-                                            title="Delete Asset"
-                                            visible={showDeleteCoinModal}
-                                            onCancel={this._closeDeleteCoinModal}
-                                            footer={[
-                                                <Button onClick={this._closeDeleteCoinModal}>No</Button>,
-                                                <Button onClick={this._deleteCoin}>Yes</Button>,
-                                            ]}
-                                        >
-                                            Are you sure you want to delete this asset ?
-                                    </Modal>
-                                    }
-                                    <TableWrapper
-                                        onRow={(record, rowIndex) => {
-                                            return {
-                                                onClick: () => { this._changeRow.bind(this) },
-                                            };
-                                        }}
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allCoins}
-                                        onChange={this.handleTableChange}
-                                        className="isoCustomizedTable"
-                                    />
-                                    {allCoinCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleCoinPagination.bind(this)}
-                                            pageSize={50}
-                                            current={page}
-                                            total={allCoinCount}
-                                        /> : ''}
-                                </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
-                </TableDemoStyle>
-            </LayoutWrapper>
-        );
+  static deleteCoin(value) {
+    self.setState({ showDeleteCoinModal: true, deleteCoinId: value });
+  }
+
+  static assetWallet(value, coin_name, coin_code) {
+    self.props.history.push("/dashboard/assets/wallet/" + coin_code);
+  }
+
+  componentDidMount = () => {
+    this._getAllCoins();
+  };
+
+  openNotificationWithIconError = type => {
+    notification[type]({
+      message: this.state.errType,
+      description: this.state.errMessage
+    });
+    this.setState({ errMsg: false });
+  };
+
+  _getAllCoins = (exportToCsv=false) => {
+    const { token } = this.props;
+    const { limit, searchCoin, page, sorterCol, sortOrder } = this.state;
+    let _this = this;
+
+    _this.setState({ loader: true });
+    (exportToCsv?ApiUtils.getAllCoins(1,EXPORT_LIMIT_SIZE, token,""):ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder))
+      .then(response => response.json())
+      .then(function (res) {
+        if (res.status == 200) {
+          if(exportToCsv){
+            let csvData=clone(res.data);
+            csvData=csvData.map((ele)=>{
+              ele["updated_at"]=DateTimeCell(ele["updated_at"],'string');
+              ele["created_at"]=DateTimeCell(ele["created_at"],'string');
+              ele["deleted_at"]=DateTimeCell(ele["deleted_at"],'string');
+              ele["type"]=ele['type']==1?"bitgo":"node setup";
+              ele["min_limit"]=PrecisionCell(ele["min_limit"]);
+              ele["max_limit"]=PrecisionCell(ele["max_limit"]);
+              return ele;
+            })
+            _this.setState({csvData})
+          }else{
+            _this.setState({ allCoins: res.data,allCoinCount: res.CoinsCount });
+          }
+        } else if (res.status == 403) {
+          _this.setState(
+            { errMsg: true, errMessage: res.err, errType: "error" },
+            () => {
+              _this.props.logout();
+            }
+          );
+        } else {
+          _this.setState({
+            errMsg: true,
+            errMessage: res.message,
+            errType: "error"
+          });
+        }
+        _this.setState({ loader: false });
+      })
+      .catch(() => {
+        _this.setState({
+          errMsg: true,
+          errMessage: "Unable to complete the requested action.",
+          errType: "error",
+          loader: false
+        });
+      });
+  };
+
+  _searchCoin = val => {
+    this.setState({ searchCoin: val, page: 1 }, () => {
+      this._getAllCoins();
+    });
+  };
+
+  _handleCoinPagination = page => {
+    this.setState({ page }, () => {
+      this._getAllCoins();
+    });
+  };
+
+  _showAddCoinModal = () => {
+    this.setState({ showAddCoinModal: true });
+  };
+
+  _closeViewCoinModal = () => {
+    this.setState({ showViewCoinModal: false });
+  };
+
+  _closeAddCoinModal = () => {
+    this.setState({ showAddCoinModal: false });
+  };
+
+  _deleteCoin = () => {
+    const { token } = this.props;
+    const { deleteCoinId } = this.state;
+    let _this = this;
+
+    this.setState({ loader: true });
+    ApiUtils.deleteCoin(deleteCoinId, token)
+      .then(response => response.json())
+      .then(function (res) {
+        if (res) {
+          if (res.status == 200) {
+            _this.setState(
+              {
+                deleteCoinId: "",
+                showDeleteCoinModal: false,
+                errMessage: res.message,
+                errMsg: true
+              },
+              () => {
+                _this._getAllCoins();
+              }
+            );
+          } else if (res.status == 403) {
+            _this.setState(
+              { errMsg: true, errMessage: res.err, errType: "error" },
+              () => {
+                _this.props.logout();
+              }
+            );
+          } else {
+            _this.setState({
+              errMsg: true,
+              errMessage: res.message,
+              errType: "error"
+            });
+          }
+        } else {
+          _this.setState({ deleteCoinId: "", showDeleteCoinModal: false });
+        }
+        this.setState({ loader: false });
+      })
+      .catch(() => {
+        _this.setState({
+          deleteCoinId: "",
+          showDeleteCoinModal: false,
+          loader: false
+        });
+      });
+  };
+
+  _closeDeleteCoinModal = () => {
+    this.setState({ showDeleteCoinModal: false });
+  };
+
+  handleTableChange = (pagination, filters, sorter) => {
+    this.setState(
+      { sorterCol: sorter.columnKey, sortOrder: sorter.order, page: 1 },
+      () => {
+        this._getAllCoins();
+      }
+    );
+  };
+
+  _changePaginationSize = (current, pageSize) => {
+    this.setState({ page: current, limit: pageSize }, () => {
+      this._getAllCoins();
+    });
+  };
+
+  onExport=()=>{
+    this.setState({openCsvExportModal:true},()=>this._getAllCoins(true));
+  }
+
+  render() {
+    const {
+      allCoins,
+      allCoinCount,
+      showAddCoinModal,
+      coinDetails,
+      errType,
+      loader,
+      showViewCoinModal,
+      showDeleteCoinModal,
+      errMsg,
+      page,
+      limit,
+      openCsvExportModal,
+      csvData
+    } = this.state;
+    let pageSizeOptions = PAGE_SIZE_OPTIONS;
+
+    if (errMsg) {
+      this.openNotificationWithIconError(errType.toLowerCase());
     }
+
+    return (
+      <LayoutWrapper>
+        {/* <BackButton {...this.props}/> */}
+        <BreadcrumbComponent {...this.props} />
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="assets.csv" data={csvData} header={exportAsset}/>
+        <Tabs className="isoTableDisplayTab full-width">
+            <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
+              <TableDemoStyle className="isoLayoutContent">
+              <PageCounterComponent page={page} limit={limit} dataCount={allCoinCount} syncCallBack={()=>{this.setState({searchCoin:"",page:1},()=>this._getAllCoins())}}/>
+                <Row type="flex" className="table-filter-row" justify="start">
+                  <Col md={4}>
+                    {isAllowed("create_coins") && (
+                      <Button type="primary" className="full-width" onClick={this._showAddCoinModal}>
+                        <Icon type="plus" />
+                        Add Asset
+                      </Button>
+                    )}
+                  </Col>
+                  <Col md={8}>
+                    <Search
+                      placeholder="Search assets"
+                      onSearch={value => this._searchCoin(value)}
+                      enterButton
+                      className="full-width"
+                    />
+                  </Col>
+                  <Col md={3}>
+                    <Button onClick={this.onExport} icon="export" type="primary">Export</Button>
+                  </Col>
+                  </Row>
+                <AddCoinModal
+                  showAddCoinModal={showAddCoinModal}
+                  closeAddModal={this._closeAddCoinModal}
+                  getAllCoins={this._getAllCoins.bind(this, 1)}
+                />
+
+                {loader && <FaldaxLoader />}
+                <div className="float-clear">
+                  <ViewCoinModal
+                    coinDetails={coinDetails}
+                    showViewCoinModal={showViewCoinModal}
+                    closeViewCoinModal={this._closeViewCoinModal}
+                  />
+                  {showDeleteCoinModal && (
+                    <Modal
+                      title="Delete Asset"
+                      visible={showDeleteCoinModal}
+                      onCancel={this._closeDeleteCoinModal}
+                      footer={[
+                        <Button onClick={this._closeDeleteCoinModal}>
+                          No
+                        </Button>,
+                        <Button onClick={this._deleteCoin}>Yes</Button>
+                      ]}
+                    >
+                      Are you sure you want to delete this asset ?
+                    </Modal>
+                  )}
+                  <TableWrapper
+                    rowKey="id"
+                    {...this.state}
+                    columns={assetTableInfos.columns}
+                    pagination={false}
+                    dataSource={allCoins}
+                    onChange={this.handleTableChange}
+                    className="table-tb-margin"
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
+                  />
+                  {allCoinCount > 0 ? (
+                    <Pagination
+                      className="ant-users-pagination"
+                      onChange={this._handleCoinPagination.bind(this)}
+                      pageSize={limit}
+                      current={page}
+                      total={parseInt(allCoinCount)}
+                      showSizeChanger
+                      onShowSizeChange={this._changePaginationSize}
+                      pageSizeOptions={pageSizeOptions}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </TableDemoStyle>
+            </TabPane>
+          {isAllowed("metabase_asset_report") && (
+            <TabPane tab="Report" key="metabase">
+              <TableDemoStyle>
+                <AssetsMetabase></AssetsMetabase>
+              </TableDemoStyle>
+            </TabPane>
+          )}
+        </Tabs>
+      </LayoutWrapper>
+    );
+  }
 }
 
 export default connect(
-    state => ({
-        token: state.Auth.get('token')
-    }), { logout })(Assets);
+  state => ({
+    token: state.Auth.get("token")
+  }),
+  { logout }
+)(Assets);
 
 export { Assets, assetTableInfos };

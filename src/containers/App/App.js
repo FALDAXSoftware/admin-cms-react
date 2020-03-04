@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, LocaleProvider } from "antd";
+import { Layout,ConfigProvider} from "antd";
 import { IntlProvider } from "react-intl";
 import { Debounce } from "react-throttle";
 import WindowResizeListener from "react-window-size-listener";
@@ -15,6 +15,7 @@ import { AppLocale } from "../../dashApp";
 import themes from "../../settings/themes";
 import AppHolder from "./commonStyle";
 import "./global.css";
+import IdleTimerComponent from "../Shared/idleTimer";
 
 const { Content, Footer } = Layout;
 const { logout } = authAction;
@@ -27,7 +28,8 @@ export class App extends Component {
     const currentAppLocale = AppLocale[locale];
 
     return (
-      <LocaleProvider locale={currentAppLocale.antd}>
+      <ConfigProvider locale={currentAppLocale.antd}>
+        <IdleTimerComponent/>
         <IntlProvider
           locale={currentAppLocale.locale}
           messages={currentAppLocale.messages}
@@ -81,7 +83,7 @@ export class App extends Component {
             </AppHolder>
           </ThemeProvider>
         </IntlProvider>
-      </LocaleProvider>
+      </ConfigProvider>
     );
   }
 }

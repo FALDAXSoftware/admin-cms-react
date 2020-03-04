@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Select, Button, Row, Form, Tabs } from 'antd';
+import { Input, Pagination, notification, Select, Button, Row, Form, Col } from 'antd';
 import { userWithdrawReqTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
@@ -8,11 +8,13 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
-import ColWithPadding from '../common.style';
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import { export2faRequest } from '../../../helpers/exportToCsv/headers';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class UserWithdrawRequest extends Component {
@@ -22,13 +24,15 @@ class UserWithdrawRequest extends Component {
             allRequests: [],
             allReqCount: 0,
             searchReq: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
             page: 1,
             loader: false,
             filterVal: '',
+            openCsvModal:false,
+            csvData:[]
         }
     }
 
@@ -44,16 +48,19 @@ class UserWithdrawRequest extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getUserRequests = () => {
+    _getUserRequests = (isExportToCsv=false) => {
         const { token, user_id } = this.props;
         const { searchReq, page, limit, startDate, endDate, filterVal, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getUserWithdrawReq(page, limit, token, searchReq, startDate, endDate, user_id, filterVal, sorterCol, sortOrder)
+        (isExportToCsv?ApiUtils.getUserWithdrawReq(1, EXPORT_LIMIT_SIZE, token, "", "", "", user_id, "", "", ""):ApiUtils.getUserWithdrawReq(page, limit, token, searchReq, startDate, endDate, user_id, filterVal, sorterCol, sortOrder))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    if(isExportToCsv)
+                    _this.setState({csvData:res.data})
+                    else
                     _this.setState({ allRequests: res.data, allReqCount: res.withdrawReqCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -66,7 +73,7 @@ class UserWithdrawRequest extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }
@@ -106,18 +113,16 @@ class UserWithdrawRequest extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getUserRequests();
+        });
+    }
+
     render() {
         const { allRequests, allReqCount, errType, errMsg, page, loader, filterVal,
-            searchReq } = this.state;
-
-        const requestHeaders = [
-            { label: "Source Address", key: "source_address" },
-            { label: "Destination Address", key: "destination_address" },
-            { label: "Transaction Type", key: "transaction_type" },
-            { label: "Amount", key: "amount" },
-            { label: "Email", key: "email" },
-            { label: "Created On", key: "created_at" }
-        ];
+            searchReq, limit,openCsvModal,csvData} = this.state;
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -125,22 +130,22 @@ class UserWithdrawRequest extends Component {
 
         return (
             <LayoutWrapper>
-                <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {userWithdrawReqTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
+                <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="user_withdrawal_request.csv" data={csvData} header={export2faRequest}/>
+                <TableDemoStyle className="isoLayoutContent full-width">
+
+                                    <div className="form-container">
                                     <Form onSubmit={this._searchReq}>
                                         <Row>
-                                            <ColWithPadding sm={8}>
+                                            <Col sm={8}>
                                                 <Input
                                                     placeholder="Search requests"
                                                     onChange={this._changeSearch.bind(this)}
                                                     value={searchReq}
                                                 />
-                                            </ColWithPadding>
-                                            <ColWithPadding sm={7}>
+                                            </Col>
+                                            <Col sm={7}>
                                                 <Select
+                                                    getPopupContainer={trigger => trigger.parentNode}
                                                     placeholder="Select a type"
                                                     onChange={this._changeFilter}
                                                     value={filterVal}
@@ -149,46 +154,44 @@ class UserWithdrawRequest extends Component {
                                                     <Option value={'true'}>Approve</Option>
                                                     <Option value={'false'}>Dis-Approve</Option>
                                                 </Select>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button htmlType="submit" className="search-btn" type="primary">Search</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                            </ColWithPadding>
-                                            <ColWithPadding xs={12} sm={3}>
-                                                {allRequests && allRequests.length > 0 ?
-                                                    <CSVLink filename={'user_withdraw_requests.csv'} data={allRequests} headers={requestHeaders}>
-                                                        <Button className="search-btn" type="primary">Export</Button>
-                                                    </CSVLink>
-                                                    : ''}
-                                            </ColWithPadding>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button htmlType="submit" className="filter-btn full-width" icon ="search" type="primary">Search</Button>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button className="filter-btn full-width" type="primary" icon="reload" onClick={this._resetFilters}>Reset</Button>
+                                            </Col>
+                                            <Col xs={12} sm={3}>
+                                                <Button icon="export" className="filter-btn full-width" type="primary" 
+                                                 onClick={()=>{this.setState({openCsvModal:true},()=>{this._getUserRequests(true)})}}>Export</Button>
+                                            </Col>
                                         </Row>
                                     </Form>
-                                </div>
+                                    </div>
                                 {loader && <FaldaxLoader />}
                                 < TableWrapper
-                                    style={{ marginTop: '20px' }}
+                                    className="table-tb-margin float-clear"
+                                    rowKey="id"
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={userWithdrawReqTableInfos[0].columns}
                                     pagination={false}
                                     dataSource={allRequests}
-                                    className="isoCustomizedTable"
                                     onChange={this._handleUserWithdrawReqChange}
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
                                 />
                                 {allReqCount > 0 ?
                                     <Pagination
-                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleWithdrawPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
                                         total={allReqCount}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''
                                 }
-                            </TabPane>
-                        ))}
-                    </Tabs>
                 </TableDemoStyle>
             </LayoutWrapper>
         );

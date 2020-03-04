@@ -39,7 +39,7 @@ class ViewKYCModal extends Component {
 
         return (
             <Modal
-                title="View KYC Application"
+                title="View Customer ID"
                 visible={showViewKYCModal}
                 onCancel={this._closeViewKYCModal}
                 footer={[

@@ -114,13 +114,14 @@ class EditPairModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        this._closeEditPairModal();
-                        getAllPairs();
-                        this._resetEditForm();
                         this.setState({
-                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            errType: 'success', errMsg: true, errMessage: res.message,
                             isDisabled: false, loader: false
+                        },()=>{
+                            this._closeEditPairModal();
+                            getAllPairs();
                         })
+                        this._resetEditForm();
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                             this.props.logout();
@@ -131,7 +132,7 @@ class EditPairModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                        errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.',
                         isDisabled: false, loader: false
                     });
                     this._resetEditForm();

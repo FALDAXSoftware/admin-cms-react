@@ -35,7 +35,7 @@ const DashAppHolder = styled.div`
   }
 
   .ant-row > div {
-    padding: 0;
+    padding: 3px;
   }
 
   .isoLeftRightComponent {

@@ -5,6 +5,8 @@ import LayoutWrapper from "../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../redux/auth/actions';
+// import { BackButton } from '../Shared/backBttton';
+import { BreadcrumbComponent } from '../Shared/breadcrumb';
 
 const { logout } = authAction;
 
@@ -47,7 +49,7 @@ class PanicButton extends Component {
             })
             .catch(err => {
                 _this.setState({
-                    errType: 'error', notify: true, errMessage: 'Something went wrong', loader: false
+                    errType: 'error', notify: true, errMessage: 'Unable to complete the requested action.', loader: false
                 });
             });
     }
@@ -82,7 +84,7 @@ class PanicButton extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    notify: true, errMessage: 'Something went wrong!!', errType: 'error'
+                    notify: true, errMessage: 'Unable to complete the requested action.', errType: 'error'
                 });
                 _this._closeConfirmModal();
             });
@@ -119,19 +121,21 @@ class PanicButton extends Component {
 
     render() {
         const { notify, errType, isPanic, panicConfirmModal, fields } = this.state;
-        console.log(isPanic)
-
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
 
         return (
             <LayoutWrapper>
+                {/* <BackButton {...this.props}/> */}
+                <BreadcrumbComponent {...this.props} />
                 <div className="isoLayoutContent">
-                    <Card title="Panic Button" bordered={false} style={{ width: 300 }}>
-                        <p>Panic buttons can be added to security systems to increase safety and security.</p>
-                        <Switch checked={isPanic} checkedChildren="ON" unCheckedChildren="OFF" size="large" onChange={this._showConfirmPanicModal} />
-                    </Card>
+                   <div className="panic-container">
+                        <Card title="Panic Button" bordered={false}>
+                            <p>Panic buttons can be added to security systems to increase safety and security.</p>
+                            <Switch className="panic-btn" checked={isPanic} checkedChildren="ON" unCheckedChildren="OFF" size="large" onChange={this._showConfirmPanicModal} />
+                        </Card>
+                    </div> 
                     <Modal
                         title="Confirm Panic"
                         onCancel={this._closeConfirmModal}
@@ -140,7 +144,7 @@ class PanicButton extends Component {
                     >
                         {this.props.user.is_twofactor ?
                             <div>
-                                <span>Enter your two-factor code here:</span>
+                                <span>Enter your 2FA code here:</span>
                                 <div style={{ marginTop: "20px" }}>
                                     <Input style={{ width: "200px" }} value={fields["otp"]}
                                         onChange={this._onChangeFields.bind(this, "otp")} />
@@ -152,8 +156,10 @@ class PanicButton extends Component {
                                     onClick={this._panicButton}>Enable</Button>
                             </div>
                             : <div>
-                                <span>Enable two factor authentication to Enable Panic Button.</span><br />
-                                <Button type="primary" onClick={() => { this.props.history.push('/dashboard/edit-profile') }}>Enable Now</Button>
+                                <span>Enable 2FA to Enable Panic Button.</span><br />
+                                <Button type="primary" onClick={() => { this.props.history.push('/dashboard/edit-profile') }}>
+                                    {!isPanic ? 'Enable Now' : 'Disable'}
+                                </Button>
                             </div>}
                     </Modal>
                 </div>

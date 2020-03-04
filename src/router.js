@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
@@ -20,19 +20,30 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   />
 );
 
-const PublicRoutes = ({ history, isLoggedIn }) => {
+const PublicRoutes = ({ history, isLoggedIn ,isSessionActive}) => {
   return (
     <ConnectedRouter history={history}>
       <div>
-        <Route
+        {isSessionActive && history.location.pathname=="/" && <Redirect push to="/dashboard"></Redirect>}
+        {!isSessionActive && <Route
           exact
           path={'/'}
+          component={asyncComponent(() => import('./containers/Page/signin'))}
+        />}
+        <Route
+          exact
+          path={'/login'}
           component={asyncComponent(() => import('./containers/Page/signin'))}
         />
         <Route
           exact
           path={'/404'}
           component={asyncComponent(() => import('./containers/Page/404'))}
+        />
+        <Route
+          exact
+          path={'/403'}
+          component={asyncComponent(() => import('./containers/Page/403'))}
         />
         <Route
           exact
@@ -73,5 +84,6 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
 };
 
 export default connect(state => ({
+  isSessionActive:state.Auth.get("isSessionActive"),
   isLoggedIn: state.Auth.get('token') ? true : false,
 }))(PublicRoutes);

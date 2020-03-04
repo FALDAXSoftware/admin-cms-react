@@ -1,19 +1,20 @@
 import styled from 'styled-components';
-import { palette } from 'styled-theme';
 import { Card } from 'antd';
 import WithDirection from '../../../settings/withDirection';
+import React from 'react';
 
-const CardWrapper = styled(Card)`
-background-color: ${props => props.bgColor} !important;
+const Wrapper = styled(Card)`
+background-color: ${props => props.bgcolor} !important;
 border-radius: 10px !important;
 overflow: hidden;
 min-height: 200px;
 color: white;
+height:100%;
 width: 100%;
 box-shadow: 0px 3px 4px 0px rgba(45, 52, 70,0.5);
 
   & .ant-card-head{
-    background-color: ${props => props.headColor} !important;
+    background-color: ${props => props.headcolor} !important;
     border-bottom: none !important;
   }
 
@@ -27,10 +28,10 @@ box-shadow: 0px 3px 4px 0px rgba(45, 52, 70,0.5);
   }
 
   & .count{
-    padding: 5px;
-    font-size: 20px;
+    padding: 2px;
+    font-size: 18px;
     color:#2d3446;
-    font-weight: bold;
+    font-weight: 500;
     width: 50px;
     display: inline-block;
   }
@@ -44,5 +45,9 @@ box-shadow: 0px 3px 4px 0px rgba(45, 52, 70,0.5);
     }   
   }
 `;
+
+const CardWrapper=(props)=>{
+  return <Wrapper {...props}/>
+}
 
 export default WithDirection(CardWrapper);

@@ -6,15 +6,14 @@ import SimpleReactValidator from 'simple-react-validator';
 import authAction from '../../../redux/auth/actions';
 import styled from 'styled-components';
 import FaldaxLoader from '../faldaxLoader';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const { logout } = authAction;
 const Option = Select.Option;
 const { TextArea } = Input;
 
 const ParentDiv = styled.div`
-padding: 20px;
 background-color: white;
-margin: 30px !important;
 `
 
 class PersonalDetails extends Component {
@@ -23,14 +22,14 @@ class PersonalDetails extends Component {
         this.state = {
             selectedRole: '',
             fields: {},
-            errors: {},
+            pwdError: false,
         }
         this.validator = new SimpleReactValidator();
         this.PasswordValidator = new SimpleReactValidator();
     }
 
     componentDidMount = () => {
-        this._getAllRoles();
+       if(isAllowed("get_role"))this._getAllRoles();
         this._getEmployeeDetails();
     }
 
@@ -48,11 +47,11 @@ class PersonalDetails extends Component {
                         _this.props.logout();
                     });
                 } else {
-
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' })
                 }
             })
             .catch((err) => {
-                console.log(err)
+                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.", errType: 'error' })
             });
     }
 
@@ -75,7 +74,7 @@ class PersonalDetails extends Component {
                 }
             })
             .catch(err => {
-                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Something went wrong' });
+                _this.setState({ errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.' });
             });
     }
 
@@ -103,7 +102,7 @@ class PersonalDetails extends Component {
 
     _changePassword = () => {
         const { token } = this.props;
-        let { fields, errors } = this.state;
+        let { fields } = this.state;
         let _this = this;
 
         if (this.PasswordValidator.allValid() && fields["newPwd"] === fields["confirmPwd"]) {
@@ -125,7 +124,7 @@ class PersonalDetails extends Component {
                         _this.PasswordValidator = new SimpleReactValidator();
                         _this.setState({
                             fields, loader: false, errMsg: true, errType: res.err ? 'Error' : 'Success',
-                            errMessage: res.err ? res.err : res.message
+                            errMessage: res.err ? res.err : res.message, pwdError: false
                         });
                     } else if (res.status == 403) {
                         _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -142,8 +141,7 @@ class PersonalDetails extends Component {
                 });
         } else {
             if (fields["confirmPwd"] !== fields["newPwd"] || fields["newPwd"] !== fields["confirmPwd"]) {
-                this.state.errors["main"] = "New Password and Confirm Password doesn't match.";
-                this.setState({ errors, loader: false })
+                this.setState({ pwdError: true, loader: false })
             }
             this.PasswordValidator.showMessages();
             this.forceUpdate();
@@ -183,7 +181,7 @@ class PersonalDetails extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error', isDisabled: false
                     });
                 });
@@ -194,7 +192,7 @@ class PersonalDetails extends Component {
     }
 
     render() {
-        const { fields, errors, selectedRole, allRoles, errMsg, errType, loader } = this.state;
+        const { fields, selectedRole, allRoles, errMsg, errType, loader, pwdError } = this.state;
         let roleOptions = allRoles && allRoles.map((role) => {
             return (
                 <Option value={role.key}>{role.value}</Option>
@@ -246,6 +244,7 @@ class PersonalDetails extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span style={{ "marginRight": "15px" }}>Role:</span>
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200 }}
                             placeholder="Select a role"
                             onChange={this._changeRole}
@@ -255,43 +254,46 @@ class PersonalDetails extends Component {
                         </Select>
                     </div>
                     <br />
-                    <Button type="primary" onClick={this._updateEmployee}> Update </Button>
+                   {isAllowed("update_employee") && <Button type="primary" onClick={this._updateEmployee}> Update </Button>}
                 </div>
-                <Divider>Change Password</Divider>
-                <div className="">
-                    <div style={{ "marginTop": "10px" }}>
-                        <span>
-                            <b>New Password</b>
-                        </span>
-                        <Input
-                            type="password"
-                            placeholder="New Password"
-                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                            onChange={this._onChangeFields.bind(this, "newPwd")}
-                            value={fields["newPwd"]}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.PasswordValidator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
-                        </span>
+                {isAllowed("employee_change_password") &&
+                    <>
+                        <Divider>Change Password</Divider>
+                        <div className="">
+                            <div style={{ "marginTop": "10px" }}>
+                                <span>
+                                    <b>New Password</b>
+                                </span>
+                                <Input.Password
+                                    placeholder="New Password"
+                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                                    onChange={this._onChangeFields.bind(this, "newPwd")}
+                                    value={fields["newPwd"]}
+                                />
+                                <span style={{ "color": "red" }}>
+                                    {this.PasswordValidator.message('New Password', fields["newPwd"], 'required|min:6', 'text-danger')}
+                                </span>
 
-                        <span>
-                            <b>Confirm Password</b>
-                        </span>
-                        <Input
-                            type="password"
-                            placeholder="Confirm Password"
-                            style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
-                            onChange={this._onChangeFields.bind(this, "confirmPwd")}
-                            value={fields["confirmPwd"]}
-                        />
-                        <span style={{ "color": "red" }}>
-                            {this.PasswordValidator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
-                            {errors["main"]}
-                        </span>
-                        <br />
-                        <Button type="primary" onClick={this._changePassword}> Change </Button>
-                    </div>
-                </div>
+                                <span>
+                                    <b>Confirm Password</b>
+                                </span>
+                                <Input.Password
+                                    placeholder="Confirm Password"
+                                    style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
+                                    onChange={this._onChangeFields.bind(this, "confirmPwd")}
+                                    value={fields["confirmPwd"]}
+                                />
+                                <span style={{ "color": "red" }}>
+                                    {this.PasswordValidator.message('Confirm Password', fields["confirmPwd"], 'required|min:6', 'text-danger')}
+                                    {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
+                                </span>
+                                <br />
+                               {isAllowed("employee_change_password") && <Button type="primary" onClick={this._changePassword}> Change </Button>}
+                            </div>
+                        </div>
+                    </>
+                }
+
                 {/* <Divider>Change Email Address</Divider>
                 <div className="">
                     <div style={{ "marginTop": "10px" }}>

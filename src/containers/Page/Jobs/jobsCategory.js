@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Button } from 'antd';
+import { notification, Button, Icon } from 'antd';
 import { jobCategoryTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import TableWrapper from "../../Tables/antTables/antTable.style";
@@ -8,6 +8,9 @@ import AddJobCatModal from './addJobCategoryModal';
 import EditJobCatModal from './editCategory';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { isAllowed } from '../../../helpers/accessControl';
+import TableDemoStyle from '../../Tables/antTables/demo.style';
+import { TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 
 const { logout } = authAction;
 var self;
@@ -65,7 +68,7 @@ class JobCategory extends Component {
             })
             .catch(() => {
                 self.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!',
+                    errMsg: true, errMessage: 'Unable to complete the requested action.',
                     loader: false, errType: 'error', showError: false, isDisabled: false
                 });
             });
@@ -89,7 +92,7 @@ class JobCategory extends Component {
     _getAllJobCategories = () => {
         const { token } = this.props;
         let _this = this;
-
+        this.setState({loader:true});
         ApiUtils.getAllJobCategories(token, false)
             .then((response) => response.json())
             .then(function (res) {
@@ -106,7 +109,7 @@ class JobCategory extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }
@@ -132,11 +135,13 @@ class JobCategory extends Component {
         }
 
         return (
-            <div>
-                {jobCategoryTableInfos.map(tableInfo => (
-                    <div key={tableInfo.value}>
+            <TableDemoStyle className="isoLayoutContent">
                         <div style={{ "display": "inline-block", "width": "100%" }}>
-                            <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}>Add Category</Button>
+
+                            {isAllowed("add_job_category") &&
+                                <Button type="primary" style={{ "marginBottom": "15px", "float": "left" }} onClick={this._showAddJobCatModal}><Icon type="plus" />Add Category</Button>
+                            }
+
                             <AddJobCatModal
                                 showAddJobCatModal={showAddJobCatModal}
                                 closeAddModal={this._closeAddJobModal}
@@ -151,16 +156,17 @@ class JobCategory extends Component {
                             getAllJobCategories={this._getAllJobCategories.bind(this, 1)}
                         />
                         <TableWrapper
+                            rowKey="id"
                             {...this.state}
-                            columns={tableInfo.columns}
+                            columns={jobCategoryTableInfos[0].columns}
                             pagination={false}
                             dataSource={allJobCategories}
                             className="isoCustomizedTable"
                             onChange={this._handleJobTableChange}
+                            scroll={TABLE_SCROLL_HEIGHT}
+                            bordered
                         />
-                    </div>
-                ))}
-            </div>
+            </TableDemoStyle>
         );
     }
 }

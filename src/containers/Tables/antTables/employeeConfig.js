@@ -4,8 +4,11 @@ import IntlMessages from '../../../components/utility/intlMessages';
 import {
     TextCell,
     EmployeeActionCell,
-    EmployeeSwitchCell
+    EmployeeSwitchCell,
+    DateTimeCell,
+    ToolTipsCell
 } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, fname = null, lname = null, emailID = null,
     phone = null, s_address = null, roles = null, roleID = null, status = null,
@@ -35,37 +38,52 @@ const renderCell = (object, type, key, fname = null, lname = null, emailID = nul
 
 const columns = [
     {
+        title: <IntlMessages id="antTable.title.actions" />,
+        key: 'action',
+        width: 100,
+        align:"left",
+        render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
+            'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
+    },
+    {
+        title: <IntlMessages id="antTable.title.created_on" />,
+        key: 'created_at',
+        width: 150,
+        sorter: true,
+        align:"left",
+        render: object => DateTimeCell(object['created_at'])
+    },
+    {
         title: <IntlMessages id="antTable.title.name" />,
         key: 'first_name',
-        width: 100,
+        width: 200,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'first_name')
+        align:"left",
+        render: object =>ToolTipsCell(object["last_name"]?object["first_name"]+" "+object["last_name"]:object['first_name'])
     },
     {
         title: <IntlMessages id="antTable.title.email" />,
         key: 'email',
+        align:"left",
         width: 200,
         sorter: true,
-        render: object => renderCell(object, 'TextCell', 'email')
+        dataIndex:"email",
+        render:(data)=><span className="lowercase">{ToolTipsCell(data)}</span>
     },
     {
         title: <IntlMessages id="antTable.title.role" />,
         key: 'role',
-        width: 200,
-        render: object => renderCell(object, 'TextCell', 'role')
+        width: 150,
+        // sorter:true,
+        align:"left",
+        render: (object)=>(isAllowed('get_role')?<a href={"roles/access-grant/"+object.role_id}>{object['role']}</a>:object['role'])
     },
     {
         title: <IntlMessages id="antTable.title.Active" />,
         key: 'is_active',
-        width: 200,
+       align:"left",
+        width: 100,
         render: object => renderCell(object, 'EmployeeSwitchCell', 'id', 'first_name', 'last_name',
-            'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
-    },
-    {
-        title: <IntlMessages id="antTable.title.details" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object, 'EmployeeActionCell', 'id', 'first_name', 'last_name',
             'email', 'phone_number', 'address', 'role', 'role_id', 'is_active')
     }
 ];

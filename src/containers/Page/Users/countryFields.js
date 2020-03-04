@@ -75,15 +75,40 @@ export default class CountryFields extends Component {
             countries: [],
             selectedCountry: null,
             selectedState: null,
-            selectedCity: null,
+            selectedCity:null,
             countryID: "",
             stateID: "",
             states: [],
-            cities: []
+            cities: [],
+            isUpdate:this.props.update,
         }
         this._changeCountry = this._changeCountry.bind(this);
         this._changeState = this._changeState.bind(this);
         this._changeCity = this._changeCity.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        var states=[],cities=[];
+        if(this.state.isUpdate){
+            if(this.props.selectedCountry!=nextProps.countryName){
+                let country=this.state.countries.find((country)=>country.name==nextProps.countryName);
+                if(country){
+                    states = CountryData.getStatesOfCountry(country.id);
+                }
+            }
+            if(this.props.selectedState!=nextProps.stateName){
+                let state=states.find((state)=>state.name==nextProps.stateName);
+                if(state){
+                    cities = CountryData.getCitiesOfState(state.id);
+                }
+            }
+            this.setState({states,cities,selectedCountry:nextProps.countryName,selectedState:nextProps.stateName,selectedCity:nextProps.cityName})
+        }
+    }
+
+    componentDidMount() {
+        let allCountries = CountryData.getAllCountries();
+        this.setState({ countries: allCountries });
     }
 
     _changeCountry = (value, position) => {
@@ -93,7 +118,7 @@ export default class CountryFields extends Component {
                     var newPosition = Number(position.key) - 1;
                     var states = CountryData.getStatesOfCountry(newPosition + 1);
                     this.setState({
-                        selectedCountry: country.name, countryID: newPosition, states,
+                        selectedCountry: country.name, update:false,countryID: newPosition, states,
                         countryCode: country.sortname
                     });
                     this.props.onCountryChange(country.name, null, null, null, null, country.sortname);
@@ -107,24 +132,17 @@ export default class CountryFields extends Component {
         var stateID = position.key;
         const { selectedCountry, countryID, countryCode } = this.state;
 
-        this.setState({ selectedState: value, selectedCity: "", stateID: position.key, cities });
+        this.setState({ selectedState: value, update:false,selectedCity: "", stateID: position.key, cities });
         this.props.onCountryChange(selectedCountry, value, null, stateID, countryID, countryCode);
     }
 
     _changeCity = (value, position) => {
         const { selectedCountry, selectedState, countryID, stateID, countryCode } = this.state;
-        this.setState({ selectedCity: value });
+        this.setState({ selectedCity: value ,update:false});
         this.props.onCountryChange(selectedCountry, selectedState, value, stateID, countryID, countryCode);
     }
 
-    _handleBlur = () => {
-
-    }
-
-    componentDidMount() {
-        let allCountries = CountryData.getAllCountries();
-        this.setState({ countries: allCountries });
-    }
+    _handleBlur = () => { }
 
     render() {
         const { selectedCountry, selectedState, selectedCity, states, cities, countries } = this.state;
@@ -133,7 +151,7 @@ export default class CountryFields extends Component {
             <CountryWrap>
                 <Row>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
-                        <Country>Country:</Country>
+                        <Country>Country*</Country>
                         <SelectS
                             showSearch
                             value={selectedCountry}
@@ -149,7 +167,7 @@ export default class CountryFields extends Component {
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <SelectWrap>
-                            <Country>State:</Country>
+                            <Country>State*</Country>
                             <SelectS
                                 showSearch
                                 value={selectedState}
@@ -165,7 +183,7 @@ export default class CountryFields extends Component {
                     </Col>
                     <Col sm={24} md={8} xl={8} xxl={8} style={{ zIndex: "1" }}>
                         <SelectWrap>
-                            <Country>City:</Country>
+                            <Country>City*</Country>
                             <SelectS
                                 showSearch
                                 value={selectedCity}

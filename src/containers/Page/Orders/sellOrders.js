@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification, Tabs } from 'antd';
+import { Input, Pagination, notification } from 'antd';
 import { sellOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -8,9 +8,9 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
 
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
 const { logout } = authAction;
 
 class SellOrders extends Component {
@@ -20,7 +20,7 @@ class SellOrders extends Component {
             allOrders: [],
             allOrderCount: 0,
             searchOrder: '',
-            limit: 5,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -63,7 +63,7 @@ class SellOrders extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }
@@ -86,8 +86,15 @@ class SellOrders extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllOrders();
+        });
+    }
+
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page, loader } = this.state;
+        const { allOrders, allOrderCount, errType, errMsg, page, loader, limit } = this.state;
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -96,39 +103,40 @@ class SellOrders extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {sellOrderTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Search
-                                        placeholder="Search Orders"
-                                        onSearch={(value) => this._searchOrder(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                <TableWrapper
-                                    {...this.state}
-                                    columns={tableInfo.columns}
-                                    pagination={false}
-                                    dataSource={allOrders}
-                                    className="isoCustomizedTable"
-                                    onChange={this._handleSellOrderChange}
+                    {sellOrderTableInfos.map(tableInfo => (
+                        <div>
+                            <div style={{ "display": "inline-block", "width": "100%" }}>
+                                <Search
+                                    placeholder="Search Orders"
+                                    onSearch={(value) => this._searchOrder(value)}
+                                    style={{ "float": "right", "width": "250px" }}
+                                    enterButton
                                 />
-                                {loader && <FaldaxLoader />}
-                                {allOrderCount > 0 ?
-                                    <Pagination
-                                        style={{ marginTop: '15px' }}
-                                        className="ant-users-pagination"
-                                        onChange={this._handleOrderPagination.bind(this)}
-                                        pageSize={5}
-                                        current={page}
-                                        total={allOrderCount}
-                                    /> : ''
-                                }
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                            </div>
+                            <TableWrapper
+                                {...this.state}
+                                columns={tableInfo.columns}
+                                pagination={false}
+                                dataSource={allOrders}
+                                className="isoCustomizedTable"
+                                onChange={this._handleSellOrderChange}
+                            />
+                            {loader && <FaldaxLoader />}
+                            {allOrderCount > 0 ?
+                                <Pagination
+                                    style={{ marginTop: '15px' }}
+                                    className="ant-users-pagination"
+                                    onChange={this._handleOrderPagination.bind(this)}
+                                    pageSize={limit}
+                                    current={page}
+                                    total={allOrderCount}
+                                    showSizeChanger
+                                    onShowSizeChange={this._changePaginationSize}
+                                    pageSizeOptions={pageSizeOptions}
+                                /> : ''
+                            }
+                        </div>
+                    ))}
                 </TableDemoStyle>
             </LayoutWrapper>
         );

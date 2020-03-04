@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { notification, Pagination, Input, DatePicker, Row, Form, Button } from 'antd';
+import { notification, Pagination, Input,Icon, DatePicker, Row, Form, Button, Col } from 'antd';
 import { KYCInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
-import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+// import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
@@ -10,8 +10,10 @@ import ViewKYCModal from './viewKYCModal';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import moment from 'moment';
-import ColWithPadding from '../common.style';
-
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import { PageCounterComponent } from '../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { exportCustomerIdVerification } from '../../../helpers/exportToCsv/headers';
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
 var self;
@@ -28,13 +30,15 @@ class ReviewKYC extends Component {
             errType: '',
             loader: false,
             page: 1,
-            limit: 50,
+             limit: PAGESIZE,
             searchKYC: '',
             allKYCCount: 0,
             status: 'REVIEW',
             startDate: '',
             endDate: '',
-            rangeDate: []
+            rangeDate: [],
+            csvData:[],
+            openCsvModal:false
         }
         self = this;
         ReviewKYC.viewKYC = ReviewKYC.viewKYC.bind(this);
@@ -53,17 +57,25 @@ class ReviewKYC extends Component {
         this._getAllKYCData();
     }
 
-    _getAllKYCData = () => {
+    onExport=()=>{
+        this.setState({openCsvModal:true},()=>this._getAllKYCData(true));
+    }
+
+    _getAllKYCData = (isExportToCsv=false) => {
         const { token } = this.props;
         const { page, limit, searchKYC, sorterCol, sortOrder, status, startDate, endDate } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate, status)
+        (isExportToCsv?ApiUtils.getKYCData(token, 1, EXPORT_LIMIT_SIZE, "", "", "", "", "", status):ApiUtils.getKYCData(token, page, limit, searchKYC, sorterCol, sortOrder, startDate, endDate, status))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ allKYCData: res.data, allKYCCount: parseInt(res.KYCCount) });
+                    if(isExportToCsv){
+                        _this.setState({csvData:res.data});
+                    }else{
+                        _this.setState({ allKYCData: res.data, allKYCCount: parseInt(res.KYCCount) });
+                    }
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -75,7 +87,7 @@ class ReviewKYC extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }
@@ -104,8 +116,9 @@ class ReviewKYC extends Component {
         })
     }
 
-    _searchKYC = (val) => {
-        this.setState({ searchKYC: val, page: 1 }, () => {
+    _searchKYC = (e) => {
+        e.preventDefault();
+        this.setState({ page: 1, status: 'REVIEW' }, () => {
             this._getAllKYCData();
         });
     }
@@ -114,72 +127,142 @@ class ReviewKYC extends Component {
         this.setState({ searchKYC: field.target.value })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllKYCData();
+        });
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    isabledRangeTime = (_, type) => {
+        if (type === 'start') {
+            return {
+                disabledHours: () => this.range(0, 60).splice(4, 20),
+                disabledMinutes: () => this.range(30, 60),
+                disabledSeconds: () => [55, 56],
+            };
+        }
+        return {
+            disabledHours: () => this.range(0, 60).splice(20, 4),
+            disabledMinutes: () => this.range(0, 31),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+
+    _changeDate = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+            startDate: date.length > 0 ? moment(date[0]).toISOString() : '',
+            endDate: date.length > 0 ? moment(date[1]).toISOString() : ''
+        })
+    }
+
+    _resetFilters = () => {
+        this.setState({
+            filterVal: '', searchKYC: '', startDate: '', endDate: '',
+            rangeDate: [], page: 1, sorterCol: '', sortOrder: ''
+        }, () => {
+            this._getAllKYCData();
+        })
+    }
+
     render() {
         const { allKYCData, errMsg, errType, loader, kycDetails, showViewKYCModal, page, allKYCCount,
-            rangeDate, searchKYC } = this.state;
+            rangeDate, searchKYC, limit,openCsvModal,csvData } = this.state;
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
 
         return (
             <TableDemoStyle>
-                <div className="isoTableDisplayTab">
-                    {KYCInfos.map(tableInfo => (
-                        <div key={tableInfo.value}>
+                <div className="isoLayoutContent">
+                <ExportToCSVComponent
+                    isOpenCSVModal={openCsvModal}
+                    onClose={() => {
+                    this.setState({ openCsvModal: false });
+                    }}
+                    filename="under_review_customer_id_verification.csv"
+                    data={csvData}
+                    header={exportCustomerIdVerification}
+                />
+                <PageCounterComponent page={page} limit={limit} dataCount={allKYCCount} syncCallBack={this._resetFilters}/>
+                        <div key={KYCInfos[0].value}>
                             <Form onSubmit={this._searchKYC}>
-                                <Row type="flex" justify="end">
-                                    <ColWithPadding sm={5}>
+                                <Row type="flex" justify="start" className="table-filter-row">
+                                    <Col md={8}>
                                         <Input
-                                            placeholder="Search KYC"
+                                            placeholder="Search Customer ID"
                                             onChange={this._changeSearch.bind(this)}
                                             value={searchKYC}
                                         />
-                                    </ColWithPadding>
-                                    <ColWithPadding sm={7}>
+                                    </Col>
+                                    <Col md={7}>
                                         <RangePicker
                                             value={rangeDate}
                                             disabledTime={this.disabledRangeTime}
                                             onChange={this._changeDate}
                                             format="YYYY-MM-DD"
                                             allowClear={false}
-                                            style={{ width: "100%" }}
                                         />
-                                    </ColWithPadding>
-                                    <ColWithPadding xs={12} sm={3}>
-                                        <Button htmlType="submit" className="search-btn" type="primary" style={{ margin: "0" }}>Search</Button>
-                                    </ColWithPadding>
-                                    <ColWithPadding xs={12} sm={3}>
-                                        <Button className="search-btn" type="primary" onClick={this._resetFilters}>Reset</Button>
-                                    </ColWithPadding>
-                                </Row>
+                                    </Col>
+                                    <Col xs={12} md={3}>
+                                        <Button htmlType="submit" className="filter-btn btn-full-width" type="primary"><Icon type="search"/>Search</Button>
+                                    </Col>
+                                    <Col xs={12} md={3}>
+                                        <Button className="filter-btn btn-full-width" type="primary" onClick={this._resetFilters}><Icon type="reload"></Icon>Reset</Button>
+                                    </Col>
+                                    <Col xs={12} md={3}>
+                                        <Button
+                                        className="filter-btn full-width"
+                                        type="primary"
+                                        onClick={this.onExport}
+                                        icon="export"
+                                        >
+                                        Export
+                                        </Button>
+                                    </Col>
+                                </Row>  
                             </Form>
                             {loader && <FaldaxLoader />}
-                            <div style={{ marginTop: "30px" }}>
+                          
                                 <ViewKYCModal
                                     kycDetails={kycDetails}
                                     showViewKYCModal={showViewKYCModal}
                                     closeViewModal={this._closeViewKYCModal}
                                 />
                                 <TableWrapper
+                                    rowkey="id"
                                     {...this.state}
-                                    columns={tableInfo.columns}
+                                    columns={KYCInfos[0].columns}
                                     pagination={false}
+                                    className="table-tb-margin"
                                     dataSource={allKYCData}
-                                    className="isoCustomizedTable"
                                     onChange={this._handleKYCTableChange}
+                                    bordered
+                                    scroll={TABLE_SCROLL_HEIGHT}
                                 />
                                 {allKYCCount > 0 ?
                                     <Pagination
-                                        style={{ marginTop: '15px' }}
                                         className="ant-users-pagination"
                                         onChange={this._handleKYCPagination.bind(this)}
-                                        pageSize={50}
+                                        pageSize={limit}
                                         current={page}
-                                        total={allKYCCount}
+                                        total={parseInt(allKYCCount)}
+                                        showSizeChanger
+                                        onShowSizeChange={this._changePaginationSize}
+                                        pageSizeOptions={pageSizeOptions}
                                     /> : ''}
-                            </div>
+                            
                         </div>
-                    ))}
+                    
                 </div>
             </TableDemoStyle>
         );
@@ -192,4 +275,3 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(ReviewKYC);
 
-export { ReviewKYC }

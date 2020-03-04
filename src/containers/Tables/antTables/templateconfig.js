@@ -20,21 +20,19 @@ const renderCell = (object, type, key, fname = null, emailContent = null, emailN
     }
 };
 
-const columns = [
-    {
-        title: <IntlMessages id="antTable.title.name" />,
-        key: 'name',
-        width: 100,
-        render: object => renderCell(object, 'TextCell', 'name')
-    },
-    {
-        title: <IntlMessages id="antTable.title.details" />,
-        key: 'action',
-        width: 200,
-        render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',
-            'note')
-    }
-];
+const columns = [{
+    title: <IntlMessages id="emailTable.title.actions" />,
+    key: 'action',
+    width: 75,
+    align:"left",
+    render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',
+        'note')
+}, {
+    title: <IntlMessages id="antTable.title.template_name" />,
+    key: 'name',
+    align:"left",
+    render: object => renderCell(object, 'TextCell', 'name')
+}];
 
 const templateTableinfos = [
     {

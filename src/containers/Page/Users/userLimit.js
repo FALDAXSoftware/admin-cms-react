@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import ApiUtils from '../../../helpers/apiUtills';
 import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
+import { isAllowed } from '../../../helpers/accessControl';
+// import createNotification from '../../../components/notification';
+import { messages } from '../../../helpers/messages';
 
 const { logout } = authAction;
 const EditableContext = React.createContext();
-
+const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
 class EditableCell extends React.Component {
 
     getInput = () => {
@@ -18,7 +21,7 @@ class EditableCell extends React.Component {
     };
 
     renderCell = ({ getFieldDecorator }) => {
-        console.log('>>>getFieldDecorator', getFieldDecorator)
+        // console.log('>>>getFieldDecorator', getFieldDecorator)
         const {
             editing,
             dataIndex,
@@ -29,20 +32,24 @@ class EditableCell extends React.Component {
             children,
             ...restProps
         } = this.props;
-        console.log('>>>', record)
+        // console.log('>>>', record)
         return (
             <td {...restProps}>
                 {editing ? (
                     <Form.Item style={{ margin: 0 }}>
                         {getFieldDecorator(dataIndex, {
                             rules: [
+                                // {
+                                //     required: true,
+                                //     message: `Please Input ${title}!`,
+                                // },
                                 {
-                                    required: true,
-                                    max: 100,
-                                    message: `Please Input ${title}!`,
-                                },
+                                    pattern: regEx,
+                                    message: "Please Enter Valid Positive Number"
+
+                                }
                             ],
-                            initialValue: record[dataIndex],
+                            initialValue: typeof record[dataIndex]=="number" ?parseFloat(record[dataIndex]):undefined,
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -119,9 +126,9 @@ class EditableUserLimitTable extends React.Component {
                             </Popconfirm>
                         </span>
                     ) : (
-                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
+                           <>{isAllowed("update_user_limit") && <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
                                 Edit
-                    </a>
+                           </a>}</>
                         );
                 },
             },
@@ -146,11 +153,38 @@ class EditableUserLimitTable extends React.Component {
         this.setState({ editingKey: '' });
     };
 
+    validateMinCryptoLimit=(rowData,key)=>{
+        let {userAllLimits}=this.state;
+        let data=userAllLimits.find(ele=>ele.key==key)
+        if(rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
+            return false;
+        }if(rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'Error' });
+            return false;
+        }if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
+            return false;
+        }if(rowData.daily_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto)>parseFloat(rowData.daily_withdraw_crypto)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto_lte_daily_withdraw_crypto, errType: 'Error' });
+            return false;
+        }
+        if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto)>parseFloat(rowData.monthly_withdraw_crypto)){
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_withdraw_crypto_lte_monthly_withdraw_crypto, errType: 'Error' });
+            return false;
+        }
+        return true;
+    }
+
     save = (form, key) => {
         const { token, user_id } = this.props;
         let _this = this;
         form.validateFields((error, row) => {
-            console.log('error', error, row)
+            let isValid=this.validateMinCryptoLimit(row,key);
+            if(!isValid){
+                return false;
+            }
+            // console.log('error', error, row)
             if (error) {
                 return;
             }
@@ -161,12 +195,12 @@ class EditableUserLimitTable extends React.Component {
                 // id: newData[index].id,
                 coin_id: newData[index].coin_table_id,
                 user_id: user_id,
-                daily_withdraw_crypto: parseInt(row.daily_withdraw_crypto),
-                daily_withdraw_fiat: parseInt(row.daily_withdraw_fiat),
-                min_withdrawl_crypto: parseInt(row.min_withdrawl_crypto),
-                min_withdrawl_fiat: parseInt(row.min_withdrawl_fiat),
-                monthly_withdraw_crypto: parseInt(row.monthly_withdraw_crypto),
-                monthly_withdraw_fiat: parseInt(row.monthly_withdraw_fiat)
+                daily_withdraw_crypto: parseFloat(row.daily_withdraw_crypto),
+                daily_withdraw_fiat: parseFloat(row.daily_withdraw_fiat),
+                min_withdrawl_crypto: parseFloat(row.min_withdrawl_crypto),
+                min_withdrawl_fiat: parseFloat(row.min_withdrawl_fiat),
+                monthly_withdraw_crypto: parseFloat(row.monthly_withdraw_crypto),
+                monthly_withdraw_fiat: parseFloat(row.monthly_withdraw_fiat)
             }
 
             _this.setState({ loader: true });
@@ -178,17 +212,17 @@ class EditableUserLimitTable extends React.Component {
                             _this._getUserLimit();
                         });
                     } else if (res.status == 403) {
-                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                        _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error' }, () => {
                             _this.props.logout();
                         });
                     } else {
-                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                        _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error' });
                     }
                     _this.setState({ loader: false });
                 })
                 .catch(() => {
                     _this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                        errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error', loader: false
                     });
                 });
 
@@ -226,17 +260,17 @@ class EditableUserLimitTable extends React.Component {
                     _this.setState({ userAllLimits: data });
 
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error' }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'error' });
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error' });
                 }
                 _this.setState({ loader: false });
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error', loader: false
                 });
             });
     }
@@ -277,7 +311,7 @@ class EditableUserLimitTable extends React.Component {
         });
 
         return (
-            <div className="isoLayoutContent">
+            <div className="isoLayoutContent scroll-table">
                 <EditableContext.Provider value={this.props.form}>
                     <Table
                         components={components}

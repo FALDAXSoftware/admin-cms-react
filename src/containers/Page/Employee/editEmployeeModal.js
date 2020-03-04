@@ -112,7 +112,7 @@ class EditEmployeeModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error', isDisabled: false
                     });
                 });
@@ -194,6 +194,7 @@ class EditEmployeeModal extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span style={{ "marginRight": "15px" }}>Role:</span>
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200 }}
                             placeholder="Select a role"
                             onChange={this._changeRole}

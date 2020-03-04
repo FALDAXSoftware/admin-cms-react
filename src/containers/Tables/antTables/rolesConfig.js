@@ -1,7 +1,8 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, RolesActionCell, RoleSwitchCell } from '../../../components/tables/helperCells';
+import { TextCell, RolesActionCell, RoleSwitchCell, DateTimeCell } from '../../../components/tables/helperCells';
+import { isAllowed } from '../../../helpers/accessControl';
 
 const renderCell = (object, type, key, first_name = null, isCoin = null, isUser = null,
     isCountry = null, isEmp = null, isRole = null,
@@ -32,7 +33,7 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
         case 'RoleSwitchCell':
             return RoleSwitchCell(value, name, users, assets, countries,
                 roles, employee, pairs, transaction_history, trade_history,
-                withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active);
+                withdraw_requests, jobs, kyc, fees, panic_button, news, is_referral, add_user, is_active,!isAllowed("update_role"));
         case 'RolesActionCell':
             return RolesActionCell(value, name, users, assets, countries,
                 roles, employee, pairs, transaction_history, trade_history,
@@ -44,28 +45,42 @@ const renderCell = (object, type, key, first_name = null, isCoin = null, isUser 
 
 const columns = [
     {
-        title: <IntlMessages id="roleTable.title.name" />,
-        key: 'name',
-        width: 200,
-        sorter: true,
-        render: object => renderCell(object, 'TextCell', 'name')
-    }, {
-        title: <IntlMessages id="roleTable.title.status" />,
-        key: 'is_active',
-        width: 200,
-        render: object => renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
-            'countries', 'roles', 'employee', 'pairs', 'transaction_history',
-            'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
-            'is_referral', 'add_user', 'is_active')
-    }, {
         title: <IntlMessages id="roleTable.title.actions" />,
-        key: 'action',
-        width: 200,
+        key: 'roleTable.title.actions',
+        width: 100,
+        align:"left",
         render: object => renderCell(object,
             'RolesActionCell', 'id', 'name', 'users', 'assets',
             'countries', 'roles', 'employee', 'pairs', 'transaction_history',
             'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
             'is_referral', 'add_user', 'is_active')
+    },
+    {
+        title: <IntlMessages id="antTable.title.created_on" />,
+        key: 'created_at',
+        width: 150,
+        align:"left",
+        sorter: true,
+        render: object => DateTimeCell(object['created_at'])
+    },{
+        title: <IntlMessages id="roleTable.title.name" />,
+        key: 'name',
+        width: 200,
+        align:"left",
+        sorter: true,
+        render: object => renderCell(object, 'TextCell', 'name')
+    }
+    , {
+        title: <IntlMessages id="roleTable.title.status" />,
+        key: 'roleTable.title.status',
+       align:"left",
+        width: 200,
+        render: object => {
+            return renderCell(object, 'RoleSwitchCell', 'id', 'name', 'users', 'assets',
+                'countries', 'roles', 'employee', 'pairs', 'transaction_history',
+                'trade_history', 'withdraw_requests', 'jobs', 'kyc', 'fees', 'panic_button', 'news',
+                'is_referral', 'add_user', 'is_active')
+        }
     }
 ];
 

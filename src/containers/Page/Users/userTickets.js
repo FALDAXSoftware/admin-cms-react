@@ -5,13 +5,14 @@ import { ticketsTableInfos } from '../../Tables/antTables';
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
-import { Tabs, notification } from 'antd';
+import { notification } from 'antd';
 import FaldaxLoader from '../faldaxLoader';
 import authAction from '../../../redux/auth/actions';
 import { withRouter } from 'react-router';
+import { TABLE_SCROLL_HEIGHT } from '../../../helpers/globals';
 
 const { logout } = authAction;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 
 class UserTickets extends Component {
     constructor(props) {
@@ -64,8 +65,7 @@ class UserTickets extends Component {
                 }
             })
             .catch((err) => {
-                console.log("errror", err);
-                _this.setState({ loader: false })
+                _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.",loader:false});
             });
     }
 
@@ -90,29 +90,24 @@ class UserTickets extends Component {
         return (
             <LayoutWrapper>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {ticketsTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div>
-                                    <TableWrapper
-                                        onRow={(record, rowIndex) => {
-                                            return {
-                                                onClick: () => { this._changeRow(record) },
-                                            };
-                                        }}
-                                        style={{ marginTop: '20px' }}
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allTickets}
-                                        className="isoCustomizedTable"
-                                        expandedRowRender={record => <p style={{ margin: 0, whiteSpace: 'pre-line' }}>{record.content}</p>}
-                                    />
-                                    {loader && <FaldaxLoader />}
-                                </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
+
+                    <TableWrapper
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => { this._changeRow(record) },
+                            };
+                        }}
+                        rowKey="id"
+                        {...this.state}
+                        columns={ticketsTableInfos[0].columns}
+                        pagination={false}
+                        dataSource={allTickets}
+                        className="isoCustomizedTable"
+                        expandedRowRender={record => <p style={{ margin: 0, whiteSpace: 'pre-line' }}>{record.content}</p>}
+                        scroll={TABLE_SCROLL_HEIGHT}
+                        bordered
+                    />
+                    {loader && <FaldaxLoader />}    
                 </TableDemoStyle>
             </LayoutWrapper>
         )

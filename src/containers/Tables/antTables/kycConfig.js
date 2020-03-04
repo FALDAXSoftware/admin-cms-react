@@ -2,7 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import {
-    TextCell, KYCActionCell, TierCell, DateCell
+    TextCell, KYCActionCell, TierCell, DateTimeCell, ToolTipsCell
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null, emailId = null,
@@ -32,71 +32,89 @@ const renderCell = (object, type, key, IDM_ID = null, fname = null, lname = null
         case 'TierCell':
             return TierCell(value);
         case 'DateCell':
-            return DateCell(value);
+            return DateTimeCell(value);
         default:
             return TextCell(value);
     }
 };
 
 const columns = [{
-    title: <IntlMessages id="kycTable.title.mtid" />,
-    key: 'mtid',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'mtid')
-}, {
-    title: <IntlMessages id="kycTable.title.name" />,
-    key: 'first_name',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'first_name')
-}, {
-    title: <IntlMessages id="kycTable.title.last_name" />,
-    key: 'last_name',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'last_name')
-}, {
-    title: <IntlMessages id="kycTable.title.email" />,
-    key: 'email',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'email')
-}, {
-    title: <IntlMessages id="kycTable.title.country" />,
-    key: 'country',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TextCell', 'country')
-}, {
-    title: <IntlMessages id="kycTable.title.account_tier" />,
-    key: 'account_tier',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'TierCell', 'account_tier')
-}, {
-    title: <IntlMessages id="kycTable.title.direct_response" />,
-    key: 'direct_response',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'direct_response')
-}, {
-    title: <IntlMessages id="kycTable.title.created_at" />,
-    key: 'created_at',
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, 'DateCell', 'created_at')
-}, {
     title: <IntlMessages id="kycTable.title.actions" />,
+    align:"left",
+    ellipsis:true,
     key: 'action',
     width: 100,
     render: object => renderCell(object, 'KYCActionCell', 'id', 'mtid', 'first_name'
         , 'last_name', 'email', 'direct_response', 'kycDoc_details', 'webhook_response', 'address',
         'country', 'city', 'zip', 'dob', 'id_type', 'created_at'
     )
+}, {
+    title: <IntlMessages id="kycTable.title.created_at" />,
+   align:"left",
+    ellipsis:true,
+    key: 'created_at_1',
+    width: 150,
+    sorter: true,
+    render: object => renderCell(object, 'DateCell', 'created_at')
+}, {
+    title: <IntlMessages id="kycTable.title.mtid" />,
+   align:"left",
+    ellipsis:true,
+    key: 'mtid',
+    width: 250,
+    render: object => renderCell(object, 'TextCell', 'mtid')
+}, {
+    title: <IntlMessages id="kycTable.title.name" />,
+   align:"left",
+    ellipsis:true,
+    key: 'first_name',
+    width: 150,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'first_name')
+}, {
+    title: <IntlMessages id="kycTable.title.last_name" />,
+   align:"left",
+    ellipsis:true,
+    key: 'last_name',
+    width: 150,
+    sorter: true,
+    render: object => renderCell(object, 'TextCell', 'last_name')
+}, {
+    title: <IntlMessages id="kycTable.title.email" />,
+   align:"left",
+    ellipsis:true,
+    key: 'email',
+    width: 300,
+    dataIndex:"email",
+    render: object => ToolTipsCell(object)
+}, {
+    title: <IntlMessages id="kycTable.title.country" />,
+   align:"left",
+    ellipsis:true,
+    key: 'country',
+    width: 130,
+    sorter: true,
+    dataIndex:"country",
+    render: object => ToolTipsCell(object)
+}, {
+    title: <IntlMessages id="kycTable.title.account_tier" />,
+   align:"left",
+    ellipsis:true,
+    key: 'account_tier',
+    width: 150,
+    render: object => renderCell(object, 'TierCell', 'account_tier')
+}, {
+    title: <IntlMessages id="kycTable.title.direct_response" />,
+   align:"left",
+    ellipsis:true,
+    key: 'direct_response',
+    width: 150,
+    render: object => renderCell(object, 'TextCell', 'direct_response')
 }];
 
 const KYCInfos = [
     {
-        title: 'KYC',
+        title: 'Customer ID',
         value: 'KYCTable',
         columns: clone(columns)
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Tabs, Pagination, notification } from 'antd';
-import { jobAppTableInfos } from "../../Tables/antTables";
+import { Input, Pagination, notification, Row, Col, Button } from 'antd';
+import { jobAppTableInfos as tableColumn } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from '../../Tables/antTables/demo.style';
@@ -8,12 +8,17 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import ViewJobAppModal from './viewJobAppModal';
 import FaldaxLoader from '../faldaxLoader';
-import { Link } from 'react-router-dom';
 import authAction from '../../../redux/auth/actions';
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+// import { BackButton } from '../../Shared/backBttton';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { exportJobApplicants } from '../../../helpers/exportToCsv/headers';
+import { PageCounterComponent } from '../../Shared/pageCounter';
 
 const { logout } = authAction;
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 var self;
 
 class JobApplications extends Component {
@@ -23,7 +28,7 @@ class JobApplications extends Component {
             allApplications: [],
             allApplicationsCount: 0,
             searchJobApp: '',
-            limit: 50,
+             limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -31,7 +36,9 @@ class JobApplications extends Component {
             loader: false,
             applicationDetails: [],
             showViewJobAppModal: false,
-            jobId: ''
+            jobId: '',
+            csvData:[],
+            openCsvModal:false
         }
         self = this;
         JobApplications.viewJobApplication = JobApplications.viewJobApplication.bind(this);
@@ -61,16 +68,19 @@ class JobApplications extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllJobApplicants = () => {
+    _getAllJobApplicants = (isExportToCsv=false) => {
         const { token } = this.props;
         const { limit, searchJobApp, page, sorterCol, sortOrder, jobId } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllJobApplications(jobId, page, limit, token, searchJobApp, sorterCol, sortOrder)
+        (isExportToCsv?ApiUtils.getAllJobApplications(jobId, 1,EXPORT_LIMIT_SIZE, token, "", "", ""):ApiUtils.getAllJobApplications(jobId, page, limit, token, searchJobApp, sorterCol, sortOrder))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                    if(isExportToCsv)
+                    _this.setState({csvData:res.data});
+                    else
                     _this.setState({ allApplications: res.data, allApplicationsCount: res.applicationCount });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -83,7 +93,7 @@ class JobApplications extends Component {
             })
             .catch(() => {
                 _this.setState({
-                    errMsg: true, errMessage: 'Something went wrong!!', errType: 'error', loader: false
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'error', loader: false
                 });
             });
     }
@@ -110,61 +120,89 @@ class JobApplications extends Component {
         })
     }
 
+    _changePaginationSize = (current, pageSize) => {
+        this.setState({ page: current, limit: pageSize }, () => {
+            this._getAllJobApplicants();
+        });
+    }
+
     render() {
         const { allApplications, allApplicationsCount, errType, loader, errMsg, page,
-            showViewJobAppModal, applicationDetails } = this.state;
-
+            showViewJobAppModal, applicationDetails, limit,csvData,openCsvModal } = this.state;
+       let pageSizeOptions = PAGE_SIZE_OPTIONS
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
             <LayoutWrapper>
+                {loader && <FaldaxLoader />}
+                <ExportToCSVComponent
+              isOpenCSVModal={openCsvModal}
+              onClose={() => {
+                this.setState({ openCsvModal: false });
+              }}
+              filename="job_applicants.csv"
+              data={csvData}
+              header={exportJobApplicants}
+            />
+                {/* <BackButton {...this.props}></BackButton> */}
+                <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
                 <TableDemoStyle className="isoLayoutContent">
-                    <Tabs className="isoTableDisplayTab">
-                        {jobAppTableInfos.map(tableInfo => (
-                            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-                                <div style={{ "display": "inline-block", "width": "100%" }}>
-                                    <Link to="/dashboard/jobs">
-                                        <i style={{ marginRight: '10px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                                        <a onClick={() => { this.props.history.push('/dashboard/jobs') }}>Back</a>
-                                    </Link>
-                                    <Search
-                                        placeholder="Search applicants"
-                                        onSearch={(value) => this._searchJobApp(value)}
-                                        style={{ "float": "right", "width": "250px" }}
-                                        enterButton
-                                    />
-                                </div>
-                                {loader && <FaldaxLoader />}
-                                <div>
-                                    <ViewJobAppModal
-                                        applicationDetails={applicationDetails}
-                                        showViewJobAppModal={showViewJobAppModal}
-                                        closeViewJobAppModal={this._closeViewJobAppModal}
-                                    />
-                                    <TableWrapper
-                                        style={{ marginTop: '20px' }}
-                                        {...this.state}
-                                        columns={tableInfo.columns}
-                                        pagination={false}
-                                        dataSource={allApplications}
-                                        className="isoCustomizedTable"
-                                        onChange={this._handleJobAppTableChange}
-                                    />
-                                    {allApplicationsCount > 0 ?
-                                        <Pagination
-                                            style={{ marginTop: '15px' }}
-                                            className="ant-users-pagination"
-                                            onChange={this._handleJobPagination.bind(this)}
-                                            pageSize={50}
-                                            current={page}
-                                            total={allApplicationsCount}
-                                        /> : ''}
-                                </div>
-                            </TabPane>
-                        ))}
-                    </Tabs>
+                <PageCounterComponent page={page} limit={limit} dataCount={allApplicationsCount} syncCallBack={()=>this._getAllJobApplicants(false)}/>
+                <Row className="table-filter-row" type="flex" justify="start">
+                    <Col md={7}>
+                        <Search
+                        placeholder="Search applicants"
+                        onSearch={(value) => this._searchJobApp(value)}
+                        enterButton
+                        />
+                    </Col>
+                    <Col xs={24} md={3}>
+                  <Button
+                    type="primary"
+                    icon="export"
+                    className="full-width"
+                    onClick={() => {
+                      this.setState({ openCsvModal: true }, () =>
+                        this._getAllJobApplicants(true)
+                      );
+                    }}
+                  >
+                    Export
+                  </Button>
+                </Col>
+                </Row>
+                
+                <ViewJobAppModal
+                    applicationDetails={applicationDetails}
+                    showViewJobAppModal={showViewJobAppModal}
+                    closeViewJobAppModal={this._closeViewJobAppModal}
+                />
+                <TableWrapper
+                    rowKey="id"
+                    className="float-clear table-tb-margin"
+                    {...this.state}
+                    columns={tableColumn.columns}
+                    pagination={false}
+                    dataSource={allApplications}
+                    onChange={this._handleJobAppTableChange}
+                    bordered
+                    scroll={TABLE_SCROLL_HEIGHT}
+                />
+                {allApplicationsCount > 0 ?
+                    <Pagination
+                        className="ant-users-pagination"
+                        onChange={this._handleJobPagination.bind(this)}
+                        pageSize={limit}
+                        current={page}
+                        total={parseInt(allApplicationsCount)}
+                        showSizeChanger
+                        onShowSizeChange={this._changePaginationSize}
+                        pageSizeOptions={pageSizeOptions}
+                    /> : ''}
+        
+
                 </TableDemoStyle>
             </LayoutWrapper>
         );
@@ -176,4 +214,4 @@ export default connect(
         token: state.Auth.get('token')
     }), { logout })(JobApplications);
 
-export { JobApplications, jobAppTableInfos };
+export { JobApplications };

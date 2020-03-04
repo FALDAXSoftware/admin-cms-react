@@ -15,6 +15,16 @@ const routes = [
         module: "assets"
     },
     {
+        path: "key",
+        component: asyncComponent(() => import("../Page/key/key")),
+        module: "key"
+    },
+    {
+        path: "terms-and-conditions",
+        component: asyncComponent(() => import("../Page/Terms/terms")),
+        module: "terms-and-conditions"
+    },
+    {
         path: "countries",
         component: asyncComponent(() => import("../Page/Country/countries")),
         module: "countries"
@@ -46,17 +56,17 @@ const routes = [
     // },
     {
         path: "transaction-history",
-        component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistory")),
+        component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistoryTabs")),
         module: "transaction_history"
     },
     {
         path: "trade-history",
-        component: asyncComponent(() => import("../Page/Trade/tradeHistory")),
+        component: asyncComponent(() => import("../Page/Trade/allHistory")),
         module: "trade_history"
     },
     {
         path: "withdraw-requests",
-        component: asyncComponent(() => import("../Page/WithdrawRequest/withdrawRequest")),
+        component: asyncComponent(() => import("../Page/WithdrawRequest/tabs")),
         module: "withdraw_requests"
     },
     {
@@ -66,7 +76,7 @@ const routes = [
     },
     {
         path: "kyc",
-        component: asyncComponent(() => import("../Page/KYC/kyc")),
+        component: asyncComponent(() => import("../Page/KYC/kycTabs")),
         module: "kyc"
     },
     {
@@ -81,12 +91,12 @@ const routes = [
     },
     {
         path: "news",
-        component: asyncComponent(() => import("../Page/News/news")),
+        component: asyncComponent(() => import("../Page/News/tabs")),
         module: "news"
     },
     {
         path: "referral",
-        component: asyncComponent(() => import("../Page/Referral/referral")),
+        component: asyncComponent(() => import("../Page/Referral/tabs")),
         module: "is_referral"
     },
     {
@@ -96,7 +106,7 @@ const routes = [
     },
     {
         path: "account-class",
-        component: asyncComponent(() => import("../Page/AccountClass/accountClass")),
+        component: asyncComponent(() => import("../Page/AccountClass/tabs")),
         module: "account_class"
     },
     {
@@ -105,26 +115,111 @@ const routes = [
         module: "email_templates"
     },
     {
-        path: "news-source",
+        path: "new's-source",
         component: asyncComponent(() => import("../Page/NewsSource/newsSources")),
         module: "news_source"
+    },
+    {
+        path: "two-factor-requests",
+        component: asyncComponent(() => import("../Page/TwoFactorRequest/TwoFactorRequestTab")),
+        module: "two_factor_requests"
+    },
+    {
+        path: "notifications",
+        component: asyncComponent(() => import("../Page/Notifications/notifications")),
+        module: "notifications"
+    },
+    {
+        path: "wallet",
+        component: asyncComponent(() => import("../Page/Wallet/walletDashboard")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/faldax/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/faldax/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/faldax-main-wallet/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/faldax main/details")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/warm/:coin",  
+        component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/hotsend/:coin",  
+        component: asyncComponent(() => import("../Page/Wallet/hot-send/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/hotreceive/:coin",  
+        component: asyncComponent(() => import("../Page/Wallet/hot-receive/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "wallet/custodial/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/custodial/wallet")),
+        module: "wallet_dashboard"
+    },
+    {
+        path: "batch-and-balance",
+        component: asyncComponent(() => import("../Page/Batch/batch")),
+        module: "batch_and_balance"
     },
     // {
     //     path: "edit-asset",
     //     component: asyncComponent(() => import("../Page/Assets/editAsset")),
     //     module: "edit_asset"
     // },
+    {
+        path: "account-tier",
+        component: asyncComponent(() => import("../Page/Tiers/tiers")),
+        module: "tiers"
+    },
+    {
+        path: "simplex-token",
+        component: asyncComponent(() => import("../Page/SimplexToken/simplexToken")),
+        module: "simplex_token"
+    },
+    {
+        path: "campaign",
+        component: asyncComponent(() => import("../Page/Offers/offers")),
+        module: "offers"
+    },
+    {
+        path: "campaign/add-campaign",
+        component: asyncComponent(() => import("../Page/Offers/addCampaign")),
+        module: "offers"
+    },
+    {
+        path: "campaign/update-campaign/:id",
+        component: asyncComponent(() => import("../Page/Offers/addCampaign")),
+        module: "offers"
+    },
+    {
+        path: "campaign/:campaignId/offer-usage/:id",
+        component: asyncComponent(() => import("../Page/Offers/offersUsage")),
+        module: "offers"
+    },
+    {
+        path: "network-fee",
+        component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
+        module: "network_fee"
+    }
 ];
 
 const mandatoryRoutes = [
     {
         path: "",
-        component: asyncComponent(() => import("../Page/dashboard"))
+        component: asyncComponent(() => import("../Page/Dashboard/tabs"))
     },
-    {
-        path: "dashboard",
-        component: asyncComponent(() => import("../Page/dashboard"))
-    },
+    // {
+    //     path: "dashboard",
+    //     component: asyncComponent(() => import("../Page/Dashboard/tabs"))
+    // },
     {
         path: "change-password",
         component: asyncComponent(() => import("../Page/changePassword"))
@@ -147,14 +242,14 @@ const mandatoryRoutes = [
     },
     {
         path: "users/trade-history/:id",
-        component: asyncComponent(() => import("../Page/Users/userTradeHistory"))
+        component: asyncComponent(() => import("../Page/Users/userTrades"))
     },
     {
-        path: "country/:id/states",
+        path: "countries/:id/states",
         component: asyncComponent(() => import("../Page/Country/StateList"))
     },
     {
-        path: "job-applications/:id",
+        path: "jobs/job-applications/:id",
         component: asyncComponent(() => import("../Page/Jobs/jobApplications")),
     },
     {
@@ -166,6 +261,10 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Users/viewUser"))
     },
     {
+        path: "campaign/:id",
+        component: asyncComponent(() => import("../Page/Offers/viewCampaign"))
+    },
+    {
         path: "employee/:id",
         component: asyncComponent(() => import("../Page/Employee/employeeProfile"))
     },
@@ -174,12 +273,32 @@ const mandatoryRoutes = [
         component: asyncComponent(() => import("../Page/Referral/referredAmount"))
     },
     {
+        path: "referral/:id/:coin_code",
+        component: asyncComponent(() => import("../Page/Referral/details/referralDetails"))
+    },
+    {
         path: "assets/edit-asset/:id",
         component: asyncComponent(() => import("../Page/Assets/editAsset"))
     },
     {
+        path: "assets/wallet/:id",
+        component: asyncComponent(() => import("../Page/Assets/assetWallet"))
+    },
+    {
         path: "email-templates/edit-template/:id",
         component: asyncComponent(() => import("../Page/EmailTemplates/updateEmailTemplate"))
+    },
+    {
+        path: "batch-and-balance/:id",
+        component: asyncComponent(() => import("../Page/Batch/batchDetails"))
+    },
+    {
+        path: "account-tier/:id",
+        component: asyncComponent(() => import("../Page/Tiers/editTier"))
+    },
+    {
+        path: "roles/access-grant/:id",
+        component: asyncComponent(() => import("../Page/Roles/access-grant"))
     },
 ]
 
@@ -195,21 +314,21 @@ class AppRouter extends Component {
             <div style={style}>
                 <Switch>
                     {
-                        rolesArray.map((role) => (
-                            routes.map(singleRoute => {
-                                const { path, exact, ...otherProps } = singleRoute;
-                                if ((role.module == singleRoute.module) && role.value == true) {
-                                    return (
-                                        <Route
-                                            exact={true}
-                                            key={singleRoute.path}
-                                            path={`${url}/${singleRoute.path}`}
-                                            {...otherProps}
-                                        />
-                                    )
-                                }
-                            })
-                        ))
+                        // rolesArray.map((role) => (
+                        routes.map(singleRoute => {
+                            const { path, exact, ...otherProps } = singleRoute;
+                            // if ((role.module == singleRoute.module) && role.value == true) {
+                            return (
+                                <Route
+                                    exact={true}
+                                    key={singleRoute.path}
+                                    path={`${url}/${singleRoute.path}`}
+                                    {...otherProps}
+                                />
+                            )
+                            // }
+                        })
+                        // ))
                     }
                     {
                         mandatoryRoutes.map(singleRoute => {

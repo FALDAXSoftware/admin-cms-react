@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Input, Checkbox, notification } from 'antd';
+import { Button, Input, Form, notification } from 'antd';
 import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
@@ -44,7 +44,8 @@ class SignIn extends Component {
     this.setState({ fields });
   }
 
-  _handleLogin = () => {
+  _handleLogin = (e) => {
+    e.preventDefault();
     const { login, storeToken, checkRoles } = this.props;
     const { fields } = this.state;
     let _this = this;
@@ -66,7 +67,11 @@ class SignIn extends Component {
             login({ user: res.user });
             storeToken({ token: res.token });
             checkRoles({ roles: res.user.roles })
-            _this.props.history.push('/dashboard');
+            if (res.user.roleAllowedData.length > 0) {
+              _this.props.history.push('/dashboard');
+            } else {
+              _this.props.history.push('/403');
+            }
           } else if (res.status == 201) {
             _this.setState({ isOtpRequired: true, loader: false });
           } else if (res.status == 402) {
@@ -79,7 +84,7 @@ class SignIn extends Component {
           }
         })
         .catch(err => {
-          _this.setState({ loader: false, errMsg: true, errMessage: 'Something went wrong!!' });
+          _this.setState({ loader: false, errMsg: true, errMessage: 'Unable to complete the requested action.' });
         });
     } else {
       this.setState({ loader: false });
@@ -105,12 +110,10 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-              <Link to="/dashboard">
-                <img src={logo} />
-              </Link>
+                <img src={logo} alt="signin"/>
             </div>
-
             <div className="isoSignInForm">
+            <Form onSubmit={this._handleLogin}>
               <div className="isoInputWrapper">
                 <Input size="large" placeholder="Email ID" onChange={this._onChangeFields.bind(this, "email")} />
                 <span className="field-error">
@@ -119,7 +122,7 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" onChange={this._onChangeFields.bind(this, "password")} />
+                <Input.Password size="large"  placeholder="Password" onChange={this._onChangeFields.bind(this, "password")} />
                 <span className="field-error">
                   {this.validator.message('Password', this.state.fields['password'], 'required')}
                 </span>
@@ -127,7 +130,7 @@ class SignIn extends Component {
 
               {this.state.isOtpRequired &&
                 <div className="isoInputWrapper">
-                  <span>Two-Factor Authentication is enabled for this account. Please enter your 2FA code below to proceed.</span>
+                  <span>2FA is enabled for this account. Please enter your 2FA code below to proceed.</span>
                   <div>
                     <Input size="large" type="text" placeholder="OTP" onChange={this._onChangeFields.bind(this, "otp")} />
                     {this.validator.message('OTP', this.state.fields['otp'], 'required|numeric')}
@@ -140,17 +143,18 @@ class SignIn extends Component {
                 {/* <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
                 </Checkbox> */}
-                <Button type="primary" onClick={this._handleLogin}>
+                <Button htmlType="submit" type="primary">
                   <IntlMessages id="page.signInButton" />
                 </Button>
               </div>
 
+            </Form>
               <div className="isoCenterComponent isoHelperWrapper">
-                <Link to="/forgot-password" className="isoForgotPass">
+                <Link to="/forgot-password" className="signin-link">
                   <IntlMessages id="page.signInForgotPass" />
                 </Link>
               </div>
-              {loader && <FaldaxLoader />}
+              {loader && <FaldaxLoader isSignUpPage={true}/>}
             </div>
           </div>
         </div>

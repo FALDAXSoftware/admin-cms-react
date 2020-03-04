@@ -4,6 +4,7 @@ import LayoutContentWrapper from '../../../components/utility/layoutWrapper.js';
 import TableDemoStyle from './demo.style';
 import fakeData from '../fakeData';
 import { tableinfos } from './usersConfig';
+import { inActiveUserinfos } from './inActiveUserConfig';
 import { assetTableInfos } from './coinsConfig';
 import { userReferralInfos } from './userReferralConfig';
 import { countryTableInfos } from './countriesConfig';
@@ -14,7 +15,6 @@ import { historyTableInfos } from './loginHistoryConfig';
 import { pairsTableInfos } from './pairsConfig';
 import { limitTableInfos } from './limitConfig';
 import { transactionTableInfos } from './transactionConfig';
-import { userTransactionTableInfos } from './userTransactionConfig.js'
 import { tradeTableInfos } from './tradeConfig';
 import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
@@ -32,7 +32,22 @@ import { templateTableinfos } from './templateconfig';
 import { newsSourceTableInfos } from './newsSourceConfig';
 import { jobCategoryTableInfos } from './jobcategoryConfig';
 import { ApprovedKYCInfos } from './approvedKYCConfig';
+import { whitelistTableInfos } from './whitelistConfig';
+import { profileWhitelistTableInfos } from './profileWhitelistConfig';
+import { twoFactorReqInfos } from './twoFactorReqConfig';
+import { walletTableInfos } from './walletHistoryConfig';
+import { dashboardTableinfos } from './walletDashboardConfig';
+import { walletFeeTableinfos } from './walletFeeConfig';
+import { pendingOrderTableInfos } from './pendingOrderConfig';
+import { cancelOrderTableInfos } from './cancelOrderConfig';
+import { tierTableInfos } from './tierConfig';
+import { tierReqTableInfos } from './tierRequestConfig';
+import { tierPendingReqTableInfos } from './pendingTierReqConfig';
+import { simplexTableInfos } from './simplexConfig';
+import { networkFeeTableInfos } from './networFeeConfig';
 import * as TableViews from './tableViews/';
+import { tblOffers } from './offersConfig';
+
 
 const dataList = new fakeData(10);
 
@@ -82,8 +97,11 @@ export {
   countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
   historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
   tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
-  jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos, userTransactionTableInfos,
+  jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos,
   newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
   accountClassTableinfos, templateTableinfos, newsSourceTableInfos, jobCategoryTableInfos,
-  ApprovedKYCInfos
+  ApprovedKYCInfos, whitelistTableInfos, profileWhitelistTableInfos, twoFactorReqInfos,
+  walletTableInfos, dashboardTableinfos, walletFeeTableinfos, pendingOrderTableInfos,
+  cancelOrderTableInfos, tierTableInfos, tierReqTableInfos, tierPendingReqTableInfos,
+  simplexTableInfos, inActiveUserinfos,networkFeeTableInfos,tblOffers
 };

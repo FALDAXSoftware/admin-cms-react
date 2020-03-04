@@ -89,13 +89,13 @@ class AddEmployeeModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        this._closeAddEmpModal();
-                        getAllEmployee();
-                        this._resetAddForm();
                         this.setState({
                             errMsg: true, errMessage: res.message, showRoleErr: false,
                             errType: 'Success', loader: false, isDisabled: false
                         })
+                        this._closeAddEmpModal();
+                        getAllEmployee();
+                        this._resetAddForm();
                     } else if (res.status == 403) {
                         this.setState({
                             errMsg: true, errMessage: res.err, errType: 'error',
@@ -113,7 +113,7 @@ class AddEmployeeModal extends Component {
                 .catch(() => {
                     this.setState({
                         errType: 'error', errMsg: true, isDisabled: false,
-                        errMessage: 'Something went wrong', loader: false
+                        errMessage: 'Unable to complete the requested action.', loader: false
                     });
                 });
         } else {
@@ -207,6 +207,7 @@ class AddEmployeeModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span style={{ "marginRight": "15px" }}>Role:</span>
                     <Select
+                        getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200 }}
                         placeholder="Select a role"
                         onChange={this._changeRole}

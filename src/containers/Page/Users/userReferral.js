@@ -62,7 +62,7 @@ class Referral extends Component {
                 _this.setState({ loader: false });
             })
             .catch((err) => {
-                console.log(err)
+                _this.setState({ errMsg: true, errMessage: "Unable to complete the requested action."});
             });
     }
 
@@ -165,10 +165,10 @@ class Referral extends Component {
                     <span>
                         <b>Referral Percentage</b>
                     </span>
-                    <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "15px", "width": "60%", "display": "inherit" }}
+                    <Input addonAfter={'%'} placeholder="Referral Percentage" style={{ "marginTop": "15px", "marginBottom": "5px    ", "width": "60%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "percentage")} value={fields["percentage"]} />
                     <span className="field-error">
-                        {this.validator.message('percentage', fields['percentage'], 'required|custom_between:0,100|max:10')}
+                        {this.validator.message('percentage', fields['percentage'], 'required|numeric|lte:100')}
                     </span>
                     {/* <span>
                         <b>Referral Days</b>
@@ -178,7 +178,7 @@ class Referral extends Component {
                     <span className="field-error">
                         {this.validator.message('days', fields['days'], 'required')}
                     </span> */}
-                    <Button type="primary" style={{ "marginBottom": "15px" }} onClick={this._updateReferral}> Update </Button>
+                    <Button type="primary" style={{ "marginBottom": "15px" }} className="mg-tp-15" onClick={this._updateReferral}> Update </Button>
                     <Button type="primary" className="cancel-btn" onClick={this._cancelReferral}> Cancel </Button>
                 </div>
                 {loader && <FaldaxLoader />}

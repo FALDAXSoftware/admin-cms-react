@@ -125,12 +125,13 @@ class AddPairModal extends Component {
                 .then((res) => res.json())
                 .then((res) => {
                     if (res.status == 200) {
-                        this._closeAddPairsModal();
-                        getAllPairs();
-                        this._resetAddForm();
                         this.setState({
-                            errType: 'Success', errMsg: true, errMessage: res.message,
+                            errType: 'success', errMsg: true, errMessage: res.message,
                             isDisabled: false, loader: false
+                        },()=>{
+                            this._resetAddForm();
+                            this._closeAddPairsModal();
+                            getAllPairs();
                         })
                     } else if (res.status == 403) {
                         this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -144,7 +145,7 @@ class AddPairModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errType: 'error', errMsg: true, errMessage: 'Something went wrong',
+                        errType: 'error', errMsg: true, errMessage: 'Unable to complete the requested action.',
                         isDisabled: false, loader: false
                     });
                     this._resetAddForm();
@@ -219,8 +220,9 @@ class AddPairModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Asset 1:</span>
                     <Select
+                        getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Asset"
+                        placeholder="Select an Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id1')}
                     >
                         {coinOptions}
@@ -233,8 +235,9 @@ class AddPairModal extends Component {
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Asset 2:</span>
                     <Select
+                        getPopupContainer={trigger => trigger.parentNode}
                         style={{ width: 200, "marginLeft": "15px" }}
-                        placeholder="Select a Asset"
+                        placeholder="Select an Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id2')}
                     >
                         {coinOptions}
@@ -257,7 +260,7 @@ class AddPairModal extends Component {
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Taker Fee:</span>
-                    <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
+                    <Input addonAfter={'%'} placeholder="Taker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>

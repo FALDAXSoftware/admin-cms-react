@@ -17,7 +17,7 @@ class ThemeSwitcher extends Component {
       topbarTheme,
       sidebarTheme,
       layoutTheme,
-      switchActivation,
+      // switchActivation,
       changeTheme
     } = this.props;
 

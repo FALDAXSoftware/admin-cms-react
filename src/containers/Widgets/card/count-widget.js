@@ -1,21 +1,43 @@
 import React, { Component } from 'react';
 import CardWrapper from './countStyle';
+import { isAllowed } from '../../../helpers/accessControl';
 
 export default class extends Component {
-    render() {
-        const { icon, number, text, number2, text2, bgColor, title, headColor } = this.props;
+    redirectToDeleteAccountPage=(e,tabIndex)=>{
 
+        switch(tabIndex){
+            case 1:
+                if(!isAllowed("get_users")){
+                    return false;
+                }else{
+                    this.props.history.push({pathname:"./users",state:{"selectedTab":tabIndex.toString()}})
+                }
+            case 2:
+                if(!isAllowed("get_inactive_users")){
+                    return false;
+                }else {
+                    this.props.history.push({pathname:"./users",state:{"selectedTab":tabIndex.toString()}})
+                }
+            case 3:
+                if(!isAllowed("get_deleted_users")){
+                    return false
+                }else{
+                    this.props.history.push({pathname:"./users",state:{"selectedTab":tabIndex.toString()}})
+                }
+        }
+        
+    }
+    render() {
+        const { icon,data,bgcolor, title, headcolor } = this.props;
         return (
-            <CardWrapper headColor={headColor} bgColor={bgColor}
+            <CardWrapper key={title} headcolor={headcolor} bgcolor={bgcolor}
                 title={<div><i className={icon} />   {title}</div>} bordered={false}>
-                <div>
-                    <span className="count">{number}</span>
-                    <span className="isoLabel">{text}</span>
-                </div>
-                <div>
-                    <span className="count">{number2}</span>
-                    <span className="isoLabel">{text2}</span>
-                </div>
+        
+                {data && data.map((ele,index)=>(<div key={'cursor'+index} className="cursor-pointer">
+                    <span key={'count'+index} className="count" >{ele.count}</span>
+                    <span key={'label'+index} className="isoLabel">{ele.name}</span>
+                </div>))
+                }
             </CardWrapper>
         );
     }

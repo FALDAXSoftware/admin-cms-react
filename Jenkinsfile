@@ -10,7 +10,7 @@ volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
   ]
 ){
-  timeout(20){
+  timeout(45){
       def coinToDeploy;
       def triggerByUser;
       def namespace;
@@ -32,7 +32,7 @@ volumes: [
               sh "apk upgrade "
               sh "apk add --no-cache bash git openssh"
               sh "npm install"
-              sh "npm run build"
+              sh "npm run build${getEnvConfig(myRepo.GIT_BRANCH)}"
               sh "ls -la" 
               if (env.BRANCH_NAME == 'development') {
                         withAWS(credentials:'jenkins_s3_upload') {
@@ -45,9 +45,17 @@ volumes: [
                         s3Delete(bucket:'admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'admin.faldax.com', path:'')
                 }
+                }else if (env.BRANCH_NAME == 'preprod') {
+                        withAWS(credentials:'jenkins_s3_upload') {
+                        s3Delete(bucket:'preprod-admin.faldax.com', path:'')
+                        s3Upload(file:'build', bucket:'preprod-admin.faldax.com', path:'')
                 }
-                
-              
+                } else if (env.BRANCH_NAME == 'mainnet') {
+                        withAWS(credentials:'jenkins_s3_upload') {
+                        s3Delete(bucket:'mainnet-admin.faldax.com', path:'')
+                        s3Upload(file:'build', bucket:'mainnet-admin.faldax.com', path:'')
+                }
+                }
                  }
 
          }
@@ -65,7 +73,18 @@ def getNamespace(branch){
     switch(branch){
         case 'master' : return "prod";
         case 'development' :  return "dev";
+        case 'preprod' :  return "preprod";
+        case 'mainnet' :  return "mainnet";
         default : return null;
     }
 }
+def getEnvConfig(branch){
+  switch(branch){
+      case 'development' :  return ":preprod";
+      case 'preprod' :  return ":preprod";
+      case 'mainnet' :  return ":mainnet";
+      default : return "";
+  }
+}
+
 

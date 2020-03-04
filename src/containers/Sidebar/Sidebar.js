@@ -35,6 +35,7 @@ class Sidebar extends Component {
     this.onOpenChange = this.onOpenChange.bind(this);
   }
 
+
   handleClick(e) {
     this.props.changeCurrent([e.key]);
     if (this.props.app.view === 'MobileView') {
@@ -73,7 +74,8 @@ class Sidebar extends Component {
   getMenuItem = ({ singleOption, submenuStyle, submenuColor }) => {
     const { key, label, leftIcon, children } = singleOption;
     const url = stripTrailingSlash(this.props.url);
-
+    // const {pathname}=this.props.location;
+    // const urlReg=new RegExp(url+"/"+key,'ig')
     if (children) {
       return (
         <SubMenu
@@ -102,9 +104,10 @@ class Sidebar extends Component {
         </SubMenu>
       );
     }
+    let buildKey=key?(url+"/"+key):url;
     return (
-      <Menu.Item key={`${url}/${key}`}>
-        <Link to={`${url}/${key}`}>
+      <Menu.Item key={buildKey}>
+        <Link to={buildKey}>
           <span className="isoMenuHolder" style={submenuColor}>
             <i className={leftIcon} />
             <span className="nav-text">
@@ -115,7 +118,23 @@ class Sidebar extends Component {
       </Menu.Item>
     );
   };
-
+  isModulePermited = (permissions) => {
+    if (this.props.user && this.props.user.roleAllowedData) {
+      for (let index = 0; index < this.props.user.roleAllowedData.length; index++) {
+        const role = this.props.user.roleAllowedData[index];
+        for (let index = 0; index < permissions.length; index++) {
+          const permission = permissions[index];
+          if (role.module_name == permission) {
+            return true
+          }
+        }
+      }
+      return false
+    } else {
+      return false
+    }
+  }
+  // this.props.user.roleAllowedData
   render() {
     const { app, toggleOpenDrawer, customizedTheme, height, roles, location } = this.props;
 
@@ -186,7 +205,13 @@ class Sidebar extends Component {
             >
               {
                 options.map(singleOption => {
-                  if (rolesModuleArray.indexOf(singleOption.module) > -1) {
+                  if (singleOption.permssions) {
+                    if (this.isModulePermited(singleOption.permssions)) {
+                      return (
+                        that.getMenuItem({ submenuStyle, submenuColor, singleOption })
+                      )
+                    }
+                  } else {
                     return (
                       that.getMenuItem({ submenuStyle, submenuColor, singleOption })
                     )
@@ -204,6 +229,7 @@ class Sidebar extends Component {
 
 export default connect(
   state => ({
+    user: state.Auth.get("user"),
     app: state.App.toJS(),
     customizedTheme: state.ThemeSwitcher.toJS().sidebarTheme,
     height: state.App.toJS().height,

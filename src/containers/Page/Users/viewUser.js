@@ -2,25 +2,38 @@ import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import LoginHistory from './loginHistory';
 import PersonalDetails from './personalDetails';
-import BuyOrders from '../Orders/buyOrders';
-import SellOrders from '../Orders/sellOrders';
 import Referral from './userReferral';
-import UserTradeHistory from './userTradeHistory';
+import AllTrades from './userTrades';
 import UserTransactionHistory from './userTransactionHistory';
 import ReferredUsers from './referralUsersModal';
 import UserWithdrawRequest from './userWithdrawRequest';
 import UserKYCDetails from './userKYC';
-import { Link } from 'react-router-dom';
 import UserTickets from './userTickets';
 import UserLimit from './userLimit';
+import AccountSummary from './accountSummary';
+import UserWallets from './userWallets';
+import { isAllowed } from '../../../helpers/accessControl';
+// import { BackButton } from '../../Shared/backBttton';
+import LayoutWrapper from '../../../components/utility/layoutWrapper';
+import { BreadcrumbComponent } from '../../Shared/breadcrumb';
+import { connect } from "react-redux"
+import actions from "../../../redux/users/actions"
+const { removeUserDetails } = actions;
 
 const { TabPane } = Tabs;
 
 class ViewUser extends Component {
+
     constructor(props) {
         super(props)
-        this.state = {
-        }
+    }
+
+    componentWillMount() {
+        this.props.removeUserDetails();
+    }
+
+    componentWillUnmount() {
+        this.props.removeUserDetails();
     }
 
     render() {
@@ -29,30 +42,56 @@ class ViewUser extends Component {
         let user_id = path[path.length - 1]
 
         return (
-            <div>
-                <div style={{ "display": "inline-block", "width": "100%", marginLeft: '20px' }}>
-                    <Link to="/dashboard/users">
-                        <i style={{ margin: '15px' }} class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <a onClick={() => { this.props.history.push('/dashboard/users') }}>Back</a>
-                    </Link>
-                </div>
-                <Tabs defaultActiveKey="1" size={'large'} style={{ marginTop: '20px' }}>
-                    <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
-                    <TabPane tab="KYC" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
-                    <TabPane tab="Sell Orders" key="3"><SellOrders user_id={user_id} /></TabPane>
-                    <TabPane tab="Buy Orders" key="4"><BuyOrders user_id={user_id} /></TabPane>
-                    <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
-                    <TabPane tab="Trade History" key="6"><UserTradeHistory user_id={user_id} /></TabPane>
-                    <TabPane tab="Referral" key="7"><Referral user_id={user_id} /></TabPane>
-                    <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
-                    <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
-                    <TabPane tab="Withdraw Requests" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
-                    <TabPane tab="Tickets" key="11"><UserTickets user_id={user_id} /></TabPane>
-                    <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
+            <LayoutWrapper>
+                {/* <BackButton {...this.props}></BackButton> */}
+                <BreadcrumbComponent {...this.props} />
+                <Tabs className="full-width">
+                    {isAllowed("get_user_details") &&
+
+                        <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_kyc_detail") &&
+
+                        <TabPane tab="Customer ID Verification" key="2"><UserKYCDetails user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_user_wallet_addresses") &&
+
+                        <TabPane tab="Wallets" key="3"><UserWallets is_deleted={this.props.location.state ? this.props.location.state.is_deleted : false} user_id={user_id} /></TabPane>
+                    }
+                    {/* {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
+                        <TabPane tab="Orders" key="4"><AllOrders user_id={user_id} /></TabPane>
+                    } */}
+                    {isAllowed("get_user_login_history") &&
+                        <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_all_trade") &&
+                        <TabPane tab="History" key="6"><AllTrades user_id={user_id} /></TabPane>
+                    }
+                    {(isAllowed("update_user_referal") && isAllowed("get_user_details")) &&
+                        <TabPane tab="User Referral Percentage" key="7"><Referral user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("referred_users") &&
+                        <TabPane tab="Referred Users" key="8"><ReferredUsers user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_user_transactions") &&
+                        <TabPane tab="Transaction History" key="9"><UserTransactionHistory user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_all_withdraw_request") &&
+                        <TabPane tab="Withdrawal Request" key="10"><UserWithdrawRequest user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_user_ticket") &&
+                        <TabPane tab="Tickets" key="11"><UserTickets user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_user_limits") &&
+                        <TabPane tab="Limit Management" key="12"><UserLimit user_id={user_id} /></TabPane>
+                    }
+                    {isAllowed("get_delete_account_summary") &&
+                        (this.props.location.state && this.props.location.state.is_deleted) && <TabPane tab="Deactivated Account Summary" key="13"><AccountSummary user_id={user_id} /></TabPane>
+                    }
                 </Tabs>
-            </div>
+            </LayoutWrapper>
         );
     }
 }
 
-export default ViewUser;
+export default connect(undefined, { removeUserDetails })(ViewUser);

@@ -3,6 +3,8 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
 import { Divider } from 'antd';
 import authAction from '../../../redux/auth/actions';
+import DetailDiv from './detailDiv';
+import Loader from '../faldaxLoader';
 
 const { logout } = authAction;
 
@@ -10,72 +12,58 @@ class UserKYCDetails extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            kycDetails: [],
+            kycDetails: {},
+            loader:false
+        }
+        this.loader={show:()=>this.setState({loader:true}),hide:()=>this.setState({loader:false})}
+    }
+
+    componentDidMount = async() => {
+        try{
+           this.loader.show(); 
+           const { token, user_id } = this.props;
+           let res=await(await ApiUtils.getKYCDetails(token, user_id)).json();
+           if (res.status == 200) {
+               this.setState({ kycDetails: res.data });
+           } else if (res.status == 403) {
+               this.props.logout();
+           } else {
+               this.setState({ errMsg: true, errMessage: res.message });
+           }
+
+        }catch(error){
+            this.setState({ errMsg: true, errMessage:"Unable to complete the requested action."});
+        }finally{
+            this.loader.hide();
         }
     }
 
-    componentDidMount = () => {
-        const { token, user_id } = this.props;
-        let _this = this;
-
-        ApiUtils.getKYCDetails(token, user_id)
-            .then((response) => response.json())
-            .then(function (res) {
-                console.log('res', res)
-                if (res.status == 200) {
-                    _this.setState({ kycDetails: res.data });
-                } else if (res.status == 403) {
-                    _this.props.logout();
-                } else {
-                    console.log('else', _this.state.kycDetails)
-                    _this.setState({ errMsg: true, errMessage: res.message });
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            });
-    }
-
     render() {
-        const { kycDetails } = this.state;
+        const { kycDetails,loader } = this.state;
 
         return (
-            <div className="kyc-div user-profile">{
-                kycDetails && kycDetails.length > 0 ?
+            <>
+            <div className="kyc-div user-profile">
+                {kycDetails && Object.entries(kycDetails).length != 0 ?
                     <div>
-                        <Divider>KYC Information</Divider>
-                        <div>
-                            <p style={{ "marginBottom": "10px" }}>
-                                <span> <b>Status:</b> </span>
-                                {kycDetails && kycDetails.isApprove !== undefined && kycDetails.isApprove ? 'APPROVED' : 'DIS-APPROVED'}
-                            </p>
-                        </div>
+                        {/* <Divider>Customer ID Verification</Divider> */}
+                        {/* <DetailDiv title="Status"
+                            value={kycDetails && kycDetails.is_approve != undefined && kycDetails.is_approve ? 'APPROVED' :(kycDetails.direct_response?'DIS-APPROVED':'PENDING-APPROVAL')} /> */}
                         <Divider>IDM Details</Divider>
-                        <div>
-                            <p ><span><b>Direct Response: </b></span>
-                                {kycDetails && kycDetails.direct_response ? kycDetails.direct_response : 'N/A'}
-                            </p>
-                        </div>
-                        <div>
-                            <p ><span><b>Webhook Response: </b></span>
-                                {kycDetails && kycDetails.webhook_response ? kycDetails.webhook_response : 'N/A'}
-                            </p>
-                        </div>
-                        <div>
-                            <p>
-                                <span><b>KYC Document Details: </b></span>
-                                {kycDetails && kycDetails.kycDoc_details ? kycDetails.kycDoc_details : 'N/A'}
-                            </p>
-                        </div>
-                        <div>
-                            <p > <span><b>Comments: </b></span>
-                                {kycDetails && kycDetails.comments ? kycDetails.comments : 'N/A'}
-                            </p>
-                        </div>
+                        <DetailDiv title="Direct Response"
+                            value={kycDetails && kycDetails.direct_response ? kycDetails.direct_response : 'N/A'} />
+                        <DetailDiv title="Webhook Response"
+                            value={kycDetails && kycDetails.webhook_response ? kycDetails.webhook_response : 'N/A'} />
+                        <DetailDiv title="Customer ID Details"
+                            value={kycDetails && kycDetails.kyc_doc_details ? kycDetails.kyc_doc_details : 'N/A'} />
+                        <DetailDiv title="Comments"
+                            value={kycDetails && kycDetails.comments ? kycDetails.comments : 'N/A'} />
                     </div>
-                    : <h2 style={{ textAlign: 'center', width: '100 %' }}>KYC data not submitted</h2>
-            }
+                    : <h2 style={{ textAlign: 'center', width: '100 %' }}>Customer id not submitted</h2>
+                }
             </div >
+                {loader &&<Loader/>}
+            </>
         );
     }
 }

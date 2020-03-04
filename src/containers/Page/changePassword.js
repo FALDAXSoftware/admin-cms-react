@@ -107,43 +107,40 @@ class ChangePassword extends Component {
                     <span>
                         <b>Current Password</b>
                     </span>
-                    <Input
-                        type="password"
+                    <Input.Password
                         placeholder="Current Password"
                         style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "oldPwd")}
                         value={fields["oldPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('Current Password', fields["oldPwd"], 'required', 'text-danger')}
+                        {this.validator.message('Current Password', fields["oldPwd"], 'required|min:6', 'text-danger')}
                     </span>
 
                     <span>
                         <b>New Password</b>
                     </span>
-                    <Input
-                        type="password"
+                    <Input.Password
                         placeholder="New Password"
                         style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "newPwd")}
                         value={fields["newPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('New Password', fields["newPwd"], 'required', 'text-danger')}
+                        {this.validator.message('New Password', fields["newPwd"], 'required|min:6', 'text-danger')}
                     </span>
 
                     <span>
                         <b>Confirm Password</b>
                     </span>
-                    <Input
-                        type="password"
+                    <Input.Password
                         placeholder="Confirm Password"
                         style={{ "marginBottom": "15px", "width": "25%", "display": "inherit" }}
                         onChange={this._onChangeFields.bind(this, "confirmPwd")}
                         value={fields["confirmPwd"]}
                     />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('Confirm Password', fields["confirmPwd"], 'required', 'text-danger')}
+                        {this.validator.message('Confirm Password', fields["confirmPwd"], 'required|min:6', 'text-danger')}
                         {pwdError && <span>New Password and Confirm Password doesn't match.</span>}
                     </span>
                     <br />

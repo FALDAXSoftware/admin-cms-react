@@ -112,7 +112,7 @@ class EditCountryModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error', isDisabled: false
                     });
                 });
@@ -125,9 +125,9 @@ class EditCountryModal extends Component {
     _changeLegality = (legal) => {
         let fields = this.state.fields;
         const colorCodes = [
-            { key: '1', colorCode: '#62d0c5' },
+            { key: '1', colorCode: '#00a9fa' },
             { key: '2', colorCode: '#f6776e' },
-            { key: '3', colorCode: '#b6cbfa' },
+            { key: '3', colorCode: '#00a9fb' },
             { key: '4', colorCode: '#FCD26E' }
         ]
 
@@ -172,6 +172,7 @@ class EditCountryModal extends Component {
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Country Legality:</span><br />
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200 }}
                             placeholder="Select Legality"
                             onChange={this._changeLegality}

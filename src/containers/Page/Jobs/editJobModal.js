@@ -118,7 +118,7 @@ class EditJobModal extends Component {
                 })
                 .catch(() => {
                     this.setState({
-                        errMsg: true, errMessage: 'Something went wrong!!',
+                        errMsg: true, errMessage: 'Unable to complete the requested action.',
                         loader: false, errType: 'error', showError: false, isDisabled: false
                     });
                 });
@@ -160,9 +160,10 @@ class EditJobModal extends Component {
                         <Button disabled={isDisabled} onClick={this._editJob}>Update</Button>,
                     ]}
                 >
-                    <div style={{ "marginBottom": "15px" }}>
+                  {catOptions.length>1&& <div style={{ "marginBottom": "15px" }}>
                         <span>Category:</span>
                         <Select
+                            getPopupContainer={trigger => trigger.parentNode}
                             style={{ width: 200, "marginLeft": "15px" }}
                             placeholder="Select a Category"
                             onChange={this._changeCategory}
@@ -170,7 +171,7 @@ class EditJobModal extends Component {
                         >
                             {catOptions}
                         </Select>
-                    </div>
+                    </div>}
 
                     <div style={{ "marginBottom": "15px" }}>
                         <span>Position:</span>
