@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import { TabPane } from '../../../components/uielements/tabs';
 import { withRouter } from "react-router-dom";
 import WalletFaldaxDashboard from './faldax/walletFaldaxDashboard';
+import FALDAXWallet from './faldax main/wallet';
 // import WalletWarmDashboard from './warm/walletWarmDashboard';
 // import WalletCustodialDashboard from './custodial/walletCustodialDashboard';
 import { isAllowed } from '../../../helpers/accessControl';
@@ -19,10 +20,11 @@ class WalletDashboard extends Component {
                 {/* <BackButton {...this.props}/> */}
                 <BreadcrumbComponent {...this.props} />
                 <Tabs className="full-width">
-                    {isAllowed("admin_wallet_fees_details") && <TabPane tab="FALDAX Wallet" key="1"><WalletFaldaxDashboard /></TabPane>}
+                    {isAllowed("admin_wallet_fees_details") && <TabPane tab="FALDAX Fee Wallet" key="1"><WalletFaldaxDashboard /></TabPane>}
+                    <TabPane tab="FALDAX Wallet" key="6"><FALDAXWallet/></TabPane>
                     {/* {isAllowed("admin_warm_wallet_data") &&<TabPane tab="Warm Wallet" key="2"><WalletWarmDashboard/></TabPane>}
-                {isAllowed("admin_cold_wallet_data") &&<TabPane tab="Custodial Wallet" key="3"><WalletCustodialDashboard/></TabPane>}
-                {isAllowed("admin_hotsend_wallet_data") &&<TabPane tab="Hot Send Wallet" key="4"><WalletHotSendDashboard/></TabPane>} */}
+                    {isAllowed("admin_cold_wallet_data") &&<TabPane tab="Custodial Wallet" key="3"><WalletCustodialDashboard/></TabPane>}
+                    {isAllowed("admin_hotsend_wallet_data") &&<TabPane tab="Hot Send Wallet" key="4"><WalletHotSendDashboard/></TabPane>} */}
                     {isAllowed("admin_hotreceive_wallet_data") && <TabPane tab="Main Wallet" key="5"><WalletHotReceiveDashboard /></TabPane>}
                 </Tabs>
             </LayoutWrapper>

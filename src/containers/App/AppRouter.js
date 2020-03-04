@@ -140,6 +140,11 @@ const routes = [
         module: "wallet_dashboard"
     },
     {
+        path: "wallet/faldax-main-wallet/:coin",
+        component: asyncComponent(() => import("../Page/Wallet/faldax main/details")),
+        module: "wallet_dashboard"
+    },
+    {
         path: "wallet/warm/:coin",  
         component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
         module: "wallet_dashboard"
