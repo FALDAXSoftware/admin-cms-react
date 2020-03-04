@@ -644,6 +644,20 @@ const exportHotReceiveWalletDetails = [
   { key: "inputs", label: "Inputs" },
   { key: "normalizedTxHash", label: "Normalized Tx Hash" }
 ];
+const exportFaldaxMainWallet = [
+  { key: "id", label: "ID" },
+  { key: "coin_icon", label: "Asset Icon" },
+  { key: "coin_name", label: "Asset Name" },
+  { key: "coin_code", label: "Asset Code" },
+  { key: "coin", label: "Asset" },
+  { key: "min_limit", label: "Min Limit" },
+  { key: "iserc", label: "Is ERC ?" },
+  { key: "is_active", label: "Is Active ?" },
+  { key: "fiat", label: "Fiat Value" },
+  { key: "send_address", label: "Send Address" },
+  { key: "receive_address", label: "Receive Address" },
+  { key: "balance", label: "Balance" }
+];
 
 export {
   exportResidualHeaders,
@@ -673,5 +687,6 @@ export {
   exportUsers,
   exportReferralUsers,
   exportHotReceiveWallet,
-  exportHotReceiveWalletDetails
+  exportHotReceiveWalletDetails,
+  exportFaldaxMainWallet
 };
