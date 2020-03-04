@@ -3390,6 +3390,36 @@ const ApiUtils = {
           }
         );
       },
+      getFaldaxMainWalletDetails: function(
+        coin = "",
+        page,
+        limit,
+        sortCol = "created_at",
+        sortOrder = "descend",
+        searchData = "",
+        start_date = null,
+        end_date = null,
+        walletType = 1,
+        transaction_type=""
+      ) {
+        return fetch(
+          `${API_URL}${
+            this.url
+          }get-bussiness-wallet-data?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${
+            sortCol ? "&sort_col=" + sortCol : ""
+          }${
+            sortOrder ? "&sort_order=" + sortOrder : ""
+          }&page=${page}&limit=${limit}${
+            searchData ? "&data=" + encodeURIComponent(searchData) : ""
+          }${start_date ? "&start_date=" + start_date : ""}${
+            end_date ? "&end_date=" + end_date : ""
+          }${transaction_type?"&wallet_type="+transaction_type:""}`,
+          {
+            method: "GET",
+            headers: this.headers
+          }
+        );
+      },
       getWalletWarnDashboard: function(search = "") {
         return fetch(
           `${API_URL}${this.url}get-warm-wallet-data${
@@ -3569,6 +3599,20 @@ const ApiUtils = {
   },
   getAvailableWarmBalance:function(token,asset="tbtc"){
     return fetch(API_URL+`/admin/get-warm-available-balance?coin=${asset}`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  },
+  getFaldaxMainWallet:function(token,search=""){
+    let url="/admin-business-wallet-details";
+      if (search) {
+      url += "?search=" + search;
+    }
+    return fetch(API_URL+url, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,

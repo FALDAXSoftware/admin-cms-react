@@ -3,7 +3,7 @@ import { Breadcrumb } from 'antd';
 import React from 'react';
 const breadcrumbNameMap = {
     '/dashboard/wallet': ' Wallet Dashboard',
-    '/dashboard/wallet/faldax/:coin': 'FALDAX Wallet',
+    '/dashboard/wallet/faldax/:coin': 'FALDAX Fee Wallet',
     '/dashboard/wallet/warm/:coin': 'Warm Wallet',
     '/dashboard/wallet/hotsend/:coin': 'Hot Send Wallet',
     '/dashboard/wallet/hotreceive/:coin': 'Hot Receive Wallet',
@@ -47,7 +47,8 @@ const breadcrumbNameMap = {
     "/dashboard/dashboard":"Dashboard",
     "/dashboard/assets/wallet/:id":"Wallet",
     "/dashboard/email-templates":"Email Templates",
-    "/dashboard/email-templates/edit-template/:id":"Edit"
+    "/dashboard/email-templates/edit-template/:id":"Edit",
+    "/dashboard/wallet/faldax-main-wallet/:coin":"FALDAX Wallet"
   };
 
 
