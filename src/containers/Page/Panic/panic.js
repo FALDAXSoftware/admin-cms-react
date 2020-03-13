@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { notification, Button, Modal, Switch, Input, Card } from 'antd';
-import ApiUtils from '../../helpers/apiUtills';
-import LayoutWrapper from "../../components/utility/layoutWrapper.js";
+import ApiUtils from '../../../helpers/apiUtills';
+import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import { connect } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
-import authAction from '../../redux/auth/actions';
-// import { BackButton } from '../Shared/backBttton';
-import { BreadcrumbComponent } from '../Shared/breadcrumb';
+import authAction from '../../../redux/auth/actions';
+import FaldaxLoader from '../faldaxLoader';
 
 const { logout } = authAction;
 
@@ -31,7 +30,6 @@ class PanicButton extends Component {
     _getPanicBtnDetails = () => {
         const { token } = this.props;
         let _this = this;
-
         _this.setState({ loader: true });
         ApiUtils.getPanicBtnDetails(token)
             .then((response) => response.json())
@@ -120,15 +118,14 @@ class PanicButton extends Component {
     }
 
     render() {
-        const { notify, errType, isPanic, panicConfirmModal, fields } = this.state;
+        const { notify, errType,loader, isPanic, panicConfirmModal, fields } = this.state;
         if (notify) {
             this.openNotificationWithIcon(errType.toLowerCase());
         }
 
         return (
-            <LayoutWrapper>
-                {/* <BackButton {...this.props}/> */}
-                <BreadcrumbComponent {...this.props} />
+            <>
+                {loader && <FaldaxLoader/>}
                 <div className="isoLayoutContent">
                    <div className="panic-container">
                         <Card title="Panic Button" bordered={false}>
@@ -163,7 +160,7 @@ class PanicButton extends Component {
                             </div>}
                     </Modal>
                 </div>
-            </LayoutWrapper>
+            </>
         );
     }
 }
