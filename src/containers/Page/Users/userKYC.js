@@ -55,7 +55,7 @@ class UserKYCDetails extends Component {
                         <DetailDiv title="Webhook Response"
                             value={kycDetails && kycDetails.webhook_response ? kycDetails.webhook_response : 'N/A'} />
                         <DetailDiv title="Customer ID Details"
-                            value={kycDetails && kycDetails.kyc_doc_details ? kycDetails.kyc_doc_details : 'N/A'} />
+                            value={kycDetails && kycDetails.kyc_doc_details ?<ul className="idm-des-text" type="circle">{kycDetails.kyc_doc_details.split(';').map((ele)=>{return <li>{ele}</li>})}</ul> : 'N/A'} />
                         <DetailDiv title="Comments"
                             value={kycDetails && kycDetails.comments ? kycDetails.comments : 'N/A'} />
                     </div>
