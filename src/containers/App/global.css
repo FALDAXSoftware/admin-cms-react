@@ -861,3 +861,7 @@ html[dir='rtl'] .dz-hidden-input {
   margin-top: 5px;
   overflow-y: scroll;
 }
+.idm-des-text{
+  list-style-type: circle !important;
+    padding-left: 15px;
+}
