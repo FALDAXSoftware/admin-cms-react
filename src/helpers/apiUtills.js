@@ -3620,6 +3620,17 @@ const ApiUtils = {
         "Content-Type": "application/json"
       }
     })
+  },
+  getPanicBtnHistory:function(token,searchData="",startDate="",endDate="",sortCol="",sortOrder="",page=1,limit=50){
+    let url=`${API_URL}/admin/get-panic-history?page=${page}${sortOrder?'&sort_order='+sortOrder:""}${startDate?'&start_date='+startDate:""}${endDate?'&end_date='+endDate:""}${searchData?'&data='+searchData:""}${sortCol?'&sort_col='+sortCol:""}&limit=${limit}`
+    return fetch(url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
   }
 };
 export default ApiUtils;
