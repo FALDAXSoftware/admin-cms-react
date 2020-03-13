@@ -658,6 +658,14 @@ const exportFaldaxMainWallet = [
   { key: "receive_address", label: "Receive Address" },
   { key: "balance", label: "Balance" }
 ];
+const exportPanicHistory = [
+  { key: "id", label: "ID" },
+  { key: "ip", label: "IP" },
+  { key: "created_at", label: "Created At" },
+  { key: "updated_at", label: "Updated At" },
+  { key: "deleted_at", label: "Deleted At" },
+  { key: "panic_status", label: "Status" }
+];
 
 export {
   exportResidualHeaders,
@@ -688,5 +696,6 @@ export {
   exportReferralUsers,
   exportHotReceiveWallet,
   exportHotReceiveWalletDetails,
-  exportFaldaxMainWallet
+  exportFaldaxMainWallet,
+  exportPanicHistory
 };

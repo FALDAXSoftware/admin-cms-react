@@ -86,7 +86,7 @@ const routes = [
     },
     {
         path: "panic-button",
-        component: asyncComponent(() => import("../Page/panicButton")),
+        component: asyncComponent(() => import("../Page/Panic/tabs")),
         module: "panic_button"
     },
     {
