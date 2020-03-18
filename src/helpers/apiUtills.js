@@ -3631,6 +3631,18 @@ const ApiUtils = {
         "Content-Type": "application/json"
       }
     })
+  },
+  disableTwoFactorViaCode:function(token,formData){
+    let url=`${API_URL}/admin/disable-two-factor`
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body:JSON.stringify(formData)
+    })
   }
 };
 export default ApiUtils;
