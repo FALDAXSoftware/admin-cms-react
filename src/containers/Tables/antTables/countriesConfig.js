@@ -28,7 +28,7 @@ const renderCell = (object, type, key, c_name = null, legal = null, colorCode = 
         case 'LegalityCell':
             return LegalityCell(value, name, legality, color, stateCount, is_active);
         case 'CountrySwitchCell':
-            return CountrySwitchCell(value, name, legality, color, is_active,!isAllowed("activate_country"));
+            return CountrySwitchCell(value, name, legality, color, is_active, !isAllowed("activate_country"));
         case 'CountryActionCell':
             return CountryActionCell(value, name, legality, color, stateCount, is_active);
         default:
@@ -38,7 +38,7 @@ const renderCell = (object, type, key, c_name = null, legal = null, colorCode = 
 
 const columns = [{
     title: < IntlMessages id="countryTable.title.actions" />,
-   align:"left",
+    align: "left",
     key: 'action',
     width: 50,
     render: object => renderCell(object, 'CountryActionCell', 'id', 'name', 'legality',
@@ -46,7 +46,7 @@ const columns = [{
 },
 {
     title: < IntlMessages id="countryTable.title.name" />,
-   align:"left",
+    align: "left",
     key: 'name',
     width: 100,
     sorter: true,
@@ -54,7 +54,7 @@ const columns = [{
 },
 {
     title: < IntlMessages id="countryTable.title.legality" />,
-   align:"left",
+    align: "left",
     key: 'legality',
     width: 100,
     sorter: true,
@@ -62,24 +62,24 @@ const columns = [{
 },
 {
     title: < IntlMessages id="countryTable.title.color" />,
-   align:"left",
+    align: "left",
     key: 'color',
     width: 100,
     render: object => renderCell(object, 'ColorCell', 'color')
 },
-{
-    title: < IntlMessages id="countryTable.title.status" />,
-   align:"left",
-    key: 'is_active',
-    width: 100,
-    render: object => {
-        return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
-        'color', 'is_active', 'stateCount',)
-    }
-},
+// {
+//     title: < IntlMessages id="countryTable.title.status" />,
+//    align:"left",
+//     key: 'is_active',
+//     width: 100,
+//     render: object => {
+//         return renderCell(object, 'CountrySwitchCell', 'id', 'name', 'legality',
+//         'color', 'is_active', 'stateCount',)
+//     }
+// },
 {
     title: < IntlMessages id="countryTable.title.State" />,
-    align:"left",
+    align: "left",
     key: 'button',
     width: 100,
     render: object => renderCell(object, 'CountryButtonCell', 'id', 'stateCount')
