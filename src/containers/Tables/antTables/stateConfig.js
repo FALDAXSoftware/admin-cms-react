@@ -19,7 +19,7 @@ const renderCell = (object, type, key, s_name = null, legal = null, colorCode = 
         case 'LegalityCell':
             return LegalityCell(value, name, legality, color, is_active);
         case 'StateSwitchCell':
-            return StateSwitchCell(value, name, legality, color, is_active,!isAllowed("activate_state"));
+            return StateSwitchCell(value, name, legality, color, is_active, !isAllowed("activate_state"));
         case 'StateActionCell':
             return StateActionCell(value, name, legality, color, is_active);
         default:
@@ -30,13 +30,13 @@ const renderCell = (object, type, key, s_name = null, legal = null, colorCode = 
 const columns = [{
     title: <IntlMessages id="countryTable.title.actions" />,
     key: 'action',
-   align:"left",
+    align: "left",
     width: 50,
     render: object => renderCell(object, 'StateActionCell', 'id', 'name', 'legality', 'color', 'is_active')
 }, {
     title: <IntlMessages id="stateTable.title.name" />,
     key: 'name',
-   align:"left",
+    align: "left",
     width: 150,
     sorter: true,
     render: object => renderCell(object, 'TextCell', 'name')
@@ -44,25 +44,27 @@ const columns = [{
     title: <IntlMessages id="countryTable.title.legality" />,
     key: 'legality',
     width: 100,
-    align:"left",
-    dataIndex:'legality',
+    align: "left",
+    dataIndex: 'legality',
     sorter: true,
-    
+
 }, {
     title: <IntlMessages id="countryTable.title.color" />,
     key: 'color',
-   align:"left",
+    align: "left",
     width: 100,
     render: object => renderCell(object, 'ColorCell', 'color')
-}, {
-    title: <IntlMessages id="countryTable.title.status" />,
-    key: 'is_active',
-   align:"left",
-    width: 100,
-    render: object => {
-        return renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
-    }
-}];
+}
+    // {
+    //     title: <IntlMessages id="countryTable.title.status" />,
+    //     key: 'is_active',
+    //     align: "left",
+    //     width: 100,
+    //     render: object => {
+    //         return renderCell(object, 'StateSwitchCell', 'id', 'name', 'legality', 'color', 'is_active')
+    //     }
+    // }
+];
 
 const stateTableInfos = [
     {
