@@ -111,7 +111,7 @@ const columns = [{
     key: 'transaction_id',
     width: 450,
     align:"left",
-    render: object => ToolTipsCell(TransactionIdHashCell(object["coin_code"],object["transaction_id"]))
+    render: object => ToolTipsCell(TransactionIdHashCell(object["coin_code"],object["transaction_id"],object["iserc"]))
 },
 
 // {
