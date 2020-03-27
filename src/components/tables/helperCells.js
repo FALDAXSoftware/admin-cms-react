@@ -992,10 +992,19 @@ const ConvertSatoshiToAssetCell = (coin, balance) => {
   return <span>{coin == "eth" || coin == "teth" ? parseFloat(amount).toFixed(8) : parseFloat(amount).toFixed(8)}</span>
 };
 
-const TransactionIdHashCell = (coin_id, transaction_id) => {
+const TransactionIdHashCell = (coin_id, transaction_id,isERC20=false) => {
   let url = "";
   if (!transaction_id) {
     return <span>-</span>
+  }
+  if(isERC20){
+     return transaction_id ? (
+    <a target="_blank" href={"https://etherscan.io/tx/"+transaction_id}>
+      {transaction_id}
+    </a>
+  ) : (
+      <span></span>
+    );
   }
   switch (coin_id.toLowerCase()) {
     // Fot Test Net
