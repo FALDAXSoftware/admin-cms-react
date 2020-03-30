@@ -117,7 +117,7 @@ const columns = [
     key: "is_active",
     width: 100,
     render: object =>{
-      if (isAllowed("update_pair")) {
+      if (isAllowed("admin_edit_pair")) {
         return renderCell(
           object,
           "FeeSwitchCell",
