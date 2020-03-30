@@ -950,13 +950,15 @@ const approvePendingReq = (
   );
 };
 
-const ConvertSatoshiToAssetCell = (coin, balance) => {
+const ConvertSatoshiToAssetCell = (coin, balance,precision=false) => {
   coin = coin.toLowerCase();
   let amount = 0;
   balance = parseFloat(balance);
-
   if (!parseFloat(balance)) {
     return <span>0</span>
+  }
+  if (precision) {
+    return <span>{parseFloat(balance /precision).toFixed(8)}</span>
   }
   switch (coin) {
     case "btc":

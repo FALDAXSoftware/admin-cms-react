@@ -34,7 +34,7 @@ const columns = [
         align: "left",
         key: 1,
         width: 100,
-        render: data => ConvertSatoshiToAssetCell(data["coin"], data["balance"])
+        render: data => ConvertSatoshiToAssetCell(data["coin"], data["balance"],data["coin_precision"])
     },
     {
         title: <IntlMessages id="walletWarmDashboardTable.title.address" />,
