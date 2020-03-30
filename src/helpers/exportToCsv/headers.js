@@ -683,6 +683,33 @@ const exportPair = [
   { key: "bid_price", label: "Bid Price" },
   { key: "kraken_pair", label: "Kraken Pair" }
 ];
+const exportSellOrder = [
+  { key: "user_id", label: "User ID" },
+  { key: "id", label: "ID" },
+  { key: "maximum_time", label: "Maximum Time" },
+  { key: "fill_price", label: "Full Price" },
+  { key: "limit_price", label: "Limit Price" },
+  { key: "stop_price", label: "Stop Price" },
+  { key: "price", label: "Price" },
+  { key: "quantity", label: "Quantity" },
+  { key: "avg_price", label: "Avg Price" },
+  { key: "currency", label: "Currency" },
+  { key: "settle_currency", label: "Settle Currency" },
+  { key: "working_indicator", label: "Working Indicator" },
+  { key: "order_type", label: "Order Type" },
+  { key: "order_status", label: "Order Status" },
+  { key: "time", label: "Time" },
+  { key: "side", label: "Side" },
+  { key: "is_partially_fulfilled", label: "Is Partially Fulfilled" },
+  { key: "fix_quantity", label: "Fix Quantity" },
+  { key: "maker_fee", label: "Maker Fee" },
+  { key: "taker_fee", label: "Taker Fee" },
+  { key: "created_at", label: "Created At" },
+  { key: "updated_at", label: "Update At" },
+  { key: "deleted_at", label: "Deleted At" },
+  { key: "symbol", label: "Symbol" },
+  { key: "activity_id", label: "Activity" }
+];
 
 export {
   exportResidualHeaders,
@@ -715,5 +742,6 @@ export {
   exportHotReceiveWalletDetails,
   exportFaldaxMainWallet,
   exportPanicHistory,
-  exportPair
+  exportPair,
+  exportSellOrder
 };

@@ -15,7 +15,7 @@ import { historyTableInfos } from './loginHistoryConfig';
 import { pairsTableInfos } from './pairsConfig';
 import { limitTableInfos } from './limitConfig';
 import { transactionTableInfos } from './transactionConfig';
-import { tradeTableInfos } from './tradeConfig';
+import { tradeTableInfos,ownTradeTable } from './tradeConfig';
 import { withdrawReqTableInfos } from './withdrawReqConfig';
 import { sellOrderTableInfos } from './sellOrderConfig';
 import { buyOrderTableInfos } from './buyOrderConfig';
@@ -96,7 +96,7 @@ export {
   TableViews, tableinfos, dataList, assetTableInfos, referralInfos,
   countryTableInfos, rolesTableInfos, stateTableInfos, employeeTableinfos,
   historyTableInfos, pairsTableInfos, limitTableInfos, transactionTableInfos,
-  tradeTableInfos, withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
+  tradeTableInfos, ownTradeTable,withdrawReqTableInfos, sellOrderTableInfos, buyOrderTableInfos,
   jobsTableInfos, jobAppTableInfos, KYCInfos, FeesInfos,
   newsTableInfos, userReferralInfos, userWithdrawReqTableInfos, ticketsTableInfos,
   accountClassTableinfos, templateTableinfos, newsSourceTableInfos, jobCategoryTableInfos,

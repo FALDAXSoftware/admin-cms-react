@@ -11,6 +11,7 @@ const { TabPane } = Tabs;
 export default function AllOrders(props) {
     return (
         <React.Fragment>
+             <Tabs className="full-width">
                 {isAllowed("get_all_sell_orders") &&
                     <TabPane tab="Sell Orders" key="1"><SellOrders user_id={props.user_id} /></TabPane>
                 }
@@ -23,6 +24,7 @@ export default function AllOrders(props) {
                 {isAllowed("get_all_cancelled_orders") &&
                     <TabPane tab="Cancelled Orders" key="4"><CancelOrders user_id={props.user_id} /></TabPane>
                 }
+                </Tabs>
         </React.Fragment>
     )
 }
