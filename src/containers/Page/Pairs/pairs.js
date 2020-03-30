@@ -21,10 +21,16 @@ import AddPairModal from "./addPairModal";
 import EditPairModal from "./editPairModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import {ColWithMarginBottom} from "../common.style";
-import { PAGE_SIZE_OPTIONS, PAGESIZE } from "../../../helpers/globals";
+import { PageCounterComponent } from "../../Shared/pageCounter";
+import { exportPair } from "../../../helpers/exportToCsv/headers";
+import { ExportToCSVComponent } from "../../Shared/exportToCsv";
+import {
+  PAGE_SIZE_OPTIONS,
+  PAGESIZE,
+  TABLE_SCROLL_HEIGHT
+} from "../../../helpers/globals";
 import styled from "styled-components";
-import { isAllowed } from '../../../helpers/accessControl';
+import { isAllowed } from "../../../helpers/accessControl";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -57,7 +63,9 @@ class Pairs extends Component {
       searchPair: "",
       sorterCol: "",
       sortOrder: "",
-      metabaseUrl: ""
+      metabaseUrl: "",
+      openCsvExportModal: false,
+      csvData:[]
     };
     self = this;
     Pairs.editPair = Pairs.editPair.bind(this);
@@ -128,7 +136,7 @@ class Pairs extends Component {
 
     ApiUtils.getWalletCoins(token)
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
           _this.setState({ allAssets: res.data });
         } else if (res.status == 403) {
@@ -155,7 +163,7 @@ class Pairs extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAllPairs = () => {
+  _getAllPairs = (isExportToCsv = false) => {
     const { token } = this.props;
     const {
       page,
@@ -168,20 +176,26 @@ class Pairs extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllPairs(
-      page,
-      limit,
-      token,
-      searchPair,
-      sorterCol,
-      sortOrder,
-      selectedAsset
-    )
+    (isExportToCsv
+      ? ApiUtils.getAllPairs(1, 100000, token, "", "", "", selectedAsset)
+      : ApiUtils.getAllPairs(
+          page,
+          limit,
+          token,
+          searchPair,
+          sorterCol,
+          sortOrder,
+          selectedAsset
+        ))
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
-          const { pairsCount, allCoins } = res;
-          _this.setState({ allPairs: res.data, pairsCount, allCoins });
+          if (isExportToCsv) {
+            _this.setState({ csvData: res.data });
+          } else {
+            const { pairsCount, allCoins } = res;
+            _this.setState({ allPairs: res.data, pairsCount, allCoins });
+          }
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -242,17 +256,17 @@ class Pairs extends Component {
 
   async getMetaBaseUrl() {
     try {
-      this.setState({ loader: true })
-      let response = await (await ApiUtils.metabase(this.props.token).getPairsRequest()).json();
+      this.setState({ loader: true });
+      let response = await (await ApiUtils.metabase(
+        this.props.token
+      ).getPairsRequest()).json();
       if (response.status == 200) {
-        this.setState({ metabaseUrl: response.frameURL })
+        this.setState({ metabaseUrl: response.frameURL });
       } else if (response.statue == 400 || response.status == 403) {
-
       }
     } catch (error) {
-
     } finally {
-      this.setState({ loader: false })
+      this.setState({ loader: false });
     }
   }
 
@@ -276,11 +290,16 @@ class Pairs extends Component {
     });
   };
 
-  onChangeTabs = (key) => {
+  onChangeTabs = key => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
       this.getMetaBaseUrl();
     }
-  }
+  };
+
+  onExportCSV = async () => {
+    this.setState({ openCsvExportModal: true });
+    this._getAllPairs(true);
+  };
 
   render() {
     const {
@@ -298,7 +317,8 @@ class Pairs extends Component {
       showEditPairModal,
       allAssets,
       selectedAsset,
-      metabaseUrl
+      openCsvExportModal,
+      csvData
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -306,136 +326,137 @@ class Pairs extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <Tabs
-          className="isoTableDisplayTab full-width"
-          onChange={this.onChangeTabs}
-        >
-          {pairsTableInfos.map(tableInfo => (
-            <TabPane tab={tableInfo.title} key={tableInfo.value}>
-              <TableDemoStyle className="isoLayoutContent">
-                <Form onSubmit={this._searchPair}>
-                  <Row type="flex" justify="start">
-                    {isAllowed('add_pair')&&<ColWithMarginBottom sm={3}>
-                      <Button
-                        type="primary"
-                        className="btn-full-width"
-                        onClick={this._showAddPairModal}
-                      >
-                        <Icon type="plus" />
-                        Add Pair
-                      </Button>
-                    </ColWithMarginBottom>
-                    }
-                    <ColWithMarginBottom sm={7}>
-                      <Input
-                        placeholder="Search pairs"
-                        onChange={this._changeSearch.bind(this)}
-                        value={searchPair}
-                      />
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom sm={7}>
-                      <Select
-                        getPopupContainer={trigger => trigger.parentNode}
-                        placeholder="Select an asset"
-                        onChange={this._changeAsset}
-                        value={selectedAsset}
-                      >
-                        {allAssets &&
-                          allAssets.map((asset, index) => (
-                            <Option key={asset.coin} value={asset.id}>
-                              {asset.coin}
-                            </Option>
-                          ))}
-                      </Select>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        htmlType="submit"
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                      >
-                        <Icon type="search" />
-                        Search
-                      </Button>
-                    </ColWithMarginBottom>
-                    <ColWithMarginBottom xs={12} sm={3}>
-                      <Button
-                        className="filter-btn btn-full-width"
-                        type="primary"
-                        onClick={this._resetFilters}
-                      >
-                        <Icon type="reload" />
-                        Reset
-                      </Button>
-                    </ColWithMarginBottom>
-                  </Row>
-                </Form>
+      <TableDemoStyle className="isoLayoutContent">
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvExportModal}
+          onClose={() => {
+            this.setState({ openCsvExportModal: false });
+          }}
+          filename="pairs.csv"
+          data={csvData}
+          header={exportPair}
+        />
+        <PageCounterComponent
+          page={page}
+          limit={limit}
+          dataCount={pairsCount}
+          syncCallBack={this.resetFilters}
+        />
+        <Form onSubmit={this._searchPair}>
+          <Row type="flex" justify="start" className="table-filter-row">
+            {isAllowed("admin_edit_pair") && (
+              <Col sm={3}>
+                <Button
+                  type="primary"
+                  className="btn-full-width"
+                  onClick={this._showAddPairModal}
+                >
+                  <Icon type="plus" />
+                  Add Pair
+                </Button>
+              </Col>
+            )}
+            <Col sm={6}>
+              <Input
+                placeholder="Search pairs"
+                onChange={this._changeSearch.bind(this)}
+                value={searchPair}
+              />
+            </Col>
+            <Col sm={6}>
+              <Select
+                getPopupContainer={trigger => trigger.parentNode}
+                placeholder="Select an asset"
+                onChange={this._changeAsset}
+                value={selectedAsset}
+              >
+                {allAssets &&
+                  allAssets.map((asset, index) => (
+                    <Option key={asset.coin} value={asset.id}>
+                      {asset.coin}
+                    </Option>
+                  ))}
+              </Select>
+            </Col>
+            <Col xs={12} sm={3}>
+              <Button
+                htmlType="submit"
+                className="filter-btn btn-full-width"
+                type="primary"
+              >
+                <Icon type="search" />
+                Search
+              </Button>
+            </Col>
+            <Col xs={12} sm={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this._resetFilters}
+              >
+                <Icon type="reload" />
+                Reset
+              </Button>
+            </Col>
+            <Col xs={12} sm={3}>
+              <Button
+                className="filter-btn btn-full-width"
+                type="primary"
+                onClick={this.onExportCSV}
+                icon="export"
+              >
+                Export
+              </Button>
+            </Col>
+          </Row>
+        </Form>
 
-                {showAddPairsModal && (
-                  <AddPairModal
-                    allCoins={allCoins}
-                    showAddPairsModal={showAddPairsModal}
-                    closeAddModal={this._closeAddFeesModal}
-                    getAllPairs={this._getAllPairs}
-                  />
-                )}
-                {loader && <FaldaxLoader />}
-                <div>
-                  {showEditPairModal && (
-                    <EditPairModal
-                      allCoins={allCoins}
-                      fields={pairDetails}
-                      showEditPairModal={showEditPairModal}
-                      closeEditModal={this._closeEditPairModal}
-                      getAllPairs={this._getAllPairs}
-                    />
-                  )}
-                  <TableWrapper
-                    {...this.state}
-                    columns={tableInfo.columns}
-                    pagination={false}
-                    dataSource={allPairs}
-                    className="isoCustomizedTable float-clear"
-                    onChange={this._handlePairsChange}
-                  />
-                  {pairsCount > 0 ? (
-                    <Pagination
-                      style={{ marginTop: "15px" }}
-                      className="ant-users-pagination"
-                      onChange={this._handleFeesPagination.bind(this)}
-                      pageSize={limit}
-                      current={page}
-                      total={pairsCount}
-                      showSizeChanger
-                      onShowSizeChange={this._changePaginationSize}
-                      pageSizeOptions={pageSizeOptions}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </TableDemoStyle>
-            </TabPane>
-          ))}
-          {isAllowed("metabase_asset_report") && (
-            <TabPane tab="Report" key="metabase">
-              <TableDemoStyle className="isoLayoutContent">
-                {metabaseUrl && (
-                  <IframeCol>
-                    <iframe
-                      src={metabaseUrl}
-                      frameborder="0"
-                      width="100%"
-                      allowtransparency
-                    ></iframe>
-                  </IframeCol>
-                )}
-              </TableDemoStyle>
-            </TabPane>
+        {showAddPairsModal && (
+          <AddPairModal
+            allCoins={allCoins}
+            showAddPairsModal={showAddPairsModal}
+            closeAddModal={this._closeAddFeesModal}
+            getAllPairs={this._getAllPairs}
+          />
+        )}
+        {loader && <FaldaxLoader />}
+        <div>
+          {showEditPairModal && (
+            <EditPairModal
+              allCoins={allCoins}
+              fields={pairDetails}
+              showEditPairModal={showEditPairModal}
+              closeEditModal={this._closeEditPairModal}
+              getAllPairs={this._getAllPairs}
+            />
           )}
-        </Tabs>
-      </LayoutWrapper>
+          <TableWrapper
+            {...this.state}
+            columns={pairsTableInfos[0].columns}
+            pagination={false}
+            dataSource={allPairs}
+            className="table-tb-margin float-clear"
+            onChange={this._handlePairsChange}
+            bordered
+            scroll={TABLE_SCROLL_HEIGHT}
+          />
+          {pairsCount > 0 ? (
+            <Pagination
+              style={{ marginTop: "15px" }}
+              className="ant-users-pagination"
+              onChange={this._handleFeesPagination.bind(this)}
+              pageSize={limit}
+              current={page}
+              total={pairsCount}
+              showSizeChanger
+              onShowSizeChange={this._changePaginationSize}
+              pageSizeOptions={pageSizeOptions}
+            />
+          ) : (
+            ""
+          )}
+        </div>
+      </TableDemoStyle>
     );
   }
 }

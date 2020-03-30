@@ -37,7 +37,8 @@ const options = [
     leftIcon: "fas fa-coins",
     module: "pairs",
     permssions: [
-      "get_all_pairs",
+      "admin_all_pairs",
+      "admin_pair_report"
     ]
   },
   {
