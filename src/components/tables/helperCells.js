@@ -2292,7 +2292,7 @@ const FeeActionCell = (
   is_active
 ) => (
     <div>
-      {isAllowed("update_pair") && (
+      {isAllowed("admin_edit_pair") && (
         <Tooltip title="Edit">
           <Icon
             type="edit"

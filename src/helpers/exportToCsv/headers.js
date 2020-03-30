@@ -667,6 +667,23 @@ const exportPanicHistory = [
   { key: "panic_status", label: "Status" }
 ];
 
+const exportPair = [
+  { key: "id", label: "ID" },
+  { key: "name", label: "Name" },
+  { key: "maker_fee", label: "Maker Fee" },
+  { key: "taker_fee", label: "Taker Fee" },
+  { key: "created_at", label: "Created At" },
+  { key: "updated_at", label: "Updated At" },
+  { key: "deleted_at", label: "Deleted At" },
+  { key: "is_active", label: "Is Active ?" },
+  { key: "coin_code1", label: "Asset Code1" },
+  { key: "coin_code2", label: "Asset Code2" },
+  { key: "symbol", label: "Symbol" },
+  { key: "ask_price", label: "Ask Price" },
+  { key: "bid_price", label: "Bid Price" },
+  { key: "kraken_pair", label: "Kraken Pair" }
+];
+
 export {
   exportResidualHeaders,
   exportLoginHistory,
@@ -697,5 +714,6 @@ export {
   exportHotReceiveWallet,
   exportHotReceiveWalletDetails,
   exportFaldaxMainWallet,
-  exportPanicHistory
+  exportPanicHistory,
+  exportPair
 };
