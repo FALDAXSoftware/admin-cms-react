@@ -986,8 +986,11 @@ const ConvertSatoshiToAssetCell = (coin, balance) => {
     case "susu":
       amount = balance;
       break;
+    case "usdt":
+      amount = balance / 1e18;
+      break;
     default:
-      amount = balance;
+      amount = balance ;
   }
   return <span>{coin == "eth" || coin == "teth" ? parseFloat(amount).toFixed(8) : parseFloat(amount).toFixed(8)}</span>
 };
@@ -2289,7 +2292,7 @@ const FeeActionCell = (
   is_active
 ) => (
     <div>
-      {isAllowed("update_pair") && (
+      {isAllowed("admin_edit_pair") && (
         <Tooltip title="Edit">
           <Icon
             type="edit"
