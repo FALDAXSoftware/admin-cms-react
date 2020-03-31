@@ -18,6 +18,7 @@ import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 import { connect } from "react-redux"
 import actions from "../../../redux/users/actions"
+import AllOrders from "./allOrders"
 const { removeUserDetails } = actions;
 
 const { TabPane } = Tabs;
@@ -58,9 +59,9 @@ class ViewUser extends Component {
 
                         <TabPane tab="Wallets" key="3"><UserWallets is_deleted={this.props.location.state ? this.props.location.state.is_deleted : false} user_id={user_id} /></TabPane>
                     }
-                    {/* {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
+                    {(isAllowed("get_all_sell_orders") || isAllowed("get_all_buy_orders") || isAllowed("get_all_pending_orders") || isAllowed("get_all_cancelled_orders")) &&
                         <TabPane tab="Orders" key="4"><AllOrders user_id={user_id} /></TabPane>
-                    } */}
+                    }
                     {isAllowed("get_user_login_history") &&
                         <TabPane tab="Login History" key="5"><LoginHistory user_id={user_id} /></TabPane>
                     }
