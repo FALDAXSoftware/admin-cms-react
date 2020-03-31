@@ -242,12 +242,21 @@ const columns = [
 
 const columns1 = [
   {
-    title: <IntlMessages id="tradeTable.title.created_at" />,
+    title:"Created At",
     key: "created_at",
     align: "left",
     width: 150,
     sorter: true,
     render: object => renderCell(object, "DateCell", "created_at")
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.email" />,
+    key: "email",
+    width: 250,
+    align: "left",
+    sorter: true,
+    dataIndex: "email",
+    render: object => ToolTipsCell(object)
   },
   {
     title: <IntlMessages id="tradeTable.title.symbol" />,
@@ -275,21 +284,12 @@ const columns1 = [
     )
   },
   {
-    title: <IntlMessages id="tradeTable.title.email" />,
-    key: "email",
-    width: 250,
-    align: "left",
-    sorter: true,
-    dataIndex: "email",
-    render: object => ToolTipsCell(object)
-  },
-  {
     title: <IntlMessages id="tradeTable.title.order_id" />,
     key: "order_id",
     width: 150,
     sorter: true,
     align: "left",
-    render: object => renderCell(object, "TextCell", "order_id")
+    dataIndex:"order_id"
   },
   {
     title: <IntlMessages id="tradeTable.title.order_status" />,
@@ -300,9 +300,59 @@ const columns1 = [
     dataIndex: "order_status",
     render: data => (
       <span className={"status-" + data + ""}>
-        {data.charAt(0).toUpperCase() + data.slice(1)}
+        {data.charAt(0).toUpperCase() + data.slice(1).replace("_"," ")}
       </span>
     )
+  },
+  {
+    title:"Fill Price",
+    key: "fill_price",
+    sorter: true,
+    align: "left",
+    width: 100,
+    dataIndex: "fill_price",
+    render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+  },
+  {
+    title:"Limit Price",
+    key: "limit_price",
+    sorter: true,
+    align: "left",
+    width: 100,
+    dataIndex: "limit_price",
+    render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+  },
+  {
+    title:"Stop Price",
+    key: "stop_price",
+    sorter: true,
+    align: "left",
+    width: 100,
+    dataIndex: "stop_price",
+    render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+  },{
+    title:"Amount",
+    key: "quantity",
+    sorter: true,
+    align: "left",
+    width: 150,
+    render:(row)=>(<span>{parseFloat(row["quantity"]).toFixed(8) +" "+row["settle_currency"]}</span>)
+  },
+  {
+    title:"Maker Fee",
+    key: "maker_fee",
+    sorter: true,
+    align: "left",
+    width: 100,
+    render:(row)=>(<span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>)
+  },
+  {
+    title:"Taker Fee",
+    key: "taker_fee",
+    sorter: true,
+    align: "left",
+    width: 100,
+    render:(row)=>(<span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>)
   }
 ];
 

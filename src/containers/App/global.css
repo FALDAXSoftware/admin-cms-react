@@ -581,6 +581,10 @@ html[dir='rtl'] .dz-hidden-input {
   color: #5dade2;
   font-weight: 500;
 }
+.status-partially_filled{
+  color: #5dade9;
+  font-weight: 500;
+}
 .status-cancelled{
   color:red;
   font-weight: 500;
