@@ -41,7 +41,7 @@ const routes = [
     },
     {
         path: "pairs",
-        component: asyncComponent(() => import("../Page/Pairs/pairs")),
+        component: asyncComponent(() => import("../Page/Pairs/tabs")),
         module: "pairs"
     },
     {
