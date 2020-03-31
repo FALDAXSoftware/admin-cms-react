@@ -51,7 +51,7 @@ const columns = [
         key: "txid",
         width: 250,
         ellipsis: true,
-        render: data => TransactionIdHashCell(data["coin"], data["txid"])
+        render: data => TransactionIdHashCell(data["coin"], data["txid"],isErcToken?true:false)
     },
     {
         title: <IntlMessages id="walletWarmDetailsTable.title.network_fee" />,
