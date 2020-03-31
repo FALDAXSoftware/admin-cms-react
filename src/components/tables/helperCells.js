@@ -950,13 +950,15 @@ const approvePendingReq = (
   );
 };
 
-const ConvertSatoshiToAssetCell = (coin, balance) => {
+const ConvertSatoshiToAssetCell = (coin, balance,precision=false) => {
   coin = coin.toLowerCase();
   let amount = 0;
   balance = parseFloat(balance);
-
   if (!parseFloat(balance)) {
     return <span>0</span>
+  }
+  if (precision) {
+    return <span>{parseFloat(balance /precision).toFixed(8)}</span>
   }
   switch (coin) {
     case "btc":
@@ -986,8 +988,11 @@ const ConvertSatoshiToAssetCell = (coin, balance) => {
     case "susu":
       amount = balance;
       break;
+    case "usdt":
+      amount = balance / 1e18;
+      break;
     default:
-      amount = balance;
+      amount = balance ;
   }
   return <span>{coin == "eth" || coin == "teth" ? parseFloat(amount).toFixed(8) : parseFloat(amount).toFixed(8)}</span>
 };
@@ -2289,7 +2294,7 @@ const FeeActionCell = (
   is_active
 ) => (
     <div>
-      {isAllowed("update_pair") && (
+      {isAllowed("admin_edit_pair") && (
         <Tooltip title="Edit">
           <Icon
             type="edit"

@@ -240,6 +240,72 @@ const columns = [
   // }
 ];
 
+const columns1 = [
+  {
+    title: <IntlMessages id="tradeTable.title.created_at" />,
+    key: "created_at",
+    align: "left",
+    width: 150,
+    sorter: true,
+    render: object => renderCell(object, "DateCell", "created_at")
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.symbol" />,
+    key: "symbol",
+    width: 100,
+    align: "left",
+    sorter: true,
+    render: object => renderCell(object, "TextCell", "symbol")
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.side" />,
+    key: "side",
+    width: 75,
+    sorter: true,
+    align: "left",
+    dataIndex: "side",
+    render: data => (
+      <span
+        className={data.toLowerCase() == "sell" ? "field-error" : "color-green"}
+      >
+        <Icon
+          type={data.toLowerCase() == "sell" ? "arrow-up" : "arrow-down"}
+        />&nbsp;{data}
+      </span>
+    )
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.email" />,
+    key: "email",
+    width: 250,
+    align: "left",
+    sorter: true,
+    dataIndex: "email",
+    render: object => ToolTipsCell(object)
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.order_id" />,
+    key: "order_id",
+    width: 150,
+    sorter: true,
+    align: "left",
+    render: object => renderCell(object, "TextCell", "order_id")
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.order_status" />,
+    key: "order_status",
+    sorter: true,
+    align: "left",
+    width: 100,
+    dataIndex: "order_status",
+    render: data => (
+      <span className={"status-" + data + ""}>
+        {data.charAt(0).toUpperCase() + data.slice(1)}
+      </span>
+    )
+  }
+];
+
 const tradeTableInfos = [
   {
     title: "Trade History",
@@ -247,5 +313,12 @@ const tradeTableInfos = [
     columns: clone(columns)
   }
 ];
+const ownTradeTable = [
+  {
+    title: "Trade History",
+    value: "TradeTable",
+    columns: clone(columns1)
+  }
+];
 
-export { columns, tradeTableInfos };
+export { columns,columns1, tradeTableInfos,ownTradeTable };
