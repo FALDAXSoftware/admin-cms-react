@@ -25,7 +25,7 @@ import {ExecutionUl} from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
-import { exportCryptoOnly } from "../../../helpers/exportToCsv/headers";
+import { exportOwnTrade } from "../../../helpers/exportToCsv/headers";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -245,7 +245,7 @@ class TradeHistory extends Component {
 
     return (
         <TableDemoStyle className="isoLayoutContent full-width">
-          <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="crypto_only.csv" data={csvData} header={exportCryptoOnly}/>
+          <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="trade_history.csv" data={csvData} header={exportOwnTrade}/>
           <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
           <div><Form onSubmit={this._searchTrade}>
             <Row justify="start" type="flex" className="table-filter-row">
@@ -317,8 +317,7 @@ class TradeHistory extends Component {
               return (
                 <div>
                   <span>
-                    {/* {JSON.stringify(record.execution_report)} */}
-                    {Object.keys(record.execution_report).length > 0 ? (
+                    {record.execution_report && Object.keys(record.execution_report).length > 0 ? (
                       <ExecutionUl>
                         {Object.keys(record.execution_report).map(
                           (element, index) => {
@@ -339,6 +338,7 @@ class TradeHistory extends Component {
                       <ExecutionUl>
                       </ExecutionUl>
                     )}
+
                   </span>
                 </div>
               );
