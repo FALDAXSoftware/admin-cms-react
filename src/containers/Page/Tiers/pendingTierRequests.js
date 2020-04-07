@@ -7,6 +7,9 @@ import authAction from '../../../redux/auth/actions';
 import ApiUtils from '../../../helpers/apiUtills';
 import FaldaxLoader from "../faldaxLoader";
 import { PAGE_SIZE_OPTIONS,TABLE_SCROLL_HEIGHT, PAGESIZE } from "../../../helpers/globals";
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { PageCounterComponent } from '../../Shared/pageCounter';
+import { exportTier } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 const {Option}=Select;
@@ -21,7 +24,9 @@ class PendingRequests extends Component {
             limit:PAGESIZE,
             tradeCount:0,
             searchData:"",
-            type:""
+            type:"",
+            csvData:[],
+            openCsvExportModal:false
         }
         self = this;
         PendingRequests.approvePendingReq = PendingRequests.approvePendingReq.bind(this);
@@ -36,21 +41,27 @@ class PendingRequests extends Component {
         this.getAllPendingRequest();
     }
 
-    getAllPendingRequest=()=>{
+    getAllPendingRequest=(isExportToCsv=false)=>{
         const { token } = this.props;
         const { sorterCol, sortOrder,limit,page,type,searchData } = this.state;
         let _this = this;
 
-        _this.setState({ loader: true })
-        ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder,limit,page,undefined,1,searchData,type)
+        _this.setState({ loader: true });
+        (isExportToCsv?ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder,100000,1,undefined,1,searchData,type):ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder,limit,page,undefined,1,searchData,type))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
+                  if(isExportToCsv){
                     _this.setState({
-                        pendingRequests:res.tradeData,
-                        tradeCount:res.tradeCount
+                      csvData:res.tradeData
+                    })
+                  }else{
+                    _this.setState({
+                      pendingRequests:res.tradeData,
+                      tradeCount:res.tradeCount
                     });
-                } else if (res.status == 403) {
+                  }
+                  } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
                     });
@@ -96,6 +107,9 @@ class PendingRequests extends Component {
             this.setState({ pendingRequests: nextProps.data })
         }
     }
+    onExport=()=>{
+      this.setState({openCsvExportModal:true},()=>this.getAllPendingRequest(true));
+    }
 
     openNotificationWithIconError = (type) => {
         notification[type]({
@@ -118,7 +132,7 @@ class PendingRequests extends Component {
       };
 
     render() {
-        const { errType, errMsg, pendingRequests,loader,tradeCount,page,limit,searchData,type } = this.state;
+        const { errType, errMsg, pendingRequests,loader,tradeCount,page,limit,searchData,type,csvData,openCsvExportModal} = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -126,6 +140,8 @@ class PendingRequests extends Component {
         return (
             <div className="isoLayoutContent">
                 <Form onSubmit={this.onSearch}>
+                <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename={`pending_tier${this.props.tier}_request.csv`} data={csvData} header={exportTier}/>
+                <PageCounterComponent page={page} limit={limit} dataCount={tradeCount} syncCallBack={()=>this.setState({type:"",searchData:""},()=>this.getAllPendingRequest())}/>
                 <Row  type="flex" justify="start" className="table-filter-row">
                   <Col lg={8}>
                     <Form.Item
@@ -177,6 +193,7 @@ class PendingRequests extends Component {
                       className="filter-btn btn-full-width"
                       type="primary"
                       icon="export"
+                      onClick={this.onExport}
                     >
                       Export
                     </Button>
