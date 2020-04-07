@@ -581,6 +581,10 @@ html[dir='rtl'] .dz-hidden-input {
   color: #5dade2;
   font-weight: 500;
 }
+.style-circle{
+  list-style: circle !important;
+  margin: 5px;
+}
 .status-partially_filled{
   color: #5dade9;
   font-weight: 500;
@@ -868,4 +872,18 @@ html[dir='rtl'] .dz-hidden-input {
 .idm-des-text{
   list-style-type: circle !important;
     padding-left: 15px;
+}
+.btn-icon-reject{
+  margin: 5px;
+  font-size: 18px;
+  color: red !important;
+}
+.btn-icon-accept{
+  margin: 5px;
+  font-size: 18px;
+  color: green !important;
+}
+.btn-icon-view{
+  margin: 5px;
+  font-size: 18px !important;
 }

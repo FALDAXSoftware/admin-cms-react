@@ -5,6 +5,7 @@ import RejectedRequests from './rejectedTierRequests';
 import ApprovedRequests from './approvedTierRequests';
 import ApiUtils from '../../../helpers/apiUtills';
 import { connect } from 'react-redux';
+import FaldaxLoader from "../faldaxLoader";
 import authAction from '../../../redux/auth/actions';
 
 const { TabPane } = Tabs;
@@ -19,7 +20,7 @@ class AllRequests extends React.Component {
     }
 
     componentDidMount = () => {
-        this._getAllTierRequests();
+        // this._getAllTierRequests();
     }
 
     _getAllTierRequests = () => {
@@ -28,7 +29,7 @@ class AllRequests extends React.Component {
         let _this = this;
 
         _this.setState({ loader: true })
-        ApiUtils.getAllTierRequests(token, sorterCol, sortOrder)
+        ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
@@ -54,13 +55,14 @@ class AllRequests extends React.Component {
     }
 
     render() {
-        const { allPendingReq, allApprovedReq, allRejectedReq } = this.state;
+        const { allPendingReq, allApprovedReq, allRejectedReq,loader } = this.state;
         return (
             <React.Fragment>
-                <Tabs className="tier-tab" defaultActiveKey="1" size={'large'}>
-                    <TabPane tab="Pending Requests" key="1"><PendingRequests data={allPendingReq} /></TabPane>
-                    <TabPane tab="Approved Requests" key="2"><ApprovedRequests data={allApprovedReq} /></TabPane>
-                    <TabPane tab="Rejected Requests" key="3"><RejectedRequests data={allRejectedReq} /></TabPane>
+            {loader && <FaldaxLoader/>}
+                <Tabs className="tier-tab" size={'large'}>
+                    <TabPane tab="Pending Requests" key="1"><PendingRequests tier={this.props.tier} data={allPendingReq} /></TabPane>
+                    <TabPane tab="Approved Requests" key="2"><ApprovedRequests tier={this.props.tier} data={allApprovedReq} /></TabPane>
+                    <TabPane tab="Rejected Requests" key="3"><RejectedRequests tier={this.props.tier} data={allRejectedReq} /></TabPane>
                 </Tabs>
             </React.Fragment>
         )

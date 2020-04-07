@@ -26,25 +26,41 @@ const renderCell = (object, type, key, fname = null, lname = null, tierStep = nu
 const columns = [{
     title: <IntlMessages id="tierTable.title.actions" />,
     key: 'actions',
-    width: 100,
+    width: 80,
     render: object => renderCell(object, 'PendingTierReqActionCell', 'id', 'first_name',
         'last_name', 'tier_step', 'is_approved', 'user_id')
-}, {
+},
+{
+    title:"Unique Key",
+    key :"unique_key",
+    dataIndex:"unique_key",
+    width:100
+},
+{
+    title:"SSN",
+    key :"ssn",
+    dataIndex:"ssn",
+    width:100
+},
+ {
     title: <IntlMessages id="tierTable.title.first_name" />,
     key: 'first_name',
-    width: 100,
+    width: 150,
     render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
 }, {
     title: <IntlMessages id="tierTable.title.email" />,
     key: 'email',
-    width: 100,
+    width: 200,
     render: object => renderCell(object, 'TextCell', 'email')
-}, {
-    title: <IntlMessages id="tierTable.title.tier_step" />,
-    key: 'tier_step',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'tier_step')
-}];
+},
+{
+    title:"Type",
+    key: 'type',
+    dataIndex:"type",
+    width:250,
+    render: object => <span>{object=="1"?"Valid ID":object=="2"?"Proof of Residence":"Social Security Number or Equivalent Govt"}</span>
+}
+]
 
 const tierPendingReqTableInfos = [
     {
