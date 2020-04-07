@@ -2861,12 +2861,13 @@ const TierReqCell = (
   requirements
 ) => (
     <div>
+    <ul class="style-circle" type="circle">
       {Object.keys(requirements).map(req => (
-        <span>
-          {requirements[req]}
-          <br />
-        </span>
+        <li>
+          <b>{requirements[req]}</b>
+        </li>
       ))}
+      </ul>
     </div>
   );
 const TierThresholdCell = (
@@ -2877,14 +2878,13 @@ const TierThresholdCell = (
   minimum_activity_thresold,
   requirements
 ) => (
-    <div>
+    <ul class="style-circle" type="circle">
       {Object.keys(minimum_activity_thresold).map(threshold => (
-        <span>
-          {minimum_activity_thresold[threshold]}
-          <br />
-        </span>
+        <li>
+          <b>{minimum_activity_thresold[threshold]}</b>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 const TierActionCell = value => (
   <div>
@@ -2915,38 +2915,54 @@ const PendingTierReqActionCell = (
   user_id
 ) => (
     <div>
-      <Tooltip title="View">
+      {/* <Tooltip title="View">
         <Icon
           type="info-circle"
-          className="btn-icon"
+          className="btn-icon-view"
           onClick={() =>
             viewPendingReq(
               value,
               first_name,
               last_name,
               tier_step,
-              is_approved,
+              false,
+              user_id
+            )
+          }
+        />
+      </Tooltip> */}
+      <Tooltip title="Approved">
+        <Icon
+          type="check-circle"
+          className="btn-icon-accept"
+          onClick={() =>
+            approvePendingReq(
+              value,
+              first_name,
+              last_name,
+              tier_step,
+              true,
               user_id
             )
           }
         />
       </Tooltip>
-      <Switch
-        className="switch-cell"
-        checkedChildren="Active"
-        unCheckedChildren="Inactive"
-        checked={is_approved}
-        onChange={() => {
-          approvePendingReq(
-            value,
-            first_name,
-            last_name,
-            tier_step,
-            is_approved,
-            user_id
-          );
-        }}
-      />
+      <Tooltip title="Reject">
+        <Icon
+          type="close-circle"
+          className="btn-icon-reject"
+          onClick={() =>
+            approvePendingReq(
+              value,
+              first_name,
+              last_name,
+              tier_step,
+              false,
+              user_id
+            )
+          }
+        />
+      </Tooltip>
     </div>
   );
 const SimplexStatusCell = (

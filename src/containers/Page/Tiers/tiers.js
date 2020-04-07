@@ -5,11 +5,10 @@ import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import TableWrapper from "../../Tables/antTables/antTable.style";
-import { connect } from 'react-redux';
-import FaldaxLoader from '../faldaxLoader';
-import authAction from '../../../redux/auth/actions';
-import AllRequests from './tierRequests';
-import { isAllowed } from '../../../helpers/accessControl';
+import { connect } from "react-redux";
+import FaldaxLoader from "../faldaxLoader";
+import authAction from "../../../redux/auth/actions";
+import AllRequests from "./tierRequests";
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -36,10 +35,8 @@ class Tiers extends Component {
   }
 
   componentDidMount = () => {
-    if (isAllowed("get_tier_details")) {
       this._getAllTiers();
-    }
-  }
+  };
 
   openNotificationWithIconError = type => {
     notification[type]({
@@ -57,7 +54,7 @@ class Tiers extends Component {
     _this.setState({ loader: true });
     ApiUtils.getAllTiers(token, sorterCol, sortOrder)
       .then(response => response.json())
-      .then(function (res) {
+      .then(function(res) {
         if (res.status == 200) {
           _this.setState({ allTiers: res.data });
         } else if (res.status == 403) {
@@ -97,28 +94,18 @@ class Tiers extends Component {
     }
 
     return (
-      <LayoutWrapper>
+      <TableDemoStyle className="isoLayoutContent">
         {loader && <FaldaxLoader />}
-        <TableDemoStyle className="isoLayoutContent">
-          <Tabs className="isoTableDisplayTab full-width">
-            {isAllowed("get_tier_details") &&
-              <TabPane tab={tierTableInfos[0].title} key={tierTableInfos[0].value}>
-                <TableWrapper
-                  {...this.state}
-                  columns={tierTableInfos[0].columns}
-                  pagination={false}
-                  dataSource={allTiers}
-                  className="isoCustomizedTable"
-                  onChange={this._handlePairsChange}
-                />
-              </TabPane>
-            }
-            {isAllowed("user_tier_request") &&
-              <TabPane tab="Tier Requests" key="2"><AllRequests /></TabPane>
-            }
-          </Tabs>
-        </TableDemoStyle>
-      </LayoutWrapper >
+        <TableWrapper
+          {...this.state}
+          columns={tierTableInfos[0].columns}
+          pagination={false}
+          dataSource={allTiers}
+          className="isoCustomizedTable"
+          onChange={this._handlePairsChange}
+          bordered
+        />
+      </TableDemoStyle>
     );
   }
 }
