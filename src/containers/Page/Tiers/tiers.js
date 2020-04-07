@@ -8,7 +8,7 @@ import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import AllRequests from "./tierRequests";
+import {withRouter} from "react-router-dom"
 
 const TabPane = Tabs.TabPane;
 const { logout } = authAction;
@@ -110,11 +110,11 @@ class Tiers extends Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     token: state.Auth.get("token")
   }),
   { logout }
-)(Tiers);
+)(Tiers));
 
 export { Tiers, tierTableInfos };
