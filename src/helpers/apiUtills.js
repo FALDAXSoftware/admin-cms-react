@@ -3030,12 +3030,8 @@ const ApiUtils = {
     });
   },
 
-  getAllTierRequests: function(token, id, status) {
-    let url = "/admin/user-tier-request";
-    if (id && status) {
-      url += "?id=" + id + "&status=" + status;
-    }
-
+  getAllTierRequests: function(token,tier="1",sortCol="",sortOrder="",limit=10,page=1, id, status=1,searchData="",type="") {
+    let url = `/admin/user-tier-request?step=${tier}&limit=${limit}&page=${page}&status=${status}&data=${searchData}&type=${type}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -3623,6 +3619,17 @@ const ApiUtils = {
   },
   getPanicBtnHistory:function(token,searchData="",startDate="",endDate="",sortCol="",sortOrder="",page=1,limit=50){
     let url=`${API_URL}/admin/get-panic-history?page=${page}${sortOrder?'&sort_order='+sortOrder:""}${startDate?'&start_date='+startDate:""}${endDate?'&end_date='+endDate:""}${searchData?'&data='+searchData:""}${sortCol?'&sort_col='+sortCol:""}&limit=${limit}`
+    return fetch(url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  },
+  approveRejectRequest:function(token,tier,id,status,user_id){
+    let url=`${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&user_id=${user_id}`
     return fetch(url, {
       method: "get",
       headers: {

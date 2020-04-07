@@ -262,16 +262,17 @@ const options = [
       "list_batch"
     ]
   },
-  // {
-  //   key: "account-tier",
-  //   label: "Account Tier Management",
-  //   leftIcon: "fas fa-file-invoice",
-  //   module: "tiers",
-  //   permssions: [
-  //     "get_tier_details",
-  //     "user_tier_request"
-  //   ]
-  // },
+  {
+    key: "account-tier",
+    label: "sidebar.account_tier",
+    leftIcon: "fas fa-file-invoice",
+    module: "tiers",
+    permssions: [
+      "get-tier-data",
+      // "get_tier_details",
+      "user_tier_request"
+    ]
+  },
   // {
   //   key: "simplex-token",
   //   label: "sidebar.token",

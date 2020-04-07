@@ -176,7 +176,7 @@ const routes = [
     // },
     {
         path: "account-tier",
-        component: asyncComponent(() => import("../Page/Tiers/tiers")),
+        component: asyncComponent(() => import("../Page/Tiers/tabs")),
         module: "tiers"
     },
     {
