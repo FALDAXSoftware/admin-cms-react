@@ -7,6 +7,9 @@ import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS,TABLE_SCROLL_HEIGHT, PAGESIZE } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
 import ApiUtils from '../../../helpers/apiUtills';
+import { PageCounterComponent } from '../../Shared/pageCounter';
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import {  exportTier } from '../../../helpers/exportToCsv/headers';
 
 const { logout } = authAction;
 const {Option}=Select;
@@ -21,7 +24,9 @@ class ApprovedRequests extends Component {
             loader:false,
             tradeCount:0,
             searchData:"",
-            type:""
+            type:"",
+            csvData:[],
+            openCsvExportModal:false
         }
     }
 
@@ -32,20 +37,24 @@ class ApprovedRequests extends Component {
     componentDidMount(){
         this.getAllApprovedTierRequest();
     }
-    getAllApprovedTierRequest(){
+    getAllApprovedTierRequest(isExportToCsv=false){
         const { token } = this.props;
         const { sorterCol, sortOrder,limit,page,searchData,type } = this.state;
         let _this = this;
 
-        _this.setState({ loader: true })
-        ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder,limit,page,undefined,2,searchData,type)
+        _this.setState({ loader: true });
+        (isExportToCsv?ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder,100000,1,undefined,2,searchData,type):ApiUtils.getAllTierRequests(token,this.props.tier, sorterCol, sortOrder,limit,page,undefined,2,searchData,type))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({
-                        approvedRequests:res.tradeData,
-                        tradeCount:res.tradeCount
-                    });
+                    if(isExportToCsv){
+                        _this.setState({csvData:res.tradeData});
+                    }else{
+                        _this.setState({
+                            approvedRequests:res.tradeData,
+                            tradeCount:res.tradeCount
+                        });
+                    }
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
                         _this.props.logout();
@@ -86,14 +95,19 @@ class ApprovedRequests extends Component {
         this.setState({ errMsg: false });
     };
 
+    onExport=()=>{
+        this.setState({openCsvExportModal:true},()=>this.getAllApprovedTierRequest(true));
+      }
     render() {
-        const { errType, errMsg, approvedRequests ,loader,page,tradeCount,limit,searchData,type} = this.state;
+        const { errType, errMsg, approvedRequests ,loader,page,tradeCount,limit,searchData,type,csvData,openCsvExportModal} = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
             <div className="isoLayoutContent">
+                <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename={`approved_tier${this.props.tier}_request.csv`} data={csvData} header={exportTier}/>
+                <PageCounterComponent page={page} limit={limit} dataCount={tradeCount} syncCallBack={()=>this.setState({type:"",searchData:""},()=>this.getAllApprovedTierRequest())}/>
                 <Form onSubmit={this.onSearch}>
                 <Row  type="flex" justify="start" className="table-filter-row">
                   <Col lg={8}>
@@ -145,6 +159,7 @@ class ApprovedRequests extends Component {
                     <Button
                       className="filter-btn btn-full-width"
                       type="primary"
+                      onClick={this.onExport}
                       icon="export"
                     >
                       Export

@@ -7,6 +7,9 @@ import authAction from '../../../redux/auth/actions';
 import { PAGE_SIZE_OPTIONS,TABLE_SCROLL_HEIGHT, PAGESIZE } from "../../../helpers/globals";
 import ApiUtils from '../../../helpers/apiUtills';
 import FaldaxLoader from "../faldaxLoader";
+import { ExportToCSVComponent } from '../../Shared/exportToCsv';
+import { PageCounterComponent } from '../../Shared/pageCounter';
+import { exportTier } from '../../../helpers/exportToCsv/headers';
 const { logout } = authAction;
 const {Option}=Select;
 
@@ -20,7 +23,9 @@ class RejectedRequests extends Component {
             loader:false,
             tradeCount:0,
             searchData:"",
-            type:""
+            type:"",
+            csvData:[],
+            openCsvExportModal:false
         }
     }onSearch=(e)=>{
       e.preventDefault();
@@ -43,13 +48,22 @@ class RejectedRequests extends Component {
       });
     };
 
-    getAllRejectedTier(){
+    getAllRejectedTier(isExportToCsv=false){
         const { token } = this.props;
-        const { sorterCol, sortOrder,limit,page,searchData,type } = this.state;
+        const { sorterCol, sortOrder,limit,page,searchData,type} = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getAllTierRequests(
+        (isExportToCsv?ApiUtils.getAllTierRequests(
+          token,
+          this.props.tier,
+          sorterCol,
+          sortOrder,
+          100000,
+          1,
+          undefined,
+          3,searchData,type
+        ):ApiUtils.getAllTierRequests(
           token,
           this.props.tier,
           sorterCol,
@@ -58,15 +72,19 @@ class RejectedRequests extends Component {
           page,
           undefined,
           3,searchData,type
-        )
+        ))
           .then((response) => response.json())
           .then(function (res) {
             if (res.status == 200) {
-              _this.setState({
-                rejectedRequests: res.tradeData,
-                tradeCount:res.tradeCount
-              });
-            } else if (res.status == 403) {
+              if(isExportToCsv){
+                _this.setState({csvData:res.tradeData})
+              }else{
+                _this.setState({
+                  rejectedRequests: res.tradeData,
+                  tradeCount:res.tradeCount
+                });
+              }
+              } else if (res.status == 403) {
               _this.setState(
                 { errMsg: true, errMessage: res.err, errType: "error" },
                 () => {
@@ -97,6 +115,9 @@ class RejectedRequests extends Component {
             this.setState({ rejectedRequests: nextProps.data })
         }
     }
+    onExport=()=>{
+      this.setState({openCsvExportModal:true},()=>this.getAllRejectedTier(true));
+    }
 
     openNotificationWithIconError = (type) => {
         notification[type]({
@@ -107,13 +128,15 @@ class RejectedRequests extends Component {
     };
 
     render() {
-        const { errType, errMsg, rejectedRequests,loader,searchData,type,page,limit,tradeCount } = this.state;
+        const { errType, errMsg, rejectedRequests,loader,searchData,type,page,limit,tradeCount,csvData,openCsvExportModal } = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
             <div className="isoLayoutContent">
+              <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename={`rejected_tier${this.props.tier}_request.csv`} data={csvData} header={exportTier}/>
+              <PageCounterComponent page={page} limit={limit} dataCount={tradeCount} syncCallBack={()=>this.setState({type:"",searchData:""},()=>this.getAllRejectedTier())}/>
               <Form onSubmit={this.onSearch}>
                 <Row  type="flex" justify="start" className="table-filter-row">
                   <Col lg={8}>
@@ -166,6 +189,7 @@ class RejectedRequests extends Component {
                       className="filter-btn btn-full-width"
                       type="primary"
                       icon="export"
+                      onClick={this.onExport}
                     >
                       Export
                     </Button>
