@@ -250,12 +250,21 @@ const columns1 = [
     render: object => renderCell(object, "DateCell", "created_at")
   },
   {
-    title: <IntlMessages id="tradeTable.title.email" />,
-    key: "email",
+    title:"User Email",
+    key: "user_email",
     width: 250,
     align: "left",
     sorter: true,
     dataIndex: "email",
+    render: object => ToolTipsCell(object)
+  },
+  {
+    title:"Requested Email",
+    key: "requested_mail",
+    width: 250,
+    align: "left",
+    sorter: true,
+    dataIndex: "requested_email",
     render: object => ToolTipsCell(object)
   },
   {
@@ -313,24 +322,25 @@ const columns1 = [
     dataIndex: "fill_price",
     render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
   },
+  // {
+  //   title:"Limit Price",
+  //   key: "limit_price",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   dataIndex: "limit_price",
+  //   render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+  // },
+  // {
+  //   title:"Stop Price",
+  //   key: "stop_price",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   dataIndex: "stop_price",
+  //   render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+  // },
   {
-    title:"Limit Price",
-    key: "limit_price",
-    sorter: true,
-    align: "left",
-    width: 100,
-    dataIndex: "limit_price",
-    render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
-  },
-  {
-    title:"Stop Price",
-    key: "stop_price",
-    sorter: true,
-    align: "left",
-    width: 100,
-    dataIndex: "stop_price",
-    render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
-  },{
     title:"Amount",
     key: "quantity",
     sorter: true,
