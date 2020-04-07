@@ -37,7 +37,8 @@ const columns = [{
     title: <IntlMessages id="tierTable.title.tier_step" />,
     key: 'tier_step',
     width: 100,
-    render: object => renderCell(object, 'TextCell', 'tier_step')
+    dataIndex:"tier_step",
+    render: object => <span>Tier&nbsp; {object}</span>
 }, {
     title: <IntlMessages id="tierTable.title.daily_withdraw_limit" />,
     key: 'daily_withdraw_limit',
