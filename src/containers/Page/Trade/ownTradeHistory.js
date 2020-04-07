@@ -26,6 +26,7 @@ import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } f
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportOwnTrade } from "../../../helpers/exportToCsv/headers";
+import { PrecisionCell,DateTimeCell } from "../../../components/tables/helperCells";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -316,30 +317,17 @@ class TradeHistory extends Component {
             expandedRowRender={record => {
               return (
                 <div>
-                  <span>
-                    {record.execution_report && Object.keys(record.execution_report).length > 0 ? (
-                      <ExecutionUl>
-                        {Object.keys(record.execution_report).map(
-                          (element, index) => {
-                            return (
-                              <li>
-                                <span className="ex_head">
-                                  <b>{element} : </b>
-                                </span>
-                                <span className="ex_data">
-                                  {record.execution_report[element]}
-                                </span>
-                              </li>
-                            );
-                          }
-                        )}
-                      </ExecutionUl>
-                    ) : (
-                      <ExecutionUl>
-                      </ExecutionUl>
-                    )}
-
-                  </span>
+                    <span><b>Created At</b>&nbsp;:&nbsp; {record['created_at']}</span><br/>
+                    <span><b>Fill Price</b>&nbsp;:&nbsp;{PrecisionCell(record['fill_price'])}</span><br/>
+                    <span><b>Side</b>&nbsp;:&nbsp;{record['side']}</span><br/>
+                    <span><b>Order Type</b>&nbsp;:&nbsp;{record['order_type']}</span><br/>
+                    <span><b>User Email</b>&nbsp;:&nbsp;{record['email']}</span><br/>
+                    <span><b>Requested Email</b>&nbsp;:&nbsp;{record['requested_email']}</span><br/>
+                    <span><b>Order Status</b>&nbsp;:&nbsp;{record['order_status']}</span><br/>
+                    <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br/>
+                    <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br/>
+                    <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"]+" "+record['user_coin']}</span><br/>
+                    <span><b>RequestedFees</b>&nbsp;:&nbsp;{record["requested_fee"]+" "+record['requested_coin']}</span><br/>
                 </div>
               );
             }}
