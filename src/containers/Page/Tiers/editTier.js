@@ -168,7 +168,7 @@ class EditTier extends Component {
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Account Age:</span>
+                            <span>Account Age (Days):</span>
                             <Input placeholder="Account Age" onChange={this._handleChange.bind(this, "account_age")} value={fields["account_age"]} />
                             <span style={{ "color": "red" }}>
                                 {this.validator.message('account_age', fields["account_age"], 'required', 'text-danger')}
@@ -186,7 +186,7 @@ class EditTier extends Component {
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Minimum Total Value of All Transactions:</span>
+                            <span>Minimum Total Value of All Transactions (USD):</span>
                             <Input placeholder="Minimum Total Value of All Transactions" onChange={this._handleChange.bind(this, "total_value")} value={fields["total_value"]} />
                             <span style={{ "color": "red" }}>
                                 {this.validator.message('total_value', fields["total_value"], 'required', 'text-danger')}
