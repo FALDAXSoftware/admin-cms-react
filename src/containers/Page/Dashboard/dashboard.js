@@ -108,7 +108,11 @@ class Dashboard extends Component {
       startDate: "",
       endDate: "",
       rangeDate: [],
+      tierData:[],
       loader: false,
+      tradeTransactionLabel:[],
+      tradeTransactionValue:[],
+      tradeTransactionValue2:[]
     };
   }
 
@@ -124,6 +128,37 @@ class Dashboard extends Component {
       this._getAllCount();
   }
 
+  calculateTierData(tierData){
+    // Key Means tier
+    // first occurrence is approved request count,second is reject occurrence count and third one is pending request count
+    let tier=[],data=[];
+    for (let i = 0; i < tierData.length; i++) {
+      Object.keys(tierData[i]).forEach((key) => {
+        if (tier["tier" + key]) {
+          if (tier["tier" + key].length == 1) {
+            tier["tier" + key].push({"name" : "Reject",count:tierData[i][key]});
+          }   
+           else {
+            tier["tier" + key].push({"name" : "Pending",count:tierData[i][key]});
+          }
+        } else {
+          tier["tier" + key] = [];
+          tier["tier" + key].push({"name" : "Approved",count:tierData[i][key]});
+        }
+      });
+    }
+    this.setState({tierData:tier});
+  }
+
+  getFeesTransactionValue(data){
+    let label=[],value=[],value2=[];
+    data.forEach((ele)=>{
+      label.push(ele["symbol"]);
+      value.push(ele["user_fee"]);
+      value2.push(ele["requested_fee"]);
+    })
+    return [label,value,value2];
+  }
   _getAllCount = () => {
     const { token } = this.props;
     const { startDate, endDate } = this.state;
@@ -140,6 +175,8 @@ class Dashboard extends Component {
             let residualFees = [];
             let transactionSymbols = [];
             let transactionCount = [];
+            let [tradeTransactionLabel,tradeTransactionValue,tradeTransactionValue2]=_this.getFeesTransactionValue(res.feesTransactionValue);
+            _this.calculateTierData(res.TierData);
             res.walletFeesTransactionValue &&
               res.walletFeesTransactionValue.forEach((value)=> {
                 feesLabels.push(value.coin_code.toUpperCase());
@@ -201,7 +238,10 @@ class Dashboard extends Component {
               faldaxFees,
               residualFees,
               transactionSymbols,
-              transactionCount
+              transactionCount,
+              tradeTransactionLabel,
+              tradeTransactionValue,
+              tradeTransactionValue2
             });
           } else if (res.status == 403 || res.status == 401) {
             _this.setState({
@@ -303,6 +343,9 @@ class Dashboard extends Component {
       deletedUsers,
       transactionSymbols,
       transactionCount,
+      tierData,
+      tradeTransactionLabel,
+      tradeTransactionValue,tradeTransactionValue2
     } = this.state;
 
     const data = {
@@ -441,15 +484,65 @@ class Dashboard extends Component {
               </span>
               <ChartWrapper>
                 <FeeChart
-                  feesLabels={feesLabels}
-                  faldaxFees={faldaxFees}
-                  residualFees={residualFees}
+                  label={feesLabels}
+                  datasets={[
+                    {
+                      label: "FALDAX Fees",
+                      backgroundColor: "rgb(98, 208, 197)",
+                      borderColor: "rgb(43, 107, 101)",
+                      borderWidth: 1,
+                      hoverBackgroundColor: "rgb(28, 84, 79)",
+                      hoverBorderColor: "rgb(43, 107, 101)",
+                      data: faldaxFees,
+                    },
+                    {
+                      label: "Residual Amount",
+                      backgroundColor: "rgba(255,99,132,0.2)",
+                      borderColor: "rgba(255,99,132,1)",
+                      borderWidth: 1,
+                      hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                      hoverBorderColor: "rgba(255,99,132,1)",
+                      data: residualFees,
+                    },
+                  ]}
+                />
+              </ChartWrapper>
+            </CardWrapper>
+          </Col>
+          <Col md={12} xs={24}>
+            <CardWrapper>
+              <span>
+                <b> Trade Fees collected in last 30 days</b>
+              </span>
+              <ChartWrapper>
+                <FeeChart
+               label={tradeTransactionLabel}
+               datasets={[
+                 {
+                   label: "User Fee",
+                   backgroundColor: "rgb(98, 208, 197)",
+                   borderColor: "rgb(43, 107, 101)",
+                   borderWidth: 1,
+                   hoverBackgroundColor: "rgb(28, 84, 79)",
+                   hoverBorderColor: "rgb(43, 107, 101)",
+                   data: tradeTransactionValue,
+                 },
+                 {
+                   label: "Requested Fee",
+                   backgroundColor: "rgba(255,99,132,0.2)",
+                   borderColor: "rgba(255,99,132,1)",
+                   borderWidth: 1,
+                   hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                   hoverBorderColor: "rgba(255,99,132,1)",
+                   data: tradeTransactionValue2,
+                 },
+               ]}
                 />
               </ChartWrapper>
             </CardWrapper>
           </Col>
 
-          <Col md={12} xs={24}>
+          <Col md={24} xs={24}>
             <CardWrapper>
               <span>
                 <b>Transactions</b>
@@ -483,13 +576,13 @@ class Dashboard extends Component {
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
                 style={{
-                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
                 }}
                 title={"Users"}
                 data={[
                   { name: "Active Users", count: activeUsers },
                   { name: "Suspended Users", count: inactiveUsers },
-                  { name: "Deactivated Users", count: deletedUsers }
+                  { name: "Deactivated Users", count: deletedUsers },
                 ]}
                 icon="fa fa-users"
                 fontColor="#2d3446"
@@ -504,10 +597,10 @@ class Dashboard extends Component {
                 bgcolor={"#fff"}
                 data={[
                   { name: "Active Assets", count: activeCoins },
-                  { name: "Inactive Assets", count: InactiveCoins }
+                  { name: "Inactive Assets", count: InactiveCoins },
                 ]}
                 style={{
-                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
                 }}
                 title={"Assets"}
                 icon="fa fa-coins"
@@ -537,12 +630,12 @@ class Dashboard extends Component {
               <CountCard
                 data={[
                   { name: "Active Employee", count: activeEmployeeCount },
-                  { name: "Inactive Employee", count: inactiveEmployeeCount }
+                  { name: "Inactive Employee", count: inactiveEmployeeCount },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
                 style={{
-                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
                 }}
                 title={"Employees"}
                 icon="fas fa-user-tie"
@@ -566,12 +659,12 @@ class Dashboard extends Component {
               <CountCard
                 data={[
                   { name: "Approved Customer ID", count: kyc_approved },
-                  { name: "Disapproved Customer ID", count: kyc_disapproved }
+                  { name: "Disapproved Customer ID", count: kyc_disapproved },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
                 style={{
-                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
                 }}
                 title="Customer ID Verification"
                 icon="fa fa-id-card"
@@ -585,17 +678,17 @@ class Dashboard extends Component {
                 data={[
                   {
                     name: "Last 7 Days Withdrawal Request",
-                    count: withdrawReqCount
+                    count: withdrawReqCount,
                   },
                   {
                     name: "Pending Withdrawal Request",
-                    count: withdrawReqCountValue
-                  }
+                    count: withdrawReqCountValue,
+                  },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
                 style={{
-                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
                 }}
                 title="Withdrawal Request"
                 icon="fas fa-hand-holding-usd"
@@ -620,14 +713,59 @@ class Dashboard extends Component {
                   { name: "Legal Countries", count: legalCountries },
                   { name: "Illegal Countries", count: illegalCountries },
                   { name: "Neutral Countries", count: neutralCountries },
-                  { name: "Partial Countries", count: PartialCountries }
+                  { name: "Partial Countries", count: PartialCountries },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
                 style={{
-                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);"
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
                 }}
                 title="Countries"
+                icon="fa fa-flag"
+                fontColor="#ffffff"
+              />
+            </Link>
+          </Col>
+          <Col lg={6} md={12} sm={12} xs={24}>
+            <Link target="_blank" to="/dashboard/account-tier">
+              <CountCard
+                data={tierData["tier2"]}
+                headcolor={"#1f2431"}
+                bgcolor={"#fff"}
+                style={{
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
+                }}
+                title="Tier2 Request"
+                icon="fa fa-flag"
+                fontColor="#ffffff"
+              />
+            </Link>
+          </Col>
+          <Col lg={6} md={12} sm={12} xs={24}>
+            <Link target="_blank" to="/dashboard/account-tier">
+              <CountCard
+                data={tierData["tier3"]}
+                headcolor={"#1f2431"}
+                bgcolor={"#fff"}
+                style={{
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
+                }}
+                title="Tier3 Request"
+                icon="fa fa-flag"
+                fontColor="#ffffff"
+              />
+            </Link>
+          </Col>
+          <Col lg={6} md={12} sm={12} xs={24}>
+            <Link target="_blank" to="/dashboard/account-tier">
+              <CountCard
+                data={tierData["tier4"]}
+                headcolor={"#1f2431"}
+                bgcolor={"#fff"}
+                style={{
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
+                }}
+                title="Tier4 Request"
                 icon="fa fa-flag"
                 fontColor="#ffffff"
               />
