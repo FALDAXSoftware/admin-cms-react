@@ -21,12 +21,11 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter} from "react-router-dom";
-import {ExecutionUl} from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportOwnTrade } from "../../../helpers/exportToCsv/headers";
-import { PrecisionCell,DateTimeCell } from "../../../components/tables/helperCells";
+import { PrecisionCell } from "../../../components/tables/helperCells";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -81,7 +80,7 @@ class TradeHistory extends Component {
 
     _this.setState({ loader: true });
     (isExportCsv
-      ? ApiUtils.getAllTrades(1, EXPORT_LIMIT_SIZE, token, "", "", "", "", "", "", 1)
+      ? ApiUtils.getAllTrades(1, EXPORT_LIMIT_SIZE, token, "", "", "", "", "", "", trade_type)
       : ApiUtils.getAllTrades(
           page,
           limit,
@@ -327,7 +326,7 @@ class TradeHistory extends Component {
                     <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br/>
                     <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br/>
                     <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"]+" "+record['user_coin']}</span><br/>
-                    <span><b>RequestedFees</b>&nbsp;:&nbsp;{record["requested_fee"]+" "+record['requested_coin']}</span><br/>
+                    <span><b>Requested Fees</b>&nbsp;:&nbsp;{record["requested_fee"]+" "+record['requested_coin']}</span><br/>
                 </div>
               );
             }}
