@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import FaldaxLoader from "../faldaxLoader";
 // import { CSVLink } from "react-csv";
 import authAction from "../../../redux/auth/actions";
-import { ExecutionUl } from "../common.style";
+// import { ExecutionUl } from "../common.style";
 import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
@@ -273,7 +273,7 @@ class UserOwnTradeHistory extends Component {
                   <TableWrapper
                     rowKey="id"
                     {...this.state}
-                    columns={ownTradeTable[0].columns1}
+                    columns={ownTradeTable[0].columns}
                     pagination={false}
                     dataSource={allTrades}
                     className="table-tb-margin"
@@ -293,7 +293,7 @@ class UserOwnTradeHistory extends Component {
                     <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br/>
                     <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br/>
                     <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"]+" "+record['user_coin']}</span><br/>
-                    <span><b>RequestedFees</b>&nbsp;:&nbsp;{record["requested_fee"]+" "+record['requested_coin']}</span><br/>
+                    <span><b>Requested Fees</b>&nbsp;:&nbsp;{record["requested_fee"]+" "+record['requested_coin']}</span><br/>
                 </div>
               );
             }}

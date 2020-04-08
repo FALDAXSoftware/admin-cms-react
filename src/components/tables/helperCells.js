@@ -2879,11 +2879,15 @@ const TierThresholdCell = (
   requirements
 ) => (
     <ul class="style-circle" type="circle">
-      {Object.keys(minimum_activity_thresold).map(threshold => (
         <li>
-          <b>{minimum_activity_thresold[threshold]}</b>
+          <b>{"Account Age : "+minimum_activity_thresold["Account_Age"]+' Days'}</b>
         </li>
-      ))}
+        <li>
+          <b>{"Minimum Total Transactions : "+minimum_activity_thresold["Minimum_Total_Transactions"]+' Transactions'}</b>
+        </li>
+        <li>
+          <b>{"Minimum Total Value of All Transactions : $"+minimum_activity_thresold["Minimum_Total_Value_of_All_Transactions"]}</b>
+        </li>
     </ul>
   );
 const TierActionCell = value => (
