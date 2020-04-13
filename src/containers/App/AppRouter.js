@@ -25,6 +25,11 @@ const routes = [
         module: "terms-and-conditions"
     },
     {
+        path: "tier-documentation",
+        component: asyncComponent(() => import("../Page/TierDocument/tierDocument")),
+        module: "tier-documentation"
+    },
+    {
         path: "countries",
         component: asyncComponent(() => import("../Page/Country/countries")),
         module: "countries"
