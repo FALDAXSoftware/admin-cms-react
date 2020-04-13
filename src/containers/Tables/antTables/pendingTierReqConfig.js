@@ -23,39 +23,41 @@ const renderCell = (object, type, key, fname = null, lname = null, tierStep = nu
     }
 };
 
-const columns = [{
-    title: <IntlMessages id="tierTable.title.actions" />,
-    key: 'actions',
-    width: 80,
-    align:"left",
-    ellipsis:true,
-    render: object => renderCell(object, 'PendingTierReqActionCell', 'id', 'first_name',
-        'last_name', 'tier_step', 'is_approved', 'user_id')
-},
+const columns = [
+//     {
+//     title: <IntlMessages id="tierTable.title.actions" />,
+//     key: 'actions',
+//     width: 80,
+//     align:"left",
+//     ellipsis:true,
+//     render: object => renderCell(object, 'PendingTierReqActionCell', 'id', 'first_name',
+//         'last_name', 'tier_step', 'is_approved', 'user_id')
+// },
+// {
+//     title:"Unique Key",
+//     key :"unique_key",
+//     align:"left",
+//     ellipsis:true,
+//     dataIndex:"unique_key",
+//     width:100
+// },
 {
-    title:"Unique Key",
-    key :"unique_key",
+    title:"Name",
+    key :"name",
     align:"left",
     ellipsis:true,
-    dataIndex:"unique_key",
+    dataIndex:"name",
     width:100
 },
-{
-    title:"SSN",
-    key :"ssn",
-    align:"left",
-    ellipsis:true,
-    dataIndex:"ssn",
-    width:100
-},
+//  {
+//     title: <IntlMessages id="tierTable.title.first_name" />,
+//     key: 'first_name',
+//     width: 150,
+//     align:"left",
+//     ellipsis:true,
+//     render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
+// },
  {
-    title: <IntlMessages id="tierTable.title.first_name" />,
-    key: 'first_name',
-    width: 150,
-    align:"left",
-    ellipsis:true,
-    render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
-}, {
     title: <IntlMessages id="tierTable.title.email" />,
     key: 'email',
     width: 200,
@@ -65,13 +67,14 @@ const columns = [{
     render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 },
 {
-    title:"Type",
-    key: 'type',
-    dataIndex:"type",
+    title:"No of Request",
+    key: 'count',
+    // dataIndex:"type",
     width:250,
     align:"left",
     ellipsis:true,
-    render: object => <span>{object=="1"?"Valid ID":object=="2"?"Proof of Residence":"Social Security Number or Equivalent Govt"}</span>
+    render:object=><span>{object.data.length}</span>
+    // render: object => <span>{object=="1"?"Valid ID":object=="2"?"Proof of Residence":"Social Security Number or Equivalent Govt"}</span>
 }
 ]
 
