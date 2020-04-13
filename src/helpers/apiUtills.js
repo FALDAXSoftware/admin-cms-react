@@ -5,6 +5,7 @@
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
+// const API_URL='http://1c7c4138.ngrok.io'
 const API_URL=process.env.REACT_APP_API_ENDPOINT;
 
 const ApiUtils = {
@@ -3371,7 +3372,7 @@ const ApiUtils = {
         return fetch(
           `${API_URL}${
             this.url
-          }get-wallet-dashboard?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${
+          }get-wallet-dashboard?${walletType==5?'coin':'coin_code'}=${coin.toLowerCase()}&wallet_type=${walletType}${
             sortCol ? "&sort_col=" + sortCol : ""
           }${
             sortOrder ? "&sort_order=" + sortOrder : ""
@@ -3638,6 +3639,16 @@ const ApiUtils = {
         "Content-Type": "application/json"
       }
     })
-  }
+  },
+  uploadDoc:function(token,formData){
+    let url=`${API_URL}/admin/upload-user-documents`
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body:formData
+    })
+  },
 };
 export default ApiUtils;
