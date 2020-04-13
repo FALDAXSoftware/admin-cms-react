@@ -5,8 +5,8 @@
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
-// const API_URL='http://1c7c4138.ngrok.io'
-const API_URL=process.env.REACT_APP_API_ENDPOINT;
+const API_URL='http://1c7c4138.ngrok.io'
+// const API_URL=process.env.REACT_APP_API_ENDPOINT;
 
 const ApiUtils = {
   //super admin sign in api
@@ -3649,6 +3649,27 @@ const ApiUtils = {
       },
       body:formData
     })
+  },
+  getTierDocuments:function(token){
+    let url=`${API_URL}/admin/get-tier-pdf`
+    return fetch(url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  },
+  setTierDocument: function(token, formData) {
+    return fetch(`${API_URL}/admin/upload-tier-pdf`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token
+        // "Content-Type": 'multipart/form-data',
+      },
+      body: formData
+    });
   },
 };
 export default ApiUtils;

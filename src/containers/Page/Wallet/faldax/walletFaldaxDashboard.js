@@ -63,6 +63,13 @@ const columns = [
 
     },
     {
+        title: <IntlMessages id="walletFaldaxDashboardTable.title.trade_total" />,
+        align: "left",
+        key: 8,
+        dataIndex: "trade_earned",
+        width: 100,
+    },
+    {
         title: <IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_wallets" />,
         align: "left",
         key: 4,
