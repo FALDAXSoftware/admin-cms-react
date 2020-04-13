@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.0.6",
     "aes-js": "^3.1.2",
     "antd": "^3.26.3",
     "auth0-lock": "^11.1.2",
