@@ -14,29 +14,32 @@ const renderCell = (object, type, key, tier = null) => {
     }
 };
 
-const columns = [{
-    title:"Unique Key",
-    key :"unique_key",
+const columns = [
+//     {
+//     title:"Unique Key",
+//     key :"unique_key",
+//     align:"left",
+//     ellipsis:true,
+//     dataIndex:"unique_key",
+//     width:100
+// },
+{
+    title:"Name",
+    key :"name",
     align:"left",
     ellipsis:true,
-    dataIndex:"unique_key",
+    dataIndex:"name",
     width:100
 },
-{
-    title:"SSN",
-    key :"ssn",
-    align:"left",
-    ellipsis:true,
-    dataIndex:"ssn",
-    width:100
-}, {
-    title: <IntlMessages id="tierTable.title.first_name" />,
-    key: 'first_name',
-    width: 100,
-    align:"left",
-    ellipsis:true,
-    render: object => renderCell(object, 'TextCell', 'first_name')
-}, {
+//  {
+//     title: <IntlMessages id="tierTable.title.first_name" />,
+//     key: 'first_name',
+//     width: 100,
+//     align:"left",
+//     ellipsis:true,
+//     render: object => renderCell(object, 'TextCell', 'first_name')
+// },
+ {
     title: <IntlMessages id="tierTable.title.email" />,
     key: 'email',
     width: 200,
@@ -46,14 +49,22 @@ const columns = [{
     render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 },
 {
-    title:"Type",
-    key: 'type',
-    dataIndex:"type",
-    width:250,
+    title:"No of Request",
+    key: 'no_request',
+    width: 200,
     align:"left",
     ellipsis:true,
-    render: object => <span>{object=="1"?"Valid ID":object=="2"?"Proof of Residence":"Social Security Number or Equivalent Govt"}</span>
-}
+    render:(value)=><span>{value["data"].length}</span>
+},
+// {
+//     title:"Type",
+//     key: 'type',
+//     dataIndex:"type",
+//     width:250,
+//     align:"left",
+//     ellipsis:true,
+//     render: object => <span>{object=="1"?"Valid ID":object=="2"?"Proof of Residence":"Social Security Number or Equivalent Govt"}</span>
+// }
 ];
 
 const tierReqTableInfos = [

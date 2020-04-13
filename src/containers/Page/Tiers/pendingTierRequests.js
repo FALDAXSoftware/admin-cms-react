@@ -10,6 +10,7 @@ import { PAGE_SIZE_OPTIONS,TABLE_SCROLL_HEIGHT, PAGESIZE } from "../../../helper
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { exportTier } from '../../../helpers/exportToCsv/headers';
+import { PendingTierReqActionCell, getTierDoc } from '../../../components/tables/helperCells';
 
 const { logout } = authAction;
 const {Option}=Select;
@@ -40,6 +41,40 @@ class PendingRequests extends Component {
         e.preventDefault();
         this.getAllPendingRequest();
     }
+    formateTradeRequest(data){
+      let tradeData=[];
+      for(let i of data){
+        // let index=data.indexOf(i);
+        if(tradeData.length==0){
+          tradeData.push({
+            email:i["email"],
+            name:i["first_name"]+" "+i["last_name"],
+            data:[i]
+
+          })
+        }else{
+          let found=false;
+          for(let i2 of tradeData){
+            let index=tradeData.indexOf(i2);
+            let tradeIndex=tradeData.findIndex(ele=>ele["email"]==i["email"]);
+            if(tradeIndex!=-1){
+              tradeData[tradeIndex]["data"].push(i);
+              found=true;
+              break
+            }
+          }
+          if(!found){
+            tradeData.push({
+              email:i["email"],
+              name:i["first_name"]+" "+i["last_name"],
+              data:[i]
+  
+            })
+          }
+        }
+      }
+      return tradeData;
+    }
 
     getAllPendingRequest=(isExportToCsv=false)=>{
         const { token } = this.props;
@@ -56,8 +91,9 @@ class PendingRequests extends Component {
                       csvData:res.tradeData
                     })
                   }else{
+                    let data=_this.formateTradeRequest(res.tradeData)
                     _this.setState({
-                      pendingRequests:res.tradeData,
+                      pendingRequests:data,
                       tradeCount:res.tradeCount
                     });
                   }
@@ -81,7 +117,7 @@ class PendingRequests extends Component {
         self.setState({ loader: true })
         ApiUtils.approveRejectRequest(token, tier_step,value, is_approved,user_id)
             .then((response) => response.json())
-            .then(function (res) {
+            .then((res)=> {
                 if (res.status == 200) {
                     self.setState({ errMsg: true, errMessage: res.message, errType: 'Success' });
                     self.getAllPendingRequest();
@@ -149,13 +185,14 @@ class PendingRequests extends Component {
                       className="cty-search"
                     >
                       <Input
-                        placeholder="Search Tier"
+                        placeholder="Search"
                         onChange={(field)=>{this.setState({searchData:field.target.value})}}
                         value={searchData}
                       />
                     </Form.Item>
                   </Col>
                   <Col lg={7}>
+                  {this.props.tier==2 &&
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a Type"
@@ -163,10 +200,20 @@ class PendingRequests extends Component {
                       value={type}
                     >
                         <Option value="">All</Option>
-                      <Option value={"1"}>Valid ID</Option>
-                      <Option value={"2"}>Prof of Residency</Option>
-                      <Option value={"3"}>Equivalent Govt</Option>
-                    </Select>
+                     <Option key="1" value={"1"}>Valid ID</Option>
+                      <Option key="2" value={"2"}>Prof of Residency</Option>
+                      <Option key="3" value={"3"}>Equivalent Govt</Option>
+                    </Select>}
+                    {this.props.tier==3 &&  <Select
+                      getPopupContainer={trigger => trigger.parentNode}
+                      placeholder="Select a Type"
+                      onChange={(field)=>{this.setState({type:field})}}
+                      value={type}
+                    >
+                      <Option value="">All</Option>
+                      <Option value={"1"}>IDCP</Option>
+                      <Option key="2" value={"2"}>Proof of Assets Form</Option>
+                    </Select>}
                   </Col>
                   <Col lg={3}>
                     <Button
@@ -213,6 +260,22 @@ class PendingRequests extends Component {
                         onChange={this._handlePairsChange}
                         bordered
                         scroll={TABLE_SCROLL_HEIGHT}
+                        expandedRowRender={record => {
+                          return (<>
+                                  
+                                  
+                          {record.data.map((ele)=>{
+                            return(<>
+                                  <tr>
+                            <td className="custom-tr-width">{PendingTierReqActionCell(ele["id"], ele["first_name"], ele["last_name"], ele["tier_step"],ele["is_approved"], ele["user_id"])}</td>
+                            <td className="custom-tr-width"><b>Unique Id &nbsp;: </b>&nbsp;{ele["unique_key"]}</td>
+                            <td className="custom-tr-width"><b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</td>
+                            <td className="custom-tr-width"><b>Type &nbsp;: </b>&nbsp;{<span>{getTierDoc(this.props.tier,ele["type"])}</span>}</td>
+                            </tr>
+                            </>)
+                                })}
+                          </>)
+                        }}
                     />
                 ))}
                 <Pagination
