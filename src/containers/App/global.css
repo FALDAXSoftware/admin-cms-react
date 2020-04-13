@@ -859,7 +859,15 @@ html[dir='rtl'] .dz-hidden-input {
   width: 300px !important;
   float: left;
 }
-
+.upload-doc-text{
+  font-style: italic;
+  display: block;
+  text-align: center;
+}
+.ant-upload-select-picture-card{
+  float:none !important;
+  margin: 0 auto !important;
+}
 
 .main_wallet_row{
   width: 100%;
@@ -886,4 +894,7 @@ html[dir='rtl'] .dz-hidden-input {
 .btn-icon-view{
   margin: 5px;
   font-size: 18px !important;
+}
+.custom-tr-width{
+  padding-left: 100px;
 }

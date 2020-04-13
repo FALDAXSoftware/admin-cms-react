@@ -10,6 +10,7 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 import {  exportTier } from '../../../helpers/exportToCsv/headers';
+import { getTierDoc } from '../../../components/tables/helperCells';
 
 const { logout } = authAction;
 const {Option}=Select;
@@ -30,6 +31,50 @@ class ApprovedRequests extends Component {
         }
     }
 
+    formateTradeRequest(data){
+      let tradeData=[];
+      for (let i of data) {
+        // let index=data.indexOf(i);
+        if (tradeData.length == 0) {
+          tradeData.push({
+            email: i["email"],
+            name: i["first_name"] + " " + i["last_name"],
+            data: [i],
+          });
+        } else {
+          let found = false;
+          for (let i2 of tradeData) {
+            let index = tradeData.indexOf(i2);
+            let tradeIndex = tradeData.findIndex(
+              (ele) => ele["email"] == i["email"]
+            );
+            if (tradeIndex != -1) {
+              tradeData[tradeIndex]["data"].push(i);
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            tradeData.push({
+              email: i["email"],
+              name: i["first_name"] + " " + i["last_name"],
+              data: [i],
+            });
+          }
+        }
+      }
+      if (this.props.tier == 3) {
+        return tradeData.filter((ele) => {
+          return ele.data.length == 2;
+        });
+      } else if (this.props.tier == 2) {
+        return tradeData.filter((ele) => {
+          return ele.data.length == 3;
+        })
+        }else{
+          return tradeData;
+        }
+    }
     onSearch=(e)=>{
         e.preventDefault();
         this.getAllApprovedTierRequest();
@@ -51,7 +96,7 @@ class ApprovedRequests extends Component {
                         _this.setState({csvData:res.tradeData});
                     }else{
                         _this.setState({
-                            approvedRequests:res.tradeData,
+                            approvedRequests:_this.formateTradeRequest(res.tradeData),
                             tradeCount:res.tradeCount
                         });
                     }
@@ -116,13 +161,14 @@ class ApprovedRequests extends Component {
                       className="cty-search"
                     >
                       <Input
-                        placeholder="Search Tier"
+                        placeholder="Search"
                         onChange={(field)=>{this.setState({searchData:field.target.value})}}
                         value={searchData}
                       />
                     </Form.Item>
                   </Col>
                   <Col lg={7}>
+                  {this.props.tier==2 &&
                     <Select
                       getPopupContainer={trigger => trigger.parentNode}
                       placeholder="Select a Type"
@@ -130,10 +176,20 @@ class ApprovedRequests extends Component {
                       value={type}
                     >
                         <Option value="">All</Option>
-                      <Option value={"1"}>Valid ID</Option>
-                      <Option value={"2"}>Prof of Residency</Option>
-                      <Option value={"3"}>Equivalent Govt</Option>
-                    </Select>
+                     <Option key="1" value={"1"}>Valid ID</Option>
+                      <Option key="2" value={"2"}>Prof of Residency</Option>
+                      <Option key="3" value={"3"}>Equivalent Govt</Option>
+                    </Select>}
+                    {this.props.tier==3 &&  <Select
+                      getPopupContainer={trigger => trigger.parentNode}
+                      placeholder="Select a Type"
+                      onChange={(field)=>{this.setState({type:field})}}
+                      value={type}
+                    >
+                      <Option value="">All</Option>
+                      <Option value={"1"}>IDCP</Option>
+                      <Option key="2" value={"2"}>Proof of Assets Form</Option>
+                    </Select>}
                   </Col>
                   <Col lg={3}>
                     <Button
@@ -179,6 +235,22 @@ class ApprovedRequests extends Component {
                         onChange={this._handlePairsChange}
                         bordered
                         scroll={TABLE_SCROLL_HEIGHT}
+                        expandedRowRender={record => {
+                          return (<>
+                                  
+                                  
+                          {record.data.map((ele)=>{
+                            return(<>
+                                  <tr>
+                            {/* <td className="custom-tr-width">{PendingTierReqActionCell(ele["id"], ele["first_name"], ele["last_name"], ele["tier_step"],ele["is_approved"], ele["user_id"])}</td> */}
+                            <td className="custom-tr-width"><b>Unique Id &nbsp;: </b>&nbsp;{ele["unique_key"]}</td>
+                            <td className="custom-tr-width"><b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</td>
+                            <td className="custom-tr-width"><b>Type &nbsp;: </b>&nbsp;{<span>{getTierDoc(this.props.tier,ele["type"])}</span>}</td>
+                            </tr>
+                            </>)
+                                })}
+                          </>)
+                        }}
                     />
                 ))}
                  <Pagination

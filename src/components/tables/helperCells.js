@@ -950,6 +950,31 @@ const approvePendingReq = (
   );
 };
 
+const getTierDoc=(tier,type)=>{
+  if(tier==2 || tier=="2"){
+    if(type=="1"){
+    return <span>Valid ID</span>
+    }else if(type=="2"){
+      return <span>Proof of Residence</span>
+      }else if(type=="2"){
+        return <span>Social Security # or Equivalent Govt. Issued ID Number</span>
+        }
+
+  }else if(tier==3 || tier=="3"){
+    if(type=="1"){
+      return <span>IDCP</span>
+    }else if(type=="2"){
+      return <span>Proof of Assets Form</span>
+    }
+  }else{
+    if(type=="1"){
+      return <span>AML Questionnaire</span>
+    }else if(type=="2"){
+      return <span>Comfort Letter</span>
+    }
+  }
+}
+
 const ConvertSatoshiToAssetCell = (coin, balance,precision=false) => {
   coin = coin.toLowerCase();
   let amount = 0;
@@ -3257,5 +3282,6 @@ export {
   ToolTipsCell,
   TransactionIdHashCell,
   ConvertSatoshiToAssetCell,
-  InActiveUserActionCell
+  InActiveUserActionCell,
+  getTierDoc
 };
