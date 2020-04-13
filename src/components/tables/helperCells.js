@@ -956,7 +956,7 @@ const getTierDoc=(tier,type)=>{
     return <span>Valid ID</span>
     }else if(type=="2"){
       return <span>Proof of Residence</span>
-      }else if(type=="2"){
+      }else if(type=="3"){
         return <span>Social Security # or Equivalent Govt. Issued ID Number</span>
         }
 
