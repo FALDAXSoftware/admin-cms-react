@@ -13,7 +13,7 @@ class TierTabs extends Component {
         return (
         <LayoutWrapper>
                 <BreadcrumbComponent {...this.props} />
-                <Tabs className="full-width" defaultActiveKey="4">
+                <Tabs className="full-width">
                   {isAllowed('get_tier_details')&& <TabPane tab="Account Tier" key="1"><TierComponent/></TabPane>}
                   {isAllowed('user_tier_request')&& <TabPane tab="Tier 2" key="3"><TierRequest tier="2"/></TabPane>}
                   {isAllowed('user_tier_request')&& <TabPane tab="Tier 3" key="4"><TierRequest tier="3"/></TabPane>}
