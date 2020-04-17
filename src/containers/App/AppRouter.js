@@ -235,6 +235,13 @@ const routes = [
     component: asyncComponent(() => import("../Page/TradeDesk/tradedesk")),
     module: "tradedesk",
   },
+  {
+    path: "trade-monitoring",
+    component: asyncComponent(() =>
+      import("../Page/TradeMonitoring/trademonitoring")
+    ),
+    module: "trade-monitoring",
+  },
 ];
 
 const mandatoryRoutes = [
