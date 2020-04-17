@@ -13,6 +13,9 @@ import TradeAction from "./tradeaction";
 import BuyBook from "./buybook";
 import SellBook from "./sellbook";
 import DepthChart from "./depth";
+import PendingOrders from "./pendingorders";
+import CancelledOrders from "./cancelledorders";
+import CompletedOrders from "./completedorders";
 
 const { logout } = authAction;
 // var self;
@@ -77,13 +80,13 @@ class TradeDesk extends Component {
               </TradeRow>
               <Row>
                 <Col span={8}>
-                  <SellBook />
+                  <PendingOrders />
                 </Col>
-                <Col>
-                  <SellBook />
+                <Col span={8}>
+                  <CompletedOrders />
                 </Col>
-                <Col>
-                  <SellBook />
+                <Col span={8}>
+                  <CancelledOrders />
                 </Col>
               </Row>
             </TableDemoStyle>

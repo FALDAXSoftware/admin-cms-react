@@ -7,7 +7,7 @@ import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 
 const { logout } = authAction;
 // var self;
-class BuyBook extends Component {
+class PendingOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +19,14 @@ class BuyBook extends Component {
   }
 
   componentDidMount = () => {};
+
+  openNotificationWithIconError = (type) => {
+    notification[type]({
+      message: this.state.errType,
+      description: this.state.errMessage,
+    });
+    this.setState({ errMsg: false });
+  };
 
   hideLoader() {
     this.setState({ loader: false });
@@ -32,14 +40,34 @@ class BuyBook extends Component {
     const { errType, errMsg } = this.state;
     const columns = [
       {
+        title: "Side",
+        dataIndex: "side",
+        key: "side",
+      },
+      {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
       },
       {
-        title: "Bid",
-        dataIndex: "bid",
-        key: "bid",
+        title: "Price",
+        dataIndex: "price",
+        key: "price",
+      },
+      {
+        title: "Fill Price",
+        dataIndex: "fill_price",
+        key: "fill_price",
+      },
+      {
+        title: "Unfilled",
+        dataIndex: "unfilled",
+        key: "unfilled",
+      },
+      {
+        title: "Time",
+        dataIndex: "time",
+        key: "time",
       },
       {
         title: "Total",
@@ -47,7 +75,6 @@ class BuyBook extends Component {
         key: "total",
       },
     ];
-
     const data = [];
     for (let index = 0; index < 100; index++) {
       data.push({
@@ -58,26 +85,22 @@ class BuyBook extends Component {
       });
     }
 
+    if (errMsg) {
+      this.openNotificationWithIconError(errType.toLowerCase());
+    }
     return (
       <>
         <Card>
           <TradeHeadRow type="flex" justify="space-between">
             <Col span={12}>
-              <label>Buying XRP</label>
-            </Col>
-            <Col className="text-right" span={12}>
-              <span>
-                <b>Total: </b>
-              </span>
-              <span>0 BTC</span>
+              <label>Pending Orders</label>
             </Col>
           </TradeHeadRow>
           <TradeTable
             columns={columns}
             dataSource={data}
             pagination={false}
-            bordered={false}
-            scroll={{ y: 600 }}
+            scroll={{ y: 400 }}
           />
         </Card>
       </>
@@ -92,5 +115,5 @@ export default withRouter(
       user: state.Auth.get("user"),
     }),
     { logout }
-  )(BuyBook)
+  )(PendingOrders)
 );
