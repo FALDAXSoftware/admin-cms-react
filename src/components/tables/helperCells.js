@@ -938,7 +938,7 @@ const approvePendingReq = (
   last_name,
   tier_step,
   is_approved,
-  user_id
+  request_id
 ) => {
   PendingRequests.approvePendingReq(
     value,
@@ -946,7 +946,7 @@ const approvePendingReq = (
     last_name,
     tier_step,
     is_approved,
-    user_id
+    request_id
   );
 };
 
@@ -957,8 +957,10 @@ const getTierDoc=(tier,type)=>{
     }else if(type=="2"){
       return <span>Proof of Residence</span>
       }else if(type=="3"){
-        return <span>Social Security # or Equivalent Govt. Issued ID Number</span>
-        }
+        return <span>Equivalent Govt. Issued ID Number</span>
+        }else if(type=="4"){
+          return <span>Two Factor Authentication</span>
+          }
 
   }else if(tier==3 || tier=="3"){
     if(type=="1"){
@@ -2941,7 +2943,7 @@ const PendingTierReqActionCell = (
   last_name,
   tier_step,
   is_approved,
-  user_id
+  request_id
 ) => (
     <div>
       {/* <Tooltip title="View">
@@ -2971,7 +2973,7 @@ const PendingTierReqActionCell = (
               last_name,
               tier_step,
               true,
-              user_id
+              request_id
             )
           }
         />
@@ -2987,7 +2989,7 @@ const PendingTierReqActionCell = (
               last_name,
               tier_step,
               false,
-              user_id
+              request_id
             )
           }
         />
