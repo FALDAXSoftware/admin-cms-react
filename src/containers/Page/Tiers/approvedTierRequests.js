@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Pagination,Icon,Button,Form, Row, Col,Select,Input } from 'antd';
+import { notification, Pagination,Icon,Button,Form, Row, Col,Select,Input, Tag } from 'antd';
 import { tierReqTableInfos } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
@@ -10,10 +10,19 @@ import ApiUtils from '../../../helpers/apiUtills';
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 import {  exportTier } from '../../../helpers/exportToCsv/headers';
-import { getTierDoc } from '../../../components/tables/helperCells';
+import { getTierDoc, DateTimeCell } from '../../../components/tables/helperCells';
 
 const { logout } = authAction;
 const {Option}=Select;
+var columns=tierReqTableInfos[0].columns.slice(),self;
+columns.push({
+  title:"Action",
+  key: 'count',
+  width:250,
+  align:"left",
+  ellipsis:true,
+  render:object=><span><Button type="danger" onClick={()=>self.forceApproveRejectTierRequest(false,object["id"])}>Force Reject</Button></span>
+});
 
 class ApprovedRequests extends Component {
     constructor(props) {
@@ -27,8 +36,49 @@ class ApprovedRequests extends Component {
             searchData:"",
             type:"",
             csvData:[],
-            openCsvExportModal:false
+            openCsvExportModal:false,
+            tierDetailsRequest:[],
+            expandRowLoader:false
         }
+        self=this;
+    }
+    async forceApproveRejectTierRequest(status,id){
+      try {
+        this.setState({ loader: true });
+        let response = await (
+          await ApiUtils.forceApproveRejectTierRequest(
+            this.props.token,
+            id,
+            status
+          )
+        ).json();
+        if (response.status == 200) {
+          this.setState({
+            errMsg: true,
+            errMessage: response.message,
+            errType: "success",
+            loader:false
+          },()=>this.getAllApprovedTierRequest());
+        } else if (response.status == 403) {
+          this.setState(
+            { errMsg: true, errMessage: response.err,loader:false, errType: "error" },
+            () => {
+              this.props.logout();
+            }
+          );
+        } else {
+          this.setState({
+            errMsg: true,
+            loader:false,
+            errMessage: response.message,
+            errType: "error",
+          });
+        }
+      } catch (error) {
+        this.setState({loader:false})
+        console.log(error);
+      } finally {
+      }
     }
 
     formateTradeRequest(data){
@@ -96,7 +146,7 @@ class ApprovedRequests extends Component {
                         _this.setState({csvData:res.tradeData});
                     }else{
                         _this.setState({
-                            approvedRequests:_this.formateTradeRequest(res.tradeData),
+                            approvedRequests:res.tradeData,
                             tradeCount:res.tradeCount
                         });
                     }
@@ -140,11 +190,41 @@ class ApprovedRequests extends Component {
         this.setState({ errMsg: false });
     };
 
+    async getDetTierDetails(expanded,row){
+      if(!expanded){
+        return false;
+      }
+      try{
+        this.setState({expandRowLoader:true,tierDetailsRequest:[]})
+         let res=await(await ApiUtils.getTierDetails(this.props.token,row.id,row.tier_step)).json();
+         if(res.status==200){
+           this.setState({tierDetailsRequest:[].concat.apply([],res.data)});
+         }else if (res.status == 403) {
+          this.setState(
+            {
+              errMsg: true,
+              loader: false,
+              errMessage: res.err,
+              errType: "error",
+            },
+            () => {
+              this.props.logout();
+            }
+          );
+        }
+       } catch(error){
+
+         console.log(error);
+       } finally{
+         this.setState({expandRowLoader:false})
+       }
+     }
+
     onExport=()=>{
         this.setState({openCsvExportModal:true},()=>this.getAllApprovedTierRequest(true));
       }
     render() {
-        const { errType, errMsg, approvedRequests ,loader,page,tradeCount,limit,searchData,type,csvData,openCsvExportModal} = this.state;
+        const { errType, tierDetailsRequest,errMsg, approvedRequests ,loader,page,tradeCount,limit,searchData,type,csvData,openCsvExportModal} = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
@@ -166,30 +246,6 @@ class ApprovedRequests extends Component {
                         value={searchData}
                       />
                     </Form.Item>
-                  </Col>
-                  <Col lg={7}>
-                  {this.props.tier==2 &&
-                    <Select
-                      getPopupContainer={trigger => trigger.parentNode}
-                      placeholder="Select a Type"
-                      onChange={(field)=>{this.setState({type:field})}}
-                      value={type}
-                    >
-                        <Option value="">All</Option>
-                     <Option key="1" value={"1"}>Valid ID</Option>
-                      <Option key="2" value={"2"}>Prof of Residency</Option>
-                      <Option key="3" value={"3"}>Equivalent Govt</Option>
-                    </Select>}
-                    {this.props.tier==3 &&  <Select
-                      getPopupContainer={trigger => trigger.parentNode}
-                      placeholder="Select a Type"
-                      onChange={(field)=>{this.setState({type:field})}}
-                      value={type}
-                    >
-                      <Option value="">All</Option>
-                      <Option value={"1"}>IDCP</Option>
-                      <Option key="2" value={"2"}>Proof of Assets Form</Option>
-                    </Select>}
                   </Col>
                   <Col lg={3}>
                     <Button
@@ -224,35 +280,76 @@ class ApprovedRequests extends Component {
                 </Row>
               </Form>
                 {loader && <FaldaxLoader/>}
-                {tierReqTableInfos.map(tableInfo => (
                     <TableWrapper
                         rowKey="id"
                         {...this.state}
-                        columns={tableInfo.columns}
+                        columns={columns}
                         pagination={false}
                         dataSource={approvedRequests}
                         className="table-tb-margin"
                         onChange={this._handlePairsChange}
                         bordered
+                        loading={this.state.expandRowLoader}
                         scroll={TABLE_SCROLL_HEIGHT}
-                        expandedRowRender={record => {
-                          return (<>
-                                  
-                                  
-                          {record.data.map((ele)=>{
-                            return(<>
+                        expandedRowRender={()=>{
+                          return <>
+                              {tierDetailsRequest.map((ele)=>{
+                                return (
                                   <tr>
-                            {/* <td className="custom-tr-width">{PendingTierReqActionCell(ele["id"], ele["first_name"], ele["last_name"], ele["tier_step"],ele["is_approved"], ele["user_id"])}</td> */}
-                            <td className="custom-tr-width"><b>Unique Id &nbsp;: </b>&nbsp;{ele["unique_key"]}</td>
-                            <td className="custom-tr-width"><b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</td>
-                            <td className="custom-tr-width"><b>Type &nbsp;: </b>&nbsp;{<span>{getTierDoc(this.props.tier,ele["type"])}</span>}</td>
-                            </tr>
-                            </>)
-                                })}
-                          </>)
+                                    <td className="custom-tr-width">
+                                      <b>Submitted On &nbsp;: </b>&nbsp;
+                                      {DateTimeCell(ele["created_at"],"string")}
+                                    </td>
+                                    {ele["is_approved"] == true && (
+                                      <td className="custom-tr-width">
+                                        <Tag color="#87d068">
+                                          <Icon type="check"></Icon>
+                                          &nbsp;Approved
+                                        </Tag>
+                                      </td>
+                                    )}
+                                    {ele["is_approved"] == false && (
+                                      <td className="custom-tr-width">
+                                        <Tag color="#f50">
+                                          <Icon type="close"></Icon>
+                                          &nbsp;Rejected
+                                        </Tag>
+                                      </td>
+                                    )}
+                                    {ele["is_approved"] == null && (
+                                      <td className="custom-tr-width">
+                                        <Tag color="#6896d0">
+                                          <Icon type="info-circle"></Icon>
+                                          &nbsp;Pending
+                                        </Tag>
+                                      </td>
+                                    )}
+                                    <td className="custom-tr-width">
+                                      <b>Unique Id &nbsp;: </b>&nbsp;
+                                      {ele["unique_key"]
+                                        ? ele["unique_key"]
+                                        : ele["type"] == "4"
+                                        ? "Enabled"
+                                        : ele["ssn"]}
+                                    </td>
+                                    <td className="custom-tr-width">
+                                      <b>Type &nbsp;: </b>&nbsp;
+                                      {
+                                        <span>
+                                          {getTierDoc(
+                                            this.props.tier,
+                                            ele["type"]
+                                          )}
+                                        </span>
+                                      }
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                          </>
                         }}
+                        onExpand={(expanded,records)=>{this.getDetTierDetails(expanded,records)}}
                     />
-                ))}
                  <Pagination
                       className="ant-users-pagination"
                       onChange={this._handlePagination}
