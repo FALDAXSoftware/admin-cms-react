@@ -28,8 +28,9 @@ const columns = [
     key :"name",
     align:"left",
     ellipsis:true,
-    dataIndex:"name",
-    width:100
+    // dataIndex:"name",
+    width:100,
+    render:data=><span>{data['first_name']+" "+data["last_name"]}</span>
 },
 //  {
 //     title: <IntlMessages id="tierTable.title.first_name" />,
@@ -48,14 +49,14 @@ const columns = [
     dataIndex:"email",
     render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
 },
-{
-    title:"No of Request",
-    key: 'no_request',
-    width: 200,
-    align:"left",
-    ellipsis:true,
-    render:(value)=><span>{value["data"].length}</span>
-},
+// {
+//     title:"No of Request",
+//     key: 'no_request',
+//     width: 200,
+//     align:"left",
+//     ellipsis:true,
+//     render:(value)=><span>{value["data"].length}</span>
+// },
 // {
 //     title:"Type",
 //     key: 'type',

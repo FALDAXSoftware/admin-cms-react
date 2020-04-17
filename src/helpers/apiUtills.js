@@ -3628,8 +3628,8 @@ const ApiUtils = {
       }
     })
   },
-  approveRejectRequest:function(token,tier,id,status,user_id){
-    let url=`${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&user_id=${user_id}`
+  approveRejectRequest:function(token,tier,id,status,request_id){
+    let url=`${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&request_id=${request_id}`
     return fetch(url, {
       method: "get",
       headers: {
@@ -3668,6 +3668,30 @@ const ApiUtils = {
         // "Content-Type": 'multipart/form-data',
       },
       body: formData
+    });
+  },
+  forceApproveRejectTierRequest:function(token,id,status){
+    let url=`${API_URL}/admin/force-change-status?id=${id}&status=${status}`
+    return fetch(url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  },
+  getTierDetails: function(token, id,tier) {
+    return fetch(`${API_URL}/admin/get-tier-details`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token
+        // "Content-Type": 'multipart/form-data',
+      },
+      body:JSON.stringify({
+        request_id:id,
+        tier_step:tier  
+      })
     });
   },
 };
