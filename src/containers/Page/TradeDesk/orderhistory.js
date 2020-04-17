@@ -17,7 +17,7 @@ import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 
 const { logout } = authAction;
 // var self;
-class PendingOrders extends Component {
+class OrderHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,16 +60,6 @@ class PendingOrders extends Component {
         key: "amount",
       },
       {
-        title: "Limit Price",
-        dataIndex: "limit_price",
-        key: "price",
-      },
-      {
-        title: "Stop Price",
-        dataIndex: "stop_price",
-        key: "price",
-      },
-      {
         title: "Fill Price",
         dataIndex: "fill_price",
         key: "fill_price",
@@ -79,21 +69,11 @@ class PendingOrders extends Component {
         dataIndex: "time",
         key: "time",
       },
-      {
-        title: "Placed By",
-        dataIndex: "placed_by",
-        key: "placed_by",
-      },
+
       {
         title: "Total",
         dataIndex: "total",
         key: "total",
-      },
-      {
-        title: "Action",
-        dataIndex: "action",
-        key: "action",
-        render: () => <Icon type="close-circle" />,
       },
     ];
     const data = [];
@@ -113,12 +93,19 @@ class PendingOrders extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <TradeTable
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        scroll={{ y: 200 }}
-      />
+      <Card>
+        <TradeHeadRow type="flex" justify="space-between">
+          <Col span={12}>
+            <label>Order History</label>
+          </Col>
+        </TradeHeadRow>
+        <TradeTable
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          scroll={{ y: 200 }}
+        />
+      </Card>
     );
   }
 }
@@ -130,5 +117,5 @@ export default withRouter(
       user: state.Auth.get("user"),
     }),
     { logout }
-  )(PendingOrders)
+  )(OrderHistory)
 );

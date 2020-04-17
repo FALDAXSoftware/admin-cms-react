@@ -17,6 +17,8 @@ import PendingOrders from "./pendingorders";
 import CancelledOrders from "./cancelledorders";
 import CompletedOrders from "./completedorders";
 import MyOrders from "./myorders";
+import AllPendingOrders from "./allpendingorders";
+import OrderHistory from "./orderhistory";
 
 const { logout } = authAction;
 // var self;
@@ -31,7 +33,7 @@ class TradeDesk extends Component {
     // self = this;
   }
 
-  componentDidMount = () => { };
+  componentDidMount = () => {};
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -81,7 +83,17 @@ class TradeDesk extends Component {
               </TradeRow>
               <Row>
                 <Col span={24}>
+                  <OrderHistory />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
                   <MyOrders />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <AllPendingOrders />
                 </Col>
               </Row>
             </TableDemoStyle>

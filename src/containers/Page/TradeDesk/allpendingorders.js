@@ -17,7 +17,7 @@ import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 
 const { logout } = authAction;
 // var self;
-class PendingOrders extends Component {
+class AllPendingOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -113,12 +113,19 @@ class PendingOrders extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <TradeTable
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        scroll={{ y: 200 }}
-      />
+      <Card>
+        <TradeHeadRow type="flex" justify="space-between">
+          <Col span={12}>
+            <label>All Pending Orders</label>
+          </Col>
+        </TradeHeadRow>
+        <TradeTable
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          scroll={{ y: 600 }}
+        />
+      </Card>
     );
   }
 }
@@ -130,5 +137,5 @@ export default withRouter(
       user: state.Auth.get("user"),
     }),
     { logout }
-  )(PendingOrders)
+  )(AllPendingOrders)
 );

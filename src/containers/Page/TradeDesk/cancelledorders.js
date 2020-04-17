@@ -18,7 +18,7 @@ class CancelledOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => { };
+  componentDidMount = () => {};
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -98,7 +98,7 @@ class CancelledOrders extends Component {
         columns={columns}
         dataSource={data}
         pagination={false}
-        scroll={{ y: 400, x: true }}
+        scroll={{ y: 200 }}
       />
     );
   }
