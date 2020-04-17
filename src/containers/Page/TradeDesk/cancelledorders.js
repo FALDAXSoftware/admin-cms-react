@@ -18,7 +18,7 @@ class CancelledOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -40,14 +40,39 @@ class CancelledOrders extends Component {
     const { errType, errMsg } = this.state;
     const columns = [
       {
+        title: "Side",
+        dataIndex: "side",
+        key: "side",
+      },
+      {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
       },
       {
-        title: "Ask",
-        dataIndex: "ask",
-        key: "ask",
+        title: "Price",
+        dataIndex: "price",
+        key: "price",
+      },
+      {
+        title: "Fill Price",
+        dataIndex: "fill_price",
+        key: "fill_price",
+      },
+      {
+        title: "Unfilled",
+        dataIndex: "unfilled",
+        key: "unfilled",
+      },
+      {
+        title: "Time",
+        dataIndex: "time",
+        key: "time",
+      },
+      {
+        title: "Placed By",
+        dataIndex: "placed_by",
+        key: "placed_by",
       },
       {
         title: "Total",
@@ -69,21 +94,12 @@ class CancelledOrders extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <>
-        <Card>
-          <TradeHeadRow type="flex" justify="space-between">
-            <Col span={12}>
-              <label>Cancelled Orders</label>
-            </Col>
-          </TradeHeadRow>
-          <TradeTable
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            scroll={{ y: 600 }}
-          />
-        </Card>
-      </>
+      <TradeTable
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        scroll={{ y: 400, x: true }}
+      />
     );
   }
 }

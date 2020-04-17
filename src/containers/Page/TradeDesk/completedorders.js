@@ -18,7 +18,7 @@ class CompletedOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -70,6 +70,11 @@ class CompletedOrders extends Component {
         key: "time",
       },
       {
+        title: "Placed By",
+        dataIndex: "placed_by",
+        key: "placed_by",
+      },
+      {
         title: "Total",
         dataIndex: "total",
         key: "total",
@@ -89,21 +94,12 @@ class CompletedOrders extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <>
-        <Card>
-          <TradeHeadRow type="flex" justify="space-between">
-            <Col span={12}>
-              <label>Completed Orders</label>
-            </Col>
-          </TradeHeadRow>
-          <TradeTable
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            scroll={{ y: 400 }}
-          />
-        </Card>
-      </>
+      <TradeTable
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        scroll={{ y: 400, x: true }}
+      />
     );
   }
 }

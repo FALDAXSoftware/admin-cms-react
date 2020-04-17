@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { notification, Tabs, Row, Col, Card, Table, Divider, Tag } from "antd";
+import { notification, Tabs, Row, Col, Card, Table, Divider, Tag, Icon } from "antd";
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
@@ -18,7 +18,7 @@ class PendingOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -50,8 +50,13 @@ class PendingOrders extends Component {
         key: "amount",
       },
       {
-        title: "Price",
-        dataIndex: "price",
+        title: "Limit Price",
+        dataIndex: "limit_price",
+        key: "price",
+      },
+      {
+        title: "Stop Price",
+        dataIndex: "stop_price",
         key: "price",
       },
       {
@@ -60,27 +65,37 @@ class PendingOrders extends Component {
         key: "fill_price",
       },
       {
-        title: "Unfilled",
-        dataIndex: "unfilled",
-        key: "unfilled",
-      },
-      {
         title: "Time",
         dataIndex: "time",
         key: "time",
+
+      },
+      {
+        title: "Placed By",
+        dataIndex: "placed_by",
+        key: "placed_by",
       },
       {
         title: "Total",
         dataIndex: "total",
         key: "total",
       },
+      {
+        title: "Action",
+        dataIndex: "action",
+        key: "action",
+        render: () => (<Icon type="close-circle" />)
+      },
     ];
     const data = [];
     for (let index = 0; index < 100; index++) {
       data.push({
         key: index,
-        amount: "1.00",
-        bid: "0.005",
+        side: "Buy",
+        amount: 0.001,
+        price: 0.000456,
+        placed_by: "Bot",
+        time: "17/04/2020, 11:39:30",
         total: "2.5000",
       });
     }
@@ -89,21 +104,12 @@ class PendingOrders extends Component {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
-      <>
-        <Card>
-          <TradeHeadRow type="flex" justify="space-between">
-            <Col span={12}>
-              <label>Pending Orders</label>
-            </Col>
-          </TradeHeadRow>
-          <TradeTable
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            scroll={{ y: 400 }}
-          />
-        </Card>
-      </>
+      <TradeTable
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        scroll={{ y: 400, x: true }}
+      />
     );
   }
 }

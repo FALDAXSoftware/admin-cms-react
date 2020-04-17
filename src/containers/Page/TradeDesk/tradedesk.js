@@ -16,6 +16,7 @@ import DepthChart from "./depth";
 import PendingOrders from "./pendingorders";
 import CancelledOrders from "./cancelledorders";
 import CompletedOrders from "./completedorders";
+import MyOrders from "./myorders";
 
 const { logout } = authAction;
 // var self;
@@ -30,7 +31,7 @@ class TradeDesk extends Component {
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -79,14 +80,8 @@ class TradeDesk extends Component {
                 </Col>
               </TradeRow>
               <Row>
-                <Col span={8}>
-                  <PendingOrders />
-                </Col>
-                <Col span={8}>
-                  <CompletedOrders />
-                </Col>
-                <Col span={8}>
-                  <CancelledOrders />
+                <Col span={24}>
+                  <MyOrders />
                 </Col>
               </Row>
             </TableDemoStyle>
