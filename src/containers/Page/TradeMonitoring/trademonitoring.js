@@ -8,6 +8,8 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import { TabPane } from "../../../components/uielements/tabs";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { TradeRow, InnerTabs, InputRow } from "../../App/tradeStyle.js";
+import TradeWallets from "./trade-wallets";
+import AllPendingOrders from "../TradeDesk/allpendingorders";
 
 const { logout } = authAction;
 // var self;
@@ -36,9 +38,15 @@ class TradeMonitoring extends Component {
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane tab="Trade Monitoring" key="1">
             <TableDemoStyle className="isoLayoutContent">
-              <TradeRow>
+              <TradeWallets />
+              <Row gutter={16} style={{ marginBottom: "13px" }}>
+                <Col span={24}>
+                  <AllPendingOrders />
+                </Col>
+              </Row>
+              {/* <TradeRow>
                 <Col span={8}>test</Col>
-              </TradeRow>
+              </TradeRow> */}
             </TableDemoStyle>
           </TabPane>
         </Tabs>

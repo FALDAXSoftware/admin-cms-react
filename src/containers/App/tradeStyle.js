@@ -91,3 +91,34 @@ export const TradeTable = styled(Table)`
     background-color: #f1f3f6 !important;
   }
 `;
+export const WalletCard = styled.div`
+  // padding: 20px 0;
+  border: 1px solid #e9e9e9;
+`;
+export const HeadRowWallet = styled.div`
+  border-bottom: 1px solid #e9e9e9;
+  padding: 20px 20px;
+  > img {
+    max-width: 20px;
+    margin: 0 10px 0 0;
+  }
+  > span {
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+`;
+export const CreateWalletRow = styled.div`
+  padding: 20px;
+  text-align: center;
+`;
+export const LabelRow = styled.div`
+  display: flex;
+  width: 100%;
+  > label {
+    display: inherit;
+    width: 35%;
+    align-items: center;
+    flex-wrap: wrap;
+    font-weight: 600;
+  }
+`;
