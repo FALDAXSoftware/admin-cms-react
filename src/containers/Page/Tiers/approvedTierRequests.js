@@ -11,9 +11,10 @@ import { PageCounterComponent } from '../../Shared/pageCounter';
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 import {  exportTier } from '../../../helpers/exportToCsv/headers';
 import { getTierDoc, DateTimeCell } from '../../../components/tables/helperCells';
+import RejectNotesModal from '../../Shared/rejectNotesModal';
+import ViewNotesModal from '../../Shared/viewNotesModal';
 
 const { logout } = authAction;
-const {Option}=Select;
 var columns=tierReqTableInfos[0].columns.slice(),self;
 columns.push({
   title:"Action",
@@ -21,7 +22,9 @@ columns.push({
   width:250,
   align:"left",
   ellipsis:true,
-  render:object=><span><Button type="danger" onClick={()=>self.forceApproveRejectTierRequest(false,object["id"])}>Force Reject</Button></span>
+  render:object=><span><Button type="danger" onClick={()=>self.forceApproveRejectTierRequest(false,object["id"])}>Force Reject</Button>&nbsp;&nbsp;
+  <Button disabled={!(object['public_note'] || object['private_note'])} onClick={()=>self.setState({showNotesModal:true,public_note:object["public_note"],private_note:object["private_note"]})}>Show Notes</Button></span>
+  
 });
 
 class ApprovedRequests extends Component {
@@ -38,18 +41,29 @@ class ApprovedRequests extends Component {
             csvData:[],
             openCsvExportModal:false,
             tierDetailsRequest:[],
-            expandRowLoader:false
-        }
+            expandRowLoader:false,
+            showRejectModel:false,
+            request_id:undefined,
+            showNotesModal:false,
+            private_note:"",
+            public_note:""
+           }
         self=this;
     }
-    async forceApproveRejectTierRequest(status,id){
+    async forceApproveRejectTierRequest(status,id,public_note,private_note){
       try {
+        if(!this.state.showRejectModel){
+          this.setState({showRejectModel:true,request_id:id});
+          return false;
+        }
         this.setState({ loader: true });
         let response = await (
           await ApiUtils.forceApproveRejectTierRequest(
             this.props.token,
             id,
-            status
+            status,
+            public_note,
+            private_note
           )
         ).json();
         if (response.status == 200) {
@@ -57,7 +71,8 @@ class ApprovedRequests extends Component {
             errMsg: true,
             errMessage: response.message,
             errType: "success",
-            loader:false
+            loader:false,
+            showRejectModel:false
           },()=>this.getAllApprovedTierRequest());
         } else if (response.status == 403) {
           this.setState(
@@ -81,50 +96,6 @@ class ApprovedRequests extends Component {
       }
     }
 
-    formateTradeRequest(data){
-      let tradeData=[];
-      for (let i of data) {
-        // let index=data.indexOf(i);
-        if (tradeData.length == 0) {
-          tradeData.push({
-            email: i["email"],
-            name: i["first_name"] + " " + i["last_name"],
-            data: [i],
-          });
-        } else {
-          let found = false;
-          for (let i2 of tradeData) {
-            let index = tradeData.indexOf(i2);
-            let tradeIndex = tradeData.findIndex(
-              (ele) => ele["email"] == i["email"]
-            );
-            if (tradeIndex != -1) {
-              tradeData[tradeIndex]["data"].push(i);
-              found = true;
-              break;
-            }
-          }
-          if (!found) {
-            tradeData.push({
-              email: i["email"],
-              name: i["first_name"] + " " + i["last_name"],
-              data: [i],
-            });
-          }
-        }
-      }
-      if (this.props.tier == 3) {
-        return tradeData.filter((ele) => {
-          return ele.data.length == 2;
-        });
-      } else if (this.props.tier == 2) {
-        return tradeData.filter((ele) => {
-          return ele.data.length == 3;
-        })
-        }else{
-          return tradeData;
-        }
-    }
     onSearch=(e)=>{
         e.preventDefault();
         this.getAllApprovedTierRequest();
@@ -224,143 +195,183 @@ class ApprovedRequests extends Component {
         this.setState({openCsvExportModal:true},()=>this.getAllApprovedTierRequest(true));
       }
     render() {
-        const { errType, tierDetailsRequest,errMsg, approvedRequests ,loader,page,tradeCount,limit,searchData,type,csvData,openCsvExportModal} = this.state;
+        const { errType,showRejectModel, showNotesModal,tierDetailsRequest,errMsg, approvedRequests ,loader,page,tradeCount,limit,searchData,type,csvData,openCsvExportModal} = this.state;
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
         }
 
         return (
-            <div className="isoLayoutContent">
-                <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename={`approved_tier${this.props.tier}_request.csv`} data={csvData} header={exportTier}/>
-                <PageCounterComponent page={page} limit={limit} dataCount={tradeCount} syncCallBack={()=>this.setState({type:"",searchData:""},()=>this.getAllApprovedTierRequest())}/>
-                <Form onSubmit={this.onSearch}>
-                <Row  type="flex" justify="start" className="table-filter-row">
-                  <Col lg={8}>
-                    <Form.Item
-                      validateStatus={this.state.searchValid}
-                      className="cty-search"
-                    >
-                      <Input
-                        placeholder="Search"
-                        onChange={(field)=>{this.setState({searchData:field.target.value})}}
-                        value={searchData}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Button
-                      htmlType="submit"
-                      className="filter-btn btn-full-width"
-                      type="primary"
-                    >
-                      <Icon type="search" />
-                      Search
-                    </Button>
-                  </Col>
-                  <Col lg={3}>
-                    <Button
-                      className="filter-btn btn-full-width"
-                      type="primary"
-                      onClick={()=>{this.setState({searchData:"",type:""},()=>this.getAllApprovedTierRequest())}}
-                    >
-                      <Icon type="reload" />
-                      Reset
-                    </Button>
-                  </Col>
-                  <Col lg={3}>
-                    <Button
-                      className="filter-btn btn-full-width"
-                      type="primary"
-                      onClick={this.onExport}
-                      icon="export"
-                    >
-                      Export
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-                {loader && <FaldaxLoader/>}
-                    <TableWrapper
-                        rowKey="id"
-                        {...this.state}
-                        columns={columns}
-                        pagination={false}
-                        dataSource={approvedRequests}
-                        className="table-tb-margin"
-                        onChange={this._handlePairsChange}
-                        bordered
-                        loading={this.state.expandRowLoader}
-                        scroll={TABLE_SCROLL_HEIGHT}
-                        expandedRowRender={()=>{
-                          return <>
-                              {tierDetailsRequest.map((ele)=>{
-                                return (
-                                  <tr>
-                                    <td className="custom-tr-width">
-                                      <b>Submitted On &nbsp;: </b>&nbsp;
-                                      {DateTimeCell(ele["created_at"],"string")}
-                                    </td>
-                                    {ele["is_approved"] == true && (
-                                      <td className="custom-tr-width">
-                                        <Tag color="#87d068">
-                                          <Icon type="check"></Icon>
-                                          &nbsp;Approved
-                                        </Tag>
-                                      </td>
-                                    )}
-                                    {ele["is_approved"] == false && (
-                                      <td className="custom-tr-width">
-                                        <Tag color="#f50">
-                                          <Icon type="close"></Icon>
-                                          &nbsp;Rejected
-                                        </Tag>
-                                      </td>
-                                    )}
-                                    {ele["is_approved"] == null && (
-                                      <td className="custom-tr-width">
-                                        <Tag color="#6896d0">
-                                          <Icon type="info-circle"></Icon>
-                                          &nbsp;Pending
-                                        </Tag>
-                                      </td>
-                                    )}
-                                    <td className="custom-tr-width">
-                                      <b>Unique Id &nbsp;: </b>&nbsp;
-                                      {ele["unique_key"]
-                                        ? ele["unique_key"]
-                                        : ele["type"] == "4"
-                                        ? "Enabled"
-                                        : ele["ssn"]}
-                                    </td>
-                                    <td className="custom-tr-width">
-                                      <b>Type &nbsp;: </b>&nbsp;
-                                      {
-                                        <span>
-                                          {getTierDoc(
-                                            this.props.tier,
-                                            ele["type"]
-                                          )}
-                                        </span>
-                                      }
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                          </>
-                        }}
-                        onExpand={(expanded,records)=>{this.getDetTierDetails(expanded,records)}}
+          <div className="isoLayoutContent">
+            <ExportToCSVComponent
+              isOpenCSVModal={openCsvExportModal}
+              onClose={() => {
+                this.setState({ openCsvExportModal: false });
+              }}
+              filename={`approved_tier${this.props.tier}_request.csv`}
+              data={csvData}
+              header={exportTier}
+            />
+            <PageCounterComponent
+              page={page}
+              limit={limit}
+              dataCount={tradeCount}
+              syncCallBack={() =>
+                this.setState({ type: "", searchData: "" }, () =>
+                  this.getAllApprovedTierRequest()
+                )
+              }
+            />
+            <Form onSubmit={this.onSearch}>
+              <Row type="flex" justify="start" className="table-filter-row">
+                <Col lg={8}>
+                  <Form.Item
+                    validateStatus={this.state.searchValid}
+                    className="cty-search"
+                  >
+                    <Input
+                      placeholder="Search"
+                      onChange={(field) => {
+                        this.setState({ searchData: field.target.value });
+                      }}
+                      value={searchData}
                     />
-                 <Pagination
-                      className="ant-users-pagination"
-                      onChange={this._handlePagination}
-                      pageSize={limit}
-                      current={page}
-                      total={tradeCount}
-                      showSizeChanger
-                      onShowSizeChange={this.changePaginationSize}
-                      pageSizeOptions={PAGE_SIZE_OPTIONS}
-                    />
-            </div>
+                  </Form.Item>
+                </Col>
+                <Col lg={3}>
+                  <Button
+                    htmlType="submit"
+                    className="filter-btn btn-full-width"
+                    type="primary"
+                  >
+                    <Icon type="search" />
+                    Search
+                  </Button>
+                </Col>
+                <Col lg={3}>
+                  <Button
+                    className="filter-btn btn-full-width"
+                    type="primary"
+                    onClick={() => {
+                      this.setState({ searchData: "", type: "" }, () =>
+                        this.getAllApprovedTierRequest()
+                      );
+                    }}
+                  >
+                    <Icon type="reload" />
+                    Reset
+                  </Button>
+                </Col>
+                <Col lg={3}>
+                  <Button
+                    className="filter-btn btn-full-width"
+                    type="primary"
+                    onClick={this.onExport}
+                    icon="export"
+                  >
+                    Export
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+            {loader && <FaldaxLoader />}
+            <TableWrapper
+              rowKey="id"
+              {...this.state}
+              columns={columns}
+              pagination={false}
+              dataSource={approvedRequests}
+              className="table-tb-margin"
+              onChange={this._handlePairsChange}
+              bordered
+              loading={this.state.expandRowLoader}
+              scroll={TABLE_SCROLL_HEIGHT}
+              expandedRowRender={() => {
+                return (
+                  <>
+                    <tr>
+                      <th className="custom-tr-width">Submitted On</th>
+                      <th className="custom-tr-width">Status</th>
+                      <th className="custom-tr-width">Updated By</th>
+                      <th className="custom-tr-width">Id</th>
+                      <th className="custom-tr-width">Type</th>
+                      
+                    </tr>
+                    {tierDetailsRequest.map((ele) => {
+                      return (
+                        <tr>
+                          <td className="custom-tr-width">
+                            {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
+                            {DateTimeCell(ele["created_at"], "string")}
+                          </td>
+                          {ele["is_approved"] == true && (
+                            <td className="custom-tr-width">
+                              <Tag color="#87d068">
+                                <Icon type="check"></Icon>
+                                &nbsp;Approved
+                              </Tag>
+                            </td>
+                          )}
+                          {ele["is_approved"] == false && (
+                            <td className="custom-tr-width">
+                              <Tag color="#f50">
+                                <Icon type="close"></Icon>
+                                &nbsp;Rejected
+                              </Tag>
+                            </td>
+                          )}
+                          {ele["is_approved"] == null && (
+                            <td className="custom-tr-width">
+                              <Tag color="#6896d0">
+                                <Icon type="info-circle"></Icon>
+                                &nbsp;Pending
+                              </Tag>
+                            </td>
+                          )}
+                          <td className="custom-tr-width">
+                            {/* <b>Unique Id &nbsp;: </b>&nbsp; */}
+                            {ele["unique_key"]
+                              ? ele["unique_key"]
+                              : ele["type"] == "4"
+                              ? "Enabled"
+                              : ele["ssn"] + "(Govt.Issued ID Number)"}
+                          </td>
+                          <td className="custom-tr-width">
+                            {ele["updated_by"] ? ele["updated_by"] : "-"}
+                          </td>
+                          <td className="custom-tr-width">
+                            {/* <b>Type &nbsp;: </b>&nbsp; */}
+                            {
+                              <span>
+                                {getTierDoc(this.props.tier, ele["type"])}
+                              </span>
+                            }
+                          </td>
+                          <td className="custom-tr-width">
+                             <Button  disabled={!(ele['public_note'] || ele['private_note'])} onClick={()=>{this.setState({"showNotesModal":true,"public_note":ele["public_note"],"private_note":ele["private_note"]})}}>Show Notes</Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                );
+              }}
+              onExpand={(expanded, records) => {
+                this.getDetTierDetails(expanded, records);
+              }}
+            />
+            <Pagination
+              className="ant-users-pagination"
+              onChange={this._handlePagination}
+              pageSize={limit}
+              current={page}
+              total={tradeCount}
+              showSizeChanger
+              onShowSizeChange={this.changePaginationSize}
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+            />
+             <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
+            <RejectNotesModal setVisible={(showRejectModel)=>this.setState({showRejectModel})} callback={(private_note,public_note)=>this.forceApproveRejectTierRequest(false,this.state.request_id,public_note,private_note)} visible={showRejectModel}></RejectNotesModal>
+          </div>
         );
     }
 }

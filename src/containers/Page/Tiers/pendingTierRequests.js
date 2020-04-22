@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notification, Pagination,Icon,Button,Form, Row, Col,Select,Input, Tag } from 'antd';
+import { notification, Pagination,Icon,Button,Form, Row, Col,Select,Input, Tag, Modal } from 'antd';
 import { tierPendingReqTableInfos } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
@@ -11,9 +11,11 @@ import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { exportTier } from '../../../helpers/exportToCsv/headers';
 import { PendingTierReqActionCell, getTierDoc, DateTimeCell } from '../../../components/tables/helperCells';
+import TextArea from 'antd/lib/input/TextArea';
+import ViewNotesModal from '../../Shared/viewNotesModal';
 // import { PendingTierReqActionCell, getTierDoc } from '../../../components/tables/helperCells';
 const { logout } = authAction;
-const {Option}=Select;
+// const {Option}=Select;
 var self,columns;
 
 class PendingRequests extends Component {
@@ -31,13 +33,22 @@ class PendingRequests extends Component {
       expandRowLoader: false,
       tierDetailsRequest: [],
       expandedRowKeys: [],
+      showRejectNoteModal:false,
+      rejectRequestData:undefined,
+      privateNote:"",
+      publicNote:"",
+      callbackFunction:PendingRequests.approvePendingReq,
+      callbackParams:{},
+      showNotesModal:false,
+      public_note:"",
+      private_note:""
     };
     self = this;
     columns = tierPendingReqTableInfos[0].columns.slice();
     columns.push({
       title: "Action",
       key: "count",
-      width: 250,
+      width:450,
       align: "left",
       ellipsis: true,
       render: (object) => (
@@ -59,6 +70,8 @@ class PendingRequests extends Component {
           >
             Force Reject
           </Button>
+          &nbsp;&nbsp;
+           <Button disabled={!(object['public_note'] || object['private_note'])} onClick={()=>this.setState({showNotesModal:true,public_note:object["public_note"],private_note:object["private_note"]})}>Show Notes</Button>
         </span>
       ),
     });
@@ -73,12 +86,21 @@ class PendingRequests extends Component {
 
   async forceApproveRejectTierRequest(status, id) {
     try {
+      let {showRejectNoteModal}=this.state;
+      if(!showRejectNoteModal)
+      {
+        this.setState({showRejectNoteModal:true,callbackFunction:this.forceApproveRejectTierRequest.bind(this),callbackParams:{id,status}});
+        return false;
+      }
       this.setState({ loader: true });
+      let {publicNote,privateNote}=this.state;
       let response = await (
         await ApiUtils.forceApproveRejectTierRequest(
           this.props.token,
           id,
-          status
+          status,
+          publicNote,
+          privateNote
         )
       ).json();
       if (response.status == 200) {
@@ -88,6 +110,7 @@ class PendingRequests extends Component {
             errMessage: response.message,
             errType: "success",
             loader: false,
+            showRejectNoteModal:false
           },
           () => this.getAllPendingRequest()
         );
@@ -121,41 +144,7 @@ class PendingRequests extends Component {
     e.preventDefault();
     this.getAllPendingRequest();
   };
-  formateTradeRequest(data) {
-    let tradeData = [];
-    for (let i of data) {
-      // let index=data.indexOf(i);
-      if (tradeData.length == 0) {
-        tradeData.push({
-          email: i["email"],
-          name: i["first_name"] + " " + i["last_name"],
-          data: [i],
-        });
-      } else {
-        let found = false;
-        for (let i2 of tradeData) {
-          let index = tradeData.indexOf(i2);
-          let tradeIndex = tradeData.findIndex(
-            (ele) => ele["email"] == i["email"]
-          );
-          if (tradeIndex != -1) {
-            tradeData[tradeIndex]["data"].push(i);
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          tradeData.push({
-            email: i["email"],
-            name: i["first_name"] + " " + i["last_name"],
-            data: [i],
-          });
-        }
-      }
-    }
-    return tradeData;
-  }
-
+  
   getAllPendingRequest = async (isExportToCsv = false) => {
     const { token } = this.props;
     const { sorterCol, sortOrder, limit, page, type, searchData } = this.state;
@@ -226,6 +215,17 @@ class PendingRequests extends Component {
       _this.setState({ loader: false });
     }
   };
+
+  onRejectRequestSubmit=()=>{
+    if(this.state.callbackParams.first_name){
+      let {value,first_name,last_name,tier_step,is_approved,request_id}=this.state.callbackParams;
+      this.state.callbackFunction(value,first_name,last_name,tier_step,is_approved,request_id);
+    }else{
+      let {id,status}=this.state.callbackParams;
+      this.state.callbackFunction(status,id); 
+    }
+  }
+
   static async approvePendingReq(
     value,
     first_name,
@@ -234,7 +234,12 @@ class PendingRequests extends Component {
     is_approved,
     request_id
   ) {
+    if(!is_approved && !self.state.showRejectNoteModal){
+      self.setState({showRejectNoteModal:true,callbackParams:{value,first_name,last_name,tier_step,is_approved,request_id}});
+      return
+    }
     const { token } = self.props;
+    const {publicNote,privateNote}=self.state;
     self.setState({ loader: true });
     try {
       let res = await (
@@ -243,7 +248,9 @@ class PendingRequests extends Component {
           tier_step,
           value,
           is_approved,
-          request_id
+          request_id,
+          privateNote,
+          publicNote
         )
       ).json();
       if (res.status == 200) {
@@ -252,6 +259,7 @@ class PendingRequests extends Component {
           errMessage: res.message,
           errType: "Success",
           expandedRowKeys: [],
+          showRejectNoteModal:false
         });
         await self.getAllPendingRequest();
       } else if (res.status == 403) {
@@ -348,6 +356,17 @@ class PendingRequests extends Component {
       this.setState({ expandRowLoader: false });
     }
   }
+  onCancel=()=>{
+    this.setState({showRejectNoteModal:false,rejectRequestData:undefined});
+  }
+  onChange=({target})=>{
+    if(target.name=="private_note")
+    {
+      this.setState({"privateNote":target.value});
+    }else{
+      this.setState({"publicNote":target.value});
+    }
+  }
   render() {
     const {
       errType,
@@ -363,10 +382,12 @@ class PendingRequests extends Component {
       type,
       csvData,
       openCsvExportModal,
+      showNotesModal
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
+    console.log(showNotesModal)
 
     return (
       <div className="isoLayoutContent">
@@ -457,12 +478,20 @@ class PendingRequests extends Component {
           expandedRowKeys={this.state.expandedRowKeys}
           expandedRowRender={() => {
             return (
-              <>
+              <><tr>
+                <th className="custom-tr-width">Submitted On</th>
+                <th className="custom-tr-width">Status</th>
+                <th className="custom-tr-width">Updated By</th>
+                <th className="custom-tr-width">Id</th>
+                <th className="custom-tr-width">Type</th>
+                <th className="custom-tr-width">Notes</th>
+              </tr>
                 {tierDetailsRequest.map((ele) => {
                   return (
+                  <>
                     <tr>
                        <td className="custom-tr-width">
-                                      <b>Submitted On &nbsp;: </b>&nbsp;
+                                      {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
                                       {DateTimeCell(ele["created_at"],"string")}
                                     </td>
                       {ele["is_approved"] == null && (
@@ -493,23 +522,37 @@ class PendingRequests extends Component {
                         </td>
                       )}
                       <td className="custom-tr-width">
-                        <b>Unique Id &nbsp;: </b>&nbsp;
+                      {/* <b>{ele["is_approved"]==null?"-":ele["is_approved"]?"Approved By :":"Rejected By :"}</b> */}
+                      {ele["updated_by"]?ele["updated_by"]:"-"}
+                      </td>
+                      <td className="custom-tr-width">
+                        {/* <b>{ele['ssn'] && <span>Govt.Issued ID Number &nbsp;</span>} </b>&nbsp; */}
+                        {/* <b>{!ele['ssn'] && <span>Unique Id &nbsp;</span>} </b>&nbsp; */}
                         {ele["unique_key"]
                           ? ele["unique_key"]
                           : ele["type"] == "4"
                           ? "Enabled"
-                          : ele["ssn"]}
+                          : ele["ssn"]+"(Govt.Issued ID Number)"}
                       </td>
                       {/* <td className="custom-tr-width">{ele["ssn"] &&<> <b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</>}</td> */}
                       <td className="custom-tr-width">
-                        <b>Type &nbsp;: </b>&nbsp;
+                        {/* <b>Type &nbsp;: </b>&nbsp; */}
                         {
                           <span>
                             {getTierDoc(this.props.tier, ele["type"])}
                           </span>
                         }
                       </td>
-                    </tr>
+                      <td className="custom-tr-width">
+                        <Button  disabled={!(ele['public_note'] || ele['private_note'])} onClick={()=>{this.setState({"showNotesModal":true,"public_note":ele["public_note"],"private_note":ele["private_note"]})}}>Show Notes</Button>
+                      </td>
+            
+                    {/* <td className="custom-tr-width">
+                      {ele["public_note"]?ele["public_note"]:"-"}</td>
+                    <td className="custom-tr-width">
+                      {ele["private_note"]?ele["private_note"]:"-"}</td> */}
+                  </tr>
+                  </>
                   );
                 })}
               </>
@@ -517,25 +560,7 @@ class PendingRequests extends Component {
           }}
           onExpand={(expanded, records) => {
             this.getDetTierDetails(expanded, records);
-          }}
-
-          // record => {
-          //   return (<>
-
-          //   {record.data.map((ele)=>{
-          //     return(<>
-          //           <tr>
-          //     <td className="custom-tr-width">{PendingTierReqActionCell(ele["id"], ele["first_name"], ele["last_name"], ele["tier_step"],ele["is_approved"], ele["user_id"])}</td>
-          //     <td className="custom-tr-width"><b>Unique Id &nbsp;: </b>&nbsp;{ele["unique_key"]}</td>
-          //     <td className="custom-tr-width"><b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</td>
-          //     <td className="custom-tr-width"><b>Type &nbsp;: </b>&nbsp;{<span>{getTierDoc(this.props.tier,ele["type"])}</span>}</td>
-          //     </tr>
-          //     </>)
-          //         })}
-          //   </>)
-          // }}
-        />
-        {/* ))} */}
+          }}></TableWrapper>
         <Pagination
           className="ant-users-pagination"
           onChange={this._handlePagination}
@@ -546,6 +571,31 @@ class PendingRequests extends Component {
           onShowSizeChange={this.changePaginationSize}
           pageSizeOptions={PAGE_SIZE_OPTIONS}
         />
+          <Modal
+          title="Notes"
+          visible={this.state.showRejectNoteModal}
+          footer={[
+          <Button onClick={this.onCancel}>Cancel</Button>,
+          <Button type="primary" onClick={this.onRejectRequestSubmit}>Submit</Button>
+          ]}
+        >
+          <TextArea
+          placeholder="Private Note"
+          autoSize={{ minRows: 2, maxRows: 6 }}
+          name="private_note"
+          onChange={this.onChange}
+        />
+
+
+        <TextArea
+        className="mt-8"
+          placeholder="Public Note"
+          name="public_note"
+          autoSize={{ minRows: 2, maxRows: 6 }}
+          onChange={this.onChange}
+        />
+        </Modal>
+        <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
       </div>
     );
   }
