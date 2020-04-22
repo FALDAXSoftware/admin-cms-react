@@ -5,11 +5,12 @@
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
-const API_URL=process.env.REACT_APP_API_ENDPOINT;
-
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
+export const SOCKET_HOST = "https://preprod-trading.faldax.com"
+// export const SOCKET_HOST = "http://localhost:3011"
 const ApiUtils = {
   //super admin sign in api
-  adminSignIn: function(form) {
+  adminSignIn: function (form) {
     return fetch(API_URL + "/admin/login", {
       method: "POST",
       headers: {
@@ -21,7 +22,7 @@ const ApiUtils = {
   },
 
   //edit profile api
-  editProfile: function(token, form) {
+  editProfile: function (token, form) {
     return fetch(API_URL + "/admin/update", {
       method: "PUT",
       headers: {
@@ -34,7 +35,7 @@ const ApiUtils = {
   },
 
   //change admin password api
-  changePassword: function(token, form) {
+  changePassword: function (token, form) {
     return fetch(API_URL + "/admin/change-password", {
       method: "POST",
       headers: {
@@ -45,7 +46,7 @@ const ApiUtils = {
   },
 
   //change employee password api
-  changeEmployeePassword: function(token, form) {
+  changeEmployeePassword: function (token, form) {
     return fetch(API_URL + "/admin/employee-change-password", {
       method: "POST",
       headers: {
@@ -56,7 +57,7 @@ const ApiUtils = {
   },
 
   //get all counts for dashboard api
-  getAllCount: function(token, startDate, endDate) {
+  getAllCount: function (token, startDate, endDate) {
     let url = "/admin/dashboard/get-data";
     if (startDate && endDate) {
       url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
@@ -69,7 +70,7 @@ const ApiUtils = {
     });
   },
 
-  getCampaignUserList: function(token) {
+  getCampaignUserList: function (token) {
     let url = "/admin/users/list";
     return fetch(API_URL + url, {
       method: "GET",
@@ -80,7 +81,7 @@ const ApiUtils = {
   },
 
   // create new campaign
-  createCampaign: function(token, formdata) {
+  createCampaign: function (token, formdata) {
     return fetch(API_URL + "/admin/campaigns/create", {
       method: "POST",
       headers: {
@@ -91,7 +92,7 @@ const ApiUtils = {
   },
 
   //get all counts for dashboard api
-  getMetabase: function() {
+  getMetabase: function () {
     let url = "/metabase-details";
     return fetch(API_URL + url, {
       method: "GET"
@@ -102,7 +103,7 @@ const ApiUtils = {
   },
 
   //get all users api
-  getAllUsers: function(
+  getAllUsers: function (
     page,
     limit,
     token,
@@ -116,11 +117,11 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${filterVal ? "&country=" + filterVal : ""}${
+      }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-    }${endDate ? "&end_date=" + endDate : ""}`;
+      }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -131,7 +132,7 @@ const ApiUtils = {
   },
 
   //get all in-active users api
-  getAllInActiveUsers: function(
+  getAllInActiveUsers: function (
     page,
     limit,
     token,
@@ -145,11 +146,11 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-inactive-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${filterVal ? "&country=" + filterVal : ""}${
+      }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-    }${endDate ? "&end_date=" + endDate : ""}`;
+      }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -160,7 +161,7 @@ const ApiUtils = {
   },
 
   //get all in-active users api
-  getAllDeletedUsers: function(
+  getAllDeletedUsers: function (
     page,
     limit,
     token,
@@ -174,11 +175,11 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-deleted-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${filterVal ? "&country=" + filterVal : ""}${
+      }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-    }${endDate ? "&end_date=" + endDate : ""}`;
+      }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -189,7 +190,7 @@ const ApiUtils = {
   },
 
   //activate user api
-  activateUser: function(token, form) {
+  activateUser: function (token, form) {
     return fetch(API_URL + "/admin/user-activate", {
       method: "POST",
       headers: {
@@ -200,7 +201,7 @@ const ApiUtils = {
   },
 
   //delete user api
-  deleteUser: function(token, user_id) {
+  deleteUser: function (token, user_id) {
     return fetch(API_URL + "/admin/delete-user?user_id=" + user_id, {
       method: "DELETE",
       headers: {
@@ -211,7 +212,7 @@ const ApiUtils = {
   },
 
   //get all coins api
-  getAllCoins: function(page, limit, token, search, sorterCol, sortOrder) {
+  getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
     let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -238,7 +239,7 @@ const ApiUtils = {
   },
 
   //add coin api
-  addCoin: function(token, form) {
+  addCoin: function (token, form) {
     return fetch(API_URL + "/admin/coins/create", {
       method: "POST",
       headers: {
@@ -249,7 +250,7 @@ const ApiUtils = {
   },
 
   //edit coin api
-  editCoin: function(token, form) {
+  editCoin: function (token, form) {
     return fetch(API_URL + "/admin/coins/update", {
       method: "PUT",
       headers: {
@@ -261,7 +262,7 @@ const ApiUtils = {
   },
 
   //delete coin api
-  deleteCoin: function(coinId, token) {
+  deleteCoin: function (coinId, token) {
     return fetch(API_URL + "/admin/coins/delete?id=" + coinId, {
       method: "DELETE",
       headers: {
@@ -272,7 +273,7 @@ const ApiUtils = {
   },
 
   //forgot password api
-  forgotPassword: function(form) {
+  forgotPassword: function (form) {
     return fetch(API_URL + "/admin/forgot-password", {
       method: "POST",
       headers: {
@@ -284,7 +285,7 @@ const ApiUtils = {
   },
 
   //reset password api
-  resetPassword: function(form) {
+  resetPassword: function (form) {
     return fetch(API_URL + "/admin/reset-password", {
       method: "PUT",
       headers: {
@@ -295,7 +296,7 @@ const ApiUtils = {
     });
   },
 
-  getUserReferData: function(
+  getUserReferData: function (
     token,
     coin_id = "",
     user_id = "",
@@ -305,9 +306,9 @@ const ApiUtils = {
   ) {
     let url = `/admin/get-referred-user-data?coin_code=${coin_id}${
       user_id ? "&user_id=" + user_id : ""
-    }${page ? "&page=" + page : ""}${limit ? "&limit=" + limit : ""}${
+      }${page ? "&page=" + page : ""}${limit ? "&limit=" + limit : ""}${
       data ? "&data=" + data : ""
-    }`;
+      }`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -318,7 +319,7 @@ const ApiUtils = {
   },
 
   //get all referrals api
-  getAllUserReferrals: function(
+  getAllUserReferrals: function (
     page,
     limit,
     token,
@@ -347,7 +348,7 @@ const ApiUtils = {
   },
 
   //get all referrals api
-  getAllReferrals: function(
+  getAllReferrals: function (
     page,
     limit,
     token,
@@ -357,7 +358,7 @@ const ApiUtils = {
   ) {
     let url = `/admin/get-referal-list?data=${searchReferral}${
       sorterCol ? "&sort_col=" + sorterCol : ""
-    }${sortOrder ? "&sort_order=" + sortOrder : ""}`;
+      }${sortOrder ? "&sort_order=" + sortOrder : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -368,7 +369,7 @@ const ApiUtils = {
   },
 
   //get all counties api
-  getAllCountries: function(
+  getAllCountries: function (
     page,
     limit,
     token,
@@ -404,7 +405,7 @@ const ApiUtils = {
   },
 
   //Activate-deactivate country api
-  activateCountry: function(token, form) {
+  activateCountry: function (token, form) {
     return fetch(API_URL + "/admin/country-activate", {
       method: "PUT",
       headers: {
@@ -415,7 +416,7 @@ const ApiUtils = {
   },
 
   //Announce to users api
-  announceUser: function(token, form) {
+  announceUser: function (token, form) {
     return fetch(API_URL + "/admin/email-send", {
       method: "POST",
       headers: {
@@ -426,7 +427,7 @@ const ApiUtils = {
   },
 
   //get all roles api
-  getAllRoles: function(token, sorterCol, sortOrder, status) {
+  getAllRoles: function (token, sorterCol, sortOrder, status) {
     let url = "/admin/role/get?status=" + status;
     if (sorterCol && sortOrder) {
       url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
@@ -441,7 +442,7 @@ const ApiUtils = {
     });
   },
 
-  getAllPermissions: function(token) {
+  getAllPermissions: function (token) {
     let url = "/get-all-permissions";
     return fetch(API_URL + url, {
       method: "GET",
@@ -453,7 +454,7 @@ const ApiUtils = {
   },
 
   //edit country api call
-  editCountry: function(token, form) {
+  editCountry: function (token, form) {
     return fetch(API_URL + "/admin/country-update", {
       method: "PUT",
       headers: {
@@ -464,7 +465,7 @@ const ApiUtils = {
   },
 
   //get all states api
-  getAllStates: function(token, countryId, search, sorterCol, sortOrder) {
+  getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
     let url = "/admin/get-state-data?country_id=" + countryId;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -486,7 +487,7 @@ const ApiUtils = {
   },
 
   //Activate-deactivate state api
-  activateState: function(token, form) {
+  activateState: function (token, form) {
     return fetch(API_URL + "/admin/state-activate", {
       method: "PUT",
       headers: {
@@ -497,7 +498,7 @@ const ApiUtils = {
   },
 
   //edit state api call
-  editState: function(token, form) {
+  editState: function (token, form) {
     return fetch(API_URL + "/admin/state-update", {
       method: "PUT",
       headers: {
@@ -508,7 +509,7 @@ const ApiUtils = {
   },
 
   //add role api call
-  addRole: function(token, form) {
+  addRole: function (token, form) {
     return fetch(API_URL + "/admin/role/create", {
       method: "POST",
       headers: {
@@ -519,7 +520,7 @@ const ApiUtils = {
   },
 
   //edit role api call
-  updateRole: function(token, form) {
+  updateRole: function (token, form) {
     return fetch(API_URL + "/admin/role/update", {
       method: "PUT",
       headers: {
@@ -529,7 +530,7 @@ const ApiUtils = {
     });
   },
 
-  deleteRole: function(token, roleId) {
+  deleteRole: function (token, roleId) {
     return fetch(API_URL + "/admin/role/delete", {
       method: "DELETE",
       headers: {
@@ -543,7 +544,7 @@ const ApiUtils = {
   },
 
   //get all employee api
-  getAllEmployee: function(page, limit, token, sorterCol, sortOrder, search) {
+  getAllEmployee: function (page, limit, token, sorterCol, sortOrder, search) {
     let url = "/admin/get-employees?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -564,7 +565,7 @@ const ApiUtils = {
   },
 
   //add employee api call
-  addEmployee: function(token, form) {
+  addEmployee: function (token, form) {
     return fetch(API_URL + "/admin/add-employee", {
       method: "POST",
       headers: {
@@ -575,7 +576,7 @@ const ApiUtils = {
   },
 
   //delete employee api call
-  deleteEmployee: function(token, roleId) {
+  deleteEmployee: function (token, roleId) {
     return fetch(API_URL + "/admin/delete-employee", {
       method: "DELETE",
       headers: {
@@ -589,7 +590,7 @@ const ApiUtils = {
   },
 
   //edit employee api call
-  editEmployee: function(token, form) {
+  editEmployee: function (token, form) {
     return fetch(API_URL + "/admin/update-employee", {
       method: "PUT",
       headers: {
@@ -600,7 +601,7 @@ const ApiUtils = {
   },
 
   //user login history api call
-  getUserHistory: function(
+  getUserHistory: function (
     token,
     user_id,
     page,
@@ -633,7 +634,7 @@ const ApiUtils = {
   },
 
   //user delete account summary
-  getUserAccountSummary: function(token, user_id) {
+  getUserAccountSummary: function (token, user_id) {
     let url = "/admin/deleteAccountCheck?user_id=" + user_id;
 
     return fetch(API_URL + url, {
@@ -645,7 +646,7 @@ const ApiUtils = {
     });
   },
 
-  getAllPairs: function(
+  getAllPairs: function (
     page,
     limit,
     token,
@@ -701,7 +702,7 @@ const ApiUtils = {
   },
 
   //add fees api call
-  addPair: function(token, form) {
+  addPair: function (token, form) {
     return fetch(API_URL + "/admin/add-pair", {
       method: "POST",
       headers: {
@@ -712,7 +713,7 @@ const ApiUtils = {
   },
 
   //edit pair api call
-  updatePair: function(token, form) {
+  updatePair: function (token, form) {
     return fetch(API_URL + "/admin/edit-pair", {
       method: "PUT",
       headers: {
@@ -723,7 +724,7 @@ const ApiUtils = {
     });
   },
 
-  getAllLimit: function(token) {
+  getAllLimit: function (token) {
     return fetch(API_URL + "/admin/all-limits", {
       method: "GET",
       headers: {
@@ -734,7 +735,7 @@ const ApiUtils = {
   },
 
   //edit limit api call
-  updateLimit: function(token, form) {
+  updateLimit: function (token, form) {
     return fetch(API_URL + "/admin/edit-limit", {
       method: "PUT",
       headers: {
@@ -745,7 +746,7 @@ const ApiUtils = {
     });
   },
 
-  getAllTransaction: function(
+  getAllTransaction: function (
     page,
     limit,
     token,
@@ -875,7 +876,7 @@ const ApiUtils = {
   },
 
   //user wise transaction list api call
-  getUserTransaction: function(
+  getUserTransaction: function (
     page,
     limit,
     token,
@@ -999,7 +1000,7 @@ const ApiUtils = {
     });
   },
 
-  getAllTrades: function(
+  getAllTrades: function (
     page,
     limit,
     token,
@@ -1007,8 +1008,8 @@ const ApiUtils = {
     filterVal,
     startDate,
     endDate,
-    sorterCol="created_at",
-    sortOrder="descend",
+    sorterCol = "created_at",
+    sortOrder = "descend",
     trade_type
   ) {
     let url = "page=" + page + "&limit=" + limit + "&trade_type=" + trade_type;
@@ -1129,7 +1130,7 @@ const ApiUtils = {
     });
   },
 
-  getAllSimplexTrades: function(
+  getAllSimplexTrades: function (
     page,
     limit,
     token,
@@ -1339,7 +1340,7 @@ const ApiUtils = {
     });
   },
 
-  getUserTrades: function(
+  getUserTrades: function (
     page,
     limit,
     token,
@@ -1453,7 +1454,7 @@ const ApiUtils = {
     });
   },
 
-  getAllWithdrawRequests: function(
+  getAllWithdrawRequests: function (
     page,
     limit,
     token,
@@ -1563,7 +1564,7 @@ const ApiUtils = {
   },
 
   //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
-  getUserWithdrawReq: function(
+  getUserWithdrawReq: function (
     page,
     limit,
     token,
@@ -1684,7 +1685,7 @@ const ApiUtils = {
     });
   },
 
-  getAllSellOrders: function(
+  getAllSellOrders: function (
     page,
     limit,
     token,
@@ -1721,7 +1722,7 @@ const ApiUtils = {
     });
   },
 
-  getAllPendingOrders: function(
+  getAllPendingOrders: function (
     page,
     limit,
     token,
@@ -1758,7 +1759,7 @@ const ApiUtils = {
     });
   },
 
-  getAllCancelledOrders: function(
+  getAllCancelledOrders: function (
     page,
     limit,
     token,
@@ -1795,7 +1796,7 @@ const ApiUtils = {
     });
   },
 
-  getAllBuyOrders: function(
+  getAllBuyOrders: function (
     page,
     limit,
     token,
@@ -1832,7 +1833,7 @@ const ApiUtils = {
   },
 
   //get all jobs api
-  getAllJobs: function(page, limit, token, search, sorterCol, sortOrder) {
+  getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
     let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -1859,7 +1860,7 @@ const ApiUtils = {
   },
 
   //get all job categories api
-  getAllJobCategories: function(token, active) {
+  getAllJobCategories: function (token, active) {
     return fetch(API_URL + "/admin/job-categories?active=" + active, {
       method: "GET",
       headers: {
@@ -1870,7 +1871,7 @@ const ApiUtils = {
   },
 
   //add job api
-  addJob: function(token, form) {
+  addJob: function (token, form) {
     return fetch(API_URL + "/admin/add-job", {
       method: "POST",
       headers: {
@@ -1882,7 +1883,7 @@ const ApiUtils = {
   },
 
   //edit job api call
-  updateJob: function(token, form) {
+  updateJob: function (token, form) {
     return fetch(API_URL + "/admin/edit-job", {
       method: "PUT",
       headers: {
@@ -1894,7 +1895,7 @@ const ApiUtils = {
   },
 
   //delete job api call
-  deleteJob: function(jobId, token) {
+  deleteJob: function (jobId, token) {
     return fetch(API_URL + "/admin/delete-job?job_id=" + jobId, {
       method: "DELETE",
       headers: {
@@ -1905,7 +1906,7 @@ const ApiUtils = {
   },
 
   //edit contact details api
-  editContact: function(token, form) {
+  editContact: function (token, form) {
     return fetch(API_URL + "/edit-contact-details", {
       method: "POST",
       headers: {
@@ -1917,7 +1918,7 @@ const ApiUtils = {
   },
 
   //get contact details api
-  getContactDetails: function() {
+  getContactDetails: function () {
     return fetch(API_URL + "/admin/get-contact-details", {
       method: "GET",
       headers: {
@@ -1927,7 +1928,7 @@ const ApiUtils = {
   },
 
   // get default referral percentage
-  getReferPercentage: function(token) {
+  getReferPercentage: function (token) {
     return fetch(API_URL + "/admin/get-referal-details", {
       method: "GET",
       headers: {
@@ -1938,7 +1939,7 @@ const ApiUtils = {
   },
 
   //get all jobs api
-  getAllJobApplications: function(
+  getAllJobApplications: function (
     jobId,
     page,
     limit,
@@ -1979,7 +1980,7 @@ const ApiUtils = {
   },
 
   //get all kyc data api
-  getKYCData: function(
+  getKYCData: function (
     token,
     page,
     limit,
@@ -2074,7 +2075,7 @@ const ApiUtils = {
   },
 
   //get all fees api
-  getFeesData: function(token) {
+  getFeesData: function (token) {
     let url = "/admin/get-all-fee";
     return fetch(API_URL + url, {
       method: "GET",
@@ -2086,7 +2087,7 @@ const ApiUtils = {
   },
 
   //get withdrawl fees api
-  getWithdrawlFee: function(token) {
+  getWithdrawlFee: function (token) {
     let url = "/admin/get-withdrawl-faldax-fee";
     return fetch(API_URL + url, {
       method: "GET",
@@ -2098,7 +2099,7 @@ const ApiUtils = {
   },
 
   //edit fees api
-  updateFees: function(token, form) {
+  updateFees: function (token, form) {
     return fetch(API_URL + "/admin/edit-fee", {
       method: "PUT",
       headers: {
@@ -2109,7 +2110,7 @@ const ApiUtils = {
     });
   },
 
-  getPanicBtnDetails: function(token) {
+  getPanicBtnDetails: function (token) {
     return fetch(API_URL + "/get-panic-status", {
       method: "GET",
       headers: {
@@ -2120,7 +2121,7 @@ const ApiUtils = {
   },
 
   //panic button api
-  panicBtn: function(token, form) {
+  panicBtn: function (token, form) {
     return fetch(API_URL + "/toggle-panic-status", {
       method: "POST",
       headers: {
@@ -2132,7 +2133,7 @@ const ApiUtils = {
   },
 
   // get user details api
-  getUserDetails: function(token, user_id) {
+  getUserDetails: function (token, user_id) {
     return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
       method: "GET",
       headers: {
@@ -2143,7 +2144,7 @@ const ApiUtils = {
   },
 
   // get employee details api
-  getEmployeeDetails: function(token, emp_id) {
+  getEmployeeDetails: function (token, emp_id) {
     return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
       method: "GET",
       headers: {
@@ -2153,7 +2154,7 @@ const ApiUtils = {
     });
   },
 
-  disableTwoFactor: function(token, form) {
+  disableTwoFactor: function (token, form) {
     return fetch(API_URL + "/admin/disable-two-factor", {
       method: "POST",
       headers: {
@@ -2164,7 +2165,7 @@ const ApiUtils = {
     });
   },
 
-  setupTwoFactor: function(token, form) {
+  setupTwoFactor: function (token, form) {
     return fetch(API_URL + "/admin/setup-two-factor", {
       method: "POST",
       headers: {
@@ -2175,7 +2176,7 @@ const ApiUtils = {
     });
   },
 
-  verifyOTP: function(token, form) {
+  verifyOTP: function (token, form) {
     return fetch(API_URL + "/admin/verify-two-factor", {
       method: "POST",
       headers: {
@@ -2186,7 +2187,7 @@ const ApiUtils = {
     });
   },
 
-  getAdminDetails: function(token, admin_id) {
+  getAdminDetails: function (token, admin_id) {
     return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
       method: "GET",
       headers: {
@@ -2197,7 +2198,7 @@ const ApiUtils = {
   },
 
   //get all news api
-  getAllNews: function(
+  getAllNews: function (
     page,
     limit,
     token,
@@ -2324,7 +2325,7 @@ const ApiUtils = {
     });
   },
 
-  changeNewsStatus: function(token, form) {
+  changeNewsStatus: function (token, form) {
     return fetch(API_URL + "/admin/change-news-status", {
       method: "POST",
       headers: {
@@ -2335,7 +2336,7 @@ const ApiUtils = {
     });
   },
 
-  getNewsDetails: function(token, news_id) {
+  getNewsDetails: function (token, news_id) {
     return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
       method: "GET",
       headers: {
@@ -2345,7 +2346,7 @@ const ApiUtils = {
     });
   },
 
-  updateReferral: function(token, form) {
+  updateReferral: function (token, form) {
     return fetch(API_URL + "/admin/update-user-referal", {
       method: "POST",
       headers: {
@@ -2356,7 +2357,7 @@ const ApiUtils = {
     });
   },
 
-  getKYCDetails: function(token, user_id) {
+  getKYCDetails: function (token, user_id) {
     return fetch(API_URL + "/admin/get-kyc-detail?user_id=" + user_id, {
       method: "GET",
       headers: {
@@ -2366,7 +2367,7 @@ const ApiUtils = {
     });
   },
 
-  getReferredAmounts: function(token, ref_id) {
+  getReferredAmounts: function (token, ref_id) {
     return fetch(API_URL + "/admin/get-referred-id-data?id=" + ref_id, {
       method: "GET",
       headers: {
@@ -2376,7 +2377,7 @@ const ApiUtils = {
     });
   },
 
-  updateSendCoinFee: function(token, form) {
+  updateSendCoinFee: function (token, form) {
     return fetch(API_URL + "/admin/update-send-coin-fee", {
       method: "POST",
       headers: {
@@ -2387,7 +2388,7 @@ const ApiUtils = {
     });
   },
 
-  updateFaldaxFee: function(token, form) {
+  updateFaldaxFee: function (token, form) {
     return fetch(API_URL + "/admin/update-faldax-fee", {
       method: "POST",
       headers: {
@@ -2399,7 +2400,7 @@ const ApiUtils = {
   },
 
   //add user api call
-  addUser: function(token, form) {
+  addUser: function (token, form) {
     return fetch(API_URL + "/admin/add-user", {
       method: "POST",
       headers: {
@@ -2410,7 +2411,7 @@ const ApiUtils = {
     });
   },
 
-  getWalletCoins: function(token) {
+  getWalletCoins: function (token) {
     return fetch(API_URL + "/coin-list", {
       method: "GET",
       headers: {
@@ -2420,7 +2421,7 @@ const ApiUtils = {
     });
   },
 
-  getUserTickets: function(token, form) {
+  getUserTickets: function (token, form) {
     return fetch(API_URL + "/admin/get-user-tickets", {
       method: "POST",
       headers: {
@@ -2431,7 +2432,7 @@ const ApiUtils = {
     });
   },
 
-  getAllAccountClasses: function(token, sorterCol, sortOrder) {
+  getAllAccountClasses: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-all-account-classes";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -2446,7 +2447,7 @@ const ApiUtils = {
     });
   },
 
-  addAccountClass: function(token, form) {
+  addAccountClass: function (token, form) {
     return fetch(API_URL + "/admin/add-account-class", {
       method: "POST",
       headers: {
@@ -2457,7 +2458,7 @@ const ApiUtils = {
     });
   },
 
-  updateAccountClass: function(token, form) {
+  updateAccountClass: function (token, form) {
     return fetch(API_URL + "/admin/update-account-class", {
       method: "POST",
       headers: {
@@ -2468,7 +2469,7 @@ const ApiUtils = {
     });
   },
 
-  deleteAccountClass: function(token, form) {
+  deleteAccountClass: function (token, form) {
     return fetch(API_URL + "/admin/delete-account-class", {
       method: "POST",
       headers: {
@@ -2479,7 +2480,7 @@ const ApiUtils = {
     });
   },
 
-  getAssetDetails: function(token, coin_id) {
+  getAssetDetails: function (token, coin_id) {
     return fetch(API_URL + "/admin/coin/get-coin-details?id=" + coin_id, {
       method: "GET",
       headers: {
@@ -2489,7 +2490,7 @@ const ApiUtils = {
     });
   },
 
-  getAssetLimits: function(token, coin_id) {
+  getAssetLimits: function (token, coin_id) {
     return fetch(API_URL + "/admin/all-limits?coin_id=" + coin_id, {
       method: "GET",
       headers: {
@@ -2499,7 +2500,7 @@ const ApiUtils = {
     });
   },
 
-  updateAssetLimits: function(token, form) {
+  updateAssetLimits: function (token, form) {
     return fetch(API_URL + "/admin/edit-limit", {
       method: "PUT",
       headers: {
@@ -2510,7 +2511,7 @@ const ApiUtils = {
     });
   },
 
-  getUserLimits: function(token, user_id) {
+  getUserLimits: function (token, user_id) {
     return fetch(API_URL + "/admin/all-user-limits?user_id=" + user_id, {
       method: "GET",
       headers: {
@@ -2520,7 +2521,7 @@ const ApiUtils = {
     });
   },
 
-  updateUserLimits: function(token, form) {
+  updateUserLimits: function (token, form) {
     return fetch(API_URL + "/admin/edit-user-limit", {
       method: "PUT",
       headers: {
@@ -2531,7 +2532,7 @@ const ApiUtils = {
     });
   },
 
-  getAllEmailTemplates: function(token) {
+  getAllEmailTemplates: function (token) {
     return fetch(API_URL + "/admin/emailTemplate/get", {
       method: "GET",
       headers: {
@@ -2541,7 +2542,7 @@ const ApiUtils = {
     });
   },
 
-  updateEmailTemplate: function(token, form) {
+  updateEmailTemplate: function (token, form) {
     return fetch(API_URL + "/admin/emailTemplate/update", {
       method: "PUT",
       headers: {
@@ -2552,7 +2553,7 @@ const ApiUtils = {
     });
   },
 
-  getAllNewsSources: function(token) {
+  getAllNewsSources: function (token) {
     return fetch(API_URL + "/admin/all-new-source", {
       method: "GET",
       headers: {
@@ -2562,7 +2563,7 @@ const ApiUtils = {
     });
   },
 
-  updateNewsSource: function(token, form) {
+  updateNewsSource: function (token, form) {
     return fetch(API_URL + "/admin/edit-news-source", {
       method: "PUT",
       headers: {
@@ -2573,7 +2574,7 @@ const ApiUtils = {
     });
   },
 
-  changeWithdrawStatus: function(token, form) {
+  changeWithdrawStatus: function (token, form) {
     return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
       method: "POST",
       headers: {
@@ -2584,7 +2585,7 @@ const ApiUtils = {
     });
   },
 
-  getTemplateDetails: function(token, template_id) {
+  getTemplateDetails: function (token, template_id) {
     return fetch(API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
       method: "GET",
       headers: {
@@ -2595,7 +2596,7 @@ const ApiUtils = {
   },
 
   //edit job category api call
-  updateJobCategory: function(token, form) {
+  updateJobCategory: function (token, form) {
     return fetch(API_URL + "/admin/update-job-category", {
       method: "PUT",
       headers: {
@@ -2606,7 +2607,7 @@ const ApiUtils = {
     });
   },
 
-  addJobCategory: function(token, form) {
+  addJobCategory: function (token, form) {
     return fetch(API_URL + "/admin/add-job-category", {
       method: "POST",
       headers: {
@@ -2617,7 +2618,7 @@ const ApiUtils = {
     });
   },
 
-  addWhitelistIP: function(token, form) {
+  addWhitelistIP: function (token, form) {
     return fetch(API_URL + "/admin/add-whitelist-ip", {
       method: "POST",
       headers: {
@@ -2628,7 +2629,7 @@ const ApiUtils = {
     });
   },
 
-  getAllWhitelistIP: function(token, page, limit) {
+  getAllWhitelistIP: function (token, page, limit) {
     return fetch(
       API_URL + "/admin/get-all-whitelist-ip?page=" + page + "&limit=" + limit,
       {
@@ -2641,7 +2642,7 @@ const ApiUtils = {
     );
   },
 
-  deleteProfileWhitelistIP: function(token, id) {
+  deleteProfileWhitelistIP: function (token, id) {
     return fetch(API_URL + "/admin/delete-whitelist-ip?id=" + id, {
       method: "DELETE",
       headers: {
@@ -2651,7 +2652,7 @@ const ApiUtils = {
     });
   },
 
-  addProfileWhitelistIP: function(token, form) {
+  addProfileWhitelistIP: function (token, form) {
     return fetch(API_URL + "/admin/add-whitelist-ip", {
       method: "POST",
       headers: {
@@ -2662,15 +2663,15 @@ const ApiUtils = {
     });
   },
 
-  getAllUserWhitelistIP: function(token, user_id, page, limit) {
+  getAllUserWhitelistIP: function (token, user_id, page, limit) {
     return fetch(
       API_URL +
-        "/admin/get-user-whitelist-ip?user_id=" +
-        user_id +
-        "&page=" +
-        page +
-        "&limit=" +
-        limit,
+      "/admin/get-user-whitelist-ip?user_id=" +
+      user_id +
+      "&page=" +
+      page +
+      "&limit=" +
+      limit,
       {
         method: "GET",
         headers: {
@@ -2681,7 +2682,7 @@ const ApiUtils = {
     );
   },
 
-  deleteEmpWhitelistIP: function(token, id) {
+  deleteEmpWhitelistIP: function (token, id) {
     return fetch(API_URL + "/admin/delete-user-whitelist-ip?id=" + id, {
       method: "DELETE",
       headers: {
@@ -2691,7 +2692,7 @@ const ApiUtils = {
     });
   },
 
-  addEmpWhitelistIP: function(token, form) {
+  addEmpWhitelistIP: function (token, form) {
     return fetch(API_URL + "/admin/add-user-ip-whitelist", {
       method: "POST",
       headers: {
@@ -2702,7 +2703,7 @@ const ApiUtils = {
     });
   },
 
-  updateUser: function(token, form) {
+  updateUser: function (token, form) {
     return fetch(API_URL + "/admin/update-user", {
       method: "POST",
       headers: {
@@ -2713,7 +2714,7 @@ const ApiUtils = {
     });
   },
 
-  enableWhitelist: function(token, form) {
+  enableWhitelist: function (token, form) {
     return fetch(API_URL + "/admin/user-whitelist-ip-status-change", {
       method: "POST",
       headers: {
@@ -2724,7 +2725,7 @@ const ApiUtils = {
     });
   },
 
-  enableProfileWhitelist: function(token, form) {
+  enableProfileWhitelist: function (token, form) {
     return fetch(API_URL + "/admin/whitelist-ip-status-change", {
       method: "POST",
       headers: {
@@ -2735,7 +2736,7 @@ const ApiUtils = {
     });
   },
 
-  getAll2FARequests: function(
+  getAll2FARequests: function (
     token,
     page,
     limit,
@@ -2789,7 +2790,7 @@ const ApiUtils = {
     });
   },
 
-  approve2FARequest: function(token, form) {
+  approve2FARequest: function (token, form) {
     return fetch(API_URL + "/admin/approve-twofactors-request-status", {
       method: "POST",
       headers: {
@@ -2800,7 +2801,7 @@ const ApiUtils = {
     });
   },
 
-  rejectRequest: function(token, form) {
+  rejectRequest: function (token, form) {
     return fetch(API_URL + "/admin/reject-twofactors-request-status", {
       method: "POST",
       headers: {
@@ -2811,7 +2812,7 @@ const ApiUtils = {
     });
   },
 
-  getWalletDetails: function(token, form) {
+  getWalletDetails: function (token, form) {
     return fetch(API_URL + "/wallet-details", {
       method: "POST",
       headers: {
@@ -2822,7 +2823,7 @@ const ApiUtils = {
     });
   },
 
-  generateWalletAddress: function(token, code, userId) {
+  generateWalletAddress: function (token, code, userId) {
     return fetch(
       API_URL + "/admin/create-admin-wallet/" + code + "/" + userId,
       {
@@ -2835,7 +2836,7 @@ const ApiUtils = {
     );
   },
 
-  generateUserWalletAddress: function(token, coin, userId) {
+  generateUserWalletAddress: function (token, coin, userId) {
     return fetch(API_URL + "/admin/create-wallet/" + coin + "/" + userId, {
       method: "GET",
       headers: {
@@ -2845,7 +2846,7 @@ const ApiUtils = {
     });
   },
 
-  getAdminThresholds: function(token, code) {
+  getAdminThresholds: function (token, code) {
     return fetch(API_URL + "/admin/get-admin-thresholds", {
       method: "GET",
       headers: {
@@ -2855,7 +2856,7 @@ const ApiUtils = {
     });
   },
 
-  getAdminContactDetails: function(token, code) {
+  getAdminContactDetails: function (token, code) {
     return fetch(API_URL + "/admin/get-admin-thresholds-contacts", {
       method: "GET",
       headers: {
@@ -2865,7 +2866,7 @@ const ApiUtils = {
     });
   },
 
-  storeContactDetails: function(token, form) {
+  storeContactDetails: function (token, form) {
     return fetch(API_URL + "/admin/add-admin-thresholds-contacts", {
       method: "POST",
       headers: {
@@ -2876,7 +2877,7 @@ const ApiUtils = {
     });
   },
 
-  saveAllNotification: function(token, form) {
+  saveAllNotification: function (token, form) {
     return fetch(API_URL + "/admin/add-admin-thresholds", {
       method: "POST",
       headers: {
@@ -2887,7 +2888,7 @@ const ApiUtils = {
     });
   },
 
-  getAllWallets: function(token, search) {
+  getAllWallets: function (token, search) {
     let url = "/admin-wallet-fees-details";
     if (search) {
       url += "?search=" + search;
@@ -2901,7 +2902,7 @@ const ApiUtils = {
     });
   },
 
-  sendWalletBalance: function(token, form) {
+  sendWalletBalance: function (token, form) {
     return fetch(API_URL + "/send-coin-admin", {
       method: "POST",
       headers: {
@@ -2911,7 +2912,7 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-  sendWarmWalletBalance: function(token, form) {
+  sendWarmWalletBalance: function (token, form) {
     return fetch(API_URL + "/admin/send-warm-balance", {
       method: "POST",
       headers: {
@@ -2922,7 +2923,7 @@ const ApiUtils = {
     });
   },
 
-  getAllBatches: function(token, page, limit) {
+  getAllBatches: function (token, page, limit) {
     let url = "/admin/batches/list?page=" + page + "&limit=" + limit;
     return fetch(API_URL + url, {
       method: "POST",
@@ -2933,7 +2934,7 @@ const ApiUtils = {
     });
   },
 
-  createBatch: function(token, form) {
+  createBatch: function (token, form) {
     return fetch(API_URL + "/admin/batches/create", {
       method: "POST",
       headers: {
@@ -2944,7 +2945,7 @@ const ApiUtils = {
     });
   },
 
-  updateBatch: function(token, form) {
+  updateBatch: function (token, form) {
     return fetch(API_URL + "/admin/batches/update", {
       method: "PUT",
       headers: {
@@ -2955,7 +2956,7 @@ const ApiUtils = {
     });
   },
 
-  getAllTiers: function(token) {
+  getAllTiers: function (token) {
     let url = "/admin/get-tier-details";
     return fetch(API_URL + url, {
       method: "GET",
@@ -2966,7 +2967,7 @@ const ApiUtils = {
     });
   },
 
-  getSummaryOfBatch: function(token, transactionStart, transactionEnd) {
+  getSummaryOfBatch: function (token, transactionStart, transactionEnd) {
     let url =
       "/admin/get-batch-value?transaction_start=" +
       transactionStart +
@@ -2981,7 +2982,7 @@ const ApiUtils = {
     });
   },
 
-  getPurchaseOfBatch: function(token, transactionStart, transactionEnd) {
+  getPurchaseOfBatch: function (token, transactionStart, transactionEnd) {
     let url =
       "/admin/get-each-transaction-value?transaction_start=" +
       transactionStart +
@@ -2996,7 +2997,7 @@ const ApiUtils = {
     });
   },
 
-  getBatchDetails: function(token, batchId) {
+  getBatchDetails: function (token, batchId) {
     let url = "/admin/get-batch-detail?id=" + batchId;
     return fetch(API_URL + url, {
       method: "GET",
@@ -3007,7 +3008,7 @@ const ApiUtils = {
     });
   },
 
-  getTierDetails: function(token, tierId) {
+  getTierDetails: function (token, tierId) {
     let url = "/admin/get-tier-data?id=" + tierId;
     return fetch(API_URL + url, {
       method: "GET",
@@ -3018,7 +3019,7 @@ const ApiUtils = {
     });
   },
 
-  updateTier: function(token, form) {
+  updateTier: function (token, form) {
     let url = "/admin/update-tier-list";
     return fetch(API_URL + url, {
       method: "POST",
@@ -3030,7 +3031,7 @@ const ApiUtils = {
     });
   },
 
-  getAllTierRequests: function(token,tier="1",sortCol="",sortOrder="",limit=10,page=1, id, status=1,searchData="",type="") {
+  getAllTierRequests: function (token, tier = "1", sortCol = "", sortOrder = "", limit = 10, page = 1, id, status = 1, searchData = "", type = "") {
     let url = `/admin/user-tier-request?step=${tier}&limit=${limit}&page=${page}&status=${status}&data=${searchData}&type=${type}`;
     return fetch(API_URL + url, {
       method: "GET",
@@ -3041,7 +3042,7 @@ const ApiUtils = {
     });
   },
 
-  uploadBatchDoc: function(token, form) {
+  uploadBatchDoc: function (token, form) {
     let url = "/admin/batches/upload";
     return fetch(API_URL + url, {
       method: "POST",
@@ -3052,7 +3053,7 @@ const ApiUtils = {
     });
   },
 
-  downloadBatch: function(token, form) {
+  downloadBatch: function (token, form) {
     let url = "/admin/batches/download";
     return fetch(API_URL + url, {
       method: "POST",
@@ -3063,7 +3064,7 @@ const ApiUtils = {
     });
   },
 
-  getUserWallets: function(token, user_id) {
+  getUserWallets: function (token, user_id) {
     return fetch(
       API_URL + "/admin/get-user-wallet-addresses?user_id=" + user_id,
       {
@@ -3076,7 +3077,7 @@ const ApiUtils = {
     );
   },
 
-  getSimplexToken: function(token) {
+  getSimplexToken: function (token) {
     return fetch(API_URL + "/get-token-value", {
       method: "GET",
       headers: {
@@ -3086,7 +3087,7 @@ const ApiUtils = {
     });
   },
 
-  updateSimplexToken: function(token, form) {
+  updateSimplexToken: function (token, form) {
     let url = "/update-token-value";
     return fetch(API_URL + url, {
       method: "PUT",
@@ -3097,7 +3098,7 @@ const ApiUtils = {
     });
   },
 
-  getNetworkFee: function(token, sorterCol, sortOrder) {
+  getNetworkFee: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-coin-fees-coin";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -3115,7 +3116,7 @@ const ApiUtils = {
       }
     });
   },
-  updateNetworkFee: function(token, body) {
+  updateNetworkFee: function (token, body) {
     const url = "/admin/update-fees-value";
     return fetch(API_URL + url, {
       method: "PUT",
@@ -3125,7 +3126,7 @@ const ApiUtils = {
       body: JSON.stringify(body)
     });
   },
-  getRolePermissions: function(token, roleId = "") {
+  getRolePermissions: function (token, roleId = "") {
     const url = "/admin/get-role-permission";
     return fetch(`${API_URL}${url}?role_id=${roleId}`, {
       method: "GET",
@@ -3134,7 +3135,13 @@ const ApiUtils = {
       }
     });
   },
-  updatePermissions: function(token, form) {
+  getPairList: function () {
+    const url = "/users/get-all-pair";
+    return fetch(`${API_URL}${url}`, {
+      method: "GET",
+    });
+  },
+  updatePermissions: function (token, form) {
     let url = "/admin/update-role-permission";
     return fetch(API_URL + url, {
       method: "POST",
@@ -3145,13 +3152,13 @@ const ApiUtils = {
     });
   },
   // Offer Module API's
-  offers: function(token) {
+  offers: function (token) {
     return {
       url: "/admin/campaigns/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getCampaignList: function(
+      getCampaignList: function (
         page,
         limit,
         searchData = "",
@@ -3176,7 +3183,7 @@ const ApiUtils = {
           body: formData
         });
       },
-      changeStatus: function(id, status = false) {
+      changeStatus: function (id, status = false) {
         let formData = new FormData();
         formData.append("status", status);
         return fetch(`${API_URL}${this.url}change-status?id=${id}`, {
@@ -3185,7 +3192,7 @@ const ApiUtils = {
           body: formData
         });
       },
-      updateCampaign: function(id, data) {
+      updateCampaign: function (id, data) {
         return fetch(`${API_URL}${this.url}update?id=${id}`, {
           method: "PUT",
           headers: this.headers,
@@ -3193,13 +3200,13 @@ const ApiUtils = {
         });
       },
       // get campaign details api
-      getById: function(campaign_id) {
+      getById: function (campaign_id) {
         return fetch(API_URL + "/admin/campaigns/get?id=" + campaign_id, {
           method: "GET",
           headers: this.headers
         });
       },
-      checkOfferCode: function(offerCode = "") {
+      checkOfferCode: function (offerCode = "") {
         return fetch(
           `${API_URL}${this.url}verify-offercode?code=${offerCode}`,
           {
@@ -3208,7 +3215,7 @@ const ApiUtils = {
           }
         );
       },
-      getOfferCodeHistory: function(
+      getOfferCodeHistory: function (
         offerId,
         page,
         limit,
@@ -3228,121 +3235,121 @@ const ApiUtils = {
       }
     };
   },
-  metabase: function(token) {
+  metabase: function (token) {
     return {
       url: "/admin/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getAccountClassMetabase: function() {
+      getAccountClassMetabase: function () {
         return fetch(`${API_URL}${this.url}get-account-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getWithdrawRequest: function() {
+      getWithdrawRequest: function () {
         return fetch(`${API_URL}${this.url}get-withdraw-request-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getUsersRequest: function() {
+      getUsersRequest: function () {
         return fetch(`${API_URL}${this.url}get-users-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getTwoFactorRequest: function() {
+      getTwoFactorRequest: function () {
         return fetch(`${API_URL}${this.url}get-two-factor-request-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getTransactionHistory: function() {
+      getTransactionHistory: function () {
         return fetch(`${API_URL}${this.url}get-transaction-history-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getRolesRequest: function() {
+      getRolesRequest: function () {
         return fetch(`${API_URL}${this.url}get-roles-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getPairsRequest: function() {
+      getPairsRequest: function () {
         return fetch(`${API_URL}${this.url}get-pairs-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getOffersRequest: function() {
+      getOffersRequest: function () {
         return fetch(`${API_URL}${this.url}get-offers-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getNewsRequest: function() {
+      getNewsRequest: function () {
         return fetch(`${API_URL}${this.url}get-news-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getDashboardRequest: function() {
+      getDashboardRequest: function () {
         return fetch(`${API_URL}${this.url}get-dashboard-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getKYCRequest: function() {
+      getKYCRequest: function () {
         return fetch(`${API_URL}${this.url}get-kyc-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getReferralMetabaseUrl: function() {
+      getReferralMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-referral-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getAssetsMetabaseUrl: function() {
+      getAssetsMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-assets-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getBatchMetabaseUrl: function() {
+      getBatchMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-batch-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getCareerMetabaseUrl: function() {
+      getCareerMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-career-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getCountryMetabaseUrl: function() {
+      getCountryMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-country-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getEmployeeMetabaseUrl: function() {
+      getEmployeeMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-employee-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getFeesMetabaseUrl: function() {
+      getFeesMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-fees-report`, {
           method: "GET",
           headers: this.headers
         });
       },
-      getHistoryMetabaseUrl: function() {
+      getHistoryMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-history-report`, {
           method: "GET",
           headers: this.headers
@@ -3350,13 +3357,13 @@ const ApiUtils = {
       }
     };
   },
-  walletDashboard: function(token) {
+  walletDashboard: function (token) {
     return {
       url: "/admin/",
       headers: {
         Authorization: "Bearer " + token
       },
-      getWalletDetailByName: function(
+      getWalletDetailByName: function (
         coin = "",
         page,
         limit,
@@ -3366,27 +3373,27 @@ const ApiUtils = {
         start_date = null,
         end_date = null,
         walletType = 1,
-        transaction_type=""
+        transaction_type = ""
       ) {
         return fetch(
           `${API_URL}${
-            this.url
-          }get-wallet-dashboard?${walletType==5?'coin':'coin_code'}=${coin.toLowerCase()}&wallet_type=${walletType}${
-            sortCol ? "&sort_col=" + sortCol : ""
+          this.url
+          }get-wallet-dashboard?${walletType == 5 ? 'coin' : 'coin_code'}=${coin.toLowerCase()}&wallet_type=${walletType}${
+          sortCol ? "&sort_col=" + sortCol : ""
           }${
-            sortOrder ? "&sort_order=" + sortOrder : ""
+          sortOrder ? "&sort_order=" + sortOrder : ""
           }&page=${page}&limit=${limit}${
-            searchData ? "&data=" + encodeURIComponent(searchData) : ""
+          searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
-            end_date ? "&end_date=" + end_date : ""
-          }${transaction_type?"&t_type="+transaction_type:""}`,
+          end_date ? "&end_date=" + end_date : ""
+          }${transaction_type ? "&t_type=" + transaction_type : ""}`,
           {
             method: "GET",
             headers: this.headers
           }
         );
       },
-      getFaldaxMainWalletDetails: function(
+      getFaldaxMainWalletDetails: function (
         coin = "",
         page,
         limit,
@@ -3396,30 +3403,30 @@ const ApiUtils = {
         start_date = null,
         end_date = null,
         walletType = 1,
-        transaction_type=""
+        transaction_type = ""
       ) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-bussiness-wallet-data?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${
-            sortCol ? "&sort_col=" + sortCol : ""
+          sortCol ? "&sort_col=" + sortCol : ""
           }${
-            sortOrder ? "&sort_order=" + sortOrder : ""
+          sortOrder ? "&sort_order=" + sortOrder : ""
           }&page=${page}&limit=${limit}${
-            searchData ? "&data=" + encodeURIComponent(searchData) : ""
+          searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
-            end_date ? "&end_date=" + end_date : ""
-          }${transaction_type?"&wallet_type="+transaction_type:""}`,
+          end_date ? "&end_date=" + end_date : ""
+          }${transaction_type ? "&wallet_type=" + transaction_type : ""}`,
           {
             method: "GET",
             headers: this.headers
           }
         );
       },
-      getWalletWarnDashboard: function(search = "") {
+      getWalletWarnDashboard: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-warm-wallet-data${
-            search ? "?search=" + search : ""
+          search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
@@ -3427,10 +3434,10 @@ const ApiUtils = {
           }
         );
       },
-      getHotSendWallet: function(search = "") {
+      getHotSendWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotsend-wallet-data${
-            search ? "?search=" + search : ""
+          search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
@@ -3438,10 +3445,10 @@ const ApiUtils = {
           }
         );
       },
-      getHotReceiveWallet: function(search = "") {
+      getHotReceiveWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotreceive-wallet-data${
-            search ? "?search=" + search : ""
+          search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
@@ -3449,10 +3456,10 @@ const ApiUtils = {
           }
         );
       },
-      getWalletColdDashboard: function(searchData) {
+      getWalletColdDashboard: function (searchData) {
         return fetch(
           `${API_URL}${this.url}get-cold-wallet-data${
-            searchData ? "?search=" + searchData : ""
+          searchData ? "?search=" + searchData : ""
           }`,
           {
             method: "GET",
@@ -3460,12 +3467,12 @@ const ApiUtils = {
           }
         );
       },
-      getWarmWalletDetail: function(coin_code, search) {
+      getWarmWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-warm-wallet-transaction?coin_code=${coin_code}${
-            search ? "&searchLabel=" + search : ""
+          search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
@@ -3473,12 +3480,12 @@ const ApiUtils = {
           }
         );
       },
-      getCustodialWalletDetail: function(coin_code, search) {
+      getCustodialWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-cold-wallet-transaction?coin_code=${coin_code}${
-            search ? "&searchLabel=" + search : ""
+          search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
@@ -3486,12 +3493,12 @@ const ApiUtils = {
           }
         );
       },
-      getHotReceiveWalletDetails: function(coin_code, search) {
+      getHotReceiveWalletDetails: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-hotreceive-wallet-transaction?coin_code=${coin_code}${
-            search ? "&searchLabel=" + search : ""
+          search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
@@ -3501,12 +3508,12 @@ const ApiUtils = {
       }
     };
   },
-  getHotSendWalletDetails: function(coin_code, search) {
+  getHotSendWalletDetails: function (coin_code, search) {
     return fetch(
       `${API_URL}${
-        this.url
+      this.url
       }get-hotsend-wallet-transaction?coin_code=${coin_code}${
-        search ? "&searchLabel=" + search : ""
+      search ? "&searchLabel=" + search : ""
       }`,
       {
         method: "GET",
@@ -3514,7 +3521,7 @@ const ApiUtils = {
       }
     );
   },
-  getPolicyUrl: function(token) {
+  getPolicyUrl: function (token) {
     return fetch(`${API_URL}/admin/get-static-page-links`, {
       method: "GET",
       headers: {
@@ -3522,7 +3529,7 @@ const ApiUtils = {
       }
     });
   },
-  setPolicyDocs: function(token, formData) {
+  setPolicyDocs: function (token, formData) {
     return fetch(`${API_URL}/admin/update-static-page-pdf`, {
       method: "POST",
       headers: {
@@ -3532,7 +3539,7 @@ const ApiUtils = {
       body: formData
     });
   },
-  getAssetFeesAndLimits: function(token) {
+  getAssetFeesAndLimits: function (token) {
     return fetch(`${API_URL}/admin/list-asset-fees-limits`, {
       method: "GET",
       headers: {
@@ -3540,7 +3547,7 @@ const ApiUtils = {
       }
     });
   },
-  editAssetFeesAndLimits: function(token, form) {
+  editAssetFeesAndLimits: function (token, form) {
     return fetch(API_URL + "/admin/update-asset-fees-limits", {
       method: "PUT",
       headers: {
@@ -3551,7 +3558,7 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-  sendResetPasswordLink: function(token, form) {
+  sendResetPasswordLink: function (token, form) {
     return fetch(API_URL + "/admin/forgot-user-password", {
       method: "post",
       headers: {
@@ -3562,8 +3569,8 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-  getResidualTransactions: function(token,page=1,limit=50,data="",startDate="",endDate="",txType="") {
-    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}${data?"&data="+data:""}${txType?"&t_type="+txType:""}${startDate?"&start_date="+startDate:""}${endDate?"&end_date="+endDate:""}`, {
+  getResidualTransactions: function (token, page = 1, limit = 50, data = "", startDate = "", endDate = "", txType = "") {
+    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}${data ? "&data=" + data : ""}${txType ? "&t_type=" + txType : ""}${startDate ? "&start_date=" + startDate : ""}${endDate ? "&end_date=" + endDate : ""}`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
@@ -3572,7 +3579,7 @@ const ApiUtils = {
       },
     });
   },
-  getWalletNetworkFee: function(token, form) {
+  getWalletNetworkFee: function (token, form) {
     return fetch(API_URL + "/admin/wallet/get-network-fee", {
       method: "post",
       headers: {
@@ -3583,8 +3590,8 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-  getAvailableBalance:function(token,asset="tbtc"){
-    return fetch(API_URL+`/admin/get-admin-available-balance?coin=${asset}`, {
+  getAvailableBalance: function (token, asset = "tbtc") {
+    return fetch(API_URL + `/admin/get-admin-available-balance?coin=${asset}`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,
@@ -3593,8 +3600,8 @@ const ApiUtils = {
       }
     })
   },
-  getAvailableWarmBalance:function(token,asset="tbtc"){
-    return fetch(API_URL+`/admin/get-warm-available-balance?coin=${asset}`, {
+  getAvailableWarmBalance: function (token, asset = "tbtc") {
+    return fetch(API_URL + `/admin/get-warm-available-balance?coin=${asset}`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,
@@ -3603,12 +3610,12 @@ const ApiUtils = {
       }
     })
   },
-  getFaldaxMainWallet:function(token,search=""){
-    let url="/admin-business-wallet-details";
-      if (search) {
+  getFaldaxMainWallet: function (token, search = "") {
+    let url = "/admin-business-wallet-details";
+    if (search) {
       url += "?search=" + search;
     }
-    return fetch(API_URL+url, {
+    return fetch(API_URL + url, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,
@@ -3617,8 +3624,8 @@ const ApiUtils = {
       }
     })
   },
-  getPanicBtnHistory:function(token,searchData="",startDate="",endDate="",sortCol="",sortOrder="",page=1,limit=50){
-    let url=`${API_URL}/admin/get-panic-history?page=${page}${sortOrder?'&sort_order='+sortOrder:""}${startDate?'&start_date='+startDate:""}${endDate?'&end_date='+endDate:""}${searchData?'&data='+searchData:""}${sortCol?'&sort_col='+sortCol:""}&limit=${limit}`
+  getPanicBtnHistory: function (token, searchData = "", startDate = "", endDate = "", sortCol = "", sortOrder = "", page = 1, limit = 50) {
+    let url = `${API_URL}/admin/get-panic-history?page=${page}${sortOrder ? '&sort_order=' + sortOrder : ""}${startDate ? '&start_date=' + startDate : ""}${endDate ? '&end_date=' + endDate : ""}${searchData ? '&data=' + searchData : ""}${sortCol ? '&sort_col=' + sortCol : ""}&limit=${limit}`
     return fetch(url, {
       method: "get",
       headers: {
@@ -3628,8 +3635,8 @@ const ApiUtils = {
       }
     })
   },
-  approveRejectRequest:function(token,tier,id,status,user_id){
-    let url=`${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&user_id=${user_id}`
+  approveRejectRequest: function (token, tier, id, status, user_id) {
+    let url = `${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&user_id=${user_id}`
     return fetch(url, {
       method: "get",
       headers: {
@@ -3639,18 +3646,18 @@ const ApiUtils = {
       }
     })
   },
-  uploadDoc:function(token,formData){
-    let url=`${API_URL}/admin/upload-user-documents`
+  uploadDoc: function (token, formData) {
+    let url = `${API_URL}/admin/upload-user-documents`
     return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
       },
-      body:formData
+      body: formData
     })
   },
-  getTierDocuments:function(token){
-    let url=`${API_URL}/admin/get-tier-pdf`
+  getTierDocuments: function (token) {
+    let url = `${API_URL}/admin/get-tier-pdf`
     return fetch(url, {
       method: "get",
       headers: {
@@ -3660,7 +3667,7 @@ const ApiUtils = {
       }
     })
   },
-  setTierDocument: function(token, formData) {
+  setTierDocument: function (token, formData) {
     return fetch(`${API_URL}/admin/upload-tier-pdf`, {
       method: "POST",
       headers: {
@@ -3668,6 +3675,16 @@ const ApiUtils = {
         // "Content-Type": 'multipart/form-data',
       },
       body: formData
+    });
+  },
+  executeTrade: function (url, token, formData) {
+    return fetch(`${SOCKET_HOST}${url}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
     });
   },
 };

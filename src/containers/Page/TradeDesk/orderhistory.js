@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
+import moment from "moment";
 
 const { logout } = authAction;
 // var self;
@@ -24,12 +25,34 @@ class OrderHistory extends Component {
       errMsg: false,
       errType: "Success",
       loader: false,
+      data: []
     };
     // self = this;
   }
 
-  componentDidMount = () => {};
-
+  componentDidMount = () => {
+    this.props.io.on("trade-history-data", data => {
+      // console.log("^^^^data", data);
+      this.updateData(data);
+    });
+  };
+  updateData = (data) => {
+    const rows = [];
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+      var date = moment.utc(element.created_at)
+        .local()
+        .format("DD/MM/YYYY, H:m:s");
+      rows.push({
+        side: element.side,
+        amount: Number(element.quantity).toFixed(8),
+        fill_price: Number(element.fill_price).toFixed(8),
+        time: date,
+        total: Number(element.quantity * element.fill_price).toFixed(8)
+      });
+    }
+    this.setState({ data: rows })
+  }
   openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
@@ -76,18 +99,7 @@ class OrderHistory extends Component {
         key: "total",
       },
     ];
-    const data = [];
-    for (let index = 0; index < 100; index++) {
-      data.push({
-        key: index,
-        side: "Buy",
-        amount: 0.001,
-        price: 0.000456,
-        placed_by: "Bot",
-        time: "17/04/2020, 11:39:30",
-        total: "2.5000",
-      });
-    }
+
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -101,7 +113,7 @@ class OrderHistory extends Component {
         </TradeHeadRow>
         <TradeTable
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.data}
           pagination={false}
           scroll={{ y: 200 }}
         />

@@ -14,12 +14,32 @@ class BuyBook extends Component {
       errMsg: false,
       errType: "Success",
       loader: false,
+      data: []
     };
     // self = this;
   }
 
-  componentDidMount = () => {};
-
+  componentDidMount = () => {
+    this.props.io.on("buy-book-data", (data) => {
+      this.updateData(data)
+    })
+  };
+  updateData = (data) => {
+    const row = [];
+    let sum = 0;
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      sum += element.quantity * element.price;
+      row.push({
+        amount: Number(element.quantity).toFixed(8),
+        bid: Number(element.price).toFixed(8),
+        total: Number(sum).toFixed(8)
+      });
+    }
+    this.setState({
+      data: row
+    })
+  }
   hideLoader() {
     this.setState({ loader: false });
   }
@@ -48,33 +68,25 @@ class BuyBook extends Component {
       },
     ];
 
-    const data = [];
-    for (let index = 0; index < 100; index++) {
-      data.push({
-        key: index,
-        amount: "1.00",
-        bid: "0.005",
-        total: "2.5000",
-      });
-    }
+
 
     return (
       <>
-        <Card>
+        <Card className="lessPaddingCard">
           <TradeHeadRow type="flex" justify="space-between">
             <Col span={12}>
-              <label>Buying XRP</label>
+              <label>Buying {this.props.crypto}</label>
             </Col>
             <Col className="text-right" span={12}>
               <span>
                 <b>Total: </b>
               </span>
-              <span>0 BTC</span>
+              <span>{this.state.data.length ? Number(this.state.data[this.state.data.length - 1].total).toFixed(8) : 0} {this.props.crypto}</span>
             </Col>
           </TradeHeadRow>
           <TradeTable
             columns={columns}
-            dataSource={data}
+            dataSource={this.state.data}
             pagination={false}
             bordered={false}
             scroll={{ y: 600 }}

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
+import moment from "moment";
 
 const { logout } = authAction;
 // var self;
@@ -18,7 +19,7 @@ class CompletedOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -46,28 +47,27 @@ class CompletedOrders extends Component {
       },
       {
         title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
-      },
-      {
-        title: "Price",
-        dataIndex: "price",
-        key: "price",
+        dataIndex: "quantity",
+        key: "quantity",
+        render: (text, record) => (`${Number(text).toFixed(8)} ${record.settle_currency}`)
       },
       {
         title: "Fill Price",
         dataIndex: "fill_price",
         key: "fill_price",
+        render: (text, record) => (`${Number(text).toFixed(8)} ${record.currency}`)
       },
       {
         title: "Unfilled",
         dataIndex: "unfilled",
         key: "unfilled",
+        render: (text, record) => (`${Number(record.fix_quantity - record.quantity).toFixed(8)}`)
       },
       {
         title: "Time",
         dataIndex: "time",
         key: "time",
+        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`)
       },
       {
         title: "Placed By",
@@ -78,17 +78,9 @@ class CompletedOrders extends Component {
         title: "Total",
         dataIndex: "total",
         key: "total",
+        render: (text, record) => (`${Number(record.quantity * record.fill_price).toFixed(8)}`)
       },
     ];
-    const data = [];
-    for (let index = 0; index < 100; index++) {
-      data.push({
-        key: index,
-        amount: "1.00",
-        bid: "0.005",
-        total: "2.5000",
-      });
-    }
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -96,7 +88,7 @@ class CompletedOrders extends Component {
     return (
       <TradeTable
         columns={columns}
-        dataSource={data}
+        dataSource={this.props.data}
         pagination={false}
         scroll={{ y: 200 }}
       />

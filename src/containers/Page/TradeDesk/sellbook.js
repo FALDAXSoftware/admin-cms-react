@@ -14,12 +14,32 @@ class SellBook extends Component {
       errMsg: false,
       errType: "Success",
       loader: false,
+      data: []
     };
     // self = this;
   }
 
-  componentDidMount = () => {};
-
+  componentDidMount = () => {
+    this.props.io.on("sell-book-data", (data) => {
+      this.updateData(data);
+    });
+  };
+  updateData = (data) => {
+    const row = [];
+    let sum = 0;
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      sum += element.quantity * element.price;
+      row.push({
+        amount: Number(element.quantity).toFixed(8),
+        ask: Number(element.price).toFixed(8),
+        total: Number(sum).toFixed(8)
+      });
+    }
+    this.setState({
+      data: row
+    })
+  }
   openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
@@ -55,36 +75,27 @@ class SellBook extends Component {
         key: "total",
       },
     ];
-    const data = [];
-    for (let index = 0; index < 100; index++) {
-      data.push({
-        key: index,
-        amount: "1.00",
-        bid: "0.005",
-        total: "2.5000",
-      });
-    }
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     return (
       <>
-        <Card>
+        <Card className="lessPaddingCard">
           <TradeHeadRow type="flex" justify="space-between">
             <Col span={12}>
-              <label>Selling XRP</label>
+              <label>Selling {this.props.crypto}</label>
             </Col>
             <Col className="text-right" span={12}>
               <span>
                 <b>Total: </b>
               </span>
-              <span>0 BTC</span>
+              <span>{this.state.data.length ? Number(this.state.data[this.state.data.length - 1].total).toFixed(8) : 0} {this.props.currency}</span>
             </Col>
           </TradeHeadRow>
           <TradeTable
             columns={columns}
-            dataSource={data}
+            dataSource={this.state.data}
             pagination={false}
             scroll={{ y: 600 }}
           />

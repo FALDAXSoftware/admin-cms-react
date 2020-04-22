@@ -231,9 +231,9 @@ const routes = [
     module: "network_fee",
   },
   {
-    path: "tradedesk",
+    path: "tradedesk/:pair",
     component: asyncComponent(() => import("../Page/TradeDesk/tradedesk")),
-    module: "tradedesk",
+    module: "trade_desk_management",
   },
   {
     path: "trade-monitoring",

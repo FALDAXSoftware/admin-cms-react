@@ -898,3 +898,7 @@ html[dir='rtl'] .dz-hidden-input {
 .custom-tr-width{
   padding-left: 50px;
 }
+
+.lessPaddingCard .ant-card-body{
+  padding: 24px 10px;
+}
