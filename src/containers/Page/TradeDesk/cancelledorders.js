@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
+import moment from "moment";
 
 const { logout } = authAction;
 // var self;
@@ -18,7 +19,7 @@ class CancelledOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -46,28 +47,21 @@ class CancelledOrders extends Component {
       },
       {
         title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
+        dataIndex: "quantity",
+        key: "quantity",
+        render: (text, record) => (`${Number(text).toFixed(8)}`)
       },
       {
         title: "Price",
-        dataIndex: "price",
-        key: "price",
-      },
-      {
-        title: "Fill Price",
-        dataIndex: "fill_price",
-        key: "fill_price",
-      },
-      {
-        title: "Unfilled",
-        dataIndex: "unfilled",
-        key: "unfilled",
+        dataIndex: "limit_price",
+        key: "limit_price",
+        render: (text, record) => (`${Number(text).toFixed(8)}`)
       },
       {
         title: "Time",
         dataIndex: "time",
         key: "time",
+        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`)
       },
       {
         title: "Placed By",
@@ -78,25 +72,13 @@ class CancelledOrders extends Component {
         title: "Total",
         dataIndex: "total",
         key: "total",
+        render: (text, record) => (`${Number(record.quantity * record.limit_price).toFixed(8)}`)
       },
     ];
-    const data = [];
-    for (let index = 0; index < 100; index++) {
-      data.push({
-        key: index,
-        amount: "1.00",
-        bid: "0.005",
-        total: "2.5000",
-      });
-    }
-
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <TradeTable
         columns={columns}
-        dataSource={data}
+        dataSource={this.props.data}
         pagination={false}
         scroll={{ y: 200 }}
       />

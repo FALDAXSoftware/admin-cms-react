@@ -38,7 +38,7 @@ class CompletedOrders extends Component {
   }
 
   render() {
-    const { errType, errMsg } = this.state;
+    // const { errType, errMsg } = this.state;
     const columns = [
       {
         title: "Side",
@@ -81,10 +81,9 @@ class CompletedOrders extends Component {
         render: (text, record) => (`${Number(record.quantity * record.fill_price).toFixed(8)}`)
       },
     ];
-
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
+    // if (errMsg) {
+    //   this.openNotificationWithIconError(errType.toLowerCase());
+    // }
     return (
       <TradeTable
         columns={columns}

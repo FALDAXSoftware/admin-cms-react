@@ -97,7 +97,8 @@ class SellBook extends Component {
             columns={columns}
             dataSource={this.state.data}
             pagination={false}
-            scroll={{ y: 600 }}
+            scroll={{ y: 497 }}
+            className="bookTable"
           />
         </Card>
       </>

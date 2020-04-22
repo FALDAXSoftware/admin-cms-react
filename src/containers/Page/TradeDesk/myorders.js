@@ -17,13 +17,14 @@ class MyOrders extends Component {
     }
     componentDidMount() {
         this.props.io.on("users-completed-flag", (data) => {
-            this.orderSocket(this.state.timePeriod, this.state.status);
+            this.orderSocket(this.state.time, this.state.status);
         });
         this.props.io.on("users-all-trade-data", (data) => {
             console.log("-----------", data);
 
             this.updateMyOrder(data)
         });
+        this.orderSocket(this.state.time, this.state.status);
     }
     orderSocket = (month, filter_type) => {
         this.props.io.emit("trade_users_history_event", {
@@ -33,8 +34,7 @@ class MyOrders extends Component {
         });
     }
     statusChange = (key) => {
-
-        this.setState({ status: key });
+        this.setState({ status: key, orderTradeData: [] });
         this.orderSocket(this.state.time, key);
     }
     updateMyOrder = (response) => {

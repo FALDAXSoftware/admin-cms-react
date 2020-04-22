@@ -169,7 +169,6 @@ class TradeAction extends Component {
           message: "Error",
           description: responseData.message,
         })
-
       } else {
         notification.error({
           message: "Error",

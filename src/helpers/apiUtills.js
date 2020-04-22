@@ -3687,5 +3687,15 @@ const ApiUtils = {
       body: JSON.stringify(formData)
     });
   },
+  cancleOrder: function (token, formData) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/cancel-pending-order`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+  },
 };
 export default ApiUtils;
