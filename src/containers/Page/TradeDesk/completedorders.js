@@ -81,15 +81,13 @@ class CompletedOrders extends Component {
         render: (text, record) => (`${Number(record.quantity * record.fill_price).toFixed(8)}`)
       },
     ];
-    // if (errMsg) {
-    //   this.openNotificationWithIconError(errType.toLowerCase());
-    // }
     return (
       <TradeTable
         columns={columns}
         dataSource={this.props.data}
         pagination={false}
         scroll={{ y: 200 }}
+        loading={this.props.loading}
       />
     );
   }

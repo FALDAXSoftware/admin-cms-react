@@ -51,26 +51,11 @@ class OrderHistory extends Component {
         total: Number(element.quantity * element.fill_price).toFixed(8)
       });
     }
-    this.setState({ data: rows })
-  }
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
-    });
-    this.setState({ errMsg: false });
-  };
-
-  hideLoader() {
-    this.setState({ loader: false });
+    this.setState({ data: rows }, () => { this.props.onLoadComplete() })
   }
 
-  showLoader() {
-    this.setState({ loader: true });
-  }
 
   render() {
-    const { errType, errMsg } = this.state;
     const columns = [
       {
         title: "Side",
@@ -101,9 +86,6 @@ class OrderHistory extends Component {
     ];
 
 
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <Card>
         <TradeHeadRow type="flex" justify="space-between">
@@ -116,6 +98,7 @@ class OrderHistory extends Component {
           dataSource={this.state.data}
           pagination={false}
           scroll={{ y: 200 }}
+          loading={this.props.loading}
         />
       </Card>
     );

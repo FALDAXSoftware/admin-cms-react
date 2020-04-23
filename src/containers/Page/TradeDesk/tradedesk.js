@@ -31,7 +31,11 @@ class TradeDesk extends Component {
       loader: false,
       crypto: "",
       currency: "",
-      pair: ""
+      pair: "",
+      buyBookLoader: true,
+      sellBookLoader: true,
+      myOrderLoader: true,
+      orderHistoryLoader: true
     };
     // alert(this.props.token)
     this.io = io(SOCKET_HOST, {
@@ -76,6 +80,12 @@ class TradeDesk extends Component {
     }
   }
   joinRoom = (prevRoom = null) => {
+    this.setState({
+      buyBookLoader: true,
+      sellBookLoader: true,
+      myOrderLoader: true,
+      orderHistoryLoader: true
+    })
     this.io.emit("join", { room: this.state.crypto + "-" + this.state.currency, previous_room: prevRoom })
   }
   openNotificationWithIconError = (type) => {
@@ -120,7 +130,13 @@ class TradeDesk extends Component {
                 <Col span={8}>
                   <Row>
                     <Col>
-                      <BuyBook crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                      <BuyBook
+                        crypto={this.state.crypto}
+                        currency={this.state.currency}
+                        pair={this.state.pair}
+                        io={this.io}
+                        loading={this.state.buyBookLoader}
+                        onLoadComplete={() => { this.setState({ buyBookLoader: false }) }} />
                     </Col>
                   </Row>
 
@@ -128,19 +144,38 @@ class TradeDesk extends Component {
                 <Col span={8}>
                   <Row>
                     <Col>
-                      <SellBook crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                      <SellBook
+                        crypto={this.state.crypto}
+                        currency={this.state.currency}
+                        pair={this.state.pair}
+                        io={this.io}
+                        loading={this.state.sellBookLoader}
+                        onLoadComplete={() => { this.setState({ sellBookLoader: false }) }} />
                     </Col>
                   </Row>
                 </Col>
               </TradeRow>
               <Row>
                 <Col span={24}>
-                  <OrderHistory crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                  <OrderHistory
+                    crypto={this.state.crypto}
+                    currency={this.state.currency}
+                    pair={this.state.pair}
+                    io={this.io}
+                    loading={this.state.orderHistoryLoader}
+                    onLoadComplete={() => { this.setState({ orderHistoryLoader: false }) }} />
                 </Col>
               </Row>
               <Row>
                 <Col span={24}>
-                  <MyOrders crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                  <MyOrders
+                    crypto={this.state.crypto}
+                    currency={this.state.currency}
+                    pair={this.state.pair}
+                    io={this.io}
+                    loading={this.state.myOrderLoader}
+                    onLoadComplete={() => { this.setState({ myOrderLoader: false }) }}
+                    enableLoader={() => { this.setState({ myOrderLoader: true }); }} />
                 </Col>
               </Row>
               <Row>

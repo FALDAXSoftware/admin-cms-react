@@ -33,21 +33,6 @@ class PendingOrders extends Component {
 
   componentDidMount = () => { };
 
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
-    });
-    this.setState({ errMsg: false });
-  };
-
-  hideLoader() {
-    this.setState({ loader: false });
-  }
-
-  showLoader() {
-    this.setState({ loader: true });
-  }
   onCancle = (id, side, type) => {
     ApiUtils.cancleOrder(this.props.token, { id: id, side: side, order_type: type, })
       .then((response) => response.json())
@@ -68,7 +53,6 @@ class PendingOrders extends Component {
   }
 
   render() {
-    const { errType, errMsg } = this.state;
     const columns = [
       {
         title: "Side",
@@ -117,15 +101,14 @@ class PendingOrders extends Component {
         render: (text, record) => <Icon type="close-circle" onClick={() => { this.onCancle(record.encript_id, record.side, record.order_type) }} />,
       },
     ];
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <TradeTable
         columns={columns}
         dataSource={this.props.data}
         pagination={false}
         scroll={{ y: 200 }}
+        loading={this.props.loading}
+
       />
     );
   }

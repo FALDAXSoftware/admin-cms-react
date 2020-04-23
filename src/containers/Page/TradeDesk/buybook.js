@@ -14,7 +14,7 @@ class BuyBook extends Component {
       errMsg: false,
       errType: "Success",
       loader: false,
-      data: []
+      data: [],
     };
     // self = this;
   }
@@ -38,7 +38,7 @@ class BuyBook extends Component {
     }
     this.setState({
       data: row
-    })
+    }, () => { this.props.onLoadComplete() })
   }
   hideLoader() {
     this.setState({ loader: false });
@@ -91,6 +91,7 @@ class BuyBook extends Component {
             bordered={false}
             scroll={{ y: 497 }}
             className="bookTable"
+            loading={this.props.loading}
           />
         </Card>
       </>

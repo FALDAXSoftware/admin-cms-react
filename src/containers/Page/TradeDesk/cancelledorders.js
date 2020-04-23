@@ -81,6 +81,7 @@ class CancelledOrders extends Component {
         dataSource={this.props.data}
         pagination={false}
         scroll={{ y: 200 }}
+        loading={this.props.loading}
       />
     );
   }

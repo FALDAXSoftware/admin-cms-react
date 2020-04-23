@@ -38,7 +38,7 @@ class SellBook extends Component {
     }
     this.setState({
       data: row
-    })
+    }, () => { this.props.onLoadComplete() })
   }
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -99,6 +99,7 @@ class SellBook extends Component {
             pagination={false}
             scroll={{ y: 497 }}
             className="bookTable"
+            loading={this.props.loading}
           />
         </Card>
       </>
