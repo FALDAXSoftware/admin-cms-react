@@ -630,7 +630,7 @@
   "sidebar.key": "Encrypt Key",
   "sidebar.terms": "Policy Documents",
   "sidebar.tier_docs": "Tier Documents",
-  "sidebar.account_tier":"Account Tier Management",
+  "sidebar.account_tier": "Account Tier Management",
   "summaryTableInfos.title.receive_address": "Address",
   "summaryTableInfos.title.balance": "Available Balance",
   "summaryTableInfos.title.coin_name": "Coin",
@@ -682,7 +682,7 @@
   "walletFaldaxDashboardTable.title.send_address": "Send Address",
   "walletFaldaxDashboardTable.title.total": "Total",
   "walletFaldaxDashboardTable.title.trade_total": "Trade",
-  "walletFaldaxDashboardTable.title.balance":"Balance",
+  "walletFaldaxDashboardTable.title.balance": "Balance",
   "walletFaldaxDashboardTable.title.total_earned_from_forfeit": "Forfeit",
   "walletFaldaxDashboardTable.title.total_earned_from_jst": "Crypto",
   "walletFaldaxDashboardTable.title.total_earned_from_wallets": "Wallets",
@@ -711,5 +711,6 @@
   "ReferralDetailsTable.title.amount": "Amount",
   "ReferralDetailsTable.title.email": "Email",
   "ReferralDetailsTable.title.txid": "Transaction Id",
-  "walletWarmDetailsTable.title.network_fee": "Network Fees"
+  "walletWarmDetailsTable.title.network_fee": "Network Fees",
+  "tradeTable.title.transaction_id": "Transaction Id"
 }
