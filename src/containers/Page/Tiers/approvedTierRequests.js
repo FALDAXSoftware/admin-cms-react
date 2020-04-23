@@ -370,7 +370,7 @@ class ApprovedRequests extends Component {
               pageSizeOptions={PAGE_SIZE_OPTIONS}
             />
              <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
-            <RejectNotesModal setVisible={(showRejectModel)=>this.setState({showRejectModel})} callback={(private_note,public_note)=>this.forceApproveRejectTierRequest(false,this.state.request_id,public_note,private_note)} visible={showRejectModel}></RejectNotesModal>
+            <RejectNotesModal setVisible={(showRejectModel)=>{this.setState({showRejectModel,private_note:"",public_note:""})}} callback={(private_note,public_note)=>{this.setState({private_note:"",public_note:""});this.forceApproveRejectTierRequest(false,this.state.request_id,public_note,private_note)}} visible={showRejectModel}></RejectNotesModal>
           </div>
         );
     }

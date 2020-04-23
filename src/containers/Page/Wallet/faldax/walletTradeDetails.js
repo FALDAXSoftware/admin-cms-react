@@ -38,6 +38,15 @@ const columns = [
     render: object => ToolTipsCell(object)
   },
   {
+    title: "Requested Email",
+    key: "requested_mail",
+    width: 250,
+    align: "left",
+    sorter: true,
+    dataIndex: "requested_email",
+    render: object => ToolTipsCell(object)
+  },
+  {
     title: <IntlMessages id="tradeTable.title.symbol" />,
     key: "symbol",
     width: 100,
@@ -61,6 +70,14 @@ const columns = [
         />&nbsp;{data}
       </span>
     )
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.transaction_id" />,
+    key: "transaction_id1",
+    width: 350,
+    sorter: true,
+    align: "left",
+    dataIndex: "transaction_id"
   },
   {
     title: <IntlMessages id="tradeTable.title.order_id" />,

@@ -9,7 +9,6 @@ import Loader from '../faldaxLoader';
 import SimpleReactValidator from 'simple-react-validator';
 import ApiUtils from '../../../helpers/apiUtills';
 import { isAllowed } from '../../../helpers/accessControl';
-import { BreadcrumbComponent } from '../../Shared/breadcrumb';
 
 class TierDocument extends Component {
    constructor(props){
@@ -19,32 +18,24 @@ class TierDocument extends Component {
    }
 
    componentDidMount(){
-       this.getDocsUrl();
+       let data=this.props.data,fields={};
+        data.map((ele)=>{
+            this[ele.slug]=new SimpleReactValidator()
+            fields[ele.slug]="";
+            return ele;
+        })
+        this.setState({tierDocsUrlList:data,fields})
    }
 
-   async getDocsUrl(){
-       try{
-            this.loader.show();
-            let {token,logout}=this.props;
-            let res=await(await ApiUtils.getTierDocuments(token)).json();
-            let {status,data}=res,fields={};
-            if(status==200){
-                data.map((ele)=>{
-                    this[ele.slug]=new SimpleReactValidator()
-                    fields[ele.slug]="";
-                    return ele;
-                })
-                this.setState({tierDocsUrlList:data,fields})
-            }else if(status==400 || status==403){
-                this.showNotification("error",res.err)
-                logout();
-            }else{
-                this.showNotification("error",res.message)
-            }
-       }catch(error){
-           console.error(error);
-       }finally{
-           this.loader.hide();
+   componentWillReceiveProps(newProps){
+       if(this.props.data!==newProps.data){
+           let data=newProps.data,fields={};
+        data.map((ele)=>{
+            this[ele.slug]=new SimpleReactValidator()
+            fields[ele.slug]="";
+            return ele;
+        })
+        this.setState({tierDocsUrlList:data,fields})
        }
    }
 
@@ -103,9 +94,6 @@ class TierDocument extends Component {
     render() { 
         let {loader,fields,tierDocsUrlList}=this.state;
         return (<>
-            <LayoutWrapper>
-                {/* <BackButton {...this.props}/> */}
-                <BreadcrumbComponent {...this.props} />
                 <TableDemoStyle className="full-width">
                     <div>
                        { tierDocsUrlList.map((ele,index)=>{
@@ -122,7 +110,6 @@ class TierDocument extends Component {
                     }
                     </div>
                 </TableDemoStyle>
-            </LayoutWrapper>
             {loader && <Loader/>}
         </>);
     }

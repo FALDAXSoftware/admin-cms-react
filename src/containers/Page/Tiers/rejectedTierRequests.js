@@ -223,41 +223,6 @@ class RejectedRequests extends Component {
     this.setState({ errMsg: false });
   };
 
-  formateTradeRequest(data){
-    let tradeData=[];
-    for(let i of data){
-      // let index=data.indexOf(i);
-      if(tradeData.length==0){
-        tradeData.push({
-          email:i["email"],
-          name:i["first_name"]+" "+i["last_name"],
-          data:[i]
-
-        })
-      }else{
-        let found=false;
-        for(let i2 of tradeData){
-          let index=tradeData.indexOf(i2);
-          let tradeIndex=tradeData.findIndex(ele=>ele["email"]==i["email"]);
-          if(tradeIndex!=-1){
-            tradeData[tradeIndex]["data"].push(i);
-            found=true;
-            break
-          }
-        }
-        if(!found){
-          tradeData.push({
-            email:i["email"],
-            name:i["first_name"]+" "+i["last_name"],
-            data:[i]
-
-          })
-        }
-      }
-    }
-    return tradeData;
-  }
-
   onSubmit = async () => {
     try {
       this.setState({ loader: true });
@@ -532,7 +497,7 @@ class RejectedRequests extends Component {
           onShowSizeChange={this.changePaginationSize}
           pageSizeOptions={PAGE_SIZE_OPTIONS}
         />
-        <RejectNotesModal setVisible={(showRejectModel)=>this.setState({showRejectModel})} callback={(private_note,public_note)=>this.forceApproveRejectTierRequest("truefalse",this.state.request_id,public_note,private_note)} visible={showRejectModel}></RejectNotesModal>
+        <RejectNotesModal setVisible={(showRejectModel)=>this.setState({showRejectModel,private_note:"",public_note:""})} callback={(private_note,public_note)=>{this.setState({private_note:"",public_note:""});this.forceApproveRejectTierRequest("truefalse",this.state.request_id,public_note,private_note)}} visible={showRejectModel}></RejectNotesModal>
         <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
       </div>
     );

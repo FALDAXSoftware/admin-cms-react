@@ -13,6 +13,7 @@ import { exportTier } from '../../../helpers/exportToCsv/headers';
 import { PendingTierReqActionCell, getTierDoc, DateTimeCell } from '../../../components/tables/helperCells';
 import TextArea from 'antd/lib/input/TextArea';
 import ViewNotesModal from '../../Shared/viewNotesModal';
+import SimpleReactValidator from 'simple-react-validator';
 // import { PendingTierReqActionCell, getTierDoc } from '../../../components/tables/helperCells';
 const { logout } = authAction;
 // const {Option}=Select;
@@ -40,10 +41,11 @@ class PendingRequests extends Component {
       callbackFunction:PendingRequests.approvePendingReq,
       callbackParams:{},
       showNotesModal:false,
-      public_note:"",
-      private_note:""
+      public_note:undefined,
+      private_note:undefined
     };
     self = this;
+    this.validator = new SimpleReactValidator();
     columns = tierPendingReqTableInfos[0].columns.slice();
     columns.push({
       title: "Action",
@@ -89,7 +91,7 @@ class PendingRequests extends Component {
       let {showRejectNoteModal}=this.state;
       if(!showRejectNoteModal)
       {
-        this.setState({showRejectNoteModal:true,callbackFunction:this.forceApproveRejectTierRequest.bind(this),callbackParams:{id,status}});
+        this.setState({showRejectNoteModal:true,callbackFunction:this.forceApproveRejectTierRequest.bind(this),callbackParams:{id,status,isForce:true}});
         return false;
       }
       this.setState({ loader: true });
@@ -110,7 +112,9 @@ class PendingRequests extends Component {
             errMessage: response.message,
             errType: "success",
             loader: false,
-            showRejectNoteModal:false
+            showRejectNoteModal:false,
+            privateNote:"",
+            publicNote:""
           },
           () => this.getAllPendingRequest()
         );
@@ -217,12 +221,17 @@ class PendingRequests extends Component {
   };
 
   onRejectRequestSubmit=()=>{
-    if(this.state.callbackParams.first_name){
-      let {value,first_name,last_name,tier_step,is_approved,request_id}=this.state.callbackParams;
-      this.state.callbackFunction(value,first_name,last_name,tier_step,is_approved,request_id);
+    if(this.validator.allValid()){
+      if(!this.state.callbackParams.isForce){
+        let {value,first_name,last_name,tier_step,is_approved,request_id}=this.state.callbackParams;
+        this.state.callbackFunction(value,first_name,last_name,tier_step,is_approved,request_id);
+      }else{
+        let {id,status}=this.state.callbackParams;
+        this.state.callbackFunction(status,id); 
+      }
     }else{
-      let {id,status}=this.state.callbackParams;
-      this.state.callbackFunction(status,id); 
+      this.validator.showMessages();
+      this.forceUpdate();
     }
   }
 
@@ -235,7 +244,7 @@ class PendingRequests extends Component {
     request_id
   ) {
     if(!is_approved && !self.state.showRejectNoteModal){
-      self.setState({showRejectNoteModal:true,callbackParams:{value,first_name,last_name,tier_step,is_approved,request_id}});
+      self.setState({showRejectNoteModal:true,callbackParams:{value,first_name,last_name,tier_step,is_approved,request_id,isForce:false}});
       return
     }
     const { token } = self.props;
@@ -259,7 +268,9 @@ class PendingRequests extends Component {
           errMessage: res.message,
           errType: "Success",
           expandedRowKeys: [],
-          showRejectNoteModal:false
+          showRejectNoteModal:false,
+          privateNote:"",
+          publicNote:""
         });
         await self.getAllPendingRequest();
       } else if (res.status == 403) {
@@ -357,7 +368,8 @@ class PendingRequests extends Component {
     }
   }
   onCancel=()=>{
-    this.setState({showRejectNoteModal:false,rejectRequestData:undefined});
+    this.validator.hideMessages();
+    this.setState({showRejectNoteModal:false,rejectRequestData:undefined,privateNote:"",publicNote:""});
   }
   onChange=({target})=>{
     if(target.name=="private_note")
@@ -583,17 +595,27 @@ class PendingRequests extends Component {
           placeholder="Private Note"
           autoSize={{ minRows: 2, maxRows: 6 }}
           name="private_note"
+          value={this.state.privateNote}
           onChange={this.onChange}
+          required
         />
+        <span style={{ color: "red" }}>
+                {this.validator.message('Private Note', this.state.privateNote, 'required')}
+           </span>
 
 
         <TextArea
         className="mt-8"
           placeholder="Public Note"
           name="public_note"
+          value={this.state.publicNote}
           autoSize={{ minRows: 2, maxRows: 6 }}
           onChange={this.onChange}
+          required
         />
+        <span style={{ color: "red" }}>
+                {this.validator.message('Public Note', this.state.publicNote, 'required')}
+           </span>
         </Modal>
         <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
       </div>

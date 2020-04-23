@@ -126,7 +126,9 @@ const columns = [
     width: 150,
     sorter: true,
     align: "left",
-    render: object => renderCell(object, "TextCell", "order_id")
+    dataIndex:"order_id",
+    ellipses:true,
+    render: object =>ToolTipsCell(object) 
   },
   {
     title: <IntlMessages id="tradeTable.title.order_status" />,

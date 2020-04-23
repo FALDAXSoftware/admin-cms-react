@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
+    import SimpleReactValidator from 'simple-react-validator';
 import TextArea from 'antd/lib/input/TextArea';
 class rejectNotesModal extends Component {
     constructor(props) {
@@ -9,18 +10,26 @@ class rejectNotesModal extends Component {
             public_note:"",
             private_note:""
         };
+        this.validator = new SimpleReactValidator();
     }
     componentWillReceiveProps(newProps){
       if(newProps.visible!==this.state.visible){
           this.setState({visible:newProps.visible});
       }
     }
+
     onCancel=()=>{
+        this.validator.hideMessages();
         this.setState({visible:false});
         this.props.setVisible(false)
     }
     onRejectRequestSubmit=()=>{
-        this.props.callback(this.state.private_note,this.state.public_note)
+        if(this.validator.allValid()){
+            this.props.callback(this.state.private_note,this.state.public_note)
+        }else{
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
     }
 
     onChange=({target})=>{
@@ -48,6 +57,9 @@ class rejectNotesModal extends Component {
             name="private_note"
             onChange={this.onChange}
           />
+           <span style={{ color: "red" }}>
+                {this.validator.message('Private Note', this.state.private_note, 'required')}
+           </span>
   
   
           <TextArea
@@ -57,6 +69,9 @@ class rejectNotesModal extends Component {
             autoSize={{ minRows: 2, maxRows: 6 }}
             onChange={this.onChange}
           />
+           <span style={{ color: "red" }}>
+          {this.validator.message('Public Note', this.state.public_note, 'required')}
+           </span>
           </Modal>
         );
     }
