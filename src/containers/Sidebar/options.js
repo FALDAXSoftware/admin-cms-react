@@ -79,6 +79,15 @@ const options = [
 
   // },
   {
+    key: "tradedesk",
+    label: "sidebar.tradedesk",
+    leftIcon: "fas fa-exchange-alt",
+    module: "trade_desk_management",
+    permssions: [
+      "trade_desk_management"
+    ]
+  },
+  {
     key: "transaction-history",
     label: "sidebar.transactionHistory",
     leftIcon: "fas fa-exchange-alt",
@@ -126,7 +135,7 @@ const options = [
     module: "kyc",
     permssions: [
       "get_all_kyc_data",
-      "metabase_kyc_report"      
+      "metabase_kyc_report"
     ]
   },
   {
@@ -229,7 +238,7 @@ const options = [
     label: "sidebar.terms",
     leftIcon: "fas fa-file",
     module: "terms-and-conditions",
-    permssions:["get_static_page_links"]
+    permssions: ["get_static_page_links"]
   },
   // {
   //   key: "tier-documentation",
