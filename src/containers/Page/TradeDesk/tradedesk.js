@@ -1,21 +1,17 @@
 import React, { Component } from "react";
-import { notification, Tabs, Row, Col, Card, Input, Button } from "antd";
+import { notification, Tabs, Row, Col } from "antd";
 import { SOCKET_HOST } from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
 import { TabPane } from "../../../components/uielements/tabs";
-import SimpleReactValidator from "simple-react-validator";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { TradeRow, InnerTabs, InputRow } from "../../App/tradeStyle.js";
 import TradeAction from "./tradeaction";
 import BuyBook from "./buybook";
 import SellBook from "./sellbook";
 import DepthChart from "./depth";
-import PendingOrders from "./pendingorders";
-import CancelledOrders from "./cancelledorders";
-import CompletedOrders from "./completedorders";
 import MyOrders from "./myorders";
 import AllPendingOrders from "./allpendingorders";
 import OrderHistory from "./orderhistory";
@@ -80,35 +76,10 @@ class TradeDesk extends Component {
     }
   }
   joinRoom = (prevRoom = null) => {
-    // this.setState({
-    //   buyBookLoader: true,
-    //   sellBookLoader: true,
-    //   myOrderLoader: true,
-    //   orderHistoryLoader: true
-    // })
     this.io.emit("join", { room: this.state.crypto + "-" + this.state.currency, previous_room: prevRoom })
-  }
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
-    });
-    this.setState({ errMsg: false });
-  };
-
-  hideLoader() {
-    this.setState({ loader: false });
-  }
-
-  showLoader() {
-    this.setState({ loader: true });
   }
 
   render() {
-    const { errType, errMsg } = this.state;
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <LayoutWrapper>
         <Tabs className="isoTableDisplayTab full-width">
@@ -178,7 +149,7 @@ class TradeDesk extends Component {
                     enableLoader={() => { this.setState({ myOrderLoader: true }); }} />
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col span={24}>
                   <AllPendingOrders
                     crypto={this.state.crypto}
@@ -186,7 +157,7 @@ class TradeDesk extends Component {
                     pair={this.state.pair}
                     io={this.io} />
                 </Col>
-              </Row>
+              </Row> */}
             </TableDemoStyle>
           </TabPane>
         </Tabs>

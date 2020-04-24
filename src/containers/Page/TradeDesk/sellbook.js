@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { notification, Tabs, Row, Col, Card, Table, Divider, Tag } from "antd";
+import { Col, Card } from "antd";
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
@@ -57,29 +57,8 @@ class SellBook extends Component {
       data: row
     }, () => { /* this.props.onLoadComplete() */ })
   }
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
-    });
-    this.setState({ errMsg: false });
-  };
-
-  hideLoader() {
-    this.setState({ loader: false });
-  }
-
-  showLoader() {
-    this.setState({ loader: true });
-  }
 
   render() {
-    const { errType, errMsg } = this.state;
-
-
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <>
         <Card className="lessPaddingCard">

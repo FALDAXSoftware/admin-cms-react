@@ -3,7 +3,7 @@ import { notification, Tabs, Row, Col, Card, Table, Divider, Tag } from "antd";
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
-import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
+import { TradeTable } from "../../App/tradeStyle";
 import moment from "moment";
 
 const { logout } = authAction;
@@ -21,24 +21,8 @@ class CancelledOrders extends Component {
 
   componentDidMount = () => { };
 
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
-    });
-    this.setState({ errMsg: false });
-  };
-
-  hideLoader() {
-    this.setState({ loader: false });
-  }
-
-  showLoader() {
-    this.setState({ loader: true });
-  }
 
   render() {
-    const { errType, errMsg } = this.state;
     const columns = [
       {
         title: "Side",

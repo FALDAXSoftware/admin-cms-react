@@ -43,7 +43,6 @@ class AllPendingOrders extends Component {
 
 
   render() {
-    const { errType, errMsg } = this.state;
     const columns = [
       {
         title: "Side",

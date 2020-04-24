@@ -94,21 +94,6 @@ class TradeAction extends Component {
       });
     }
   }
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
-    });
-    this.setState({ errMsg: false });
-  };
-
-  hideLoader() {
-    this.setState({ loader: false });
-  }
-
-  showLoader() {
-    this.setState({ loader: true });
-  }
   onFieldChange = (field, value) => {
     let stateFields = this.state.fields
     stateFields[field] = value
@@ -189,10 +174,6 @@ class TradeAction extends Component {
 
   }
   render() {
-    const { errType, errMsg } = this.state;
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <>
         <Card>
