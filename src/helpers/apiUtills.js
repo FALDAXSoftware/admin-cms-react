@@ -3628,15 +3628,19 @@ const ApiUtils = {
       }
     })
   },
-  approveRejectRequest:function(token,tier,id,status,request_id){
+  approveRejectRequest:function(token,tier,id,status,request_id,private_note="",public_note=""){
     let url=`${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&request_id=${request_id}`
     return fetch(url, {
-      method: "get",
+      method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
         "Content-Type": "application/json"
-      }
+      },
+      body:JSON.stringify({
+        private_note,
+        public_note
+      })
     })
   },
   uploadDoc:function(token,formData){
@@ -3670,15 +3674,15 @@ const ApiUtils = {
       body: formData
     });
   },
-  forceApproveRejectTierRequest:function(token,id,status){
+  forceApproveRejectTierRequest:function(token,id,status,public_note,private_note){
     let url=`${API_URL}/admin/force-change-status?id=${id}&status=${status}`
     return fetch(url, {
-      method: "get",
+      method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
         "Content-Type": "application/json"
-      }
+      },body:JSON.stringify({public_note,private_note})
     })
   },
   getTierDetails: function(token, id,tier) {
