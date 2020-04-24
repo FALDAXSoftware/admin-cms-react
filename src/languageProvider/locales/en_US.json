@@ -712,5 +712,6 @@
   "ReferralDetailsTable.title.amount": "Amount",
   "ReferralDetailsTable.title.email": "Email",
   "ReferralDetailsTable.title.txid": "Transaction Id",
-  "walletWarmDetailsTable.title.network_fee": "Network Fees"
+  "walletWarmDetailsTable.title.network_fee": "Network Fees",
+  "tradeTable.title.transaction_id": "Transaction Id"
 }

@@ -3635,15 +3635,19 @@ const ApiUtils = {
       }
     })
   },
-  approveRejectRequest: function (token, tier, id, status, user_id) {
-    let url = `${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&user_id=${user_id}`
+  approveRejectRequest: function (token, tier, id, status, request_id, private_note = "", public_note = "") {
+    let url = `${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&request_id=${request_id}`
     return fetch(url, {
-      method: "get",
+      method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify({
+        private_note,
+        public_note
+      })
     })
   },
   uploadDoc: function (token, formData) {
@@ -3695,6 +3699,30 @@ const ApiUtils = {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(formData)
+    })
+  },
+  forceApproveRejectTierRequest: function (token, id, status, public_note, private_note) {
+    let url = `${API_URL}/admin/force-change-status?id=${id}&status=${status}`
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }, body: JSON.stringify({ public_note, private_note })
+    })
+  },
+  getTierDetails: function (token, id, tier) {
+    return fetch(`${API_URL}/admin/get-tier-details`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token
+        // "Content-Type": 'multipart/form-data',
+      },
+      body: JSON.stringify({
+        request_id: id,
+        tier_step: tier
+      })
     });
   },
 };

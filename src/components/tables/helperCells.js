@@ -938,7 +938,7 @@ const approvePendingReq = (
   last_name,
   tier_step,
   is_approved,
-  user_id
+  request_id
 ) => {
   PendingRequests.approvePendingReq(
     value,
@@ -946,7 +946,7 @@ const approvePendingReq = (
     last_name,
     tier_step,
     is_approved,
-    user_id
+    request_id
   );
 };
 
@@ -957,8 +957,10 @@ const getTierDoc=(tier,type)=>{
     }else if(type=="2"){
       return <span>Proof of Residence</span>
       }else if(type=="3"){
-        return <span>Social Security # or Equivalent Govt. Issued ID Number</span>
-        }
+        return <span>Equivalent Govt. Issued ID Number</span>
+        }else if(type=="4"){
+          return <span>Two Factor Authentication</span>
+          }
 
   }else if(tier==3 || tier=="3"){
     if(type=="1"){
@@ -971,7 +973,34 @@ const getTierDoc=(tier,type)=>{
       return <span>AML Questionnaire</span>
     }else if(type=="2"){
       return <span>Comfort Letter</span>
-    }
+    }else if(type=="3")
+    return <span>Board Resolution</span>
+    else if(type=="4")
+    return <span>2 Months Bank Satements</span>
+    else if(type=="5")
+    return <span>Corporate Filing Information</span>
+    else if(type=="6")
+    return <span>Beneficial Ownership Form</span>
+    else if(type=="7")
+    return <span>Articles of Incorporation</span>
+    else if(type=="8")
+    return <span>bylaws</span>
+    else if(type=="9")
+    return <span>Ownership and Control Structure</span>
+    else if(type=="10")
+    return <span>Directors and Officers List & Personal Info Equivalent to Tier 3 Requirements</span>
+    else if(type=="11")
+    return <span>Proof of Active Business Address</span>
+    else if(type=="12")
+    return <span>Document Availability Policy</span>
+    else if(type=="13")
+    return <span>Cookies Policy</span>
+    else if(type=="14")
+    return <span>Privacy Policy</span>
+    else if(type=="15")
+    return <span>AML Policy</span>
+    else if(type=="16")
+    return <span>Terms of Service</span>
   }
 }
 
@@ -2941,7 +2970,7 @@ const PendingTierReqActionCell = (
   last_name,
   tier_step,
   is_approved,
-  user_id
+  request_id
 ) => (
     <div>
       {/* <Tooltip title="View">
@@ -2971,7 +3000,7 @@ const PendingTierReqActionCell = (
               last_name,
               tier_step,
               true,
-              user_id
+              request_id
             )
           }
         />
@@ -2987,7 +3016,7 @@ const PendingTierReqActionCell = (
               last_name,
               tier_step,
               false,
-              user_id
+              request_id
             )
           }
         />

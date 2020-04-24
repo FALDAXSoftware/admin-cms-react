@@ -21,7 +21,7 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 const columns = [
   {
-    title:"Created At",
+    title: "Created At",
     key: "created_at",
     align: "left",
     width: 150,
@@ -29,7 +29,7 @@ const columns = [
     render: object => DateTimeCell(object, "DateCell", "created_at")
   },
   {
-    title:"User Email",
+    title: "User Email",
     key: "user_email",
     width: 250,
     align: "left",
@@ -38,12 +38,21 @@ const columns = [
     render: object => ToolTipsCell(object)
   },
   {
+    title: "Requested Email",
+    key: "requested_mail",
+    width: 250,
+    align: "left",
+    sorter: true,
+    dataIndex: "requested_email",
+    render: object => ToolTipsCell(object)
+  },
+  {
     title: <IntlMessages id="tradeTable.title.symbol" />,
     key: "symbol",
     width: 100,
     align: "left",
     sorter: true,
-    dataIndex:'symbol'
+    dataIndex: 'symbol'
   },
   {
     title: <IntlMessages id="tradeTable.title.side" />,
@@ -63,13 +72,21 @@ const columns = [
     )
   },
   {
-    title: <IntlMessages id="tradeTable.title.order_id" />,
-    key: "order_id",
-    width: 150,
+    title: <IntlMessages id="tradeTable.title.transaction_id" />,
+    key: "transaction_id1",
+    width: 350,
     sorter: true,
     align: "left",
-    dataIndex:"order_id"
+    dataIndex: "transaction_id"
   },
+  // {
+  //   title: <IntlMessages id="tradeTable.title.order_id" />,
+  //   key: "order_id",
+  //   width: 150,
+  //   sorter: true,
+  //   align: "left",
+  //   dataIndex: "order_id"
+  // },
   {
     title: <IntlMessages id="tradeTable.title.order_status" />,
     key: "order_status",
@@ -79,42 +96,42 @@ const columns = [
     dataIndex: "order_status",
     render: data => (
       <span className={"status-" + data + ""}>
-        {data.charAt(0).toUpperCase() + data.slice(1).replace("_"," ")}
+        {data.charAt(0).toUpperCase() + data.slice(1).replace("_", " ")}
       </span>
     )
   },
   {
-    title:"Fill Price",
+    title: "Fill Price",
     key: "fill_price",
     sorter: true,
     align: "left",
     width: 100,
     dataIndex: "fill_price",
-    render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+    render: (columns) => <span>{columns != 0 || columns != "0" ? parseFloat(columns).toFixed(8) : columns}</span>
   },
   {
-    title:"Amount",
+    title: "Amount",
     key: "quantity",
     sorter: true,
     align: "left",
     width: 150,
-    render:(row)=>(<span>{parseFloat(row["quantity"]).toFixed(8) +" "+row["settle_currency"]}</span>)
+    render: (row) => (<span>{parseFloat(row["quantity"]).toFixed(8) + " " + row["settle_currency"]}</span>)
   },
   {
-    title:"Maker Fee",
+    title: "Maker Fee",
     key: "maker_fee",
     sorter: true,
     align: "left",
     width: 100,
-    render:(row)=>(<span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>)
+    render: (row) => (<span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>)
   },
   {
-    title:"Taker Fee",
+    title: "Taker Fee",
     key: "taker_fee",
     sorter: true,
     align: "left",
     width: 100,
-    render:(row)=>(<span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>)
+    render: (row) => (<span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>)
   }
 ]
 
@@ -240,7 +257,7 @@ class WalletTradeDetailsComponent extends Component {
         if (isExportCsv) {
           this.setState({ csvData: tradeValue });
         } else {
-          this.setState({ walletValue:tradeValue, count: tradeCount });
+          this.setState({ walletValue: tradeValue, count: tradeCount });
         }
       } else if (status == 400 || status == 403) {
         this.openNotificationWithIcon("Error", err);
@@ -352,16 +369,16 @@ class WalletTradeDetailsComponent extends Component {
                   onChange={value => this.setState({ transaction_type: value })}
                 >
                   <Option value="">All</Option>
-                  <Option value="send">
+                  <Option value="Sell">
                     <span className="error-danger">
                       <Icon type="arrow-up" />
-                      &nbsp;Send
+                      &nbsp;Sell
                     </span>
                   </Option>
-                  <Option value="receive">
+                  <Option value="Buy">
                     <span className="color-green">
                       <Icon type="arrow-down" />
-                      &nbsp;Receive
+                      &nbsp;Buy
                     </span>
                   </Option>
                 </Select>
@@ -409,7 +426,7 @@ class WalletTradeDetailsComponent extends Component {
             </Row>
           </Form>
           <TableWrapper
-            rowKey="id"
+            rowKey="transaction_id"
             {...this.state}
             columns={columns}
             pagination={false}
@@ -421,19 +438,20 @@ class WalletTradeDetailsComponent extends Component {
             expandedRowRender={record => {
               return (
                 <div>
-                    <span><b>Created At</b>&nbsp;:&nbsp; {record['created_at']}</span><br/>
-                    <span><b>Fill Price</b>&nbsp;:&nbsp;{PrecisionCell(record['fill_price'])}</span><br/>
-                    <span><b>Side</b>&nbsp;:&nbsp;{record['side']}</span><br/>
-                    <span><b>Order Type</b>&nbsp;:&nbsp;{record['order_type']}</span><br/>
-                    <span><b>User Email</b>&nbsp;:&nbsp;{record['email']}</span><br/>
-                    <span><b>Requested Email</b>&nbsp;:&nbsp;{record['requested_email']}</span><br/>
-                    <span><b>Order Status</b>&nbsp;:&nbsp;{record['order_status']}</span><br/>
-                    <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br/>
-                    <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br/>
-                    <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"]+" "+record['user_coin']}</span><br/>
-                    <span><b>Requested Fees</b>&nbsp;:&nbsp;{record["requested_fee"]+" "+record['requested_coin']}</span><br/>
+                  <span><b>Created At</b>&nbsp;:&nbsp; {record['created_at']}</span><br />
+                  <span><b>Fill Price</b>&nbsp;:&nbsp;{PrecisionCell(record['fill_price'])}</span><br />
+                  <span><b>Side</b>&nbsp;:&nbsp;{record['side']}</span><br />
+                  <span><b>Order Type</b>&nbsp;:&nbsp;{record['order_type']}</span><br />
+                  <span><b>User Email</b>&nbsp;:&nbsp;{record['email']}</span><br />
+                  <span><b>Requested Email</b>&nbsp;:&nbsp;{record['requested_email']}</span><br />
+                  <span><b>Order Status</b>&nbsp;:&nbsp;{record['order_status']}</span><br />
+                  <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br />
+                  <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br />
+                  <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"] + " " + record['user_coin']}</span><br />
+                  <span><b>Requested Fees</b>&nbsp;:&nbsp;{record["requested_fee"] + " " + record['requested_coin']}</span><br />
                 </div>
-            )}}
+              )
+            }}
           />
           <Pagination
             className="ant-users-pagination"

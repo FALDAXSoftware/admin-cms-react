@@ -902,3 +902,17 @@ html[dir='rtl'] .dz-hidden-input {
 .lessPaddingCard .ant-card-body{
   padding: 24px 10px;
 }
+.custom-tr-width:not(:first-child){
+  padding-left: 20px;
+}
+
+.mt-8{
+  margin-top: 8px !important;
+}
+th.custom-tr-width{
+  /* text-align: center; */
+  padding: 8px;
+}
+.ant-table-expanded-row{
+  overflow: auto;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
 import { TextCell, PendingTierReqActionCell, FullNameTextCell, ToolTipsCell } from '../../../components/tables/helperCells';
+import { Button } from 'antd';
 
 const renderCell = (object, type, key, fname = null, lname = null, tierStep = null,
     isApproved = null, userId = null) => {
@@ -46,8 +47,9 @@ const columns = [
     key :"name",
     align:"left",
     ellipsis:true,
-    dataIndex:"name",
-    width:100
+    // dataIndex:"name",
+    width:100,
+    render:(data)=><span>{data["first_name"]+" "+data["last_name"]}</span>
 },
 //  {
 //     title: <IntlMessages id="tierTable.title.first_name" />,
@@ -65,16 +67,6 @@ const columns = [
     ellipsis:true,
     dataIndex:"email",
     render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
-},
-{
-    title:"No of Request",
-    key: 'count',
-    // dataIndex:"type",
-    width:250,
-    align:"left",
-    ellipsis:true,
-    render:object=><span>{object.data.length}</span>
-    // render: object => <span>{object=="1"?"Valid ID":object=="2"?"Proof of Residence":"Social Security Number or Equivalent Govt"}</span>
 }
 ]
 
