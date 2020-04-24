@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { palette } from 'styled-theme';
+import styled from "styled-components";
+import { palette } from "styled-theme";
 
 const TableDemoStyle = styled.div`
   .ant-tabs-content {
@@ -8,14 +8,14 @@ const TableDemoStyle = styled.div`
 
   .ant-tabs-nav {
     > div {
-      color: ${palette('secondary', 2)};
+      color: ${palette("secondary", 2)};
 
       &.ant-tabs-ink-bar {
-        background-color: ${palette('primary', 0)};
+        background-color: ${palette("primary", 0)};
       }
 
       &.ant-tabs-tab-active {
-        color: ${palette('primary', 0)};
+        color: ${palette("primary", 0)};
       }
     }
   }
