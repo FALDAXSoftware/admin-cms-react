@@ -79,14 +79,14 @@ const columns = [
     align: "left",
     dataIndex: "transaction_id"
   },
-  {
-    title: <IntlMessages id="tradeTable.title.order_id" />,
-    key: "order_id",
-    width: 150,
-    sorter: true,
-    align: "left",
-    dataIndex: "order_id"
-  },
+  // {
+  //   title: <IntlMessages id="tradeTable.title.order_id" />,
+  //   key: "order_id",
+  //   width: 150,
+  //   sorter: true,
+  //   align: "left",
+  //   dataIndex: "order_id"
+  // },
   {
     title: <IntlMessages id="tradeTable.title.order_status" />,
     key: "order_status",
@@ -426,7 +426,7 @@ class WalletTradeDetailsComponent extends Component {
             </Row>
           </Form>
           <TableWrapper
-            rowKey="id"
+            rowKey="transaction_id"
             {...this.state}
             columns={columns}
             pagination={false}
