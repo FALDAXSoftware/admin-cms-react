@@ -896,5 +896,16 @@ html[dir='rtl'] .dz-hidden-input {
   font-size: 18px !important;
 }
 .custom-tr-width:not(:first-child){
-  padding-left: 50px;
+  padding-left: 20px;
+}
+
+.mt-8{
+  margin-top: 8px !important;
+}
+th.custom-tr-width{
+  /* text-align: center; */
+  padding: 8px;
+}
+.ant-table-expanded-row{
+  overflow: auto;
 }

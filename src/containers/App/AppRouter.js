@@ -26,7 +26,7 @@ const routes = [
     },
     {
         path: "tier-documentation",
-        component: asyncComponent(() => import("../Page/TierDocument/tierDocument")),
+        component: asyncComponent(() => import("../Page/TierDocument/tabs")),
         module: "tier-documentation"
     },
     {

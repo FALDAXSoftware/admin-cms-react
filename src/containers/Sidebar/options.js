@@ -231,13 +231,13 @@ const options = [
     module: "terms-and-conditions",
     permssions:["get_static_page_links"]
   },
-  {
-    key: "tier-documentation",
-    label: "sidebar.tier_docs",
-    leftIcon: "fas fa-file",
-    module: "tier-documentation",
-    permssions:["upload_user_document"]
-  },
+  // {
+  //   key: "tier-documentation",
+  //   label: "sidebar.tier_docs",
+  //   leftIcon: "fas fa-file",
+  //   module: "tier-documentation",
+  //   permssions:["upload_user_document"]
+  // },
   {
     key: "wallet",
     label: "sidebar.wallet_dashboard",

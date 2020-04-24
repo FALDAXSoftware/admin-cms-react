@@ -9,9 +9,6 @@ import {
   Col,
   Select,
   Input,
-  Modal,
-  message,
-  Upload,
   Tag
 } from "antd";
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
@@ -30,6 +27,8 @@ import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { exportTier } from "../../../helpers/exportToCsv/headers";
 import { getTierDoc, DateTimeCell } from "../../../components/tables/helperCells";
+import RejectNotesModal from "../../Shared/rejectNotesModal";
+import ViewNotesModal from "../../Shared/viewNotesModal";
 const { logout } = authAction;
 const { Option } = Select;
 var self;
@@ -41,7 +40,8 @@ columns.push({
   width:250,
   align:"left",
   ellipsis:true,
-  render:object=><span><Button type="primary" onClick={()=>self.forceApproveRejectTierRequest(true,object["id"])}>Force Approve</Button></span>
+  render:object=><span><Button type="primary" onClick={()=>self.forceApproveRejectTierRequest(true,object["id"])}>Force Resubmit</Button>  &nbsp;&nbsp;
+  <Button disabled={!(object['public_note'] || object['private_note'])} onClick={()=>self.setState({showNotesModal:true,public_note:object["public_note"],private_note:object["private_note"]})}>Show Notes</Button></span>
 });
 class RejectedRequests extends Component {
   constructor(props) {
@@ -61,7 +61,12 @@ class RejectedRequests extends Component {
       tierDetailsRequest:[],
       imageUrl: "",
       selectedRequest: {},
-      expandRowLoader:false
+      expandRowLoader:false,
+      showRejectModel:false,
+      request_id:undefined,
+      showNotesModal:false,
+      private_note:"",
+      public_note:""
     };
     self = this;
   }
@@ -74,14 +79,20 @@ class RejectedRequests extends Component {
     this.getAllRejectedTier();
   }
 
-  async forceApproveRejectTierRequest(status,id){
+  async forceApproveRejectTierRequest(status,id,public_note,private_note){
     try {
+      if(!this.state.showRejectModel){
+        this.setState({showRejectModel:true,request_id:id});
+        return
+      }
       this.setState({ loader: true });
       let response = await (
         await ApiUtils.forceApproveRejectTierRequest(
           this.props.token,
           id,
-          status
+          status,
+          public_note,
+          private_note
         )
       ).json();
       if (response.status == 200) {
@@ -89,7 +100,8 @@ class RejectedRequests extends Component {
           errMsg: true,
           errMessage: response.message,
           errType: "success",
-          loader:false
+          loader:false,
+          showRejectModel:false
         },()=>this.getAllRejectedTier());
       } else if (response.status == 403) {
         this.setState(
@@ -211,41 +223,6 @@ class RejectedRequests extends Component {
     this.setState({ errMsg: false });
   };
 
-  formateTradeRequest(data){
-    let tradeData=[];
-    for(let i of data){
-      // let index=data.indexOf(i);
-      if(tradeData.length==0){
-        tradeData.push({
-          email:i["email"],
-          name:i["first_name"]+" "+i["last_name"],
-          data:[i]
-
-        })
-      }else{
-        let found=false;
-        for(let i2 of tradeData){
-          let index=tradeData.indexOf(i2);
-          let tradeIndex=tradeData.findIndex(ele=>ele["email"]==i["email"]);
-          if(tradeIndex!=-1){
-            tradeData[tradeIndex]["data"].push(i);
-            found=true;
-            break
-          }
-        }
-        if(!found){
-          tradeData.push({
-            email:i["email"],
-            name:i["first_name"]+" "+i["last_name"],
-            data:[i]
-
-          })
-        }
-      }
-    }
-    return tradeData;
-  }
-
   onSubmit = async () => {
     try {
       this.setState({ loader: true });
@@ -326,7 +303,7 @@ class RejectedRequests extends Component {
     const {
       errType,
       errMsg,
-      showDocUploadModal,
+      // showDocUploadModal,
       rejectedRequests,
       loader,
       searchData,
@@ -334,10 +311,12 @@ class RejectedRequests extends Component {
       page,
       limit,
       tradeCount,
+      showNotesModal,
       csvData,
       openCsvExportModal,
-      imageUrl,
-      tierDetailsRequest
+      // imageUrl,
+      tierDetailsRequest,
+      showRejectModel
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -434,22 +413,77 @@ class RejectedRequests extends Component {
           bordered
           scroll={TABLE_SCROLL_HEIGHT}
           loading={this.state.expandRowLoader}
-          expandedRowRender={()=>{
-            return <>
-                {tierDetailsRequest.map((ele)=>{
-                  return <tr>
-                  <td className="custom-tr-width">
-                                      <b>Submitted On &nbsp;: </b>&nbsp;
+          expandedRowRender={() => {
+            return (
+              <><tr>
+                <th className="custom-tr-width">Submitted On</th>
+                <th className="custom-tr-width">Status</th>
+                <th className="custom-tr-width">Updated By</th>
+                <th className="custom-tr-width">Id</th>
+                <th className="custom-tr-width">Type</th>
+              </tr>
+                {tierDetailsRequest.map((ele) => {
+                  return (
+                  <>
+                    <tr>
+                       <td className="custom-tr-width">
+                                      {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
                                       {DateTimeCell(ele["created_at"],"string")}
                                     </td>
-                  {ele["is_approved"]==true && <td className="custom-tr-width"><Tag color="#87d068"><Icon type="check"></Icon>&nbsp;Approved</Tag></td>}
-                  {ele["is_approved"]==null && <td className="custom-tr-width"><Tag color="#6896d0"><Icon type="info-circle"></Icon>&nbsp;Pending</Tag></td>}
-                  {ele["is_approved"]==false &&<td className="custom-tr-width"><Tag color="#f50"><Icon type="close"></Icon>&nbsp;Rejected</Tag></td>} 
-                  <td className="custom-tr-width"><b>Unique Id &nbsp;: </b>&nbsp;{ele["unique_key"]?ele["unique_key"]:ele["type"]=="4"?'Enabled':ele["ssn"]}</td>
-                    <td className="custom-tr-width"><b>Type &nbsp;: </b>&nbsp;{<span>{getTierDoc(this.props.tier,ele["type"])}</span>}</td>
+                      {ele["is_approved"] == null && (
+                        <td className="custom-tr-width">
+                        <Tag color="#6896d0">
+                          <Icon type="info-circle"></Icon>
+                          &nbsp;Pending
+                        </Tag>
+                      </td>
+                      )}
+                      {ele["is_approved"] == true && (
+                        <td className="custom-tr-width">
+                          <Tag color="#87d068">
+                            <Icon type="check"></Icon>
+                            &nbsp;Approved
+                          </Tag>
+                        </td>
+                      )}
+                      {ele["is_approved"] == false && (
+                        <td className="custom-tr-width">
+                          <Tag color="#f50">
+                            <Icon type="close"></Icon>&nbsp;Rejected
+                          </Tag>
+                        </td>
+                      )}
+                      <td className="custom-tr-width">
+                      {/* <b>{ele["is_approved"]==null?"-":ele["is_approved"]?"Approved By :":"Rejected By :"}</b> */}
+                      {ele["updated_by"]?ele["updated_by"]:"-"}
+                      </td>
+                      <td className="custom-tr-width">
+                        {/* <b>{ele['ssn'] && <span>Govt.Issued ID Number &nbsp;</span>} </b>&nbsp; */}
+                        {/* <b>{!ele['ssn'] && <span>Unique Id &nbsp;</span>} </b>&nbsp; */}
+                        {ele["unique_key"]
+                          ? ele["unique_key"]
+                          : ele["type"] == "4"
+                          ? "Enabled"
+                          : ele["ssn"]+"(Govt.Issued ID Number)"}
+                      </td>
+                      {/* <td className="custom-tr-width">{ele["ssn"] &&<> <b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</>}</td> */}
+                      <td className="custom-tr-width">
+                        {/* <b>Type &nbsp;: </b>&nbsp; */}
+                        {
+                          <span>
+                            {getTierDoc(this.props.tier, ele["type"])}
+                          </span>
+                        }
+                      </td>
+                      <td className="custom-tr-width">
+                        <Button  disabled={!(ele['public_note'] || ele['private_note'])} onClick={()=>{this.setState({"showNotesModal":true,"public_note":ele["public_note"],"private_note":ele["private_note"]})}}>Show Notes</Button>
+                      </td>
                   </tr>
+                  </>
+                  );
                 })}
-            </>
+              </>
+            );
           }}
           onExpand={(expanded,records)=>{this.getDetTierDetails(expanded,records)}}
         />
@@ -463,6 +497,8 @@ class RejectedRequests extends Component {
           onShowSizeChange={this.changePaginationSize}
           pageSizeOptions={PAGE_SIZE_OPTIONS}
         />
+        <RejectNotesModal setVisible={(showRejectModel)=>this.setState({showRejectModel,private_note:"",public_note:""})} callback={(private_note,public_note)=>{this.setState({private_note:"",public_note:""});this.forceApproveRejectTierRequest("truefalse",this.state.request_id,public_note,private_note)}} visible={showRejectModel}></RejectNotesModal>
+        <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
       </div>
     );
   }
