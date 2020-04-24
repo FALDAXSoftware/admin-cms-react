@@ -32,7 +32,6 @@ class OrderHistory extends Component {
 
   componentDidMount = () => {
     this.props.io.on("trade-history-data", data => {
-      // console.log("^^^^data", data);
       this.updateData(data);
     });
   };
@@ -51,7 +50,7 @@ class OrderHistory extends Component {
         total: Number(element.quantity * element.fill_price).toFixed(8)
       });
     }
-    this.setState({ data: rows }, () => { this.props.onLoadComplete() })
+    this.setState({ data: rows }, () => { /* this.props.onLoadComplete() */ })
   }
 
 

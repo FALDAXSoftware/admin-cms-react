@@ -20,8 +20,6 @@ class MyOrders extends Component {
             this.orderSocket(this.state.time, this.state.status);
         });
         this.props.io.on("users-all-trade-data", (data) => {
-            console.log("-----------", data);
-
             this.updateMyOrder(data)
         });
         this.orderSocket(this.state.time, this.state.status);
@@ -32,14 +30,14 @@ class MyOrders extends Component {
             flag: filter_type,
             pair: `${this.props.pair}`,
         });
-        this.props.enableLoader()
+        // this.props.enableLoader()
     }
     statusChange = (key) => {
         this.setState({ status: key, orderTradeData: [] });
         this.orderSocket(this.state.time, key);
     }
     updateMyOrder = (response) => {
-        this.setState({ orderTradeData: response }, () => { this.props.onLoadComplete() });
+        this.setState({ orderTradeData: response }, () => { /* this.props.onLoadComplete() */ });
     }
     chnageTime = (value) => {
         this.setState({

@@ -7,6 +7,23 @@ import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 
 const { logout } = authAction;
 // var self;
+const columns = [
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
+  },
+  {
+    title: "Bid",
+    dataIndex: "bid",
+    key: "bid",
+  },
+  {
+    title: "Total",
+    dataIndex: "total",
+    key: "total",
+  },
+];
 class BuyBook extends Component {
   constructor(props) {
     super(props);
@@ -38,35 +55,10 @@ class BuyBook extends Component {
     }
     this.setState({
       data: row
-    }, () => { this.props.onLoadComplete() })
+    }, () => { /* this.props.onLoadComplete() */ })
   }
-  hideLoader() {
-    this.setState({ loader: false });
-  }
-
-  showLoader() {
-    this.setState({ loader: true });
-  }
-
   render() {
-    const { errType, errMsg } = this.state;
-    const columns = [
-      {
-        title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
-      },
-      {
-        title: "Bid",
-        dataIndex: "bid",
-        key: "bid",
-      },
-      {
-        title: "Total",
-        dataIndex: "total",
-        key: "total",
-      },
-    ];
+
 
 
 
@@ -77,12 +69,12 @@ class BuyBook extends Component {
             <Col span={12}>
               <label>Buying {this.props.crypto}</label>
             </Col>
-            <Col className="text-right" span={12}>
+            {/* <Col className="text-right" span={12}>
               <span>
                 <b>Total: </b>
               </span>
               <span>{this.state.data.length ? Number(this.state.data[this.state.data.length - 1].total).toFixed(8) : 0} {this.props.crypto}</span>
-            </Col>
+            </Col> */}
           </TradeHeadRow>
           <TradeTable
             columns={columns}

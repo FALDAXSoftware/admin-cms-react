@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { notification, Tabs, Row, Col, Card, Input, Button } from "antd";
-import ApiUtils, { SOCKET_HOST } from "../../../helpers/apiUtills";
+import { SOCKET_HOST } from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
@@ -32,10 +32,10 @@ class TradeDesk extends Component {
       crypto: "",
       currency: "",
       pair: "",
-      buyBookLoader: true,
-      sellBookLoader: true,
-      myOrderLoader: true,
-      orderHistoryLoader: true
+      buyBookLoader: false,
+      sellBookLoader: false,
+      myOrderLoader: false,
+      orderHistoryLoader: false
     };
     // alert(this.props.token)
     this.io = io(SOCKET_HOST, {
@@ -80,12 +80,12 @@ class TradeDesk extends Component {
     }
   }
   joinRoom = (prevRoom = null) => {
-    this.setState({
-      buyBookLoader: true,
-      sellBookLoader: true,
-      myOrderLoader: true,
-      orderHistoryLoader: true
-    })
+    // this.setState({
+    //   buyBookLoader: true,
+    //   sellBookLoader: true,
+    //   myOrderLoader: true,
+    //   orderHistoryLoader: true
+    // })
     this.io.emit("join", { room: this.state.crypto + "-" + this.state.currency, previous_room: prevRoom })
   }
   openNotificationWithIconError = (type) => {
@@ -180,7 +180,11 @@ class TradeDesk extends Component {
               </Row>
               <Row>
                 <Col span={24}>
-                  <AllPendingOrders crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                  <AllPendingOrders
+                    crypto={this.state.crypto}
+                    currency={this.state.currency}
+                    pair={this.state.pair}
+                    io={this.io} />
                 </Col>
               </Row>
             </TableDemoStyle>

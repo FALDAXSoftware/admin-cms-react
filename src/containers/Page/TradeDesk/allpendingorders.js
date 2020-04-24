@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
+import moment from "moment";
 
 const { logout } = authAction;
 // var self;
@@ -24,27 +25,22 @@ class AllPendingOrders extends Component {
       errMsg: false,
       errType: "Success",
       loader: false,
+      data: [],
+      id: null
     };
     // self = this;
   }
 
-  componentDidMount = () => {};
-
-  openNotificationWithIconError = (type) => {
-    notification[type]({
-      message: this.state.errType,
-      description: this.state.errMessage,
+  componentDidMount = () => {
+    this.props.io.on("all-pending-orders-data", data => {
+      this.setState({
+        data: data.data,
+        id: data.id
+      })
     });
-    this.setState({ errMsg: false });
   };
 
-  hideLoader() {
-    this.setState({ loader: false });
-  }
 
-  showLoader() {
-    this.setState({ loader: true });
-  }
 
   render() {
     const { errType, errMsg } = this.state;
@@ -56,28 +52,27 @@ class AllPendingOrders extends Component {
       },
       {
         title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
+        dataIndex: "quantity",
+        key: "quantity",
+        render: (text, record) => (`${Number(text).toFixed(8)}`)
       },
       {
         title: "Limit Price",
         dataIndex: "limit_price",
-        key: "price",
+        key: "limit_price",
+        render: (text, record) => (`${Number(text).toFixed(8)}`)
       },
       {
         title: "Stop Price",
         dataIndex: "stop_price",
-        key: "price",
-      },
-      {
-        title: "Fill Price",
-        dataIndex: "fill_price",
-        key: "fill_price",
+        key: "stop_price",
+        render: (text, record) => (`${text ? Number(text).toFixed(8) : "-"}`)
       },
       {
         title: "Time",
         dataIndex: "time",
         key: "time",
+        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`)
       },
       {
         title: "Placed By",
@@ -88,30 +83,16 @@ class AllPendingOrders extends Component {
         title: "Total",
         dataIndex: "total",
         key: "total",
+        render: (text, record) => (`${Number(record.quantity * record.limit_price).toFixed(8)}`)
       },
       {
         title: "Action",
         dataIndex: "action",
         key: "action",
-        render: () => <Icon type="close-circle" />,
+        render: (text, record) => (record.user_id == this.state.id ? <Icon type="close-circle" onClick={() => { this.onCancle(record.encript_id, record.side, record.order_type) }} /> : "-"),
       },
     ];
-    const data = [];
-    for (let index = 0; index < 100; index++) {
-      data.push({
-        key: index,
-        side: "Buy",
-        amount: 0.001,
-        price: 0.000456,
-        placed_by: "Bot",
-        time: "17/04/2020, 11:39:30",
-        total: "2.5000",
-      });
-    }
 
-    if (errMsg) {
-      this.openNotificationWithIconError(errType.toLowerCase());
-    }
     return (
       <Card>
         <TradeHeadRow type="flex" justify="space-between">
@@ -121,7 +102,7 @@ class AllPendingOrders extends Component {
         </TradeHeadRow>
         <TradeTable
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.data}
           pagination={false}
           scroll={{ y: 600 }}
         />

@@ -7,6 +7,23 @@ import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 
 const { logout } = authAction;
 // var self;
+const columns = [
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
+  },
+  {
+    title: "Ask",
+    dataIndex: "ask",
+    key: "ask",
+  },
+  {
+    title: "Total",
+    dataIndex: "total",
+    key: "total",
+  },
+];
 class SellBook extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +55,7 @@ class SellBook extends Component {
     }
     this.setState({
       data: row
-    }, () => { this.props.onLoadComplete() })
+    }, () => { /* this.props.onLoadComplete() */ })
   }
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -58,23 +75,7 @@ class SellBook extends Component {
 
   render() {
     const { errType, errMsg } = this.state;
-    const columns = [
-      {
-        title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
-      },
-      {
-        title: "Ask",
-        dataIndex: "ask",
-        key: "ask",
-      },
-      {
-        title: "Total",
-        dataIndex: "total",
-        key: "total",
-      },
-    ];
+
 
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -86,12 +87,12 @@ class SellBook extends Component {
             <Col span={12}>
               <label>Selling {this.props.crypto}</label>
             </Col>
-            <Col className="text-right" span={12}>
+            {/* <Col className="text-right" span={12}>
               <span>
                 <b>Total: </b>
               </span>
               <span>{this.state.data.length ? Number(this.state.data[this.state.data.length - 1].total).toFixed(8) : 0} {this.props.currency}</span>
-            </Col>
+            </Col> */}
           </TradeHeadRow>
           <TradeTable
             columns={columns}
