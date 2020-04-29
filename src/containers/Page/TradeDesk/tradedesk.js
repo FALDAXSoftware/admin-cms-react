@@ -16,6 +16,7 @@ import MyOrders from "./myorders";
 import AllPendingOrders from "./allpendingorders";
 import OrderHistory from "./orderhistory";
 import io from 'socket.io-client';
+import { isAllowed } from "../../../helpers/accessControl";
 const { logout } = authAction;
 // var self;
 class TradeDesk extends Component {
@@ -161,7 +162,7 @@ class TradeDesk extends Component {
             </TableDemoStyle>
           </TabPane>
         </Tabs>
-      </LayoutWrapper>
+      </LayoutWrapper >
     );
   }
 }

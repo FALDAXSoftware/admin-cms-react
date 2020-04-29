@@ -84,7 +84,16 @@ const options = [
     leftIcon: "fas fa-exchange-alt",
     module: "trade_desk_management",
     permssions: [
-      "trade_desk_management"
+      "trade_desk_management",
+    ]
+  },
+  {
+    key: "tradedesk-monitoring",
+    label: "sidebar.tradedeskMonitoring",
+    leftIcon: "fas fa-exchange-alt",
+    module: "trade_desk_monitoring",
+    permssions: [
+      "trade_desk_monitoring",
     ]
   },
   {
