@@ -53,9 +53,14 @@ class TradeWallets extends Component {
   }
   componentDidMount() {
     this.getWalletdata()
+    setInterval(() => {
+      this.getWalletdata(false)
+    }, 10000);
   }
-  getWalletdata = () => {
-    this.setState({ loader: true });
+  getWalletdata = (showLoader = true) => {
+    if (showLoader) {
+      this.setState({ loader: true });
+    }
     ApiUtils.getTradeDeskBalance(this.props.token).then((response) => response.json()).then((res) => {
       this.setState({ data: res.data, loader: false });
 
@@ -64,14 +69,19 @@ class TradeWallets extends Component {
   render() {
     return (
       <Card style={{ marginBottom: "13px" }}>
-        {/* <TradeHeadRow gutter={16}>
-          <Col span={12}>
-            <label>Wallets</label>
-          </Col>
-        </TradeHeadRow> */}
         <TradeRow gutter={16}>
           <Col span={24}>
             <Table
+              title={() => (
+                <TradeHeadRow>
+                  <Col span={12}>
+                    <label>Wallets</label>
+                  </Col>
+                  <Col span={12} style={{ textAlign: "right" }}>
+                    <Button type="primary" icon="reload" onClick={this.getWalletdata} />
+                  </Col>
+                </TradeHeadRow>
+              )}
               columns={columns}
               dataSource={this.state.data}
               pagination={false}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TradeHeadRow } from '../../App/tradeStyle';
-import { Col, Card, Row, Table } from 'antd';
+import { Col, Card, Row, Table, Button } from 'antd';
 import ApiUtils from '../../../helpers/apiUtills';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -61,9 +61,14 @@ class TradeSummary extends Component {
     }
     componentDidMount() {
         this.getData()
+        setInterval(() => {
+            this.getData(false)
+        }, 10000);
     }
-    getData = () => {
-        this.setState({ loader: true });
+    getData = (showLoader = true) => {
+        if (showLoader) {
+            this.setState({ loader: true });
+        }
         ApiUtils.getSpreadData(this.props.token).then((response) => response.json()).then((res) => {
             console.log("-------------------", res);
             this.setState({ data: res.data, loader: false });
@@ -72,14 +77,18 @@ class TradeSummary extends Component {
     render() {
         return (
             <Card>
-
-                {/* <TradeHeadRow gutter={16}>
-                    <Col span={12}>
-                        <label>Trade Summary</label>
-                    </Col>
-                </TradeHeadRow> */}
                 <Row>
                     <Table
+                        title={() => (
+                            <TradeHeadRow>
+                                <Col span={12}>
+                                    <label>Trade Summary</label>
+                                </Col>
+                                <Col span={12} style={{ textAlign: "right" }}>
+                                    <Button type="primary" icon="reload" onClick={this.getData} />
+                                </Col>
+                            </TradeHeadRow>
+                        )}
                         dataSource={this.state.data}
                         columns={columns}
                         pagination={false}
