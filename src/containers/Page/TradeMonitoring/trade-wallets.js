@@ -7,112 +7,88 @@ import {
   LabelRow,
   TradeHeadRow,
 } from "../../App/tradeStyle";
-import { Col, Card, Button, Row } from "antd";
-
+import { Col, Card, Button, Row, Table } from "antd";
+import ApiUtils from "../../../helpers/apiUtills";
+import authAction from "../../../redux/auth/actions";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+const { logout } = authAction;
+const columns = [
+  {
+    title: 'Asset',
+    dataIndex: 'coin',
+    key: 'coin',
+  },
+  {
+    title: 'Balance',
+    dataIndex: 'placed_balance',
+    key: 'placed_balance',
+    render: (text, record) => parseFloat(text).toFixed(8)
+  },
+  {
+    title: 'In order assets',
+    dataIndex: 'balance',
+    key: 'balance',
+    render: (text, record) => (<>{parseFloat(record.balance - record.placed_balance).toFixed(8)}</>)
+  },
+  {
+    title: 'Total',
+    dataIndex: 'balance',
+    key: 'balance',
+    render: (text, record) => parseFloat(text).toFixed(8)
+  },
+  {
+    title: 'Wallet Address',
+    dataIndex: 'receive_address',
+    key: 'receive_address',
+  },
+]
 class TradeWallets extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      data: [],
+      loader: true
+    };
+  }
+  componentDidMount() {
+    this.getWalletdata()
+  }
+  getWalletdata = () => {
+    this.setState({ loader: true });
+    ApiUtils.getTradeDeskBalance(this.props.token).then((response) => response.json()).then((res) => {
+      this.setState({ data: res.data, loader: false });
+
+    })
   }
   render() {
     return (
       <Card style={{ marginBottom: "13px" }}>
-        <TradeHeadRow gutter={16}>
+        {/* <TradeHeadRow gutter={16}>
           <Col span={12}>
             <label>Wallets</label>
           </Col>
-        </TradeHeadRow>
+        </TradeHeadRow> */}
         <TradeRow gutter={16}>
-          <Col span={8}>
-            <WalletCard>
-              <HeadRowWallet>
-                <img src="https://s3.us-east-2.amazonaws.com/production-static-asset/coin/bitcoin.png" />
-                <span>TBTC</span>
-              </HeadRowWallet>
-              <HeadRowWallet>
-                <LabelRow>
-                  <label>Address:</label>
-                  <span>-</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Placed Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Total Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-              </HeadRowWallet>
-              <CreateWalletRow>
-                <Button type="primary">Create Wallet</Button>
-              </CreateWalletRow>
-            </WalletCard>
-          </Col>
-          <Col span={8}>
-            <WalletCard>
-              <HeadRowWallet>
-                <img src="https://s3.us-east-2.amazonaws.com/production-static-asset/coin/bitcoin.png" />
-                <span>TBTC</span>
-              </HeadRowWallet>
-              <HeadRowWallet>
-                <LabelRow>
-                  <label>Address:</label>
-                  <span>-</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Placed Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Total Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-              </HeadRowWallet>
-              <CreateWalletRow>
-                <Button type="primary">Create Wallet</Button>
-              </CreateWalletRow>
-            </WalletCard>
-          </Col>
-          <Col span={8}>
-            <WalletCard>
-              <HeadRowWallet>
-                <img src="https://s3.us-east-2.amazonaws.com/production-static-asset/coin/bitcoin.png" />
-                <span>TBTC</span>
-              </HeadRowWallet>
-              <HeadRowWallet>
-                <LabelRow>
-                  <label>Address:</label>
-                  <span>-</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Placed Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-                <LabelRow>
-                  <label>Total Balance:</label>
-                  <span>0</span>
-                </LabelRow>
-              </HeadRowWallet>
-              <CreateWalletRow>
-                <Button type="primary">Create Wallet</Button>
-              </CreateWalletRow>
-            </WalletCard>
+          <Col span={24}>
+            <Table
+              columns={columns}
+              dataSource={this.state.data}
+              pagination={false}
+              loading={this.state.loader}
+            />
           </Col>
         </TradeRow>
       </Card>
     );
   }
 }
-export default TradeWallets;
+export default withRouter(
+  connect(
+    (state) => ({
+      token: state.Auth.get("token"),
+      user: state.Auth.get("user"),
+    }),
+    { logout }
+  )(TradeWallets)
+);

@@ -10,6 +10,8 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { TradeRow, InnerTabs, InputRow } from "../../App/tradeStyle.js";
 import TradeWallets from "./trade-wallets";
 import AllPendingOrders from "../TradeDesk/allpendingorders";
+import TradeSummary from "./trade-summary";
+import BotConfig from "./bot-config";
 
 const { logout } = authAction;
 // var self;
@@ -18,11 +20,12 @@ class TradeMonitoring extends Component {
     super(props);
     this.state = {
       loader: false,
+      selectedKey: "1"
     };
     // self = this;
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -35,19 +38,36 @@ class TradeMonitoring extends Component {
   render() {
     return (
       <LayoutWrapper>
-        <Tabs className="isoTableDisplayTab full-width">
-          <TabPane tab="Trade Monitoring" key="1">
-            <TableDemoStyle className="isoLayoutContent">
-              <TradeWallets />
-              <Row gutter={16} style={{ marginBottom: "13px" }}>
-                <Col span={24}>
-                  <AllPendingOrders />
-                </Col>
-              </Row>
-              {/* <TradeRow>
-                <Col span={8}>test</Col>
-              </TradeRow> */}
-            </TableDemoStyle>
+        <Tabs className="isoTableDisplayTab full-width" selectedKey={this.state.selectedKey} onChange={(key) => { this.setState({ selectedKey: key }); }}>
+          <TabPane tab="Trade Summary" key="1">
+            {this.state.selectedKey == "1" &&
+              <TableDemoStyle className="isoLayoutContent">
+                <Row gutter={16} style={{ marginBottom: "20px" }}>
+                  <Col span={24}>
+                    <TradeSummary />
+                  </Col>
+                </Row>
+              </TableDemoStyle>
+            }
+          </TabPane>
+          <TabPane tab="Wallets" key="2">
+            {this.state.selectedKey == "2" &&
+              <TableDemoStyle className="isoLayoutContent">
+                <TradeWallets />
+              </TableDemoStyle>
+            }
+
+          </TabPane>
+          <TabPane tab="Configurations" key="3">
+            {this.state.selectedKey == "3" &&
+              <TableDemoStyle className="isoLayoutContent">
+                <Row gutter={16} style={{ marginBottom: "20px" }}>
+                  <Col span={24}>
+                    <BotConfig />
+                  </Col>
+                </Row>
+              </TableDemoStyle>
+            }
           </TabPane>
         </Tabs>
       </LayoutWrapper>

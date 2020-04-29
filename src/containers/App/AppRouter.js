@@ -220,11 +220,11 @@ const routes = [
     module: "trade_desk_management",
   },
   {
-    path: "trade-monitoring",
+    path: "tradedesk-monitoring",
     component: asyncComponent(() =>
       import("../Page/TradeMonitoring/trademonitoring")
     ),
-    module: "trade-monitoring",
+    module: "trade_desk_monitoring",
   },
 ];
 

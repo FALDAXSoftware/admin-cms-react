@@ -3725,5 +3725,45 @@ const ApiUtils = {
       })
     });
   },
+  getSpreadData: function (token) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/get-spread-value`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+        // "Content-Type": 'multipart/form-data',
+      },
+      // body: JSON.stringify({})
+    });
+  },
+  getTradeDeskBalance: function (token) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/get-tradedesk-user-balances`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+        // "Content-Type": 'multipart/form-data',
+      },
+      // body: JSON.stringify({})
+    });
+  },
+  getPairsForBot: function (token) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/get-pairs-value`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+        // "Content-Type": 'multipart/form-data',
+      },
+      // body: JSON.stringify({})
+    });
+  },
+  updatePairsForBot: function (token, data) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/update-pairs-value`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ...data })
+    });
+  },
 };
 export default ApiUtils;
