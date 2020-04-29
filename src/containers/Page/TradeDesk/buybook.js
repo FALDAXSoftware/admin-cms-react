@@ -64,7 +64,7 @@ class BuyBook extends Component {
 
     return (
       <>
-        <Card className="lessPaddingCard">
+        <Card className="lessPaddingCard" style={{ minHeight: "610px" }}>
           <TradeHeadRow type="flex" justify="space-between">
             <Col span={12}>
               <label>Buying {this.props.crypto}</label>

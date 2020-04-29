@@ -17,29 +17,38 @@ const columns = [
         title: 'Best Bid Price',
         dataIndex: 'bid_price',
         key: 'bid_price',
+        render: (text, record) => (<>{text ? parseFloat(text).toFixed(8) : "-"}</>),
+        // sorter: (a, b) => parseFloat(a.bid_price).toFixed(8) - parseFloat(b.bid_price).toFixed(8),
     },
     {
         title: 'Best Ask Price',
         dataIndex: 'ask_price',
         key: 'ask_price',
+        render: (text, record) => (<>{text ? parseFloat(text).toFixed(8) : "-"}</>),
+        // sorter: (a, b) => parseFloat(a.ask_price).toFixed(8) - parseFloat(b.ask_price).toFixed(8),
+
     },
     {
         title: 'Spread',
         dataIndex: 'spread',
         key: 'spread',
-        render: (text, record) => (<>{!isNaN(record.bid_price - record.ask_price) ? parseFloat(record.bid_price - record.ask_price).toFixed(8) : 0}</>)
+        render: (text, record) => (<>{!isNaN(record.bid_price - record.ask_price) ? parseFloat(record.bid_price - record.ask_price).toFixed(8) : parseFloat(0).toFixed(8)}</>),
+        // sorter: (a, b) => (<>{!isNaN(a.bid_price - a.ask_price) ? parseFloat(a.bid_price - a.ask_price).toFixed(8) : parseFloat(0).toFixed(8)}</>) - (<>{!isNaN(b.bid_price - b.ask_price) ? parseFloat(b.bid_price - b.ask_price).toFixed(8) : parseFloat(0).toFixed(8)}</>),
+
     },
     {
         title: 'Price',
         dataIndex: 'price',
         key: 'price',
-        render: (text, record) => (<>{!isNaN((record.bid_price + record.ask_price) / 2) ? parseFloat((record.bid_price + record.ask_price) / 2).toFixed(8) : 0}</>)
+        render: (text, record) => (<>{!isNaN((record.bid_price + record.ask_price) / 2) ? parseFloat((record.bid_price + record.ask_price) / 2).toFixed(8) : parseFloat(0).toFixed(8)}</>),
+        // sorter: (a, b) => (<>{!isNaN((a.bid_price + a.ask_price) / 2) ? parseFloat((a.bid_price + a.ask_price) / 2).toFixed(8) : parseFloat(0).toFixed(8)}</>) - (<>{!isNaN((b.bid_price + b.ask_price) / 2) ? parseFloat((b.bid_price + b.ask_price) / 2).toFixed(8) : parseFloat(0).toFixed(8)}</>),
+
     },
     {
         title: 'Spread %',
         dataIndex: 'spread_per',
         key: 'spread_per',
-        render: (text, record) => (<>{!isNaN((record.bid_price - record.ask_price) / ((record.bid_price + record.ask_price) / 2)) ? parseFloat((record.bid_price - record.ask_price) / ((record.bid_price + record.ask_price) / 2)).toFixed(8) : 0}</>)
+        render: (text, record) => (<>{!isNaN((record.bid_price - record.ask_price) / ((record.bid_price + record.ask_price) / 2)) ? parseFloat((record.bid_price - record.ask_price) / ((record.bid_price + record.ask_price) / 2)).toFixed(8) : parseFloat(0).toFixed(8)}</>)
     }
 ]
 class TradeSummary extends Component {
