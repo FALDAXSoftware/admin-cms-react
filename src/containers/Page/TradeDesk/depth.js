@@ -113,6 +113,7 @@ class DepthChart extends Component {
                 height="200"
                 data={graphData}
                 options={{
+                  animation: false,
                   responsive: true,
                   maintainAspectRatio: false,
                   legend: {
