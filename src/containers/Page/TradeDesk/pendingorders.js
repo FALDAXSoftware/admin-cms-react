@@ -98,7 +98,7 @@ class PendingOrders extends Component {
         title: "Action",
         dataIndex: "action",
         key: "action",
-        render: (text, record) => <Icon type="close-circle" onClick={() => { this.onCancle(record.encript_id, record.side, record.order_type) }} />,
+        render: (text, record) => <Icon type="close-circle" onClick={() => { this.onCancle(record.id, record.side, record.order_type) }} />,
       },
     ];
     return (
