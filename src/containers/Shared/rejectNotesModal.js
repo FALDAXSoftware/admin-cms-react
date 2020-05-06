@@ -51,20 +51,25 @@ class rejectNotesModal extends Component {
             <Button type="primary" onClick={this.onRejectRequestSubmit}>Submit</Button>
             ]}
           >
-            <TextArea
-            placeholder="Private Note"
-            autoSize={{ minRows: 2, maxRows: 6 }}
-            name="private_note"
-            onChange={this.onChange}
-          />
-           <span style={{ color: "red" }}>
-                {this.validator.message('Private Note', this.state.private_note, 'required')}
-           </span>
+              <fieldset>
+                <label><b>Private Note</b></label>
+                <TextArea
+                placeholder="Write here.."
+                autoSize={{ minRows: 2, maxRows: 6 }}
+                name="private_note"
+                onChange={this.onChange}
+                />
+                <span style={{ color: "red" }}>
+                        {this.validator.message('Private Note', this.state.private_note, 'required')}
+                </span>
+            </fieldset> 
   
-  
+            
+            <fieldset className="mt-8">
+            <label><b>Public Note</b></label>
           <TextArea
-          className="mt-8"
-            placeholder="Public Note"
+          
+            placeholder="Write here"
             name="public_note"
             autoSize={{ minRows: 2, maxRows: 6 }}
             onChange={this.onChange}
@@ -72,6 +77,7 @@ class rejectNotesModal extends Component {
            <span style={{ color: "red" }}>
           {this.validator.message('Public Note', this.state.public_note, 'required')}
            </span>
+           </fieldset>
           </Modal>
         );
     }

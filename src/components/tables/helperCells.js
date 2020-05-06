@@ -20,7 +20,7 @@ import AccountClass from "../../containers/Page/AccountClass/accountClass";
 import { EmailTemplates } from "../../containers/Page/EmailTemplates/emailTemplates";
 import { NewsSources } from "../../containers/Page/NewsSource/newsSources";
 import WithdrawRequest from "../../containers/Page/WithdrawRequest/withdrawRequest";
-import { Icon, Switch, Button, Tooltip } from "antd";
+import { Icon, Switch, Button, Tooltip, Divider } from "antd";
 import moment from "moment";
 import { JobCategory } from "../../containers/Page/Jobs/jobsCategory";
 import ProfileWhitelist from "../../containers/Page/profileWhitelist";
@@ -2912,38 +2912,64 @@ const TierReqCell = (
   daily_withdraw_limit,
   monthly_withdraw_limit,
   minimum_activity_thresold,
-  requirements
+  requirements,
+  requirements2
 ) => (
-    <div>
+  <div>
     <ul class="style-circle" type="circle">
-      {Object.keys(requirements).map(req => (
+      {Object.keys(requirements).map((req) => (
         <li>
           <b>{requirements[req]}</b>
         </li>
       ))}
-      </ul>
-    </div>
-  );
+    </ul>
+    <Divider>OR</Divider>
+    <ul class="style-circle" type="circle">
+      <li>
+        <b>
+          {"Total wallet USD Value : $" +
+            requirements2["Total_Wallet_Balance"]}
+        </b>
+      </li>
+    </ul>
+  </div>
+);
 const TierThresholdCell = (
   value,
   tier_step,
   daily_withdraw_limit,
   monthly_withdraw_limit,
   minimum_activity_thresold,
-  requirements
+  requirements,
+  
 ) => (
+  <>
     <ul class="style-circle" type="circle">
-        <li>
-          <b>{"Account Age : "+minimum_activity_thresold["Account_Age"]+' Days'}</b>
-        </li>
-        <li>
-          <b>{"Minimum Total Transactions : "+minimum_activity_thresold["Minimum_Total_Transactions"]+' Transactions'}</b>
-        </li>
-        <li>
-          <b>{"Minimum Total Value of All Transactions : $"+minimum_activity_thresold["Minimum_Total_Value_of_All_Transactions"]}</b>
-        </li>
+      <li>
+        <b>
+          {"Account Age : " +
+            minimum_activity_thresold["Account_Age"] +
+            " Days"}
+        </b>
+      </li>
+      <li>
+        <b>
+          {"Minimum Total Transactions : " +
+            minimum_activity_thresold["Minimum_Total_Transactions"] +
+            " Transactions"}
+        </b>
+      </li>
+      <li>
+        <b>
+          {"Minimum Total Value of All Transactions : $" +
+            minimum_activity_thresold[
+              "Minimum_Total_Value_of_All_Transactions"
+            ]}
+        </b>
+      </li>
     </ul>
-  );
+  </>
+);
 const TierActionCell = value => (
   <div>
     {isAllowed("get_tier_data") && (

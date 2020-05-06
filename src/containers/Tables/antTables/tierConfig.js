@@ -6,20 +6,21 @@ import {
 } from '../../../components/tables/helperCells';
 
 const renderCell = (object, type, key, tier = null, dailyLimit = null, monthlyLimit = null,
-    minThreshold = null, req = null) => {
+    minThreshold = null, req = null,req2=null) => {
     const value = object[key];
     const tier_step = object[tier];
     const daily_withdraw_limit = object[dailyLimit];
     const monthly_withdraw_limit = object[monthlyLimit];
     const minimum_activity_thresold = object[minThreshold];
     const requirements = object[req];
+    const requirements2 = object[req2];
 
     switch (type) {
         case 'TierActionCell':
             return TierActionCell(value);
         case 'TierReqCell':
             return TierReqCell(value, tier_step, daily_withdraw_limit, monthly_withdraw_limit,
-                minimum_activity_thresold, requirements);
+                minimum_activity_thresold, requirements,requirements2);
         case 'TierThresholdCell':
             return TierThresholdCell(value, tier_step, daily_withdraw_limit, monthly_withdraw_limit,
                 minimum_activity_thresold, requirements);
@@ -60,7 +61,7 @@ const columns = [{
     key: 'requirements',
     width: 100,
     render: object => renderCell(object, 'TierReqCell', 'id', 'tier_step', 'daily_withdraw_limit',
-        'monthly_withdraw_limit', 'minimum_activity_thresold', 'requirements')
+        'monthly_withdraw_limit', 'minimum_activity_thresold', 'requirements','requirements_two')
 }];
 
 const tierTableInfos = [
