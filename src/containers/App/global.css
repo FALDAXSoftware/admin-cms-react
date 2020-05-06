@@ -903,9 +903,9 @@ html[dir='rtl'] .dz-hidden-input {
   margin: 5px;
   font-size: 18px !important;
 }
-.custom-tr-width{
+/* .custom-tr-width{
   padding-left: 50px;
-}
+} */
 
 .lessPaddingCard .ant-card-body{
   padding: 24px 10px;
@@ -931,4 +931,7 @@ th.custom-tr-width{
 }
 .tier-upgrade-info-tbl tr th , .tier-upgrade-info-tbl tr td{
   padding: 0 10px;
+}
+.tier-upgrade-info-tbl{
+  border: 1px solid #999999 !important;
 }

@@ -46,7 +46,7 @@ class ViewNotesModal extends Component {
             ]}
           >
            <p><b>Public Note</b> : &nbsp;{this.state.public_note}</p>
-           {this.state.private_note &&<p><b>Private Note</b> : &nbsp;{this.state.private_note}</p>}
+           {this.state.private_note &&<p className="mt-8"><b>Private Note</b> : &nbsp;{this.state.private_note}</p>}
           </Modal>
         );
     }

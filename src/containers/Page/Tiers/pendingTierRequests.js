@@ -491,6 +491,8 @@ class PendingRequests extends Component {
           expandedRowRender={() => {
             return (
               <>
+                {tierDetailsRequest.length>0 && 
+                <>
                 <tr>
                   <th className="custom-tr-width">Submitted On</th>
                   <th className="custom-tr-width">Status</th>
@@ -581,6 +583,9 @@ class PendingRequests extends Component {
                     </>
                   );
                 })}
+                </>
+                }
+                {tierDetailsRequest.length==0 && <p>No Data Found</p>}
               </>
             );
           }}

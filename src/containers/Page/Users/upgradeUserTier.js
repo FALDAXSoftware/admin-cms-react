@@ -116,6 +116,17 @@ class UpgradeUserTier extends Component {
               initial={1}
             >
               <Step
+                status={accountTier >= 1 ? "finish" : accountTier == 0 ? "process" : "wait"}
+                title="Tier 1"
+                description={
+                  accountTier >= 1 ? (
+                    "Unlocked"
+                  ) : (
+                    "Locked"
+                  )
+                }
+              />
+              <Step
                 status={accountTier >= 2 ? "finish" : accountTier == 1 ? "process" : "wait"}
                 title="Tier 2"
                 description={
@@ -143,6 +154,13 @@ class UpgradeUserTier extends Component {
                     </Button>}
                     </>
                   )
+                }
+              />
+              <Step
+                status="finish"
+                title="Tier 4"
+                description={
+                    "Unlocked"
                 }
               />
               {/* <Step
@@ -204,7 +222,7 @@ class UpgradeUserTier extends Component {
               <tr>
                   <td>Total Wallet USD Value</td>
             <td>$ {tierUpgradeRequirement2.Total_Wallet_Balance}</td>
-            <td className={req2_tradeWalletCheck?"color-green":"color-red"}>$ {tierData2.userWalletFiatRemaining?tierData2.userWalletFiatRemaining:0}</td>
+            <td className={req2_tradeWalletCheck?"color-green":"color-red"}>$ {tierData2.userWalletFiatRemaining?parseFloat(tierData2.userWalletFiatRemaining).toFixed(2):0}</td>
               </tr>
             </table>
         </Modal>

@@ -5,7 +5,7 @@
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
+const API_URL =process.env.REACT_APP_API_ENDPOINT;
 export const SOCKET_HOST = "https://preprod-trading.faldax.com"
 // export const SOCKET_HOST = "http://localhost:3011"
 const ApiUtils = {
