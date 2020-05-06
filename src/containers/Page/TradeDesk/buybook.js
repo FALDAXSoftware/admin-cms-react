@@ -38,7 +38,7 @@ class BuyBook extends Component {
 
   componentDidMount = () => {
     this.props.io.on("buy-book-data", (data) => {
-      this.updateData(data)
+      this.updateData(data.data)
     })
   };
   updateData = (data) => {
