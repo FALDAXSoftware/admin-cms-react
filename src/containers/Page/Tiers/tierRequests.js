@@ -20,14 +20,15 @@ class AllRequests extends React.Component {
   }
 
   componentDidMount = () => {
-    this._getAllTierRequests();
+    // this._getAllTierRequests();
   };
-
+  
   _getAllTierRequests = () => {
     const { token } = this.props;
     const { sorterCol, sortOrder } = this.state;
     let _this = this;
-
+    
+    console.log("call");
     _this.setState({ loader: true });
     ApiUtils.getAllTierRequests(token, this.props.tier, sorterCol, sortOrder)
       .then((response) => response.json())
