@@ -490,81 +490,95 @@ class PendingRequests extends Component {
           expandedRowKeys={this.state.expandedRowKeys}
           expandedRowRender={() => {
             return (
-              <><tr>
-                <th className="custom-tr-width">Submitted On</th>
-                <th className="custom-tr-width">Status</th>
-                <th className="custom-tr-width">Updated By</th>
-                <th className="custom-tr-width">Id</th>
-                <th className="custom-tr-width">Type</th>
-                <th className="custom-tr-width">Notes</th>
-              </tr>
+              <>
+                <tr>
+                  <th className="custom-tr-width">Submitted On</th>
+                  <th className="custom-tr-width">Status</th>
+                  <th className="custom-tr-width">Updated By</th>
+                  <th className="custom-tr-width">Id</th>
+                  <th className="custom-tr-width">Type</th>
+                  <th className="custom-tr-width">Notes</th>
+                </tr>
                 {tierDetailsRequest.map((ele) => {
                   return (
-                  <>
-                    <tr>
-                       <td className="custom-tr-width">
-                                      {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
-                                      {DateTimeCell(ele["created_at"],"string")}
-                                    </td>
-                      {ele["is_approved"] == null && (
+                    <>
+                      <tr>
                         <td className="custom-tr-width">
-                          {PendingTierReqActionCell(
-                            ele["id"],
-                            ele["first_name"],
-                            ele["last_name"],
-                            ele["tier_step"],
-                            ele["is_approved"],
-                            ele["request_id"]
-                          )}
+                          {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
+                          {DateTimeCell(ele["created_at"], "string")}
                         </td>
-                      )}
-                      {ele["is_approved"] == true && (
+                        {ele["is_approved"] == null && (
+                          <td className="custom-tr-width">
+                            {PendingTierReqActionCell(
+                              ele["id"],
+                              ele["first_name"],
+                              ele["last_name"],
+                              ele["tier_step"],
+                              ele["is_approved"],
+                              ele["request_id"]
+                            )}
+                          </td>
+                        )}
+                        {ele["is_approved"] == true && (
+                          <td className="custom-tr-width">
+                            <Tag color="#87d068">
+                              <Icon type="check"></Icon>
+                              &nbsp;Approved
+                            </Tag>
+                          </td>
+                        )}
+                        {ele["is_approved"] == false && (
+                          <td className="custom-tr-width">
+                            <Tag color="#f50">
+                              <Icon type="close"></Icon>&nbsp;Rejected
+                            </Tag>
+                          </td>
+                        )}
                         <td className="custom-tr-width">
-                          <Tag color="#87d068">
-                            <Icon type="check"></Icon>
-                            &nbsp;Approved
-                          </Tag>
+                          {/* <b>{ele["is_approved"]==null?"-":ele["is_approved"]?"Approved By :":"Rejected By :"}</b> */}
+                          {ele["updated_by"] ? ele["updated_by"] : "-"}
                         </td>
-                      )}
-                      {ele["is_approved"] == false && (
                         <td className="custom-tr-width">
-                          <Tag color="#f50">
-                            <Icon type="close"></Icon>&nbsp;Rejected
-                          </Tag>
+                          {/* <b>{ele['ssn'] && <span>Govt.Issued ID Number &nbsp;</span>} </b>&nbsp; */}
+                          {/* <b>{!ele['ssn'] && <span>Unique Id &nbsp;</span>} </b>&nbsp; */}
+                          {ele["unique_key"]
+                            ? ele["unique_key"]
+                            : ele["type"] == "4"
+                            ? "Enabled"
+                            : ele["ssn"] + "(Govt.Issued ID Number)"}
                         </td>
-                      )}
-                      <td className="custom-tr-width">
-                      {/* <b>{ele["is_approved"]==null?"-":ele["is_approved"]?"Approved By :":"Rejected By :"}</b> */}
-                      {ele["updated_by"]?ele["updated_by"]:"-"}
-                      </td>
-                      <td className="custom-tr-width">
-                        {/* <b>{ele['ssn'] && <span>Govt.Issued ID Number &nbsp;</span>} </b>&nbsp; */}
-                        {/* <b>{!ele['ssn'] && <span>Unique Id &nbsp;</span>} </b>&nbsp; */}
-                        {ele["unique_key"]
-                          ? ele["unique_key"]
-                          : ele["type"] == "4"
-                          ? "Enabled"
-                          : ele["ssn"]+"(Govt.Issued ID Number)"}
-                      </td>
-                      {/* <td className="custom-tr-width">{ele["ssn"] &&<> <b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</>}</td> */}
-                      <td className="custom-tr-width">
-                        {/* <b>Type &nbsp;: </b>&nbsp; */}
-                        {
-                          <span>
-                            {getTierDoc(this.props.tier, ele["type"])}
-                          </span>
-                        }
-                      </td>
-                      <td className="custom-tr-width">
-                        <Button  disabled={!(ele['public_note'] || ele['private_note'])} onClick={()=>{this.setState({"showNotesModal":true,"public_note":ele["public_note"],"private_note":ele["private_note"]})}}>Show Notes</Button>
-                      </td>
-            
-                    {/* <td className="custom-tr-width">
+                        {/* <td className="custom-tr-width">{ele["ssn"] &&<> <b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</>}</td> */}
+                        <td className="custom-tr-width">
+                          {/* <b>Type &nbsp;: </b>&nbsp; */}
+                          {
+                            <span>
+                              {getTierDoc(this.props.tier, ele["type"])}
+                            </span>
+                          }
+                        </td>
+                        <td className="custom-tr-width">
+                          <Button
+                            disabled={
+                              !(ele["public_note"] || ele["private_note"])
+                            }
+                            onClick={() => {
+                              this.setState({
+                                showNotesModal: true,
+                                public_note: ele["public_note"],
+                                private_note: ele["private_note"],
+                              });
+                            }}
+                          >
+                            Show Notes
+                          </Button>
+                        </td>
+
+                        {/* <td className="custom-tr-width">
                       {ele["public_note"]?ele["public_note"]:"-"}</td>
                     <td className="custom-tr-width">
                       {ele["private_note"]?ele["private_note"]:"-"}</td> */}
-                  </tr>
-                  </>
+                      </tr>
+                    </>
                   );
                 })}
               </>
@@ -572,7 +586,8 @@ class PendingRequests extends Component {
           }}
           onExpand={(expanded, records) => {
             this.getDetTierDetails(expanded, records);
-          }}></TableWrapper>
+          }}
+        ></TableWrapper>
         <Pagination
           className="ant-users-pagination"
           onChange={this._handlePagination}
@@ -583,41 +598,65 @@ class PendingRequests extends Component {
           onShowSizeChange={this.changePaginationSize}
           pageSizeOptions={PAGE_SIZE_OPTIONS}
         />
-          <Modal
+        <Modal
           title="Notes"
           visible={this.state.showRejectNoteModal}
+          onCancel={this.onCancel}
           footer={[
-          <Button onClick={this.onCancel}>Cancel</Button>,
-          <Button type="primary" onClick={this.onRejectRequestSubmit}>Submit</Button>
+            <Button onClick={this.onCancel}>Cancel</Button>,
+            <Button type="primary" onClick={this.onRejectRequestSubmit}>
+              Submit
+            </Button>,
           ]}
         >
-          <TextArea
-          placeholder="Private Note"
-          autoSize={{ minRows: 2, maxRows: 6 }}
-          name="private_note"
-          value={this.state.privateNote}
-          onChange={this.onChange}
-          required
-        />
-        <span style={{ color: "red" }}>
-                {this.validator.message('Private Note', this.state.privateNote, 'required')}
-           </span>
+          <fieldset>
+            <label>
+              <b>Private Note</b>
+            </label>
+            <TextArea
+              placeholder="Write here..."
+              autoSize={{ minRows: 2, maxRows: 6 }}
+              name="private_note"
+              value={this.state.privateNote}
+              onChange={this.onChange}
+              required
+            />
+            <span style={{ color: "red" }}>
+              {this.validator.message(
+                "Private Note",
+                this.state.privateNote,
+                "required"
+              )}
+            </span>
+          </fieldset>
 
-
-        <TextArea
-        className="mt-8"
-          placeholder="Public Note"
-          name="public_note"
-          value={this.state.publicNote}
-          autoSize={{ minRows: 2, maxRows: 6 }}
-          onChange={this.onChange}
-          required
-        />
-        <span style={{ color: "red" }}>
-                {this.validator.message('Public Note', this.state.publicNote, 'required')}
-           </span>
+          <fieldset className="mt-8">
+            <label>
+              <b>Public Note</b>
+            </label>
+            <TextArea
+              placeholder="Write here..."
+              name="public_note"
+              value={this.state.publicNote}
+              autoSize={{ minRows: 2, maxRows: 6 }}
+              onChange={this.onChange}
+              required
+            />
+            <span style={{ color: "red" }}>
+              {this.validator.message(
+                "Public Note",
+                this.state.publicNote,
+                "required"
+              )}
+            </span>
+          </fieldset>
         </Modal>
-        <ViewNotesModal visible={showNotesModal} public_note={this.state.public_note} private_note={this.state.private_note} setVisible={(showNotesModal)=>this.setState({showNotesModal})}/>
+        <ViewNotesModal
+          visible={showNotesModal}
+          public_note={this.state.public_note}
+          private_note={this.state.private_note}
+          setVisible={(showNotesModal) => this.setState({ showNotesModal })}
+        />
       </div>
     );
   }

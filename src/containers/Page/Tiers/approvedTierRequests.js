@@ -328,15 +328,15 @@ class ApprovedRequests extends Component {
                             </td>
                           )}
                           <td className="custom-tr-width">
+                            {ele["updated_by"] ? ele["updated_by"] : "-"}
+                          </td>
+                          <td className="custom-tr-width">
                             {/* <b>Unique Id &nbsp;: </b>&nbsp; */}
                             {ele["unique_key"]
                               ? ele["unique_key"]
                               : ele["type"] == "4"
                               ? "Enabled"
                               : ele["ssn"] + "(Govt.Issued ID Number)"}
-                          </td>
-                          <td className="custom-tr-width">
-                            {ele["updated_by"] ? ele["updated_by"] : "-"}
                           </td>
                           <td className="custom-tr-width">
                             {/* <b>Type &nbsp;: </b>&nbsp; */}

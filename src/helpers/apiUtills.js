@@ -2955,8 +2955,17 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-
-  getAllTiers: function (token) {
+  getAllTierRequirement: function(token) {
+    let url = "/admin/get-all-tier-details";
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
+      }
+    });
+  },
+  getAllTiers: function(token) {
     let url = "/admin/get-tier-details";
     return fetch(API_URL + url, {
       method: "GET",
@@ -3712,7 +3721,15 @@ const ApiUtils = {
       }, body: JSON.stringify({ public_note, private_note })
     })
   },
-  getTierDetails: function (token, id, tier) {
+  getTierTierRequirement(token,id){
+    return fetch(`${API_URL}/admin/get-tier-data?id=${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+  },
+  getTierDetails: function(token, id,tier) {
     return fetch(`${API_URL}/admin/get-tier-details`, {
       method: "POST",
       headers: {
@@ -3765,5 +3782,29 @@ const ApiUtils = {
       body: JSON.stringify({ ...data })
     });
   },
+    checkTierUpgradeStatus: function(token, user_id,tier) {
+      return fetch(`${API_URL}/admin/user-tier-unlock-check?user_id=${user_id}&tier_step=${tier}`, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      });
+    },
+    tierUnlock: function(token, user_id,tier) {
+      return fetch(`${API_URL}/admin/user-tier-unlock?user_id=${user_id}&tier_step=${tier}`, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      });
+    },
+    getUserTierValue: function(token, user_id) {
+      return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      });
+    }
 };
 export default ApiUtils;
