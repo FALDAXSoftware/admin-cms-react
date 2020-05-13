@@ -2967,6 +2967,12 @@ const TierThresholdCell = (
             ]}
         </b>
       </li>
+      <li>
+        <b>Deposit Cryptocurrencies : Unlimited</b>
+      </li>
+      <li>
+        <b>Trade : Unlimited</b>
+      </li>
     </ul>
   </>
 );
