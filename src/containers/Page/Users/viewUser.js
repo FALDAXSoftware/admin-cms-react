@@ -47,7 +47,7 @@ class ViewUser extends Component {
             <LayoutWrapper>
                 {/* <BackButton {...this.props}></BackButton> */}
                 <BreadcrumbComponent {...this.props} />
-                <Tabs className="full-width" defaultActiveKey="13">
+                <Tabs className="full-width">
                     {isAllowed("get_user_details") &&
 
                         <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
