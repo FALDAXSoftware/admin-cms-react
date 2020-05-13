@@ -22,7 +22,8 @@ columns.push({
   width:250,
   align:"left",
   ellipsis:true,
-  render:object=><span><Button type="danger" onClick={()=>self.forceApproveRejectTierRequest(false,object["id"])}>Force Reject</Button>&nbsp;&nbsp;
+  render:object=><span>
+    {/* <Button type="danger" onClick={()=>self.forceApproveRejectTierRequest(false,object["id"])}>Force Reject</Button>&nbsp;&nbsp; */}
   <Button disabled={!(object['public_note'] || object['private_note'])} onClick={()=>self.setState({showNotesModal:true,public_note:object["public_note"],private_note:object["private_note"]})}>Show Notes</Button></span>
   
 });
