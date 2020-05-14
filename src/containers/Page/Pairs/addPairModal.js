@@ -116,9 +116,9 @@ class AddPairModal extends Component {
             let formData = {
                 name: name,
                 coin_code1: selectedCoin1,
-                coin_code2: selectedCoin2,
-                maker_fee: fields['maker_fee'],
-                taker_fee: fields['taker_fee']
+                coin_code2: selectedCoin2
+                // maker_fee: fields['maker_fee'],
+                // taker_fee: fields['taker_fee']
             };
 
             ApiUtils.addPair(token, formData)
@@ -128,7 +128,7 @@ class AddPairModal extends Component {
                         this.setState({
                             errType: 'success', errMsg: true, errMessage: res.message,
                             isDisabled: false, loader: false
-                        },()=>{
+                        }, () => {
                             this._resetAddForm();
                             this._closeAddPairsModal();
                             getAllPairs();
@@ -196,6 +196,14 @@ class AddPairModal extends Component {
                 <Option value={coin.coin}>{coin.coin_name}-{coin.coin}</Option>
             )
         });
+        let coinOptions1 = allCoins.map((coin) => {
+            if (coin.coin == "BTC" || coin.coin == "ETH" || coin.coin == "PAX") {
+                return (
+
+                    <Option value={coin.coin} > {coin.coin_name} - {coin.coin}</Option >
+                )
+            }
+        })
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -207,10 +215,11 @@ class AddPairModal extends Component {
                 visible={showAddPairsModal}
                 confirmLoading={loader}
                 onCancel={this._closeAddPairsModal}
-                footer={[
-                    <Button onClick={this._closeAddPairsModal}>Cancel</Button>,
-                    <Button disabled={isDisabled} onClick={this._addPairs}>Add</Button>,
-                ]}
+                footer={
+                    [
+                        <Button onClick={this._closeAddPairsModal}>Cancel</Button>,
+                        <Button disabled={isDisabled} onClick={this._addPairs}>Add</Button>,
+                    ]}
             >
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Pair Name:</span>
@@ -240,7 +249,7 @@ class AddPairModal extends Component {
                         placeholder="Select an Asset"
                         onChange={this._changeCoin.bind(this, 'coin_id2')}
                     >
-                        {coinOptions}
+                        {coinOptions1}
                     </Select><br />
                     {showCoin2Err && <span style={{ "color": "red" }}>
                         {'The asset 2 field is required.'}
@@ -250,23 +259,23 @@ class AddPairModal extends Component {
                     {'The asset 1 & asset 2 field can not be same.'}
                 </span>}
 
-                <div style={{ "marginBottom": "15px" }}>
+                {/* <div style={{ "marginBottom": "15px" }}>
                     <span>Maker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('maker fee', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
-                </div>
+                </div> */}
 
-                <div style={{ "marginBottom": "15px" }}>
+                {/* <div style={{ "marginBottom": "15px" }}>
                     <span>Taker Fee:</span>
                     <Input addonAfter={'%'} placeholder="Taker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
-                </div>
+                </div> */}
                 {loader && <FaldaxLoader />}
-            </Modal>
+            </Modal >
         );
     }
 }

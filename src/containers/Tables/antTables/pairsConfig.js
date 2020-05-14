@@ -98,25 +98,25 @@ const columns = [
     sorter: true,
     render: object => renderCell(object, "TextCell", "name")
   },
-  {
-    title: <IntlMessages id="feeTable.title.maker_fee" />,
-    key: "maker_fee",
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, "FixedCell", "maker_fee")
-  },
-  {
-    title: <IntlMessages id="feeTable.title.taker_fee" />,
-    key: "taker_fee",
-    width: 100,
-    sorter: true,
-    render: object => renderCell(object, "FixedCell", "taker_fee")
-  },
+  // {
+  //   title: <IntlMessages id="feeTable.title.maker_fee" />,
+  //   key: "maker_fee",
+  //   width: 100,
+  //   sorter: true,
+  //   render: object => renderCell(object, "FixedCell", "maker_fee")
+  // },
+  // {
+  //   title: <IntlMessages id="feeTable.title.taker_fee" />,
+  //   key: "taker_fee",
+  //   width: 100,
+  //   sorter: true,
+  //   render: object => renderCell(object, "FixedCell", "taker_fee")
+  // },
   {
     title: <IntlMessages id="feeTable.title.status" />,
     key: "is_active",
     width: 100,
-    render: object =>{
+    render: object => {
       if (isAllowed("admin_edit_pair")) {
         return renderCell(
           object,
@@ -127,12 +127,12 @@ const columns = [
           "taker_fee",
           "created_at",
           "is_active"
-        )  
-      }else{
+        )
+      } else {
         return renderCell(object, "TextCell", "is_active")
       }
     }
-      
+
   }
 ];
 
