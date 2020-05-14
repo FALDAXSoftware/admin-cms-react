@@ -415,7 +415,10 @@ class RejectedRequests extends Component {
           loading={this.state.expandRowLoader}
           expandedRowRender={() => {
             return (
-              <><tr>
+              <>
+              {tierDetailsRequest.length>0 && 
+              <>
+              <tr>
                 <th className="custom-tr-width">Submitted On</th>
                 <th className="custom-tr-width">Status</th>
                 <th className="custom-tr-width">Updated By</th>
@@ -482,6 +485,9 @@ class RejectedRequests extends Component {
                   </>
                   );
                 })}
+                    </>
+                  } 
+                     {tierDetailsRequest.length==0 && <p>No Data Found</p>}
               </>
             );
           }}

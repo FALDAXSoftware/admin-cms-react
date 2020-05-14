@@ -423,6 +423,14 @@ html[dir='rtl'] .dz-hidden-input {
 .error-danger{
   color:red;
 }
+.color-red{
+  color: red;
+}
+.tier-unlock-warning{
+  padding-bottom: 11px;
+    font-size: unset;
+    color: red;
+}
 
 .mg-top-15{
   margin-top: 15px;
@@ -895,9 +903,9 @@ html[dir='rtl'] .dz-hidden-input {
   margin: 5px;
   font-size: 18px !important;
 }
-.custom-tr-width{
+/* .custom-tr-width{
   padding-left: 50px;
-}
+} */
 
 .lessPaddingCard .ant-card-body{
   padding: 24px 10px;
@@ -915,4 +923,20 @@ th.custom-tr-width{
 }
 .ant-table-expanded-row{
   overflow: auto;
+}
+.upgrade-btn{
+  /* background-color: #1890ff; */
+  /* color: #fff !important; */
+  border-radius: 5px !important;
+}
+.tier-upgrade-info-tbl tr th , .tier-upgrade-info-tbl tr td{
+  padding: 0 10px;
+}
+.tier-upgrade-info-tbl{
+  border: 1px solid #999999 !important;
+}
+
+#depthChartContainer{
+  height: 100%;
+  width: 95%;
 }

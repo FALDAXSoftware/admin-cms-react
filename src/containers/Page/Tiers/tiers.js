@@ -52,7 +52,7 @@ class Tiers extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllTiers(token, sorterCol, sortOrder)
+    ApiUtils.getAllTierRequirement(token, sorterCol, sortOrder)
       .then(response => response.json())
       .then(function(res) {
         if (res.status == 200) {

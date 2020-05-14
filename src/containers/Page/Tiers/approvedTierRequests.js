@@ -288,6 +288,8 @@ class ApprovedRequests extends Component {
               expandedRowRender={() => {
                 return (
                   <>
+                  {tierDetailsRequest.length>0 && 
+                  <>
                     <tr>
                       <th className="custom-tr-width">Submitted On</th>
                       <th className="custom-tr-width">Status</th>
@@ -328,15 +330,15 @@ class ApprovedRequests extends Component {
                             </td>
                           )}
                           <td className="custom-tr-width">
+                            {ele["updated_by"] ? ele["updated_by"] : "-"}
+                          </td>
+                          <td className="custom-tr-width">
                             {/* <b>Unique Id &nbsp;: </b>&nbsp; */}
                             {ele["unique_key"]
                               ? ele["unique_key"]
                               : ele["type"] == "4"
                               ? "Enabled"
                               : ele["ssn"] + "(Govt.Issued ID Number)"}
-                          </td>
-                          <td className="custom-tr-width">
-                            {ele["updated_by"] ? ele["updated_by"] : "-"}
                           </td>
                           <td className="custom-tr-width">
                             {/* <b>Type &nbsp;: </b>&nbsp; */}
@@ -352,6 +354,9 @@ class ApprovedRequests extends Component {
                         </tr>
                       );
                     })}
+                    </>
+                  }
+                     {tierDetailsRequest.length==0 && <p>No Data Found</p>}
                   </>
                 );
               }}
