@@ -950,61 +950,61 @@ const approvePendingReq = (
   );
 };
 
-const getTierDoc=(tier,type)=>{
-  if(tier==2 || tier=="2"){
-    if(type=="1"){
-    return <span>Valid ID</span>
-    }else if(type=="2"){
+const getTierDoc = (tier, type) => {
+  if (tier == 2 || tier == "2") {
+    if (type == "1") {
+      return <span>Valid ID</span>
+    } else if (type == "2") {
       return <span>Proof of Residence</span>
-      }else if(type=="3"){
-        return <span>Equivalent Govt. Issued ID Number</span>
-        }else if(type=="4"){
-          return <span>Two Factor Authentication</span>
-          }
+    } else if (type == "3") {
+      return <span>Equivalent Govt. Issued ID Number</span>
+    } else if (type == "4") {
+      return <span>Two Factor Authentication</span>
+    }
 
-  }else if(tier==3 || tier=="3"){
-    if(type=="1"){
+  } else if (tier == 3 || tier == "3") {
+    if (type == "1") {
       return <span>IDCP</span>
-    }else if(type=="2"){
+    } else if (type == "2") {
       return <span>Proof of Assets Form</span>
     }
-  }else{
-    if(type=="1"){
+  } else {
+    if (type == "1") {
       return <span>AML Questionnaire</span>
-    }else if(type=="2"){
+    } else if (type == "2") {
       return <span>Comfort Letter</span>
-    }else if(type=="3")
-    return <span>Board Resolution</span>
-    else if(type=="4")
-    return <span>2 Months Bank Satements</span>
-    else if(type=="5")
-    return <span>Corporate Filing Information</span>
-    else if(type=="6")
-    return <span>Beneficial Ownership Form</span>
-    else if(type=="7")
-    return <span>Articles of Incorporation</span>
-    else if(type=="8")
-    return <span>bylaws</span>
-    else if(type=="9")
-    return <span>Ownership and Control Structure</span>
-    else if(type=="10")
-    return <span>Directors and Officers List & Personal Info Equivalent to Tier 3 Requirements</span>
-    else if(type=="11")
-    return <span>Proof of Active Business Address</span>
-    else if(type=="12")
-    return <span>Document Availability Policy</span>
-    else if(type=="13")
-    return <span>Cookies Policy</span>
-    else if(type=="14")
-    return <span>Privacy Policy</span>
-    else if(type=="15")
-    return <span>AML Policy</span>
-    else if(type=="16")
-    return <span>Terms of Service</span>
+    } else if (type == "3")
+      return <span>Board Resolution</span>
+    else if (type == "4")
+      return <span>2 Months Bank Satements</span>
+    else if (type == "5")
+      return <span>Corporate Filing Information</span>
+    else if (type == "6")
+      return <span>Beneficial Ownership Form</span>
+    else if (type == "7")
+      return <span>Articles of Incorporation</span>
+    else if (type == "8")
+      return <span>bylaws</span>
+    else if (type == "9")
+      return <span>Ownership and Control Structure</span>
+    else if (type == "10")
+      return <span>Directors and Officers List & Personal Info Equivalent to Tier 3 Requirements</span>
+    else if (type == "11")
+      return <span>Proof of Active Business Address</span>
+    else if (type == "12")
+      return <span>Document Availability Policy</span>
+    else if (type == "13")
+      return <span>Cookies Policy</span>
+    else if (type == "14")
+      return <span>Privacy Policy</span>
+    else if (type == "15")
+      return <span>AML Policy</span>
+    else if (type == "16")
+      return <span>Terms of Service</span>
   }
 }
 
-const ConvertSatoshiToAssetCell = (coin, balance,precision=false) => {
+const ConvertSatoshiToAssetCell = (coin, balance, precision = false) => {
   coin = coin.toLowerCase();
   let amount = 0;
   balance = parseFloat(balance);
@@ -1012,7 +1012,7 @@ const ConvertSatoshiToAssetCell = (coin, balance,precision=false) => {
     return <span>0</span>
   }
   if (precision) {
-    return <span>{parseFloat(balance /precision).toFixed(8)}</span>
+    return <span>{parseFloat(balance / precision).toFixed(8)}</span>
   }
   switch (coin) {
     case "btc":
@@ -1046,24 +1046,24 @@ const ConvertSatoshiToAssetCell = (coin, balance,precision=false) => {
       amount = balance / 1e18;
       break;
     default:
-      amount = balance ;
+      amount = balance;
   }
   return <span>{coin == "eth" || coin == "teth" ? parseFloat(amount).toFixed(8) : parseFloat(amount).toFixed(8)}</span>
 };
 
-const TransactionIdHashCell = (coin_id, transaction_id,isERC20=false) => {
+const TransactionIdHashCell = (coin_id, transaction_id, isERC20 = false) => {
   let url = "";
   if (!transaction_id) {
     return <span>-</span>
   }
-  if(isERC20){
-     return transaction_id ? (
-    <a target="_blank" href={"https://etherscan.io/tx/"+transaction_id}>
-      {transaction_id}
-    </a>
-  ) : (
-      <span></span>
-    );
+  if (isERC20) {
+    return transaction_id ? (
+      <a target="_blank" href={"https://etherscan.io/tx/" + transaction_id}>
+        {transaction_id}
+      </a>
+    ) : (
+        <span></span>
+      );
   }
   switch (coin_id.toLowerCase()) {
     // Fot Test Net
@@ -2041,7 +2041,7 @@ const CoinActionCell = (
           />
         </Tooltip>
       )}
-      {isAllowed("wallet_details") && (
+      {/* {isAllowed("wallet_details") && (
         <Tooltip title="Wallet">
           <Icon
             type="wallet"
@@ -2049,7 +2049,7 @@ const CoinActionCell = (
             onClick={() => assetWallet(value, coin_name, coin_code)}
           />
         </Tooltip>
-      )}
+      )} */}
     </div>
   );
 
@@ -2915,25 +2915,25 @@ const TierReqCell = (
   requirements,
   requirements2
 ) => (
-  <div>
-    <ul class="style-circle" type="circle">
-      {Object.keys(requirements).map((req) => (
+    <div>
+      <ul class="style-circle" type="circle">
+        {Object.keys(requirements).map((req) => (
+          <li>
+            <b>{requirements[req]}</b>
+          </li>
+        ))}
+      </ul>
+      <Divider>OR</Divider>
+      <ul class="style-circle" type="circle">
         <li>
-          <b>{requirements[req]}</b>
+          <b>
+            {"Total wallet USD Value : $" +
+              requirements2["Total_Wallet_Balance"]}
+          </b>
         </li>
-      ))}
-    </ul>
-    <Divider>OR</Divider>
-    <ul class="style-circle" type="circle">
-      <li>
-        <b>
-          {"Total wallet USD Value : $" +
-            requirements2["Total_Wallet_Balance"]}
-        </b>
-      </li>
-    </ul>
-  </div>
-);
+      </ul>
+    </div>
+  );
 const TierThresholdCell = (
   value,
   tier_step,
@@ -2941,31 +2941,37 @@ const TierThresholdCell = (
   monthly_withdraw_limit,
   minimum_activity_thresold,
   requirements,
-  
+
 ) => (
-  <>
-    <ul class="style-circle" type="circle">
-      <li>
-        <b>
-          {"Account Age : " +
-            minimum_activity_thresold["Account_Age"] +
-            " Days"}
-        </b>
-      </li>
-      <li>
-        <b>
-          {"Minimum Total Transactions : " +
-            minimum_activity_thresold["Minimum_Total_Transactions"] +
-            " Transactions"}
-        </b>
-      </li>
-      <li>
-        <b>
-          {"Minimum Total Value of All Transactions : $" +
-            minimum_activity_thresold[
+    <>
+      <ul class="style-circle" type="circle">
+        <li>
+          <b>
+            {"Account Age : " +
+              minimum_activity_thresold["Account_Age"] +
+              " Days"}
+          </b>
+        </li>
+        <li>
+          <b>
+            {"Minimum Total Transactions : " +
+              minimum_activity_thresold["Minimum_Total_Transactions"] +
+              " Transactions"}
+          </b>
+        </li>
+        <li>
+          <b>
+            {"Minimum Total Value of All Transactions : $" +
+              minimum_activity_thresold[
               "Minimum_Total_Value_of_All_Transactions"
             ]}
         </b>
+      </li>
+      <li>
+        <b>Deposit Cryptocurrencies : Unlimited</b>
+      </li>
+      <li>
+        <b>Trade : Unlimited</b>
       </li>
     </ul>
   </>

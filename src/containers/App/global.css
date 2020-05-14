@@ -935,3 +935,8 @@ th.custom-tr-width{
 .tier-upgrade-info-tbl{
   border: 1px solid #999999 !important;
 }
+
+#depthChartContainer{
+  height: 100%;
+  width: 95%;
+}

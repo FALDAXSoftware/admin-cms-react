@@ -47,7 +47,7 @@ class ViewUser extends Component {
             <LayoutWrapper>
                 {/* <BackButton {...this.props}></BackButton> */}
                 <BreadcrumbComponent {...this.props} />
-                <Tabs className="full-width" defaultActiveKey="13">
+                <Tabs className="full-width">
                     {isAllowed("get_user_details") &&
 
                         <TabPane tab="Personal Details" key="1"><PersonalDetails user_id={user_id} /></TabPane>
@@ -70,7 +70,7 @@ class ViewUser extends Component {
                         <TabPane tab="History" key="6"><AllTrades user_id={user_id} /></TabPane>
                     }
                     {/* {isAllowed("get_all_trade") && */}
-                        <TabPane tab="Tier Unlock" key="13"><UpgradeUserTier user_id={user_id} /></TabPane>
+                    <TabPane tab="Tier Unlock" key="13"><UpgradeUserTier user_id={user_id} /></TabPane>
                     {/* } */}
                     {(isAllowed("update_user_referal") && isAllowed("get_user_details")) &&
                         <TabPane tab="User Referral Percentage" key="7"><Referral user_id={user_id} /></TabPane>
