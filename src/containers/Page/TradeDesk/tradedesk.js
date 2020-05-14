@@ -95,7 +95,9 @@ class TradeDesk extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <DepthChart crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                      {this.state.crypto && this.state.currency &&
+                        <DepthChart crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                      }
                     </Col>
                   </Row>
                 </Col>

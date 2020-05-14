@@ -25,7 +25,7 @@ class EditAssetDetails extends Component {
       errType: "Success",
       isDisabled: false,
       selectedToken: false,
-      bitGoMinLimit:false
+      bitGoMinLimit: false
     };
     this.validator = new SimpleReactValidator({});
     this.DecimalConvertUpTo = this.DecimalConvertUpTo.bind(this);
@@ -35,22 +35,22 @@ class EditAssetDetails extends Component {
     this._getAssetDetails();
   };
 
- set setBitGoLimit(coin=""){
-    switch(coin.toLowerCase()){
+  set setBitGoLimit(coin = "") {
+    switch (coin.toLowerCase()) {
       case "btc":
-        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.BTC})
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.BTC })
         break;
       case "xrp":
-        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.XRP})
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.XRP })
         break;
       case "eth":
-        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.ETH})
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.ETH })
         break;
       case "ltc":
-        this.setState({bitGoMinLimit:BITGO_MIN_LIMIT.LTC})
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.LTC })
         break;
       default:
-        this.setState({bitGoMinLimit:0})
+        this.setState({ bitGoMinLimit: 0 })
     }
   }
 
@@ -63,7 +63,7 @@ class EditAssetDetails extends Component {
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setBitGoLimit=res.coin.coin;
+          _this.setBitGoLimit = res.coin.coin;
           if (res.coin.max_limit > 0) {
             _this.setState({
               fields: res.coin,
@@ -86,7 +86,7 @@ class EditAssetDetails extends Component {
               max_limit: PrecisionCell(res.coin.max_limit)
             });
           }
-        } else if (res.status == 403 || res.status==400) {
+        } else if (res.status == 403 || res.status == 400) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
             () => {
@@ -288,7 +288,7 @@ class EditAssetDetails extends Component {
   };
 
   render() {
-    const { loader, fields, errMsg, errType, selectedToken,bitGoMinLimit } = this.state;
+    const { loader, fields, errMsg, errType, selectedToken, bitGoMinLimit } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -300,13 +300,13 @@ class EditAssetDetails extends Component {
             <Col>
               <span>Asset Icon:</span>
               <br />
-              {fields["coin_icon"]&&
-              <div className="asset-container">
-                <img
-                  className="asset-"
-                  src={BUCKET_URL + fields["coin_icon"]}
-                />
-              </div>
+              {fields["coin_icon"] &&
+                <div className="asset-container">
+                  <img
+                    className="asset-"
+                    src={BUCKET_URL + fields["coin_icon"]}
+                  />
+                </div>
               }
             </Col>
           </Row>
@@ -348,7 +348,7 @@ class EditAssetDetails extends Component {
               </span>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Maximum Limit:</span>
               <Input
@@ -367,8 +367,8 @@ class EditAssetDetails extends Component {
                 )}
               </span>
             </Col>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          </Row> */}
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Warm Wallet Address:</span>
               <Input
@@ -385,8 +385,8 @@ class EditAssetDetails extends Component {
                 )}
               </span>
             </Col>
-          </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          </Row> */}
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Hot Send Wallet Address:</span>
               <Input
@@ -406,7 +406,7 @@ class EditAssetDetails extends Component {
                 )}
               </span>
             </Col>
-          </Row>
+          </Row> */}
           <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Hot Receive Wallet Address:</span>
@@ -428,7 +428,7 @@ class EditAssetDetails extends Component {
               </span>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Custody Wallet Address:</span>
               <Input
@@ -448,7 +448,7 @@ class EditAssetDetails extends Component {
                 )}
               </span>
             </Col>
-          </Row>
+          </Row> */}
           <Row style={{ marginBottom: "15px" }}>
             <Col>
               <span>Is ERC20 Token? :</span>

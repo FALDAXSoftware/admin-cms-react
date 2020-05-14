@@ -93,8 +93,8 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.Actions" />,
     key: "action",
-    width:"20%",
-   align:"left",
+    width: "20%",
+    align: "left",
     render: object =>
       renderCell(
         object,
@@ -117,10 +117,10 @@ const columns = [
   },
   {
     title: <IntlMessages id="coinTable.title.coin" />,
-    width:"20%",
-   align:"left",
+    width: "20%",
+    align: "left",
     sorter: true,
-    render:object=><span><img className="small-icon-img" alt="asset" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"]+" ("+object["coin_name"]+ ")"}</span>
+    render: object => <span><img className="small-icon-img" alt="asset" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"] + " (" + object["coin_name"] + ")"}</span>
   },
   // {
   //   title: <IntlMessages id="coinTable.title.code" />,
@@ -132,53 +132,53 @@ const columns = [
   {
     title: <IntlMessages id="coinTable.title.limit" />,
     key: "min_limit",
-   align:"left",
-    width:"20%",
+    align: "left",
+    width: "20%",
     sorter: true,
     render: object => renderCell(object, "FixedCell", "min_limit")
   },
-  {
-    title: <IntlMessages id="coinTable.title.maxlimit" />,
-    key: "max_limit",
-   align:"left",
-    width:"20%",
-    sorter: true,
-    render: object => renderCell(object, "FixedCell", "max_limit")
-  },
+  // {
+  //   title: <IntlMessages id="coinTable.title.maxlimit" />,
+  //   key: "max_limit",
+  //   align: "left",
+  //   width: "20%",
+  //   sorter: true,
+  //   render: object => renderCell(object, "FixedCell", "max_limit")
+  // },
   {
     title: <IntlMessages id="coinTable.title.active" />,
     key: "is_active",
-   align:"left",
-    width:"20%",
-    render: object =>{
-        return renderCell(
-          object,
-          "SwitchCell",
-          "id",
-          "coin_name",
-          "coin_code",
-          "min_limit",
-          "max_limit",
-          "wallet_address",
-          "created_at",
-          "is_active",
-          "isERC",
-          "coin_icon",
-          "warm_wallet_address",
-          "hot_send_wallet_address",
-          "hot_receive_wallet_address",
-          "custody_wallet_address"
-        )  
+    align: "left",
+    width: "20%",
+    render: object => {
+      return renderCell(
+        object,
+        "SwitchCell",
+        "id",
+        "coin_name",
+        "coin_code",
+        "min_limit",
+        // "max_limit",
+        "wallet_address",
+        "created_at",
+        "is_active",
+        "isERC",
+        "coin_icon",
+        "warm_wallet_address",
+        "hot_send_wallet_address",
+        "hot_receive_wallet_address",
+        "custody_wallet_address"
+      )
     }
-      
+
   }
 ];
 
-const assetTableInfos = 
-  {
-    title: "Assets",
-    value: "CoinsTable",
-    columns: clone(columns)
-  };
+const assetTableInfos =
+{
+  title: "Assets",
+  value: "CoinsTable",
+  columns: clone(columns)
+};
 
 export { columns, assetTableInfos };
