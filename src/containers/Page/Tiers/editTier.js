@@ -18,7 +18,20 @@ class EditTier extends Component {
             fields: {},
             errType: 'Success',
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+              unlimited: {  // name the rule
+                message: 'The :attribute must be a number or type "Unlimited"',
+                rule:function (val, params, validator) {
+                  let validation1=this._testRegex(val,/^[0-9]*\.?\d*$/i) && params.indexOf(val) === -1
+                  if(validation1){
+                      return true
+                  }
+                  else{
+                      return val=="unlimited" || val=="Unlimited"
+                  }
+                }
+              }
+          });
     }
 
     componentDidMount = () => {
@@ -157,6 +170,9 @@ class EditTier extends Component {
                         <Col>
                             <span>Daily Withdraw Limit (USD):</span>
                             <Input placeholder="Daily Withdraw Limit" onChange={this._handleChange.bind(this, "daily_withdraw_limit")} value={fields["daily_withdraw_limit"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('daily_withdraw_limit', fields["daily_withdraw_limit"], 'required|unlimited', 'text-danger')}
+                            </span>
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
@@ -164,7 +180,7 @@ class EditTier extends Component {
                             <span>Monthly Withdraw Limit (USD):</span>
                             <Input placeholder="Monthly Withdraw Limit" onChange={this._handleChange.bind(this, "monthly_withdraw_limit")} value={fields["monthly_withdraw_limit"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('monthly_withdraw_limit', fields["monthly_withdraw_limit"], 'required', 'text-danger')}
+                                {this.validator.message('monthly_withdraw_limit', fields["monthly_withdraw_limit"], 'required|unlimited', 'text-danger')}
                             </span>
                         </Col>
                     </Row>

@@ -79,7 +79,7 @@ class AddCoinModal extends Component {
 
     _resetAddForm = () => {
         const { fields } = this.state;
-        this.refs.uploadImg.value=null;
+        this.refs.uploadImg.value = null;
         fields['coin_name'] = '';
         fields['coin_code'] = '';
         fields['min_limit'] = '';
@@ -248,13 +248,13 @@ class AddCoinModal extends Component {
                     </span>
                 </div>
 
-                <div style={{ "marginBottom": "15px" }}>
+                {/* <div style={{ "marginBottom": "15px" }}>
                     <span>Maximum Limit:</span>
                     <Input placeholder="Maximum Limit" onChange={this._handleChange.bind(this, "max_limit")} value={fields["max_limit"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('maximum limit', fields["max_limit"], 'required|numeric', 'text-danger')}
                     </span>
-                </div>
+                </div> */}
 
                 <div style={{ "marginBottom": "15px" }}>
                     <span>Is ERC20 Token? :</span>

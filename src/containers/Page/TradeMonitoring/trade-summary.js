@@ -58,10 +58,11 @@ class TradeSummary extends Component {
             data: [],
             loader: true
         }
+        this.timeInterval = null
     }
     componentDidMount() {
         this.getData()
-        setInterval(() => {
+        this.timeInterval = setInterval(() => {
             this.getData(false)
         }, 10000);
     }
@@ -73,6 +74,11 @@ class TradeSummary extends Component {
             console.log("-------------------", res);
             this.setState({ data: res.data, loader: false });
         })
+    }
+    componentWillUnmount() {
+        if (this.timeInterval) {
+            clearInterval(this.timeInterval)
+        }
     }
     render() {
         return (

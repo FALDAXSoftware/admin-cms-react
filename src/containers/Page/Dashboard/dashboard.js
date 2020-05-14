@@ -108,11 +108,11 @@ class Dashboard extends Component {
       startDate: "",
       endDate: "",
       rangeDate: [],
-      tierData:[],
+      tierData: [],
       loader: false,
-      tradeTransactionLabel:[],
-      tradeTransactionValue:[],
-      tradeTransactionValue2:[]
+      tradeTransactionLabel: [],
+      tradeTransactionValue: [],
+      tradeTransactionValue2: []
     };
   }
 
@@ -124,40 +124,40 @@ class Dashboard extends Component {
     this.setState({ errMsg: false });
   };
 
-  componentDidMount() { 
-      this._getAllCount();
+  componentDidMount() {
+    this._getAllCount();
   }
 
-  calculateTierData(tierData){
+  calculateTierData(tierData) {
     // Key Means tier
     // first occurrence is approved request count,second is reject occurrence count and third one is pending request count
-    let tier=[],data=[];
+    let tier = [], data = [];
     for (let i = 0; i < tierData.length; i++) {
       Object.keys(tierData[i]).forEach((key) => {
         if (tier["tier" + key]) {
           if (tier["tier" + key].length == 1) {
-            tier["tier" + key].push({"name" : "Reject",count:tierData[i][key]});
-          }   
-           else {
-            tier["tier" + key].push({"name" : "Pending",count:tierData[i][key]});
+            tier["tier" + key].push({ "name": "Reject", count: tierData[i][key]["count"] });
+          }
+          else {
+            tier["tier" + key].push({ "name": "Pending", count: tierData[i][key]["count"] });
           }
         } else {
           tier["tier" + key] = [];
-          tier["tier" + key].push({"name" : "Approved",count:tierData[i][key]});
+          tier["tier" + key].push({ "name": "Approved", count: tierData[i][key]["count"] });
         }
       });
     }
-    this.setState({tierData:tier});
+    this.setState({ tierData: tier });
   }
 
-  getFeesTransactionValue(data){
-    let label=[],value=[],value2=[];
-    data.forEach((ele)=>{
+  getFeesTransactionValue(data) {
+    let label = [], value = [], value2 = [];
+    data.forEach((ele) => {
       label.push(ele["symbol"]);
       value.push(ele["user_fee"]);
       value2.push(ele["requested_fee"]);
     })
-    return [label,value,value2];
+    return [label, value, value2];
   }
   _getAllCount = () => {
     const { token } = this.props;
@@ -175,10 +175,10 @@ class Dashboard extends Component {
             let residualFees = [];
             let transactionSymbols = [];
             let transactionCount = [];
-            let [tradeTransactionLabel,tradeTransactionValue,tradeTransactionValue2]=_this.getFeesTransactionValue(res.feesTransactionValue);
+            let [tradeTransactionLabel, tradeTransactionValue, tradeTransactionValue2] = _this.getFeesTransactionValue(res.feesTransactionValue);
             _this.calculateTierData(res.TierData);
             res.walletFeesTransactionValue &&
-              res.walletFeesTransactionValue.forEach((value)=> {
+              res.walletFeesTransactionValue.forEach((value) => {
                 feesLabels.push(value.coin_code.toUpperCase());
                 faldaxFees.push(value.faldax_fee);
                 residualFees.push(value.residual_amount);
@@ -248,8 +248,8 @@ class Dashboard extends Component {
               errMsg: true,
               message: res.err,
               loader: false
-            },()=>_this.props.logout());
-            
+            }, () => _this.props.logout());
+
           } else {
             _this.setState({
               errMsg: true,
@@ -345,7 +345,7 @@ class Dashboard extends Component {
       transactionCount,
       tierData,
       tradeTransactionLabel,
-      tradeTransactionValue,tradeTransactionValue2
+      tradeTransactionValue, tradeTransactionValue2
     } = this.state;
 
     const data = {
@@ -494,16 +494,16 @@ class Dashboard extends Component {
                       hoverBackgroundColor: "rgb(28, 84, 79)",
                       hoverBorderColor: "rgb(43, 107, 101)",
                       data: faldaxFees,
-                    },
-                    {
-                      label: "Residual Amount",
-                      backgroundColor: "rgba(255,99,132,0.2)",
-                      borderColor: "rgba(255,99,132,1)",
-                      borderWidth: 1,
-                      hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                      hoverBorderColor: "rgba(255,99,132,1)",
-                      data: residualFees,
-                    },
+                    }
+                    // {
+                    //   label: "Residual Amount",
+                    //   backgroundColor: "rgba(255,99,132,0.2)",
+                    //   borderColor: "rgba(255,99,132,1)",
+                    //   borderWidth: 1,
+                    //   hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    //   hoverBorderColor: "rgba(255,99,132,1)",
+                    //   data: residualFees,
+                    // },
                   ]}
                 />
               </ChartWrapper>
@@ -516,27 +516,27 @@ class Dashboard extends Component {
               </span>
               <ChartWrapper>
                 <FeeChart
-               label={tradeTransactionLabel}
-               datasets={[
-                 {
-                   label: "User Fee",
-                   backgroundColor: "rgb(98, 208, 197)",
-                   borderColor: "rgb(43, 107, 101)",
-                   borderWidth: 1,
-                   hoverBackgroundColor: "rgb(28, 84, 79)",
-                   hoverBorderColor: "rgb(43, 107, 101)",
-                   data: tradeTransactionValue,
-                 },
-                 {
-                   label: "Requested Fee",
-                   backgroundColor: "rgba(255,99,132,0.2)",
-                   borderColor: "rgba(255,99,132,1)",
-                   borderWidth: 1,
-                   hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                   hoverBorderColor: "rgba(255,99,132,1)",
-                   data: tradeTransactionValue2,
-                 },
-               ]}
+                  label={tradeTransactionLabel}
+                  datasets={[
+                    {
+                      label: "User Fee",
+                      backgroundColor: "rgb(98, 208, 197)",
+                      borderColor: "rgb(43, 107, 101)",
+                      borderWidth: 1,
+                      hoverBackgroundColor: "rgb(28, 84, 79)",
+                      hoverBorderColor: "rgb(43, 107, 101)",
+                      data: tradeTransactionValue,
+                    },
+                    {
+                      label: "Requested Fee",
+                      backgroundColor: "rgba(255,99,132,0.2)",
+                      borderColor: "rgba(255,99,132,1)",
+                      borderWidth: 1,
+                      hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                      hoverBorderColor: "rgba(255,99,132,1)",
+                      data: tradeTransactionValue2,
+                    },
+                  ]}
                 />
               </ChartWrapper>
             </CardWrapper>
