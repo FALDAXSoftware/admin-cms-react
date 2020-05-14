@@ -23,11 +23,11 @@ class AllHistory extends Component {
         return (
             <LayoutWrapper>
                 {/* <BackButton {...this.props}/> */}
-                <BreadcrumbComponent {...this.props}/>
+                <BreadcrumbComponent {...this.props} />
                 <Tabs className="isoTableDisplayTab full-width">
-                    <TabPane tab="Crypto Only" key="1"><TradeHistory /></TabPane>
+                    {/* <TabPane tab="Crypto Only" key="1"><TradeHistory /></TabPane> */}
                     <TabPane tab="Credit Card" key="2"><SimplexHistory /></TabPane>
-                      <TabPane tab="Trade" key="4"><OwnTradeHistory /></TabPane>
+                    <TabPane tab="Trade" key="4"><OwnTradeHistory /></TabPane>
                     {isAllowed("metabase_history_report") && <TabPane tab="Report" key="3"><Metabase /></TabPane>}
                 </Tabs>
             </LayoutWrapper>

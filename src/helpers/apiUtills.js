@@ -1,11 +1,11 @@
-// const API_URL = "http://192.168.0.213:1440"; // Local (Mansi) URL
+// const API_URL = "http://localhost:1440"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
-const API_URL =process.env.REACT_APP_API_ENDPOINT;
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 export const SOCKET_HOST = "https://preprod-trading.faldax.com"
 // export const SOCKET_HOST = "http://localhost:3011"
 const ApiUtils = {
@@ -2955,7 +2955,7 @@ const ApiUtils = {
       body: JSON.stringify(form)
     });
   },
-  getAllTierRequirement: function(token) {
+  getAllTierRequirement: function (token) {
     let url = "/admin/get-all-tier-details";
     return fetch(API_URL + url, {
       method: "GET",
@@ -2965,7 +2965,7 @@ const ApiUtils = {
       }
     });
   },
-  getAllTiers: function(token) {
+  getAllTiers: function (token) {
     let url = "/admin/get-tier-details";
     return fetch(API_URL + url, {
       method: "GET",
@@ -3721,7 +3721,7 @@ const ApiUtils = {
       }, body: JSON.stringify({ public_note, private_note })
     })
   },
-  getTierTierRequirement(token,id){
+  getTierTierRequirement(token, id) {
     return fetch(`${API_URL}/admin/get-tier-data?id=${id}`, {
       method: "GET",
       headers: {
@@ -3729,7 +3729,7 @@ const ApiUtils = {
       }
     });
   },
-  getTierDetails: function(token, id,tier) {
+  getTierDetails: function (token, id, tier) {
     return fetch(`${API_URL}/admin/get-tier-details`, {
       method: "POST",
       headers: {
@@ -3782,29 +3782,29 @@ const ApiUtils = {
       body: JSON.stringify({ ...data })
     });
   },
-    checkTierUpgradeStatus: function(token, user_id,tier) {
-      return fetch(`${API_URL}/admin/user-tier-unlock-check?user_id=${user_id}&tier_step=${tier}`, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      });
-    },
-    tierUnlock: function(token, user_id,tier) {
-      return fetch(`${API_URL}/admin/user-tier-unlock?user_id=${user_id}&tier_step=${tier}`, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      });
-    },
-    getUserTierValue: function(token, user_id) {
-      return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      });
-    }
+  checkTierUpgradeStatus: function (token, user_id, tier) {
+    return fetch(`${API_URL}/admin/user-tier-unlock-check?user_id=${user_id}&tier_step=${tier}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+  },
+  tierUnlock: function (token, user_id, tier) {
+    return fetch(`${API_URL}/admin/user-tier-unlock?user_id=${user_id}&tier_step=${tier}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+  },
+  getUserTierValue: function (token, user_id) {
+    return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+  }
 };
 export default ApiUtils;

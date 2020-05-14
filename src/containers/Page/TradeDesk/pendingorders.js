@@ -81,12 +81,14 @@ class PendingOrders extends Component {
         title: "Time",
         dataIndex: "time",
         key: "time",
-        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`)
+        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`),
+        width: 150
       },
       {
         title: "Placed By",
         dataIndex: "placed_by",
         key: "placed_by",
+        width: 150
       },
       {
         title: "Total",
