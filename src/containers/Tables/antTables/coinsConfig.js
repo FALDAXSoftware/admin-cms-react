@@ -122,13 +122,13 @@ const columns = [
     sorter: true,
     render: object => <span><img className="small-icon-img" alt="asset" src={`https://s3.us-east-2.amazonaws.com/production-static-asset/${object["coin_icon"]}`}></img>&nbsp;&nbsp;{object["coin"] + " (" + object["coin_name"] + ")"}</span>
   },
-  // {
-  //   title: <IntlMessages id="coinTable.title.code" />,
-  //   key: "coin_code",
-  //   width: 100,
-  //   sorter: true,
-  //   render: object => renderCell(object, "TextCell", "coin_code")
-  // },
+  {
+    title: <IntlMessages id="coinTable.title.code" />,
+    key: "coin_code",
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, "TextCell", "coin_code")
+  },
   {
     title: <IntlMessages id="coinTable.title.limit" />,
     key: "min_limit",
@@ -158,7 +158,7 @@ const columns = [
         "coin_name",
         "coin_code",
         "min_limit",
-        // "max_limit",
+        "max_limit",
         "wallet_address",
         "created_at",
         "is_active",
