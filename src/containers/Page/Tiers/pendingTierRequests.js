@@ -191,6 +191,7 @@ class PendingRequests extends Component {
           let data = res.tradeData;
           _this.setState({
             pendingRequests: data,
+            expandedRowKeys: [],
             tradeCount: res.tradeCount,
           });
         }
@@ -263,16 +264,24 @@ class PendingRequests extends Component {
         )
       ).json();
       if (res.status == 200) {
+
         self.setState({
           errMsg: true,
           errMessage: res.message,
           errType: "Success",
-          expandedRowKeys: [],
           showRejectNoteModal:false,
           privateNote:"",
           publicNote:""
         });
-        await self.getAllPendingRequest();
+        let res1=await (await ApiUtils.getTierDetails(self.props.token,request_id, tier_step)).json();
+        if(res1.status==200){
+          let index=res1.data.findIndex((ele)=>ele[0].is_approved==null);
+          if(index!=-1){
+            self.setState({ tierDetailsRequest: [].concat.apply([], res1.data) });
+          }else{
+            await self.getAllPendingRequest();
+          }
+        }
       } else if (res.status == 403) {
         self.setState(
           { errMsg: true, errMessage: res.err, errType: "error" },
@@ -290,6 +299,7 @@ class PendingRequests extends Component {
         self.setState({ loader: false });
       }
     } catch (error) {
+      console.log(error);
       self.setState({
         errType: "error",
         errMsg: true,
@@ -332,7 +342,7 @@ class PendingRequests extends Component {
     });
   };
 
-  async getDetTierDetails(expanded, row) {
+  async getDetailsTierDetails(expanded, row) {
     var keys = [];
     if (expanded) {
       keys.push(row.id);
@@ -590,7 +600,7 @@ class PendingRequests extends Component {
             );
           }}
           onExpand={(expanded, records) => {
-            this.getDetTierDetails(expanded, records);
+            this.getDetailsTierDetails(expanded, records);
           }}
         ></TableWrapper>
         <Pagination
