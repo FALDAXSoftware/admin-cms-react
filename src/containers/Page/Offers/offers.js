@@ -367,7 +367,7 @@ class Offers extends Component {
           ))}
           {isAllowed("metabase_offers_report") && (
             <TabPane tab="Report" key="metabase">
-              <Metabase />q{" "}
+                <Metabase/>
             </TabPane>
           )}
         </Tabs>
