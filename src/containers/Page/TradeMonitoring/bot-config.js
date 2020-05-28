@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import authAction from "../../../redux/auth/actions";
-import { Card, Col, Row, Form, InputNumber, Table, Input, Popconfirm } from 'antd';
+import { Card, Col, Row, Form, InputNumber, Table, Input, Popconfirm, Switch } from 'antd';
 import { TradeHeadRow } from '../../App/tradeStyle';
 import ApiUtils from '../../../helpers/apiUtills';
+import { Record } from 'immutable';
 const { logout } = authAction;
 const EditableContext = React.createContext();
 class BotConfig extends Component {
@@ -17,7 +18,7 @@ class BotConfig extends Component {
         }
         this.columns = [
             {
-                title: 'pair',
+                title: 'Pair',
                 dataIndex: 'name',
                 key: 'name',
             },
@@ -34,6 +35,19 @@ class BotConfig extends Component {
                 key: 'crypto_maximum',
                 editable: true,
                 width: 300
+            },
+            {
+                title: 'Bot Cron Status',
+                dataIndex: 'bot_status',
+                key: 'bot_status',
+                editable: false,
+                // width: 300,
+                render: (text, record) => {
+                    return <Switch className="bot_config_switch" defaultChecked={record.bot_status}
+                        onChange={(value) => {
+                            this.changeBotStatus(value, record)
+                        }} />
+                }
             },
             {
                 title: 'Action',
@@ -78,12 +92,20 @@ class BotConfig extends Component {
                 return;
             }
             this.setState({ loader: true });
-            ApiUtils.updatePairsForBot(this.props.token, { id: record.encript_id, min_crypto: row.crypto_minimum, max_crypto: row.crypto_maximum }).then((response) => response.json()).then((res) => {
+            ApiUtils.updatePairsForBot(this.props.token, { id: record.encript_id, min_crypto: row.crypto_minimum, max_crypto: row.crypto_maximum, flag: record.bot_status }).then((response) => response.json()).then((res) => {
                 this.getData()
 
             })
 
         });
+    }
+
+    changeBotStatus = (value, record) => {
+        this.setState({ loader: true });
+        ApiUtils.updatePairsForBot(this.props.token, { id: record.encript_id, min_crypto: record.crypto_minimum, max_crypto: record.crypto_maximum, flag: value }).then((response) => response.json()).then((res) => {
+            this.getData()
+
+        })
     }
 
     edit(key) {

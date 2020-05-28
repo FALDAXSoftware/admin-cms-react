@@ -26,21 +26,30 @@ const columns = [
     render: (text, record) => parseFloat(text).toFixed(8)
   },
   {
-    title: 'In order assets',
-    dataIndex: 'balance',
-    key: 'balance',
-    render: (text, record) => (<>{parseFloat(record.balance - record.placed_balance).toFixed(8)}</>)
+    title: 'Equivivalent USD Value',
+    dataIndex: 'fiat_value',
+    key: 'fiat_value',
+    render: (text, record) => (<>{parseFloat(record.placed_balance * record.fiat_value).toFixed(2)}</>)
   },
-  {
-    title: 'Total',
-    dataIndex: 'balance',
-    key: 'balance',
-    render: (text, record) => parseFloat(text).toFixed(8)
-  },
+  // {
+  //   title: 'In order assets',
+  //   dataIndex: 'balance',
+  //   key: 'balance',
+  //   render: (text, record) => (<>{parseFloat(record.balance - record.placed_balance).toFixed(8)}</>)
+  // },
+  // {
+  //   title: 'Total',
+  //   dataIndex: 'balance',
+  //   key: 'balance',
+  //   render: (text, record) => parseFloat(text).toFixed(8)
+  // },
   {
     title: 'Wallet Address',
     dataIndex: 'receive_address',
     key: 'receive_address',
+    render: (text) => <span>{text}</span>,
+    width: 400,
+
   },
 ]
 class TradeWallets extends Component {
@@ -92,6 +101,7 @@ class TradeWallets extends Component {
               dataSource={this.state.data}
               pagination={false}
               loading={this.state.loader}
+            // scroll={{ x: "max-content", y: "70vh" }}
             />
           </Col>
         </TradeRow>
