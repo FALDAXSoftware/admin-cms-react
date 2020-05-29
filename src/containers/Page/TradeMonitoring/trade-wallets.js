@@ -126,10 +126,10 @@ class TradeWallets extends Component {
       },
     });
   }
-  componentDidMount() {
-    this.getWalletdata();
+  async componentDidMount() {
+    await this.getWalletData();
     this.timeInterval = setInterval(() => {
-      this.getWalletdata(false);
+      this.getWalletData(false);
     }, 10000);
   }
   static openSendModal = async (values) => {
@@ -142,18 +142,19 @@ class TradeWallets extends Component {
       state: { transaction_hash: transaction_hash },
     });
   };
-  getWalletdata = (showLoader = true) => {
+
+
+  getWalletData = async(showLoader = true) => {
     if (showLoader) {
       this.setState({ loader: true });
     }
-    ApiUtils.getTradeDeskBalance(this.props.token)
-      .then((response) => response.json())
-      .then((res) => {
-        this.setState({ data: res.data, loader: false });
-      });
+   let {data,message,status}=await(await ApiUtils.getTradeDeskBalance(this.props.token)).json();
+   if(status==200){
+     this.setState({ data: data, loader:showLoader?false:this.state.loader});
+    }     
   };
 
-  _handleChange = async (field, e) => {
+  _handleChange =  (field, e) => {
     if (this.state.loader) {
       return false;
     }
@@ -165,9 +166,9 @@ class TradeWallets extends Component {
     } else {
       fields[field] = e.target.value;
     }
-    this.setState({ fields }, async () => {
+    this.setState({ fields }, () => {
       if (this.validator.allValid()) {
-        this.timeCounter = setTimeout(async () => {
+        this.timeCounter = setTimeout(async() => {
           try {
             this.loader.show();
             let res = await (
@@ -353,7 +354,7 @@ class TradeWallets extends Component {
               <span>Destination Address:</span>
               <Input
                 placeholder="Destination Address"
-                onChange={this._handleChange.bind(this, "dest_address")}
+                onChange={(e)=>this._handleChange("dest_address",e)}
                 value={fields["dest_address"]}
               />
               <span style={{ color: "red" }}>
@@ -369,7 +370,7 @@ class TradeWallets extends Component {
               <span>Amount:</span>
               <Input
                 placeholder="Amount"
-                onChange={this._handleChange.bind(this, "amount")}
+                onChange={(e)=>this._handleChange("amount",e)}
                 value={fields["amount"]}
               />
               <span style={{ color: "red" }}>
