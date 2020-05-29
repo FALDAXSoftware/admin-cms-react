@@ -940,3 +940,7 @@ th.custom-tr-width{
   height: 100%;
   width: 95%;
 }
+
+.bot_config_switch{
+  border-radius: 100px !important;
+}

@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { notification, Tabs, Row, Col, Card, Input, Button } from "antd";
+import {
+  notification,
+  Tabs,
+  Row,
+  Col,
+  Card,
+  Input,
+  Button,
+  Checkbox,
+} from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
@@ -25,7 +34,9 @@ class TradeAction extends Component {
       fields: {
         amount: 0,
         limit: 0,
-        stop: 0
+        stop: 0,
+        buycheck: false,
+        sellcheck: false,
       },
     };
     // self = this;
@@ -69,7 +80,7 @@ class TradeAction extends Component {
     });
   }
 
-  componentDidMount = () => { };
+  componentDidMount = () => {};
   onMainTabChange = (key) => {
     if (!this.state.loader) {
       this.setState({
@@ -77,11 +88,13 @@ class TradeAction extends Component {
         fields: {
           amount: 0,
           limit: 0,
-          stop: 0
-        }
+          stop: 0,
+          buycheck: false,
+          sellcheck: false,
+        },
       });
     }
-  }
+  };
   onSubTabChange = (key) => {
     if (!this.state.loader) {
       this.setState({
@@ -89,97 +102,118 @@ class TradeAction extends Component {
         fields: {
           amount: 0,
           limit: 0,
-          stop: 0
-        }
+          stop: 0,
+          buycheck: false,
+          sellcheck: false,
+        },
       });
     }
-  }
+  };
   onFieldChange = (field, value) => {
-    let stateFields = this.state.fields
-    stateFields[field] = value
+    let stateFields = this.state.fields;
+    stateFields[field] = value;
     this.setState({
-      field: stateFields
-    })
-  }
+      field: stateFields,
+    });
+  };
   onSubmit = () => {
     this.setState({ loader: true });
-    let url = "/api/v1/tradding/orders/"
+    let url = "/api/v1/tradding/orders/";
     let params = {
       symbol: `${this.props.crypto}-${this.props.currency}`,
       side: this.state.subTab,
       orderQuantity: this.state.fields.amount,
-    }
+      is_checkbox_selected:
+        this.state.subTab === "Buy"
+          ? this.state.fields.buycheck
+          : this.state.fields.sellcheck,
+    };
     switch (this.state.mainTab) {
       case "market":
-        url += `market-${this.state.subTab}-create/`
+        url += `market-${this.state.subTab}-create/`;
         params = {
           ...params,
-          order_type: "Market"
-        }
+          order_type: "Market",
+        };
         break;
       case "limit":
-        url += `limit-${this.state.subTab}-order-create`
+        url += `limit-${this.state.subTab}-order-create`;
         params = {
           ...params,
           order_type: "Limit",
           limit_price: this.state.fields.limit,
-        }
+        };
         break;
       case "stop":
-        url += `pending-${this.state.subTab}-order-create`
+        url += `pending-${this.state.subTab}-order-create`;
         params = {
           ...params,
           order_type: "StopLimit",
           limit_price: this.state.fields.limit,
           stop_price: this.state.fields.stop,
-        }
+        };
         break;
       default:
         break;
     }
     console.log(url, params);
-    ApiUtils.executeTrade(url, this.props.token, params).then((response) => response.json()).then((responseData) => {
-      if (responseData.status === 200) {
-        notification.success({
-          message: "Success",
-          description: responseData.message,
-        })
-      } else if (responseData.status === 201) {
-        notification.warning({
-          message: "Warning",
-          description: responseData.message,
-        })
-      } else if (responseData.status === 500) {
-        notification.error({
-          message: "Error",
-          description: responseData.message,
-        })
-      } else {
-        notification.error({
-          message: "Error",
-          description: responseData.err,
-        })
-      }
-      this.setState({
-        loader: false,
-        fields: {
-          amount: 0,
-          limit: 0,
-          stop: 0
+    ApiUtils.executeTrade(url, this.props.token, params)
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (responseData.status === 200) {
+          notification.success({
+            message: "Success",
+            description: responseData.message,
+          });
+        } else if (responseData.status === 201) {
+          notification.warning({
+            message: "Warning",
+            description: responseData.message,
+          });
+        } else if (responseData.status === 500) {
+          notification.error({
+            message: "Error",
+            description: responseData.message,
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: responseData.err,
+          });
         }
-      })
-
-    })
-
-
-  }
+        this.setState({
+          loader: false,
+          fields: {
+            amount: 0,
+            limit: 0,
+            stop: 0,
+          },
+        });
+      });
+  };
+  onCheckBoxChange = (field, value) => {
+    console.log(`checked = ${value}`);
+    let stateFields = this.state.fields;
+    stateFields[field] = value;
+    this.setState(
+      {
+        field: stateFields,
+      },
+      () => {
+        console.log("^^^", this.state.fields.buycheck);
+      }
+    );
+  };
   render() {
     return (
       <>
         <Card>
           <Tabs activeKey={this.state.mainTab} onChange={this.onMainTabChange}>
             <TabPane tab="Market" key="market">
-              <InnerTabs onChange={this.onSubTabChange} activeKey={this.state.subTab}>
+              <InnerTabs
+                onChange={this.onSubTabChange}
+                activeKey={this.state.subTab}
+              >
                 <TabPane tab="Buy" key="Buy">
                   <InputRow>
                     <Col span={12}>
@@ -192,7 +226,9 @@ class TradeAction extends Component {
                         value={this.state.fields.amount}
                         placeholder="0"
                         name="amount"
-                        onChange={(e) => { this.onFieldChange("amount", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("amount", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -201,8 +237,25 @@ class TradeAction extends Component {
                         "trade-action-validation"
                       )} */}
                     </Col>
+                    <Col span={24}>
+                      <Checkbox
+                        value={this.state.fields.buycheck}
+                        checked={this.state.fields.buycheck}
+                        onChange={(e) =>
+                          this.onCheckBoxChange("buycheck", e.target.checked)
+                        }
+                      >
+                        Checkbox
+                      </Checkbox>
+                    </Col>
                     <Col className="action-btn" span={24}>
-                      <Button type="primary" onClick={this.onSubmit} loading={this.state.loader}>Buy</Button>
+                      <Button
+                        type="primary"
+                        onClick={this.onSubmit}
+                        loading={this.state.loader}
+                      >
+                        Buy
+                      </Button>
                     </Col>
                   </InputRow>
                 </TabPane>
@@ -218,7 +271,9 @@ class TradeAction extends Component {
                         value={this.state.fields.amount}
                         placeholder="0"
                         name="amount"
-                        onChange={(e) => { this.onFieldChange("amount", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("amount", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -227,15 +282,35 @@ class TradeAction extends Component {
                         "trade-action-validation"
                       )} */}
                     </Col>
+                    <Col span={24}>
+                      <Checkbox
+                        value={this.state.fields.sellcheck}
+                        checked={this.state.fields.sellcheck}
+                        onChange={(e) =>
+                          this.onCheckBoxChange("sellcheck", e.target.checked)
+                        }
+                      >
+                        Checkbox
+                      </Checkbox>
+                    </Col>
                     <Col className="action-btn" span={24}>
-                      <Button type="primary" onClick={this.onSubmit} loading={this.state.loader}>Sell</Button>
+                      <Button
+                        type="primary"
+                        onClick={this.onSubmit}
+                        loading={this.state.loader}
+                      >
+                        Sell
+                      </Button>
                     </Col>
                   </InputRow>
                 </TabPane>
               </InnerTabs>
             </TabPane>
             <TabPane tab="Limit" key="limit">
-              <InnerTabs onChange={this.onSubTabChange} activeKey={this.state.subTab}>
+              <InnerTabs
+                onChange={this.onSubTabChange}
+                activeKey={this.state.subTab}
+              >
                 <TabPane tab="Buy" key="Buy">
                   <InputRow>
                     <Col span={12}>
@@ -248,7 +323,9 @@ class TradeAction extends Component {
                         value={this.state.fields.amount}
                         placeholder="0"
                         name="amount"
-                        onChange={(e) => { this.onFieldChange("amount", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("amount", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -267,7 +344,9 @@ class TradeAction extends Component {
                         value={this.state.fields.limit}
                         placeholder="0"
                         name="limit"
-                        onChange={(e) => { this.onFieldChange("limit", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("limit", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -276,8 +355,25 @@ class TradeAction extends Component {
                         "trade-action-validation"
                       )} */}
                     </Col>
+                    <Col span={24}>
+                      <Checkbox
+                        value={this.state.fields.buycheck}
+                        checked={this.state.fields.buycheck}
+                        onChange={(e) =>
+                          this.onCheckBoxChange("buycheck", e.target.checked)
+                        }
+                      >
+                        Checkbox
+                      </Checkbox>
+                    </Col>
                     <Col className="action-btn" span={24}>
-                      <Button type="primary" onClick={this.onSubmit} loading={this.state.loader}>Buy</Button>
+                      <Button
+                        type="primary"
+                        onClick={this.onSubmit}
+                        loading={this.state.loader}
+                      >
+                        Buy
+                      </Button>
                     </Col>
                   </InputRow>
                 </TabPane>
@@ -293,7 +389,9 @@ class TradeAction extends Component {
                         value={this.state.fields.amount}
                         placeholder="0"
                         name="amount"
-                        onChange={(e) => { this.onFieldChange("amount", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("amount", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -312,7 +410,9 @@ class TradeAction extends Component {
                         value={this.state.fields.limit}
                         placeholder="0"
                         name="limit"
-                        onChange={(e) => { this.onFieldChange("limit", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("limit", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -321,15 +421,35 @@ class TradeAction extends Component {
                         "trade-action-validation"
                       )} */}
                     </Col>
+                    <Col span={24}>
+                      <Checkbox
+                        value={this.state.fields.sellcheck}
+                        checked={this.state.fields.sellcheck}
+                        onChange={(e) =>
+                          this.onCheckBoxChange("sellcheck", e.target.checked)
+                        }
+                      >
+                        Checkbox
+                      </Checkbox>
+                    </Col>
                     <Col className="action-btn" span={24}>
-                      <Button type="primary" onClick={this.onSubmit} loading={this.state.loader}>Sell</Button>
+                      <Button
+                        type="primary"
+                        onClick={this.onSubmit}
+                        loading={this.state.loader}
+                      >
+                        Sell
+                      </Button>
                     </Col>
                   </InputRow>
                 </TabPane>
               </InnerTabs>
             </TabPane>
             <TabPane tab="Stop Limit" key="stop-limit">
-              <InnerTabs onChange={this.onSubTabChange} activeKey={this.state.subTab}>
+              <InnerTabs
+                onChange={this.onSubTabChange}
+                activeKey={this.state.subTab}
+              >
                 <TabPane tab="Buy" key="Buy">
                   <InputRow>
                     <Col span={12}>
@@ -342,7 +462,9 @@ class TradeAction extends Component {
                         value={this.state.fields.amount}
                         placeholder="0"
                         name="amount"
-                        onChange={(e) => { this.onFieldChange("amount", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("amount", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -361,7 +483,9 @@ class TradeAction extends Component {
                         value={this.state.fields.limit}
                         placeholder="0"
                         name="limit"
-                        onChange={(e) => { this.onFieldChange("limit", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("limit", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -380,7 +504,9 @@ class TradeAction extends Component {
                         value={this.state.fields.stop}
                         placeholder="0"
                         name="stop"
-                        onChange={(e) => { this.onFieldChange("stop", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("stop", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -389,8 +515,25 @@ class TradeAction extends Component {
                         "trade-action-validation"
                       )} */}
                     </Col>
+                    <Col span={24}>
+                      <Checkbox
+                        value={this.state.fields.buycheck}
+                        checked={this.state.fields.buycheck}
+                        onChange={(e) =>
+                          this.onCheckBoxChange("buycheck", e.target.checked)
+                        }
+                      >
+                        Checkbox
+                      </Checkbox>
+                    </Col>
                     <Col className="action-btn" span={24}>
-                      <Button type="primary" onClick={this.onSubmit} loading={this.state.loader}>Buy</Button>
+                      <Button
+                        type="primary"
+                        onClick={this.onSubmit}
+                        loading={this.state.loader}
+                      >
+                        Buy
+                      </Button>
                     </Col>
                   </InputRow>
                 </TabPane>
@@ -406,7 +549,9 @@ class TradeAction extends Component {
                         value={this.state.fields.amount}
                         placeholder="0"
                         name="amount"
-                        onChange={(e) => { this.onFieldChange("amount", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("amount", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -425,7 +570,9 @@ class TradeAction extends Component {
                         value={this.state.fields.limit}
                         placeholder="0"
                         name="limit"
-                        onChange={(e) => { this.onFieldChange("limit", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("limit", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -444,7 +591,9 @@ class TradeAction extends Component {
                         value={this.state.fields.stop}
                         placeholder="0"
                         name="stop"
-                        onChange={(e) => { this.onFieldChange("stop", e.target.value) }}
+                        onChange={(e) => {
+                          this.onFieldChange("stop", e.target.value);
+                        }}
                       />
                       {/* {this.validator.message(
                         "Amount",
@@ -453,8 +602,25 @@ class TradeAction extends Component {
                         "trade-action-validation"
                       )} */}
                     </Col>
+                    <Col span={24}>
+                      <Checkbox
+                        value={this.state.fields.sellcheck}
+                        checked={this.state.fields.sellcheck}
+                        onChange={(e) =>
+                          this.onCheckBoxChange("sellcheck", e.target.checked)
+                        }
+                      >
+                        Checkbox
+                      </Checkbox>
+                    </Col>
                     <Col className="action-btn" span={24}>
-                      <Button type="primary" onClick={this.onSubmit} loading={this.state.loader}>Sell</Button>
+                      <Button
+                        type="primary"
+                        onClick={this.onSubmit}
+                        loading={this.state.loader}
+                      >
+                        Sell
+                      </Button>
                     </Col>
                   </InputRow>
                 </TabPane>
