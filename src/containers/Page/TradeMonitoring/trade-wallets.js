@@ -45,7 +45,7 @@ const columns = [
         <Tooltip className="btn-icon" title="View Transaction History">
           <Icon
             // onClick={() => TradeWallets.navigateToView(object["coin_code"])}
-            onClick={() => TradeWallets.navigateToView("2105")}
+            onClick={() => TradeWallets.navigateToView(record.coin)}
             type="info-circle"
           ></Icon>
         </Tooltip>
@@ -143,18 +143,22 @@ class TradeWallets extends Component {
     });
   };
 
-
-  getWalletData = async(showLoader = true) => {
+  getWalletData = async (showLoader = true) => {
     if (showLoader) {
       this.setState({ loader: true });
     }
-   let {data,message,status}=await(await ApiUtils.getTradeDeskBalance(this.props.token)).json();
-   if(status==200){
-     this.setState({ data: data, loader:showLoader?false:this.state.loader});
-    }     
+    let { data, message, status } = await (
+      await ApiUtils.getTradeDeskBalance(this.props.token)
+    ).json();
+    if (status == 200) {
+      this.setState({
+        data: data,
+        loader: showLoader ? false : this.state.loader,
+      });
+    }
   };
 
-  _handleChange =  (field, e) => {
+  _handleChange = (field, e) => {
     if (this.state.loader) {
       return false;
     }
@@ -168,7 +172,7 @@ class TradeWallets extends Component {
     }
     this.setState({ fields }, () => {
       if (this.validator.allValid()) {
-        this.timeCounter = setTimeout(async() => {
+        this.timeCounter = setTimeout(async () => {
           try {
             this.loader.show();
             let res = await (
@@ -354,7 +358,7 @@ class TradeWallets extends Component {
               <span>Destination Address:</span>
               <Input
                 placeholder="Destination Address"
-                onChange={(e)=>this._handleChange("dest_address",e)}
+                onChange={(e) => this._handleChange("dest_address", e)}
                 value={fields["dest_address"]}
               />
               <span style={{ color: "red" }}>
@@ -370,7 +374,7 @@ class TradeWallets extends Component {
               <span>Amount:</span>
               <Input
                 placeholder="Amount"
-                onChange={(e)=>this._handleChange("amount",e)}
+                onChange={(e) => this._handleChange("amount", e)}
                 value={fields["amount"]}
               />
               <span style={{ color: "red" }}>
