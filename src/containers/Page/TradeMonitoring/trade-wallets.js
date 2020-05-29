@@ -132,7 +132,7 @@ class TradeWallets extends Component {
       this.getWalletdata(false);
     }, 10000);
   }
-  static openSendModal = (values) => {
+  static openSendModal = async (values) => {
     // await self.getAssetAvailableBalance(values.coin_code, values);
     self.setState({ sendModal: true, walletDetails: values });
   };
@@ -239,10 +239,8 @@ class TradeWallets extends Component {
         ).json();
         let [{ data, status, err, message }, { logout }] = [res, this.props];
         if (status == 200) {
-          this.setState({ allWallets: data }, () => {
-            this.openNotificationWithIcon("Success", message);
-            this.getWalletData();
-          });
+          this.openNotificationWithIcon("Success", message);
+          // this.getWalletData();
         } else if (status == 403) {
           this.openNotificationWithIcon("Error", err);
           logout();
