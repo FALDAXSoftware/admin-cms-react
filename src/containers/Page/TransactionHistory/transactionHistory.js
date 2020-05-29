@@ -43,6 +43,7 @@ class Transactions extends Component {
       allTransactions: [],
       allTransactionCount: 0,
       searchTransaction: "",
+      userid: "",
       limit: PAGESIZE,
       errMessage: "",
       errMsg: false,
@@ -62,11 +63,20 @@ class Transactions extends Component {
   componentDidMount = () => {
     if (this.props.location.state) {
       this.setState(
-        { searchTransaction: this.props.location.state.transaction_hash },
+        {
+          searchTransaction: this.props.location.state.transaction_hash,
+          userid: this.props.location.state.userid,
+        },
         () => this._getAllTransactions()
       );
     } else {
-      this._getAllTransactions();
+      this.setState(
+        {
+          searchTransaction: "",
+          userid: "",
+        },
+        () => this._getAllTransactions()
+      );
     }
   };
 
@@ -81,6 +91,7 @@ class Transactions extends Component {
       endDate,
       sorterCol,
       sortOrder,
+      userid,
     } = this.state;
     let _this = this;
 
@@ -96,7 +107,8 @@ class Transactions extends Component {
           startDate,
           endDate,
           sorterCol,
-          sortOrder
+          sortOrder,
+          userid
         )
     )
       .then((response) => response.json())

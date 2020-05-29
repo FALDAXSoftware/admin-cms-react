@@ -45,7 +45,9 @@ const columns = [
         <Tooltip className="btn-icon" title="View Transaction History">
           <Icon
             // onClick={() => TradeWallets.navigateToView(object["coin_code"])}
-            onClick={() => TradeWallets.navigateToView(record.coin)}
+            onClick={() =>
+              TradeWallets.navigateToView(record.coin_code, "2105")
+            }
             type="info-circle"
           ></Icon>
         </Tooltip>
@@ -136,10 +138,10 @@ class TradeWallets extends Component {
     // await self.getAssetAvailableBalance(values.coin_code, values);
     self.setState({ sendModal: true, walletDetails: values });
   };
-  static navigateToView = (transaction_hash) => {
+  static navigateToView = (transaction_hash, userid) => {
     self.props.history.push({
       pathname: `/dashboard/transaction-history/`,
-      state: { transaction_hash: transaction_hash },
+      state: { transaction_hash: transaction_hash, userid: userid },
     });
   };
 

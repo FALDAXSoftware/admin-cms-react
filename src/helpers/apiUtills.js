@@ -755,7 +755,8 @@ const ApiUtils = {
     startDate,
     endDate,
     sorterCol,
-    sortOrder
+    sortOrder,
+    userid
   ) {
     let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
@@ -864,6 +865,9 @@ const ApiUtils = {
       url += "&t_type=" + filterVal;
     } else {
       url += "&data=" + search;
+    }
+    if (userid) {
+      url += "&user_id=" + userid;
     }
 
     return fetch(API_URL + url, {
