@@ -1,4 +1,4 @@
-// const API_URL = "http://localhost:1440"; // Local (Mansi) URL
+// const API_URL = "http://abe0458e1044.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -6,7 +6,7 @@
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
-export const SOCKET_HOST = "https://preprod-trading.faldax.com"
+export const SOCKET_HOST = "https://preprod-trading.faldax.com";
 // export const SOCKET_HOST = "http://localhost:3011"
 const ApiUtils = {
   //super admin sign in api
@@ -15,9 +15,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -28,9 +28,9 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -39,9 +39,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/change-password", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -50,9 +50,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/employee-change-password", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -65,8 +65,8 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
 
@@ -75,8 +75,8 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
 
@@ -85,9 +85,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/campaigns/create", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(formdata)
+      body: JSON.stringify(formdata),
     });
   },
 
@@ -95,7 +95,7 @@ const ApiUtils = {
   getMetabase: function () {
     let url = "/metabase-details";
     return fetch(API_URL + url, {
-      method: "GET"
+      method: "GET",
       // headers: {
       //   Authorization: "Bearer " + token
       // }
@@ -117,17 +117,17 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-      }${filterVal ? "&country=" + filterVal : ""}${
+    }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-      }${endDate ? "&end_date=" + endDate : ""}`;
+    }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -146,17 +146,17 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-inactive-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-      }${filterVal ? "&country=" + filterVal : ""}${
+    }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-      }${endDate ? "&end_date=" + endDate : ""}`;
+    }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -175,17 +175,17 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-deleted-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-      }${filterVal ? "&country=" + filterVal : ""}${
+    }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-      }${endDate ? "&end_date=" + endDate : ""}`;
+    }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -194,9 +194,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/user-activate", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -206,8 +206,8 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/json"
-      }
+        Accept: "application/json",
+      },
     });
   },
 
@@ -233,8 +233,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -243,9 +243,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/coins/create", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: form
+      body: form,
     });
   },
 
@@ -255,9 +255,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/json"
+        Accept: "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -267,8 +267,8 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/json"
-      }
+        Accept: "application/json",
+      },
     });
   },
 
@@ -278,9 +278,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -290,9 +290,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -306,15 +306,15 @@ const ApiUtils = {
   ) {
     let url = `/admin/get-referred-user-data?coin_code=${coin_id}${
       user_id ? "&user_id=" + user_id : ""
-      }${page ? "&page=" + page : ""}${limit ? "&limit=" + limit : ""}${
+    }${page ? "&page=" + page : ""}${limit ? "&limit=" + limit : ""}${
       data ? "&data=" + data : ""
-      }`;
+    }`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -342,8 +342,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -358,13 +358,13 @@ const ApiUtils = {
   ) {
     let url = `/admin/get-referal-list?data=${searchReferral}${
       sorterCol ? "&sort_col=" + sorterCol : ""
-      }${sortOrder ? "&sort_order=" + sortOrder : ""}`;
+    }${sortOrder ? "&sort_order=" + sortOrder : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -399,8 +399,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -409,9 +409,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/country-activate", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -420,9 +420,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/email-send", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -437,8 +437,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -448,8 +448,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -458,9 +458,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/country-update", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -481,8 +481,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -491,9 +491,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/state-activate", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -502,9 +502,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/state-update", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -513,9 +513,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/role/create", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -524,9 +524,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/role/update", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -535,11 +535,11 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: roleId
-      })
+        id: roleId,
+      }),
     });
   },
 
@@ -559,8 +559,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -569,9 +569,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/add-employee", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -581,11 +581,11 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: roleId
-      })
+        id: roleId,
+      }),
     });
   },
 
@@ -594,9 +594,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/update-employee", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -625,11 +625,11 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: parseInt(user_id)
-      })
+        user_id: parseInt(user_id),
+      }),
     });
   },
 
@@ -641,8 +641,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -696,8 +696,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -706,9 +706,9 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/add-pair", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -718,9 +718,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -729,8 +729,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -740,9 +740,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -755,7 +755,8 @@ const ApiUtils = {
     startDate,
     endDate,
     sorterCol,
-    sortOrder
+    sortOrder,
+    userid
   ) {
     let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
@@ -865,13 +866,16 @@ const ApiUtils = {
     } else {
       url += "&data=" + search;
     }
+    if (userid) {
+      url += "&user_id=" + userid;
+    }
 
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -995,8 +999,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1125,8 +1129,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1335,8 +1339,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1449,8 +1453,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1558,8 +1562,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1680,8 +1684,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1714,11 +1718,11 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
@@ -1751,11 +1755,11 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
@@ -1788,11 +1792,11 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
@@ -1824,11 +1828,11 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
@@ -1854,8 +1858,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1865,8 +1869,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1876,9 +1880,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -1888,9 +1892,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -1900,8 +1904,8 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1911,9 +1915,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -1922,8 +1926,8 @@ const ApiUtils = {
     return fetch(API_URL + "/admin/get-contact-details", {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1933,8 +1937,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -1974,8 +1978,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2069,8 +2073,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2081,8 +2085,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2093,8 +2097,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2104,9 +2108,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2115,8 +2119,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2126,9 +2130,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2138,8 +2142,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2149,8 +2153,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2159,9 +2163,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2170,9 +2174,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2181,9 +2185,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2192,8 +2196,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2320,8 +2324,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2330,9 +2334,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2341,8 +2345,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2351,9 +2355,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2362,8 +2366,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2372,8 +2376,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2382,9 +2386,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2393,9 +2397,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2405,9 +2409,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2416,8 +2420,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2426,9 +2430,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2442,8 +2446,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2452,9 +2456,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2463,9 +2467,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2474,9 +2478,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2485,8 +2489,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2495,8 +2499,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2505,9 +2509,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2516,8 +2520,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2526,9 +2530,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2537,8 +2541,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2547,9 +2551,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2558,8 +2562,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2568,9 +2572,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2579,9 +2583,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2590,8 +2594,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2601,9 +2605,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2612,9 +2616,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2623,9 +2627,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2636,8 +2640,8 @@ const ApiUtils = {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
@@ -2647,8 +2651,8 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2657,27 +2661,27 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   getAllUserWhitelistIP: function (token, user_id, page, limit) {
     return fetch(
       API_URL +
-      "/admin/get-user-whitelist-ip?user_id=" +
-      user_id +
-      "&page=" +
-      page +
-      "&limit=" +
-      limit,
+        "/admin/get-user-whitelist-ip?user_id=" +
+        user_id +
+        "&page=" +
+        page +
+        "&limit=" +
+        limit,
       {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
@@ -2687,8 +2691,8 @@ const ApiUtils = {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2697,9 +2701,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2708,9 +2712,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2719,9 +2723,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2730,9 +2734,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2785,8 +2789,8 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2795,9 +2799,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2806,9 +2810,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2817,9 +2821,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2830,8 +2834,8 @@ const ApiUtils = {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
@@ -2841,8 +2845,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2851,8 +2855,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2861,8 +2865,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2871,9 +2875,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2882,9 +2886,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2897,8 +2901,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2907,9 +2911,19 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
+    });
+  },
+  sendWalletBalanceTradedesk: function (token, form) {
+    return fetch(API_URL + "/admin/wallet-send-coin-tradedesk", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
     });
   },
   sendWarmWalletBalance: function (token, form) {
@@ -2917,9 +2931,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2929,8 +2943,8 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2939,9 +2953,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -2950,9 +2964,9 @@ const ApiUtils = {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
   getAllTierRequirement: function (token) {
@@ -2961,8 +2975,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
   getAllTiers: function (token) {
@@ -2971,8 +2985,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -2986,8 +3000,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -3001,8 +3015,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -3012,8 +3026,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -3023,8 +3037,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -3034,20 +3048,31 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllTierRequests: function (token, tier = "1", sortCol = "", sortOrder = "", limit = 10, page = 1, id, status = 1, searchData = "", type = "") {
+  getAllTierRequests: function (
+    token,
+    tier = "1",
+    sortCol = "",
+    sortOrder = "",
+    limit = 10,
+    page = 1,
+    id,
+    status = 1,
+    searchData = "",
+    type = ""
+  ) {
     let url = `/admin/user-tier-request?step=${tier}&limit=${limit}&page=${page}&status=${status}&data=${searchData}&type=${type}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -3056,9 +3081,9 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: form
+      body: form,
     });
   },
 
@@ -3067,9 +3092,9 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -3080,8 +3105,8 @@ const ApiUtils = {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
@@ -3091,8 +3116,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
@@ -3101,9 +3126,9 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
@@ -3121,8 +3146,8 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
   updateNetworkFee: function (token, body) {
@@ -3130,9 +3155,9 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
   },
   getRolePermissions: function (token, roleId = "") {
@@ -3140,8 +3165,8 @@ const ApiUtils = {
     return fetch(`${API_URL}${url}?role_id=${roleId}`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
   getPairList: function () {
@@ -3155,9 +3180,9 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
   // Offer Module API's
@@ -3165,7 +3190,7 @@ const ApiUtils = {
     return {
       url: "/admin/campaigns/",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
       getCampaignList: function (
         page,
@@ -3189,7 +3214,7 @@ const ApiUtils = {
         return fetch(`${API_URL}${this.url}list`, {
           method: "POST",
           headers: this.headers,
-          body: formData
+          body: formData,
         });
       },
       changeStatus: function (id, status = false) {
@@ -3198,21 +3223,21 @@ const ApiUtils = {
         return fetch(`${API_URL}${this.url}change-status?id=${id}`, {
           method: "PUT",
           headers: this.headers,
-          body: formData
+          body: formData,
         });
       },
       updateCampaign: function (id, data) {
         return fetch(`${API_URL}${this.url}update?id=${id}`, {
           method: "PUT",
           headers: this.headers,
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
       },
       // get campaign details api
       getById: function (campaign_id) {
         return fetch(API_URL + "/admin/campaigns/get?id=" + campaign_id, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       checkOfferCode: function (offerCode = "") {
@@ -3220,7 +3245,7 @@ const ApiUtils = {
           `${API_URL}${this.url}verify-offercode?code=${offerCode}`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
@@ -3239,138 +3264,138 @@ const ApiUtils = {
         return fetch(`${API_URL}${this.url}offercode-used?id=${offerId}`, {
           method: "POST",
           headers: this.headers,
-          body: formData
+          body: formData,
         });
-      }
+      },
     };
   },
   metabase: function (token) {
     return {
       url: "/admin/",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
       getAccountClassMetabase: function () {
         return fetch(`${API_URL}${this.url}get-account-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getWithdrawRequest: function () {
         return fetch(`${API_URL}${this.url}get-withdraw-request-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getUsersRequest: function () {
         return fetch(`${API_URL}${this.url}get-users-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getTwoFactorRequest: function () {
         return fetch(`${API_URL}${this.url}get-two-factor-request-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getTransactionHistory: function () {
         return fetch(`${API_URL}${this.url}get-transaction-history-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getRolesRequest: function () {
         return fetch(`${API_URL}${this.url}get-roles-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getPairsRequest: function () {
         return fetch(`${API_URL}${this.url}get-pairs-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getOffersRequest: function () {
         return fetch(`${API_URL}${this.url}get-offers-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getNewsRequest: function () {
         return fetch(`${API_URL}${this.url}get-news-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getDashboardRequest: function () {
         return fetch(`${API_URL}${this.url}get-dashboard-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getKYCRequest: function () {
         return fetch(`${API_URL}${this.url}get-kyc-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getReferralMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-referral-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getAssetsMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-assets-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getBatchMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-batch-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getCareerMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-career-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getCountryMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-country-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getEmployeeMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-employee-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getFeesMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-fees-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
       getHistoryMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-history-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
-      }
+      },
     };
   },
   walletDashboard: function (token) {
     return {
       url: "/admin/",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
       getWalletDetailByName: function (
         coin = "",
@@ -3385,20 +3410,20 @@ const ApiUtils = {
         transaction_type = ""
       ) {
         return fetch(
-          `${API_URL}${
-          this.url
-          }get-wallet-dashboard?${walletType == 5 ? 'coin' : 'coin_code'}=${coin.toLowerCase()}&wallet_type=${walletType}${
-          sortCol ? "&sort_col=" + sortCol : ""
+          `${API_URL}${this.url}get-wallet-dashboard?${
+            walletType == 5 ? "coin" : "coin_code"
+          }=${coin.toLowerCase()}&wallet_type=${walletType}${
+            sortCol ? "&sort_col=" + sortCol : ""
           }${
-          sortOrder ? "&sort_order=" + sortOrder : ""
+            sortOrder ? "&sort_order=" + sortOrder : ""
           }&page=${page}&limit=${limit}${
-          searchData ? "&data=" + encodeURIComponent(searchData) : ""
+            searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
-          end_date ? "&end_date=" + end_date : ""
+            end_date ? "&end_date=" + end_date : ""
           }${transaction_type ? "&t_type=" + transaction_type : ""}`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
@@ -3416,117 +3441,117 @@ const ApiUtils = {
       ) {
         return fetch(
           `${API_URL}${
-          this.url
+            this.url
           }get-bussiness-wallet-data?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${
-          sortCol ? "&sort_col=" + sortCol : ""
+            sortCol ? "&sort_col=" + sortCol : ""
           }${
-          sortOrder ? "&sort_order=" + sortOrder : ""
+            sortOrder ? "&sort_order=" + sortOrder : ""
           }&page=${page}&limit=${limit}${
-          searchData ? "&data=" + encodeURIComponent(searchData) : ""
+            searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
-          end_date ? "&end_date=" + end_date : ""
+            end_date ? "&end_date=" + end_date : ""
           }${transaction_type ? "&wallet_type=" + transaction_type : ""}`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getWalletWarnDashboard: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-warm-wallet-data${
-          search ? "?search=" + search : ""
+            search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getHotSendWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotsend-wallet-data${
-          search ? "?search=" + search : ""
+            search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getHotReceiveWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotreceive-wallet-data${
-          search ? "?search=" + search : ""
+            search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getWalletColdDashboard: function (searchData) {
         return fetch(
           `${API_URL}${this.url}get-cold-wallet-data${
-          searchData ? "?search=" + searchData : ""
+            searchData ? "?search=" + searchData : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getWarmWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-          this.url
+            this.url
           }get-warm-wallet-transaction?coin_code=${coin_code}${
-          search ? "&searchLabel=" + search : ""
+            search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getCustodialWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-          this.url
+            this.url
           }get-cold-wallet-transaction?coin_code=${coin_code}${
-          search ? "&searchLabel=" + search : ""
+            search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
       getHotReceiveWalletDetails: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-          this.url
+            this.url
           }get-hotreceive-wallet-transaction?coin_code=${coin_code}${
-          search ? "&searchLabel=" + search : ""
+            search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
-      }
+      },
     };
   },
   getHotSendWalletDetails: function (coin_code, search) {
     return fetch(
       `${API_URL}${
-      this.url
+        this.url
       }get-hotsend-wallet-transaction?coin_code=${coin_code}${
-      search ? "&searchLabel=" + search : ""
+        search ? "&searchLabel=" + search : ""
       }`,
       {
         method: "GET",
-        headers: this.headers
+        headers: this.headers,
       }
     );
   },
@@ -3534,26 +3559,26 @@ const ApiUtils = {
     return fetch(`${API_URL}/admin/get-static-page-links`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
   setPolicyDocs: function (token, formData) {
     return fetch(`${API_URL}/admin/update-static-page-pdf`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
-      body: formData
+      body: formData,
     });
   },
   getAssetFeesAndLimits: function (token) {
     return fetch(`${API_URL}/admin/list-asset-fees-limits`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
   editAssetFeesAndLimits: function (token, form) {
@@ -3562,9 +3587,9 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
   sendResetPasswordLink: function (token, form) {
@@ -3573,20 +3598,36 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
-  getResidualTransactions: function (token, page = 1, limit = 50, data = "", startDate = "", endDate = "", txType = "") {
-    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}${data ? "&data=" + data : ""}${txType ? "&t_type=" + txType : ""}${startDate ? "&start_date=" + startDate : ""}${endDate ? "&end_date=" + endDate : ""}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-    });
+  getResidualTransactions: function (
+    token,
+    page = 1,
+    limit = 50,
+    data = "",
+    startDate = "",
+    endDate = "",
+    txType = ""
+  ) {
+    return fetch(
+      API_URL +
+        `/admin/get-residual-lists?page=${page}&limit=${limit}${
+          data ? "&data=" + data : ""
+        }${txType ? "&t_type=" + txType : ""}${
+          startDate ? "&start_date=" + startDate : ""
+        }${endDate ? "&end_date=" + endDate : ""}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
   },
   getWalletNetworkFee: function (token, form) {
     return fetch(API_URL + "/admin/wallet/get-network-fee", {
@@ -3594,9 +3635,9 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
   getAvailableBalance: function (token, asset = "tbtc") {
@@ -3605,9 +3646,9 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
   },
   getAvailableWarmBalance: function (token, asset = "tbtc") {
     return fetch(API_URL + `/admin/get-warm-available-balance?coin=${asset}`, {
@@ -3615,9 +3656,9 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
   },
   getFaldaxMainWallet: function (token, search = "") {
     let url = "/admin-business-wallet-details";
@@ -3629,65 +3670,88 @@ const ApiUtils = {
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
   },
-  getPanicBtnHistory: function (token, searchData = "", startDate = "", endDate = "", sortCol = "", sortOrder = "", page = 1, limit = 50) {
-    let url = `${API_URL}/admin/get-panic-history?page=${page}${sortOrder ? '&sort_order=' + sortOrder : ""}${startDate ? '&start_date=' + startDate : ""}${endDate ? '&end_date=' + endDate : ""}${searchData ? '&data=' + searchData : ""}${sortCol ? '&sort_col=' + sortCol : ""}&limit=${limit}`
+  getPanicBtnHistory: function (
+    token,
+    searchData = "",
+    startDate = "",
+    endDate = "",
+    sortCol = "",
+    sortOrder = "",
+    page = 1,
+    limit = 50
+  ) {
+    let url = `${API_URL}/admin/get-panic-history?page=${page}${
+      sortOrder ? "&sort_order=" + sortOrder : ""
+    }${startDate ? "&start_date=" + startDate : ""}${
+      endDate ? "&end_date=" + endDate : ""
+    }${searchData ? "&data=" + searchData : ""}${
+      sortCol ? "&sort_col=" + sortCol : ""
+    }&limit=${limit}`;
     return fetch(url, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
   },
-  approveRejectRequest: function (token, tier, id, status, request_id, private_note = "", public_note = "") {
-    let url = `${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&request_id=${request_id}`
+  approveRejectRequest: function (
+    token,
+    tier,
+    id,
+    status,
+    request_id,
+    private_note = "",
+    public_note = ""
+  ) {
+    let url = `${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&request_id=${request_id}`;
     return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         private_note,
-        public_note
-      })
-    })
+        public_note,
+      }),
+    });
   },
   uploadDoc: function (token, formData) {
-    let url = `${API_URL}/admin/upload-user-documents`
+    let url = `${API_URL}/admin/upload-user-documents`;
     return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
       },
-      body: formData
-    })
+      body: formData,
+    });
   },
   getTierDocuments: function (token) {
-    let url = `${API_URL}/admin/get-tier-pdf`
+    let url = `${API_URL}/admin/get-tier-pdf`;
     return fetch(url, {
       method: "get",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
   },
   setTierDocument: function (token, formData) {
     return fetch(`${API_URL}/admin/upload-tier-pdf`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
-      body: formData
+      body: formData,
     });
   },
   executeTrade: function (url, token, formData) {
@@ -3695,9 +3759,9 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
   },
   cancleOrder: function (token, formData) {
@@ -3705,48 +3769,55 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
-    })
+      body: JSON.stringify(formData),
+    });
   },
-  forceApproveRejectTierRequest: function (token, id, status, public_note, private_note) {
-    let url = `${API_URL}/admin/force-change-status?id=${id}&status=${status}`
+  forceApproveRejectTierRequest: function (
+    token,
+    id,
+    status,
+    public_note,
+    private_note
+  ) {
+    let url = `${API_URL}/admin/force-change-status?id=${id}&status=${status}`;
     return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }, body: JSON.stringify({ public_note, private_note })
-    })
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ public_note, private_note }),
+    });
   },
   getTierTierRequirement(token, id) {
     return fetch(`${API_URL}/admin/get-tier-data?id=${id}`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
   getTierDetails: function (token, id, tier) {
     return fetch(`${API_URL}/admin/get-tier-details`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
       body: JSON.stringify({
         request_id: id,
-        tier_step: tier
-      })
+        tier_step: tier,
+      }),
     });
   },
   getSpreadData: function (token) {
     return fetch(`${SOCKET_HOST}/api/v1/tradding/get-spread-value`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
       // body: JSON.stringify({})
@@ -3756,7 +3827,7 @@ const ApiUtils = {
     return fetch(`${SOCKET_HOST}/api/v1/tradding/get-tradedesk-user-balances`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
       // body: JSON.stringify({})
@@ -3766,7 +3837,7 @@ const ApiUtils = {
     return fetch(`${SOCKET_HOST}/api/v1/tradding/get-pairs-value`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
       // body: JSON.stringify({})
@@ -3777,34 +3848,40 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...data })
+      body: JSON.stringify({ ...data }),
     });
   },
   checkTierUpgradeStatus: function (token, user_id, tier) {
-    return fetch(`${API_URL}/admin/user-tier-unlock-check?user_id=${user_id}&tier_step=${tier}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token
+    return fetch(
+      `${API_URL}/admin/user-tier-unlock-check?user_id=${user_id}&tier_step=${tier}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       }
-    });
+    );
   },
   tierUnlock: function (token, user_id, tier) {
-    return fetch(`${API_URL}/admin/user-tier-unlock?user_id=${user_id}&tier_step=${tier}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token
+    return fetch(
+      `${API_URL}/admin/user-tier-unlock?user_id=${user_id}&tier_step=${tier}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       }
-    });
+    );
   },
   getUserTierValue: function (token, user_id) {
     return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
-  }
+  },
 };
 export default ApiUtils;
