@@ -14,27 +14,27 @@ const renderCell = (
   type,
   key,
   fee_name = null,
-  maker = null,
-  taker = null,
+  price_precision = null,
+  quantity_precision = null,
   created = null,
   status = null
 ) => {
   const value = object[key];
   const name = object[fee_name];
-  const maker_fee = object[maker];
-  const taker_fee = object[taker];
+  const maker_fee = object[price_precision];
+  const taker_fee = object[quantity_precision];
   const created_at = object[created];
   const is_active = object[status];
 
   switch (type) {
     case "DateCell":
-      return DateCell(value, name, maker_fee, taker_fee, created_at, is_active);
+      return DateCell(value, name, price_precision, quantity_precision, created_at, is_active);
     case "FeeSwitchCell":
       return FeeSwitchCell(
         value,
         name,
-        maker_fee,
-        taker_fee,
+        price_precision,
+        quantity_precision,
         created_at,
         is_active
       );
@@ -42,8 +42,8 @@ const renderCell = (
       return FeeActionCell(
         value,
         name,
-        maker_fee,
-        taker_fee,
+        price_precision,
+        quantity_precision,
         created_at,
         is_active
       );
@@ -98,20 +98,20 @@ const columns = [
     sorter: true,
     render: object => renderCell(object, "TextCell", "name")
   },
-  // {
-  //   title: <IntlMessages id="feeTable.title.maker_fee" />,
-  //   key: "maker_fee",
-  //   width: 100,
-  //   sorter: true,
-  //   render: object => renderCell(object, "FixedCell", "maker_fee")
-  // },
-  // {
-  //   title: <IntlMessages id="feeTable.title.taker_fee" />,
-  //   key: "taker_fee",
-  //   width: 100,
-  //   sorter: true,
-  //   render: object => renderCell(object, "FixedCell", "taker_fee")
-  // },
+  {
+    title: <IntlMessages id="feeTable.title.price_precision" />,
+    key: "price_precision",
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, "FixedCell", "price_precision")
+  },
+  {
+    title: <IntlMessages id="feeTable.title.quantity_precision" />,
+    key: "quantity_precision",
+    width: 100,
+    sorter: true,
+    render: object => renderCell(object, "FixedCell", "quantity_precision")
+  },
   {
     title: <IntlMessages id="feeTable.title.status" />,
     key: "is_active",
@@ -123,8 +123,8 @@ const columns = [
           "FeeSwitchCell",
           "id",
           "name",
-          "maker_fee",
-          "taker_fee",
+          "price_precision",
+          "quantity_precision",
           "created_at",
           "is_active"
         )

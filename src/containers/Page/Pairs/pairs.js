@@ -65,32 +65,32 @@ class Pairs extends Component {
       sortOrder: "",
       metabaseUrl: "",
       openCsvExportModal: false,
-      csvData:[]
+      csvData: []
     };
     self = this;
     Pairs.editPair = Pairs.editPair.bind(this);
     Pairs.pairStatus = Pairs.pairStatus.bind(this);
   }
 
-  static editPair(value, name, maker_fee, taker_fee, created_at, is_active) {
+  static editPair(value, name, price_precision, quantity_precision, created_at, is_active) {
     let pairDetails = {
       value,
       name,
-      maker_fee,
-      taker_fee,
+      price_precision,
+      quantity_precision,
       created_at,
       is_active
     };
     self.setState({ pairDetails, showEditPairModal: true });
   }
 
-  static pairStatus(value, name, maker_fee, taker_fee, created_at, is_active) {
+  static pairStatus(value, name, price_precision, quantity_precision, created_at, is_active) {
     const { token } = this.props;
     let formData = {
       id: value,
       name: name,
-      maker_fee: maker_fee,
-      taker_fee: taker_fee,
+      price_precision: price_precision,
+      quantity_precision: quantity_precision,
       is_active: !is_active
     };
 
@@ -136,7 +136,7 @@ class Pairs extends Component {
 
     ApiUtils.getWalletCoins(token)
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allAssets: res.data });
         } else if (res.status == 403) {
@@ -179,16 +179,17 @@ class Pairs extends Component {
     (isExportToCsv
       ? ApiUtils.getAllPairs(1, 100000, token, "", "", "", selectedAsset)
       : ApiUtils.getAllPairs(
-          page,
-          limit,
-          token,
-          searchPair,
-          sorterCol,
-          sortOrder,
-          selectedAsset
-        ))
+        page,
+        limit,
+        token,
+        searchPair,
+        sorterCol,
+        sortOrder,
+        selectedAsset
+      ))
       .then(response => response.json())
-      .then(function(res) {
+      .then(function (res) {
+        console.log("res", res)
         if (res.status == 200) {
           if (isExportToCsv) {
             _this.setState({ csvData: res.data });
@@ -453,8 +454,8 @@ class Pairs extends Component {
               pageSizeOptions={pageSizeOptions}
             />
           ) : (
-            ""
-          )}
+              ""
+            )}
         </div>
       </TableDemoStyle>
     );
