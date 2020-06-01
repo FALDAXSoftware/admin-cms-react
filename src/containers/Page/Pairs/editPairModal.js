@@ -106,8 +106,8 @@ class EditPairModal extends Component {
                 name: fields["name"],
                 coin_id1: fields["coin_id1"],
                 coin_id2: fields["coin_id2"],
-                maker_fee: fields['maker_fee'],
-                taker_fee: fields['taker_fee']
+                price_precision: fields['maker_fee'],
+                quantity_precision: fields['taker_fee']
             };
 
             ApiUtils.updatePair(token, formData)
@@ -117,7 +117,7 @@ class EditPairModal extends Component {
                         this.setState({
                             errType: 'success', errMsg: true, errMessage: res.message,
                             isDisabled: false, loader: false
-                        },()=>{
+                        }, () => {
                             this._closeEditPairModal();
                             getAllPairs();
                         })
@@ -167,18 +167,18 @@ class EditPairModal extends Component {
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Maker Fee:</span>
-                    <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
+                    <span>Price Precision:</span>
+                    <Input addonAfter={'%'} placeholder="Price Precision" onChange={this._handleChange.bind(this, "maker_fee")} value={fields["maker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('maker fee', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
+                        {this.validator.message('Price Precision', fields["maker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Taker Fee:</span>
-                    <Input addonAfter={'%'} placeholder="Maker Fee" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
+                    <span>Quantity Precision:</span>
+                    <Input addonAfter={'%'} placeholder="Quantity Precision" onChange={this._handleChange.bind(this, "taker_fee")} value={fields["taker_fee"]} />
                     <span style={{ "color": "red" }}>
-                        {this.validator.message('taker fee', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
+                        {this.validator.message('Quantity precision', fields["taker_fee"], 'required|custom_between:0,100', 'text-danger')}
                     </span>
                 </div>
                 {loader && <FaldaxLoader />}
