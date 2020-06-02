@@ -155,7 +155,7 @@ class UserTransactionHistory extends Component {
     }
 
     _handleTransactionPagination = (page) => {
-        this.setState({ page: page - 1 }, () => {
+        this.setState({ page }, () => {
             this._getUserTransactions();
         })
     }
