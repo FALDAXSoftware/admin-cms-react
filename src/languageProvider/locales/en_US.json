@@ -716,5 +716,6 @@
   "walletWarmDetailsTable.title.network_fee": "Network Fees",
   "tradeTable.title.transaction_id": "Transaction Id",
   "feeTable.title.quantity_precision": "Quantity Precision",
-  "feeTable.title.price_precision": "Price Precision"
+  "feeTable.title.price_precision": "Price Precision",
+  "feeTable.title.order_maximum": "Maximum Order Quantity (USD)"
 }

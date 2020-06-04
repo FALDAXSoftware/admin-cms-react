@@ -9,7 +9,7 @@ import {
   Row,
   Select,
   Icon,
-  Col
+  Col,
 } from "antd";
 import { pairsTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -27,7 +27,7 @@ import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import {
   PAGE_SIZE_OPTIONS,
   PAGESIZE,
-  TABLE_SCROLL_HEIGHT
+  TABLE_SCROLL_HEIGHT,
 } from "../../../helpers/globals";
 import styled from "styled-components";
 import { isAllowed } from "../../../helpers/accessControl";
@@ -65,44 +65,62 @@ class Pairs extends Component {
       sortOrder: "",
       metabaseUrl: "",
       openCsvExportModal: false,
-      csvData: []
+      csvData: [],
     };
     self = this;
     Pairs.editPair = Pairs.editPair.bind(this);
     Pairs.pairStatus = Pairs.pairStatus.bind(this);
   }
 
-  static editPair(value, name, price_precision, quantity_precision, created_at, is_active) {
+  static editPair(
+    value,
+    name,
+    price_precision,
+    quantity_precision,
+    order_maximum,
+    created_at,
+    is_active
+  ) {
     let pairDetails = {
       value,
       name,
       price_precision,
       quantity_precision,
+      order_maximum,
       created_at,
-      is_active
+      is_active,
     };
     self.setState({ pairDetails, showEditPairModal: true });
   }
 
-  static pairStatus(value, name, price_precision, quantity_precision, created_at, is_active) {
+  static pairStatus(
+    value,
+    name,
+    price_precision,
+    quantity_precision,
+    order_maximum,
+    created_at,
+    is_active
+  ) {
     const { token } = this.props;
     let formData = {
       id: value,
       name: name,
       price_precision: price_precision,
       quantity_precision: quantity_precision,
-      is_active: !is_active
+      order_maximum: order_maximum,
+      is_active: !is_active,
     };
 
     ApiUtils.updatePair(token, formData)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.status == 200) {
           self._getAllPairs();
           self.setState({
             errType: "Success",
             errMsg: true,
-            errMessage: res.message
+            errMessage: res.message,
           });
         } else if (res.status == 403) {
           self.setState(
@@ -119,7 +137,7 @@ class Pairs extends Component {
         self.setState({
           errType: "error",
           errMsg: true,
-          errMessage: "Unable to complete the requested action."
+          errMessage: "Unable to complete the requested action.",
         });
         self._resetEditForm();
       });
@@ -135,7 +153,7 @@ class Pairs extends Component {
     let _this = this;
 
     ApiUtils.getWalletCoins(token)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allAssets: res.data });
@@ -150,15 +168,15 @@ class Pairs extends Component {
           _this.setState({ errMsg: true, errMessage: res.message });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({ loader: false });
       });
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -171,7 +189,7 @@ class Pairs extends Component {
       searchPair,
       sorterCol,
       sortOrder,
-      selectedAsset
+      selectedAsset,
     } = this.state;
     let _this = this;
 
@@ -179,17 +197,18 @@ class Pairs extends Component {
     (isExportToCsv
       ? ApiUtils.getAllPairs(1, 100000, token, "", "", "", selectedAsset)
       : ApiUtils.getAllPairs(
-        page,
-        limit,
-        token,
-        searchPair,
-        sorterCol,
-        sortOrder,
-        selectedAsset
-      ))
-      .then(response => response.json())
+          page,
+          limit,
+          token,
+          searchPair,
+          sorterCol,
+          sortOrder,
+          selectedAsset
+        )
+    )
+      .then((response) => response.json())
       .then(function (res) {
-        console.log("res", res)
+        console.log("res", res);
         if (res.status == 200) {
           if (isExportToCsv) {
             _this.setState({ csvData: res.data });
@@ -208,7 +227,7 @@ class Pairs extends Component {
           _this.setState({
             errMsg: true,
             errMessage: res.message,
-            errType: "error"
+            errType: "error",
           });
         }
         _this.setState({ loader: false });
@@ -218,12 +237,12 @@ class Pairs extends Component {
           errType: "error",
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
-          loader: false
+          loader: false,
         });
       });
   };
 
-  _handleFeesPagination = page => {
+  _handleFeesPagination = (page) => {
     this.setState({ page }, () => {
       this._getAllPairs();
     });
@@ -241,7 +260,7 @@ class Pairs extends Component {
     this.setState({ showEditPairModal: false });
   };
 
-  _searchPair = e => {
+  _searchPair = (e) => {
     e.preventDefault();
     this._getAllPairs();
   };
@@ -258,9 +277,9 @@ class Pairs extends Component {
   async getMetaBaseUrl() {
     try {
       this.setState({ loader: true });
-      let response = await (await ApiUtils.metabase(
-        this.props.token
-      ).getPairsRequest()).json();
+      let response = await (
+        await ApiUtils.metabase(this.props.token).getPairsRequest()
+      ).json();
       if (response.status == 200) {
         this.setState({ metabaseUrl: response.frameURL });
       } else if (response.statue == 400 || response.status == 403) {
@@ -271,7 +290,7 @@ class Pairs extends Component {
     }
   }
 
-  _changeAsset = value => {
+  _changeAsset = (value) => {
     this.setState({ selectedAsset: value });
   };
 
@@ -291,7 +310,7 @@ class Pairs extends Component {
     });
   };
 
-  onChangeTabs = key => {
+  onChangeTabs = (key) => {
     if (key == "metabase" && this.state.metabaseUrl == "") {
       this.getMetaBaseUrl();
     }
@@ -319,7 +338,7 @@ class Pairs extends Component {
       allAssets,
       selectedAsset,
       openCsvExportModal,
-      csvData
+      csvData,
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -366,7 +385,7 @@ class Pairs extends Component {
             </Col>
             <Col sm={6}>
               <Select
-                getPopupContainer={trigger => trigger.parentNode}
+                getPopupContainer={(trigger) => trigger.parentNode}
                 placeholder="Select an asset"
                 onChange={this._changeAsset}
                 value={selectedAsset}
@@ -422,6 +441,7 @@ class Pairs extends Component {
         )}
         {loader && <FaldaxLoader />}
         <div>
+          {console.log("$$$all pairs", pairDetails)}
           {showEditPairModal && (
             <EditPairModal
               allCoins={allCoins}
@@ -454,8 +474,8 @@ class Pairs extends Component {
               pageSizeOptions={pageSizeOptions}
             />
           ) : (
-              ""
-            )}
+            ""
+          )}
         </div>
       </TableDemoStyle>
     );
@@ -463,8 +483,8 @@ class Pairs extends Component {
 }
 
 export default connect(
-  state => ({
-    token: state.Auth.get("token")
+  (state) => ({
+    token: state.Auth.get("token"),
   }),
   { logout }
 )(Pairs);
