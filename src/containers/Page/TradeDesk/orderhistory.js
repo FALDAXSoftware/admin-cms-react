@@ -15,6 +15,7 @@ import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 import moment from "moment";
+import { Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 // var self;
@@ -25,13 +26,13 @@ class OrderHistory extends Component {
       errMsg: false,
       errType: "Success",
       loader: false,
-      data: []
+      data: [],
     };
     // self = this;
   }
 
   componentDidMount = () => {
-    this.props.io.on("trade-history-data", data => {
+    this.props.io.on("trade-history-data", (data) => {
       this.updateData(data);
     });
   };
@@ -39,20 +40,25 @@ class OrderHistory extends Component {
     const rows = [];
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
-      var date = moment.utc(element.created_at)
+      var date = moment
+        .utc(element.created_at)
         .local()
         .format("DD/MM/YYYY, H:m:s");
       rows.push({
         side: element.side,
-        amount: Number(element.quantity).toFixed(8),
-        fill_price: Number(element.fill_price).toFixed(8),
+        amount: Precise(element.quantity, this.props.amountPrecision),
+        fill_price: Precise(element.fill_price, this.props.pricePrecision),
         time: date,
-        total: Number(element.quantity * element.fill_price).toFixed(8)
+        total: Precise(
+          parseFloat(element.quantity * element.fill_price),
+          this.props.pricePrecision
+        ),
       });
     }
-    this.setState({ data: rows }, () => { /* this.props.onLoadComplete() */ })
-  }
-
+    this.setState({ data: rows }, () => {
+      /* this.props.onLoadComplete() */
+    });
+  };
 
   render() {
     const columns = [
@@ -83,7 +89,6 @@ class OrderHistory extends Component {
         key: "total",
       },
     ];
-
 
     return (
       <Card>

@@ -15,7 +15,7 @@ import DepthChart from "./depth";
 import MyOrders from "./myorders";
 import AllPendingOrders from "./allpendingorders";
 import OrderHistory from "./orderhistory";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 import { isAllowed } from "../../../helpers/accessControl";
 const { logout } = authAction;
 // var self;
@@ -32,7 +32,9 @@ class TradeDesk extends Component {
       buyBookLoader: false,
       sellBookLoader: false,
       myOrderLoader: false,
-      orderHistoryLoader: false
+      orderHistoryLoader: false,
+      pricePrecision: "0",
+      amountPrecision: "0",
     };
     // alert(this.props.token)
     this.io = io(SOCKET_HOST, {
@@ -48,37 +50,47 @@ class TradeDesk extends Component {
   }
 
   componentDidMount = () => {
-    let crypto = this.props.match.params.pair.split("-")[0]
-    let currency = this.props.match.params.pair.split("-")[1]
-    this.setState({
-      crypto,
-      currency,
-      pair: this.props.match.params.pair
-    }, () => {
-      this.joinRoom()
-    })
+    let crypto = this.props.match.params.pair.split("-")[0];
+    let currency = this.props.match.params.pair.split("-")[1];
+    this.setState(
+      {
+        crypto,
+        currency,
+        pair: this.props.match.params.pair,
+        pricePrecision: 6,
+        amountPrecision: 3,
+      },
+      () => {
+        this.joinRoom();
+      }
+    );
     this.io.on("user-logout", (data) => {
-      this.props.logout()
-    })
-
+      this.props.logout();
+    });
   };
   UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (this.props.pair != nextProps.match.params.pair) {
-      let crypto = nextProps.match.params.pair.split("-")[0]
-      let currency = nextProps.match.params.pair.split("-")[1]
-      let prevRoom = this.state.crypto + "-" + this.state.currency
-      this.setState({
-        crypto,
-        currency,
-        pair: nextProps.match.params.pair
-      }, () => {
-        this.joinRoom(prevRoom)
-      })
+      let crypto = nextProps.match.params.pair.split("-")[0];
+      let currency = nextProps.match.params.pair.split("-")[1];
+      let prevRoom = this.state.crypto + "-" + this.state.currency;
+      this.setState(
+        {
+          crypto,
+          currency,
+          pair: nextProps.match.params.pair,
+        },
+        () => {
+          this.joinRoom(prevRoom);
+        }
+      );
     }
-  }
+  };
   joinRoom = (prevRoom = null) => {
-    this.io.emit("join", { room: this.state.crypto + "-" + this.state.currency, previous_room: prevRoom })
-  }
+    this.io.emit("join", {
+      room: this.state.crypto + "-" + this.state.currency,
+      previous_room: prevRoom,
+    });
+  };
 
   render() {
     return (
@@ -90,14 +102,28 @@ class TradeDesk extends Component {
                 <Col span={8}>
                   <Row>
                     <Col>
-                      <TradeAction crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
+                      <TradeAction
+                        crypto={this.state.crypto}
+                        currency={this.state.currency}
+                        pair={this.state.pair}
+                        io={this.io}
+                        pricePrecision={this.state.pricePrecision}
+                        amountPrecision={this.state.amountPrecision}
+                      />
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      {this.state.crypto && this.state.currency &&
-                        <DepthChart crypto={this.state.crypto} currency={this.state.currency} pair={this.state.pair} io={this.io} />
-                      }
+                      {this.state.crypto && this.state.currency && (
+                        <DepthChart
+                          crypto={this.state.crypto}
+                          currency={this.state.currency}
+                          pair={this.state.pair}
+                          io={this.io}
+                          pricePrecision={this.state.pricePrecision}
+                          amountPrecision={this.state.amountPrecision}
+                        />
+                      )}
                     </Col>
                   </Row>
                 </Col>
@@ -110,10 +136,14 @@ class TradeDesk extends Component {
                         pair={this.state.pair}
                         io={this.io}
                         loading={this.state.buyBookLoader}
-                        onLoadComplete={() => { this.setState({ buyBookLoader: false }) }} />
+                        pricePrecision={this.state.pricePrecision}
+                        amountPrecision={this.state.amountPrecision}
+                        onLoadComplete={() => {
+                          this.setState({ buyBookLoader: false });
+                        }}
+                      />
                     </Col>
                   </Row>
-
                 </Col>
                 <Col span={8}>
                   <Row>
@@ -124,7 +154,12 @@ class TradeDesk extends Component {
                         pair={this.state.pair}
                         io={this.io}
                         loading={this.state.sellBookLoader}
-                        onLoadComplete={() => { this.setState({ sellBookLoader: false }) }} />
+                        pricePrecision={this.state.pricePrecision}
+                        amountPrecision={this.state.amountPrecision}
+                        onLoadComplete={() => {
+                          this.setState({ sellBookLoader: false });
+                        }}
+                      />
                     </Col>
                   </Row>
                 </Col>
@@ -137,7 +172,12 @@ class TradeDesk extends Component {
                     pair={this.state.pair}
                     io={this.io}
                     loading={this.state.orderHistoryLoader}
-                    onLoadComplete={() => { this.setState({ orderHistoryLoader: false }) }} />
+                    pricePrecision={this.state.pricePrecision}
+                    amountPrecision={this.state.amountPrecision}
+                    onLoadComplete={() => {
+                      this.setState({ orderHistoryLoader: false });
+                    }}
+                  />
                 </Col>
               </Row>
               <Row>
@@ -148,8 +188,15 @@ class TradeDesk extends Component {
                     pair={this.state.pair}
                     io={this.io}
                     loading={this.state.myOrderLoader}
-                    onLoadComplete={() => { this.setState({ myOrderLoader: false }) }}
-                    enableLoader={() => { this.setState({ myOrderLoader: true }); }} />
+                    pricePrecision={this.state.pricePrecision}
+                    amountPrecision={this.state.amountPrecision}
+                    onLoadComplete={() => {
+                      this.setState({ myOrderLoader: false });
+                    }}
+                    enableLoader={() => {
+                      this.setState({ myOrderLoader: true });
+                    }}
+                  />
                 </Col>
               </Row>
               {/* <Row>
@@ -164,7 +211,7 @@ class TradeDesk extends Component {
             </TableDemoStyle>
           </TabPane>
         </Tabs>
-      </LayoutWrapper >
+      </LayoutWrapper>
     );
   }
 }
