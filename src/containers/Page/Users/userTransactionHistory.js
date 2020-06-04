@@ -216,6 +216,11 @@ class UserTransactionHistory extends Component {
     e.preventDefault();
     this._getUserTransactions();
   };
+  _handleTransactionPagination = (page) => {
+    this.setState({ page }, () => {
+      this._getUserTransactions();
+    });
+  };
 
   _handleTransactionPagination = (page) => {
     this.setState({ page: page - 1 }, () => {
