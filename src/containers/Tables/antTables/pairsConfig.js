@@ -5,7 +5,7 @@ import {
   TextCell,
   FeeActionCell,
   DateCell,
-  FeeSwitchCell
+  FeeSwitchCell,
 } from "../../../components/tables/helperCells";
 import { isAllowed } from "../../../helpers/accessControl";
 
@@ -16,19 +16,28 @@ const renderCell = (
   fee_name = null,
   price_precision = null,
   quantity_precision = null,
+  order_maximum = null,
   created = null,
   status = null
 ) => {
   const value = object[key];
   const name = object[fee_name];
-  const maker_fee = object[price_precision];
-  const taker_fee = object[quantity_precision];
+  const price_Precision = object[price_precision];
+  const quantity_Precision = object[quantity_precision];
+  const order_Maximum = object[order_maximum];
   const created_at = object[created];
   const is_active = object[status];
 
   switch (type) {
     case "DateCell":
-      return DateCell(value, name, price_precision, quantity_precision, created_at, is_active);
+      return DateCell(
+        value,
+        name,
+        price_precision,
+        quantity_precision,
+        created_at,
+        is_active
+      );
     case "FeeSwitchCell":
       return FeeSwitchCell(
         value,
@@ -42,8 +51,9 @@ const renderCell = (
       return FeeActionCell(
         value,
         name,
-        price_precision,
-        quantity_precision,
+        price_Precision,
+        quantity_Precision,
+        order_Maximum,
         created_at,
         is_active
       );
@@ -72,51 +82,59 @@ const columns = [
     title: <IntlMessages id="feeTable.title.Actions" />,
     key: "action",
     width: 100,
-    render: object =>
+    render: (object) =>
       renderCell(
         object,
         "FeeActionCell",
         "id",
         "name",
-        "maker_fee",
-        "taker_fee",
+        "price_precision",
+        "quantity_precision",
+        "order_maximum",
         "created_at",
         "is_active"
-      )
+      ),
   },
   {
     title: <IntlMessages id="feeTable.title.created_at" />,
     key: "created_at",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "DateCell", "created_at")
+    render: (object) => renderCell(object, "DateCell", "created_at"),
   },
   {
     title: <IntlMessages id="feeTable.title.name" />,
     key: "name",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "TextCell", "name")
+    render: (object) => renderCell(object, "TextCell", "name"),
   },
   {
     title: <IntlMessages id="feeTable.title.price_precision" />,
     key: "price_precision",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "FixedCell", "price_precision")
+    render: (object) => renderCell(object, "FixedCell", "price_precision"),
   },
   {
     title: <IntlMessages id="feeTable.title.quantity_precision" />,
     key: "quantity_precision",
     width: 100,
     sorter: true,
-    render: object => renderCell(object, "FixedCell", "quantity_precision")
+    render: (object) => renderCell(object, "FixedCell", "quantity_precision"),
+  },
+  {
+    title: <IntlMessages id="feeTable.title.order_maximum" />,
+    key: "order_maximum",
+    width: 150,
+    sorter: true,
+    dataIndex: "order_maximum",
   },
   {
     title: <IntlMessages id="feeTable.title.status" />,
     key: "is_active",
     width: 100,
-    render: object => {
+    render: (object) => {
       if (isAllowed("admin_edit_pair")) {
         return renderCell(
           object,
@@ -125,23 +143,23 @@ const columns = [
           "name",
           "price_precision",
           "quantity_precision",
+          "order_maximum",
           "created_at",
           "is_active"
-        )
+        );
       } else {
-        return renderCell(object, "TextCell", "is_active")
+        return renderCell(object, "TextCell", "is_active");
       }
-    }
-
-  }
+    },
+  },
 ];
 
 const pairsTableInfos = [
   {
     title: "Fees & Pairs",
     value: "pairsTable",
-    columns: clone(columns)
-  }
+    columns: clone(columns),
+  },
 ];
 
 export { columns, pairsTableInfos };
