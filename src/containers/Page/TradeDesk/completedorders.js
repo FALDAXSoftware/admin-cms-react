@@ -5,6 +5,7 @@ import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 import moment from "moment";
+import { Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 // var self;
@@ -19,7 +20,7 @@ class CompletedOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => { };
+  componentDidMount = () => {};
 
   openNotificationWithIconError = (type) => {
     notification[type]({
@@ -49,25 +50,37 @@ class CompletedOrders extends Component {
         title: "Amount",
         dataIndex: "quantity",
         key: "quantity",
-        render: (text, record) => (`${Number(text).toFixed(8)} ${record.settle_currency}`)
+        render: (text, record) =>
+          `${Precise(text, this.props.amountPrecision)} ${
+            record.settle_currency
+          }`,
       },
       {
         title: "Fill Price",
         dataIndex: "fill_price",
         key: "fill_price",
-        render: (text, record) => (`${Number(text).toFixed(8)} ${record.currency}`)
+        render: (text, record) =>
+          `${Precise(text, this.props.pricePrecision)} ${record.currency}`,
       },
       {
         title: "Unfilled",
         dataIndex: "unfilled",
         key: "unfilled",
-        render: (text, record) => (`${Number(record.fix_quantity - record.quantity).toFixed(8)}`)
+        render: (text, record) =>
+          `${Precise(
+            record.fix_quantity - record.quantity,
+            this.props.amountPrecision
+          )}`,
       },
       {
         title: "Time",
         dataIndex: "time",
         key: "time",
-        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`)
+        render: (text, record) =>
+          `${moment
+            .utc(record.created_at)
+            .local()
+            .format("DD/MM/YYYY, H:m:s")}`,
       },
       {
         title: "Placed By",
@@ -78,7 +91,11 @@ class CompletedOrders extends Component {
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: (text, record) => (`${Number(record.quantity * record.fill_price).toFixed(8)}`)
+        render: (text, record) =>
+          `${Precise(
+            record.quantity * record.fill_price,
+            this.props.pricePrecision
+          )}`,
       },
     ];
     return (

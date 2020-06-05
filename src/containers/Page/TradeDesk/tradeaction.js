@@ -19,6 +19,7 @@ import SimpleReactValidator from "simple-react-validator";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { TradeRow, InnerTabs, InputRow } from "../../App/tradeStyle.js";
 import FaldaxLoader from "../faldaxLoader";
+import { Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 // var self;
@@ -204,7 +205,69 @@ class TradeAction extends Component {
       }
     );
   };
+
   render() {
+    let stepValue, limitPrecision;
+    switch (this.props.amountPrecision.toString()) {
+      case "0":
+        stepValue = "1";
+        break;
+      case "1":
+        stepValue = "0.1";
+        break;
+      case "2":
+        stepValue = "0.01";
+        break;
+      case "3":
+        stepValue = "0.001";
+        break;
+      case "4":
+        stepValue = "0.0001";
+        break;
+      case "5":
+        stepValue = "0.00001";
+        break;
+      case "6":
+        stepValue = "0.000001";
+        break;
+      case "7":
+        stepValue = "0.0000001";
+      case "8":
+        stepValue = "0.00000001";
+        break;
+      default:
+        break;
+    }
+    switch (this.props.pricePrecision.toString()) {
+      case "0":
+        limitPrecision = "1";
+        break;
+      case "1":
+        limitPrecision = "0.1";
+        break;
+      case "2":
+        limitPrecision = "0.01";
+        break;
+      case "3":
+        limitPrecision = "0.001";
+        break;
+      case "4":
+        limitPrecision = "0.0001";
+        break;
+      case "5":
+        limitPrecision = "0.00001";
+        break;
+      case "6":
+        limitPrecision = "0.000001";
+        break;
+      case "7":
+        limitPrecision = "0.0000001";
+      case "8":
+        limitPrecision = "0.00000001";
+        break;
+      default:
+        break;
+    }
     return (
       <>
         <Card>
@@ -221,9 +284,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.001"
+                        step={stepValue}
                         addonAfter={this.props.crypto}
-                        value={this.state.fields.amount}
+                        value={Precise(
+                          this.state.fields.amount,
+                          this.props.amountPrecision
+                        )}
                         placeholder="0"
                         name="amount"
                         onChange={(e) => {
@@ -266,9 +332,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.001"
+                        step={stepValue}
                         addonAfter={this.props.crypto}
-                        value={this.state.fields.amount}
+                        value={Precise(
+                          this.state.fields.amount,
+                          this.props.amountPrecision
+                        )}
                         placeholder="0"
                         name="amount"
                         onChange={(e) => {
@@ -318,9 +387,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.001"
+                        step={stepValue}
                         addonAfter={this.props.crypto}
-                        value={this.state.fields.amount}
+                        value={Precise(
+                          this.state.fields.amount,
+                          this.props.amountPrecision
+                        )}
                         placeholder="0"
                         name="amount"
                         onChange={(e) => {
@@ -339,9 +411,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.00001"
+                        step={limitPrecision}
                         addonAfter={this.props.currency}
-                        value={this.state.fields.limit}
+                        value={Precise(
+                          this.state.fields.limit,
+                          this.props.pricePrecision
+                        )}
                         placeholder="0"
                         name="limit"
                         onChange={(e) => {
@@ -384,9 +459,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.001"
+                        step={stepValue}
                         addonAfter={this.props.crypto}
-                        value={this.state.fields.amount}
+                        value={Precise(
+                          this.state.fields.amount,
+                          this.props.amountPrecision
+                        )}
                         placeholder="0"
                         name="amount"
                         onChange={(e) => {
@@ -405,9 +483,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.00001"
+                        step={limitPrecision}
                         addonAfter={this.props.currency}
-                        value={this.state.fields.limit}
+                        value={Precise(
+                          this.state.fields.limit,
+                          this.props.pricePrecision
+                        )}
                         placeholder="0"
                         name="limit"
                         onChange={(e) => {
@@ -457,9 +538,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.001"
+                        step={stepValue}
                         addonAfter={this.props.crypto}
-                        value={this.state.fields.amount}
+                        value={Precise(
+                          this.state.fields.amount,
+                          this.props.amountPrecision
+                        )}
                         placeholder="0"
                         name="amount"
                         onChange={(e) => {
@@ -478,9 +562,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.00001"
+                        step={limitPrecision}
                         addonAfter={this.props.currency}
-                        value={this.state.fields.limit}
+                        value={Precise(
+                          this.state.fields.limit,
+                          this.props.pricePrecision
+                        )}
                         placeholder="0"
                         name="limit"
                         onChange={(e) => {
@@ -499,9 +586,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.00001"
+                        step={limitPrecision}
                         addonAfter={this.props.currency}
-                        value={this.state.fields.stop}
+                        value={Precise(
+                          this.state.fields.stop,
+                          this.props.pricePrecision
+                        )}
                         placeholder="0"
                         name="stop"
                         onChange={(e) => {
@@ -544,9 +634,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.001"
+                        step={stepValue}
                         addonAfter={this.props.crypto}
-                        value={this.state.fields.amount}
+                        value={Precise(
+                          this.state.fields.amount,
+                          this.props.amountPrecision
+                        )}
                         placeholder="0"
                         name="amount"
                         onChange={(e) => {
@@ -565,9 +658,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.00001"
+                        step={limitPrecision}
                         addonAfter={this.props.currency}
-                        value={this.state.fields.limit}
+                        value={Precise(
+                          this.state.fields.limit,
+                          this.props.pricePrecision
+                        )}
                         placeholder="0"
                         name="limit"
                         onChange={(e) => {
@@ -586,9 +682,12 @@ class TradeAction extends Component {
                       <Input
                         min="0"
                         type="number"
-                        step="0.00001"
+                        step={limitPrecision}
                         addonAfter={this.props.currency}
-                        value={this.state.fields.stop}
+                        value={Precise(
+                          this.state.fields.stop,
+                          this.props.pricePrecision
+                        )}
                         placeholder="0"
                         name="stop"
                         onChange={(e) => {

@@ -97,7 +97,19 @@ class Transactions extends Component {
 
     _this.setState({ loader: true });
     (isExportCsv
-      ? ApiUtils.getAllTransaction(1, EXPORT_LIMIT_SIZE, token, "")
+      ? ApiUtils.getAllTransaction(
+          1,
+          EXPORT_LIMIT_SIZE,
+          token,
+          searchTransaction,
+          filterVal,
+          filterVal,
+          startDate,
+          endDate,
+          sorterCol,
+          sortOrder,
+          userid
+        )
       : ApiUtils.getAllTransaction(
           page,
           limit,

@@ -17,6 +17,7 @@ import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
 import moment from "moment";
 import ApiUtils from "../../../helpers/apiUtills";
+import { Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 // var self;
@@ -31,10 +32,14 @@ class PendingOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => { };
+  componentDidMount = () => {};
 
   onCancle = (id, side, type) => {
-    ApiUtils.cancleOrder(this.props.token, { id: id, side: side, order_type: type, })
+    ApiUtils.cancleOrder(this.props.token, {
+      id: id,
+      side: side,
+      order_type: type,
+    })
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData.status === 200) {
@@ -42,15 +47,15 @@ class PendingOrders extends Component {
           notification.success({
             message: "Success",
             description: responseData.message,
-          })
+          });
         } else {
           notification.error({
             message: "Error",
             description: responseData.err,
-          })
+          });
         }
-      })
-  }
+      });
+  };
 
   render() {
     const columns = [
@@ -63,44 +68,61 @@ class PendingOrders extends Component {
         title: "Amount",
         dataIndex: "quantity",
         key: "quantity",
-        render: (text, record) => (`${Number(text).toFixed(8)}`)
+        render: (text, record) =>
+          `${Precise(text, this.props.amountPrecision)}`,
       },
       {
         title: "Limit Price",
         dataIndex: "limit_price",
         key: "limit_price",
-        render: (text, record) => (`${Number(text).toFixed(8)}`)
+        render: (text, record) => `${Precise(text, this.props.pricePrecision)}`,
       },
       {
         title: "Stop Price",
         dataIndex: "stop_price",
         key: "stop_price",
-        render: (text, record) => (`${text ? Number(text).toFixed(8) : "-"}`)
+        render: (text, record) =>
+          `${text ? Precise(text, this.props.pricePrecision) : "-"}`,
       },
       {
         title: "Time",
         dataIndex: "time",
         key: "time",
-        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`),
-        width: 150
+        render: (text, record) =>
+          `${moment
+            .utc(record.created_at)
+            .local()
+            .format("DD/MM/YYYY, H:m:s")}`,
+        width: 150,
       },
       {
         title: "Placed By",
         dataIndex: "placed_by",
         key: "placed_by",
-        width: 150
+        width: 150,
       },
       {
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: (text, record) => (`${Number(record.quantity * record.limit_price).toFixed(8)}`)
+        render: (text, record) =>
+          `${Precise(
+            record.quantity * record.limit_price,
+            this.props.pricePrecision
+          )}`,
       },
       {
         title: "Action",
         dataIndex: "action",
         key: "action",
-        render: (text, record) => <Icon type="close-circle" onClick={() => { this.onCancle(record.id, record.side, record.order_type) }} />,
+        render: (text, record) => (
+          <Icon
+            type="close-circle"
+            onClick={() => {
+              this.onCancle(record.id, record.side, record.order_type);
+            }}
+          />
+        ),
       },
     ];
     return (
@@ -110,7 +132,6 @@ class PendingOrders extends Component {
         pagination={false}
         scroll={{ y: 200 }}
         loading={this.props.loading}
-
       />
     );
   }

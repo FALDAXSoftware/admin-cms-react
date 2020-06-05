@@ -5,6 +5,7 @@ import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeTable } from "../../App/tradeStyle";
 import moment from "moment";
+import { Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 // var self;
@@ -19,8 +20,7 @@ class CancelledOrders extends Component {
     // self = this;
   }
 
-  componentDidMount = () => { };
-
+  componentDidMount = () => {};
 
   render() {
     const columns = [
@@ -33,19 +33,24 @@ class CancelledOrders extends Component {
         title: "Amount",
         dataIndex: "quantity",
         key: "quantity",
-        render: (text, record) => (`${Number(text).toFixed(8)}`)
+        render: (text, record) =>
+          `${Precise(text, this.props.amountPrecision)}`,
       },
       {
         title: "Price",
         dataIndex: "limit_price",
         key: "limit_price",
-        render: (text, record) => (`${Number(text).toFixed(8)}`)
+        render: (text, record) => `${Precise(text, this.props.pricePrecision)}`,
       },
       {
         title: "Time",
         dataIndex: "time",
         key: "time",
-        render: (text, record) => (`${moment.utc(record.created_at).local().format("DD/MM/YYYY, H:m:s")}`)
+        render: (text, record) =>
+          `${moment
+            .utc(record.created_at)
+            .local()
+            .format("DD/MM/YYYY, H:m:s")}`,
       },
       {
         title: "Placed By",
@@ -56,7 +61,11 @@ class CancelledOrders extends Component {
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: (text, record) => (`${Number(record.quantity * record.limit_price).toFixed(8)}`)
+        render: (text, record) =>
+          `${Precise(
+            record.quantity * record.limit_price,
+            this.props.pricePrecision
+          )}`,
       },
     ];
     return (
