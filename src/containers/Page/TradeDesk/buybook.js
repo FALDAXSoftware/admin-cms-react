@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import { TradeHeadRow, TradeTable } from "../../App/tradeStyle";
+import { Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 // var self;
@@ -38,8 +39,8 @@ class BuyBook extends Component {
 
   componentDidMount = () => {
     this.props.io.on("buy-book-data", (data) => {
-      this.updateData(data.data)
-    })
+      this.updateData(data.data);
+    });
   };
   updateData = (data) => {
     const row = [];
@@ -48,20 +49,21 @@ class BuyBook extends Component {
       const element = data[index];
       sum += element.quantity * element.price;
       row.push({
-        amount: Number(element.quantity).toFixed(8),
-        bid: Number(element.price).toFixed(8),
-        total: Number(sum).toFixed(8)
+        amount: Precise(element.quantity, this.props.amountPrecision),
+        bid: Precise(element.price, this.props.pricePrecision),
+        total: Precise(sum, this.props.pricePrecision),
       });
     }
-    this.setState({
-      data: row
-    }, () => { /* this.props.onLoadComplete() */ })
-  }
+    this.setState(
+      {
+        data: row,
+      },
+      () => {
+        /* this.props.onLoadComplete() */
+      }
+    );
+  };
   render() {
-
-
-
-
     return (
       <>
         <Card className="lessPaddingCard" style={{ minHeight: "610px" }}>
