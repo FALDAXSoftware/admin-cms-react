@@ -12,35 +12,31 @@ class DepthChart extends Component {
     super(props);
     this.state = {
       askData: [],
-      bidData: []
+      bidData: [],
     };
   }
   componentDidMount() {
-
     chart = am4core.create("depthChartContainer", am4charts.XYChart);
     chart.dataSource.url = `${SOCKET_HOST}/api/v1/tradding/depth-chart-details?symbol=${this.props.crypto}-${this.props.currency}`;
     chart.dataSource.reloadFrequency = 10000;
     chart.dataSource.adapter.add("parsedData", function (data) {
       // Function to process (sort and calculate cummulative volume)
       function processData(list, type, desc) {
-
         // Convert to data points
         for (var i = 0; i < list.length; i++) {
           list[i] = {
             value: Number(list[i].price),
             volume: Number(list[i].quantity),
-          }
+          };
         }
 
         // Sort list just in case
         list.sort(function (a, b) {
           if (a.value > b.value) {
             return 1;
-          }
-          else if (a.value < b.value) {
+          } else if (a.value < b.value) {
             return -1;
-          }
-          else {
+          } else {
             return 0;
           }
         });
@@ -48,10 +44,9 @@ class DepthChart extends Component {
         // Calculate cummulative volume
         if (desc) {
           for (var i = list.length - 1; i >= 0; i--) {
-            if (i < (list.length - 1)) {
+            if (i < list.length - 1) {
               list[i].totalvolume = list[i + 1].totalvolume + list[i].volume;
-            }
-            else {
+            } else {
               list[i].totalvolume = list[i].volume;
             }
             let dp = {};
@@ -60,13 +55,11 @@ class DepthChart extends Component {
             dp[type + "totalvolume"] = list[i].totalvolume;
             res.unshift(dp);
           }
-        }
-        else {
+        } else {
           for (var i = 0; i < list.length; i++) {
             if (i > 0) {
               list[i].totalvolume = list[i - 1].totalvolume + list[i].volume;
-            }
-            else {
+            } else {
               list[i].totalvolume = list[i].volume;
             }
             let dp = {};
@@ -76,7 +69,6 @@ class DepthChart extends Component {
             res.push(dp);
           }
         }
-
       }
 
       // Init
@@ -87,7 +79,38 @@ class DepthChart extends Component {
       return res;
     });
     // Set up precision for numbers
-    chart.numberFormatter.numberFormat = "#,###.####";
+    let stepValue;
+    switch (this.props.pricePrecision.toString()) {
+      case "0":
+        stepValue = "#,###";
+        break;
+      case "1":
+        stepValue = "#,###.#";
+        break;
+      case "2":
+        stepValue = "#,###.##";
+        break;
+      case "3":
+        stepValue = "#,###.###";
+        break;
+      case "4":
+        stepValue = "#,###.####";
+        break;
+      case "5":
+        stepValue = "#,###.#####";
+        break;
+      case "6":
+        stepValue = "#,###.######";
+        break;
+      case "7":
+        stepValue = "#,###.#######";
+      case "8":
+        stepValue = "#,###.########";
+        break;
+      default:
+        break;
+    }
+    chart.numberFormatter.numberFormat = stepValue;
 
     // Create axes
     let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -106,9 +129,10 @@ class DepthChart extends Component {
     series.strokeWidth = 2;
     series.stroke = am4core.color("rgba(93, 193, 78, 1)");
     series.fill = series.stroke;
-    series.fontSize = "5px"
+    series.fontSize = "5px";
     series.fillOpacity = 0.1;
-    series.tooltipText = "Ask: [bold]{categoryX}[/]\nTotal volume: [bold]{valueY}[/]\nVolume: [bold]{bidsvolume}[/]"
+    series.tooltipText =
+      "Ask: [bold]{categoryX}[/]\nTotal volume: [bold]{valueY}[/]\nVolume: [bold]{bidsvolume}[/]";
 
     let series2 = chart.series.push(new am4charts.StepLineSeries());
     series2.dataFields.categoryX = "value";
@@ -116,9 +140,10 @@ class DepthChart extends Component {
     series2.strokeWidth = 2;
     series2.stroke = am4core.color("rgba(229, 90, 122, 1)");
     series2.fill = series2.stroke;
-    series.fontSize = "5px"
+    series.fontSize = "5px";
     series2.fillOpacity = 0.1;
-    series2.tooltipText = "Ask: [bold]{categoryX}[/]\nTotal volume: [bold]{valueY}[/]\nVolume: [bold]{asksvolume}[/]"
+    series2.tooltipText =
+      "Ask: [bold]{categoryX}[/]\nTotal volume: [bold]{valueY}[/]\nVolume: [bold]{asksvolume}[/]";
 
     let series3 = chart.series.push(new am4charts.ColumnSeries());
     series3.dataFields.categoryX = "value";
@@ -145,10 +170,42 @@ class DepthChart extends Component {
         props.currency !== this.state.currency
       ) {
         chart.dataSource.url = `${SOCKET_HOST}/api/v1/tradding/depth-chart-details?symbol=${this.props.crypto}-${this.props.currency}`;
+        // Set up precision for numbers
+        let stepValue;
+        switch (props.pricePrecision.toString()) {
+          case "0":
+            stepValue = "#,###";
+            break;
+          case "1":
+            stepValue = "#,###.#";
+            break;
+          case "2":
+            stepValue = "#,###.##";
+            break;
+          case "3":
+            stepValue = "#,###.###";
+            break;
+          case "4":
+            stepValue = "#,###.####";
+            break;
+          case "5":
+            stepValue = "#,###.#####";
+            break;
+          case "6":
+            stepValue = "#,###.######";
+            break;
+          case "7":
+            stepValue = "#,###.#######";
+          case "8":
+            stepValue = "#,###.########";
+            break;
+          default:
+            break;
+        }
+        chart.numberFormatter.numberFormat = stepValue;
         chart.dataSource.load();
       }
     }
-
   }
   componentWillUnmount() {
     chart.dispose();
@@ -160,10 +217,12 @@ class DepthChart extends Component {
         <Card className="lessPaddingCard">
           <TradeHeadRow type="flex" justify="space-between">
             <Col span={24}>
-              <label>Depth Chart {this.props.crypto}/{this.props.currency}</label>
+              <label>
+                Depth Chart {this.props.crypto}/{this.props.currency}
+              </label>
             </Col>
           </TradeHeadRow>
-          <Row>
+          <Row style={{ fontSize: "8px" }}>
             <Col span={24} style={{ height: "205px" }}>
               <div id="depthChartContainer"></div>
             </Col>
