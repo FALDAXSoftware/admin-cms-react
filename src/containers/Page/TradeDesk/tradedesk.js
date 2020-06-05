@@ -50,6 +50,14 @@ class TradeDesk extends Component {
   }
 
   componentDidMount = () => {
+    this.io.on("trade-data-precision", (data) => {
+      if (data) {
+        this.setState({
+          pricePrecision: data.price_precision,
+          amountPrecision: data.quantity_precision,
+        });
+      }
+    });
     let crypto = this.props.match.params.pair.split("-")[0];
     let currency = this.props.match.params.pair.split("-")[1];
     this.setState(

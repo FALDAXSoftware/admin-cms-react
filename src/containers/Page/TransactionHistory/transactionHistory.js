@@ -103,11 +103,12 @@ class Transactions extends Component {
           token,
           searchTransaction,
           filterVal,
-          "",
-          "",
-          "",
-          "",
-          ""
+          filterVal,
+          startDate,
+          endDate,
+          sorterCol,
+          sortOrder,
+          userid
         )
       : ApiUtils.getAllTransaction(
           page,
