@@ -81,7 +81,7 @@ const columns = [
   {
     title: <IntlMessages id="feeTable.title.Actions" />,
     key: "action",
-    width: 100,
+    width: 50,
     render: (object) =>
       renderCell(
         object,
@@ -126,7 +126,7 @@ const columns = [
   {
     title: <IntlMessages id="feeTable.title.order_maximum" />,
     key: "order_maximum",
-    width: 150,
+    width: 200,
     sorter: true,
     dataIndex: "order_maximum",
   },
