@@ -377,7 +377,7 @@ class AddPairModal extends Component {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <span>Maximum Order Quantity (USD):</span>
+          <span>Maximum Order Quantity (%):</span>
           <Input
             placeholder="Maximum Order Quantity"
             onChange={this._handleChange.bind(this, "order_maximum")}

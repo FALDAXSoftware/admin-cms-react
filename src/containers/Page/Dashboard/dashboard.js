@@ -36,19 +36,20 @@ const ChartWrapper = styled.div`
   .isoChartControl {
     display: flex;
     align-items: center;
-    margin-left: ${props => (props["data-rtl"] === "rtl" ? "inherit" : "auto")};
-    margin-right: ${props =>
-    props["data-rtl"] === "rtl" ? "auto" : "inherit"};
+    margin-left: ${(props) =>
+      props["data-rtl"] === "rtl" ? "inherit" : "auto"};
+    margin-right: ${(props) =>
+      props["data-rtl"] === "rtl" ? "auto" : "inherit"};
     margin-bottom: 20px;
 
     span {
       font-size: 13px;
       color: ${palette("text", 1)};
       font-weight: 400;
-      margin-right: ${props =>
-    props["data-rtl"] === "rtl" ? "inherit" : "15px"};
-      margin-left: ${props =>
-    props["data-rtl"] === "rtl" ? "15px" : "inherit"};
+      margin-right: ${(props) =>
+        props["data-rtl"] === "rtl" ? "inherit" : "15px"};
+      margin-left: ${(props) =>
+        props["data-rtl"] === "rtl" ? "15px" : "inherit"};
     }
 
     button {
@@ -62,10 +63,10 @@ const ChartWrapper = styled.div`
       }
 
       &:last-child {
-        margin-left: ${props =>
-    props["data-rtl"] === "rtl" ? "inherit" : "-1px"};
-        margin-right: ${props =>
-    props["data-rtl"] === "rtl" ? "-1px" : "inherit"};
+        margin-left: ${(props) =>
+          props["data-rtl"] === "rtl" ? "inherit" : "-1px"};
+        margin-right: ${(props) =>
+          props["data-rtl"] === "rtl" ? "-1px" : "inherit"};
       }
 
       &:hover {
@@ -112,14 +113,14 @@ class Dashboard extends Component {
       loader: false,
       tradeTransactionLabel: [],
       tradeTransactionValue: [],
-      tradeTransactionValue2: []
+      tradeTransactionValue2: [],
     };
   }
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: "Error",
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -131,19 +132,28 @@ class Dashboard extends Component {
   calculateTierData(tierData) {
     // Key Means tier
     // first occurrence is approved request count,second is reject occurrence count and third one is pending request count
-    let tier = [], data = [];
+    let tier = [],
+      data = [];
     for (let i = 0; i < tierData.length; i++) {
       Object.keys(tierData[i]).forEach((key) => {
         if (tier["tier" + key]) {
           if (tier["tier" + key].length == 1) {
-            tier["tier" + key].push({ "name": "Reject", count: tierData[i][key]["count"] });
-          }
-          else {
-            tier["tier" + key].push({ "name": "Pending", count: tierData[i][key]["count"] });
+            tier["tier" + key].push({
+              name: "Reject",
+              count: tierData[i][key]["count"],
+            });
+          } else {
+            tier["tier" + key].push({
+              name: "Pending",
+              count: tierData[i][key]["count"],
+            });
           }
         } else {
           tier["tier" + key] = [];
-          tier["tier" + key].push({ "name": "Approved", count: tierData[i][key]["count"] });
+          tier["tier" + key].push({
+            name: "Approved",
+            count: tierData[i][key]["count"],
+          });
         }
       });
     }
@@ -151,12 +161,14 @@ class Dashboard extends Component {
   }
 
   getFeesTransactionValue(data) {
-    let label = [], value = [], value2 = [];
+    let label = [],
+      value = [],
+      value2 = [];
     data.forEach((ele) => {
       label.push(ele["symbol"]);
       value.push(ele["user_fee"]);
       value2.push(ele["requested_fee"]);
-    })
+    });
     return [label, value, value2];
   }
   _getAllCount = () => {
@@ -166,7 +178,7 @@ class Dashboard extends Component {
 
     _this.setState({ loader: true });
     ApiUtils.getAllCount(token, startDate, endDate)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(function (res) {
         if (res) {
           if (res.status == 200) {
@@ -175,7 +187,11 @@ class Dashboard extends Component {
             let residualFees = [];
             let transactionSymbols = [];
             let transactionCount = [];
-            let [tradeTransactionLabel, tradeTransactionValue, tradeTransactionValue2] = _this.getFeesTransactionValue(res.feesTransactionValue);
+            let [
+              tradeTransactionLabel,
+              tradeTransactionValue,
+              tradeTransactionValue2,
+            ] = _this.getFeesTransactionValue(res.feesTransactionValue);
             _this.calculateTierData(res.TierData);
             res.walletFeesTransactionValue &&
               res.walletFeesTransactionValue.forEach((value) => {
@@ -209,7 +225,7 @@ class Dashboard extends Component {
               kyc_pending,
               withdrawReqCountValue,
               deletedUsers,
-              userSignUpCountValue
+              userSignUpCountValue,
             } = res;
             _this.setState({
               activeUsers,
@@ -241,28 +257,34 @@ class Dashboard extends Component {
               transactionCount,
               tradeTransactionLabel,
               tradeTransactionValue,
-              tradeTransactionValue2
+              tradeTransactionValue2,
             });
           } else if (res.status == 403 || res.status == 401) {
-            _this.setState({
-              errMsg: true,
-              message: res.err,
-              loader: false
-            }, () => _this.props.logout());
-
+            _this.setState(
+              {
+                errMsg: true,
+                message: res.err,
+                loader: false,
+              },
+              () => _this.props.logout()
+            );
           } else {
             _this.setState({
               errMsg: true,
               message: res.message,
-              loader: false
+              loader: false,
             });
           }
         } else {
           _this.setState({ errMsg: true, message: res.message, loader: false });
         }
       })
-      .catch(err => {
-        _this.setState({ errMsg: true, message: "Unable to complete the requested action.", loader: false });
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          message: "Unable to complete the requested action.",
+          loader: false,
+        });
       });
   };
 
@@ -279,13 +301,13 @@ class Dashboard extends Component {
       return {
         disabledHours: () => this.range(0, 60).splice(4, 20),
         disabledMinutes: () => this.range(30, 60),
-        disabledSeconds: () => [55, 56]
+        disabledSeconds: () => [55, 56],
       };
     }
     return {
       disabledHours: () => this.range(0, 60).splice(20, 4),
       disabledMinutes: () => this.range(0, 31),
-      disabledSeconds: () => [55, 56]
+      disabledSeconds: () => [55, 56],
     };
   };
 
@@ -294,17 +316,9 @@ class Dashboard extends Component {
       {
         rangeDate: date,
         startDate:
-          date.length > 0
-            ? moment(date[0])
-              .startOf("d")
-              .toISOString()
-            : "",
+          date.length > 0 ? moment(date[0]).startOf("d").toISOString() : "",
         endDate:
-          date.length > 0
-            ? moment(date[1])
-              .endOf("d")
-              .toISOString()
-            : ""
+          date.length > 0 ? moment(date[1]).endOf("d").toISOString() : "",
       },
       () => {
         this._getAllCount();
@@ -345,23 +359,27 @@ class Dashboard extends Component {
       transactionCount,
       tierData,
       tradeTransactionLabel,
-      tradeTransactionValue, tradeTransactionValue2
+      tradeTransactionValue,
+      tradeTransactionValue2,
     } = this.state;
 
     const data = {
-      labels: ["Legal", "Illegal", "Neutral", "Partial Services"],
+      // labels: ["Legal", "Illegal", "Neutral", "Partial Services"],
+      labels: ["Legal", "Illegal"],
       datasets: [
         {
           data: [
             legalCountries,
             illegalCountries,
-            neutralCountries,
-            PartialCountries
+            // neutralCountries,
+            // PartialCountries,
           ],
-          backgroundColor: ["#00a9fa", "#f6776e", "#00a9fb", "#FCD26E"],
-          hoverBackgroundColor: ["#00a9fa", "#f6776e", "#00a9fb", "#FCD26E"]
-        }
-      ]
+          // backgroundColor: ["#00a9fa", "#f6776e", "#00a9fb", "#FCD26E"],
+          backgroundColor: ["#00a9fa", "#f6776e"],
+          // hoverBackgroundColor: ["#00a9fa", "#f6776e", "#00a9fb", "#FCD26E"],
+          hoverBackgroundColor: ["#00a9fa", "#f6776e"],
+        },
+      ],
     };
 
     // const transactionData = {
@@ -407,14 +425,18 @@ class Dashboard extends Component {
     // };
 
     const kycData = {
-      labels: ["Total IDs under review", "Total IDs approved", "Total IDs declined"],
+      labels: [
+        "Total IDs under review",
+        "Total IDs approved",
+        "Total IDs declined",
+      ],
       datasets: [
         {
           data: [kyc_pending, kyc_approved, kyc_disapproved],
           backgroundColor: ["#E929DD", "#D2601F", "#B95671"],
-          hoverBackgroundColor: ["#E929DD", "#D2601F", "#B95671"]
-        }
-      ]
+          hoverBackgroundColor: ["#E929DD", "#D2601F", "#B95671"],
+        },
+      ],
     };
 
     return (
@@ -494,7 +516,7 @@ class Dashboard extends Component {
                       hoverBackgroundColor: "rgb(28, 84, 79)",
                       hoverBorderColor: "rgb(43, 107, 101)",
                       data: faldaxFees,
-                    }
+                    },
                     // {
                     //   label: "Residual Amount",
                     //   backgroundColor: "rgba(255,99,132,0.2)",
@@ -712,8 +734,8 @@ class Dashboard extends Component {
                 data={[
                   { name: "Legal Countries", count: legalCountries },
                   { name: "Illegal Countries", count: illegalCountries },
-                  { name: "Neutral Countries", count: neutralCountries },
-                  { name: "Partial Countries", count: PartialCountries },
+                  // { name: "Neutral Countries", count: neutralCountries },
+                  // { name: "Partial Countries", count: PartialCountries },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
@@ -778,8 +800,8 @@ class Dashboard extends Component {
 }
 
 export default connect(
-  state => ({
-    token: state.Auth.get("token")
+  (state) => ({
+    token: state.Auth.get("token"),
   }),
   { logout }
 )(Dashboard);
