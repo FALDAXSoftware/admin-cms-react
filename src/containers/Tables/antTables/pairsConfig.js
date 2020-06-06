@@ -81,7 +81,7 @@ const columns = [
   {
     title: <IntlMessages id="feeTable.title.Actions" />,
     key: "action",
-    width: 50,
+    width: 150,
     render: (object) =>
       renderCell(
         object,
@@ -98,42 +98,42 @@ const columns = [
   {
     title: <IntlMessages id="feeTable.title.created_at" />,
     key: "created_at",
-    width: 100,
+    width: 150,
     sorter: true,
     render: (object) => renderCell(object, "DateCell", "created_at"),
   },
   {
     title: <IntlMessages id="feeTable.title.name" />,
     key: "name",
-    width: 100,
+    width: 150,
     sorter: true,
     render: (object) => renderCell(object, "TextCell", "name"),
   },
   {
     title: <IntlMessages id="feeTable.title.price_precision" />,
     key: "price_precision",
-    width: 100,
+    width: 150,
     sorter: true,
     render: (object) => renderCell(object, "FixedCell", "price_precision"),
   },
   {
     title: <IntlMessages id="feeTable.title.quantity_precision" />,
     key: "quantity_precision",
-    width: 100,
+    width: 150,
     sorter: true,
     render: (object) => renderCell(object, "FixedCell", "quantity_precision"),
   },
   {
     title: <IntlMessages id="feeTable.title.order_maximum" />,
     key: "order_maximum",
-    width: 200,
+    width: 250,
     sorter: true,
     dataIndex: "order_maximum",
   },
   {
     title: <IntlMessages id="feeTable.title.status" />,
     key: "is_active",
-    width: 100,
+    width: 150,
     render: (object) => {
       if (isAllowed("admin_edit_pair")) {
         return renderCell(
