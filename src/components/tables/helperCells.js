@@ -1361,9 +1361,11 @@ const ApproveCell = (text) => (
 const IPCell = (text) => (
   <p>{text.split(":").length > 1 ? text.split(":")[3] : text}</p>
 );
-const LegalityCell = (text) => (
+const LegalityCell = (text, name) => (
   <p>
-    {text == 1
+    {text == 1 && name == "United States"
+      ? "Partial Services Available"
+      : text == 1
       ? "Legal"
       : text == 2
       ? "Illegal"

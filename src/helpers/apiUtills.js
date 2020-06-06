@@ -1,4 +1,4 @@
-// const API_URL = "http://abe0458e1044.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://e822062b5a07.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -3134,6 +3134,24 @@ const ApiUtils = {
 
   getNetworkFee: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-coin-fees-coin";
+    if (sorterCol && sortOrder) {
+      url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (sorterCol && sortOrder) {
+      url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else {
+      // url;
+    }
+
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getTradingFees: function (token, sorterCol, sortOrder) {
+    let url = "/get-all-fee";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
     } else if (sorterCol && sortOrder) {

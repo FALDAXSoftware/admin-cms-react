@@ -114,12 +114,12 @@ class UserTransactionHistory extends Component {
           EXPORT_LIMIT_SIZE,
           token,
           searchTransaction,
-          "",
-          "",
+          startDate,
+          endDate,
           user_id,
           filterVal,
-          "",
-          ""
+          sorterCol,
+          sortOrder
         )
       : ApiUtils.getUserTransaction(
           page,
