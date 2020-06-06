@@ -66,27 +66,27 @@ const columns = [
     render: (text, record) => parseFloat(text).toFixed(8),
   },
   {
-    title: "Equivivalent USD Value",
+    title: "Equivalent USD Value",
     dataIndex: "fiat_value",
     key: "fiat_value",
     render: (text, record) => (
       <>{parseFloat(record.placed_balance * record.fiat_value).toFixed(2)}</>
     ),
   },
-  {
-    title: "In order assets",
-    dataIndex: "balance",
-    key: "balance",
-    render: (text, record) => (
-      <>{parseFloat(record.balance - record.placed_balance).toFixed(8)}</>
-    ),
-  },
-  {
-    title: "Total",
-    dataIndex: "balance",
-    key: "balance",
-    render: (text, record) => parseFloat(text).toFixed(8),
-  },
+  // {
+  //   title: "In order assets",
+  //   dataIndex: "balance",
+  //   key: "balance",
+  //   render: (text, record) => (
+  //     <>{parseFloat(record.balance - record.placed_balance).toFixed(8)}</>
+  //   ),
+  // },
+  // {
+  //   title: "Total",
+  //   dataIndex: "balance",
+  //   key: "balance",
+  //   render: (text, record) => parseFloat(text).toFixed(8),
+  // },
   {
     title: "Wallet Address",
     dataIndex: "receive_address",

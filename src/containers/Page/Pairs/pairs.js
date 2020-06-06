@@ -440,23 +440,25 @@ class Pairs extends Component {
           />
         )}
         {loader && <FaldaxLoader />}
-        <div>
-          {console.log("$$$all pairs", pairDetails)}
-          {showEditPairModal && (
-            <EditPairModal
-              allCoins={allCoins}
-              fields={pairDetails}
-              showEditPairModal={showEditPairModal}
-              closeEditModal={this._closeEditPairModal}
-              getAllPairs={this._getAllPairs}
-            />
-          )}
+
+        {console.log("$$$all pairs", pairDetails)}
+        {showEditPairModal && (
+          <EditPairModal
+            allCoins={allCoins}
+            fields={pairDetails}
+            showEditPairModal={showEditPairModal}
+            closeEditModal={this._closeEditPairModal}
+            getAllPairs={this._getAllPairs}
+          />
+        )}
+        <div className="scroll-table">
           <TableWrapper
+            rowKey="id"
             {...this.state}
             columns={pairsTableInfos[0].columns}
             pagination={false}
             dataSource={allPairs}
-            className="table-tb-margin float-clear"
+            className="table-tb-margin"
             onChange={this._handlePairsChange}
             bordered
             scroll={TABLE_SCROLL_HEIGHT}
