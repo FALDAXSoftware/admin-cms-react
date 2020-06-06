@@ -717,5 +717,8 @@
   "tradeTable.title.transaction_id": "Transaction Id",
   "feeTable.title.quantity_precision": "Amount Precision",
   "feeTable.title.price_precision": "Price Precision",
-  "feeTable.title.order_maximum": "Maximum Order Quantity (USD)"
+  "feeTable.title.order_maximum": "Maximum Order Quantity (%)",
+  "tradeFeeTable.title.makerfee": "Maker Fee",
+  "tradeFeeTable.title.takerfee": "Taker Fee",
+  "tradeFeeTable.title.tradevolume": "Trade Volume (30-Day Trailing Average)"
 }
