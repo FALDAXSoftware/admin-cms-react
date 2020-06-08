@@ -465,8 +465,26 @@ const ApiUtils = {
   },
 
   //get all states api
-  getAllStates: function (token, countryId, search, sorterCol, sortOrder) {
-    let url = "/admin/get-state-data?country_id=" + countryId;
+  getAllStates: function (
+    page,
+    countryId,
+    limit,
+    token,
+    search,
+    legality,
+    sorterCol,
+    sortOrder
+  ) {
+    // let url = "/admin/get-state-data?country_id=" + countryId;
+    let url =
+      "/admin/get-state-data?page=" +
+      page +
+      "&country_id=" +
+      countryId +
+      "&limit=" +
+      limit +
+      "&legality=" +
+      legality;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
       url +=
