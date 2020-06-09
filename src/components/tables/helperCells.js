@@ -1363,15 +1363,17 @@ const IPCell = (text) => (
 );
 const LegalityCell = (text, name) => (
   <p>
-    {text == 1 && name == "United States"
-      ? "Partial Services Available"
-      : text == 1
-      ? "Legal"
-      : text == 2
-      ? "Illegal"
-      : text == 3
-      ? "Neutral"
-      : "Partial Services Available"}
+    {
+      // text == 1 && name == "United States"
+      //   ? "Partial Services Available"
+      text == 1
+        ? "Legal"
+        : text == 2
+        ? "Illegal"
+        : text == 3
+        ? "Neutral"
+        : "Partial Services Available"
+    }
   </p>
 );
 const SwitchCell = (
