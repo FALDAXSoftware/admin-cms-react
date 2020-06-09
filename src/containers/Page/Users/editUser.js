@@ -9,7 +9,7 @@ import {
   Select,
   Button,
   DatePicker,
-  notification
+  notification,
 } from "antd";
 import CountryFields from "./countryFields";
 import authAction from "../../../redux/auth/actions";
@@ -21,13 +21,13 @@ import userAction from "../../../redux/users/actions";
 
 const Option = Select.Option;
 const { logout } = authAction;
-const { removeUserDetails ,showUserDetails} = userAction;
+const { removeUserDetails, showUserDetails } = userAction;
 
 class EditUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fields: {}
+      fields: {},
     };
     this.validator = new SimpleReactValidator({});
   }
@@ -37,31 +37,36 @@ class EditUser extends Component {
     this._getUserDetails();
   };
 
-  componentWillUnmount=()=>{
+  componentWillUnmount = () => {
     this.props.removeUserDetails();
-  }
+  };
 
   _getUserDetails = () => {
     const { token } = this.props;
     let user_id = this.props.match.params.id;
     ApiUtils.getUserDetails(token, user_id)
-      .then(response => response.json())
-      .then((res)=> {
+      .then((response) => response.json())
+      .then((res) => {
         if (res.status == 200) {
-          this.props.showUserDetails({full_name:res.data[0].first_name+" "+res.data[0].last_name,email:res.data[0].email});
-          res=res.data[0]
+          this.props.showUserDetails({
+            full_name: res.data[0].first_name + " " + res.data[0].last_name,
+            email: res.data[0].email,
+          });
+          res = res.data[0];
           this.setState({
             fields: res,
             dob: res.dob
-              ? (res.dob=="Invalid date")?null:moment(res.dob, "DD-MM-YYYY").local()
+              ? res.dob == "Invalid date"
+                ? null
+                : moment(res.dob, "DD-MM-YYYY").local()
               : null,
             selectedClass: res.account_class,
-            selectedTier: res.account_tier,
+            // selectedTier: res.account_tier,
             countrySelected: res.country,
             stateSelected: res.state,
             citySelected: res.city_town,
-            selectedGender:res.gender,
-            stateCode:res.state_id
+            selectedGender: res.gender,
+            stateCode: res.state_id,
           });
         } else if (res.status == 403) {
           this.setState(
@@ -73,7 +78,7 @@ class EditUser extends Component {
         } else {
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   };
@@ -84,8 +89,8 @@ class EditUser extends Component {
 
     _this.setState({ loader: true });
     ApiUtils.getAllAccountClasses(token, "id", "ASC")
-      .then(response => response.json())
-      .then(function(res) {
+      .then((response) => response.json())
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allAccountClasses: res.allClasses });
         } else if (res.status == 403) {
@@ -100,12 +105,12 @@ class EditUser extends Component {
         }
         _this.setState({ loader: false });
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({
           errType: "error",
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
-          loader: false
+          loader: false,
         });
       });
   };
@@ -118,18 +123,12 @@ class EditUser extends Component {
     this.setState({ selectedClass: value });
   };
 
-  _isKYCCompleted = e => {
+  _isKYCCompleted = (e) => {
     this.setState({ isKYC: e.target.checked });
   };
 
-  _disabledDate = current => {
-    return (
-      current &&
-      current >
-        moment()
-          .subtract(18, "years")
-          .endOf("day")
-    );
+  _disabledDate = (current) => {
+    return current && current > moment().subtract(18, "years").endOf("day");
   };
 
   _handleChange = (field, e) => {
@@ -169,20 +168,20 @@ class EditUser extends Component {
     this.setState({ fields });
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
 
-  _updateUser = e => {
+  _updateUser = (e) => {
     e.preventDefault();
     const { token } = this.props;
     let {
       fields,
-      selectedTier,
+      // selectedTier,
       selectedClass,
       // isKYC,
       countryCode,
@@ -192,11 +191,16 @@ class EditUser extends Component {
       dob,
       selectedGender,
       stateCode,
-      countryID
+      countryID,
     } = this.state;
     let _this = this;
 
-    if (this.validator.allValid() && selectedTier && selectedClass && moment(dob).format("DD-MM-YYYY")!=="Invalid date") {
+    if (
+      this.validator.allValid() &&
+      // selectedTier &&
+      selectedClass &&
+      moment(dob).format("DD-MM-YYYY") !== "Invalid date"
+    ) {
       let formData = {
         user_id: fields["id"],
         first_name: fields["first_name"],
@@ -205,29 +209,29 @@ class EditUser extends Component {
         street_address: fields["street_address"],
         street_address_2: fields["street_address_2"],
         postal_code: fields["postal_code"],
-        account_tier: selectedTier,
+        // account_tier: selectedTier,
         account_class: selectedClass,
         country: countrySelected,
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
-        state_id:stateCode,
-        country_id:countryID,
+        state_id: stateCode,
+        country_id: countryID,
         // kyc_done: isKYC,
         gender: selectedGender,
-        dob: moment(dob).format("DD-MM-YYYY")
+        dob: moment(dob).format("DD-MM-YYYY"),
       };
 
       this.setState({ loader: true, isDisabled: true });
       ApiUtils.updateUser(token, formData)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res.status == 200) {
             _this.setState(
               {
                 errMsg: true,
                 errMessage: res.message,
-                errType: "Success"
+                errType: "Success",
               },
               () => {
                 _this.props.history.push("/dashboard/users");
@@ -244,7 +248,7 @@ class EditUser extends Component {
             _this.setState({
               errMsg: true,
               errMessage: res.err,
-              errType: "error"
+              errType: "error",
             });
           }
           _this.setState({ loader: false });
@@ -254,15 +258,16 @@ class EditUser extends Component {
             errType: "error",
             errMsg: true,
             errMessage: "Unable to complete the requested action.",
-            loader: false
+            loader: false,
           });
         });
     } else {
       this.setState({
-        showTierError: selectedTier ? false : true,
+        // showTierError: selectedTier ? false : true,
         showClassError: selectedClass ? false : true,
         loader: false,
-        showDOBErr: moment(dob).format("DD-MM-YYYY")=="Invalid date"? true : false
+        showDOBErr:
+          moment(dob).format("DD-MM-YYYY") == "Invalid date" ? true : false,
       });
       this.validator.showMessages();
       this.forceUpdate();
@@ -270,23 +275,21 @@ class EditUser extends Component {
   };
 
   onCountryChange(country, state, city, stateID, countryID, countryCode) {
-    
     this.setState({
       countrySelected: country,
       stateSelected: state,
       citySelected: city,
       countryCode,
       countryID,
-      stateCode:stateID
+      stateCode: stateID,
     });
-    
   }
 
   _changeDate = (date, dateString) => {
-    this.setState({ dob: date ,showDOBErr:false});
+    this.setState({ dob: date, showDOBErr: false });
   };
 
-  _changeGender = val => {
+  _changeGender = (val) => {
     this.setState({ selectedGender: val });
   };
 
@@ -307,7 +310,7 @@ class EditUser extends Component {
       citySelected,
       stateCode,
       dob,
-      loader
+      loader,
     } = this.state;
 
     if (errMsg) {
@@ -332,7 +335,7 @@ class EditUser extends Component {
             </a>
           </Link>
         </div> */}
-        <BreadcrumbComponent {...this.props}/>
+        <BreadcrumbComponent {...this.props} />
         <div>
           <h2>Edit User</h2>
           <br />
@@ -403,9 +406,7 @@ class EditUser extends Component {
             <Col>
               <DatePicker
                 disabledDate={this._disabledDate}
-                defaultValue={moment()
-                  .subtract(18, "years")
-                  .endOf("day")}
+                defaultValue={moment().subtract(18, "years").endOf("day")}
                 onChange={this._changeDate}
                 value={dob}
               />
@@ -423,7 +424,7 @@ class EditUser extends Component {
             </Col>
             <Col>
               <Select
-                getPopupContainer={trigger => trigger.parentNode}
+                getPopupContainer={(trigger) => trigger.parentNode}
                 style={{ width: 125 }}
                 placeholder="Select a type"
                 onChange={this._changeGender}
@@ -433,11 +434,11 @@ class EditUser extends Component {
                 <Option value={"female"}>Female</Option>
               </Select>
               {this.validator.message(
-                  "gender",
-                  selectedGender,
-                  "required",
-                  "error-danger"
-                )}
+                "gender",
+                selectedGender,
+                "required",
+                "error-danger"
+              )}
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
@@ -468,52 +469,52 @@ class EditUser extends Component {
               />
             </Col>
           </Row>
-              <CountryFields
-                countryName={countrySelected}
-                stateName={stateSelected}
-                cityName={citySelected}
-                stateCode={stateCode}
-                update={true}
-                {...this.props}
-                onCountryChange={(
-                  country,
-                  state,
-                  city,
-                  stateID,
-                  countryID,
-                  countryCode
-                ) =>
-                  this.onCountryChange(
-                    country,
-                    state,
-                    city,
-                    stateID,
-                    countryID,
-                    countryCode
-                  )
-                }
-              />
-             <div className='float-clear'>
-                {this.validator.message(
-                  "Country",
-                  countrySelected,
-                  "required",
-                  "error-danger"
-                )}
-                {this.validator.message(
-                  "City",
-                  citySelected,
-                  "required",
-                  "error-danger"
-                )}
-                
-                {this.validator.message(
-                  "State",
-                  stateSelected,
-                  "required",
-                  "error-danger"
-                )}
-              </div>
+          <CountryFields
+            countryName={countrySelected}
+            stateName={stateSelected}
+            cityName={citySelected}
+            stateCode={stateCode}
+            update={true}
+            {...this.props}
+            onCountryChange={(
+              country,
+              state,
+              city,
+              stateID,
+              countryID,
+              countryCode
+            ) =>
+              this.onCountryChange(
+                country,
+                state,
+                city,
+                stateID,
+                countryID,
+                countryCode
+              )
+            }
+          />
+          <div className="float-clear">
+            {this.validator.message(
+              "Country",
+              countrySelected,
+              "required",
+              "error-danger"
+            )}
+            {this.validator.message(
+              "City",
+              citySelected,
+              "required",
+              "error-danger"
+            )}
+
+            {this.validator.message(
+              "State",
+              stateSelected,
+              "required",
+              "error-danger"
+            )}
+          </div>
           <Row className="table-tb-margin">
             <Col>
               <span>Postal Code*</span>
@@ -533,7 +534,7 @@ class EditUser extends Component {
               </span>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
               <span>Account Tier*</span>
             </Col>
@@ -557,21 +558,21 @@ class EditUser extends Component {
                 </span>
               )}
             </Col>
-          </Row>
+          </Row> */}
           <Row style={{ marginBottom: "15px" }}>
-            <Col sm={4}>
+            <Col>
               <span>Account Class*</span>
             </Col>
             <Col>
               <Select
-                getPopupContainer={trigger => trigger.parentNode}
-                style={{ width: 450, marginLeft: "15px" }}
+                getPopupContainer={(trigger) => trigger.parentNode}
+                style={{ width: 450 }}
                 placeholder="Select an Account Class"
                 onChange={this._changeAccountClass.bind(this, "acc_class")}
                 value={selectedClass}
               >
                 {allAccountClasses &&
-                  allAccountClasses.map(account => (
+                  allAccountClasses.map((account) => (
                     <Option
                       value={account.id}
                     >{`${account.id} - ${account.class_name}`}</Option>
@@ -605,8 +606,8 @@ class EditUser extends Component {
 }
 
 export default connect(
-  state => ({
-    token: state.Auth.get("token")
+  (state) => ({
+    token: state.Auth.get("token"),
   }),
-  { logout ,showUserDetails,removeUserDetails}
+  { logout, showUserDetails, removeUserDetails }
 )(EditUser);
