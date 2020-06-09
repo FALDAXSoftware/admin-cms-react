@@ -157,7 +157,7 @@ class EditStateModal extends Component {
       { key: 1, value: "Legal" },
       { key: 2, value: "Illegal" },
       // { key: 3, value: 'Neutral' },
-      { key: 4, value: "Partial Services Available" },
+      // { key: 4, value: "Partial Services Available" },
     ];
 
     return (
