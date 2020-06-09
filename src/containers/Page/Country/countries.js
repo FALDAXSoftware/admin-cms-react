@@ -385,7 +385,7 @@ class Countries extends Component {
               </Form>
               {loader && <FaldaxLoader />}
 
-              <div className="float-clear">
+              <div className="float-clear scroll-table">
                 <TableWrapper
                   {...this.state}
                   rowKey="id"
