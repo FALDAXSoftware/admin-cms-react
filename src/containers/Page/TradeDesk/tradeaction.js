@@ -8,6 +8,7 @@ import {
   Input,
   Button,
   Checkbox,
+  Icon,
 } from "antd";
 import ApiUtils from "../../../helpers/apiUtills";
 import { connect } from "react-redux";
@@ -20,8 +21,29 @@ import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { TradeRow, InnerTabs, InputRow } from "../../App/tradeStyle.js";
 import FaldaxLoader from "../faldaxLoader";
 import { Precise } from "../../../components/tables/helperCells";
+import styled from "styled-components";
 
 const { logout } = authAction;
+const TriggerDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px 0 0 0;
+  font-size: 12px;
+  color: "#000";
+  > span {
+    display: inherit;
+    align-items: center;
+    > i {
+      font-size: 10px;
+      display: inherit;
+      padding: 0 5px;
+    }
+  }
+  &.red {
+    color: red;
+  }
+`;
+
 // var self;
 class TradeAction extends Component {
   constructor(props) {
@@ -39,6 +61,8 @@ class TradeAction extends Component {
         buycheck: false,
         sellcheck: false,
       },
+      latestFillPrice: 0,
+      disabledBtn: false,
     };
     // self = this;
     this.validator = new SimpleReactValidator({
@@ -66,11 +90,11 @@ class TradeAction extends Component {
           }
         },
       },
-      decimalrestrict5: {
+      decimalrestrict8: {
         message:
-          "Amount value must be less than or equal to 5 digits after decimal point.",
+          "Amount value must be less than or equal to 8 digits after decimal point.",
         rule: (val) => {
-          var RE = /^\d*\.?\d{0,5}$/;
+          var RE = /^\d*\.?\d{0,8}$/;
           if (RE.test(val)) {
             return true;
           } else {
@@ -79,11 +103,81 @@ class TradeAction extends Component {
         },
       },
     });
+    this.clearValidation = this.clearValidation.bind(this);
   }
 
-  componentDidMount = () => {};
+  componentDidMount = () => {
+    if (this.props.io) {
+      this.props.io.emit("get-limit-stop-latest", {
+        symbol: `${this.props.crypto}-${this.props.currency}`,
+      });
+      this.props.io.on("get-latest-price", (data) => {
+        if (data) {
+          this.setState(
+            {
+              latestFillPrice: data.lastPrice,
+            },
+            () => {
+              if (this.state.stop_price > 0) {
+                if (this.state.side === "Buy") {
+                  if (
+                    parseFloat(this.state.fields.stop).toFixed(
+                      this.props.pricePrecision
+                    ) >
+                    parseFloat(this.state.latestFillPrice).toFixed(
+                      this.props.pricePrecision
+                    )
+                  ) {
+                    this.setState({
+                      disabledBtn: false,
+                    });
+                  } else {
+                    this.setState({
+                      disabledBtn: true,
+                    });
+                  }
+                } else {
+                  if (
+                    parseFloat(this.state.fields.stop).toFixed(
+                      this.props.pricePrecision
+                    ) <
+                    parseFloat(this.state.latestFillPrice).toFixed(
+                      this.props.pricePrecision
+                    )
+                  ) {
+                    this.setState({
+                      disabledBtn: false,
+                    });
+                  } else {
+                    this.setState({
+                      disabledBtn: true,
+                    });
+                  }
+                }
+              } else {
+                this.setState({
+                  disabledBtn: false,
+                });
+              }
+            }
+          );
+        } else {
+          this.setState({
+            latestFillPrice: "",
+            disabledBtn: false,
+          });
+        }
+      });
+    }
+  };
+  clearValidation() {
+    this.validator.hideMessages();
+    this.forceUpdate();
+    // rerender to hide messages for the first time
+  }
   onMainTabChange = (key) => {
     if (!this.state.loader) {
+      this.clearValidation();
       this.setState({
         mainTab: key,
         fields: {
@@ -97,6 +191,7 @@ class TradeAction extends Component {
     }
   };
   onSubTabChange = (key) => {
+    this.clearValidation();
     if (!this.state.loader) {
       this.setState({
         subTab: key,
@@ -116,9 +211,41 @@ class TradeAction extends Component {
     this.setState({
       field: stateFields,
     });
+    if (field === "stop" && value > 0) {
+      if (this.state.subTab === "Buy") {
+        if (
+          parseFloat(value).toFixed(this.props.pricePrecision) >
+          parseFloat(this.state.latestFillPrice).toFixed(
+            this.props.pricePrecision
+          )
+        ) {
+          this.setState({
+            disabledBtn: false,
+          });
+        } else {
+          this.setState({
+            disabledBtn: true,
+          });
+        }
+      } else {
+        if (
+          parseFloat(value).toFixed(this.props.pricePrecision) <
+          parseFloat(this.state.latestFillPrice).toFixed(
+            this.props.pricePrecision
+          )
+        ) {
+          this.setState({
+            disabledBtn: false,
+          });
+        } else {
+          this.setState({
+            disabledBtn: true,
+          });
+        }
+      }
+    }
   };
   onSubmit = () => {
-    this.setState({ loader: true });
     let url = "/api/v1/tradding/orders/";
     let params = {
       symbol: `${this.props.crypto}-${this.props.currency}`,
@@ -158,39 +285,46 @@ class TradeAction extends Component {
         break;
     }
     console.log(url, params);
-    ApiUtils.executeTrade(url, this.props.token, params)
-      .then((response) => response.json())
-      .then((responseData) => {
-        if (responseData.status === 200) {
-          notification.success({
-            message: "Success",
-            description: responseData.message,
+    if (this.validator.allValid()) {
+      this.setState({ loader: true });
+      ApiUtils.executeTrade(url, this.props.token, params)
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (responseData.status === 200) {
+            notification.success({
+              message: "Success",
+              description: responseData.message,
+            });
+          } else if (responseData.status === 201) {
+            notification.warning({
+              message: "Warning",
+              description: responseData.message,
+            });
+          } else if (responseData.status === 500) {
+            notification.error({
+              message: "Error",
+              description: responseData.message,
+            });
+          } else {
+            notification.error({
+              message: "Error",
+              description: responseData.err,
+            });
+          }
+
+          this.setState({
+            loader: false,
+            fields: {
+              amount: 0,
+              limit: 0,
+              stop: 0,
+            },
           });
-        } else if (responseData.status === 201) {
-          notification.warning({
-            message: "Warning",
-            description: responseData.message,
-          });
-        } else if (responseData.status === 500) {
-          notification.error({
-            message: "Error",
-            description: responseData.message,
-          });
-        } else {
-          notification.error({
-            message: "Error",
-            description: responseData.err,
-          });
-        }
-        this.setState({
-          loader: false,
-          fields: {
-            amount: 0,
-            limit: 0,
-            stop: 0,
-          },
         });
-      });
+    } else {
+      this.validator.showMessages();
+      this.forceUpdate();
+    }
   };
   onCheckBoxChange = (field, value) => {
     console.log(`checked = ${value}`);
@@ -296,12 +430,15 @@ class TradeAction extends Component {
                           this.onFieldChange("amount", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.amount,
-                        "required|gtzero|numeric|decimalrestrict3",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "market" &&
+                      this.state.subTab === "Buy"
+                        ? this.validator.message(
+                            "market_buy_amount",
+                            this.state.fields.amount,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["market_buy_amount"]}
                     </Col>
                     <Col span={24}>
                       <Checkbox
@@ -344,12 +481,15 @@ class TradeAction extends Component {
                           this.onFieldChange("amount", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.amount,
-                        "required|gtzero|numeric|decimalrestrict3",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "market" &&
+                      this.state.subTab === "Sell"
+                        ? this.validator.message(
+                            "market_sell_amount",
+                            this.state.fields.amount,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["market_sell_amount"]}
                     </Col>
                     <Col span={24}>
                       <Checkbox
@@ -399,12 +539,15 @@ class TradeAction extends Component {
                           this.onFieldChange("amount", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.amount,
-                        "required|gtzero|numeric|decimalrestrict3",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "limit" &&
+                      this.state.subTab === "Buy"
+                        ? this.validator.message(
+                            "limit_buy_amount",
+                            this.state.fields.amount,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["limit_buy_amount"]}
                     </Col>
                     <Col span={12}>
                       <label>Limit Price</label>
@@ -423,12 +566,15 @@ class TradeAction extends Component {
                           this.onFieldChange("limit", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.limit_price,
-                        "required|gtzero|numeric|decimalrestrict5",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "limit" &&
+                      this.state.subTab === "Buy"
+                        ? this.validator.message(
+                            "limit_price_buy",
+                            this.state.fields.limit,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["limit_price_buy"]}
                     </Col>
                     <Col span={24}>
                       <Checkbox
@@ -471,12 +617,15 @@ class TradeAction extends Component {
                           this.onFieldChange("amount", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.amount,
-                        "required|gtzero|numeric|decimalrestrict3",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "limit" &&
+                      this.state.subTab === "Sell"
+                        ? this.validator.message(
+                            "limit_sell_amount",
+                            this.state.fields.amount,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["limit_sell_amount"]}
                     </Col>
                     <Col span={12}>
                       <label>Limit Price</label>
@@ -495,12 +644,15 @@ class TradeAction extends Component {
                           this.onFieldChange("limit", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.limit_price,
-                        "required|gtzero|numeric|decimalrestrict5",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "limit" &&
+                      this.state.subTab === "Sell"
+                        ? this.validator.message(
+                            "limit_price_sell",
+                            this.state.fields.limit,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["limit_price_sell"]}
                     </Col>
                     <Col span={24}>
                       <Checkbox
@@ -550,12 +702,15 @@ class TradeAction extends Component {
                           this.onFieldChange("amount", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.amount,
-                        "required|gtzero|numeric|decimalrestrict3",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "stop-limit" &&
+                      this.state.subTab === "Buy"
+                        ? this.validator.message(
+                            "stop_buy_amount",
+                            this.state.fields.amount,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["stop_buy_amount"]}
                     </Col>
                     <Col span={12}>
                       <label>Limit Price</label>
@@ -574,12 +729,15 @@ class TradeAction extends Component {
                           this.onFieldChange("limit", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.limit_price,
-                        "required|gtzero|numeric|decimalrestrict5",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "stop-limit" &&
+                      this.state.subTab === "Buy"
+                        ? this.validator.message(
+                            "stop_limit_price_buy",
+                            this.state.fields.limit,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["stop_limit_price_buy"]}
                     </Col>
                     <Col span={12}>
                       <label>Stop Price</label>
@@ -598,13 +756,34 @@ class TradeAction extends Component {
                           this.onFieldChange("stop", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.stop_price,
-                        "required|gtzero|numeric|decimalrestrict5",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "stop-limit" &&
+                      this.state.subTab === "Buy"
+                        ? this.validator.message(
+                            "stop_price_buy",
+                            this.state.fields.stop,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["stop_price_buy"]}
                     </Col>
+                    {this.state.latestFillPrice && (
+                      <Col span={24}>
+                        <TriggerDiv
+                          className={this.state.disabledBtn ? "red" : ""}
+                        >
+                          <span>
+                            Trigger
+                            <Icon type="right" />{" "}
+                          </span>
+                          <span>
+                            {Precise(
+                              this.state.latestFillPrice,
+                              this.props.pricePrecision
+                            )}
+                          </span>
+                        </TriggerDiv>
+                      </Col>
+                    )}
                     <Col span={24}>
                       <Checkbox
                         value={this.state.fields.buycheck}
@@ -618,6 +797,7 @@ class TradeAction extends Component {
                     </Col>
                     <Col className="action-btn" span={24}>
                       <Button
+                        disabled={this.state.disabledBtn}
                         type="primary"
                         onClick={this.onSubmit}
                         loading={this.state.loader}
@@ -646,12 +826,15 @@ class TradeAction extends Component {
                           this.onFieldChange("amount", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.amount,
-                        "required|gtzero|numeric|decimalrestrict3",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "stop-limit" &&
+                      this.state.subTab === "Sell"
+                        ? this.validator.message(
+                            "stop_sell_amount",
+                            this.state.fields.amount,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["stop_sell_amount"]}
                     </Col>
                     <Col span={12}>
                       <label>Limit Price</label>
@@ -670,12 +853,15 @@ class TradeAction extends Component {
                           this.onFieldChange("limit", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.limt_price,
-                        "required|gtzero|numeric|decimalrestrict5",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "stop-limit" &&
+                      this.state.subTab === "Sell"
+                        ? this.validator.message(
+                            "stop_limit_price_sell",
+                            this.state.fields.limit,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["stop_limit_price_sell"]}
                     </Col>
                     <Col span={12}>
                       <label>Stop Price</label>
@@ -694,13 +880,34 @@ class TradeAction extends Component {
                           this.onFieldChange("stop", e.target.value);
                         }}
                       />
-                      {/* {this.validator.message(
-                        "Amount",
-                        this.state.stop_price,
-                        "required|gtzero|numeric|decimalrestrict5",
-                        "trade-action-validation"
-                      )} */}
+                      {this.state.mainTab === "stop-limit" &&
+                      this.state.subTab === "Sell"
+                        ? this.validator.message(
+                            "stop_price_sell",
+                            this.state.fields.stop,
+                            "required|gtzero|numeric|decimalrestrict8",
+                            "trade-action-validation"
+                          )
+                        : delete this.validator.fields["stop_price_sell"]}
                     </Col>
+                    {this.state.latestFillPrice && (
+                      <Col span={24}>
+                        <TriggerDiv
+                          className={this.state.disabledBtn ? "red" : ""}
+                        >
+                          <span>
+                            Trigger
+                            <Icon type="left" />{" "}
+                          </span>
+                          <span>
+                            {Precise(
+                              this.state.latestFillPrice,
+                              this.props.pricePrecision
+                            )}
+                          </span>
+                        </TriggerDiv>
+                      </Col>
+                    )}
                     <Col span={24}>
                       <Checkbox
                         value={this.state.fields.sellcheck}
@@ -714,6 +921,7 @@ class TradeAction extends Component {
                     </Col>
                     <Col className="action-btn" span={24}>
                       <Button
+                        disabled={this.state.disabledBtn}
                         type="primary"
                         onClick={this.onSubmit}
                         loading={this.state.loader}
