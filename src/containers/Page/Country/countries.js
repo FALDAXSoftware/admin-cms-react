@@ -347,8 +347,8 @@ class Countries extends Component {
                       <Option value={""}>All</Option>
                       <Option value={1}>Legal</Option>
                       <Option value={2}>Illegal</Option>
-                      {/* <Option value={3}>Neutral</Option>
-                      <Option value={4}>Partial Services Available</Option> */}
+                      {/* <Option value={3}>Neutral</Option> */}
+                      <Option value={4}>Partial Services Available</Option>
                     </Select>
                   </Col>
                   <Col lg={3}>

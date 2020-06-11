@@ -137,7 +137,7 @@ class EditCountryModal extends Component {
       { key: "1", colorCode: "#00a9fa" },
       { key: "2", colorCode: "#f6776e" },
       //   { key: "3", colorCode: "#00a9fb" },
-      //   { key: "4", colorCode: "#FCD26E" },
+      { key: "4", colorCode: "#FCD26E" },
     ];
 
     let temp = colorCodes.filter(function (val) {
@@ -173,7 +173,7 @@ class EditCountryModal extends Component {
       { key: 1, value: "Legal" },
       { key: 2, value: "Illegal" },
       //   { key: 3, value: "Neutral" },
-      //   { key: 4, value: "Partial Services Available" },
+      { key: 4, value: "Partial Services Available" },
     ];
 
     return (
