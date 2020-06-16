@@ -9,7 +9,7 @@ import {
   Form,
   Row,
   Icon,
-  Col
+  Col,
 } from "antd";
 import { ownTradeTable } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -21,7 +21,12 @@ import moment from "moment";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
-import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import {
+  PAGESIZE,
+  PAGE_SIZE_OPTIONS,
+  TABLE_SCROLL_HEIGHT,
+  EXPORT_LIMIT_SIZE,
+} from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportOwnTrade } from "../../../helpers/exportToCsv/headers";
@@ -52,13 +57,15 @@ class TradeHistory extends Component {
       sorterCol: "created_at",
       sortOrder: "descend",
       openCsvModal: false,
-      csvData: []
+      csvData: [],
     };
   }
 
   componentDidMount = async () => {
     if (this.props.location.state) {
-      await this.setState({ searchTrade: JSON.parse(this.props.location.state.orderId) })
+      await this.setState({
+        searchTrade: JSON.parse(this.props.location.state.orderId),
+      });
     }
     this._getAllTrades();
   };
@@ -74,27 +81,38 @@ class TradeHistory extends Component {
       endDate,
       sorterCol,
       sortOrder,
-      trade_type
+      trade_type,
     } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
     (isExportCsv
-      ? ApiUtils.getAllTrades(1, EXPORT_LIMIT_SIZE, token, "", "", "", "", "", "", trade_type)
+      ? ApiUtils.getAllTrades(
+          1,
+          EXPORT_LIMIT_SIZE,
+          token,
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          trade_type
+        )
       : ApiUtils.getAllTrades(
-        page,
-        limit,
-        token,
-        searchTrade,
-        filterVal,
-        startDate,
-        endDate,
-        sorterCol,
-        sortOrder,
-        trade_type
-      )
+          page,
+          limit,
+          token,
+          searchTrade,
+          filterVal,
+          startDate,
+          endDate,
+          sorterCol,
+          sortOrder,
+          trade_type
+        )
     )
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
           if (isExportCsv) {
@@ -102,7 +120,7 @@ class TradeHistory extends Component {
           } else {
             _this.setState({
               allTrades: res.data,
-              allTradeCount: res.tradeCount
+              allTradeCount: res.tradeCount,
             });
           }
         } else if (res.status == 403) {
@@ -117,25 +135,25 @@ class TradeHistory extends Component {
         }
         _this.setState({ loader: false });
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
 
-  _searchTrade = e => {
+  _searchTrade = (e) => {
     e.preventDefault();
     this.setState({ page: 1 }, () => {
       this._getAllTrades();
@@ -159,13 +177,13 @@ class TradeHistory extends Component {
       return {
         disabledHours: () => this.range(0, 60).splice(4, 20),
         disabledMinutes: () => this.range(30, 60),
-        disabledSeconds: () => [55, 56]
+        disabledSeconds: () => [55, 56],
       };
     }
     return {
       disabledHours: () => this.range(0, 60).splice(20, 4),
       disabledMinutes: () => this.range(0, 31),
-      disabledSeconds: () => [55, 56]
+      disabledSeconds: () => [55, 56],
     };
   };
 
@@ -173,13 +191,13 @@ class TradeHistory extends Component {
     this.setState({
       rangeDate: date,
       startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
-      endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+      endDate: date.length > 0 ? moment(date[1]).toISOString() : "",
     });
   };
 
   onExport = () => {
     this.setState({ openCsvModal: true }, () => this._getAllTrades(true));
-  }
+  };
   _resetFilters = () => {
     this.setState(
       {
@@ -190,7 +208,7 @@ class TradeHistory extends Component {
         rangeDate: [],
         page: 1,
         sorterCol: "",
-        sortOrder: ""
+        sortOrder: "",
       },
       () => {
         this._getAllTrades();
@@ -198,11 +216,11 @@ class TradeHistory extends Component {
     );
   };
 
-  _changeFilter = val => {
+  _changeFilter = (val) => {
     this.setState({ filterVal: val });
   };
 
-  _handleTradePagination = page => {
+  _handleTradePagination = (page) => {
     this.setState({ page }, () => {
       this._getAllTrades();
     });
@@ -236,7 +254,7 @@ class TradeHistory extends Component {
       rangeDate,
       filterVal,
       csvData,
-      openCsvModal
+      openCsvModal,
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -245,64 +263,86 @@ class TradeHistory extends Component {
 
     return (
       <TableDemoStyle className="isoLayoutContent full-width">
-        <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={() => { this.setState({ openCsvModal: false }) }} filename="trade_history.csv" data={csvData} header={exportOwnTrade} />
-        <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters} />
-        <div><Form onSubmit={this._searchTrade}>
-          <Row justify="start" type="flex" className="table-filter-row">
-            <Col sm={6}>
-              <Input
-                placeholder="Search trades"
-                onChange={this._changeSearch.bind(this)}
-                value={searchTrade}
-              />
-            </Col>
-            <Col sm={3}>
-              <Select
-                getPopupContainer={trigger => trigger.parentNode}
-                placeholder="Select type"
-                onChange={this._changeFilter}
-                value={filterVal}
-              >
-                <Option value={""}>All</Option>
-                <Option value={"Sell"}>Sell</Option>
-                <Option value={"Buy"}>Buy</Option>
-              </Select>
-            </Col>
-            <Col sm={6}>
-              <RangePicker
-                value={rangeDate}
-                disabledTime={this.disabledRangeTime}
-                onChange={this._changeDate}
-                format="YYYY-MM-DD"
-                allowClear={false}
-                className='full-width'
-              />
-            </Col>
-            <Col xs={12} sm={3}>
-              <Button
-                htmlType="submit"
-                className="filter-btn btn-full-width"
-                type="primary"
-              >
-                <Icon type="search" />Search
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+            this.setState({ openCsvModal: false });
+          }}
+          filename="trade_history.csv"
+          data={csvData}
+          header={exportOwnTrade}
+        />
+        <PageCounterComponent
+          page={page}
+          limit={limit}
+          dataCount={allTradeCount}
+          syncCallBack={this._resetFilters}
+        />
+        <div>
+          <Form onSubmit={this._searchTrade}>
+            <Row justify="start" type="flex" className="table-filter-row">
+              <Col sm={6}>
+                <Input
+                  placeholder="Search trades"
+                  onChange={this._changeSearch.bind(this)}
+                  value={searchTrade}
+                />
+              </Col>
+              <Col sm={3}>
+                <Select
+                  getPopupContainer={(trigger) => trigger.parentNode}
+                  placeholder="Select type"
+                  onChange={this._changeFilter}
+                  value={filterVal}
+                >
+                  <Option value={""}>All</Option>
+                  <Option value={"Sell"}>Sell</Option>
+                  <Option value={"Buy"}>Buy</Option>
+                </Select>
+              </Col>
+              <Col sm={6}>
+                <RangePicker
+                  value={rangeDate}
+                  disabledTime={this.disabledRangeTime}
+                  onChange={this._changeDate}
+                  format="YYYY-MM-DD"
+                  allowClear={false}
+                  className="full-width"
+                />
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  htmlType="submit"
+                  className="filter-btn btn-full-width"
+                  type="primary"
+                >
+                  <Icon type="search" />
+                  Search
                 </Button>
-            </Col>
-            <Col xs={12} sm={3}>
-              <Button
-                className="filter-btn full-width"
-                type="primary"
-                onClick={this._resetFilters}
-              ><Icon type="reload"></Icon>
-                Reset
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  className="filter-btn full-width"
+                  type="primary"
+                  onClick={this._resetFilters}
+                >
+                  <Icon type="reload"></Icon>
+                  Reset
                 </Button>
-            </Col>
-            <Col xs={12} sm={3}>
-              <Button className="filter-btn full-width" onClick={this.onExport} icon="export" type="primary">
-                Export
+              </Col>
+              <Col xs={12} sm={3}>
+                <Button
+                  className="filter-btn full-width"
+                  onClick={this.onExport}
+                  icon="export"
+                  type="primary"
+                >
+                  Export
                 </Button>
-            </Col>
-          </Row>
-        </Form></div>
+              </Col>
+            </Row>
+          </Form>
+        </div>
         <TableWrapper
           {...this.state}
           rowKey="id"
@@ -313,21 +353,67 @@ class TradeHistory extends Component {
           onChange={this._handleTradeTableChange}
           scroll={TABLE_SCROLL_HEIGHT}
           bordered
-          expandedRowRender={record => {
+          expandedRowRender={(record) => {
             return (
               <div>
-                <span><b>Created At</b>&nbsp;:&nbsp; {record['created_at']}</span><br />
-                <span><b>Fill Price</b>&nbsp;:&nbsp;{PrecisionCell(record['fill_price'])}</span><br />
-                <span><b>Order ID</b>&nbsp;:&nbsp;{record['transaction_id']}</span><br />
-                <span><b>Side</b>&nbsp;:&nbsp;{record['side']}</span><br />
-                <span><b>Order Type</b>&nbsp;:&nbsp;{record['order_type']}</span><br />
-                <span><b>User Email</b>&nbsp;:&nbsp;{record['email']}</span><br />
-                <span><b>Requested Email</b>&nbsp;:&nbsp;{record['requested_email']}</span><br />
-                <span><b>Order Status</b>&nbsp;:&nbsp;{record['order_status']}</span><br />
-                <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br />
-                <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br />
-                <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"] + " " + record['user_coin']}</span><br />
-                <span><b>Requested Fees</b>&nbsp;:&nbsp;{record["requested_fee"] + " " + record['requested_coin']}</span><br />
+                <span>
+                  <b>Created At</b>&nbsp;:&nbsp;{" "}
+                  {moment
+                    .utc(record["created_at"])
+                    .local()
+                    .format("DD MMM, YYYY HH:mm:ss")}
+                  {/* {record["created_at"]} */}
+                </span>
+                <br />
+                <span>
+                  <b>Fill Price</b>&nbsp;:&nbsp;
+                  {PrecisionCell(record["fill_price"])}
+                </span>
+                <br />
+                <span>
+                  <b>Order ID</b>&nbsp;:&nbsp;{record["transaction_id"]}
+                </span>
+                <br />
+                <span>
+                  <b>Side</b>&nbsp;:&nbsp;{record["side"]}
+                </span>
+                <br />
+                <span>
+                  <b>Order Type</b>&nbsp;:&nbsp;{record["order_type"]}
+                </span>
+                <br />
+                <span>
+                  <b>User Email</b>&nbsp;:&nbsp;{record["email"]}
+                </span>
+                <br />
+                <span>
+                  <b>Requested Email</b>&nbsp;:&nbsp;{record["requested_email"]}
+                </span>
+                <br />
+                <span>
+                  <b>Order Status</b>&nbsp;:&nbsp;{record["order_status"]}
+                </span>
+                <br />
+                <span>
+                  <b>Limit price</b>&nbsp;:&nbsp;
+                  {PrecisionCell(record["limit_price"])}
+                </span>
+                <br />
+                <span>
+                  <b>Stop Price</b>&nbsp;:&nbsp;
+                  {PrecisionCell(record["stop_price"])}
+                </span>
+                <br />
+                <span>
+                  <b>User Fees</b>&nbsp;:&nbsp;
+                  {record["user_fee"] + " " + record["user_coin"]}
+                </span>
+                <br />
+                <span>
+                  <b>Requested Fees</b>&nbsp;:&nbsp;
+                  {record["requested_fee"] + " " + record["requested_coin"]}
+                </span>
+                <br />
               </div>
             );
           }}
@@ -350,11 +436,13 @@ class TradeHistory extends Component {
   }
 }
 
-export default withRouter(connect(
-  state => ({
-    token: state.Auth.get("token")
-  }),
-  { logout }
-)(TradeHistory));
+export default withRouter(
+  connect(
+    (state) => ({
+      token: state.Auth.get("token"),
+    }),
+    { logout }
+  )(TradeHistory)
+);
 
 export { TradeHistory, ownTradeTable };
