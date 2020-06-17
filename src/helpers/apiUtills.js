@@ -6,7 +6,7 @@
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
-export const SOCKET_HOST = "https://preprod-trading.faldax.com";
+export const SOCKET_HOST = process.env.REACT_APP_SOCKET_ENDPOINT;
 // export const SOCKET_HOST = "http://localhost:3011"
 const ApiUtils = {
   //super admin sign in api
