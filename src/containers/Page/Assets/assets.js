@@ -54,15 +54,15 @@ class Assets extends Component {
       errType: "Success",
       page: 1,
       loader: false,
-      openCsvExportModal:false,
-      csvData:[]
+      openCsvExportModal: false,
+      csvData: []
     };
     self = this;
     Assets.view = Assets.view.bind(this);
     Assets.edit = Assets.edit.bind(this);
     Assets.deleteCoin = Assets.deleteCoin.bind(this);
     Assets.changeStatus = Assets.changeStatus.bind(this);
-    Assets.assetWallet = Assets.assetWallet.bind(this);
+    // Assets.assetWallet = Assets.assetWallet.bind(this);
   }
 
   static view(
@@ -169,9 +169,9 @@ class Assets extends Component {
     self.setState({ showDeleteCoinModal: true, deleteCoinId: value });
   }
 
-  static assetWallet(value, coin_name, coin_code) {
-    self.props.history.push("/dashboard/assets/wallet/" + coin_code);
-  }
+  // static assetWallet(value, coin_name, coin_code) {
+  //   self.props.history.push("/dashboard/assets/wallet/" + coin_code);
+  // }
 
   componentDidMount = () => {
     this._getAllCoins();
@@ -185,30 +185,30 @@ class Assets extends Component {
     this.setState({ errMsg: false });
   };
 
-  _getAllCoins = (exportToCsv=false) => {
+  _getAllCoins = (exportToCsv = false) => {
     const { token } = this.props;
     const { limit, searchCoin, page, sorterCol, sortOrder } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    (exportToCsv?ApiUtils.getAllCoins(1,EXPORT_LIMIT_SIZE, token,""):ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder))
+    (exportToCsv ? ApiUtils.getAllCoins(1, EXPORT_LIMIT_SIZE, token, "") : ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder))
       .then(response => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          if(exportToCsv){
-            let csvData=clone(res.data);
-            csvData=csvData.map((ele)=>{
-              ele["updated_at"]=DateTimeCell(ele["updated_at"],'string');
-              ele["created_at"]=DateTimeCell(ele["created_at"],'string');
-              ele["deleted_at"]=DateTimeCell(ele["deleted_at"],'string');
-              ele["type"]=ele['type']==1?"bitgo":"node setup";
-              ele["min_limit"]=PrecisionCell(ele["min_limit"]);
-              ele["max_limit"]=PrecisionCell(ele["max_limit"]);
+          if (exportToCsv) {
+            let csvData = clone(res.data);
+            csvData = csvData.map((ele) => {
+              ele["updated_at"] = DateTimeCell(ele["updated_at"], 'string');
+              ele["created_at"] = DateTimeCell(ele["created_at"], 'string');
+              ele["deleted_at"] = DateTimeCell(ele["deleted_at"], 'string');
+              ele["type"] = ele['type'] == 1 ? "bitgo" : "node setup";
+              ele["min_limit"] = PrecisionCell(ele["min_limit"]);
+              ele["max_limit"] = PrecisionCell(ele["max_limit"]);
               return ele;
             })
-            _this.setState({csvData})
-          }else{
-            _this.setState({ allCoins: res.data,allCoinCount: res.CoinsCount });
+            _this.setState({ csvData })
+          } else {
+            _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount });
           }
         } else if (res.status == 403) {
           _this.setState(
@@ -329,8 +329,8 @@ class Assets extends Component {
     });
   };
 
-  onExport=()=>{
-    this.setState({openCsvExportModal:true},()=>this._getAllCoins(true));
+  onExport = () => {
+    this.setState({ openCsvExportModal: true }, () => this._getAllCoins(true));
   }
 
   render() {
@@ -359,88 +359,88 @@ class Assets extends Component {
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="assets.csv" data={csvData} header={exportAsset}/>
+        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={() => { this.setState({ openCsvExportModal: false }) }} filename="assets.csv" data={csvData} header={exportAsset} />
         <Tabs className="isoTableDisplayTab full-width">
-            <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
-              <TableDemoStyle className="isoLayoutContent">
-              <PageCounterComponent page={page} limit={limit} dataCount={allCoinCount} syncCallBack={()=>{this.setState({searchCoin:"",page:1},()=>this._getAllCoins())}}/>
-                <Row type="flex" className="table-filter-row" justify="start">
-                  <Col md={4}>
-                    {isAllowed("create_coins") && (
-                      <Button type="primary" className="full-width" onClick={this._showAddCoinModal}>
-                        <Icon type="plus" />
-                        Add Asset
+          <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
+            <TableDemoStyle className="isoLayoutContent">
+              <PageCounterComponent page={page} limit={limit} dataCount={allCoinCount} syncCallBack={() => { this.setState({ searchCoin: "", page: 1 }, () => this._getAllCoins()) }} />
+              <Row type="flex" className="table-filter-row" justify="start">
+                <Col md={4}>
+                  {isAllowed("create_coins") && (
+                    <Button type="primary" className="full-width" onClick={this._showAddCoinModal}>
+                      <Icon type="plus" />
+                      Add Asset
                       </Button>
-                    )}
-                  </Col>
-                  <Col md={8}>
-                    <Search
-                      placeholder="Search assets"
-                      onSearch={value => this._searchCoin(value)}
-                      enterButton
-                      className="full-width"
-                    />
-                  </Col>
-                  <Col md={3}>
-                    <Button onClick={this.onExport} icon="export" type="primary">Export</Button>
-                  </Col>
-                  </Row>
-                <AddCoinModal
-                  showAddCoinModal={showAddCoinModal}
-                  closeAddModal={this._closeAddCoinModal}
-                  getAllCoins={this._getAllCoins.bind(this, 1)}
-                />
-
-                {loader && <FaldaxLoader />}
-                <div className="float-clear">
-                  <ViewCoinModal
-                    coinDetails={coinDetails}
-                    showViewCoinModal={showViewCoinModal}
-                    closeViewCoinModal={this._closeViewCoinModal}
-                  />
-                  {showDeleteCoinModal && (
-                    <Modal
-                      title="Delete Asset"
-                      visible={showDeleteCoinModal}
-                      onCancel={this._closeDeleteCoinModal}
-                      footer={[
-                        <Button onClick={this._closeDeleteCoinModal}>
-                          No
-                        </Button>,
-                        <Button onClick={this._deleteCoin}>Yes</Button>
-                      ]}
-                    >
-                      Are you sure you want to delete this asset ?
-                    </Modal>
                   )}
-                  <TableWrapper
-                    rowKey="id"
-                    {...this.state}
-                    columns={assetTableInfos.columns}
-                    pagination={false}
-                    dataSource={allCoins}
-                    onChange={this.handleTableChange}
-                    className="table-tb-margin"
-                    bordered
-                    scroll={TABLE_SCROLL_HEIGHT}
+                </Col>
+                <Col md={8}>
+                  <Search
+                    placeholder="Search assets"
+                    onSearch={value => this._searchCoin(value)}
+                    enterButton
+                    className="full-width"
                   />
-                  {allCoinCount > 0 ? (
-                    <Pagination
-                      className="ant-users-pagination"
-                      onChange={this._handleCoinPagination.bind(this)}
-                      pageSize={limit}
-                      current={page}
-                      total={parseInt(allCoinCount)}
-                      showSizeChanger
-                      onShowSizeChange={this._changePaginationSize}
-                      pageSizeOptions={pageSizeOptions}
-                    />
-                  ) : (
+                </Col>
+                <Col md={3}>
+                  <Button onClick={this.onExport} icon="export" type="primary">Export</Button>
+                </Col>
+              </Row>
+              <AddCoinModal
+                showAddCoinModal={showAddCoinModal}
+                closeAddModal={this._closeAddCoinModal}
+                getAllCoins={this._getAllCoins.bind(this, 1)}
+              />
+
+              {loader && <FaldaxLoader />}
+              <div className="float-clear">
+                <ViewCoinModal
+                  coinDetails={coinDetails}
+                  showViewCoinModal={showViewCoinModal}
+                  closeViewCoinModal={this._closeViewCoinModal}
+                />
+                {showDeleteCoinModal && (
+                  <Modal
+                    title="Delete Asset"
+                    visible={showDeleteCoinModal}
+                    onCancel={this._closeDeleteCoinModal}
+                    footer={[
+                      <Button onClick={this._closeDeleteCoinModal}>
+                        No
+                        </Button>,
+                      <Button onClick={this._deleteCoin}>Yes</Button>
+                    ]}
+                  >
+                    Are you sure you want to delete this asset ?
+                    </Modal>
+                )}
+                <TableWrapper
+                  rowKey="id"
+                  {...this.state}
+                  columns={assetTableInfos.columns}
+                  pagination={false}
+                  dataSource={allCoins}
+                  onChange={this.handleTableChange}
+                  className="table-tb-margin"
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
+                />
+                {allCoinCount > 0 ? (
+                  <Pagination
+                    className="ant-users-pagination"
+                    onChange={this._handleCoinPagination.bind(this)}
+                    pageSize={limit}
+                    current={page}
+                    total={parseInt(allCoinCount)}
+                    showSizeChanger
+                    onShowSizeChange={this._changePaginationSize}
+                    pageSizeOptions={pageSizeOptions}
+                  />
+                ) : (
                     ""
                   )}
-                </div>
-              </TableDemoStyle>
-            </TabPane>
+              </div>
+            </TableDemoStyle>
+          </TabPane>
           {isAllowed("metabase_asset_report") && (
             <TabPane tab="Report" key="metabase">
               <TableDemoStyle>

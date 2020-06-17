@@ -48,7 +48,8 @@ const breadcrumbNameMap = {
     "/dashboard/assets/wallet/:id":"Wallet",
     "/dashboard/email-templates":"Email Templates",
     "/dashboard/email-templates/edit-template/:id":"Edit",
-    "/dashboard/wallet/faldax-main-wallet/:coin":"FALDAX Wallet"
+    "/dashboard/wallet/faldax-main-wallet/:coin":"FALDAX Wallet",
+    "/dashboard/account-tier":"Account Tier Management"
   };
 
 
