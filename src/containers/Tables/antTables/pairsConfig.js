@@ -42,8 +42,9 @@ const renderCell = (
       return FeeSwitchCell(
         value,
         name,
-        price_precision,
-        quantity_precision,
+        price_Precision,
+        quantity_Precision,
+        order_Maximum,
         created_at,
         is_active
       );
