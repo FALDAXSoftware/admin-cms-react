@@ -59,7 +59,7 @@ class SellBook extends Component {
         data: row,
       },
       () => {
-        /* this.props.onLoadComplete() */
+        this.props.onLoadComplete();
       }
     );
   };

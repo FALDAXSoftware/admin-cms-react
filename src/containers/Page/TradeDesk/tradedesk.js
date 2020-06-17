@@ -67,6 +67,10 @@ class TradeDesk extends Component {
         pair: this.props.match.params.pair,
         pricePrecision: 6,
         amountPrecision: 3,
+        buyBookLoader: true,
+        sellBookLoader: true,
+        myOrderLoader: true,
+        orderHistoryLoader: true,
       },
       () => {
         this.joinRoom();
@@ -85,6 +89,11 @@ class TradeDesk extends Component {
         {
           crypto,
           currency,
+          buyBookLoader: true,
+          buyBookLoader: true,
+          sellBookLoader: true,
+          myOrderLoader: true,
+          orderHistoryLoader: true,
           pair: nextProps.match.params.pair,
         },
         () => {
