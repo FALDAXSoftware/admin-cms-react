@@ -56,7 +56,7 @@ class OrderHistory extends Component {
       });
     }
     this.setState({ data: rows }, () => {
-      /* this.props.onLoadComplete() */
+      this.props.onLoadComplete();
     });
   };
 

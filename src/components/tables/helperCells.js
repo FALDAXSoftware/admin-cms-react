@@ -566,12 +566,21 @@ const deleteEmployee = (value) => {
 const pairStatus = (
   value,
   name,
-  maker_fee,
-  taker_fee,
+  price_precision,
+  quantity_precision,
+  order_maximum,
   created_at,
   is_active
 ) => {
-  Pairs.pairStatus(value, name, maker_fee, taker_fee, created_at, is_active);
+  Pairs.pairStatus(
+    value,
+    name,
+    price_precision,
+    quantity_precision,
+    order_maximum,
+    created_at,
+    is_active
+  );
 };
 
 const editPair = (value, name, maker_fee, taker_fee, created_at, is_active) => {
@@ -2279,8 +2288,9 @@ const EmployeeActionCell = (
 const FeeSwitchCell = (
   value,
   name,
-  maker_fee,
-  taker_fee,
+  price_precision,
+  quantity_precision,
+  order_maximum,
   created_at,
   is_active
 ) => (
@@ -2290,7 +2300,15 @@ const FeeSwitchCell = (
     unCheckedChildren="Inactive"
     checked={is_active}
     onChange={() => {
-      pairStatus(value, name, maker_fee, taker_fee, created_at, is_active);
+      pairStatus(
+        value,
+        name,
+        price_precision,
+        quantity_precision,
+        order_maximum,
+        created_at,
+        is_active
+      );
     }}
   />
 );
