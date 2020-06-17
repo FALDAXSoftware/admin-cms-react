@@ -79,6 +79,24 @@ const options = [
 
   // },
   {
+    key: "tradedesk",
+    label: "sidebar.tradedesk",
+    leftIcon: "fas fa-exchange-alt",
+    module: "trade_desk_management",
+    permssions: [
+      "trade_desk_management",
+    ]
+  },
+  {
+    key: "tradedesk-monitoring",
+    label: "sidebar.tradedeskMonitoring",
+    leftIcon: "fas fa-exchange-alt",
+    module: "trade_desk_monitoring",
+    permssions: [
+      "trade_desk_monitoring",
+    ]
+  },
+  {
     key: "transaction-history",
     label: "sidebar.transactionHistory",
     leftIcon: "fas fa-exchange-alt",
@@ -126,7 +144,7 @@ const options = [
     module: "kyc",
     permssions: [
       "get_all_kyc_data",
-      "metabase_kyc_report"      
+      "metabase_kyc_report"
     ]
   },
   {
@@ -229,8 +247,15 @@ const options = [
     label: "sidebar.terms",
     leftIcon: "fas fa-file",
     module: "terms-and-conditions",
-    permssions:["get_static_page_links"]
+    permssions: ["get_static_page_links"]
   },
+  // {
+  //   key: "tier-documentation",
+  //   label: "sidebar.tier_docs",
+  //   leftIcon: "fas fa-file",
+  //   module: "tier-documentation",
+  //   permssions:["upload_user_document"]
+  // },
   {
     key: "wallet",
     label: "sidebar.wallet_dashboard",
@@ -262,16 +287,17 @@ const options = [
       "list_batch"
     ]
   },
-  // {
-  //   key: "account-tier",
-  //   label: "Account Tier Management",
-  //   leftIcon: "fas fa-file-invoice",
-  //   module: "tiers",
-  //   permssions: [
-  //     "get_tier_details",
-  //     "user_tier_request"
-  //   ]
-  // },
+  {
+    key: "account-tier",
+    label: "sidebar.account_tier",
+    leftIcon: "fas fa-file-invoice",
+    module: "tiers",
+    permssions: [
+      "get-tier-data",
+      // "get_tier_details",
+      "user_tier_request"
+    ]
+  },
   // {
   //   key: "simplex-token",
   //   label: "sidebar.token",

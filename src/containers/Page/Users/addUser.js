@@ -10,7 +10,7 @@ import {
   Checkbox,
   Col,
   Row,
-  DatePicker
+  DatePicker,
 } from "antd";
 import SimpleReactValidator from "simple-react-validator";
 import FaldaxLoader from "../faldaxLoader";
@@ -33,7 +33,7 @@ class AddUser extends Component {
       fields: {},
       tierMsg: false,
       countryCode: "",
-      stateID:"",
+      stateID: "",
       selectedClass: "",
       errType: "Success",
       allCoins: [],
@@ -43,11 +43,9 @@ class AddUser extends Component {
       indeterminate: false,
       checkAll: false,
       showDOBErr: false,
-      password:"",
+      password: "",
       selectedGender: "male",
-      dob:moment()
-      .subtract(18, "years")
-      .endOf("day")
+      dob: moment().subtract(18, "years").endOf("day"),
     };
     this.validator = new SimpleReactValidator();
   }
@@ -62,12 +60,12 @@ class AddUser extends Component {
     let _this = this;
 
     ApiUtils.getWalletCoins(token)
-      .then(response => response.json())
-      .then(function(res) {
+      .then((response) => response.json())
+      .then(function (res) {
         if (res.status == 200) {
           let coinsArray = [];
           res.data &&
-            res.data.map(asset => {
+            res.data.map((asset) => {
               coinsArray.push(asset.coin_name);
             });
           _this.setState({ allCoins: coinsArray });
@@ -82,7 +80,7 @@ class AddUser extends Component {
           _this.setState({ errMsg: true, errMessage: res.message });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({ loader: false });
       });
   };
@@ -93,8 +91,8 @@ class AddUser extends Component {
 
     _this.setState({ loader: true });
     ApiUtils.getAllAccountClasses(token, "id", "ASC")
-      .then(response => response.json())
-      .then(function(res) {
+      .then((response) => response.json())
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allAccountClasses: res.allClasses });
         } else if (res.status == 403) {
@@ -109,20 +107,20 @@ class AddUser extends Component {
         }
         _this.setState({ loader: false });
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({
           errType: "error",
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
-          loader: false
+          loader: false,
         });
       });
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -148,12 +146,12 @@ class AddUser extends Component {
     this.setState({ fields });
   };
 
-  _addUser = e => {
+  _addUser = (e) => {
     e.preventDefault();
     const { token } = this.props;
     let {
       fields,
-      selectedTier,
+      // selectedTier,
       selectedClass,
       isKYC,
       countryCode,
@@ -169,7 +167,13 @@ class AddUser extends Component {
     } = this.state;
     let _this = this;
 
-    if (this.validator.allValid() && selectedTier && selectedClass && password.length > 0 && dob) {
+    if (
+      this.validator.allValid() &&
+      // selectedTier &&
+      selectedClass &&
+      password.length > 0 &&
+      dob
+    ) {
       let formData = {
         first_name: fields["first_name"],
         last_name: fields["last_name"],
@@ -178,32 +182,32 @@ class AddUser extends Component {
         street_address: fields["street_address"],
         street_address_2: fields["street_address_2"],
         postal_code: fields["postal_code"],
-        account_tier: selectedTier,
+        // account_tier: selectedTier,
         account_class: selectedClass,
         country: countrySelected,
         city_town: citySelected,
         state: stateSelected,
         country_code: countryCode,
         country_id: countryID,
-        state_id:stateID,
+        state_id: stateID,
         generate_wallet_coins: checkedList,
         // kyc_done: isKYC,
         gender: selectedGender,
         password,
-        dob:dob.format("DD-MM-YYYY")
+        dob: dob.format("DD-MM-YYYY"),
       };
 
       this.setState({ loader: true, isDisabled: true });
       ApiUtils.addUser(token, formData)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res.status == 200) {
             _this._resetAddForm();
             _this.setState(
               {
                 errMsg: true,
                 errMessage: res.message,
-                errType: "Success"
+                errType: "Success",
               },
               () => {
                 _this.props.history.push("/dashboard/users");
@@ -220,7 +224,7 @@ class AddUser extends Component {
             _this.setState({
               errMsg: true,
               errMessage: res.err,
-              errType: "error"
+              errType: "error",
             });
           }
           _this.setState({ loader: false });
@@ -230,16 +234,16 @@ class AddUser extends Component {
             errType: "error",
             errMsg: true,
             errMessage: "Unable to complete the requested action.",
-            loader: false
+            loader: false,
           });
         });
     } else {
       this.setState({
-        showTierError: selectedTier ? false : true,
+        // showTierError: selectedTier ? false : true,
         showClassError: selectedClass ? false : true,
-        showPasswordError:password?false:true,
+        showPasswordError: password ? false : true,
         loader: false,
-        showDOBErr: dob ? false : true
+        showDOBErr: dob ? false : true,
       });
       this.validator.showMessages();
       this.forceUpdate();
@@ -247,7 +251,7 @@ class AddUser extends Component {
   };
 
   _changeAccountTier = (field, value) => {
-    this.setState({ selectedTier: value ,showTierError:value?false:true});
+    this.setState({ selectedTier: value, showTierError: value ? false : true });
   };
 
   onCountryChange(country, state, city, stateID, countryID, countryCode) {
@@ -257,55 +261,51 @@ class AddUser extends Component {
       citySelected: city,
       countryCode,
       stateID,
-      countryID
-      
+      countryID,
     });
   }
 
   _changeAccountClass = (field, value) => {
-    this.setState({ selectedClass: value,showClassError:value?false:true});
+    this.setState({
+      selectedClass: value,
+      showClassError: value ? false : true,
+    });
   };
 
-  _isKYCCompleted = e => {
+  _isKYCCompleted = (e) => {
     this.setState({ isKYC: e.target.checked });
   };
 
-  onChange = checkedList => {
+  onChange = (checkedList) => {
     this.setState({
       checkedList,
       indeterminate:
         !!checkedList.length && checkedList.length < this.state.allCoins.length,
-      checkAll: checkedList.length === this.state.allCoins.length
+      checkAll: checkedList.length === this.state.allCoins.length,
     });
   };
 
   _changeDate = (date, dateString) => {
-    this.setState({ dob: date,showDOBErr:date?false:true });
+    this.setState({ dob: date, showDOBErr: date ? false : true });
   };
 
-  onCheckAllChange = e => {
+  onCheckAllChange = (e) => {
     this.setState({
       checkedList: e.target.checked ? this.state.allCoins : [],
       indeterminate: false,
-      checkAll: e.target.checked
+      checkAll: e.target.checked,
     });
   };
 
-  _changeGender = val => {
+  _changeGender = (val) => {
     this.setState({ selectedGender: val });
   };
 
-  _disabledDate = current => {
-    return (
-      current &&
-      current >
-        moment()
-          .subtract(18, "years")
-          .endOf("day")
-    );
+  _disabledDate = (current) => {
+    return current && current > moment().subtract(18, "years").endOf("day");
   };
 
-  _getPassword = value => {
+  _getPassword = (value) => {
     this.setState({ password: value });
   };
 
@@ -326,7 +326,7 @@ class AddUser extends Component {
       showPasswordError,
       citySelected,
       stateSelected,
-      countrySelected
+      countrySelected,
     } = this.state;
 
     if (errMsg) {
@@ -336,8 +336,8 @@ class AddUser extends Component {
     return (
       <div className="isoLayoutContent">
         <div style={{ display: "inline-block", width: "100%" }}>
-            {/* <BackButton {...this.props}/> */}
-            <BreadcrumbComponent {...this.props}/>
+          {/* <BackButton {...this.props}/> */}
+          <BreadcrumbComponent {...this.props} />
         </div>
         <div>
           <h2>Add User</h2>
@@ -414,9 +414,7 @@ class AddUser extends Component {
             </Col>
             <Col>
               <DatePicker
-                defaultValue={moment()
-                  .subtract(18, "years")
-                  .endOf("day")}
+                defaultValue={moment().subtract(18, "years").endOf("day")}
                 disabledDate={this._disabledDate}
                 onChange={this._changeDate}
               />
@@ -434,7 +432,7 @@ class AddUser extends Component {
             </Col>
             <Col>
               <Select
-                getPopupContainer={trigger => trigger.parentNode}
+                getPopupContainer={(trigger) => trigger.parentNode}
                 style={{ width: 125 }}
                 placeholder="Select a type"
                 onChange={this._changeGender}
@@ -444,13 +442,12 @@ class AddUser extends Component {
                 <Option value={"female"}>Female</Option>
               </Select>
               {this.validator.message(
-                  "gender",
-                  selectedGender,
-                  "required",
-                  "error-danger"
-                )}
+                "gender",
+                selectedGender,
+                "required",
+                "error-danger"
+              )}
             </Col>
-            
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
@@ -488,47 +485,47 @@ class AddUser extends Component {
               </span> */}
             </Col>
           </Row>
-              <CountryFields
-                {...this.props}
-                onCountryChange={(
-                  country,
-                  state,
-                  city,
-                  stateID,
-                  countryID,
-                  countryCode
-                ) =>
-                  this.onCountryChange(
-                    country,
-                    state,
-                    city,
-                    stateID,
-                    countryID,
-                    countryCode
-                  )
-                }
-              />
-              <div className='float-clear'>
-                {this.validator.message(
-                  "Country",
-                  countrySelected,
-                  "required",
-                  "error-danger"
-                )}
-                {this.validator.message(
-                  "City",
-                  citySelected,
-                  "required",
-                  "error-danger"
-                )}
-                
-                {this.validator.message(
-                  "State",
-                  stateSelected,
-                  "required",
-                  "error-danger"
-                )}
-              </div>
+          <CountryFields
+            {...this.props}
+            onCountryChange={(
+              country,
+              state,
+              city,
+              stateID,
+              countryID,
+              countryCode
+            ) =>
+              this.onCountryChange(
+                country,
+                state,
+                city,
+                stateID,
+                countryID,
+                countryCode
+              )
+            }
+          />
+          <div className="float-clear">
+            {this.validator.message(
+              "Country",
+              countrySelected,
+              "required",
+              "error-danger"
+            )}
+            {this.validator.message(
+              "City",
+              citySelected,
+              "required",
+              "error-danger"
+            )}
+
+            {this.validator.message(
+              "State",
+              stateSelected,
+              "required",
+              "error-danger"
+            )}
+          </div>
           <Row style={{ marginBottom: "15px", paddingTop: "15px" }}>
             <Col>
               <span>Postal Code*</span>
@@ -547,7 +544,7 @@ class AddUser extends Component {
               </span>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15px" }}>
+          {/* <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
               <span>Account Tier*</span>
             </Col>
@@ -570,20 +567,20 @@ class AddUser extends Component {
                 </span>
               )}
             </Col>
-          </Row>
+          </Row> */}
           <Row style={{ marginBottom: "15px" }}>
             <Col sm={4}>
               <span>Account Class*</span>
             </Col>
             <Col>
               <Select
-                getPopupContainer={trigger => trigger.parentNode}
-                style={{ width: 450, marginLeft: "15px" }}
+                getPopupContainer={(trigger) => trigger.parentNode}
+                style={{ width: 450 }}
                 placeholder="Select an Account Class"
                 onChange={this._changeAccountClass.bind(this, "acc_class")}
               >
                 {allAccountClasses &&
-                  allAccountClasses.map(account => (
+                  allAccountClasses.map((account) => (
                     <Option
                       key={account.id}
                       value={account.id}
@@ -609,8 +606,8 @@ class AddUser extends Component {
             <Col>
               <span>Select Assets to generate wallet address</span>
               <br />
-              <Checkbox 
-              className="mg-top-1"
+              <Checkbox
+                className="mg-top-1"
                 indeterminate={this.state.indeterminate}
                 onChange={this.onCheckAllChange}
                 checked={this.state.checkAll}
@@ -629,12 +626,9 @@ class AddUser extends Component {
           <br />
           <br />
           <PasswordGenerator getPassword={this._getPassword.bind(this)} />
-          {showPasswordError && password.length==0 
-          && (
-                <span style={{ color: "red" }}>
-                  {"The Password is required."}
-                </span>
-              )}
+          {showPasswordError && password.length == 0 && (
+            <span style={{ color: "red" }}>{"The Password is required."}</span>
+          )}
           <Row>
             <Col>
               <Button
@@ -656,8 +650,8 @@ class AddUser extends Component {
 }
 
 export default connect(
-  state => ({
-    token: state.Auth.get("token")
+  (state) => ({
+    token: state.Auth.get("token"),
   }),
   { logout }
 )(AddUser);

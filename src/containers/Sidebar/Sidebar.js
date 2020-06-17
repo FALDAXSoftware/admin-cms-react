@@ -72,10 +72,22 @@ class Sidebar extends Component {
   };
 
   getMenuItem = ({ singleOption, submenuStyle, submenuColor }) => {
-    const { key, label, leftIcon, children } = singleOption;
+    let { key, label, leftIcon, children } = singleOption;
     const url = stripTrailingSlash(this.props.url);
     // const {pathname}=this.props.location;
     // const urlReg=new RegExp(url+"/"+key,'ig')
+
+    if (singleOption.key == "tradedesk" && this.props.user?.roles?.allowed_pairs) {
+      children = []
+      let pairs = this.props.user.roles.allowed_pairs.split(",")
+      for (let index = 0; index < pairs.length; index++) {
+        const element = pairs[index];
+        children.push({
+          key: "tradedesk/" + element,
+          label: element,
+        })
+      }
+    }
     if (children) {
       return (
         <SubMenu
@@ -104,7 +116,7 @@ class Sidebar extends Component {
         </SubMenu>
       );
     }
-    let buildKey=key?(url+"/"+key):url;
+    let buildKey = key ? (url + "/" + key) : url;
     return (
       <Menu.Item key={buildKey}>
         <Link to={buildKey}>
@@ -207,6 +219,7 @@ class Sidebar extends Component {
                 options.map(singleOption => {
                   if (singleOption.permssions) {
                     if (this.isModulePermited(singleOption.permssions)) {
+
                       return (
                         that.getMenuItem({ submenuStyle, submenuColor, singleOption })
                       )
