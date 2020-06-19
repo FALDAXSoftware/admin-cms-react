@@ -540,7 +540,10 @@ class WalletFaldaxDashboard extends Component {
                         ? parseFloat(walletDetails.min_limit).toFixed(8)
                         : 0
                     }|lte:${availableBalance}`,
-                    "text-danger"
+                    "text-danger",
+                    {
+                      lte: "Insufficient available balance",
+                    }
                   )}
                 </span>
               </div>
