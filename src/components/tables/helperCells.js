@@ -35,6 +35,7 @@ import { DeletedUsers } from "../../containers/Page/Users/deletedUsers";
 import { isAllowed } from "../../helpers/accessControl";
 import referrals from "../../containers/Page/Referral/referrals";
 import { S3BucketImageURL } from "../../helpers/globals";
+import { SmsTemplates } from "../../containers/Page/SmsTemplates/smsTemplates";
 
 const viewActiveUser = (
   value,
@@ -772,9 +773,14 @@ const deleteAccountClass = (value, class_name) => {
 const editTemplate = (value, name, content, note) => {
   EmailTemplates.editTemplate(value, name, content, note);
 };
-
+const editSmsTemplate = (value, name, content, note) => {
+  SmsTemplates.editSmsTemplate(value, name, content, note);
+};
 const viewTemplate = (value, name, content, note) => {
   EmailTemplates.viewTemplate(value, name, content, note);
+};
+const viewSmsTemplate = (value, name, content, note) => {
+  SmsTemplates.viewSmsTemplate(value, name, content, note);
 };
 
 const newsSourceStatus = (value, source_name, slug, is_active) => {
@@ -2635,6 +2641,28 @@ const TemplateActionCell = (value, name, content, note) => (
     )}
   </div>
 );
+const SMSTemplateActionCell = (value, name, content, note) => (
+  <div>
+    {isAllowed("get_sms_template_by_id") && (
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          className="btn-icon"
+          onClick={() => viewSmsTemplate(value, name, content, note)}
+        />
+      </Tooltip>
+    )}
+    {isAllowed("get_sms_template_by_id") && isAllowed("update_sms_template") && (
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          className="btn-icon"
+          onClick={() => editSmsTemplate(value, name, content, note)}
+        />
+      </Tooltip>
+    )}
+  </div>
+);
 const NewsSourceSwitchCell = (
   value,
   source_name,
@@ -3719,6 +3747,7 @@ export {
   UserDateCell,
   AccountClassActionCell,
   TemplateActionCell,
+  SMSTemplateActionCell,
   NewsSourceSwitchCell,
   WithdrawActionCell,
   WithdrawStatusCell,

@@ -1,4 +1,4 @@
-// const API_URL = "http://1aba33ffe40b.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://c1e662ec53bc.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -2564,6 +2564,16 @@ const ApiUtils = {
     });
   },
 
+  getAllSMSTemplates: function (token) {
+    return fetch(API_URL + "/admin/get-sms-template", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+
   updateEmailTemplate: function (token, form) {
     return fetch(API_URL + "/admin/emailTemplate/update", {
       method: "PUT",
@@ -2573,6 +2583,19 @@ const ApiUtils = {
       },
       body: JSON.stringify(form),
     });
+  },
+  updateSmsTemplate: function (token, form) {
+    return fetch(
+      API_URL + "/admin/smsTemplate/update-sms-template?id=" + form.id,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      }
+    );
   },
 
   getAllNewsSources: function (token) {
@@ -2615,6 +2638,19 @@ const ApiUtils = {
         "Content-Type": "application/json",
       },
     });
+  },
+
+  getSmsTemplateDetails: function (token, template_id) {
+    return fetch(
+      API_URL + "/admin/smsTemplate/get-sms-template-by-id?id=" + template_id,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
   },
 
   //edit job category api call
