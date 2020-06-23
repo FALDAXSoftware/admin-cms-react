@@ -50,7 +50,8 @@ const columns = [
     align: "left",
     width: 150,
     sorter: true,
-    render: (object) => DateTimeCell(object, "DateCell", "created_at"),
+    dataIndex: "created_at",
+    render: (object) => DateTimeCell(object, "string", "created_at"),
   },
   {
     title: "User Email",
