@@ -7,52 +7,52 @@ const routes = [
   {
     path: "users",
     component: asyncComponent(() => import("../Page/Users/users")),
-    module: "users"
+    module: "users",
   },
   {
     path: "assets",
     component: asyncComponent(() => import("../Page/Assets/assets")),
-    module: "assets"
+    module: "assets",
   },
   {
     path: "key",
     component: asyncComponent(() => import("../Page/key/key")),
-    module: "key"
+    module: "key",
   },
   {
     path: "terms-and-conditions",
     component: asyncComponent(() => import("../Page/Terms/terms")),
-    module: "terms-and-conditions"
+    module: "terms-and-conditions",
   },
   {
     path: "tier-documentation",
     component: asyncComponent(() => import("../Page/TierDocument/tabs")),
-    module: "tier-documentation"
+    module: "tier-documentation",
   },
   {
     path: "countries",
     component: asyncComponent(() => import("../Page/Country/countries")),
-    module: "countries"
+    module: "countries",
   },
   {
     path: "roles",
     component: asyncComponent(() => import("../Page/Roles/roles")),
-    module: "roles"
+    module: "roles",
   },
   {
     path: "employee",
     component: asyncComponent(() => import("../Page/Employee/employee")),
-    module: "employee"
+    module: "employee",
   },
   {
     path: "pairs",
     component: asyncComponent(() => import("../Page/Pairs/tabs")),
-    module: "pairs"
+    module: "pairs",
   },
   {
     path: "send-coin-fee",
     component: asyncComponent(() => import("../Page/CoinFee/sendCoinFee")),
-    module: "send_coin_fee"
+    module: "send_coin_fee",
   },
   // {
   //     path: "limit-management",
@@ -61,118 +61,137 @@ const routes = [
   // },
   {
     path: "transaction-history",
-    component: asyncComponent(() => import("../Page/TransactionHistory/transactionHistoryTabs")),
-    module: "transaction_history"
+    component: asyncComponent(() =>
+      import("../Page/TransactionHistory/transactionHistoryTabs")
+    ),
+    module: "transaction_history",
   },
   {
     path: "trade-history",
     component: asyncComponent(() => import("../Page/Trade/allHistory")),
-    module: "trade_history"
+    module: "trade_history",
   },
   {
     path: "withdraw-requests",
     component: asyncComponent(() => import("../Page/WithdrawRequest/tabs")),
-    module: "withdraw_requests"
+    module: "withdraw_requests",
   },
   {
     path: "jobs",
     component: asyncComponent(() => import("../Page/Jobs/jobs")),
-    module: "jobs"
+    module: "jobs",
   },
   {
     path: "kyc",
     component: asyncComponent(() => import("../Page/KYC/kycTabs")),
-    module: "kyc"
+    module: "kyc",
   },
   {
     path: "fees",
     component: asyncComponent(() => import("../Page/Fees/fees")),
-    module: "fees"
+    module: "fees",
   },
   {
     path: "panic-button",
     component: asyncComponent(() => import("../Page/Panic/tabs")),
-    module: "panic_button"
+    module: "panic_button",
   },
   {
     path: "news",
     component: asyncComponent(() => import("../Page/News/tabs")),
-    module: "news"
+    module: "news",
   },
   {
     path: "referral",
     component: asyncComponent(() => import("../Page/Referral/tabs")),
-    module: "is_referral"
+    module: "is_referral",
   },
   {
     path: "users/add-user",
     component: asyncComponent(() => import("../Page/Users/addUser")),
-    module: "add_user"
+    module: "add_user",
   },
   {
     path: "account-class",
     component: asyncComponent(() => import("../Page/AccountClass/tabs")),
-    module: "account_class"
+    module: "account_class",
   },
   {
     path: "email-templates",
-    component: asyncComponent(() => import("../Page/EmailTemplates/emailTemplates")),
-    module: "email_templates"
+    component: asyncComponent(() =>
+      import("../Page/EmailTemplates/emailTemplates")
+    ),
+    module: "email_templates",
+  },
+  {
+    path: "sms-templates",
+    component: asyncComponent(() =>
+      import("../Page/SmsTemplates/smsTemplates")
+    ),
+    module: "sms_templates",
   },
   {
     path: "new's-source",
     component: asyncComponent(() => import("../Page/NewsSource/newsSources")),
-    module: "news_source"
+    module: "news_source",
   },
   {
     path: "two-factor-requests",
-    component: asyncComponent(() => import("../Page/TwoFactorRequest/TwoFactorRequestTab")),
-    module: "two_factor_requests"
+    component: asyncComponent(() =>
+      import("../Page/TwoFactorRequest/TwoFactorRequestTab")
+    ),
+    module: "two_factor_requests",
   },
   {
     path: "notifications",
-    component: asyncComponent(() => import("../Page/Notifications/notifications")),
-    module: "notifications"
+    component: asyncComponent(() =>
+      import("../Page/Notifications/notifications")
+    ),
+    module: "notifications",
   },
   {
     path: "wallet",
     component: asyncComponent(() => import("../Page/Wallet/walletDashboard")),
-    module: "wallet_dashboard"
+    module: "wallet_dashboard",
   },
   {
     path: "wallet/faldax/:coin",
     component: asyncComponent(() => import("../Page/Wallet/faldax/wallet")),
-    module: "wallet_dashboard"
+    module: "wallet_dashboard",
   },
   {
     path: "wallet/faldax-main-wallet/:coin",
-    component: asyncComponent(() => import("../Page/Wallet/faldax main/details")),
-    module: "wallet_dashboard"
+    component: asyncComponent(() =>
+      import("../Page/Wallet/faldax main/details")
+    ),
+    module: "wallet_dashboard",
   },
   {
     path: "wallet/warm/:coin",
     component: asyncComponent(() => import("../Page/Wallet/warm/wallet")),
-    module: "wallet_dashboard"
+    module: "wallet_dashboard",
   },
   {
     path: "wallet/hotsend/:coin",
     component: asyncComponent(() => import("../Page/Wallet/hot-send/wallet")),
-    module: "wallet_dashboard"
+    module: "wallet_dashboard",
   },
   {
     path: "wallet/hotreceive/:coin",
-    component: asyncComponent(() => import("../Page/Wallet/hot-receive/wallet")),
-    module: "wallet_dashboard"
+    component: asyncComponent(() =>
+      import("../Page/Wallet/hot-receive/wallet")
+    ),
+    module: "wallet_dashboard",
   },
   {
     path: "wallet/custodial/:coin",
     component: asyncComponent(() => import("../Page/Wallet/custodial/wallet")),
-    module: "wallet_dashboard"
+    module: "wallet_dashboard",
   },
   {
     path: "batch-and-balance",
     component: asyncComponent(() => import("../Page/Batch/batch")),
-    module: "batch_and_balance"
+    module: "batch_and_balance",
   },
   // {
   //     path: "edit-asset",
@@ -182,37 +201,39 @@ const routes = [
   {
     path: "account-tier",
     component: asyncComponent(() => import("../Page/Tiers/tabs")),
-    module: "tiers"
+    module: "tiers",
   },
   {
     path: "simplex-token",
-    component: asyncComponent(() => import("../Page/SimplexToken/simplexToken")),
-    module: "simplex_token"
+    component: asyncComponent(() =>
+      import("../Page/SimplexToken/simplexToken")
+    ),
+    module: "simplex_token",
   },
   {
     path: "campaign",
     component: asyncComponent(() => import("../Page/Offers/offers")),
-    module: "offers"
+    module: "offers",
   },
   {
     path: "campaign/add-campaign",
     component: asyncComponent(() => import("../Page/Offers/addCampaign")),
-    module: "offers"
+    module: "offers",
   },
   {
     path: "campaign/update-campaign/:id",
     component: asyncComponent(() => import("../Page/Offers/addCampaign")),
-    module: "offers"
+    module: "offers",
   },
   {
     path: "campaign/:campaignId/offer-usage/:id",
     component: asyncComponent(() => import("../Page/Offers/offersUsage")),
-    module: "offers"
+    module: "offers",
   },
   {
     path: "network-fee",
     component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
-    module: "network_fee"
+    module: "network_fee",
   },
   {
     path: "tradedesk/:pair",
@@ -307,6 +328,12 @@ const mandatoryRoutes = [
     path: "email-templates/edit-template/:id",
     component: asyncComponent(() =>
       import("../Page/EmailTemplates/updateEmailTemplate")
+    ),
+  },
+  {
+    path: "sms-templates/edit-sms-template/:id",
+    component: asyncComponent(() =>
+      import("../Page/SmsTemplates/updateSmsTemplate")
     ),
   },
   {

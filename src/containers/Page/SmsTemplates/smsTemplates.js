@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Tabs, notification } from "antd";
-import { templateTableinfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -12,12 +11,13 @@ import { withRouter } from "react-router";
 // import { BackButton } from "../../Shared/backBttton";
 // import { TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
+import { smstemplateTableinfos } from "../../Tables/antTables/smstemplateconfig";
 
 const { logout } = authAction;
 const TabPane = Tabs.TabPane;
 var self;
 
-class EmailTemplates extends Component {
+class SmsTemplates extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,18 +28,18 @@ class EmailTemplates extends Component {
       loader: false,
     };
     self = this;
-    EmailTemplates.editTemplate = EmailTemplates.editTemplate.bind(this);
+    SmsTemplates.editSmsTemplate = SmsTemplates.editSmsTemplate.bind(this);
   }
 
-  static editTemplate(value) {
+  static editSmsTemplate(value) {
     self.props.history.push(
-      "/dashboard/email-templates/edit-template/" + value
+      "/dashboard/sms-templates/edit-sms-template/" + value
     );
   }
 
-  static viewTemplate(value) {
+  static viewSmsTemplate(value) {
     self.props.history.push({
-      pathname: "/dashboard/email-templates/edit-template/" + value,
+      pathname: "/dashboard/sms-templates/edit-sms-template/" + value,
       state: { isReadOnly: true },
     });
   }
@@ -62,11 +62,11 @@ class EmailTemplates extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    ApiUtils.getAllEmailTemplates(token)
+    ApiUtils.getAllSMSTemplates(token)
       .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setState({ allTemplates: res.templates });
+          _this.setState({ allTemplates: res.data });
         } else if (res.status == 403) {
           _this.setState(
             { errMsg: true, errMessage: res.err, errType: "error" },
@@ -102,15 +102,15 @@ class EmailTemplates extends Component {
         <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
-            tab={templateTableinfos[0].title}
-            key={templateTableinfos[0].value}
+            tab={smstemplateTableinfos[0].title}
+            key={smstemplateTableinfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
               <div>
                 <TableWrapper
                   {...this.state}
                   rowKey="id"
-                  columns={templateTableinfos[0].columns}
+                  columns={smstemplateTableinfos[0].columns}
                   pagination={false}
                   dataSource={allTemplates}
                   className="isoCustomizedTable"
@@ -133,7 +133,7 @@ export default withRouter(
       token: state.Auth.get("token"),
     }),
     { logout }
-  )(EmailTemplates)
+  )(SmsTemplates)
 );
 
-export { EmailTemplates, templateTableinfos };
+export { SmsTemplates, smstemplateTableinfos };
