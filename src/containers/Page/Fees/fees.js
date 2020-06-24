@@ -38,11 +38,11 @@ class FeesComponent extends Component {
               <NetworkFee />
             </TabPane>
           )}
-          {isAllowed("list_asset_fees_limits") && (
+          {/* {isAllowed("list_asset_fees_limits") && (
             <TabPane tab="Assets Fees" key="5">
               <FeesAssers />
             </TabPane>
-          )}
+          )} */}
           {isAllowed("metabase_fee_report") && (
             <TabPane tab="Report" key="4">
               <FeesMetabase />

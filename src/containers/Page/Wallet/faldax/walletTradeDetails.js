@@ -33,6 +33,7 @@ import {
   TransactionIdHashCell,
   PrecisionCell,
   ToolTipsCell,
+  Precise,
 } from "../../../../components/tables/helperCells";
 import { PageCounterComponent } from "../../../Shared/pageCounter";
 import {
@@ -133,9 +134,7 @@ const columns = [
     dataIndex: "fill_price",
     render: (columns) => (
       <span>
-        {columns != 0 || columns != "0"
-          ? parseFloat(columns).toFixed(8)
-          : columns}
+        {columns != 0 || columns != "0" ? Precise(columns, "8") : columns}
       </span>
     ),
   },
@@ -147,25 +146,25 @@ const columns = [
     width: 150,
     render: (row) => (
       <span>
-        {parseFloat(row["quantity"]).toFixed(8) + " " + row["settle_currency"]}
+        {Precise(row["quantity"], "8") + " " + row["settle_currency"]}
       </span>
     ),
   },
   {
     title: "Maker Fee",
-    key: "maker_fee",
+    key: "requested_fee",
     sorter: true,
     align: "left",
     width: 100,
-    render: (row) => <span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>,
+    render: (row) => <span>{Precise(row["requested_fee"], "8")}</span>,
   },
   {
     title: "Taker Fee",
-    key: "taker_fee",
+    key: "user_fee",
     sorter: true,
     align: "left",
     width: 100,
-    render: (row) => <span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>,
+    render: (row) => <span>{Precise(row["user_fee"], "8")}</span>,
   },
 ];
 
