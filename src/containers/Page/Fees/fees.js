@@ -28,7 +28,7 @@ class FeesComponent extends Component {
               <FeesWithdrawal />
             </TabPane>
           )}
-          {isAllowed("get_withdrawl_faldax_fee") && (
+          {/* {isAllowed("get_withdrawl_faldax_fee") && (
             <TabPane tab="FALDAX Fees" key="2">
               <FeesFaldax />
             </TabPane>
@@ -37,7 +37,7 @@ class FeesComponent extends Component {
             <TabPane tab="Network Fees" key="1">
               <NetworkFee />
             </TabPane>
-          )}
+          )} */}
           {/* {isAllowed("list_asset_fees_limits") && (
             <TabPane tab="Assets Fees" key="5">
               <FeesAssers />
