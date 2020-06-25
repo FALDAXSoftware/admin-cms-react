@@ -362,7 +362,7 @@ class WalletTradeDetailsComponent extends Component {
             }}
           >
             <Row justify="start" type="flex" className="table-filter-row">
-              <Col xs={12} md={5}>
+              <Col xl={4} xxl={4}>
                 <Input
                   placeholder="Search"
                   className="full-width"
@@ -372,14 +372,14 @@ class WalletTradeDetailsComponent extends Component {
                   }
                 />
               </Col>
-              <Col xs={12} md={4}>
+              <Col xl={6} xxl={5}>
                 <RangePicker
                   format="YYYY-MM-DD"
                   value={rangeDate}
                   onChange={(date) => this.setState({ rangeDate: date })}
                 />
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Select
                   className="full-width"
                   value={coin_code}
@@ -400,7 +400,7 @@ class WalletTradeDetailsComponent extends Component {
                   ))}
                 </Select>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={2} xxl={3}>
                 <Select
                   className="full-width"
                   value={transaction_type}
@@ -423,7 +423,7 @@ class WalletTradeDetailsComponent extends Component {
                   </Option>
                 </Select>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Button
                   type="primary"
                   icon="search"
@@ -433,7 +433,7 @@ class WalletTradeDetailsComponent extends Component {
                   Search
                 </Button>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Button
                   type="primary"
                   icon="reload"
@@ -453,7 +453,7 @@ class WalletTradeDetailsComponent extends Component {
                   Reset
                 </Button>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Button
                   type="primary"
                   onClick={this.onExport}
