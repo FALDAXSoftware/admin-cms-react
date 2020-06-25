@@ -210,26 +210,26 @@ const routes = [
     ),
     module: "simplex_token",
   },
-  {
-    path: "campaign",
-    component: asyncComponent(() => import("../Page/Offers/offers")),
-    module: "offers",
-  },
-  {
-    path: "campaign/add-campaign",
-    component: asyncComponent(() => import("../Page/Offers/addCampaign")),
-    module: "offers",
-  },
-  {
-    path: "campaign/update-campaign/:id",
-    component: asyncComponent(() => import("../Page/Offers/addCampaign")),
-    module: "offers",
-  },
-  {
-    path: "campaign/:campaignId/offer-usage/:id",
-    component: asyncComponent(() => import("../Page/Offers/offersUsage")),
-    module: "offers",
-  },
+  // {
+  //   path: "campaign",
+  //   component: asyncComponent(() => import("../Page/Offers/offers")),
+  //   module: "offers",
+  // },
+  // {
+  //   path: "campaign/add-campaign",
+  //   component: asyncComponent(() => import("../Page/Offers/addCampaign")),
+  //   module: "offers",
+  // },
+  // {
+  //   path: "campaign/update-campaign/:id",
+  //   component: asyncComponent(() => import("../Page/Offers/addCampaign")),
+  //   module: "offers",
+  // },
+  // {
+  //   path: "campaign/:campaignId/offer-usage/:id",
+  //   component: asyncComponent(() => import("../Page/Offers/offersUsage")),
+  //   module: "offers",
+  // },
   {
     path: "network-fee",
     component: asyncComponent(() => import("../Page/NetworkFee/networkFee")),
@@ -298,10 +298,10 @@ const mandatoryRoutes = [
     path: "users/:id",
     component: asyncComponent(() => import("../Page/Users/viewUser")),
   },
-  {
-    path: "campaign/:id",
-    component: asyncComponent(() => import("../Page/Offers/viewCampaign")),
-  },
+  // {
+  //   path: "campaign/:id",
+  //   component: asyncComponent(() => import("../Page/Offers/viewCampaign")),
+  // },
   {
     path: "employee/:id",
     component: asyncComponent(() => import("../Page/Employee/employeeProfile")),
