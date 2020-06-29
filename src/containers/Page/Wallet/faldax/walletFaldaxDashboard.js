@@ -20,7 +20,10 @@ import TableDemoStyle from "../../../Tables/antTables/demo.style";
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import SimpleReactValidator from "simple-react-validator";
 import { isAllowed } from "./../../../../helpers/accessControl";
-import { PrecisionCell } from "../../../../components/tables/helperCells";
+import {
+  PrecisionCell,
+  Precise,
+} from "../../../../components/tables/helperCells";
 import { ExportToCSVComponent } from "../../../Shared/exportToCsv";
 import { exportHotReceiveWallet } from "../../../../helpers/exportToCsv/headers";
 
@@ -77,7 +80,7 @@ const columns = [
     key: 5,
     dataIndex: "total",
     width: 100,
-    render: (data) => <span>{data ? parseFloat(data).toFixed(8) : "0"}</span>,
+    render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
   },
   {
     title: (
@@ -87,7 +90,7 @@ const columns = [
     key: 2,
     dataIndex: "total_earned_from_forfeit",
     width: 100,
-    render: (data) => <span>{data ? parseFloat(data).toFixed(8) : "0"}</span>,
+    render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
   },
   {
     title: (
@@ -97,7 +100,7 @@ const columns = [
     key: 3,
     dataIndex: "total_earned_from_jst",
     width: 100,
-    render: (data) => <span>{data ? parseFloat(data).toFixed(8) : "0"}</span>,
+    render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
   },
   {
     title: <IntlMessages id="walletFaldaxDashboardTable.title.trade_total" />,
@@ -114,7 +117,7 @@ const columns = [
     key: 4,
     dataIndex: "total_earned_from_wallets",
     width: 100,
-    render: (data) => <span>{data ? parseFloat(data).toFixed(8) : "0"}</span>,
+    render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
   },
   // {
   //     title:<IntlMessages id="walletFaldaxDashboardTable.title.send_address"/>,
@@ -308,10 +311,10 @@ class WalletFaldaxDashboard extends Component {
       amount: fields["amount"],
       destination_address: fields["dest_address"],
       coin_code: walletDetails.coin_code,
-      networkFees: parseFloat(networkFee) ? parseFloat(networkFee) : 0,
+      networkFees: parseFloat(networkFee) ? Precise(networkFee, "8") : 0,
       total_fees:
         parseFloat(fields["amount"]) && parseFloat(networkFee)
-          ? (parseFloat(fields["amount"]) + parseFloat(networkFee)).toFixed(8)
+          ? Precise(parseFloat(fields["amount"]) + parseFloat(networkFee), "8")
           : 0,
     };
     if (this.validator.allValid()) {
@@ -537,7 +540,7 @@ class WalletFaldaxDashboard extends Component {
                       walletDetails.min_limit == 0
                         ? 0
                         : walletDetails.min_limit
-                        ? parseFloat(walletDetails.min_limit).toFixed(8)
+                        ? Precise(walletDetails.min_limit, "8")
                         : 0
                     }|lte:${availableBalance}`,
                     "text-danger",
@@ -562,9 +565,10 @@ class WalletFaldaxDashboard extends Component {
                   </span>
                   <span>
                     {parseFloat(fields["amount"]) && parseFloat(networkFee)
-                      ? (
-                          parseFloat(fields["amount"]) + parseFloat(networkFee)
-                        ).toFixed(8)
+                      ? Precise(
+                          parseFloat(fields["amount"]) + parseFloat(networkFee),
+                          "8"
+                        )
                       : 0}{" "}
                     {walletDetails.coin}
                   </span>
@@ -576,10 +580,13 @@ class WalletFaldaxDashboard extends Component {
                   </span>
                   <span>
                     $&nbsp;
-                    {parseFloat(
-                      parseFloat(walletDetails.fiat || 0) *
-                        parseFloat(fields["amount"] || 0)
-                    ).toFixed(2)}
+                    {Precise(
+                      parseFloat(
+                        parseFloat(walletDetails.fiat || 0) *
+                          parseFloat(fields["amount"] || 0)
+                      ),
+                      "8"
+                    )}
                   </span>
                   <br />
                 </div>
