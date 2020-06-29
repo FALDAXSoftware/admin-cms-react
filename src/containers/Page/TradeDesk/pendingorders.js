@@ -112,6 +112,12 @@ class PendingOrders extends Component {
           )}`,
       },
       {
+        title: "Order Type",
+        dataIndex: "order_type",
+        key: "order_type",
+        width: 150,
+      },
+      {
         title: "Action",
         dataIndex: "action",
         key: "action",
