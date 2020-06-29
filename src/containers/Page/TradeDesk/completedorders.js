@@ -97,6 +97,12 @@ class CompletedOrders extends Component {
             this.props.pricePrecision
           )}`,
       },
+      {
+        title: "Order Type",
+        dataIndex: "order_type",
+        key: "order_type",
+        width: 150,
+      },
     ];
     return (
       <TradeTable

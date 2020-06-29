@@ -913,7 +913,7 @@ html[dir="rtl"] .dz-hidden-input {
   padding: 24px 10px;
 }
 .custom-tr-width:not(:first-child) {
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .mt-8 {
@@ -950,4 +950,7 @@ th.custom-tr-width {
 
 .trade-action-validation {
   color: red;
+}
+.breadcrumb-link:hover {
+  color: #1890ff !important;
 }
