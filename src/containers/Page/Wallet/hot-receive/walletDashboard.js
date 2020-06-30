@@ -34,7 +34,7 @@ const columns = [
         align: "left",
         key: 1,
         width: 100,
-        render: data => ConvertSatoshiToAssetCell(data["coin"], data["balance"],data["coin_precision"])
+        render: data => ConvertSatoshiToAssetCell(data["coin"], data["balance"], data["coin_precision"])
     },
     {
         title: <IntlMessages id="walletWarmDashboardTable.title.address" />,
@@ -84,14 +84,14 @@ class WalletWarmDashboard extends Component {
             let res = await (await (isExportToCsv ? ApiUtils.walletDashboard(this.props.token).getHotReceiveWallet("") : ApiUtils.walletDashboard(this.props.token).getHotReceiveWallet(searchData))).json();
             let [{ status, data, err }, logout] = [res, this.props.logout];
             if (status == 200) {
-                // Remove susu coin wallet 
-                let index = data.findIndex((ele) => ele.coin.toLowerCase() == "susu");
-                if (index > -1)
-                    data.splice(index, 1)
-                if (isExportToCsv)
-                    this.setState({ csvData: data })
-                else
-                    this.setState({ data });
+                // // Remove susu coin wallet 
+                // let index = data.findIndex((ele) => ele.coin.toLowerCase() == "susu");
+                // if (index > -1)
+                //     data.splice(index, 1)
+                // if (isExportToCsv)
+                //     this.setState({ csvData: data })
+                // else
+                this.setState({ data });
             } else if (status == 400 || status == 403) {
                 this.openNotificationWithIcon("Error", err)
                 logout();
