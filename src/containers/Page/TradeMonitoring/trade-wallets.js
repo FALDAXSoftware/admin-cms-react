@@ -23,7 +23,7 @@ import {
 import ApiUtils from "../../../helpers/apiUtills";
 import authAction from "../../../redux/auth/actions";
 import SimpleReactValidator from "simple-react-validator";
-import { PrecisionCell } from "../../../components/tables/helperCells";
+import { PrecisionCell, Precise } from "../../../components/tables/helperCells";
 import Loader from "../faldaxLoader";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -63,14 +63,14 @@ const columns = [
     title: "Balance",
     dataIndex: "placed_balance",
     key: "placed_balance",
-    render: (text, record) => parseFloat(text).toFixed(8),
+    render: (text, record) => Precise(text, "8"),
   },
   {
     title: "Equivalent USD Value",
     dataIndex: "fiat_value",
     key: "fiat_value",
     render: (text, record) => (
-      <>{parseFloat(record.placed_balance * record.fiat_value).toFixed(2)}</>
+      <>{Precise(parseFloat(record.placed_balance * record.fiat_value), "2")}</>
     ),
   },
   // {

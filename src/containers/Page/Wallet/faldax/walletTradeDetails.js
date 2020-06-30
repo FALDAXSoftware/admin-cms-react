@@ -1,21 +1,46 @@
-import React, { Component } from 'react';
-import ApiUtils from '../../../../helpers/apiUtills';
+import React, { Component } from "react";
+import ApiUtils from "../../../../helpers/apiUtills";
 import authAction from "../../../../redux/auth/actions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import Loader from "../../faldaxLoader"
-import { notification, Pagination, Row, Col, Input, DatePicker, Button, Select, Form, Icon } from 'antd';
-import IntlMessages from '../../../../components/utility/intlMessages';
-import TableDemoStyle from '../../../Tables/antTables/demo.style';
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, S3BucketImageURL, EXPORT_LIMIT_SIZE } from '../../../../helpers/globals';
+import Loader from "../../faldaxLoader";
+import {
+  notification,
+  Pagination,
+  Row,
+  Col,
+  Input,
+  DatePicker,
+  Button,
+  Select,
+  Form,
+  Icon,
+} from "antd";
+import IntlMessages from "../../../../components/utility/intlMessages";
+import TableDemoStyle from "../../../Tables/antTables/demo.style";
+import {
+  PAGE_SIZE_OPTIONS,
+  PAGESIZE,
+  TABLE_SCROLL_HEIGHT,
+  S3BucketImageURL,
+  EXPORT_LIMIT_SIZE,
+} from "../../../../helpers/globals";
 import TableWrapper from "../../../Tables/antTables/antTable.style";
 import moment from "moment";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { DateTimeCell, TransactionIdHashCell, PrecisionCell, ToolTipsCell } from '../../../../components/tables/helperCells';
-import { PageCounterComponent } from '../../../Shared/pageCounter';
-import { exportDirectDeposit, exportOwnTrade } from '../../../../helpers/exportToCsv/headers';
-import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
-
+import {
+  DateTimeCell,
+  TransactionIdHashCell,
+  PrecisionCell,
+  ToolTipsCell,
+  Precise,
+} from "../../../../components/tables/helperCells";
+import { PageCounterComponent } from "../../../Shared/pageCounter";
+import {
+  exportDirectDeposit,
+  exportOwnTrade,
+} from "../../../../helpers/exportToCsv/headers";
+import { ExportToCSVComponent } from "../../../Shared/exportToCsv";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -26,7 +51,8 @@ const columns = [
     align: "left",
     width: 150,
     sorter: true,
-    render: object => DateTimeCell(object, "DateCell", "created_at")
+    dataIndex: "created_at",
+    render: (object) => DateTimeCell(object, "string", "created_at"),
   },
   {
     title: "User Email",
@@ -35,7 +61,7 @@ const columns = [
     align: "left",
     sorter: true,
     dataIndex: "email",
-    render: object => ToolTipsCell(object)
+    render: (object) => ToolTipsCell(object),
   },
   {
     title: "Requested Email",
@@ -44,7 +70,7 @@ const columns = [
     align: "left",
     sorter: true,
     dataIndex: "requested_email",
-    render: object => ToolTipsCell(object)
+    render: (object) => ToolTipsCell(object),
   },
   {
     title: <IntlMessages id="tradeTable.title.symbol" />,
@@ -52,7 +78,7 @@ const columns = [
     width: 100,
     align: "left",
     sorter: true,
-    dataIndex: 'symbol'
+    dataIndex: "symbol",
   },
   {
     title: <IntlMessages id="tradeTable.title.side" />,
@@ -61,15 +87,14 @@ const columns = [
     sorter: true,
     align: "left",
     dataIndex: "side",
-    render: data => (
+    render: (data) => (
       <span
         className={data.toLowerCase() == "sell" ? "field-error" : "color-green"}
       >
-        <Icon
-          type={data.toLowerCase() == "sell" ? "arrow-up" : "arrow-down"}
-        />&nbsp;{data}
+        <Icon type={data.toLowerCase() == "sell" ? "arrow-up" : "arrow-down"} />
+        &nbsp;{data}
       </span>
-    )
+    ),
   },
   {
     title: <IntlMessages id="tradeTable.title.transaction_id" />,
@@ -77,7 +102,7 @@ const columns = [
     width: 350,
     sorter: true,
     align: "left",
-    dataIndex: "transaction_id"
+    dataIndex: "transaction_id",
   },
   // {
   //   title: <IntlMessages id="tradeTable.title.order_id" />,
@@ -94,11 +119,11 @@ const columns = [
     align: "left",
     width: 100,
     dataIndex: "order_status",
-    render: data => (
+    render: (data) => (
       <span className={"status-" + data + ""}>
         {data.charAt(0).toUpperCase() + data.slice(1).replace("_", " ")}
       </span>
-    )
+    ),
   },
   {
     title: "Fill Price",
@@ -107,7 +132,11 @@ const columns = [
     align: "left",
     width: 100,
     dataIndex: "fill_price",
-    render: (columns) => <span>{columns != 0 || columns != "0" ? parseFloat(columns).toFixed(8) : columns}</span>
+    render: (columns) => (
+      <span>
+        {columns != 0 || columns != "0" ? Precise(columns, "8") : columns}
+      </span>
+    ),
   },
   {
     title: "Amount",
@@ -115,25 +144,29 @@ const columns = [
     sorter: true,
     align: "left",
     width: 150,
-    render: (row) => (<span>{parseFloat(row["quantity"]).toFixed(8) + " " + row["settle_currency"]}</span>)
+    render: (row) => (
+      <span>
+        {Precise(row["quantity"], "8") + " " + row["settle_currency"]}
+      </span>
+    ),
   },
   {
     title: "Maker Fee",
-    key: "maker_fee",
+    key: "requested_fee",
     sorter: true,
     align: "left",
     width: 100,
-    render: (row) => (<span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>)
+    render: (row) => <span>{Precise(row["requested_fee"], "8")}</span>,
   },
   {
     title: "Taker Fee",
-    key: "taker_fee",
+    key: "user_fee",
     sorter: true,
     align: "left",
     width: 100,
-    render: (row) => (<span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>)
-  }
-]
+    render: (row) => <span>{Precise(row["user_fee"], "8")}</span>,
+  },
+];
 
 class WalletTradeDetailsComponent extends Component {
   constructor(props) {
@@ -152,11 +185,11 @@ class WalletTradeDetailsComponent extends Component {
       searchData: "",
       coin_code: "",
       rangeDate: "",
-      assetsList: []
+      assetsList: [],
     };
     this.loader = {
       show: () => this.setState({ loader: true }),
-      hide: () => this.setState({ loader: false })
+      hide: () => this.setState({ loader: false }),
     };
   }
 
@@ -169,7 +202,7 @@ class WalletTradeDetailsComponent extends Component {
       coin_code: this.props.match.params.coin,
       assetsList: JSON.parse(
         this.props.location.state ? this.props.location.state.assets : "[]"
-      )
+      ),
     });
     this.getWalletData();
   }
@@ -180,7 +213,7 @@ class WalletTradeDetailsComponent extends Component {
   ) => {
     notification[type.toLowerCase()]({
       message: type,
-      description: message
+      description: message,
     });
   };
 
@@ -199,7 +232,7 @@ class WalletTradeDetailsComponent extends Component {
     });
   };
 
-  handlePagination = page => {
+  handlePagination = (page) => {
     this.setState({ page }, () => {
       this.getWalletData();
     });
@@ -220,38 +253,40 @@ class WalletTradeDetailsComponent extends Component {
         searchData,
         rangeDate,
         coin_code,
-        transaction_type
+        transaction_type,
       } = this.state;
       let start_date = rangeDate ? moment(rangeDate[0]).toISOString() : "",
         end_date = rangeDate ? moment(rangeDate[1]).toISOString() : "";
       let res = await (
-        await (isExportCsv ? ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
-          "",
-          1,
-          EXPORT_LIMIT_SIZE,
-          "",
-          "",
-          "",
-          "",
-          "",
-          5,
-          ""
-        ) : ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
-          coin_code,
-          page,
-          limit,
-          sorterCol,
-          sortOrder,
-          searchData,
-          start_date,
-          end_date,
-          5,
-          transaction_type
-        )
-        )).json();
+        await (isExportCsv
+          ? ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
+              "",
+              1,
+              EXPORT_LIMIT_SIZE,
+              "",
+              "",
+              "",
+              "",
+              "",
+              5,
+              ""
+            )
+          : ApiUtils.walletDashboard(this.props.token).getWalletDetailByName(
+              coin_code,
+              page,
+              limit,
+              sorterCol,
+              sortOrder,
+              searchData,
+              start_date,
+              end_date,
+              5,
+              transaction_type
+            ))
+      ).json();
       let [{ status, tradeValue, err, tradeCount }, logout] = [
         res,
-        this.props.logout
+        this.props.logout,
       ];
       if (status == 200) {
         if (isExportCsv) {
@@ -266,7 +301,10 @@ class WalletTradeDetailsComponent extends Component {
         this.openNotificationWithIcon("Error", err);
       }
     } catch (error) {
-      this.openNotificationWithIcon("Error", "Unable to complete the requested action.");
+      this.openNotificationWithIcon(
+        "Error",
+        "Unable to complete the requested action."
+      );
     } finally {
       this.loader.hide();
     }
@@ -285,9 +323,9 @@ class WalletTradeDetailsComponent extends Component {
         assetsList,
         transaction_type,
         csvData,
-        openCsvModal
+        openCsvModal,
       },
-      pageSizeOptions
+      pageSizeOptions,
     ] = [this.state, PAGE_SIZE_OPTIONS];
     return (
       <>
@@ -311,44 +349,44 @@ class WalletTradeDetailsComponent extends Component {
                   rangeDate: "",
                   searchData: "",
                   coin_code: this.props.match.params.coin,
-                  transaction_type: undefined
+                  transaction_type: undefined,
                 },
                 () => this.getWalletData()
               );
             }}
           />
           <Form
-            onSubmit={e => {
+            onSubmit={(e) => {
               e.preventDefault();
               this.setState({ page: 1 }, () => this.getWalletData());
             }}
           >
             <Row justify="start" type="flex" className="table-filter-row">
-              <Col xs={12} md={5}>
+              <Col xl={4} xxl={4}>
                 <Input
                   placeholder="Search"
                   className="full-width"
                   value={searchData}
-                  onChange={value =>
+                  onChange={(value) =>
                     this.setState({ searchData: value.target.value })
                   }
                 />
               </Col>
-              <Col xs={12} md={4}>
+              <Col xl={6} xxl={5}>
                 <RangePicker
                   format="YYYY-MM-DD"
                   value={rangeDate}
-                  onChange={date => this.setState({ rangeDate: date })}
+                  onChange={(date) => this.setState({ rangeDate: date })}
                 />
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Select
                   className="full-width"
                   value={coin_code}
-                  onChange={value => this.setState({ coin_code: value })}
+                  onChange={(value) => this.setState({ coin_code: value })}
                 >
                   <Option value="">All</Option>
-                  {assetsList.map(ele => (
+                  {assetsList.map((ele) => (
                     <Option key={ele.key} value={ele.value}>
                       <span>
                         <img
@@ -362,11 +400,13 @@ class WalletTradeDetailsComponent extends Component {
                   ))}
                 </Select>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={2} xxl={3}>
                 <Select
                   className="full-width"
                   value={transaction_type}
-                  onChange={value => this.setState({ transaction_type: value })}
+                  onChange={(value) =>
+                    this.setState({ transaction_type: value })
+                  }
                 >
                   <Option value="">All</Option>
                   <Option value="Sell">
@@ -383,7 +423,7 @@ class WalletTradeDetailsComponent extends Component {
                   </Option>
                 </Select>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Button
                   type="primary"
                   icon="search"
@@ -393,7 +433,7 @@ class WalletTradeDetailsComponent extends Component {
                   Search
                 </Button>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Button
                   type="primary"
                   icon="reload"
@@ -404,7 +444,7 @@ class WalletTradeDetailsComponent extends Component {
                         rangeDate: "",
                         searchData: "",
                         coin_code: this.props.match.params.coin,
-                        transaction_type: undefined
+                        transaction_type: undefined,
                       },
                       () => this.getWalletData()
                     );
@@ -413,7 +453,7 @@ class WalletTradeDetailsComponent extends Component {
                   Reset
                 </Button>
               </Col>
-              <Col xs={12} md={3}>
+              <Col xl={3} xxl={3}>
                 <Button
                   type="primary"
                   onClick={this.onExport}
@@ -421,7 +461,7 @@ class WalletTradeDetailsComponent extends Component {
                   className="filter-btn btn-full-width"
                 >
                   Export
-                    </Button>
+                </Button>
               </Col>
             </Row>
           </Form>
@@ -435,22 +475,62 @@ class WalletTradeDetailsComponent extends Component {
             onChange={this.handleTableChange}
             bordered
             scroll={TABLE_SCROLL_HEIGHT}
-            expandedRowRender={record => {
+            expandedRowRender={(record) => {
               return (
                 <div>
-                  <span><b>Created At</b>&nbsp;:&nbsp; {record['created_at']}</span><br />
-                  <span><b>Fill Price</b>&nbsp;:&nbsp;{PrecisionCell(record['fill_price'])}</span><br />
-                  <span><b>Side</b>&nbsp;:&nbsp;{record['side']}</span><br />
-                  <span><b>Order Type</b>&nbsp;:&nbsp;{record['order_type']}</span><br />
-                  <span><b>User Email</b>&nbsp;:&nbsp;{record['email']}</span><br />
-                  <span><b>Requested Email</b>&nbsp;:&nbsp;{record['requested_email']}</span><br />
-                  <span><b>Order Status</b>&nbsp;:&nbsp;{record['order_status']}</span><br />
-                  <span><b>Limit price</b>&nbsp;:&nbsp;{PrecisionCell(record['limit_price'])}</span><br />
-                  <span><b>Stop Price</b>&nbsp;:&nbsp;{PrecisionCell(record['stop_price'])}</span><br />
-                  <span><b>User Fees</b>&nbsp;:&nbsp;{record["user_fee"] + " " + record['user_coin']}</span><br />
-                  <span><b>Requested Fees</b>&nbsp;:&nbsp;{record["requested_fee"] + " " + record['requested_coin']}</span><br />
+                  <span>
+                    <b>Created At</b>&nbsp;:&nbsp;{" "}
+                    {DateTimeCell(record["created_at"])}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Fill Price</b>&nbsp;:&nbsp;
+                    {PrecisionCell(record["fill_price"])}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Side</b>&nbsp;:&nbsp;{record["side"]}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Order Type</b>&nbsp;:&nbsp;{record["order_type"]}
+                  </span>
+                  <br />
+                  <span>
+                    <b>User Email</b>&nbsp;:&nbsp;{record["email"]}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Requested Email</b>&nbsp;:&nbsp;
+                    {record["requested_email"]}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Order Status</b>&nbsp;:&nbsp;{record["order_status"]}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Limit price</b>&nbsp;:&nbsp;
+                    {PrecisionCell(record["limit_price"])}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Stop Price</b>&nbsp;:&nbsp;
+                    {PrecisionCell(record["stop_price"])}
+                  </span>
+                  <br />
+                  <span>
+                    <b>User Fees</b>&nbsp;:&nbsp;
+                    {record["user_fee"] + " " + record["user_coin"]}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Requested Fees</b>&nbsp;:&nbsp;
+                    {record["requested_fee"] + " " + record["requested_coin"]}
+                  </span>
+                  <br />
                 </div>
-              )
+              );
             }}
           />
           <Pagination
@@ -470,8 +550,11 @@ class WalletTradeDetailsComponent extends Component {
   }
 }
 
-export default withRouter(connect(
-  state => ({
-    token: state.Auth.get("token")
-  }), { ...authAction })(WalletTradeDetailsComponent))
-
+export default withRouter(
+  connect(
+    (state) => ({
+      token: state.Auth.get("token"),
+    }),
+    { ...authAction }
+  )(WalletTradeDetailsComponent)
+);

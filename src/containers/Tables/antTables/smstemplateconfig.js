@@ -3,7 +3,7 @@ import clone from "clone";
 import IntlMessages from "../../../components/utility/intlMessages";
 import {
   TextCell,
-  TemplateActionCell,
+  SMSTemplateActionCell,
 } from "../../../components/tables/helperCells";
 
 const renderCell = (
@@ -20,8 +20,8 @@ const renderCell = (
   const note = object[emailNote];
 
   switch (type) {
-    case "TemplateActionCell ":
-      return TemplateActionCell(value, name, content, note);
+    case "SMSTemplateActionCell":
+      return SMSTemplateActionCell(value, name, content, note);
     default:
       return TextCell(value);
   }
@@ -36,7 +36,7 @@ const columns = [
     render: (object) =>
       renderCell(
         object,
-        "TemplateActionCell ",
+        "SMSTemplateActionCell",
         "id",
         "name",
         "content",
@@ -51,12 +51,12 @@ const columns = [
   },
 ];
 
-const templateTableinfos = [
+const smstemplateTableinfos = [
   {
-    title: "Email Templates",
+    title: "Sms Templates",
     value: "templateTable",
     columns: clone(columns),
   },
 ];
 
-export { columns, templateTableinfos };
+export { columns, smstemplateTableinfos };
