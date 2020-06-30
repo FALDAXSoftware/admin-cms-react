@@ -27,7 +27,7 @@ import {
   TABLE_SCROLL_HEIGHT,
   EXPORT_LIMIT_SIZE,
 } from "../../../helpers/globals";
-import { PrecisionCell } from "../../../components/tables/helperCells";
+import { PrecisionCell, Precise } from "../../../components/tables/helperCells";
 import { withRouter } from "react-router-dom";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import clone from "clone";
@@ -530,7 +530,7 @@ class Transactions extends Component {
                 </span>{" "}
                 {record.transaction_from}
                 <br />
-                {record.transaction_from == "Warmwallet to Send" && (
+                {/* {record.transaction_from == "Warmwallet to Send" && (
                   <>
                     <span>
                       <b>User (Sender) Balance Before Transaction: </b>
@@ -538,13 +538,22 @@ class Transactions extends Component {
                     {record.sender_user_balance_before}
                     <br />
                   </>
-                )}
+                )} */}
                 {record.transaction_from == "Destination To Receive" && (
                   <>
                     <span>
                       <b>User (Receiver) Balance Before Transaction: </b>
                     </span>
-                    {record.receiver_user_balance_before}
+                    {Precise(record.receiver_user_balance_before, "8")}
+                    <br />
+                  </>
+                )}
+                {record.transaction_from == "Send to Destination" && (
+                  <>
+                    <span>
+                      <b>User (Sender) Balance Before Transaction: </b>
+                    </span>
+                    {Precise(record.sender_user_balance_before, "8")}
                     <br />
                   </>
                 )}
