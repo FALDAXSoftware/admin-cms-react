@@ -9,7 +9,7 @@ import {
   Form,
   Row,
   Icon,
-  Col
+  Col,
 } from "antd";
 import { countryTableInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -21,8 +21,13 @@ import { withRouter } from "react-router";
 import EditCountryModal from "./editCountryModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
-import Metabase from "./countriesMetabase"
+import {
+  PAGE_SIZE_OPTIONS,
+  PAGESIZE,
+  TABLE_SCROLL_HEIGHT,
+  EXPORT_LIMIT_SIZE,
+} from "../../../helpers/globals";
+import Metabase from "./countriesMetabase";
 import { isAllowed } from "../../../helpers/accessControl";
 // import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
@@ -52,8 +57,8 @@ class Countries extends Component {
       showEditCountryModal: false,
       countryDetails: [],
       localityVal: "",
-      openCsvExportModal:"",
-      csvData:[]
+      openCsvExportModal: "",
+      csvData: [],
     };
     self = this;
     Countries.countryStatus = Countries.countryStatus.bind(this);
@@ -71,17 +76,17 @@ class Countries extends Component {
       legality,
       color,
       name,
-      is_active: !is_active
+      is_active: !is_active,
     };
 
     ApiUtils.activateCountry(token, formData)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         self.setState({
           errMsg: true,
           errMessage: res.message,
           errType: "Success",
-          loader: false
+          loader: false,
         });
         self._getAllCountries();
       })
@@ -89,7 +94,7 @@ class Countries extends Component {
         self.setState({
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
-          errType: "error"
+          errType: "error",
         });
       });
   }
@@ -101,7 +106,7 @@ class Countries extends Component {
       legality,
       color,
       stateCount,
-      is_active
+      is_active,
     };
     self.setState({ showEditCountryModal: true, countryDetails, page: 1 });
   }
@@ -114,10 +119,10 @@ class Countries extends Component {
     this._getAllCountries();
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -130,46 +135,44 @@ class Countries extends Component {
       page,
       localityVal,
       sorterCol,
-      sortOrder
+      sortOrder,
     } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
-    (isExportToCsv?ApiUtils.getAllCountries(
-      1,
-      EXPORT_LIMIT_SIZE,
-      token,
-      "",
-      ""
-    ):ApiUtils.getAllCountries(
-      page,
-      limit,
-      token,
-      searchCountry,
-      localityVal,
-      sorterCol,
-      sortOrder
-    ))
-      .then(response => response.json())
+    (isExportToCsv
+      ? ApiUtils.getAllCountries(1, EXPORT_LIMIT_SIZE, token, "", "")
+      : ApiUtils.getAllCountries(
+          page,
+          limit,
+          token,
+          searchCountry,
+          localityVal,
+          sorterCol,
+          sortOrder
+        )
+    )
+      .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          if(isExportToCsv){
-            let csvData=clone(res.data);
-              csvData=csvData.map((ele)=>{
-              ele["updated_at"]=DateTimeCell(ele["updated_at"],'string');
-              ele["created_at"]=DateTimeCell(ele["created_at"],'string');
-              ele["deleted_at"]=DateTimeCell(ele["deleted_at"],'string');
-              ele["legality"]= ele["legality"] == 1
-              ? "Legal"
-              :  ele["legality"] == 2
-              ? "Illegal"
-              :  ele["legality"] == 3
-              ? "Neutral"
-              : "Partial Services Available"
+          if (isExportToCsv) {
+            let csvData = clone(res.data);
+            csvData = csvData.map((ele) => {
+              ele["updated_at"] = DateTimeCell(ele["updated_at"], "string");
+              ele["created_at"] = DateTimeCell(ele["created_at"], "string");
+              ele["deleted_at"] = DateTimeCell(ele["deleted_at"], "string");
+              ele["legality"] =
+                ele["legality"] == 1
+                  ? "Legal"
+                  : ele["legality"] == 2
+                  ? "Illegal"
+                  : ele["legality"] == 3
+                  ? "Neutral"
+                  : "Partial Services Available";
               return ele;
             });
-            _this.setState({csvData});
-          }else{
+            _this.setState({ csvData });
+          } else {
             _this.setState({
               allCountries: res.data,
               allCountryCount: res.CountryCount,
@@ -186,7 +189,7 @@ class Countries extends Component {
           _this.setState({
             errMsg: true,
             message: res.message,
-            errType: "error"
+            errType: "error",
           });
         }
         _this.setState({ loader: false });
@@ -196,7 +199,7 @@ class Countries extends Component {
           errMsg: true,
           message: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   };
@@ -209,13 +212,13 @@ class Countries extends Component {
     this.setState({ searchCountry: field.target.value });
   };
 
-  _searchCountry = e => {
+  _searchCountry = (e) => {
     e.preventDefault();
     // var patt = new RegExp("^[_A-z0-9]*((-|s)*[_A-z0-9])*$");
     // if (patt.test(this.state.searchCountry)) {
-      this.setState({ page: 1 }, () => {
-        this._getAllCountries();
-      });
+    this.setState({ page: 1 }, () => {
+      this._getAllCountries();
+    });
     // } else {
     //   this.setState({
     //     errMsg: true,
@@ -233,7 +236,7 @@ class Countries extends Component {
         localityVal: "",
         page: 1,
         sorterCol: "",
-        sortOrder: ""
+        sortOrder: "",
       },
       () => {
         this._getAllCountries();
@@ -242,13 +245,13 @@ class Countries extends Component {
     );
   };
 
-  _handleCountryPagination = page => {
+  _handleCountryPagination = (page) => {
     this.setState({ page }, () => {
       this._getAllCountries();
     });
   };
 
-  _changeLocality = val => {
+  _changeLocality = (val) => {
     this.setState({ localityVal: val });
   };
 
@@ -261,9 +264,11 @@ class Countries extends Component {
     );
   };
 
-  onExport=()=>{
-    this.setState({openCsvExportModal:true},()=>this._getAllCountries(true));
-  }
+  onExport = () => {
+    this.setState({ openCsvExportModal: true }, () =>
+      this._getAllCountries(true)
+    );
+  };
 
   _changePaginationSize = (current, pageSize) => {
     this.setState({ page: current, limit: pageSize }, () => {
@@ -285,7 +290,7 @@ class Countries extends Component {
       searchCountry,
       localityVal,
       openCsvExportModal,
-      csvData
+      csvData,
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -296,17 +301,30 @@ class Countries extends Component {
     return (
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
-        <BreadcrumbComponent {...this.props}/> 
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={()=>{this.setState({openCsvExportModal:false})}} filename="country.csv" data={csvData} header={exportCountry}/>
+        <BreadcrumbComponent {...this.props} />
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvExportModal}
+          onClose={() => {
+            this.setState({ openCsvExportModal: false });
+          }}
+          filename="country.csv"
+          data={csvData}
+          header={exportCountry}
+        />
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane
             tab={countryTableInfos[0].title}
             key={countryTableInfos[0].value}
           >
             <TableDemoStyle className="isoLayoutContent">
-            <PageCounterComponent page={page} limit={limit} dataCount={allCountryCount} syncCallBack={this._resetFilters}/>
+              <PageCounterComponent
+                page={page}
+                limit={limit}
+                dataCount={allCountryCount}
+                syncCallBack={this._resetFilters}
+              />
               <Form onSubmit={this._searchCountry}>
-                <Row  type="flex" justify="start" className="table-filter-row">
+                <Row type="flex" justify="start" className="table-filter-row">
                   <Col lg={8}>
                     <Form.Item
                       validateStatus={this.state.searchValid}
@@ -321,7 +339,7 @@ class Countries extends Component {
                   </Col>
                   <Col lg={7}>
                     <Select
-                      getPopupContainer={trigger => trigger.parentNode}
+                      getPopupContainer={(trigger) => trigger.parentNode}
                       placeholder="Select a locality"
                       onChange={this._changeLocality}
                       value={localityVal}
@@ -329,7 +347,7 @@ class Countries extends Component {
                       <Option value={""}>All</Option>
                       <Option value={1}>Legal</Option>
                       <Option value={2}>Illegal</Option>
-                      <Option value={3}>Neutral</Option>
+                      {/* <Option value={3}>Neutral</Option> */}
                       <Option value={4}>Partial Services Available</Option>
                     </Select>
                   </Col>
@@ -366,42 +384,42 @@ class Countries extends Component {
                 </Row>
               </Form>
               {loader && <FaldaxLoader />}
-              
-                <div className="float-clear">
-                  <TableWrapper
-                    {...this.state}
-                    rowKey="id"
-                    columns={countryTableInfos[0].columns}
-                    pagination={false}
-                    dataSource={allCountries}
-                    className="isoCustomizedTable table-tb-margin"
-                    onChange={this._handleCountryChange}
-                    bordered
-                    scroll={TABLE_SCROLL_HEIGHT}
+
+              <div className="float-clear scroll-table">
+                <TableWrapper
+                  {...this.state}
+                  rowKey="id"
+                  columns={countryTableInfos[0].columns}
+                  pagination={false}
+                  dataSource={allCountries}
+                  className="isoCustomizedTable table-tb-margin"
+                  onChange={this._handleCountryChange}
+                  bordered
+                  scroll={TABLE_SCROLL_HEIGHT}
+                />
+                {showEditCountryModal && (
+                  <EditCountryModal
+                    fields={countryDetails}
+                    showEditCountryModal={showEditCountryModal}
+                    closeEditCountryModal={this._closeEditCountryModal}
+                    getAllCountry={this._getAllCountries.bind(this, 1)}
                   />
-                  {showEditCountryModal && (
-                    <EditCountryModal
-                      fields={countryDetails}
-                      showEditCountryModal={showEditCountryModal}
-                      closeEditCountryModal={this._closeEditCountryModal}
-                      getAllCountry={this._getAllCountries.bind(this, 1)}
-                    />
-                  )}
-                  {allCountryCount > 0 ? (
-                    <Pagination
-                      className="ant-users-pagination"
-                      onChange={this._handleCountryPagination.bind(this)}
-                      pageSize={limit}
-                      current={page}
-                      total={allCountryCount}
-                      showSizeChanger
-                      onShowSizeChange={this._changePaginationSize}
-                      pageSizeOptions={pageSizeOptions}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
+                )}
+                {allCountryCount > 0 ? (
+                  <Pagination
+                    className="ant-users-pagination"
+                    onChange={this._handleCountryPagination.bind(this)}
+                    pageSize={limit}
+                    current={page}
+                    total={allCountryCount}
+                    showSizeChanger
+                    onShowSizeChange={this._changePaginationSize}
+                    pageSizeOptions={pageSizeOptions}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </TableDemoStyle>
           </TabPane>
           {isAllowed("metabase_country_report") && (
@@ -419,8 +437,8 @@ class Countries extends Component {
 
 export default withRouter(
   connect(
-    state => ({
-      token: state.Auth.get("token")
+    (state) => ({
+      token: state.Auth.get("token"),
     }),
     { logout }
   )(Countries)
