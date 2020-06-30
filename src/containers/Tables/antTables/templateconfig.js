@@ -1,45 +1,62 @@
-import React from 'react';
-import clone from 'clone';
-import IntlMessages from '../../../components/utility/intlMessages';
+import React from "react";
+import clone from "clone";
+import IntlMessages from "../../../components/utility/intlMessages";
 import {
-    TextCell,
-    TemplateActionCell,
-} from '../../../components/tables/helperCells';
+  TextCell,
+  TemplateActionCell,
+} from "../../../components/tables/helperCells";
 
-const renderCell = (object, type, key, fname = null, emailContent = null, emailNote = null) => {
-    const value = object[key];
-    const name = object[fname];
-    const content = object[emailContent];
-    const note = object[emailNote];
+const renderCell = (
+  object,
+  type,
+  key,
+  fname = null,
+  emailContent = null,
+  emailNote = null
+) => {
+  const value = object[key];
+  const name = object[fname];
+  const content = object[emailContent];
+  const note = object[emailNote];
 
-    switch (type) {
-        case 'TemplateActionCell':
-            return TemplateActionCell(value, name, content, note);
-        default:
-            return TextCell(value);
-    }
+  switch (type) {
+    case "TemplateActionCell ":
+      return TemplateActionCell(value, name, content, note);
+    default:
+      return TextCell(value);
+  }
 };
 
-const columns = [{
+const columns = [
+  {
     title: <IntlMessages id="emailTable.title.actions" />,
-    key: 'action',
+    key: "action",
     width: 75,
-    align:"left",
-    render: object => renderCell(object, 'TemplateActionCell', 'id', 'name', 'content',
-        'note')
-}, {
+    align: "left",
+    render: (object) =>
+      renderCell(
+        object,
+        "TemplateActionCell ",
+        "id",
+        "name",
+        "content",
+        "note"
+      ),
+  },
+  {
     title: <IntlMessages id="antTable.title.template_name" />,
-    key: 'name',
-    align:"left",
-    render: object => renderCell(object, 'TextCell', 'name')
-}];
+    key: "name",
+    align: "left",
+    render: (object) => renderCell(object, "TextCell", "name"),
+  },
+];
 
 const templateTableinfos = [
-    {
-        title: 'Email Templates',
-        value: 'templateTable',
-        columns: clone(columns)
-    }
+  {
+    title: "Email Templates",
+    value: "templateTable",
+    columns: clone(columns),
+  },
 ];
 
 export { columns, templateTableinfos };

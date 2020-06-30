@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.9.20",
+    "@ant-design/icons": "^4.0.6",
     "aes-js": "^3.1.2",
     "antd": "^3.26.3",
     "auth0-lock": "^11.1.2",
@@ -51,6 +53,7 @@
     "redux-thunk": "^2.2.0",
     "simple-react-validator": "^0.0.8",
     "smooth-scrollbar": "^8.2.5",
+    "socket.io-client": "^2.3.0",
     "striptags": "2.2.1",
     "styled-components": "^2.2.1",
     "styled-theme": "^0.3.3",

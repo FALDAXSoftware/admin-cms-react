@@ -9,7 +9,7 @@ import {
   Form,
   Row,
   Icon,
-  Col
+  Col,
 } from "antd";
 import { ownTradeTable } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -20,12 +20,17 @@ import moment from "moment";
 // import { CSVLink } from "react-csv";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { withRouter} from "react-router-dom";
-import {ExecutionUl} from "../common.style";
-import { PAGESIZE, PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
+import { withRouter } from "react-router-dom";
+import {
+  PAGESIZE,
+  PAGE_SIZE_OPTIONS,
+  TABLE_SCROLL_HEIGHT,
+  EXPORT_LIMIT_SIZE,
+} from "../../../helpers/globals";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportOwnTrade } from "../../../helpers/exportToCsv/headers";
+import { PrecisionCell } from "../../../components/tables/helperCells";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -38,7 +43,7 @@ class TradeHistory extends Component {
       allTrades: [],
       allTradeCount: 0,
       searchTrade: "",
-       limit: PAGESIZE,
+      limit: PAGESIZE,
       errMessage: "",
       errMsg: false,
       errType: "Success",
@@ -51,19 +56,21 @@ class TradeHistory extends Component {
       trade_type: 3,
       sorterCol: "created_at",
       sortOrder: "descend",
-      openCsvModal:false,
-      csvData:[]
+      openCsvModal: false,
+      csvData: [],
     };
   }
 
-  componentDidMount = async() => {
-    if(this.props.location.state){
-        await this.setState({searchTrade:JSON.parse(this.props.location.state.orderId)})
+  componentDidMount = async () => {
+    if (this.props.location.state) {
+      await this.setState({
+        searchTrade: JSON.parse(this.props.location.state.orderId),
+      });
     }
     this._getAllTrades();
   };
 
-  _getAllTrades = (isExportCsv=false) => {
+  _getAllTrades = (isExportCsv = false) => {
     const { token } = this.props;
     const {
       searchTrade,
@@ -74,13 +81,24 @@ class TradeHistory extends Component {
       endDate,
       sorterCol,
       sortOrder,
-      trade_type
+      trade_type,
     } = this.state;
     let _this = this;
 
     _this.setState({ loader: true });
     (isExportCsv
-      ? ApiUtils.getAllTrades(1, EXPORT_LIMIT_SIZE, token, "", "", "", "", "", "", 1)
+      ? ApiUtils.getAllTrades(
+          1,
+          EXPORT_LIMIT_SIZE,
+          token,
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          trade_type
+        )
       : ApiUtils.getAllTrades(
           page,
           limit,
@@ -94,15 +112,15 @@ class TradeHistory extends Component {
           trade_type
         )
     )
-      .then(response => response.json())
-      .then(function(res) {
+      .then((response) => response.json())
+      .then(function (res) {
         if (res.status == 200) {
           if (isExportCsv) {
             _this.setState({ csvData: res.data });
           } else {
             _this.setState({
               allTrades: res.data,
-              allTradeCount: res.tradeCount
+              allTradeCount: res.tradeCount,
             });
           }
         } else if (res.status == 403) {
@@ -117,25 +135,25 @@ class TradeHistory extends Component {
         }
         _this.setState({ loader: false });
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
 
-  _searchTrade = e => {
+  _searchTrade = (e) => {
     e.preventDefault();
     this.setState({ page: 1 }, () => {
       this._getAllTrades();
@@ -159,13 +177,13 @@ class TradeHistory extends Component {
       return {
         disabledHours: () => this.range(0, 60).splice(4, 20),
         disabledMinutes: () => this.range(30, 60),
-        disabledSeconds: () => [55, 56]
+        disabledSeconds: () => [55, 56],
       };
     }
     return {
       disabledHours: () => this.range(0, 60).splice(20, 4),
       disabledMinutes: () => this.range(0, 31),
-      disabledSeconds: () => [55, 56]
+      disabledSeconds: () => [55, 56],
     };
   };
 
@@ -173,13 +191,13 @@ class TradeHistory extends Component {
     this.setState({
       rangeDate: date,
       startDate: date.length > 0 ? moment(date[0]).toISOString() : "",
-      endDate: date.length > 0 ? moment(date[1]).toISOString() : ""
+      endDate: date.length > 0 ? moment(date[1]).toISOString() : "",
     });
   };
 
-  onExport=()=>{
-    this.setState({openCsvModal:true},()=>this._getAllTrades(true));
-  }
+  onExport = () => {
+    this.setState({ openCsvModal: true }, () => this._getAllTrades(true));
+  };
   _resetFilters = () => {
     this.setState(
       {
@@ -190,7 +208,7 @@ class TradeHistory extends Component {
         rangeDate: [],
         page: 1,
         sorterCol: "",
-        sortOrder: ""
+        sortOrder: "",
       },
       () => {
         this._getAllTrades();
@@ -198,11 +216,11 @@ class TradeHistory extends Component {
     );
   };
 
-  _changeFilter = val => {
+  _changeFilter = (val) => {
     this.setState({ filterVal: val });
   };
 
-  _handleTradePagination = page => {
+  _handleTradePagination = (page) => {
     this.setState({ page }, () => {
       this._getAllTrades();
     });
@@ -236,7 +254,7 @@ class TradeHistory extends Component {
       rangeDate,
       filterVal,
       csvData,
-      openCsvModal
+      openCsvModal,
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
     if (errMsg) {
@@ -244,10 +262,24 @@ class TradeHistory extends Component {
     }
 
     return (
-        <TableDemoStyle className="isoLayoutContent full-width">
-          <ExportToCSVComponent isOpenCSVModal={openCsvModal} onClose={()=>{this.setState({openCsvModal:false})}} filename="trade_history.csv" data={csvData} header={exportOwnTrade}/>
-          <PageCounterComponent page={page} limit={limit} dataCount={allTradeCount} syncCallBack={this._resetFilters}/>
-          <div><Form onSubmit={this._searchTrade}>
+      <TableDemoStyle className="isoLayoutContent full-width">
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvModal}
+          onClose={() => {
+            this.setState({ openCsvModal: false });
+          }}
+          filename="trade_history.csv"
+          data={csvData}
+          header={exportOwnTrade}
+        />
+        <PageCounterComponent
+          page={page}
+          limit={limit}
+          dataCount={allTradeCount}
+          syncCallBack={this._resetFilters}
+        />
+        <div>
+          <Form onSubmit={this._searchTrade}>
             <Row justify="start" type="flex" className="table-filter-row">
               <Col sm={6}>
                 <Input
@@ -258,7 +290,7 @@ class TradeHistory extends Component {
               </Col>
               <Col sm={3}>
                 <Select
-                  getPopupContainer={trigger => trigger.parentNode}
+                  getPopupContainer={(trigger) => trigger.parentNode}
                   placeholder="Select type"
                   onChange={this._changeFilter}
                   value={filterVal}
@@ -275,7 +307,7 @@ class TradeHistory extends Component {
                   onChange={this._changeDate}
                   format="YYYY-MM-DD"
                   allowClear={false}
-                  className='full-width'
+                  className="full-width"
                 />
               </Col>
               <Col xs={12} sm={3}>
@@ -284,7 +316,8 @@ class TradeHistory extends Component {
                   className="filter-btn btn-full-width"
                   type="primary"
                 >
-                  <Icon type="search"/>Search
+                  <Icon type="search" />
+                  Search
                 </Button>
               </Col>
               <Col xs={12} sm={3}>
@@ -292,81 +325,124 @@ class TradeHistory extends Component {
                   className="filter-btn full-width"
                   type="primary"
                   onClick={this._resetFilters}
-                ><Icon type="reload"></Icon>
+                >
+                  <Icon type="reload"></Icon>
                   Reset
                 </Button>
               </Col>
               <Col xs={12} sm={3}>
-                <Button className="filter-btn full-width" onClick={this.onExport} icon="export" type="primary">
+                <Button
+                  className="filter-btn full-width"
+                  onClick={this.onExport}
+                  icon="export"
+                  type="primary"
+                >
                   Export
                 </Button>
               </Col>
             </Row>
-          </Form></div>
-          <TableWrapper
-            {...this.state}
-            rowKey="id"
-            columns={ownTradeTable[0].columns}
-            pagination={false}
-            dataSource={allTrades}
-            className="float-clear table-tb-margin"
-            onChange={this._handleTradeTableChange}
-            scroll={TABLE_SCROLL_HEIGHT}
-            bordered
-            expandedRowRender={record => {
-              return (
-                <div>
-                  <span>
-                    {record.execution_report && Object.keys(record.execution_report).length > 0 ? (
-                      <ExecutionUl>
-                        {Object.keys(record.execution_report).map(
-                          (element, index) => {
-                            return (
-                              <li>
-                                <span className="ex_head">
-                                  <b>{element} : </b>
-                                </span>
-                                <span className="ex_data">
-                                  {record.execution_report[element]}
-                                </span>
-                              </li>
-                            );
-                          }
-                        )}
-                      </ExecutionUl>
-                    ) : (
-                      <ExecutionUl>
-                      </ExecutionUl>
-                    )}
-
-                  </span>
-                </div>
-              );
-            }}
+          </Form>
+        </div>
+        <TableWrapper
+          {...this.state}
+          rowKey="id"
+          columns={ownTradeTable[0].columns}
+          pagination={false}
+          dataSource={allTrades}
+          className="float-clear table-tb-margin"
+          onChange={this._handleTradeTableChange}
+          scroll={TABLE_SCROLL_HEIGHT}
+          bordered
+          expandedRowRender={(record) => {
+            return (
+              <div>
+                <span>
+                  <b>Created At</b>&nbsp;:&nbsp;{" "}
+                  {moment
+                    .utc(record["created_at"])
+                    .local()
+                    .format("DD MMM, YYYY HH:mm:ss")}
+                  {/* {record["created_at"]} */}
+                </span>
+                <br />
+                <span>
+                  <b>Fill Price</b>&nbsp;:&nbsp;
+                  {PrecisionCell(record["fill_price"])}
+                </span>
+                <br />
+                <span>
+                  <b>Order ID</b>&nbsp;:&nbsp;{record["transaction_id"]}
+                </span>
+                <br />
+                <span>
+                  <b>Side</b>&nbsp;:&nbsp;{record["side"]}
+                </span>
+                <br />
+                <span>
+                  <b>Order Type</b>&nbsp;:&nbsp;{record["order_type"]}
+                </span>
+                <br />
+                <span>
+                  <b>User Email</b>&nbsp;:&nbsp;{record["email"]}
+                </span>
+                <br />
+                <span>
+                  <b>Requested Email</b>&nbsp;:&nbsp;{record["requested_email"]}
+                </span>
+                <br />
+                <span>
+                  <b>Order Status</b>&nbsp;:&nbsp;{record["order_status"]}
+                </span>
+                <br />
+                <span>
+                  <b>Limit price</b>&nbsp;:&nbsp;
+                  {PrecisionCell(record["limit_price"])}
+                </span>
+                <br />
+                <span>
+                  <b>Stop Price</b>&nbsp;:&nbsp;
+                  {PrecisionCell(record["stop_price"])}
+                </span>
+                <br />
+                <span>
+                  <b>User Fees</b>&nbsp;:&nbsp;
+                  {record["user_fee"] + " " + record["user_coin"]}
+                </span>
+                <br />
+                <span>
+                  <b>Requested Fees</b>&nbsp;:&nbsp;
+                  {record["requested_fee"] + " " + record["requested_coin"]}
+                </span>
+                <br />
+              </div>
+            );
+          }}
+        />
+        {allTradeCount > 0 && (
+          <Pagination
+            className="ant-users-pagination"
+            onChange={this._handleTradePagination.bind(this)}
+            pageSize={limit}
+            current={page}
+            total={parseInt(allTradeCount)}
+            showSizeChanger
+            onShowSizeChange={this._changePaginationSize}
+            pageSizeOptions={pageSizeOptions}
           />
-          {allTradeCount > 0 && (
-            <Pagination
-              className="ant-users-pagination"
-              onChange={this._handleTradePagination.bind(this)}
-              pageSize={limit}
-              current={page}
-              total={parseInt(allTradeCount)}
-              showSizeChanger
-              onShowSizeChange={this._changePaginationSize}
-              pageSizeOptions={pageSizeOptions}
-            />
-          )}
-          {loader && <FaldaxLoader />}
-        </TableDemoStyle>
+        )}
+        {loader && <FaldaxLoader />}
+      </TableDemoStyle>
     );
   }
 }
 
-export default withRouter(connect(
-  state => ({
-    token: state.Auth.get("token")
-  }),
-  { logout }
-)(TradeHistory));
+export default withRouter(
+  connect(
+    (state) => ({
+      token: state.Auth.get("token"),
+    }),
+    { logout }
+  )(TradeHistory)
+);
 
 export { TradeHistory, ownTradeTable };

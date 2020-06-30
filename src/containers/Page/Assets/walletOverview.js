@@ -23,7 +23,7 @@ class WalletOverview extends Component {
         super(props)
         this.state = {
             walletUserData: [],
-            loader:false
+            loader: false
         }
         this.validator = new SimpleReactValidator();
         this.PasswordValidator = new SimpleReactValidator();
@@ -39,22 +39,22 @@ class WalletOverview extends Component {
             coinReceive: asset_id
         }
         let _this = this;
-        _this.setState({loader:true})
+        _this.setState({ loader: true })
         ApiUtils.getWalletDetails(token, formData)
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    _this.setState({ walletUserData: res.walletUserData ,loader:false})
+                    _this.setState({ walletUserData: res.walletUserData, loader: false })
                 } else if (res.status == 403) {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error',loader:false }, () => {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false }, () => {
                         _this.props.logout();
                     });
                 } else {
-                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error',loader:false });
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'error', loader: false });
                 }
             })
             .catch((err) => {
-                _this.setState({ errMsg: true, errMessage: err, errType: 'error',loader:false });
+                _this.setState({ errMsg: true, errMessage: err, errType: 'error', loader: false });
             });
     }
 
@@ -100,11 +100,11 @@ class WalletOverview extends Component {
     }
     _copyNotification = () => {
         this.setState({
-          errMsg: true,
-          errType: "Info",
-          errMessage: "Copied to Clipboard!!"
+            errMsg: true,
+            errType: "Info",
+            errMessage: "Copied to Clipboard!!"
         });
-      };
+    };
 
     render() {
         const { errMsg, errType, loader, walletUserData } = this.state;
@@ -115,11 +115,11 @@ class WalletOverview extends Component {
 
         return (
             <>
-                <Divider><span className="wallet-head"><img  alt="" className="icon-img" src={BUCKET_URL+walletUserData.coin_icon}></img>&nbsp;{walletUserData.coin}</span></Divider>
+                <Divider><span className="wallet-head"><img alt="" className="icon-img" src={BUCKET_URL + walletUserData.coin_icon}></img>&nbsp;{walletUserData.coin}</span></Divider>
                 {
                     Object.keys(walletUserData).length > 0 ? (walletUserData.is_admin && walletUserData.flag == 0) ?
                         <Row className="text-center">
-                            <Col lg={8}>
+                            {/* <Col lg={8}>
                                 <Card title="HOT Send Wallet Address" bordered={false}>
                                     <span style={{ wordWrap: 'break-word' }}>
                                         {Object.keys(walletUserData).length > 0 ? 
@@ -132,20 +132,20 @@ class WalletOverview extends Component {
                                             </CopyToClipboard> : ""}
                                     </span>
                                 </Card>
-                            </Col>
-                            <Col lg={8}>
+                            </Col> */}
+                            <Col lg={12}>
                                 <Card title="HOT Receive Wallet Address" bordered={false}>
                                     <span style={{ wordWrap: 'break-word' }}>
-                                        {Object.keys(walletUserData).length > 0 ? 
-                                              <CopyToClipboard
-                                              className="wallet-address"
-                                              text={walletUserData.send_address}
-                                              onCopy={this._copyNotification}
+                                        {Object.keys(walletUserData).length > 0 ?
+                                            <CopyToClipboard
+                                                className="wallet-address"
+                                                text={walletUserData.send_address}
+                                                onCopy={this._copyNotification}
                                             ><span>{walletUserData.receive_address}</span></CopyToClipboard> : ""}
                                     </span>
                                 </Card>
                             </Col>
-                            <Col lg={8}>
+                            <Col lg={12}>
                                 <Card title="Balance" bordered={false}>
                                     {walletUserData.balance}  {walletUserData.coin_code}
                                 </Card>
