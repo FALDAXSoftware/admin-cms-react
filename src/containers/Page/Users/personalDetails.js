@@ -11,7 +11,6 @@ import FaldaxLoader from "../faldaxLoader";
 const { logout } = authAction;
 const { showUserDetails } = userAction;
 
-
 const ParentDiv = styled.div`
   padding: 20px;
   background-color: white;
@@ -39,7 +38,7 @@ class PersonalDetails extends Component {
     this.state = {
       userDetails: null,
       errType: "error",
-      loader: false
+      loader: false,
     };
   }
 
@@ -50,32 +49,42 @@ class PersonalDetails extends Component {
   _getUserDetail = () => {
     const { token, user_id, showUserDetails } = this.props;
     let _this = this;
-    this.setState({ "loader": true });
+    this.setState({ loader: true });
     ApiUtils.getUserDetails(token, user_id)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(function (res) {
-
         if (res.status == 200) {
-          let { email, first_name, last_name } = res.data[0]
+          let { email, first_name, last_name } = res.data[0];
           showUserDetails({ full_name: first_name + " " + last_name, email });
           _this.setState({ userDetails: res.data[0], loader: false });
         } else if (res.status == 403) {
-          _this.setState({ errMsg: true, errMessage: res.err, loader: false }, () => _this.props.logout());
+          _this.setState(
+            { errMsg: true, errMessage: res.err, loader: false },
+            () => _this.props.logout()
+          );
         } else {
-          _this.setState({ errMsg: true, errMessage: res.message, loader: false });
+          _this.setState({
+            errMsg: true,
+            errMessage: res.message,
+            loader: false,
+          });
         }
       })
-      .catch(err => {
-        _this.setState({ errMsg: true, errMessage:"Unable to complete the requested action.", loader: false });
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          errMessage: "Unable to complete the requested action.",
+          loader: false,
+        });
       });
   };
 
-  _userStatus = val => {
+  _userStatus = (val) => {
     const { token } = this.props;
     const { userDetails } = this.state;
     let formData = {
       user_id: userDetails.id,
-      email: userDetails.email
+      email: userDetails.email,
     };
 
     if (val == "is_active") {
@@ -87,15 +96,15 @@ class PersonalDetails extends Component {
     this.setState({ loader: true });
 
     ApiUtils.activateUser(token, formData)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.status == 200) {
           this._getUserDetail();
           this.setState({
             errMsg: true,
             errMessage: res.message,
             errType: "Success",
-            loader: false
+            loader: false,
           });
         } else if (res.status == 403) {
           this.setState(
@@ -113,7 +122,7 @@ class PersonalDetails extends Component {
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   };
@@ -122,45 +131,48 @@ class PersonalDetails extends Component {
     try {
       let { email } = this.state.userDetails;
       await this.setState({ loader: true });
-      let res = await (await ApiUtils.sendResetPasswordLink(this.props.token, { email: email })).json();
+      let res = await (
+        await ApiUtils.sendResetPasswordLink(this.props.token, { email: email })
+      ).json();
       let { status, message, err } = res;
       if (status == 200) {
         this.setState({
           errMsg: true,
           errMessage: message,
           errType: "success",
-        })
+        });
       } else if (status == 400 || status == 403) {
-        this.setState({
-          errMsg: true,
-          errMessage: err,
-          errType: "error",
-        }, () => this.props.logout())
+        this.setState(
+          {
+            errMsg: true,
+            errMessage: err,
+            errType: "error",
+          },
+          () => this.props.logout()
+        );
       } else if (status == 401) {
         this.setState({
           errMsg: true,
           errMessage: err,
           errType: "error",
         });
-      }
-      else {
+      } else {
         this.setState({
           errMsg: true,
           errMessage: message,
           errType: "error",
-        })
+        });
       }
     } catch (error) {
-
     } finally {
-      this.setState({ loader: false })
+      this.setState({ loader: false });
     }
-  }
+  };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -178,7 +190,10 @@ class PersonalDetails extends Component {
             <Row type="flex" justify="end">
               <Col span={3}>
                 <Switch
-                  disabled={!isAllowed("user_activate") || (isAllowed("user_activate") && userDetails.deleted_by)}
+                  disabled={
+                    !isAllowed("user_activate") ||
+                    (isAllowed("user_activate") && userDetails.deleted_by)
+                  }
                   className="personal-btn"
                   checked={userDetails.is_active}
                   checkedChildren="Active"
@@ -190,7 +205,10 @@ class PersonalDetails extends Component {
               </Col>
               <Col span={3}>
                 <Switch
-                  disabled={!isAllowed("user_activate") || (isAllowed("user_activate") && userDetails.deleted_by)}
+                  disabled={
+                    !isAllowed("user_activate") ||
+                    (isAllowed("user_activate") && userDetails.deleted_by)
+                  }
                   className="kyc-btn"
                   checked={userDetails.is_verified}
                   checkedChildren="Email Verified"
@@ -225,7 +243,9 @@ class PersonalDetails extends Component {
             </Row>
             <Row>
               <Col>
-                <UserEmail><Icon type="mail" />&nbsp;&nbsp;&nbsp;
+                <UserEmail>
+                  <Icon type="mail" />
+                  &nbsp;&nbsp;&nbsp;
                   {userDetails.email ? userDetails.email : ""}
                 </UserEmail>
               </Col>
@@ -244,19 +264,27 @@ class PersonalDetails extends Component {
               <Col>
                 <div className="address">
                   <i className="fas fa-map-marker-alt"></i>
-                  <span>&nbsp;&nbsp;&nbsp;{userDetails.street_address
-                    ? userDetails.street_address_2
-                      ? (userDetails.street_address ? userDetails.street_address + " , " : "") +
-                      userDetails.street_address_2
-                      : userDetails.street_address
-                    : ""}</span>
+                  <span>
+                    &nbsp;&nbsp;&nbsp;
+                    {userDetails.street_address
+                      ? userDetails.street_address_2
+                        ? (userDetails.street_address
+                            ? userDetails.street_address + " , "
+                            : "") + userDetails.street_address_2
+                        : userDetails.street_address
+                      : ""}
+                  </span>
                   {/* {userDetails.city_town ? `, ${userDetails.city_town}` : ""}
                   {userDetails.country ? `, ${userDetails.country}` : ""} */}
                   <span className="address-text">
-                    {(userDetails.city_town ? userDetails.city_town + " , " : "") + (userDetails.state ? userDetails.state + " , " : "") + (userDetails.postal_code ? userDetails.postal_code : "")}
+                    {(userDetails.city_town
+                      ? userDetails.city_town + " , "
+                      : "") +
+                      (userDetails.state ? userDetails.state + " , " : "") +
+                      (userDetails.postal_code ? userDetails.postal_code : "")}
                   </span>
                   <span className="address-text">
-                    {(userDetails.country ? userDetails.country : "")}
+                    {userDetails.country ? userDetails.country : ""}
                   </span>
                 </div>
               </Col>
@@ -279,17 +307,26 @@ class PersonalDetails extends Component {
                     {userDetails.deleted_by == 1 ? (
                       <span>Deactivated By User</span>
                     ) : (
-                        <span>Deactivated By Admin</span>
-                      )}
+                      <span>Deactivated By Admin</span>
+                    )}
                   </DateOfBirth>
                 </Col>
               </Row>
             ) : (
-                ""
-              )}
+              ""
+            )}
             <Row>
               <Col>
-                <Button type="primary" onClick={this.sendResendPasswordLink}>Reset Password</Button>
+                <Button
+                  disabled={
+                    !isAllowed("user_activate") ||
+                    (isAllowed("user_activate") && userDetails.deleted_by)
+                  }
+                  type="primary"
+                  onClick={this.sendResendPasswordLink}
+                >
+                  Reset Password
+                </Button>
               </Col>
             </Row>
           </ParentDiv>
@@ -301,9 +338,9 @@ class PersonalDetails extends Component {
 }
 
 export default connect(
-  state => ({
+  (state) => ({
     token: state.Auth.get("token"),
-    user: state.Auth.get("user")
+    user: state.Auth.get("user"),
   }),
   { logout, showUserDetails }
 )(PersonalDetails);
