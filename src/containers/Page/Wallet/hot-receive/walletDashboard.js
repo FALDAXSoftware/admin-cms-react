@@ -12,6 +12,7 @@ import { isAllowed } from '../../../../helpers/accessControl';
 import { ConvertSatoshiToAssetCell } from '../../../../components/tables/helperCells';
 import { exportWallet } from '../../../../helpers/exportToCsv/headers';
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
+import { Precise } from "../../../../components/tables/helperCells";
 var self;
 const columns = [
     {
@@ -35,6 +36,14 @@ const columns = [
         key: 1,
         width: 100,
         render: data => ConvertSatoshiToAssetCell(data["coin"], data["balance"], data["coin_precision"])
+    },
+    {
+        title: <IntlMessages id="walletFaldaxDashboardTable.title.fiat" />,
+        align: "left",
+        key: 1,
+        width: 100,
+        dataIndex: "total_value",
+        render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
     },
     {
         title: <IntlMessages id="walletWarmDashboardTable.title.address" />,

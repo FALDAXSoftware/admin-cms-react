@@ -688,7 +688,7 @@
   "walletFaldaxDashboardTable.title.balance": "Balance",
   "walletFaldaxDashboardTable.title.total_earned_from_forfeit": "Forfeit",
   "walletFaldaxDashboardTable.title.total_earned_from_jst": "Crypto",
-  "walletFaldaxDashboardTable.title.total_earned_from_wallets": "Wallets",
+  "walletFaldaxDashboardTable.title.total_earned_from_wallets": "Wallet withdrawal",
   "walletFaldaxDashboardTable.title.action": "Action",
   "walletWarmDashboardTable.title.asset": "Asset",
   "walletWarmDashboardTable.title.action": "Action",
@@ -721,5 +721,7 @@
   "feeTable.title.order_maximum": "Maximum Order Quantity (%)",
   "tradeFeeTable.title.makerfee": "Maker Fee",
   "tradeFeeTable.title.takerfee": "Taker Fee",
-  "tradeFeeTable.title.tradevolume": "Trade Volume (30-Day Trailing Average)"
+  "tradeFeeTable.title.tradevolume": "Trade Volume (30-Day Trailing Average)",
+  "walletFaldaxDashboardTable.title.total_fiat": "USD Value",
+  "walletFaldaxDashboardTable.title.fiat": "Fiat"
 }
