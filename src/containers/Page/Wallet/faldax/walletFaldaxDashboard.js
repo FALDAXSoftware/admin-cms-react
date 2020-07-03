@@ -75,6 +75,14 @@ const columns = [
     ),
   },
   {
+    title: <IntlMessages id="walletFaldaxDashboardTable.title.total_fiat" />,
+    align: "left",
+    key: 5,
+    dataIndex: "total_fiat",
+    width: 100,
+    render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
+  },
+  {
     title: <IntlMessages id="walletFaldaxDashboardTable.title.total" />,
     align: "left",
     key: 5,
@@ -92,16 +100,16 @@ const columns = [
     width: 100,
     render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
   },
-  {
-    title: (
-      <IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst" />
-    ),
-    align: "left",
-    key: 3,
-    dataIndex: "total_earned_from_jst",
-    width: 100,
-    render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
-  },
+  // {
+  //   title: (
+  //     <IntlMessages id="walletFaldaxDashboardTable.title.total_earned_from_jst" />
+  //   ),
+  //   align: "left",
+  //   key: 3,
+  //   dataIndex: "total_earned_from_jst",
+  //   width: 100,
+  //   render: (data) => <span>{data ? Precise(data, "8") : "0"}</span>,
+  // },
   {
     title: <IntlMessages id="walletFaldaxDashboardTable.title.trade_total" />,
     align: "left",
@@ -227,6 +235,9 @@ class WalletFaldaxDashboard extends Component {
       ).json();
       let [{ status, data, err, message }, logout] = [res, this.props.logout];
       if (status == 200) {
+        // console.log("data", data)
+        // data.total_fiat = parseFloat(data.total) * parseFloat(data.fiat)
+        // console.log("data", data)
         if (isExportToCsv) {
           this.setState({ csvData: data });
         } else {
@@ -537,9 +548,9 @@ class WalletFaldaxDashboard extends Component {
                     "amount",
                     fields["amount"],
                     `required|numeric|gte:${
-                      walletDetails.min_limit == 0
-                        ? 0
-                        : walletDetails.min_limit
+                    walletDetails.min_limit == 0
+                      ? 0
+                      : walletDetails.min_limit
                         ? Precise(walletDetails.min_limit, "8")
                         : 0
                     }|lte:${availableBalance}`,
@@ -566,9 +577,9 @@ class WalletFaldaxDashboard extends Component {
                   <span>
                     {parseFloat(fields["amount"]) && parseFloat(networkFee)
                       ? Precise(
-                          parseFloat(fields["amount"]) + parseFloat(networkFee),
-                          "8"
-                        )
+                        parseFloat(fields["amount"]) + parseFloat(networkFee),
+                        "8"
+                      )
                       : 0}{" "}
                     {walletDetails.coin}
                   </span>
@@ -583,7 +594,7 @@ class WalletFaldaxDashboard extends Component {
                     {Precise(
                       parseFloat(
                         parseFloat(walletDetails.fiat || 0) *
-                          parseFloat(fields["amount"] || 0)
+                        parseFloat(fields["amount"] || 0)
                       ),
                       "8"
                     )}
