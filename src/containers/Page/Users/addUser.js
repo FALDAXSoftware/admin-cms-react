@@ -487,6 +487,7 @@ class AddUser extends Component {
           </Row>
           <CountryFields
             {...this.props}
+            token={this.props.token}
             onCountryChange={(
               country,
               state,
