@@ -119,10 +119,10 @@ class EditStateModal extends Component {
   _changeLegality = (legal) => {
     let fields = this.state.fields;
     const colorCodes = [
-      { key: "1", colorCode: "#62d0c5" },
+      { key: "1", colorCode: "#00a9fa" },
       { key: "2", colorCode: "#f6776e" },
       // { key: '3', colorCode: '#b6cbfa' },
-      { key: "4", colorCode: "#FCD26E" },
+      // { key: "4", colorCode: "#FCD26E" },
     ];
 
     let temp = colorCodes.filter(function (val) {
