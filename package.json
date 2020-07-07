@@ -13,7 +13,6 @@
     "ckeditor4-react": "^1.0.1",
     "clone": "^2.1.1",
     "connected-react-router": "^6.6.1",
-    "country-state-city": "0.0.5",
     "env-cmd": "^10.1.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "express": "^4.15.3",
