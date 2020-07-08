@@ -1,4 +1,4 @@
-// const API_URL = "http://c1e662ec53bc.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://0574dbf89af1.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
