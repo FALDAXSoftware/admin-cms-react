@@ -123,7 +123,7 @@ class ViewUser extends Component {
           {isAllowed("get_delete_account_summary") &&
             this.props.location.state &&
             this.props.location.state.is_deleted && (
-              <TabPane tab="Deactivated Account Summary" key="13">
+              <TabPane tab="Deactivated Account Summary" key="14">
                 <AccountSummary user_id={user_id} />
               </TabPane>
             )}

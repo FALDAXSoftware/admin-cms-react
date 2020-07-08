@@ -3956,5 +3956,34 @@ const ApiUtils = {
       },
     });
   },
+  getallCountriesData: function (token) {
+    return fetch(API_URL + "/get-countries", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getallStatesData: function (token, id) {
+    return fetch(API_URL + `/get-states?country_id=${id}`, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getallCitiesData: function (token, id) {
+    return fetch(API_URL + `/get-city?state_id=${id}`, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
 };
 export default ApiUtils;
