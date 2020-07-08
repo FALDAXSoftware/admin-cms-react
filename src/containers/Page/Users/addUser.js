@@ -603,8 +603,8 @@ class AddUser extends Component {
               <br />
             </Col>
           </Row> */}
-          <Row>
-            <Col>
+          {/* <Row> */}
+          {/* <Col>
               <span>Select Assets to generate wallet address</span>
               <br />
               <Checkbox
@@ -621,9 +621,9 @@ class AddUser extends Component {
                 value={this.state.checkedList}
                 onChange={this.onChange}
               />
-            </Col>
-            {/* <PasswordGenerator /> */}
-          </Row>
+            </Col> */}
+          {/* <PasswordGenerator /> */}
+          {/* </Row> */}
           <br />
           <br />
           <PasswordGenerator getPassword={this._getPassword.bind(this)} />
