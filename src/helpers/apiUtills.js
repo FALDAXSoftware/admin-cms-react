@@ -5,9 +5,10 @@
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
+// const API_URL = process.env.REACT_APP_API_ENDPOINT;
+const API_URL = "http://localhost:1440";
 export const SOCKET_HOST = process.env.REACT_APP_SOCKET_ENDPOINT;
-// export const SOCKET_HOST = "http://localhost:3011"
+// export const SOCKET_HOST = "http://localhost:3012"
 const ApiUtils = {
   //super admin sign in api
   adminSignIn: function (form) {
@@ -117,11 +118,11 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${filterVal ? "&country=" + filterVal : ""}${
+      }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-    }${endDate ? "&end_date=" + endDate : ""}`;
+      }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -146,11 +147,11 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-inactive-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${filterVal ? "&country=" + filterVal : ""}${
+      }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-    }${endDate ? "&end_date=" + endDate : ""}`;
+      }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -175,11 +176,11 @@ const ApiUtils = {
     searchUser = encodeURIComponent(searchUser);
     let url = `/admin/get-deleted-users?page=${page}&limit=${limit}${
       searchUser ? "&data=" + searchUser : ""
-    }${sorterCol ? "&sort_col=" + sorterCol : ""}${
+      }${sorterCol ? "&sort_col=" + sorterCol : ""}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${filterVal ? "&country=" + filterVal : ""}${
+      }${filterVal ? "&country=" + filterVal : ""}${
       startDate ? "&start_date=" + startDate : ""
-    }${endDate ? "&end_date=" + endDate : ""}`;
+      }${endDate ? "&end_date=" + endDate : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -306,9 +307,9 @@ const ApiUtils = {
   ) {
     let url = `/admin/get-referred-user-data?coin_code=${coin_id}${
       user_id ? "&user_id=" + user_id : ""
-    }${page ? "&page=" + page : ""}${limit ? "&limit=" + limit : ""}${
+      }${page ? "&page=" + page : ""}${limit ? "&limit=" + limit : ""}${
       data ? "&data=" + data : ""
-    }`;
+      }`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -358,7 +359,7 @@ const ApiUtils = {
   ) {
     let url = `/admin/get-referal-list?data=${searchReferral}${
       sorterCol ? "&sort_col=" + sorterCol : ""
-    }${sortOrder ? "&sort_order=" + sortOrder : ""}`;
+      }${sortOrder ? "&sort_order=" + sortOrder : ""}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
@@ -2724,12 +2725,12 @@ const ApiUtils = {
   getAllUserWhitelistIP: function (token, user_id, page, limit) {
     return fetch(
       API_URL +
-        "/admin/get-user-whitelist-ip?user_id=" +
-        user_id +
-        "&page=" +
-        page +
-        "&limit=" +
-        limit,
+      "/admin/get-user-whitelist-ip?user_id=" +
+      user_id +
+      "&page=" +
+      page +
+      "&limit=" +
+      limit,
       {
         method: "GET",
         headers: {
@@ -3483,15 +3484,15 @@ const ApiUtils = {
       ) {
         return fetch(
           `${API_URL}${this.url}get-wallet-dashboard?${
-            walletType == 5 ? "coin" : "coin_code"
+          walletType == 5 ? "coin" : "coin_code"
           }=${coin.toLowerCase()}&wallet_type=${walletType}${
-            sortCol ? "&sort_col=" + sortCol : ""
+          sortCol ? "&sort_col=" + sortCol : ""
           }${
-            sortOrder ? "&sort_order=" + sortOrder : ""
+          sortOrder ? "&sort_order=" + sortOrder : ""
           }&page=${page}&limit=${limit}${
-            searchData ? "&data=" + encodeURIComponent(searchData) : ""
+          searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
-            end_date ? "&end_date=" + end_date : ""
+          end_date ? "&end_date=" + end_date : ""
           }${transaction_type ? "&t_type=" + transaction_type : ""}`,
           {
             method: "GET",
@@ -3513,15 +3514,15 @@ const ApiUtils = {
       ) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-bussiness-wallet-data?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${
-            sortCol ? "&sort_col=" + sortCol : ""
+          sortCol ? "&sort_col=" + sortCol : ""
           }${
-            sortOrder ? "&sort_order=" + sortOrder : ""
+          sortOrder ? "&sort_order=" + sortOrder : ""
           }&page=${page}&limit=${limit}${
-            searchData ? "&data=" + encodeURIComponent(searchData) : ""
+          searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
-            end_date ? "&end_date=" + end_date : ""
+          end_date ? "&end_date=" + end_date : ""
           }${transaction_type ? "&wallet_type=" + transaction_type : ""}`,
           {
             method: "GET",
@@ -3532,7 +3533,7 @@ const ApiUtils = {
       getWalletWarnDashboard: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-warm-wallet-data${
-            search ? "?search=" + search : ""
+          search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
@@ -3543,7 +3544,7 @@ const ApiUtils = {
       getHotSendWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotsend-wallet-data${
-            search ? "?search=" + search : ""
+          search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
@@ -3554,7 +3555,7 @@ const ApiUtils = {
       getHotReceiveWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotreceive-wallet-data${
-            search ? "?search=" + search : ""
+          search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
@@ -3565,7 +3566,7 @@ const ApiUtils = {
       getWalletColdDashboard: function (searchData) {
         return fetch(
           `${API_URL}${this.url}get-cold-wallet-data${
-            searchData ? "?search=" + searchData : ""
+          searchData ? "?search=" + searchData : ""
           }`,
           {
             method: "GET",
@@ -3576,9 +3577,9 @@ const ApiUtils = {
       getWarmWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-warm-wallet-transaction?coin_code=${coin_code}${
-            search ? "&searchLabel=" + search : ""
+          search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
@@ -3589,9 +3590,9 @@ const ApiUtils = {
       getCustodialWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-cold-wallet-transaction?coin_code=${coin_code}${
-            search ? "&searchLabel=" + search : ""
+          search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
@@ -3602,9 +3603,9 @@ const ApiUtils = {
       getHotReceiveWalletDetails: function (coin_code, search) {
         return fetch(
           `${API_URL}${
-            this.url
+          this.url
           }get-hotreceive-wallet-transaction?coin_code=${coin_code}${
-            search ? "&searchLabel=" + search : ""
+          search ? "&searchLabel=" + search : ""
           }`,
           {
             method: "GET",
@@ -3617,9 +3618,9 @@ const ApiUtils = {
   getHotSendWalletDetails: function (coin_code, search) {
     return fetch(
       `${API_URL}${
-        this.url
+      this.url
       }get-hotsend-wallet-transaction?coin_code=${coin_code}${
-        search ? "&searchLabel=" + search : ""
+      search ? "&searchLabel=" + search : ""
       }`,
       {
         method: "GET",
@@ -3686,11 +3687,11 @@ const ApiUtils = {
   ) {
     return fetch(
       API_URL +
-        `/admin/get-residual-lists?page=${page}&limit=${limit}${
-          data ? "&data=" + data : ""
-        }${txType ? "&t_type=" + txType : ""}${
-          startDate ? "&start_date=" + startDate : ""
-        }${endDate ? "&end_date=" + endDate : ""}`,
+      `/admin/get-residual-lists?page=${page}&limit=${limit}${
+      data ? "&data=" + data : ""
+      }${txType ? "&t_type=" + txType : ""}${
+      startDate ? "&start_date=" + startDate : ""
+      }${endDate ? "&end_date=" + endDate : ""}`,
       {
         method: "GET",
         headers: {
@@ -3758,11 +3759,11 @@ const ApiUtils = {
   ) {
     let url = `${API_URL}/admin/get-panic-history?page=${page}${
       sortOrder ? "&sort_order=" + sortOrder : ""
-    }${startDate ? "&start_date=" + startDate : ""}${
+      }${startDate ? "&start_date=" + startDate : ""}${
       endDate ? "&end_date=" + endDate : ""
-    }${searchData ? "&data=" + searchData : ""}${
+      }${searchData ? "&data=" + searchData : ""}${
       sortCol ? "&sort_col=" + sortCol : ""
-    }&limit=${limit}`;
+      }&limit=${limit}`;
     return fetch(url, {
       method: "get",
       headers: {
