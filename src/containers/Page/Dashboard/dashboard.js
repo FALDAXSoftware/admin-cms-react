@@ -694,7 +694,7 @@ class Dashboard extends Component {
                 data={[
                   { name: "Approved Customer ID", count: kyc_approved },
                   { name: "Disapproved Customer ID", count: kyc_disapproved },
-                  { name: "Manual Review Customer ID", count: kyc_pending },
+                  { name: "Under Review Customer ID", count: kyc_pending },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
