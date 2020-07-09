@@ -161,7 +161,7 @@ class StateList extends Component {
         )
     )
       .then((response) => response.json())
-      .then(function (res) {
+      .then((res) => {
         if (res.status == 200) {
           // Map to legality
           if (isExportToCsv) {
@@ -186,7 +186,7 @@ class StateList extends Component {
                   : "Partial Services Available";
               return ele;
             });
-            _this.state({ csvData });
+            _this.setState({ csvData });
           } else {
             res.data = res.data.map((ele) => {
               ele.legality =
@@ -217,7 +217,7 @@ class StateList extends Component {
         }
         _this.setState({ loader: false });
       })
-      .catch(() => {
+      .catch((error) => {
         _this.setState({
           loader: false,
           errMsg: true,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Pagination, notification,Row,Col,Button } from 'antd';
+import { Input, Pagination, notification, Row, Col, Button } from 'antd';
 import { pendingOrderTableInfos } from "../../Tables/antTables";
 import ApiUtils from '../../../helpers/apiUtills';
 import LayoutWrapper from "../../../components/utility/layoutWrapper";
@@ -13,7 +13,7 @@ import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportSellOrder } from "../../../helpers/exportToCsv/headers";
 import { withRouter } from "react-router";
-import { PAGE_SIZE_OPTIONS, PAGESIZE ,TABLE_SCROLL_HEIGHT} from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT } from "../../../helpers/globals";
 
 const Search = Input.Search;
 const { logout } = authAction;
@@ -25,7 +25,7 @@ class PendingOrders extends Component {
             allOrders: [],
             allOrderCount: 0,
             searchOrder: '',
-             limit: PAGESIZE,
+            limit: PAGESIZE,
             errMessage: '',
             errMsg: false,
             errType: 'Success',
@@ -50,20 +50,20 @@ class PendingOrders extends Component {
         this.setState({ errMsg: false });
     };
 
-    _getAllPendingOrders = (isExportToCsv=false) => {
+    _getAllPendingOrders = (isExportToCsv = false) => {
         const { token, user_id } = this.props;
         const { searchOrder, page, limit, sorterCol, sortOrder } = this.state;
         let _this = this;
 
         _this.setState({ loader: true });
-        (isExportToCsv?ApiUtils.getAllPendingOrders(1,100000, token, "", user_id, "", ""):ApiUtils.getAllPendingOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder))
+        (isExportToCsv ? ApiUtils.getAllPendingOrders(1, 100000, token, "", user_id, "", "") : ApiUtils.getAllPendingOrders(page, limit, token, searchOrder, user_id, sorterCol, sortOrder))
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
-                    if(isExportToCsv){
-                        _this.setState({csvData:res.data});
-                    }else{
-                        _this.setState({ allOrders: res.data, allOrderCount: res.pendingDataCount });   
+                    if (isExportToCsv) {
+                        _this.setState({ csvData: res.data });
+                    } else {
+                        _this.setState({ allOrders: res.data, allOrderCount: res.pendingDataCount });
                     }
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -106,8 +106,8 @@ class PendingOrders extends Component {
     }
 
     render() {
-        const { allOrders, allOrderCount, errType, errMsg, page, loader, limit,csvData,openCsvExportModal } = this.state;
-       let pageSizeOptions = PAGE_SIZE_OPTIONS
+        const { allOrders, allOrderCount, errType, errMsg, page, loader, limit, csvData, openCsvExportModal } = this.state;
+        let pageSizeOptions = PAGE_SIZE_OPTIONS
 
         if (errMsg) {
             this.openNotificationWithIconError(errType.toLowerCase());
@@ -117,24 +117,24 @@ class PendingOrders extends Component {
             <BreadcrumbComponent {...this.props} />
             <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={() => {
                 this.setState({ openCsvExportModal: false });
-              }} filename="pending_order.csv" data={csvData} header={exportSellOrder} />
+            }} filename="pending_order.csv" data={csvData} header={exportSellOrder} />
             {pendingOrderTableInfos.map(tableInfo => <div>
                 <Row type="flex" justify="start" className="table-filter-row">
-                  <Col lg={8}>
+                    {/* <Col lg={8}>
                     <Search placeholder="Search Orders" onSearch={value => this._searchOrder(value)} enterButton />
-                  </Col>
-                  <Col lg={3}>
-                    <Button className="filter-btn btn-full-width" type="primary" onClick={this.onExport} icon="export">
-                      Export
+                  </Col> */}
+                    <Col lg={3}>
+                        <Button className="filter-btn btn-full-width" type="primary" onClick={this.onExport} icon="export">
+                            Export
                     </Button>
-                  </Col>
+                    </Col>
                 </Row>
 
                 <TableWrapper {...this.state} columns={tableInfo.columns} pagination={false} dataSource={allOrders} className="isoCustomizedTable" onChange={this._handleSellOrderChange} bordered scroll={TABLE_SCROLL_HEIGHT} />
                 {loader && <FaldaxLoader />}
                 {allOrderCount > 0 ? <Pagination style={{ marginTop: "15px" }} className="ant-users-pagination" onChange={this._handleOrderPagination.bind(this)} pageSize={limit} current={page} total={allOrderCount} showSizeChanger onShowSizeChange={this._changePaginationSize} pageSizeOptions={pageSizeOptions} /> : ""}
-              </div>)}
-          </TableDemoStyle>;
+            </div>)}
+        </TableDemoStyle>;
     }
 }
 
