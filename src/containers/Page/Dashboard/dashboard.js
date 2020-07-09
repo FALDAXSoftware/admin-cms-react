@@ -111,6 +111,9 @@ class Dashboard extends Component {
       rangeDate: [],
       tierData: [],
       loader: false,
+      approved2Farequest: "",
+      disapproved2Farequest: "",
+      open2Farequest: "",
       tradeTransactionLabel: [],
       tradeTransactionValue: [],
       tradeTransactionValue2: [],
@@ -226,6 +229,9 @@ class Dashboard extends Component {
               withdrawReqCountValue,
               deletedUsers,
               userSignUpCountValue,
+              approved2Farequest,
+              disapproved2Farequest,
+              open2Farequest,
             } = res;
             _this.setState({
               activeUsers,
@@ -258,6 +264,9 @@ class Dashboard extends Component {
               tradeTransactionLabel,
               tradeTransactionValue,
               tradeTransactionValue2,
+              approved2Farequest,
+              disapproved2Farequest,
+              open2Farequest,
             });
           } else if (res.status == 403 || res.status == 401) {
             _this.setState(
@@ -361,6 +370,9 @@ class Dashboard extends Component {
       tradeTransactionLabel,
       tradeTransactionValue,
       tradeTransactionValue2,
+      approved2Farequest,
+      disapproved2Farequest,
+      open2Farequest,
     } = this.state;
 
     const data = {
@@ -682,6 +694,7 @@ class Dashboard extends Component {
                 data={[
                   { name: "Approved Customer ID", count: kyc_approved },
                   { name: "Disapproved Customer ID", count: kyc_disapproved },
+                  { name: "Under Review Customer ID", count: kyc_pending },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
@@ -789,6 +802,25 @@ class Dashboard extends Component {
                 }}
                 title="Tier4 Request"
                 icon="fa fa-flag"
+                fontColor="#ffffff"
+              />
+            </Link>
+          </Col>
+          <Col lg={6} md={12} sm={12} xs={24}>
+            <Link target="_blank" to="/dashboard/kyc">
+              <CountCard
+                data={[
+                  { name: "Approved", count: approved2Farequest },
+                  { name: "Disapproved", count: disapproved2Farequest },
+                  { name: "Pending", count: open2Farequest },
+                ]}
+                headcolor={"#1f2431"}
+                bgcolor={"#fff"}
+                style={{
+                  boxShadow: "0px 3px 4px 0px rgba(45, 52, 70,0.5);",
+                }}
+                title="2FA Requests"
+                icon="fa fa-id-card"
                 fontColor="#ffffff"
               />
             </Link>

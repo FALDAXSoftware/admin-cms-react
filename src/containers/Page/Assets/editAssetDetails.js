@@ -25,7 +25,7 @@ class EditAssetDetails extends Component {
       errType: "Success",
       isDisabled: false,
       selectedToken: false,
-      bitGoMinLimit: false
+      bitGoMinLimit: false,
     };
     this.validator = new SimpleReactValidator({});
     this.DecimalConvertUpTo = this.DecimalConvertUpTo.bind(this);
@@ -38,19 +38,19 @@ class EditAssetDetails extends Component {
   set setBitGoLimit(coin = "") {
     switch (coin.toLowerCase()) {
       case "btc":
-        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.BTC })
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.BTC });
         break;
       case "xrp":
-        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.XRP })
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.XRP });
         break;
       case "eth":
-        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.ETH })
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.ETH });
         break;
       case "ltc":
-        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.LTC })
+        this.setState({ bitGoMinLimit: BITGO_MIN_LIMIT.LTC });
         break;
       default:
-        this.setState({ bitGoMinLimit: 0 })
+        this.setState({ bitGoMinLimit: 0 });
     }
   }
 
@@ -60,30 +60,34 @@ class EditAssetDetails extends Component {
 
     _this.setState({ loader: true });
     ApiUtils.getAssetDetails(token, coin_id)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
-          _this.setBitGoLimit = res.coin.coin;
+          // _this.setBitGoLimit = res.coin.coin;
+          _this.setState({
+            bitGoMinLimit:
+              res.coin.bitgo_min_limit === null ? 0 : res.coin.bitgo_min_limit,
+          });
           if (res.coin.max_limit > 0) {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
               min_limit: PrecisionCell(res.coin.min_limit),
-              max_limit: PrecisionCell(res.coin.max_limit)
+              max_limit: PrecisionCell(res.coin.max_limit),
             });
           } else if (res.coin.min_limit) {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
               min_limit: PrecisionCell(res.coin.min_limit),
-              max_limit: PrecisionCell(res.coin.max_limit)
+              max_limit: PrecisionCell(res.coin.max_limit),
             });
           } else {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
               min_limit: PrecisionCell(res.coin.min_limit),
-              max_limit: PrecisionCell(res.coin.max_limit)
+              max_limit: PrecisionCell(res.coin.max_limit),
             });
           }
         } else if (res.status == 403 || res.status == 400) {
@@ -97,7 +101,7 @@ class EditAssetDetails extends Component {
           _this.setState({
             errMsg: true,
             errMessage: res.message,
-            errType: "error"
+            errType: "error",
           });
         }
         _this.setState({ loader: false });
@@ -107,15 +111,15 @@ class EditAssetDetails extends Component {
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -128,24 +132,24 @@ class EditAssetDetails extends Component {
       fields[field] = e.target.value;
     }
     this.setState({
-      fields
+      fields,
     });
   };
 
-  _handleMinChange = e => {
+  _handleMinChange = (e) => {
     // if (e.target.value.trim() == "") {
     this.setState({
-      min_limit: e.target.value
+      min_limit: e.target.value,
     });
     // } else {
     //   fields[field] = e.target.value;
     // }
   };
 
-  _handleMaxChange = e => {
+  _handleMaxChange = (e) => {
     // if (e.target.value.trim() == "") {
     this.setState({
-      max_limit: e.target.value
+      max_limit: e.target.value,
     });
     // } else {
     //   fields[field] = e.target.value;
@@ -156,7 +160,7 @@ class EditAssetDetails extends Component {
     this._getAssetDetails();
   };
 
-  _editCoin = e => {
+  _editCoin = (e) => {
     e.preventDefault();
     const { token, coin_id } = this.props;
     const { fields, selectedToken } = this.state;
@@ -174,12 +178,12 @@ class EditAssetDetails extends Component {
         hot_send_wallet_address: fields["hot_send_wallet_address"],
         hot_receive_wallet_address: fields["hot_receive_wallet_address"],
         custody_wallet_address: fields["custody_wallet_address"],
-        iserc: selectedToken
+        iserc: selectedToken,
       };
 
       ApiUtils.editCoin(token, formData)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res.status == 200) {
             this.setState(
               {
@@ -187,7 +191,7 @@ class EditAssetDetails extends Component {
                 errMessage: res.message,
                 loader: false,
                 errType: "Success",
-                isDisabled: false
+                isDisabled: false,
               },
               () => {
                 this._getAssetDetails();
@@ -206,7 +210,7 @@ class EditAssetDetails extends Component {
               errMessage: res.err,
               loader: false,
               errType: "Error",
-              isDisabled: false
+              isDisabled: false,
             });
           }
           this._resetForm();
@@ -217,7 +221,7 @@ class EditAssetDetails extends Component {
             errMessage: "Unable to complete the requested action.",
             loader: false,
             errType: "error",
-            isDisabled: false
+            isDisabled: false,
           });
         });
     } else {
@@ -226,10 +230,10 @@ class EditAssetDetails extends Component {
     }
   };
 
-  _changeFilter = val => {
+  _changeFilter = (val) => {
     this.setState({ selectedToken: val });
   };
-  DecimalConvertUpTo = value => {
+  DecimalConvertUpTo = (value) => {
     if (value == 0 || value == "Infinity") {
       return 0;
     }
@@ -288,7 +292,14 @@ class EditAssetDetails extends Component {
   };
 
   render() {
-    const { loader, fields, errMsg, errType, selectedToken, bitGoMinLimit } = this.state;
+    const {
+      loader,
+      fields,
+      errMsg,
+      errType,
+      selectedToken,
+      bitGoMinLimit,
+    } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
@@ -300,14 +311,14 @@ class EditAssetDetails extends Component {
             <Col>
               <span>Asset Icon:</span>
               <br />
-              {fields["coin_icon"] &&
+              {fields["coin_icon"] && (
                 <div className="asset-container">
                   <img
                     className="asset-"
                     src={BUCKET_URL + fields["coin_icon"]}
                   />
                 </div>
-              }
+              )}
             </Col>
           </Row>
           <Row style={{ marginBottom: "15px" }}>
@@ -453,7 +464,7 @@ class EditAssetDetails extends Component {
             <Col>
               <span>Is ERC20 Token? :</span>
               <Select
-                getPopupContainer={trigger => trigger.parentNode}
+                getPopupContainer={(trigger) => trigger.parentNode}
                 style={{ width: 125, marginLeft: "15px" }}
                 placeholder="Select a type"
                 onChange={this._changeFilter}
@@ -493,8 +504,8 @@ class EditAssetDetails extends Component {
 
 export default withRouter(
   connect(
-    state => ({
-      token: state.Auth.get("token")
+    (state) => ({
+      token: state.Auth.get("token"),
     }),
     { logout }
   )(EditAssetDetails)
