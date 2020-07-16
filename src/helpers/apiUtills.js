@@ -743,6 +743,18 @@ const ApiUtils = {
     });
   },
 
+  //edit trade fee api call
+  updateFee: function (token, form) {
+    return fetch(API_URL + "/admin/edit-trade-fee", {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
+
   getAllLimit: function (token) {
     return fetch(API_URL + "/admin/all-limits", {
       method: "GET",
