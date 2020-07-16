@@ -3,52 +3,54 @@ import clone from "clone";
 import IntlMessages from "../../../components/utility/intlMessages";
 import {
   TextCell,
-  CoinFeesActionCell,
+  TradeCoinFeesActionCell,
   CoinNoteCell,
 } from "../../../components/tables/helperCells";
 
-const renderCell = (object, maker_fee, taker_fee, trade_volume) => {
-  //   const value = object[key];
+const renderCell = (
+  object,
+  type,
+  key,
+  ID,
+  maker_fee,
+  taker_fee,
+  trade_volume
+) => {
+  const value = object[key];
+  const id = object[ID];
   const makerfee = object[maker_fee];
   const takerfee = object[taker_fee];
   const tradevolume = object[trade_volume];
-  //   switch (
-  //     type
-  //     // case "CoinFeesActionCell":
-  //     //   return CoinFeesActionCell(value, makerfee, takerfee);
-  //     // case "NoteCell":
-  //     //   return CoinNoteCell(fees_slug);
-  //     // default:
-  //     //   return TextCell(
-  //     //     value,
-  //     //     fees_name,
-  //     //     fees_slug,
-  //     //     fees_type,
-  //     //     fees_updated_at,
-  //     //     fees_value
-  //     //   );
-  //   ) {
-  //   }
+  switch (type) {
+    case "TradeCoinFeesActionCell":
+      return TradeCoinFeesActionCell(
+        value,
+        id,
+        makerfee,
+        takerfee,
+        tradevolume
+      );
+    default:
+      return TextCell(value);
+  }
 };
 
 const columns = [
-  //   {
-  //     title: <IntlMessages id="roleTable.title.actions" />,
-  //     key: "action",
-  //     width: 100,
-  //     align: "left",
-  //     render: (object) =>
-  //       renderCell(
-  //         object,
-  //         "CoinFeesActionCell",
-  //         "id",
-  //         "name",
-  //         "slug",
-  //         "type",
-  //         "updated_at",
-  //         "value"
-  //       ),
-  //   },
+  {
+    title: <IntlMessages id="roleTable.title.actions" />,
+    key: "action",
+    width: 100,
+    align: "left",
+    render: (object) =>
+      renderCell(
+        object,
+        "TradeCoinFeesActionCell",
+        "id",
+        "maker_fee",
+        "taker_fee",
+        "trade_volume"
+      ),
+  },
   {
     title: <IntlMessages id="tradeFeeTable.title.makerfee" />,
     key: "makerfee",
