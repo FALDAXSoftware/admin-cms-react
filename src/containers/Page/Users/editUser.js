@@ -28,6 +28,7 @@ class EditUser extends Component {
     super(props);
     this.state = {
       fields: {},
+      phoneNumber: "",
     };
     this.validator = new SimpleReactValidator({});
   }
@@ -209,6 +210,7 @@ class EditUser extends Component {
         street_address: fields["street_address"],
         street_address_2: fields["street_address_2"],
         postal_code: fields["postal_code"],
+        phone_number: fields["phone_number"],
         // account_tier: selectedTier,
         account_class: selectedClass,
         country: countrySelected,
@@ -275,6 +277,14 @@ class EditUser extends Component {
   };
 
   onCountryChange(country, state, city, stateID, countryID, countryCode) {
+    console.log("test", this.state.countrySelected, country);
+    if (this.state.countrySelected !== country) {
+      let fields = this.state.fields;
+      fields["phone_number"] = "";
+      this.setState({
+        fields,
+      });
+    }
     this.setState({
       countrySelected: country,
       stateSelected: state,

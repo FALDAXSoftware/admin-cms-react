@@ -723,5 +723,6 @@
   "tradeFeeTable.title.takerfee": "Taker Fee",
   "tradeFeeTable.title.tradevolume": "Trade Volume (30-Day Trailing Average)",
   "walletFaldaxDashboardTable.title.total_fiat": "USD Value",
-  "walletFaldaxDashboardTable.title.fiat": "Fiat"
+  "walletFaldaxDashboardTable.title.fiat": "Fiat",
+  "orderTable.title.stop_price": "Stop Price"
 }

@@ -8,6 +8,7 @@ import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
 import { TwoFactorEnableModal } from "../../Shared/2faModal";
+import EditFeeModal from "./editFeeModal";
 
 const { logout } = authAction;
 var self;
@@ -24,8 +25,11 @@ class FeesTrading extends Component {
       showEditNetworkFeeModal: false,
       show2FAModel: false,
       show2FAEnableModel: false,
+      showEditFeeModal: false,
+      feeDetails: "",
     };
     self = this;
+    FeesTrading.editTradeFee = FeesTrading.editTradeFee.bind(this);
   }
 
   componentDidMount = () => {
@@ -39,7 +43,15 @@ class FeesTrading extends Component {
     });
     this.setState({ errMsg: false });
   };
-
+  static editTradeFee(id, makerfee, takerfee, tradevolume) {
+    let feeDetails = {
+      id,
+      makerfee,
+      takerfee,
+      tradevolume,
+    };
+    self.setState({ feeDetails, showEditFeeModal: true });
+  }
   static edit(value, name, slug, type, updated_at, fees_value) {
     let { user } = self.props;
     let data = {
@@ -74,7 +86,6 @@ class FeesTrading extends Component {
         await ApiUtils.getTradingFees(token, sorterCol, sortOrder, "")
       ).json();
       if (res.status == 200) {
-        console.log("^^^trade fees", res);
         this.setState({ tradeFees: res.data });
       } else if (res.status == 403) {
         this.setState(
@@ -129,6 +140,9 @@ class FeesTrading extends Component {
     }
     this.setState(coinFees);
   };
+  _closeEditPairModal = () => {
+    this.setState({ showEditFeeModal: false });
+  };
   render() {
     const {
       errType,
@@ -137,6 +151,8 @@ class FeesTrading extends Component {
       tradeFees,
       modalData,
       showEditNetworkFeeModal,
+      showEditFeeModal,
+      feeDetails,
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -160,6 +176,15 @@ class FeesTrading extends Component {
           onChange={this.handleNetworkChange}
           bordered
         />
+        {showEditFeeModal && (
+          <EditFeeModal
+            // allCoins={allCoins}
+            fields={feeDetails}
+            showEditFeeModal={showEditFeeModal}
+            closeEditModal={this._closeEditPairModal}
+            getAllPairs={this.getTradingFees}
+          />
+        )}
       </TableDemoStyle>
     );
   }
@@ -172,5 +197,7 @@ export default withRouter(
       user: state.Auth.get("user"),
     }),
     { logout }
-  )(FeesTrading)
+  )(FeesTrading, tradingFeeTableInfos)
 );
+
+export { FeesTrading, tradingFeeTableInfos };

@@ -33,8 +33,8 @@ const renderCell = (
       return DateCell(
         value,
         name,
-        price_precision,
-        quantity_precision,
+        price_Precision,
+        quantity_Precision,
         created_at,
         is_active
       );

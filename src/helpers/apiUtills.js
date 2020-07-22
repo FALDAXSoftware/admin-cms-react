@@ -1,13 +1,14 @@
-// const API_URL = "http://c1e662ec53bc.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://0574dbf89af1.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
+// const API_URL = process.env.REACT_APP_API_ENDPOINT;
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 export const SOCKET_HOST = process.env.REACT_APP_SOCKET_ENDPOINT;
-// export const SOCKET_HOST = "http://localhost:3011"
+// export const SOCKET_HOST = "http://localhost:3012"
 const ApiUtils = {
   //super admin sign in api
   adminSignIn: function (form) {
@@ -733,6 +734,18 @@ const ApiUtils = {
   //edit pair api call
   updatePair: function (token, form) {
     return fetch(API_URL + "/admin/edit-pair", {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
+
+  //edit trade fee api call
+  updateFee: function (token, form) {
+    return fetch(API_URL + "/admin/edit-trade-fee", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
@@ -3963,6 +3976,35 @@ const ApiUtils = {
     return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
       method: "GET",
       headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getallCountriesData: function (token) {
+    return fetch(API_URL + "/get-countries", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getallStatesData: function (token, id) {
+    return fetch(API_URL + `/get-states?country_id=${id}`, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getallCitiesData: function (token, id) {
+    return fetch(API_URL + `/get-city?state_id=${id}`, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + token,
       },
     });

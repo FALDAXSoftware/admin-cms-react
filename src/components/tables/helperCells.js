@@ -36,6 +36,7 @@ import { isAllowed } from "../../helpers/accessControl";
 import referrals from "../../containers/Page/Referral/referrals";
 import { S3BucketImageURL } from "../../helpers/globals";
 import { SmsTemplates } from "../../containers/Page/SmsTemplates/smsTemplates";
+import { FeesTrading } from "../../containers/Page/Fees/feesTrading";
 
 const viewActiveUser = (
   value,
@@ -586,6 +587,9 @@ const pairStatus = (
 
 const editPair = (value, name, maker_fee, taker_fee, created_at, is_active) => {
   Pairs.editPair(value, name, maker_fee, taker_fee, created_at, is_active);
+};
+const editTradeFee = (id, makerfee, takerfee, tradevolume) => {
+  FeesTrading.editTradeFee(id, makerfee, takerfee, tradevolume);
 };
 
 const editLimit = (
@@ -1305,6 +1309,11 @@ const DateTimeSecCell = (data) => (
       : ""}
   </p>
 );
+
+const VolumeOrderSell = (quantity, fill_price) => (
+  <p>{quantity * fill_price}</p>
+);
+
 const ImageCell = (src) => (
   <img style={{ width: "40px", height: "40px" }} src={S3BucketImageURL + src} />
 );
@@ -2343,6 +2352,22 @@ const FeeActionCell = (
               created_at,
               is_active
             )
+          }
+        />
+      </Tooltip>
+    )}
+  </div>
+);
+const TradeCoinFeesActionCell = (id, makerfee, takerfee, tradevolume) => (
+  <div>
+    {isAllowed("admin_edit_trade_fee") && (
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          className="btn-icon"
+          onClick={
+            () => editTradeFee(id, makerfee, takerfee, tradevolume)
+            // console.log("test", isAllowed("admin_edit_trade_fee"))
           }
         />
       </Tooltip>
@@ -3723,6 +3748,7 @@ export {
   DateTimeCell,
   DateTimeSecCell,
   FeeActionCell,
+  TradeCoinFeesActionCell,
   LimitActionCell,
   TagsCell,
   JobActionCell,
@@ -3734,6 +3760,7 @@ export {
   FeesActionCell,
   FeesCell,
   VolumeCell,
+  VolumeOrderSell,
   StaticImageCell,
   NewsSwitchCell,
   NewsDescCell,
