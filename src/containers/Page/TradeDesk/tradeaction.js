@@ -207,7 +207,8 @@ class TradeAction extends Component {
   };
   onFieldChange = (field, value) => {
     let stateFields = this.state.fields;
-    stateFields[field] = value;
+    stateFields[field] = Precise(value, "8");
+    // console.log("test", field, value, Precise(value, "8"));
     this.setState({
       field: stateFields,
     });
@@ -272,7 +273,7 @@ class TradeAction extends Component {
           limit_price: this.state.fields.limit,
         };
         break;
-      case "stop":
+      case "stop-limit":
         url += `pending-${this.state.subTab}-order-create`;
         params = {
           ...params,
@@ -295,6 +296,7 @@ class TradeAction extends Component {
               message: "Success",
               description: responseData.message,
             });
+            this.clearValidation();
           } else if (responseData.status === 201) {
             notification.warning({
               message: "Warning",
@@ -330,14 +332,9 @@ class TradeAction extends Component {
     console.log(`checked = ${value}`);
     let stateFields = this.state.fields;
     stateFields[field] = value;
-    this.setState(
-      {
-        field: stateFields,
-      },
-      () => {
-        console.log("^^^", this.state.fields.buycheck);
-      }
-    );
+    this.setState({
+      field: stateFields,
+    });
   };
 
   render() {
@@ -720,13 +717,16 @@ class TradeAction extends Component {
                         step={limitPrecision}
                         addonAfter={this.props.currency}
                         value={Precise(
-                          this.state.fields.limit,
+                          parseFloat(this.state.fields.limit),
                           this.props.pricePrecision
                         )}
                         placeholder="0"
                         name="limit"
                         onChange={(e) => {
-                          this.onFieldChange("limit", e.target.value);
+                          this.onFieldChange(
+                            "limit",
+                            parseFloat(e.target.value)
+                          );
                         }}
                       />
                       {this.state.mainTab === "stop-limit" &&
