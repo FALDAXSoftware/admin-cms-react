@@ -6,6 +6,7 @@ import ApiUtils from '../../helpers/apiUtills';
 import authAction from '../../redux/auth/actions';
 import FaldaxLoader from '../Page/faldaxLoader';
 import ProfileWhitelist from './profileWhitelist';
+import { TwoFactorModal } from '../Shared/2faModal';
 
 const { login, logout } = authAction;
 
@@ -20,7 +21,8 @@ class EditProfile extends Component {
       isEnabled: "DISABLED",
       is_twofactor: false,
       showQR: false,
-      QRKey: ""
+      QRKey: "",
+      show2FAModal:false
     };
     this.validator = new SimpleReactValidator();
     this.twoFaValidator = new SimpleReactValidator();
@@ -195,20 +197,23 @@ class EditProfile extends Component {
   _enableAuthenticator = () => {
     if (this.props.user.is_twofactor == false) {
       this._setupTwoFactor();
-    } else this._enable2FA();
+    } else {
+      this.setState({loader:false,show2FAModal:true})
+    }
   };
 
-  _enable2FA = () => {
+  _enable2FA = (otp) => {
     const { token, user } = this.props;
     let _this = this;
 
-    _this.setState({ loader: true });
+    _this.setState({ loader: true});
 
     const formData = {
-      admin_id: user.id
+      admin_id: user.id,
+      otp: otp
     };
 
-    ApiUtils.disableTwoFactor(token, formData)
+    ApiUtils.disableTwoFactorViaCode(token, formData)
       .then(response => response.json())
       .then(function(res) {
         if (res) {
@@ -219,7 +224,8 @@ class EditProfile extends Component {
                 errMessage: res.message,
                 loader: false,
                 errType: "success",
-                isEnabled: "ENABLED"
+                isEnabled: "ENABLED",
+                show2FAModal:false
               },
               () => {
                 _this._getAdminDetails();
@@ -331,7 +337,8 @@ class EditProfile extends Component {
       errType,
       isEnabled,
       is_twofactor,
-      QRKey
+      QRKey,
+      show2FAModal
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -498,6 +505,7 @@ class EditProfile extends Component {
           <ProfileWhitelist />
         </div>
         {loader && <FaldaxLoader />}
+        {show2FAModal && <TwoFactorModal callback={this._enable2FA} title="Disable 2FA" onClose={()=>this.setState({show2FAModal:false})}/>}
       </div>
     );
   }
