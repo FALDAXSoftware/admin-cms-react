@@ -4186,8 +4186,20 @@ const ApiUtils = {
         headers: {
           Authorization: "Bearer " + token,
         },
-      }
-    );
+      })
+  },
+
+  disableTwoFactorViaCode: function (token ,formDataValue){
+    let url=`${API_URL}/admin/disable-two-factor`
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body:JSON.stringify(formDataValue)
+    })
   },
   getUserTierValue: function (token, user_id) {
     return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
