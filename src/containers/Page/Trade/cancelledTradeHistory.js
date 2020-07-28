@@ -10,6 +10,7 @@ import {
   Row,
   Icon,
   Col,
+  Tabs,
 } from "antd";
 import { ownTradeTable } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -31,12 +32,14 @@ import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportOwnTrade } from "../../../helpers/exportToCsv/headers";
 import { PrecisionCell } from "../../../components/tables/helperCells";
+import { TabPane } from "../../../components/uielements/tabs";
+import { pendingTradeTable } from "../../Tables/antTables/tradeConfig";
 
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const { logout } = authAction;
 
-class TradeHistory extends Component {
+class CancelledTradeHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +56,7 @@ class TradeHistory extends Component {
       startDate: "",
       endDate: "",
       rangeDate: [],
-      trade_type: 3,
+      trade_type: 4,
       sorterCol: "created_at",
       sortOrder: "descend",
       openCsvModal: false,
@@ -62,11 +65,11 @@ class TradeHistory extends Component {
   }
 
   componentDidMount = async () => {
-    if (this.props.location.state) {
-      await this.setState({
-        searchTrade: JSON.parse(this.props.location.state.orderId),
-      });
-    }
+    // if (this.props.location.state) {
+    //   await this.setState({
+    //     searchTrade: JSON.parse(this.props.location.state.orderId),
+    //   });
+    // }
     this._getAllTrades();
   };
 
@@ -87,7 +90,7 @@ class TradeHistory extends Component {
 
     _this.setState({ loader: true });
     (isExportCsv
-      ? ApiUtils.getAllTrades(
+      ? ApiUtils.getAllTradesCancelled(
           1,
           EXPORT_LIMIT_SIZE,
           token,
@@ -99,7 +102,7 @@ class TradeHistory extends Component {
           "",
           trade_type
         )
-      : ApiUtils.getAllTrades(
+      : ApiUtils.getAllTradesCancelled(
           page,
           limit,
           token,
@@ -120,7 +123,7 @@ class TradeHistory extends Component {
           } else {
             _this.setState({
               allTrades: res.data,
-              allTradeCount: res.tradeCount,
+              allTradeCount: res.buyBookCount,
             });
           }
         } else if (res.status == 403) {
@@ -268,7 +271,7 @@ class TradeHistory extends Component {
           onClose={() => {
             this.setState({ openCsvModal: false });
           }}
-          filename="trade_history.csv"
+          filename="pending_trade_history.csv"
           data={csvData}
           header={exportOwnTrade}
         />
@@ -283,7 +286,7 @@ class TradeHistory extends Component {
             <Row justify="start" type="flex" className="table-filter-row">
               <Col sm={6}>
                 <Input
-                  placeholder="Search Completed Orders"
+                  placeholder="Search Pending Orders"
                   onChange={this._changeSearch.bind(this)}
                   value={searchTrade}
                 />
@@ -346,77 +349,78 @@ class TradeHistory extends Component {
         <TableWrapper
           {...this.state}
           rowKey="id"
-          columns={ownTradeTable[0].columns}
+          columns={pendingTradeTable[0].columns}
           pagination={false}
           dataSource={allTrades}
           className="float-clear table-tb-margin"
           onChange={this._handleTradeTableChange}
           scroll={TABLE_SCROLL_HEIGHT}
           bordered
-          expandedRowRender={(record) => {
-            return (
-              <div>
-                <span>
-                  <b>Created At</b>&nbsp;:&nbsp;{" "}
-                  {moment
-                    .utc(record["created_at"])
-                    .local()
-                    .format("DD MMM, YYYY HH:mm:ss")}
-                  {/* {record["created_at"]} */}
-                </span>
-                <br />
-                <span>
-                  <b>Fill Price</b>&nbsp;:&nbsp;
-                  {PrecisionCell(record["fill_price"])}
-                </span>
-                <br />
-                <span>
-                  <b>Order ID</b>&nbsp;:&nbsp;{record["transaction_id"]}
-                </span>
-                <br />
-                <span>
-                  <b>Side</b>&nbsp;:&nbsp;{record["side"]}
-                </span>
-                <br />
-                <span>
-                  <b>Order Type</b>&nbsp;:&nbsp;{record["order_type"]}
-                </span>
-                <br />
-                <span>
-                  <b>User Email</b>&nbsp;:&nbsp;{record["email"]}
-                </span>
-                <br />
-                <span>
-                  <b>Requested Email</b>&nbsp;:&nbsp;{record["requested_email"]}
-                </span>
-                <br />
-                <span>
-                  <b>Order Status</b>&nbsp;:&nbsp;{record["order_status"]}
-                </span>
-                <br />
-                <span>
-                  <b>Limit price</b>&nbsp;:&nbsp;
-                  {PrecisionCell(record["limit_price"])}
-                </span>
-                <br />
-                <span>
-                  <b>Stop Price</b>&nbsp;:&nbsp;
-                  {PrecisionCell(record["stop_price"])}
-                </span>
-                <br />
-                <span>
-                  <b>User Fees</b>&nbsp;:&nbsp;
-                  {record["user_fee"] + " " + record["user_coin"]}
-                </span>
-                <br />
-                <span>
-                  <b>Requested Fees</b>&nbsp;:&nbsp;
-                  {record["requested_fee"] + " " + record["requested_coin"]}
-                </span>
-                <br />
-              </div>
-            );
-          }}
+          //   expandedRowRender={(record) => {
+          //     return (
+          //       <div>
+          //         <span>
+          //           <b>Created At</b>&nbsp;:&nbsp;{" "}
+          //           {moment
+          //             .utc(record["created_at"])
+          //             .local()
+          //             .format("DD MMM, YYYY HH:mm:ss")}
+          //           {/* {record["created_at"]} */}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Fill Price</b>&nbsp;:&nbsp;
+          //           {PrecisionCell(record["fill_price"])}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Order ID</b>&nbsp;:&nbsp;{record["transaction_id"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Side</b>&nbsp;:&nbsp;{record["side"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Order Type</b>&nbsp;:&nbsp;{record["order_type"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>User Email</b>&nbsp;:&nbsp;{record["email"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Requested Email</b>&nbsp;:&nbsp;
+          //           {record["requested_email"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Order Status</b>&nbsp;:&nbsp;{record["order_status"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Limit price</b>&nbsp;:&nbsp;
+          //           {PrecisionCell(record["limit_price"])}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Stop Price</b>&nbsp;:&nbsp;
+          //           {PrecisionCell(record["stop_price"])}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>User Fees</b>&nbsp;:&nbsp;
+          //           {record["user_fee"] + " " + record["user_coin"]}
+          //         </span>
+          //         <br />
+          //         <span>
+          //           <b>Requested Fees</b>&nbsp;:&nbsp;
+          //           {record["requested_fee"] + " " + record["requested_coin"]}
+          //         </span>
+          //         <br />
+          //       </div>
+          //     );
+          //   }}
         />
         {allTradeCount > 0 && (
           <Pagination
@@ -436,13 +440,21 @@ class TradeHistory extends Component {
   }
 }
 
+// export default withRouter(
+//   connect(
+//     (state) => ({
+//       token: state.Auth.get("token"),
+//     }),
+//     { logout }
+//   )(PendingTradeHistory)
+// );
 export default withRouter(
   connect(
     (state) => ({
       token: state.Auth.get("token"),
     }),
     { logout }
-  )(TradeHistory)
+  )(CancelledTradeHistory)
 );
 
-export { TradeHistory, ownTradeTable };
+export { CancelledTradeHistory, pendingTradeTable };
