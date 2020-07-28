@@ -7,6 +7,7 @@ import {
   ObjectCell,
   DateTimeCell,
   ToolTipsCell,
+  Precise,
 } from "../../../components/tables/helperCells";
 import { Icon } from "antd";
 
@@ -328,7 +329,7 @@ const columns1 = [
     render: (object) => ToolTipsCell(object),
   },
   {
-    title: "Requested Email",
+    title: "Maker Email",
     key: "requested_mail",
     width: 250,
     align: "left",
@@ -391,7 +392,7 @@ const columns1 = [
     render: (columns) => (
       <span>
         {columns != 0 || columns != "0"
-          ? parseFloat(columns).toFixed(8)
+          ? Precise(parseFloat(columns), "8")
           : columns}
       </span>
     ),
@@ -422,7 +423,9 @@ const columns1 = [
     width: 150,
     render: (row) => (
       <span>
-        {parseFloat(row["quantity"]).toFixed(8) + " " + row["settle_currency"]}
+        {Precise(parseFloat(row["quantity"]), "8") +
+          " " +
+          row["settle_currency"]}
       </span>
     ),
   },
@@ -432,7 +435,7 @@ const columns1 = [
     sorter: true,
     align: "left",
     width: 100,
-    render: (row) => <span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>,
+    render: (row) => <span>{Precise(parseFloat(row["maker_fee"]), "8")}</span>,
   },
   {
     title: "Taker Fee",
@@ -440,10 +443,166 @@ const columns1 = [
     sorter: true,
     align: "left",
     width: 100,
-    render: (row) => <span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>,
+    render: (row) => <span>{(parseFloat(row["taker_fee"]), "8")}</span>,
   },
 ];
+const columns2 = [
+  {
+    title: "Created At",
+    key: "created_at",
+    align: "left",
+    width: 150,
+    sorter: true,
+    render: (object) => renderCell(object, "DateCell", "created_at"),
+  },
+  {
+    title: "User Email",
+    key: "user_email",
+    width: 250,
+    align: "left",
+    sorter: true,
+    dataIndex: "email",
+    render: (object) => ToolTipsCell(object),
+  },
+  // {
+  //   title: "Maker Email",
+  //   key: "requested_mail",
+  //   width: 250,
+  //   align: "left",
+  //   sorter: true,
+  //   dataIndex: "requested_email",
+  //   render: (object) => ToolTipsCell(object),
+  // },
+  {
+    title: <IntlMessages id="tradeTable.title.symbol" />,
+    key: "symbol",
+    width: 100,
+    align: "left",
+    sorter: true,
+    render: (object) => renderCell(object, "TextCell", "symbol"),
+  },
+  {
+    title: <IntlMessages id="tradeTable.title.side" />,
+    key: "side",
+    width: 75,
+    sorter: true,
+    align: "left",
+    dataIndex: "side",
+    render: (data) => (
+      <span
+        className={data.toLowerCase() == "sell" ? "field-error" : "color-green"}
+      >
+        <Icon type={data.toLowerCase() == "sell" ? "arrow-up" : "arrow-down"} />
+        &nbsp;{data}
+      </span>
+    ),
+  },
+  // {
+  //   title: <IntlMessages id="tradeTable.title.transaction_id" />,
+  //   key: "transaction_id1",
+  //   width: 350,
+  //   sorter: true,
+  //   align: "left",
+  //   dataIndex: "transaction_id",
+  // },
+  // {
+  //   title: <IntlMessages id="tradeTable.title.order_status" />,
+  //   key: "order_status",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   dataIndex: "order_status",
+  //   render: data => (
+  //     <span className={"status-" + data + ""}>
+  //       {data.charAt(0).toUpperCase() + data.slice(1).replace("_", " ")}
+  //     </span>
+  //   )
+  // },
+  {
+    title: "Amount",
+    key: "quantity",
+    sorter: true,
+    align: "left",
+    width: 150,
+    render: (row) => (
+      <span>
+        {Precise(parseFloat(row["quantity"]), "8") +
+          " " +
+          row["settle_currency"]}
+      </span>
+    ),
+  },
+  // {
+  //   title: "Fill Price",
+  //   key: "fill_price",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   dataIndex: "fill_price",
+  //   render: (columns) => (
+  //     <span>
+  //       {columns != 0 || columns != "0"
+  //         ? Precise(parseFloat(columns), "8")
+  //         : columns}
+  //     </span>
+  //   ),
+  // },
+  {
+    title: "Limit Price",
+    key: "limit_price",
+    sorter: true,
+    align: "left",
+    width: 100,
+    render: (row) => (
+      <span>
+        {Precise(parseFloat(row["limit_price"]), "8") + " " + row["currency"]}
+      </span>
+    ),
+  },
+  {
+    title: "Order Type",
+    key: "order_type",
+    width: 100,
+    align: "left",
+    sorter: true,
+    render: (record) => (
+      <>
+        {/* {console.log("test", record)} */}
+        {record.order_type == "Limit"
+          ? record.is_stop_limit
+            ? "Stop Limit"
+            : "Limit"
+          : record.order_type}
+      </>
+    ),
+  },
+  // {
+  //   title:"Stop Price",
+  //   key: "stop_price",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   dataIndex: "stop_price",
+  //   render:(columns)=><span>{columns!=0 || columns!="0" ?parseFloat(columns).toFixed(8):columns}</span>
+  // },
 
+  // {
+  //   title: "Maker Fee",
+  //   key: "maker_fee",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   render: (row) => <span>{parseFloat(row["maker_fee"]).toFixed(8)}</span>,
+  // },
+  // {
+  //   title: "Taker Fee",
+  //   key: "taker_fee",
+  //   sorter: true,
+  //   align: "left",
+  //   width: 100,
+  //   render: (row) => <span>{parseFloat(row["taker_fee"]).toFixed(8)}</span>,
+  // },
+];
 const tradeTableInfos = [
   {
     title: "Trade History",
@@ -458,5 +617,19 @@ const ownTradeTable = [
     columns: clone(columns1),
   },
 ];
+const pendingTradeTable = [
+  {
+    title: "Trade History",
+    value: "TradeTable",
+    columns: clone(columns2),
+  },
+];
 
-export { columns, columns1, tradeTableInfos, ownTradeTable };
+export {
+  columns,
+  columns1,
+  columns2,
+  tradeTableInfos,
+  ownTradeTable,
+  pendingTradeTable,
+};
