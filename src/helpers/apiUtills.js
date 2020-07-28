@@ -1,4 +1,4 @@
-// const API_URL = "http://0574dbf89af1.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://3b321b6e142d.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -1164,7 +1164,236 @@ const ApiUtils = {
       },
     });
   },
+  getAllTradesPending: function (
+    page,
+    limit,
+    token,
+    search,
+    filterVal,
+    startDate,
+    endDate,
+    sorterCol = "created_at",
+    sortOrder = "desc",
+    trade_type
+  ) {
+    let url = "page=" + page + "&limit=" + limit + "&pending_type=" + filterVal;
+    search = encodeURIComponent(search);
+    if (search && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (search && startDate && endDate) {
+      url +=
+        "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (sorterCol && sortOrder) {
+      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (startDate && endDate) {
+      url += "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && startDate && endDate) {
+      url +=
+        "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (sorterCol && sortOrder) {
+      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (startDate && endDate) {
+      url += "&start_date=" + startDate + "&end_date=" + endDate;
+    } else {
+      url += "&data=" + search;
+    }
 
+    return fetch(API_URL + "/admin/get-all-orders?" + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getAllTradesCancelled: function (
+    page,
+    limit,
+    token,
+    search,
+    filterVal,
+    startDate,
+    endDate,
+    sorterCol = "created_at",
+    sortOrder = "desc",
+    trade_type
+  ) {
+    let url =
+      "page=" + page + "&limit=" + limit + "&pending_type=" + trade_type;
+    search = encodeURIComponent(search);
+    if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&order_side=" +
+        filterVal +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&order_side=" +
+        filterVal +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (search && filterVal && startDate && endDate) {
+      url +=
+        "&data=" +
+        search +
+        "&order_side=" +
+        filterVal +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && filterVal && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&order_side=" +
+        filterVal +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (filterVal && sorterCol && sortOrder) {
+      url +=
+        "&order_side=" +
+        filterVal +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (filterVal && startDate && endDate) {
+      url +=
+        "&order_side=" +
+        filterVal +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && startDate && endDate) {
+      url +=
+        "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (search && filterVal) {
+      url += "&data=" + search + "&order_side=" + filterVal;
+    } else if (sorterCol && sortOrder) {
+      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (startDate && endDate) {
+      url += "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (filterVal) {
+      url += "&order_side=" + filterVal;
+    } else {
+      url += "&data=" + search;
+    }
+
+    return fetch(API_URL + "/admin/all-trades?" + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
   getAllSimplexTrades: function (
     page,
     limit,
