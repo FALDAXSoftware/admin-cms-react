@@ -8,7 +8,7 @@ import {
   Modal,
   notification,
   Row,
-  Col
+  Col,
 } from "antd";
 import clone from "clone";
 import { assetTableInfos } from "../../Tables/antTables";
@@ -21,14 +21,22 @@ import ViewCoinModal from "./viewCoinModal";
 import AddCoinModal from "./addCoinModal";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
-import { PAGE_SIZE_OPTIONS, PAGESIZE, TABLE_SCROLL_HEIGHT, EXPORT_LIMIT_SIZE } from "../../../helpers/globals";
-import { isAllowed } from '../../../helpers/accessControl';
+import {
+  PAGE_SIZE_OPTIONS,
+  PAGESIZE,
+  TABLE_SCROLL_HEIGHT,
+  EXPORT_LIMIT_SIZE,
+} from "../../../helpers/globals";
+import { isAllowed } from "../../../helpers/accessControl";
 import AssetsMetabase from "./assetsMetabase";
 // import { BackButton } from "../../Shared/backBttton";
 import { BreadcrumbComponent } from "../../Shared/breadcrumb";
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
-import { DateTimeCell, PrecisionCell } from "../../../components/tables/helperCells";
+import {
+  DateTimeCell,
+  PrecisionCell,
+} from "../../../components/tables/helperCells";
 import { exportAsset } from "../../../helpers/exportToCsv/headers";
 
 const Search = Input.Search;
@@ -55,7 +63,7 @@ class Assets extends Component {
       page: 1,
       loader: false,
       openCsvExportModal: false,
-      csvData: []
+      csvData: [],
     };
     self = this;
     Assets.view = Assets.view.bind(this);
@@ -71,6 +79,7 @@ class Assets extends Component {
     coin_code,
     min_limit,
     max_limit,
+    orders_minimum,
     wallet_address,
     created_at,
     is_active,
@@ -87,6 +96,7 @@ class Assets extends Component {
       coin_code,
       min_limit,
       max_limit,
+      orders_minimum,
       wallet_address,
       created_at,
       is_active,
@@ -95,7 +105,7 @@ class Assets extends Component {
       warm_wallet_address,
       hot_send_wallet_address,
       hot_receive_wallet_address,
-      custody_wallet_address
+      custody_wallet_address,
     };
     self.setState({ coinDetails, showViewCoinModal: true });
   }
@@ -118,20 +128,20 @@ class Assets extends Component {
 
     let formData = {
       coin_id: value,
-      is_active: !is_active
+      is_active: !is_active,
     };
 
     self.setState({ loader: true });
     ApiUtils.editCoin(token, formData)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.status == 200) {
           self.setState({
             page: 1,
             errMsg: true,
             errMessage: res.message,
             errType: "Success",
-            loader: false
+            loader: false,
           });
           self._getAllCoins();
         } else if (res.status == 403) {
@@ -140,7 +150,7 @@ class Assets extends Component {
               errMsg: true,
               errMessage: res.err,
               errType: "error",
-              loader: false
+              loader: false,
             },
             () => {
               self.props.logout();
@@ -151,7 +161,7 @@ class Assets extends Component {
             errMsg: true,
             errMessage: "Unable to complete the requested action.",
             errType: "error",
-            loader: false
+            loader: false,
           });
         }
       })
@@ -160,7 +170,7 @@ class Assets extends Component {
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   }
@@ -177,10 +187,10 @@ class Assets extends Component {
     this._getAllCoins();
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -191,24 +201,37 @@ class Assets extends Component {
     let _this = this;
 
     _this.setState({ loader: true });
-    (exportToCsv ? ApiUtils.getAllCoins(1, EXPORT_LIMIT_SIZE, token, "") : ApiUtils.getAllCoins(page, limit, token, searchCoin, sorterCol, sortOrder))
-      .then(response => response.json())
+    (exportToCsv
+      ? ApiUtils.getAllCoins(1, EXPORT_LIMIT_SIZE, token, "")
+      : ApiUtils.getAllCoins(
+          page,
+          limit,
+          token,
+          searchCoin,
+          sorterCol,
+          sortOrder
+        )
+    )
+      .then((response) => response.json())
       .then(function (res) {
         if (res.status == 200) {
           if (exportToCsv) {
             let csvData = clone(res.data);
             csvData = csvData.map((ele) => {
-              ele["updated_at"] = DateTimeCell(ele["updated_at"], 'string');
-              ele["created_at"] = DateTimeCell(ele["created_at"], 'string');
-              ele["deleted_at"] = DateTimeCell(ele["deleted_at"], 'string');
-              ele["type"] = ele['type'] == 1 ? "bitgo" : "node setup";
+              ele["updated_at"] = DateTimeCell(ele["updated_at"], "string");
+              ele["created_at"] = DateTimeCell(ele["created_at"], "string");
+              ele["deleted_at"] = DateTimeCell(ele["deleted_at"], "string");
+              ele["type"] = ele["type"] == 1 ? "bitgo" : "node setup";
               ele["min_limit"] = PrecisionCell(ele["min_limit"]);
               ele["max_limit"] = PrecisionCell(ele["max_limit"]);
               return ele;
-            })
-            _this.setState({ csvData })
+            });
+            _this.setState({ csvData });
           } else {
-            _this.setState({ allCoins: res.data, allCoinCount: res.CoinsCount });
+            _this.setState({
+              allCoins: res.data,
+              allCoinCount: res.CoinsCount,
+            });
           }
         } else if (res.status == 403) {
           _this.setState(
@@ -221,7 +244,7 @@ class Assets extends Component {
           _this.setState({
             errMsg: true,
             errMessage: res.message,
-            errType: "error"
+            errType: "error",
           });
         }
         _this.setState({ loader: false });
@@ -231,18 +254,18 @@ class Assets extends Component {
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
           errType: "error",
-          loader: false
+          loader: false,
         });
       });
   };
 
-  _searchCoin = val => {
+  _searchCoin = (val) => {
     this.setState({ searchCoin: val, page: 1 }, () => {
       this._getAllCoins();
     });
   };
 
-  _handleCoinPagination = page => {
+  _handleCoinPagination = (page) => {
     this.setState({ page }, () => {
       this._getAllCoins();
     });
@@ -267,7 +290,7 @@ class Assets extends Component {
 
     this.setState({ loader: true });
     ApiUtils.deleteCoin(deleteCoinId, token)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(function (res) {
         if (res) {
           if (res.status == 200) {
@@ -276,7 +299,7 @@ class Assets extends Component {
                 deleteCoinId: "",
                 showDeleteCoinModal: false,
                 errMessage: res.message,
-                errMsg: true
+                errMsg: true,
               },
               () => {
                 _this._getAllCoins();
@@ -293,7 +316,7 @@ class Assets extends Component {
             _this.setState({
               errMsg: true,
               errMessage: res.message,
-              errType: "error"
+              errType: "error",
             });
           }
         } else {
@@ -305,7 +328,7 @@ class Assets extends Component {
         _this.setState({
           deleteCoinId: "",
           showDeleteCoinModal: false,
-          loader: false
+          loader: false,
         });
       });
   };
@@ -331,7 +354,7 @@ class Assets extends Component {
 
   onExport = () => {
     this.setState({ openCsvExportModal: true }, () => this._getAllCoins(true));
-  }
+  };
 
   render() {
     const {
@@ -347,7 +370,7 @@ class Assets extends Component {
       page,
       limit,
       openCsvExportModal,
-      csvData
+      csvData,
     } = this.state;
     let pageSizeOptions = PAGE_SIZE_OPTIONS;
 
@@ -359,30 +382,53 @@ class Assets extends Component {
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
         <BreadcrumbComponent {...this.props} />
-        <ExportToCSVComponent isOpenCSVModal={openCsvExportModal} onClose={() => { this.setState({ openCsvExportModal: false }) }} filename="assets.csv" data={csvData} header={exportAsset} />
+        <ExportToCSVComponent
+          isOpenCSVModal={openCsvExportModal}
+          onClose={() => {
+            this.setState({ openCsvExportModal: false });
+          }}
+          filename="assets.csv"
+          data={csvData}
+          header={exportAsset}
+        />
         <Tabs className="isoTableDisplayTab full-width">
           <TabPane tab={assetTableInfos.title} key={assetTableInfos.value}>
             <TableDemoStyle className="isoLayoutContent">
-              <PageCounterComponent page={page} limit={limit} dataCount={allCoinCount} syncCallBack={() => { this.setState({ searchCoin: "", page: 1 }, () => this._getAllCoins()) }} />
+              <PageCounterComponent
+                page={page}
+                limit={limit}
+                dataCount={allCoinCount}
+                syncCallBack={() => {
+                  this.setState({ searchCoin: "", page: 1 }, () =>
+                    this._getAllCoins()
+                  );
+                }}
+              />
               <Row type="flex" className="table-filter-row" justify="start">
                 <Col md={4}>
                   {isAllowed("create_coins") && (
-                    <Button type="primary" className="full-width" onClick={this._showAddCoinModal}>
+                    <Button
+                      type="primary"
+                      className="full-width"
+                      onClick={this._showAddCoinModal}
+                    >
                       <Icon type="plus" />
                       Add Asset
-                      </Button>
+                    </Button>
                   )}
                 </Col>
                 <Col md={8}>
                   <Search
                     placeholder="Search assets"
-                    onSearch={value => this._searchCoin(value)}
+                    onSearch={(value) => this._searchCoin(value)}
                     enterButton
                     className="full-width"
                   />
                 </Col>
                 <Col md={3}>
-                  <Button onClick={this.onExport} icon="export" type="primary">Export</Button>
+                  <Button onClick={this.onExport} icon="export" type="primary">
+                    Export
+                  </Button>
                 </Col>
               </Row>
               <AddCoinModal
@@ -404,14 +450,12 @@ class Assets extends Component {
                     visible={showDeleteCoinModal}
                     onCancel={this._closeDeleteCoinModal}
                     footer={[
-                      <Button onClick={this._closeDeleteCoinModal}>
-                        No
-                        </Button>,
-                      <Button onClick={this._deleteCoin}>Yes</Button>
+                      <Button onClick={this._closeDeleteCoinModal}>No</Button>,
+                      <Button onClick={this._deleteCoin}>Yes</Button>,
                     ]}
                   >
                     Are you sure you want to delete this asset ?
-                    </Modal>
+                  </Modal>
                 )}
                 <TableWrapper
                   rowKey="id"
@@ -436,8 +480,8 @@ class Assets extends Component {
                     pageSizeOptions={pageSizeOptions}
                   />
                 ) : (
-                    ""
-                  )}
+                  ""
+                )}
               </div>
             </TableDemoStyle>
           </TabPane>
@@ -455,8 +499,8 @@ class Assets extends Component {
 }
 
 export default connect(
-  state => ({
-    token: state.Auth.get("token")
+  (state) => ({
+    token: state.Auth.get("token"),
   }),
   { logout }
 )(Assets);

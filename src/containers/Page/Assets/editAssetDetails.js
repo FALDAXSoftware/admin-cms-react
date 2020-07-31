@@ -7,7 +7,7 @@ import { BUCKET_URL, BITGO_MIN_LIMIT } from "../../../helpers/globals";
 import FaldaxLoader from "../faldaxLoader";
 import authAction from "../../../redux/auth/actions";
 import { withRouter } from "react-router";
-import { PrecisionCell } from "../../../components/tables/helperCells";
+import { PrecisionCell, Precise } from "../../../components/tables/helperCells";
 
 const { logout } = authAction;
 const Option = Select.Option;
@@ -19,6 +19,7 @@ class EditAssetDetails extends Component {
       loader: false,
       fields: {},
       min_limit: "",
+      trade_min_limit: "",
       max_limit: "",
       errMsg: false,
       errMessage: "",
@@ -65,6 +66,9 @@ class EditAssetDetails extends Component {
         if (res.status == 200) {
           // _this.setBitGoLimit = res.coin.coin;
           _this.setState({
+            trade_min_limit: res.coin.orders_minimum
+              ? Precise(res.coin.orders_minimum, "8")
+              : "-",
             bitGoMinLimit:
               res.coin.bitgo_min_limit === null ? 0 : res.coin.bitgo_min_limit,
           });
@@ -72,22 +76,22 @@ class EditAssetDetails extends Component {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
-              min_limit: PrecisionCell(res.coin.min_limit),
-              max_limit: PrecisionCell(res.coin.max_limit),
+              min_limit: Precise(res.coin.min_limit, "8"),
+              max_limit: Precise(res.coin.max_limit, "8"),
             });
           } else if (res.coin.min_limit) {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
-              min_limit: PrecisionCell(res.coin.min_limit),
-              max_limit: PrecisionCell(res.coin.max_limit),
+              min_limit: Precise(res.coin.min_limit, "8"),
+              max_limit: Precise(res.coin.max_limit, "8"),
             });
           } else {
             _this.setState({
               fields: res.coin,
               selectedToken: res.coin.iserc,
-              min_limit: PrecisionCell(res.coin.min_limit),
-              max_limit: PrecisionCell(res.coin.max_limit),
+              min_limit: Precise(res.coin.min_limit, "8"),
+              max_limit: Precise(res.coin.max_limit, "8"),
             });
           }
         } else if (res.status == 403 || res.status == 400) {
@@ -145,6 +149,15 @@ class EditAssetDetails extends Component {
     //   fields[field] = e.target.value;
     // }
   };
+  _handleMinTradeChange = (e) => {
+    // if (e.target.value.trim() == "") {
+    this.setState({
+      trade_min_limit: e.target.value,
+    });
+    // } else {
+    //   fields[field] = e.target.value;
+    // }
+  };
 
   _handleMaxChange = (e) => {
     // if (e.target.value.trim() == "") {
@@ -172,6 +185,7 @@ class EditAssetDetails extends Component {
         coin_id,
         coin_name: fields["coin_name"],
         min_limit: this.state.min_limit,
+        orders_minimum: this.state.trade_min_limit,
         // max_limit: fields["max_limit"],
         max_limit: this.state.max_limit,
         warm_wallet_address: fields["warm_wallet_address"],
@@ -341,9 +355,9 @@ class EditAssetDetails extends Component {
           </Row>
           <Row style={{ marginBottom: "15px" }}>
             <Col>
-              <span>Minimum Limit:</span>
+              <span>Minimum Withdrawl Limit:</span>
               <Input
-                placeholder="Minimum Limit"
+                placeholder="Minimum Withdrawl Limit"
                 onChange={this._handleMinChange.bind(this)}
                 // value={fields["min_limit"]}
                 value={this.state.min_limit}
@@ -354,6 +368,26 @@ class EditAssetDetails extends Component {
                   //   fields["min_limit"],
                   this.state.min_limit,
                   `required|numeric|gte:${bitGoMinLimit}`,
+                  "text-danger"
+                )}
+              </span>
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: "15px" }}>
+            <Col>
+              <span>Minimum Trade Limit:</span>
+              <Input
+                placeholder="Minimum Trade Limit"
+                onChange={this._handleMinTradeChange.bind(this)}
+                // value={fields["min_limit"]}
+                value={this.state.trade_min_limit}
+              />
+              <span style={{ color: "red" }}>
+                {this.validator.message(
+                  "minimum trade limit",
+                  //   fields["min_limit"],
+                  this.state.trade_min_limit,
+                  `required|numeric`,
                   "text-danger"
                 )}
               </span>
