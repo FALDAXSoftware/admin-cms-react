@@ -402,6 +402,8 @@
   "coinTable.title.message": "Message",
   "coinTable.title.url": "URL",
   "coinTable.title.target_date": "Target Date",
+  "coinTable.title.withdrawal_limit": "Minimum Withdrawl Limit",
+  "coinTable.title.trade_limit": "Minimum Trade Limit",
   "antTable.title.image": "Image",
   "antTable.title.firstName": "First Name",
   "antTable.title.name": "Name",

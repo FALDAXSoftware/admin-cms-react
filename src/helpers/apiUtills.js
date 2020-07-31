@@ -1,4 +1,4 @@
-// const API_URL = "http://3b321b6e142d.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://193f780e58ea.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -1386,7 +1386,7 @@ const ApiUtils = {
       url += "&data=" + search;
     }
 
-    return fetch(API_URL + "/admin/all-trades?" + url, {
+    return fetch(API_URL + "/admin/get-all-orders?" + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
