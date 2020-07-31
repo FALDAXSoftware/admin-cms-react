@@ -1,62 +1,64 @@
-// const API_URL = "http://192.168.0.213:1440"; // Local (Mansi) URL
+// const API_URL = "http://193f780e58ea.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://pre-prod-backend.faldax.com"; //Preprod URL
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
-const API_URL=process.env.REACT_APP_API_ENDPOINT;
-
+// const API_URL = process.env.REACT_APP_API_ENDPOINT;
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
+export const SOCKET_HOST = process.env.REACT_APP_SOCKET_ENDPOINT;
+// export const SOCKET_HOST = "http://localhost:3012"
 const ApiUtils = {
   //super admin sign in api
-  adminSignIn: function(form) {
+  adminSignIn: function (form) {
     return fetch(API_URL + "/admin/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //edit profile api
-  editProfile: function(token, form) {
+  editProfile: function (token, form) {
     return fetch(API_URL + "/admin/update", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //change admin password api
-  changePassword: function(token, form) {
+  changePassword: function (token, form) {
     return fetch(API_URL + "/admin/change-password", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //change employee password api
-  changeEmployeePassword: function(token, form) {
+  changeEmployeePassword: function (token, form) {
     return fetch(API_URL + "/admin/employee-change-password", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //get all counts for dashboard api
-  getAllCount: function(token, startDate, endDate) {
+  getAllCount: function (token, startDate, endDate) {
     let url = "/admin/dashboard/get-data";
     if (startDate && endDate) {
       url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
@@ -64,37 +66,37 @@ const ApiUtils = {
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
 
-  getCampaignUserList: function(token) {
+  getCampaignUserList: function (token) {
     let url = "/admin/users/list";
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
 
   // create new campaign
-  createCampaign: function(token, formdata) {
+  createCampaign: function (token, formdata) {
     return fetch(API_URL + "/admin/campaigns/create", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(formdata)
+      body: JSON.stringify(formdata),
     });
   },
 
   //get all counts for dashboard api
-  getMetabase: function() {
+  getMetabase: function () {
     let url = "/metabase-details";
     return fetch(API_URL + url, {
-      method: "GET"
+      method: "GET",
       // headers: {
       //   Authorization: "Bearer " + token
       // }
@@ -102,7 +104,7 @@ const ApiUtils = {
   },
 
   //get all users api
-  getAllUsers: function(
+  getAllUsers: function (
     page,
     limit,
     token,
@@ -125,13 +127,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all in-active users api
-  getAllInActiveUsers: function(
+  getAllInActiveUsers: function (
     page,
     limit,
     token,
@@ -154,13 +156,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all in-active users api
-  getAllDeletedUsers: function(
+  getAllDeletedUsers: function (
     page,
     limit,
     token,
@@ -183,35 +185,35 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //activate user api
-  activateUser: function(token, form) {
+  activateUser: function (token, form) {
     return fetch(API_URL + "/admin/user-activate", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //delete user api
-  deleteUser: function(token, user_id) {
+  deleteUser: function (token, user_id) {
     return fetch(API_URL + "/admin/delete-user?user_id=" + user_id, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/json"
-      }
+        Accept: "application/json",
+      },
     });
   },
 
   //get all coins api
-  getAllCoins: function(page, limit, token, search, sorterCol, sortOrder) {
+  getAllCoins: function (page, limit, token, search, sorterCol, sortOrder) {
     let url = "/admin/get-coins?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -232,70 +234,70 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //add coin api
-  addCoin: function(token, form) {
+  addCoin: function (token, form) {
     return fetch(API_URL + "/admin/coins/create", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: form
+      body: form,
     });
   },
 
   //edit coin api
-  editCoin: function(token, form) {
+  editCoin: function (token, form) {
     return fetch(API_URL + "/admin/coins/update", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/json"
+        Accept: "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //delete coin api
-  deleteCoin: function(coinId, token) {
+  deleteCoin: function (coinId, token) {
     return fetch(API_URL + "/admin/coins/delete?id=" + coinId, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        Accept: "application/json"
-      }
+        Accept: "application/json",
+      },
     });
   },
 
   //forgot password api
-  forgotPassword: function(form) {
+  forgotPassword: function (form) {
     return fetch(API_URL + "/admin/forgot-password", {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //reset password api
-  resetPassword: function(form) {
+  resetPassword: function (form) {
     return fetch(API_URL + "/admin/reset-password", {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getUserReferData: function(
+  getUserReferData: function (
     token,
     coin_id = "",
     user_id = "",
@@ -312,13 +314,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all referrals api
-  getAllUserReferrals: function(
+  getAllUserReferrals: function (
     page,
     limit,
     token,
@@ -341,13 +343,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all referrals api
-  getAllReferrals: function(
+  getAllReferrals: function (
     page,
     limit,
     token,
@@ -362,13 +364,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all counties api
-  getAllCountries: function(
+  getAllCountries: function (
     page,
     limit,
     token,
@@ -398,35 +400,35 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //Activate-deactivate country api
-  activateCountry: function(token, form) {
+  activateCountry: function (token, form) {
     return fetch(API_URL + "/admin/country-activate", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //Announce to users api
-  announceUser: function(token, form) {
+  announceUser: function (token, form) {
     return fetch(API_URL + "/admin/email-send", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //get all roles api
-  getAllRoles: function(token, sorterCol, sortOrder, status) {
+  getAllRoles: function (token, sorterCol, sortOrder, status) {
     let url = "/admin/role/get?status=" + status;
     if (sorterCol && sortOrder) {
       url += "&sortCol=" + sorterCol + "&sortOrder=" + sortOrder;
@@ -436,36 +438,54 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAllPermissions: function(token) {
+  getAllPermissions: function (token) {
     let url = "/get-all-permissions";
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //edit country api call
-  editCountry: function(token, form) {
+  editCountry: function (token, form) {
     return fetch(API_URL + "/admin/country-update", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //get all states api
-  getAllStates: function(token, countryId, search, sorterCol, sortOrder) {
-    let url = "/admin/get-state-data?country_id=" + countryId;
+  getAllStates: function (
+    page,
+    countryId,
+    limit,
+    token,
+    search,
+    legality,
+    sorterCol,
+    sortOrder
+  ) {
+    // let url = "/admin/get-state-data?country_id=" + countryId;
+    let url =
+      "/admin/get-state-data?page=" +
+      page +
+      "&country_id=" +
+      countryId +
+      "&limit=" +
+      limit +
+      "&legality=" +
+      legality;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
       url +=
@@ -480,70 +500,70 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //Activate-deactivate state api
-  activateState: function(token, form) {
+  activateState: function (token, form) {
     return fetch(API_URL + "/admin/state-activate", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //edit state api call
-  editState: function(token, form) {
+  editState: function (token, form) {
     return fetch(API_URL + "/admin/state-update", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //add role api call
-  addRole: function(token, form) {
+  addRole: function (token, form) {
     return fetch(API_URL + "/admin/role/create", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //edit role api call
-  updateRole: function(token, form) {
+  updateRole: function (token, form) {
     return fetch(API_URL + "/admin/role/update", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  deleteRole: function(token, roleId) {
+  deleteRole: function (token, roleId) {
     return fetch(API_URL + "/admin/role/delete", {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: roleId
-      })
+        id: roleId,
+      }),
     });
   },
 
   //get all employee api
-  getAllEmployee: function(page, limit, token, sorterCol, sortOrder, search) {
+  getAllEmployee: function (page, limit, token, sorterCol, sortOrder, search) {
     let url = "/admin/get-employees?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -558,49 +578,49 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //add employee api call
-  addEmployee: function(token, form) {
+  addEmployee: function (token, form) {
     return fetch(API_URL + "/admin/add-employee", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //delete employee api call
-  deleteEmployee: function(token, roleId) {
+  deleteEmployee: function (token, roleId) {
     return fetch(API_URL + "/admin/delete-employee", {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: roleId
-      })
+        id: roleId,
+      }),
     });
   },
 
   //edit employee api call
-  editEmployee: function(token, form) {
+  editEmployee: function (token, form) {
     return fetch(API_URL + "/admin/update-employee", {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //user login history api call
-  getUserHistory: function(
+  getUserHistory: function (
     token,
     user_id,
     page,
@@ -624,28 +644,28 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: parseInt(user_id)
-      })
+        user_id: parseInt(user_id),
+      }),
     });
   },
 
   //user delete account summary
-  getUserAccountSummary: function(token, user_id) {
+  getUserAccountSummary: function (token, user_id) {
     let url = "/admin/deleteAccountCheck?user_id=" + user_id;
 
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAllPairs: function(
+  getAllPairs: function (
     page,
     limit,
     token,
@@ -695,57 +715,69 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //add fees api call
-  addPair: function(token, form) {
+  addPair: function (token, form) {
     return fetch(API_URL + "/admin/add-pair", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //edit pair api call
-  updatePair: function(token, form) {
+  updatePair: function (token, form) {
     return fetch(API_URL + "/admin/edit-pair", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllLimit: function(token) {
+  //edit trade fee api call
+  updateFee: function (token, form) {
+    return fetch(API_URL + "/admin/edit-trade-fee", {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
+
+  getAllLimit: function (token) {
     return fetch(API_URL + "/admin/all-limits", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //edit limit api call
-  updateLimit: function(token, form) {
+  updateLimit: function (token, form) {
     return fetch(API_URL + "/admin/edit-limit", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllTransaction: function(
+  getAllTransaction: function (
     page,
     limit,
     token,
@@ -754,7 +786,8 @@ const ApiUtils = {
     startDate,
     endDate,
     sorterCol,
-    sortOrder
+    sortOrder,
+    userid
   ) {
     let url = "/admin/all-transactions?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
@@ -864,18 +897,21 @@ const ApiUtils = {
     } else {
       url += "&data=" + search;
     }
+    if (userid) {
+      url += "&user_id=" + userid;
+    }
 
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //user wise transaction list api call
-  getUserTransaction: function(
+  getUserTransaction: function (
     page,
     limit,
     token,
@@ -994,12 +1030,12 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAllTrades: function(
+  getAllTrades: function (
     page,
     limit,
     token,
@@ -1007,8 +1043,8 @@ const ApiUtils = {
     filterVal,
     startDate,
     endDate,
-    sorterCol="created_at",
-    sortOrder="descend",
+    sorterCol = "created_at",
+    sortOrder = "descend",
     trade_type
   ) {
     let url = "page=" + page + "&limit=" + limit + "&trade_type=" + trade_type;
@@ -1124,12 +1160,241 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
+  getAllTradesPending: function (
+    page,
+    limit,
+    token,
+    search,
+    filterVal,
+    startDate,
+    endDate,
+    sorterCol = "created_at",
+    sortOrder = "desc",
+    trade_type
+  ) {
+    let url = "page=" + page + "&limit=" + limit + "&pending_type=" + filterVal;
+    search = encodeURIComponent(search);
+    if (search && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (search && startDate && endDate) {
+      url +=
+        "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (sorterCol && sortOrder) {
+      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (startDate && endDate) {
+      url += "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && startDate && endDate) {
+      url +=
+        "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (sorterCol && sortOrder) {
+      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (startDate && endDate) {
+      url += "&start_date=" + startDate + "&end_date=" + endDate;
+    } else {
+      url += "&data=" + search;
+    }
 
-  getAllSimplexTrades: function(
+    return fetch(API_URL + "/admin/get-all-orders?" + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getAllTradesCancelled: function (
+    page,
+    limit,
+    token,
+    search,
+    filterVal,
+    startDate,
+    endDate,
+    sorterCol = "created_at",
+    sortOrder = "desc",
+    trade_type
+  ) {
+    let url =
+      "page=" + page + "&limit=" + limit + "&pending_type=" + trade_type;
+    search = encodeURIComponent(search);
+    if (search && filterVal && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&order_side=" +
+        filterVal +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (filterVal && startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&order_side=" +
+        filterVal +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (startDate && endDate && sorterCol && sortOrder) {
+      url +=
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (search && filterVal && startDate && endDate) {
+      url +=
+        "&data=" +
+        search +
+        "&order_side=" +
+        filterVal +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && filterVal && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&order_side=" +
+        filterVal +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (filterVal && sorterCol && sortOrder) {
+      url +=
+        "&order_side=" +
+        filterVal +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (filterVal && startDate && endDate) {
+      url +=
+        "&order_side=" +
+        filterVal +
+        "&start_date=" +
+        startDate +
+        "&end_date=" +
+        endDate;
+    } else if (search && startDate && endDate) {
+      url +=
+        "&data=" + search + "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (search && sorterCol && sortOrder) {
+      url +=
+        "&data=" +
+        search +
+        "&sort_col=" +
+        sorterCol +
+        "&sort_order=" +
+        sortOrder;
+    } else if (search && filterVal) {
+      url += "&data=" + search + "&order_side=" + filterVal;
+    } else if (sorterCol && sortOrder) {
+      url += "&sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (startDate && endDate) {
+      url += "&start_date=" + startDate + "&end_date=" + endDate;
+    } else if (filterVal) {
+      url += "&order_side=" + filterVal;
+    } else {
+      url += "&data=" + search;
+    }
+
+    return fetch(API_URL + "/admin/get-all-orders?" + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getAllSimplexTrades: function (
     page,
     limit,
     token,
@@ -1334,12 +1599,12 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getUserTrades: function(
+  getUserTrades: function (
     page,
     limit,
     token,
@@ -1448,12 +1713,12 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAllWithdrawRequests: function(
+  getAllWithdrawRequests: function (
     page,
     limit,
     token,
@@ -1557,13 +1822,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //page, limit, token, searchReq, startDate, endDate, user_id, filterVal
-  getUserWithdrawReq: function(
+  getUserWithdrawReq: function (
     page,
     limit,
     token,
@@ -1679,12 +1944,12 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAllSellOrders: function(
+  getAllSellOrders: function (
     page,
     limit,
     token,
@@ -1713,15 +1978,15 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
-  getAllPendingOrders: function(
+  getAllPendingOrders: function (
     page,
     limit,
     token,
@@ -1750,15 +2015,15 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
-  getAllCancelledOrders: function(
+  getAllCancelledOrders: function (
     page,
     limit,
     token,
@@ -1787,15 +2052,15 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
-  getAllBuyOrders: function(
+  getAllBuyOrders: function (
     page,
     limit,
     token,
@@ -1823,16 +2088,16 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id
-      })
+        user_id,
+      }),
     });
   },
 
   //get all jobs api
-  getAllJobs: function(page, limit, token, search, sorterCol, sortOrder) {
+  getAllJobs: function (page, limit, token, search, sorterCol, sortOrder) {
     let url = "/admin/all-jobs?page=" + page + "&limit=" + limit;
     search = encodeURIComponent(search);
     if (sorterCol && sortOrder && search) {
@@ -1853,92 +2118,92 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all job categories api
-  getAllJobCategories: function(token, active) {
+  getAllJobCategories: function (token, active) {
     return fetch(API_URL + "/admin/job-categories?active=" + active, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //add job api
-  addJob: function(token, form) {
+  addJob: function (token, form) {
     return fetch(API_URL + "/admin/add-job", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //edit job api call
-  updateJob: function(token, form) {
+  updateJob: function (token, form) {
     return fetch(API_URL + "/admin/edit-job", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //delete job api call
-  deleteJob: function(jobId, token) {
+  deleteJob: function (jobId, token) {
     return fetch(API_URL + "/admin/delete-job?job_id=" + jobId, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //edit contact details api
-  editContact: function(token, form) {
+  editContact: function (token, form) {
     return fetch(API_URL + "/edit-contact-details", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //get contact details api
-  getContactDetails: function() {
+  getContactDetails: function () {
     return fetch(API_URL + "/admin/get-contact-details", {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   // get default referral percentage
-  getReferPercentage: function(token) {
+  getReferPercentage: function (token) {
     return fetch(API_URL + "/admin/get-referal-details", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all jobs api
-  getAllJobApplications: function(
+  getAllJobApplications: function (
     jobId,
     page,
     limit,
@@ -1973,13 +2238,13 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all kyc data api
-  getKYCData: function(
+  getKYCData: function (
     token,
     page,
     limit,
@@ -2068,136 +2333,136 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all fees api
-  getFeesData: function(token) {
+  getFeesData: function (token) {
     let url = "/admin/get-all-fee";
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get withdrawl fees api
-  getWithdrawlFee: function(token) {
+  getWithdrawlFee: function (token) {
     let url = "/admin/get-withdrawl-faldax-fee";
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //edit fees api
-  updateFees: function(token, form) {
+  updateFees: function (token, form) {
     return fetch(API_URL + "/admin/edit-fee", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getPanicBtnDetails: function(token) {
+  getPanicBtnDetails: function (token) {
     return fetch(API_URL + "/get-panic-status", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //panic button api
-  panicBtn: function(token, form) {
+  panicBtn: function (token, form) {
     return fetch(API_URL + "/toggle-panic-status", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   // get user details api
-  getUserDetails: function(token, user_id) {
+  getUserDetails: function (token, user_id) {
     return fetch(API_URL + "/admin/get-user-details?user_id=" + user_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   // get employee details api
-  getEmployeeDetails: function(token, emp_id) {
+  getEmployeeDetails: function (token, emp_id) {
     return fetch(API_URL + "/admin/get-employee-details?emp_id=" + emp_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  disableTwoFactor: function(token, form) {
+  disableTwoFactor: function (token, form) {
     return fetch(API_URL + "/admin/disable-two-factor", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  setupTwoFactor: function(token, form) {
+  setupTwoFactor: function (token, form) {
     return fetch(API_URL + "/admin/setup-two-factor", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  verifyOTP: function(token, form) {
+  verifyOTP: function (token, form) {
     return fetch(API_URL + "/admin/verify-two-factor", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAdminDetails: function(token, admin_id) {
+  getAdminDetails: function (token, admin_id) {
     return fetch(API_URL + "/admin/get-details?admin_id=" + admin_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
   //get all news api
-  getAllNews: function(
+  getAllNews: function (
     page,
     limit,
     token,
@@ -2319,119 +2584,119 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  changeNewsStatus: function(token, form) {
+  changeNewsStatus: function (token, form) {
     return fetch(API_URL + "/admin/change-news-status", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getNewsDetails: function(token, news_id) {
+  getNewsDetails: function (token, news_id) {
     return fetch(API_URL + "/admin/get-news-details?news_id=" + news_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateReferral: function(token, form) {
+  updateReferral: function (token, form) {
     return fetch(API_URL + "/admin/update-user-referal", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getKYCDetails: function(token, user_id) {
+  getKYCDetails: function (token, user_id) {
     return fetch(API_URL + "/admin/get-kyc-detail?user_id=" + user_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getReferredAmounts: function(token, ref_id) {
+  getReferredAmounts: function (token, ref_id) {
     return fetch(API_URL + "/admin/get-referred-id-data?id=" + ref_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateSendCoinFee: function(token, form) {
+  updateSendCoinFee: function (token, form) {
     return fetch(API_URL + "/admin/update-send-coin-fee", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  updateFaldaxFee: function(token, form) {
+  updateFaldaxFee: function (token, form) {
     return fetch(API_URL + "/admin/update-faldax-fee", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
   //add user api call
-  addUser: function(token, form) {
+  addUser: function (token, form) {
     return fetch(API_URL + "/admin/add-user", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getWalletCoins: function(token) {
+  getWalletCoins: function (token) {
     return fetch(API_URL + "/coin-list", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getUserTickets: function(token, form) {
+  getUserTickets: function (token, form) {
     return fetch(API_URL + "/admin/get-user-tickets", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllAccountClasses: function(token, sorterCol, sortOrder) {
+  getAllAccountClasses: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-all-account-classes";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -2441,228 +2706,264 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  addAccountClass: function(token, form) {
+  addAccountClass: function (token, form) {
     return fetch(API_URL + "/admin/add-account-class", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  updateAccountClass: function(token, form) {
+  updateAccountClass: function (token, form) {
     return fetch(API_URL + "/admin/update-account-class", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  deleteAccountClass: function(token, form) {
+  deleteAccountClass: function (token, form) {
     return fetch(API_URL + "/admin/delete-account-class", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAssetDetails: function(token, coin_id) {
+  getAssetDetails: function (token, coin_id) {
     return fetch(API_URL + "/admin/coin/get-coin-details?id=" + coin_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAssetLimits: function(token, coin_id) {
+  getAssetLimits: function (token, coin_id) {
     return fetch(API_URL + "/admin/all-limits?coin_id=" + coin_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateAssetLimits: function(token, form) {
+  updateAssetLimits: function (token, form) {
     return fetch(API_URL + "/admin/edit-limit", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getUserLimits: function(token, user_id) {
+  getUserLimits: function (token, user_id) {
     return fetch(API_URL + "/admin/all-user-limits?user_id=" + user_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateUserLimits: function(token, form) {
+  updateUserLimits: function (token, form) {
     return fetch(API_URL + "/admin/edit-user-limit", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllEmailTemplates: function(token) {
+  getAllEmailTemplates: function (token) {
     return fetch(API_URL + "/admin/emailTemplate/get", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateEmailTemplate: function(token, form) {
+  getAllSMSTemplates: function (token) {
+    return fetch(API_URL + "/admin/get-sms-template", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+
+  updateEmailTemplate: function (token, form) {
     return fetch(API_URL + "/admin/emailTemplate/update", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
+  updateSmsTemplate: function (token, form) {
+    return fetch(
+      API_URL + "/admin/smsTemplate/update-sms-template?id=" + form.id,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      }
+    );
+  },
 
-  getAllNewsSources: function(token) {
+  getAllNewsSources: function (token) {
     return fetch(API_URL + "/admin/all-new-source", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateNewsSource: function(token, form) {
+  updateNewsSource: function (token, form) {
     return fetch(API_URL + "/admin/edit-news-source", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  changeWithdrawStatus: function(token, form) {
+  changeWithdrawStatus: function (token, form) {
     return fetch(API_URL + "/admin/approve-disapprove-withdraw-request", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getTemplateDetails: function(token, template_id) {
+  getTemplateDetails: function (token, template_id) {
     return fetch(API_URL + "/admin/emailTemplate/get-by-id?id=" + template_id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
+  getSmsTemplateDetails: function (token, template_id) {
+    return fetch(
+      API_URL + "/admin/smsTemplate/get-sms-template-by-id?id=" + template_id,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  },
+
   //edit job category api call
-  updateJobCategory: function(token, form) {
+  updateJobCategory: function (token, form) {
     return fetch(API_URL + "/admin/update-job-category", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  addJobCategory: function(token, form) {
+  addJobCategory: function (token, form) {
     return fetch(API_URL + "/admin/add-job-category", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  addWhitelistIP: function(token, form) {
+  addWhitelistIP: function (token, form) {
     return fetch(API_URL + "/admin/add-whitelist-ip", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllWhitelistIP: function(token, page, limit) {
+  getAllWhitelistIP: function (token, page, limit) {
     return fetch(
       API_URL + "/admin/get-all-whitelist-ip?page=" + page + "&limit=" + limit,
       {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
 
-  deleteProfileWhitelistIP: function(token, id) {
+  deleteProfileWhitelistIP: function (token, id) {
     return fetch(API_URL + "/admin/delete-whitelist-ip?id=" + id, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  addProfileWhitelistIP: function(token, form) {
+  addProfileWhitelistIP: function (token, form) {
     return fetch(API_URL + "/admin/add-whitelist-ip", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllUserWhitelistIP: function(token, user_id, page, limit) {
+  getAllUserWhitelistIP: function (token, user_id, page, limit) {
     return fetch(
       API_URL +
         "/admin/get-user-whitelist-ip?user_id=" +
@@ -2675,67 +2976,67 @@ const ApiUtils = {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
 
-  deleteEmpWhitelistIP: function(token, id) {
+  deleteEmpWhitelistIP: function (token, id) {
     return fetch(API_URL + "/admin/delete-user-whitelist-ip?id=" + id, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  addEmpWhitelistIP: function(token, form) {
+  addEmpWhitelistIP: function (token, form) {
     return fetch(API_URL + "/admin/add-user-ip-whitelist", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  updateUser: function(token, form) {
+  updateUser: function (token, form) {
     return fetch(API_URL + "/admin/update-user", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  enableWhitelist: function(token, form) {
+  enableWhitelist: function (token, form) {
     return fetch(API_URL + "/admin/user-whitelist-ip-status-change", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  enableProfileWhitelist: function(token, form) {
+  enableProfileWhitelist: function (token, form) {
     return fetch(API_URL + "/admin/whitelist-ip-status-change", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAll2FARequests: function(
+  getAll2FARequests: function (
     token,
     page,
     limit,
@@ -2784,110 +3085,110 @@ const ApiUtils = {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  approve2FARequest: function(token, form) {
+  approve2FARequest: function (token, form) {
     return fetch(API_URL + "/admin/approve-twofactors-request-status", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  rejectRequest: function(token, form) {
+  rejectRequest: function (token, form) {
     return fetch(API_URL + "/admin/reject-twofactors-request-status", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getWalletDetails: function(token, form) {
+  getWalletDetails: function (token, form) {
     return fetch(API_URL + "/wallet-details", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  generateWalletAddress: function(token, code, userId) {
+  generateWalletAddress: function (token, code, userId) {
     return fetch(
       API_URL + "/admin/create-admin-wallet/" + code + "/" + userId,
       {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
 
-  generateUserWalletAddress: function(token, coin, userId) {
+  generateUserWalletAddress: function (token, coin, userId) {
     return fetch(API_URL + "/admin/create-wallet/" + coin + "/" + userId, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAdminThresholds: function(token, code) {
+  getAdminThresholds: function (token, code) {
     return fetch(API_URL + "/admin/get-admin-thresholds", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getAdminContactDetails: function(token, code) {
+  getAdminContactDetails: function (token, code) {
     return fetch(API_URL + "/admin/get-admin-thresholds-contacts", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  storeContactDetails: function(token, form) {
+  storeContactDetails: function (token, form) {
     return fetch(API_URL + "/admin/add-admin-thresholds-contacts", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  saveAllNotification: function(token, form) {
+  saveAllNotification: function (token, form) {
     return fetch(API_URL + "/admin/add-admin-thresholds", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllWallets: function(token, search) {
+  getAllWallets: function (token, search) {
     let url = "/admin-wallet-fees-details";
     if (search) {
       url += "?search=" + search;
@@ -2896,77 +3197,96 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  sendWalletBalance: function(token, form) {
+  sendWalletBalance: function (token, form) {
     return fetch(API_URL + "/send-coin-admin", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
-  sendWarmWalletBalance: function(token, form) {
+  sendWalletBalanceTradedesk: function (token, form) {
+    return fetch(API_URL + "/admin/wallet-send-coin-tradedesk", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
+  sendWarmWalletBalance: function (token, form) {
     return fetch(API_URL + "/admin/send-warm-balance", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllBatches: function(token, page, limit) {
+  getAllBatches: function (token, page, limit) {
     let url = "/admin/batches/list?page=" + page + "&limit=" + limit;
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  createBatch: function(token, form) {
+  createBatch: function (token, form) {
     return fetch(API_URL + "/admin/batches/create", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  updateBatch: function(token, form) {
+  updateBatch: function (token, form) {
     return fetch(API_URL + "/admin/batches/update", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
-
-  getAllTiers: function(token) {
+  getAllTierRequirement: function (token) {
+    let url = "/admin/get-all-tier-details";
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getAllTiers: function (token) {
     let url = "/admin/get-tier-details";
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getSummaryOfBatch: function(token, transactionStart, transactionEnd) {
+  getSummaryOfBatch: function (token, transactionStart, transactionEnd) {
     let url =
       "/admin/get-batch-value?transaction_start=" +
       transactionStart +
@@ -2976,12 +3296,12 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getPurchaseOfBatch: function(token, transactionStart, transactionEnd) {
+  getPurchaseOfBatch: function (token, transactionStart, transactionEnd) {
     let url =
       "/admin/get-each-transaction-value?transaction_start=" +
       transactionStart +
@@ -2991,117 +3311,124 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getBatchDetails: function(token, batchId) {
+  getBatchDetails: function (token, batchId) {
     let url = "/admin/get-batch-detail?id=" + batchId;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  getTierDetails: function(token, tierId) {
+  getTierDetails: function (token, tierId) {
     let url = "/admin/get-tier-data?id=" + tierId;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateTier: function(token, form) {
+  updateTier: function (token, form) {
     let url = "/admin/update-tier-list";
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getAllTierRequests: function(token, id, status) {
-    let url = "/admin/user-tier-request";
-    if (id && status) {
-      url += "?id=" + id + "&status=" + status;
-    }
-
+  getAllTierRequests: function (
+    token,
+    tier = "1",
+    sortCol = "",
+    sortOrder = "",
+    limit = 10,
+    page = 1,
+    id,
+    status = 1,
+    searchData = "",
+    type = ""
+  ) {
+    let url = `/admin/user-tier-request?step=${tier}&limit=${limit}&page=${page}&status=${status}&data=${searchData}&type=${type}`;
     return fetch(API_URL + url, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  uploadBatchDoc: function(token, form) {
+  uploadBatchDoc: function (token, form) {
     let url = "/admin/batches/upload";
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: form
+      body: form,
     });
   },
 
-  downloadBatch: function(token, form) {
+  downloadBatch: function (token, form) {
     let url = "/admin/batches/download";
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getUserWallets: function(token, user_id) {
+  getUserWallets: function (token, user_id) {
     return fetch(
       API_URL + "/admin/get-user-wallet-addresses?user_id=" + user_id,
       {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
   },
 
-  getSimplexToken: function(token) {
+  getSimplexToken: function (token) {
     return fetch(API_URL + "/get-token-value", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
 
-  updateSimplexToken: function(token, form) {
+  updateSimplexToken: function (token, form) {
     let url = "/update-token-value";
     return fetch(API_URL + url, {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
 
-  getNetworkFee: function(token, sorterCol, sortOrder) {
+  getNetworkFee: function (token, sorterCol, sortOrder) {
     let url = "/admin/get-coin-fees-coin";
     if (sorterCol && sortOrder) {
       url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
@@ -3115,47 +3442,71 @@ const ApiUtils = {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   },
-  updateNetworkFee: function(token, body) {
+  getTradingFees: function (token, sorterCol, sortOrder) {
+    let url = "/get-all-fee";
+    if (sorterCol && sortOrder) {
+      url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else if (sorterCol && sortOrder) {
+      url += "?sort_col=" + sorterCol + "&sort_order=" + sortOrder;
+    } else {
+      // url;
+    }
+
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  updateNetworkFee: function (token, body) {
     const url = "/admin/update-fees-value";
     return fetch(API_URL + url, {
       method: "PUT",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
   },
-  getRolePermissions: function(token, roleId = "") {
+  getRolePermissions: function (token, roleId = "") {
     const url = "/admin/get-role-permission";
     return fetch(`${API_URL}${url}?role_id=${roleId}`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
-  updatePermissions: function(token, form) {
+  getPairList: function () {
+    const url = "/users/get-all-pair";
+    return fetch(`${API_URL}${url}`, {
+      method: "GET",
+    });
+  },
+  updatePermissions: function (token, form) {
     let url = "/admin/update-role-permission";
     return fetch(API_URL + url, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
   // Offer Module API's
-  offers: function(token) {
+  offers: function (token) {
     return {
       url: "/admin/campaigns/",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      getCampaignList: function(
+      getCampaignList: function (
         page,
         limit,
         searchData = "",
@@ -3177,42 +3528,42 @@ const ApiUtils = {
         return fetch(`${API_URL}${this.url}list`, {
           method: "POST",
           headers: this.headers,
-          body: formData
+          body: formData,
         });
       },
-      changeStatus: function(id, status = false) {
+      changeStatus: function (id, status = false) {
         let formData = new FormData();
         formData.append("status", status);
         return fetch(`${API_URL}${this.url}change-status?id=${id}`, {
           method: "PUT",
           headers: this.headers,
-          body: formData
+          body: formData,
         });
       },
-      updateCampaign: function(id, data) {
+      updateCampaign: function (id, data) {
         return fetch(`${API_URL}${this.url}update?id=${id}`, {
           method: "PUT",
           headers: this.headers,
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
       },
       // get campaign details api
-      getById: function(campaign_id) {
+      getById: function (campaign_id) {
         return fetch(API_URL + "/admin/campaigns/get?id=" + campaign_id, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      checkOfferCode: function(offerCode = "") {
+      checkOfferCode: function (offerCode = "") {
         return fetch(
           `${API_URL}${this.url}verify-offercode?code=${offerCode}`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getOfferCodeHistory: function(
+      getOfferCodeHistory: function (
         offerId,
         page,
         limit,
@@ -3227,140 +3578,140 @@ const ApiUtils = {
         return fetch(`${API_URL}${this.url}offercode-used?id=${offerId}`, {
           method: "POST",
           headers: this.headers,
-          body: formData
+          body: formData,
         });
-      }
+      },
     };
   },
-  metabase: function(token) {
+  metabase: function (token) {
     return {
       url: "/admin/",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      getAccountClassMetabase: function() {
+      getAccountClassMetabase: function () {
         return fetch(`${API_URL}${this.url}get-account-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getWithdrawRequest: function() {
+      getWithdrawRequest: function () {
         return fetch(`${API_URL}${this.url}get-withdraw-request-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getUsersRequest: function() {
+      getUsersRequest: function () {
         return fetch(`${API_URL}${this.url}get-users-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getTwoFactorRequest: function() {
+      getTwoFactorRequest: function () {
         return fetch(`${API_URL}${this.url}get-two-factor-request-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getTransactionHistory: function() {
+      getTransactionHistory: function () {
         return fetch(`${API_URL}${this.url}get-transaction-history-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getRolesRequest: function() {
+      getRolesRequest: function () {
         return fetch(`${API_URL}${this.url}get-roles-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getPairsRequest: function() {
+      getPairsRequest: function () {
         return fetch(`${API_URL}${this.url}get-pairs-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getOffersRequest: function() {
+      getOffersRequest: function () {
         return fetch(`${API_URL}${this.url}get-offers-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getNewsRequest: function() {
+      getNewsRequest: function () {
         return fetch(`${API_URL}${this.url}get-news-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getDashboardRequest: function() {
+      getDashboardRequest: function () {
         return fetch(`${API_URL}${this.url}get-dashboard-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getKYCRequest: function() {
+      getKYCRequest: function () {
         return fetch(`${API_URL}${this.url}get-kyc-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getReferralMetabaseUrl: function() {
+      getReferralMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-referral-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getAssetsMetabaseUrl: function() {
+      getAssetsMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-assets-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getBatchMetabaseUrl: function() {
+      getBatchMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-batch-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getCareerMetabaseUrl: function() {
+      getCareerMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-career-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getCountryMetabaseUrl: function() {
+      getCountryMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-country-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getEmployeeMetabaseUrl: function() {
+      getEmployeeMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-employee-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getFeesMetabaseUrl: function() {
+      getFeesMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-fees-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
       },
-      getHistoryMetabaseUrl: function() {
+      getHistoryMetabaseUrl: function () {
         return fetch(`${API_URL}${this.url}get-history-report`, {
           method: "GET",
-          headers: this.headers
+          headers: this.headers,
         });
-      }
+      },
     };
   },
-  walletDashboard: function(token) {
+  walletDashboard: function (token) {
     return {
       url: "/admin/",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
       },
-      getWalletDetailByName: function(
+      getWalletDetailByName: function (
         coin = "",
         page,
         limit,
@@ -3370,12 +3721,12 @@ const ApiUtils = {
         start_date = null,
         end_date = null,
         walletType = 1,
-        transaction_type=""
+        transaction_type = ""
       ) {
         return fetch(
-          `${API_URL}${
-            this.url
-          }get-wallet-dashboard?coin_code=${coin.toLowerCase()}&wallet_type=${walletType}${
+          `${API_URL}${this.url}get-wallet-dashboard?${
+            walletType == 5 ? "coin" : "coin_code"
+          }=${coin.toLowerCase()}&wallet_type=${walletType}${
             sortCol ? "&sort_col=" + sortCol : ""
           }${
             sortOrder ? "&sort_order=" + sortOrder : ""
@@ -3383,14 +3734,14 @@ const ApiUtils = {
             searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
             end_date ? "&end_date=" + end_date : ""
-          }${transaction_type?"&t_type="+transaction_type:""}`,
+          }${transaction_type ? "&t_type=" + transaction_type : ""}`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getFaldaxMainWalletDetails: function(
+      getFaldaxMainWalletDetails: function (
         coin = "",
         page,
         limit,
@@ -3400,7 +3751,7 @@ const ApiUtils = {
         start_date = null,
         end_date = null,
         walletType = 1,
-        transaction_type=""
+        transaction_type = ""
       ) {
         return fetch(
           `${API_URL}${
@@ -3413,58 +3764,58 @@ const ApiUtils = {
             searchData ? "&data=" + encodeURIComponent(searchData) : ""
           }${start_date ? "&start_date=" + start_date : ""}${
             end_date ? "&end_date=" + end_date : ""
-          }${transaction_type?"&wallet_type="+transaction_type:""}`,
+          }${transaction_type ? "&wallet_type=" + transaction_type : ""}`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getWalletWarnDashboard: function(search = "") {
+      getWalletWarnDashboard: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-warm-wallet-data${
             search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getHotSendWallet: function(search = "") {
+      getHotSendWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotsend-wallet-data${
             search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getHotReceiveWallet: function(search = "") {
+      getHotReceiveWallet: function (search = "") {
         return fetch(
           `${API_URL}${this.url}get-hotreceive-wallet-data${
             search ? "?search=" + search : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getWalletColdDashboard: function(searchData) {
+      getWalletColdDashboard: function (searchData) {
         return fetch(
           `${API_URL}${this.url}get-cold-wallet-data${
             searchData ? "?search=" + searchData : ""
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getWarmWalletDetail: function(coin_code, search) {
+      getWarmWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
             this.url
@@ -3473,11 +3824,11 @@ const ApiUtils = {
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getCustodialWalletDetail: function(coin_code, search) {
+      getCustodialWalletDetail: function (coin_code, search) {
         return fetch(
           `${API_URL}${
             this.url
@@ -3486,11 +3837,11 @@ const ApiUtils = {
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
       },
-      getHotReceiveWalletDetails: function(coin_code, search) {
+      getHotReceiveWalletDetails: function (coin_code, search) {
         return fetch(
           `${API_URL}${
             this.url
@@ -3499,13 +3850,13 @@ const ApiUtils = {
           }`,
           {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
           }
         );
-      }
+      },
     };
   },
-  getHotSendWalletDetails: function(coin_code, search) {
+  getHotSendWalletDetails: function (coin_code, search) {
     return fetch(
       `${API_URL}${
         this.url
@@ -3514,123 +3865,378 @@ const ApiUtils = {
       }`,
       {
         method: "GET",
-        headers: this.headers
+        headers: this.headers,
       }
     );
   },
-  getPolicyUrl: function(token) {
+  getPolicyUrl: function (token) {
     return fetch(`${API_URL}/admin/get-static-page-links`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
-  setPolicyDocs: function(token, formData) {
+  setPolicyDocs: function (token, formData) {
     return fetch(`${API_URL}/admin/update-static-page-pdf`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + token,
         // "Content-Type": 'multipart/form-data',
       },
-      body: formData
+      body: formData,
     });
   },
-  getAssetFeesAndLimits: function(token) {
+  getAssetFeesAndLimits: function (token) {
     return fetch(`${API_URL}/admin/list-asset-fees-limits`, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     });
   },
-  editAssetFeesAndLimits: function(token, form) {
+  editAssetFeesAndLimits: function (token, form) {
     return fetch(API_URL + "/admin/update-asset-fees-limits", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
-  sendResetPasswordLink: function(token, form) {
+  sendResetPasswordLink: function (token, form) {
     return fetch(API_URL + "/admin/forgot-user-password", {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
   },
-  getResidualTransactions: function(token,page=1,limit=50,data="",startDate="",endDate="",txType="") {
-    return fetch(API_URL + `/admin/get-residual-lists?page=${page}&limit=${limit}${data?"&data="+data:""}${txType?"&t_type="+txType:""}${startDate?"&start_date="+startDate:""}${endDate?"&end_date="+endDate:""}`, {
-      method: "GET",
+  getResidualTransactions: function (
+    token,
+    page = 1,
+    limit = 50,
+    data = "",
+    startDate = "",
+    endDate = "",
+    txType = ""
+  ) {
+    return fetch(
+      API_URL +
+        `/admin/get-residual-lists?page=${page}&limit=${limit}${
+          data ? "&data=" + data : ""
+        }${txType ? "&t_type=" + txType : ""}${
+          startDate ? "&start_date=" + startDate : ""
+        }${endDate ? "&end_date=" + endDate : ""}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  },
+  getWalletNetworkFee: function (token, form) {
+    return fetch(API_URL + "/admin/wallet/get-network-fee", {
+      method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+  },
+  getAvailableBalance: function (token, asset = "tbtc") {
+    return fetch(API_URL + `/admin/get-admin-available-balance?coin=${asset}`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
   },
-  getWalletNetworkFee: function(token, form) {
-    return fetch(API_URL + "/admin/wallet/get-network-fee", {
+  getAvailableWarmBalance: function (token, asset = "tbtc") {
+    return fetch(API_URL + `/admin/get-warm-available-balance?coin=${asset}`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getFaldaxMainWallet: function (token, search = "") {
+    let url = "/admin-business-wallet-details";
+    if (search) {
+      url += "?search=" + search;
+    }
+    return fetch(API_URL + url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  getPanicBtnHistory: function (
+    token,
+    searchData = "",
+    startDate = "",
+    endDate = "",
+    sortCol = "",
+    sortOrder = "",
+    page = 1,
+    limit = 50
+  ) {
+    let url = `${API_URL}/admin/get-panic-history?page=${page}${
+      sortOrder ? "&sort_order=" + sortOrder : ""
+    }${startDate ? "&start_date=" + startDate : ""}${
+      endDate ? "&end_date=" + endDate : ""
+    }${searchData ? "&data=" + searchData : ""}${
+      sortCol ? "&sort_col=" + sortCol : ""
+    }&limit=${limit}`;
+    return fetch(url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  approveRejectRequest: function (
+    token,
+    tier,
+    id,
+    status,
+    request_id,
+    private_note = "",
+    public_note = ""
+  ) {
+    let url = `${API_URL}/admin/upgrade-user-tier?tier_step=${tier}&id=${id}&status=${status}&request_id=${request_id}`;
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        private_note,
+        public_note,
+      }),
+    });
+  },
+  uploadDoc: function (token, formData) {
+    let url = `${API_URL}/admin/upload-user-documents`;
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    });
+  },
+  getTierDocuments: function (token) {
+    let url = `${API_URL}/admin/get-tier-pdf`;
+    return fetch(url, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  setTierDocument: function (token, formData) {
+    return fetch(`${API_URL}/admin/upload-tier-pdf`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": 'multipart/form-data',
+      },
+      body: formData,
+    });
+  },
+  executeTrade: function (url, token, formData) {
+    return fetch(`${SOCKET_HOST}${url}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+  },
+  cancleOrder: function (token, formData) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/cancel-pending-order`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+  },
+  forceApproveRejectTierRequest: function (
+    token,
+    id,
+    status,
+    public_note,
+    private_note
+  ) {
+    let url = `${API_URL}/admin/force-change-status?id=${id}&status=${status}`;
+    return fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ public_note, private_note }),
+    });
+  },
+  getTierTierRequirement(token, id) {
+    return fetch(`${API_URL}/admin/get-tier-data?id=${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getTierDetails: function (token, id, tier) {
+    return fetch(`${API_URL}/admin/get-tier-details`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": 'multipart/form-data',
+      },
+      body: JSON.stringify({
+        request_id: id,
+        tier_step: tier,
+      }),
+    });
+  },
+  getSpreadData: function (token) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/get-spread-value`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": 'multipart/form-data',
+      },
+      // body: JSON.stringify({})
+    });
+  },
+  getTradeDeskBalance: function (token) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/get-tradedesk-user-balances`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": 'multipart/form-data',
+      },
+      // body: JSON.stringify({})
+    });
+  },
+  getPairsForBot: function (token) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/get-pairs-value`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": 'multipart/form-data',
+      },
+      // body: JSON.stringify({})
+    });
+  },
+  updatePairsForBot: function (token, data) {
+    return fetch(`${SOCKET_HOST}/api/v1/tradding/update-pairs-value`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...data }),
+    });
+  },
+  checkTierUpgradeStatus: function (token, user_id, tier) {
+    return fetch(
+      `${API_URL}/admin/user-tier-unlock-check?user_id=${user_id}&tier_step=${tier}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+  },
+  tierUnlock: function (token, user_id, tier) {
+    return fetch(
+      `${API_URL}/admin/user-tier-unlock?user_id=${user_id}&tier_step=${tier}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+  },
+
+  disableTwoFactorViaCode: function (token ,formDataValue){
+    let url=`${API_URL}/admin/disable-two-factor`
+    return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(form)
+      body:JSON.stringify(formDataValue)
+    })
+  },
+  getUserTierValue: function (token, user_id) {
+    return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
     });
   },
-  getAvailableBalance:function(token,asset="tbtc"){
-    return fetch(API_URL+`/admin/get-admin-available-balance?coin=${asset}`, {
-      method: "get",
+  getallCountriesData: function (token) {
+    return fetch(API_URL + "/get-countries", {
+      method: "GET",
       headers: {
+        "Content-Type": "application/json",
         Authorization: "Bearer " + token,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+      },
+    });
   },
-  getAvailableWarmBalance:function(token,asset="tbtc"){
-    return fetch(API_URL+`/admin/get-warm-available-balance?coin=${asset}`, {
+  getallStatesData: function (token, id) {
+    return fetch(API_URL + `/get-states?country_id=${id}`, {
       method: "get",
       headers: {
-        Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
   },
-  getFaldaxMainWallet:function(token,search=""){
-    let url="/admin-business-wallet-details";
-      if (search) {
-      url += "?search=" + search;
-    }
-    return fetch(API_URL+url, {
+  getallCitiesData: function (token, id) {
+    return fetch(API_URL + `/get-city?state_id=${id}`, {
       method: "get",
       headers: {
-        Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
   },
-  getPanicBtnHistory:function(token,searchData="",startDate="",endDate="",sortCol="",sortOrder="",page=1,limit=50){
-    let url=`${API_URL}/admin/get-panic-history?page=${page}${sortOrder?'&sort_order='+sortOrder:""}${startDate?'&start_date='+startDate:""}${endDate?'&end_date='+endDate:""}${searchData?'&data='+searchData:""}${sortCol?'&sort_col='+sortCol:""}&limit=${limit}`
-    return fetch(url, {
-      method: "get",
-      headers: {
-        Authorization: "Bearer " + token,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-  }
 };
 export default ApiUtils;

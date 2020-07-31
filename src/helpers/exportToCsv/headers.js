@@ -23,7 +23,7 @@ const exportResidualHeaders = [
   { key: "residual_amount", label: "Residual Amount" },
   { key: "id", label: "Id" },
   { key: "coin", label: "Asset" },
-  { key: "coin_code", label: "Asset Code" }
+  { key: "coin_code", label: "Asset Code" },
 ];
 
 const exportCryptoOnly = [
@@ -52,7 +52,7 @@ const exportCryptoOnly = [
   { key: "limit_price", label: "Limit Price" },
   { key: "asset1_usd_value", label: "Asset1 USD Value" },
   { key: "asset2_usd_value", label: "Asset2 USD Value" },
-  { key: "execution_report", label: "Execution Report" }
+  { key: "execution_report", label: "Execution Report" },
 ];
 
 const exportCreditCard = [
@@ -76,7 +76,7 @@ const exportCreditCard = [
   { key: "address", label: "Address" },
   { key: "deleted_at", label: "Deleted At" },
   { key: "is_processed", label: "Is Processed" },
-  { key: "id", label: "ID" }
+  { key: "id", label: "ID" },
 ];
 
 const exportWithdrawalRequest = [
@@ -102,7 +102,7 @@ const exportWithdrawalRequest = [
   { key: "first_name", label: "First Name" },
   { key: "last_name", label: "Last Name" },
   { key: "coin_name", label: "Asset Name" },
-  { key: "coin_code", label: "Asset Code" }
+  { key: "coin_code", label: "Asset Code" },
 ];
 
 const exportCustomerIdVerification = [
@@ -136,7 +136,7 @@ const exportCustomerIdVerification = [
   { key: "id_type", label: "ID Type" },
   { key: "id", label: "ID" },
   { key: "email", label: "Email" },
-  { key: "account_tier", label: "Account Tier" }
+  { key: "account_tier", label: "Account Tier" },
 ];
 
 const exportWallet = [
@@ -152,7 +152,7 @@ const exportWallet = [
   { key: "total_earned_from_wallets", label: "Total Earned from Wallets" },
   { key: "total_earned_from_forfeit", label: "Total Earned from Forfeit" },
   { key: "total_earned_from_jst", label: "Total Earned from Jst" },
-  { key: "total", label: "Total" }
+  { key: "total", label: "Total" },
 ];
 
 const exportFaldaxFeeWallet = [
@@ -164,7 +164,7 @@ const exportFaldaxFeeWallet = [
   { key: "created_at", label: "Created At" },
   { key: "coin_code", label: "Asset Code" },
   { key: "source_address", label: "Source Address" },
-  { key: "destination_address", label: "Destination Address" }
+  { key: "destination_address", label: "Destination Address" },
 ];
 
 const exportForfietFund = [
@@ -177,7 +177,7 @@ const exportForfietFund = [
   { key: "deleted_at", label: "Deleted At" },
   { key: "balance", label: "Balance" },
   { key: "receive_address", label: "Receive Address" },
-  { key: "send_address", label: "Send Address" }
+  { key: "send_address", label: "Send Address" },
 ];
 
 const exportDirectDeposit = [
@@ -205,7 +205,7 @@ const exportDirectDeposit = [
   { key: "warm_wallet_balance_before", label: "Warm Wallet Balance Before" },
   { key: "transaction_from", label: "Transaction From" },
   { key: "residual_amount", label: "Residual Amount" },
-  { key: "coin_code", label: "Asset Code" }
+  { key: "coin_code", label: "Asset Code" },
 ];
 
 const exportCryptoOnlyWallet = [
@@ -224,7 +224,7 @@ const exportCryptoOnlyWallet = [
   { key: "network_fees", label: "Network Fees" },
   { key: "comission", label: "Commission" },
   { key: "email", label: "Email" },
-  { key: "coin_code", label: "Asset Code" }
+  { key: "coin_code", label: "Asset Code" },
 ];
 
 const exportNews = [
@@ -240,7 +240,7 @@ const exportNews = [
   { key: "owner", label: "Owner" },
   { key: "link", label: "Link" },
   { key: "is_active", label: "Is Active ?" },
-  { key: "owner_id", label: "Owner ID" }
+  { key: "owner_id", label: "Owner ID" },
 ];
 
 const exportReferrals = [
@@ -250,7 +250,7 @@ const exportReferrals = [
   { key: "last_name", label: "Last Name" },
   { key: "emailValue", label: "Email Value" },
   { key: "no_of_referral", label: "No of Referral" },
-  { key: "profile_pic", label: "Profile Pic" }
+  { key: "profile_pic", label: "Profile Pic" },
 ];
 
 const export2faRequest = [
@@ -263,7 +263,7 @@ const export2faRequest = [
   { key: "id", label: "ID" },
   { key: "reason", label: "Reason" },
   { key: "full_name", label: "Full Name" },
-  { key: "email", label: "Email" }
+  { key: "email", label: "Email" },
 ];
 
 const exportOffers = [
@@ -278,7 +278,7 @@ const exportOffers = [
   { key: "description", label: "Description" },
   { key: "no_of_transactions", label: "No of Transactions" },
   { key: "fees_allowed", label: "Fees Allowed" },
-  { key: "usage", label: "Usage" }
+  { key: "usage", label: "Usage" },
 ];
 
 const exportHotReceiveWallet = [
@@ -289,7 +289,7 @@ const exportHotReceiveWallet = [
   { key: "coin", label: "Asset" },
   { key: "hot_receive_wallet_address", label: "Hot Receive Wallet Address" },
   { key: "balance", label: "Balance" },
-  { key: "address", label: "Address" }
+  { key: "address", label: "Address" },
 ];
 
 const exportOffersUsages = [
@@ -303,7 +303,7 @@ const exportOffersUsages = [
   { key: "offer_type", label: "Offer Type" },
   { key: "is_attempted", label: "Is Attempted ?" },
   { key: "waived_fees", label: "Waived Fees" },
-  { key: "faldax_fees", label: "FALDAX Fees" }
+  { key: "faldax_fees", label: "FALDAX Fees" },
 ];
 
 const exportReferralDetails = [
@@ -312,7 +312,7 @@ const exportReferralDetails = [
   { key: "coin_icon", label: "Asset Icon" },
   { key: "email", label: "Email" },
   { key: "txid", label: "Transaction ID" },
-  { key: "updated_at", label: "Updated At" }
+  { key: "updated_at", label: "Updated At" },
 ];
 
 const exportJobApplicants = [
@@ -329,7 +329,7 @@ const exportJobApplicants = [
   { key: "updated_at", label: "Updated At" },
   { key: "deleted_at", label: "Deleted At" },
   { key: "id", label: "ID" },
-  { key: "job_id", label: "Job ID" }
+  { key: "job_id", label: "Job ID" },
 ];
 const exportJobs = [
   { key: "Id", label: "ID" },
@@ -342,7 +342,7 @@ const exportJobs = [
   { key: "short_desc", label: "Short Description" },
   { key: "is_active", label: "Is Active ?" },
   { key: "category_id", label: "Category Id" },
-  { key: "category", label: "Category" }
+  { key: "category", label: "Category" },
 ];
 
 const exportLoginHistory = [
@@ -355,7 +355,7 @@ const exportLoginHistory = [
   { key: "device_type", label: "Device Type" },
   { key: "device_token", label: "Device Token" },
   { key: "jwt_token", label: "Jwt Token" },
-  { key: "user", label: "User" }
+  { key: "user", label: "User" },
 ];
 
 const exportTransactionHistory = [
@@ -386,7 +386,7 @@ const exportTransactionHistory = [
   { key: "first_name", label: "First Name" },
   { key: "last_name", label: "Last Name" },
   { key: "coin", label: "Asset" },
-  { key: "coin_code", label: "Asset Code" }
+  { key: "coin_code", label: "Asset Code" },
 ];
 
 const exportAsset = [
@@ -416,7 +416,7 @@ const exportAsset = [
   { key: "min_thresold", label: "Min Threshold" },
   { key: "is_simplex_supported", label: "Is Simplex Supported ?" },
   { key: "is_jst_supported", label: "Is Jst Supported ?" },
-  { key: "jst_min_coin_limit", label: "Jst Min Asset Limit" }
+  { key: "jst_min_coin_limit", label: "Jst Min Asset Limit" },
 ];
 
 const exportCountry = [
@@ -428,7 +428,7 @@ const exportCountry = [
   { key: "deleted_at", label: "Deleted At" },
   { key: "color", label: "Color" },
   { key: "legality", label: "Legality" },
-  { key: "stateCount", label: "State Count" }
+  { key: "stateCount", label: "State Count" },
 ];
 
 const exportState = [
@@ -440,7 +440,7 @@ const exportState = [
   { key: "deleted_at", label: "Deleted At" },
   { key: "color", label: "Color" },
   { key: "legality", label: "Legality" },
-  { key: "stateCount", label: "State Count" }
+  { key: "stateCount", label: "State Count" },
 ];
 
 const exportEmployee = [
@@ -463,7 +463,7 @@ const exportEmployee = [
   { key: "add_user", label: "Add User" },
   { key: "whitelist_ip", label: "Whitelist Ip" },
   { key: "is_whitelist_ip", label: "Is Whitelist Ip" },
-  { key: "role", label: "Role" }
+  { key: "role", label: "Role" },
 ];
 
 const exportUsers = [
@@ -522,7 +522,7 @@ const exportUsers = [
   { key: "security_feature", label: "Security Feature" },
   {
     key: "security_feature_expired_time",
-    label: "Security Feature Expired Time"
+    label: "Security Feature Expired Time",
   },
   { key: "is_whitelist_ip", label: "Is Whitelist Ip ?" },
   { key: "twofactor_backup_code", label: "2FA Backup Code" },
@@ -537,7 +537,7 @@ const exportUsers = [
   { key: "no_of_referrals", label: "No of Referrals" },
   { key: "ip", label: "Ip" },
   { key: "is_logged_in", label: "Is Logged In ?" },
-  { key: "last_login_datetime", label: "Last Seen" }
+  { key: "last_login_datetime", label: "Last Seen" },
 ];
 
 const exportReferralUsers = [
@@ -596,7 +596,7 @@ const exportReferralUsers = [
   { key: "security_feature", label: "Security Feature" },
   {
     key: "security_feature_expired_time",
-    label: "Security Feature Expired Time"
+    label: "Security Feature Expired Time",
   },
   { key: "is_whitelist_ip", label: "is Whitelist Ip" },
   { key: "twofactor_backup_code", label: "2FA Backup code" },
@@ -608,7 +608,7 @@ const exportReferralUsers = [
   { key: "customer_id", label: "Customer ID" },
   { key: "total_referal", label: "Total Referral" },
   { key: "refered_by", label: "Referred By" },
-  { key: "collected_amount", label: "Collected Amount" }
+  { key: "collected_amount", label: "Collected Amount" },
 ];
 
 const exportHotReceiveWalletDetails = [
@@ -642,7 +642,7 @@ const exportHotReceiveWalletDetails = [
   { key: "label", label: "Label" },
   { key: "outputs", label: "Outputs" },
   { key: "inputs", label: "Inputs" },
-  { key: "normalizedTxHash", label: "Normalized Tx Hash" }
+  { key: "normalizedTxHash", label: "Normalized Tx Hash" },
 ];
 const exportFaldaxMainWallet = [
   { key: "id", label: "ID" },
@@ -656,7 +656,7 @@ const exportFaldaxMainWallet = [
   { key: "fiat", label: "Fiat Value" },
   { key: "send_address", label: "Send Address" },
   { key: "receive_address", label: "Receive Address" },
-  { key: "balance", label: "Balance" }
+  { key: "balance", label: "Balance" },
 ];
 const exportPanicHistory = [
   { key: "id", label: "ID" },
@@ -664,10 +664,109 @@ const exportPanicHistory = [
   { key: "created_at", label: "Created At" },
   { key: "updated_at", label: "Updated At" },
   { key: "deleted_at", label: "Deleted At" },
-  { key: "panic_status", label: "Status" }
+  { key: "panic_status", label: "Status" },
 ];
 
+const exportPair = [
+  { key: "id", label: "ID" },
+  { key: "name", label: "Name" },
+  { key: "maker_fee", label: "Maker Fee" },
+  { key: "taker_fee", label: "Taker Fee" },
+  { key: "created_at", label: "Created At" },
+  { key: "updated_at", label: "Updated At" },
+  { key: "deleted_at", label: "Deleted At" },
+  { key: "is_active", label: "Is Active ?" },
+  { key: "coin_code1", label: "Asset Code1" },
+  { key: "coin_code2", label: "Asset Code2" },
+  { key: "symbol", label: "Symbol" },
+  { key: "ask_price", label: "Ask Price" },
+  { key: "bid_price", label: "Bid Price" },
+  { key: "kraken_pair", label: "Kraken Pair" },
+];
+const exportSellOrder = [
+  { key: "user_id", label: "User ID" },
+  { key: "id", label: "ID" },
+  { key: "maximum_time", label: "Maximum Time" },
+  { key: "fill_price", label: "Full Price" },
+  { key: "limit_price", label: "Limit Price" },
+  { key: "stop_price", label: "Stop Price" },
+  { key: "price", label: "Price" },
+  { key: "quantity", label: "Quantity" },
+  { key: "avg_price", label: "Avg Price" },
+  { key: "currency", label: "Currency" },
+  { key: "settle_currency", label: "Settle Currency" },
+  { key: "working_indicator", label: "Working Indicator" },
+  { key: "order_type", label: "Order Type" },
+  { key: "order_status", label: "Order Status" },
+  { key: "time", label: "Time" },
+  { key: "side", label: "Side" },
+  { key: "is_partially_fulfilled", label: "Is Partially Fulfilled" },
+  { key: "fix_quantity", label: "Fix Quantity" },
+  { key: "maker_fee", label: "Maker Fee" },
+  { key: "taker_fee", label: "Taker Fee" },
+  { key: "created_at", label: "Created At" },
+  { key: "updated_at", label: "Update At" },
+  { key: "deleted_at", label: "Deleted At" },
+  { key: "symbol", label: "Symbol" },
+  { key: "activity_id", label: "Activity" },
+];
+
+const exportOwnTrade = [
+  { key: "id", label: "ID" },
+  { key: "created_at", label: "Created At" },
+  { key: "updated_at", label: "Updated At" },
+  { key: "deleted_at", label: "Deleted At" },
+  { key: "maximum_time", label: "Maximum Time" },
+  { key: "fill_price", label: "Fill Price" },
+  { key: "limit_price", label: "Limit Price" },
+  { key: "stop_price", label: "Stop Price" },
+  { key: "price", label: "Price" },
+  { key: "quantity", label: "Quantity" },
+  { key: "currency", label: "Currency" },
+  { key: "average_price", label: "Average Price" },
+  { key: "settle_currency", label: "Settle Currency" },
+  { key: "side", label: "Side" },
+  { key: "order_type", label: "Order Type" },
+  { key: "order_status", label: "Order Status" },
+  { key: "deleted", label: "Deleted" },
+  { key: "requested_user_id", label: "Requested User ID" },
+  { key: "is_partially_filled", label: "Is Partially Filled ?" },
+  { key: "fix_quantity", label: "Fix Quantity" },
+  { key: "symbol", label: "Symbol" },
+  { key: "maker_fee", label: "Maker Fee" },
+  { key: "taker_fee", label: "Taker Fee" },
+  { key: "user_id", label: "User ID" },
+  { key: "user_fee", label: "User Fee" },
+  { key: "user_coin", label: "User Coin" },
+  { key: "requested_fee", label: "Requested Fee" },
+  { key: "requested_coin", label: "Requested Coin" },
+  { key: "is_collected", label: "Is Collected ?" },
+  { key: "trade_type", label: "Trade Type" },
+  { key: "filled", label: "Filled" },
+  { key: "order_id", label: "Order ID" },
+  { key: "execution_report", label: "Execution Report" },
+  { key: "payment_id", label: "Payment ID" },
+  { key: "quote_id", label: "Quote ID" },
+  { key: "simplex_payment_status", label: "Simplex Payment Status" },
+  { key: "address", label: "Address" },
+  { key: "email", label: "Email" },
+];
+
+const exportTier = [
+  { key: "id", label: "ID" },
+  { key: "user_id", label: "User ID" },
+  { key: "tier_step", label: "Tier Step" },
+  { key: "unique_key", label: "Unique Key" },
+  { key: "is_approved", label: "Is Approved ?" },
+  { key: "email", label: "Email" },
+  { key: "first_name", label: "First Name" },
+  { key: "last_name", label: "Last Name" },
+  { key: "ssn", label: "SSN" },
+  { key: "type", label: "Type" },
+];
 export {
+  exportOwnTrade,
+  exportTier,
   exportResidualHeaders,
   exportLoginHistory,
   exportJobApplicants,
@@ -697,5 +796,7 @@ export {
   exportHotReceiveWallet,
   exportHotReceiveWalletDetails,
   exportFaldaxMainWallet,
-  exportPanicHistory
+  exportPanicHistory,
+  exportPair,
+  exportSellOrder,
 };

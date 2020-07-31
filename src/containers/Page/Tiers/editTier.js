@@ -18,7 +18,20 @@ class EditTier extends Component {
             fields: {},
             errType: 'Success',
         }
-        this.validator = new SimpleReactValidator();
+        this.validator = new SimpleReactValidator({
+              unlimited: {  // name the rule
+                message: 'The :attribute must be a number or type "Unlimited"',
+                rule:function (val, params, validator) {
+                  let validation1=this._testRegex(val,/^[0-9]*\.?\d*$/i) && params.indexOf(val) === -1
+                  if(validation1){
+                      return true
+                  }
+                  else{
+                      return val=="unlimited" || val=="Unlimited"
+                  }
+                }
+              }
+          });
     }
 
     componentDidMount = () => {
@@ -33,15 +46,16 @@ class EditTier extends Component {
         let _this = this;
 
         _this.setState({ loader: true });
-        ApiUtils.getTierDetails(token, tierId)
+        ApiUtils.getTierTierRequirement(token, tierId )
             .then((response) => response.json())
             .then(function (res) {
                 if (res.status == 200) {
                     let fields = res.data;
-                    let { Account_Age, Minimum_Total_Transactions, Minimum_Total_Value_of_All_Transactions } = res.data.minimum_activity_thresold;
+                    let [{ Account_Age, Minimum_Total_Transactions, Minimum_Total_Value_of_All_Transactions },{Total_Wallet_Balance}] = [res.data.minimum_activity_thresold,res.data.requirements_two];
                     fields['account_age'] = Account_Age;
                     fields['total_tras'] = Minimum_Total_Transactions;
                     fields['total_value'] = Minimum_Total_Value_of_All_Transactions;
+                    fields['total_fiat_value']=Total_Wallet_Balance;
                     _this.setState({ fields });
                 } else if (res.status == 403) {
                     _this.setState({ errMsg: true, errMessage: res.err, errType: 'error' }, () => {
@@ -93,7 +107,8 @@ class EditTier extends Component {
                     Minimum_Total_Transactions: fields['total_tras'],
                     Minimum_Total_Value_of_All_Transactions: fields['total_value']
                 },
-                requirements: fields.requirements
+                requirements: fields.requirements,
+                requirements_two:{Total_Wallet_Balance:fields['total_fiat_value']}
             };
 
             this.setState({ loader: true, isDisabled: true })
@@ -153,22 +168,25 @@ class EditTier extends Component {
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Daily Withdraw Limit:</span>
+                            <span>Daily Withdraw Limit (USD):</span>
                             <Input placeholder="Daily Withdraw Limit" onChange={this._handleChange.bind(this, "daily_withdraw_limit")} value={fields["daily_withdraw_limit"]} />
-                        </Col>
-                    </Row>
-                    <Row style={{ "marginBottom": "15px" }}>
-                        <Col>
-                            <span>Monthly Withdraw Limit:</span>
-                            <Input placeholder="Monthly Withdraw Limit" onChange={this._handleChange.bind(this, "monthly_withdraw_limit")} value={fields["monthly_withdraw_limit"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('monthly_withdraw_limit', fields["monthly_withdraw_limit"], 'required', 'text-danger')}
+                                {this.validator.message('daily_withdraw_limit', fields["daily_withdraw_limit"], 'required|unlimited', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Account Age:</span>
+                            <span>Monthly Withdraw Limit (USD):</span>
+                            <Input placeholder="Monthly Withdraw Limit" onChange={this._handleChange.bind(this, "monthly_withdraw_limit")} value={fields["monthly_withdraw_limit"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('monthly_withdraw_limit', fields["monthly_withdraw_limit"], 'required|unlimited', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Minimum Account Age (Days):</span>
                             <Input placeholder="Account Age" onChange={this._handleChange.bind(this, "account_age")} value={fields["account_age"]} />
                             <span style={{ "color": "red" }}>
                                 {this.validator.message('account_age', fields["account_age"], 'required', 'text-danger')}
@@ -177,19 +195,28 @@ class EditTier extends Component {
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Minimum Total Transactions:</span>
+                            <span>Minimum Total Number of Transactions of Trade:</span>
                             <Input placeholder="Minimum Total Transactions" onChange={this._handleChange.bind(this, "total_tras")} value={fields["total_tras"]} />
                             <span style={{ "color": "red" }}>
-                                {this.validator.message('total_tras', fields["total_tras"], 'required', 'text-danger')}
+                                {this.validator.message('minimum_total_transactions', fields["total_tras"], 'required', 'text-danger')}
                             </span>
                         </Col>
                     </Row>
                     <Row style={{ "marginBottom": "15px" }}>
                         <Col>
-                            <span>Minimum Total Value of All Transactions:</span>
+                            <span>Minimum Total Value of All Transactions of Trade (USD):</span>
                             <Input placeholder="Minimum Total Value of All Transactions" onChange={this._handleChange.bind(this, "total_value")} value={fields["total_value"]} />
                             <span style={{ "color": "red" }}>
                                 {this.validator.message('total_value', fields["total_value"], 'required', 'text-danger')}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row style={{ "marginBottom": "15px" }}>
+                        <Col>
+                            <span>Total Wallet Value (USD):</span>
+                            <Input placeholder="Total Wallet USD Value" onChange={this._handleChange.bind(this, "total_fiat_value")} value={fields["total_fiat_value"]} />
+                            <span style={{ "color": "red" }}>
+                                {this.validator.message('Total wallet usd value', fields["total_fiat_value"], 'required', 'text-danger')}
                             </span>
                         </Col>
                     </Row>

@@ -25,7 +25,7 @@ class EmailTemplates extends Component {
       errMessage: "",
       errMsg: false,
       errType: "Success",
-      loader: false
+      loader: false,
     };
     self = this;
     EmailTemplates.editTemplate = EmailTemplates.editTemplate.bind(this);
@@ -37,22 +37,21 @@ class EmailTemplates extends Component {
     );
   }
 
-  static viewTemplate(value){
-    self.props.history.push(
-    {
-      "pathname":"/dashboard/email-templates/edit-template/" + value,
-      "state":{isReadOnly:true}
-    })
+  static viewTemplate(value) {
+    self.props.history.push({
+      pathname: "/dashboard/email-templates/edit-template/" + value,
+      state: { isReadOnly: true },
+    });
   }
 
   componentDidMount = () => {
     this._getAllTemplates();
   };
 
-  openNotificationWithIconError = type => {
+  openNotificationWithIconError = (type) => {
     notification[type]({
       message: this.state.errType,
-      description: this.state.errMessage
+      description: this.state.errMessage,
     });
     this.setState({ errMsg: false });
   };
@@ -64,8 +63,8 @@ class EmailTemplates extends Component {
 
     _this.setState({ loader: true });
     ApiUtils.getAllEmailTemplates(token)
-      .then(response => response.json())
-      .then(function(res) {
+      .then((response) => response.json())
+      .then(function (res) {
         if (res.status == 200) {
           _this.setState({ allTemplates: res.templates });
         } else if (res.status == 403) {
@@ -80,12 +79,12 @@ class EmailTemplates extends Component {
         }
         _this.setState({ loader: false });
       })
-      .catch(err => {
+      .catch((err) => {
         _this.setState({
           errType: "error",
           errMsg: true,
           errMessage: "Unable to complete the requested action.",
-          loader: false
+          loader: false,
         });
       });
   };
@@ -100,24 +99,27 @@ class EmailTemplates extends Component {
     return (
       <LayoutWrapper>
         {/* <BackButton {...this.props}/> */}
-        <BreadcrumbComponent {...this.props} ></BreadcrumbComponent>
+        <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
         <Tabs className="isoTableDisplayTab full-width">
-            <TabPane tab={templateTableinfos[0].title} key={templateTableinfos[0].value}>
-              <TableDemoStyle className="isoLayoutContent">
-                <div>
-                  <TableWrapper
-                    {...this.state}
-                    rowKey="id"
-                    columns={templateTableinfos[0].columns}
-                    pagination={false}
-                    dataSource={allTemplates}
-                    className="isoCustomizedTable"
-                    // scroll={TABLE_SCROLL_HEIGHT}
-                    bordered
-                  />
-                </div>
-              </TableDemoStyle>
-            </TabPane>
+          <TabPane
+            tab={templateTableinfos[0].title}
+            key={templateTableinfos[0].value}
+          >
+            <TableDemoStyle className="isoLayoutContent">
+              <div>
+                <TableWrapper
+                  {...this.state}
+                  rowKey="id"
+                  columns={templateTableinfos[0].columns}
+                  pagination={false}
+                  dataSource={allTemplates}
+                  className="isoCustomizedTable"
+                  // scroll={TABLE_SCROLL_HEIGHT}
+                  bordered
+                />
+              </div>
+            </TableDemoStyle>
+          </TabPane>
         </Tabs>
         {loader && <FaldaxLoader />}
       </LayoutWrapper>
@@ -127,8 +129,8 @@ class EmailTemplates extends Component {
 
 export default withRouter(
   connect(
-    state => ({
-      token: state.Auth.get("token")
+    (state) => ({
+      token: state.Auth.get("token"),
     }),
     { logout }
   )(EmailTemplates)

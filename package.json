@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.9.20",
+    "@ant-design/icons": "^4.0.6",
     "aes-js": "^3.1.2",
     "antd": "^3.26.3",
     "auth0-lock": "^11.1.2",
@@ -11,7 +13,6 @@
     "ckeditor4-react": "^1.0.1",
     "clone": "^2.1.1",
     "connected-react-router": "^6.6.1",
-    "country-state-city": "0.0.5",
     "env-cmd": "^10.1.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "express": "^4.15.3",
@@ -51,6 +52,7 @@
     "redux-thunk": "^2.2.0",
     "simple-react-validator": "^0.0.8",
     "smooth-scrollbar": "^8.2.5",
+    "socket.io-client": "^2.3.0",
     "striptags": "2.2.1",
     "styled-components": "^2.2.1",
     "styled-theme": "^0.3.3",
@@ -63,7 +65,7 @@
   },
   "scripts": {
     "start": "react-scripts --max_old_space_size=4096 start",
-    "build": "react-scripts --max_old_space_size=4096 build",
+    "build": "react-scripts --max_old_space_size=4500 build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "build:preprod": "env-cmd -f .env.preprod react-scripts build",

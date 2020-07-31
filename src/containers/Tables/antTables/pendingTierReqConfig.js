@@ -1,7 +1,8 @@
 import React from 'react';
 import clone from 'clone';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { TextCell, PendingTierReqActionCell, FullNameTextCell } from '../../../components/tables/helperCells';
+import { TextCell, PendingTierReqActionCell, FullNameTextCell, ToolTipsCell } from '../../../components/tables/helperCells';
+import { Button } from 'antd';
 
 const renderCell = (object, type, key, fname = null, lname = null, tierStep = null,
     isApproved = null, userId = null) => {
@@ -23,28 +24,51 @@ const renderCell = (object, type, key, fname = null, lname = null, tierStep = nu
     }
 };
 
-const columns = [{
-    title: <IntlMessages id="tierTable.title.actions" />,
-    key: 'actions',
-    width: 100,
-    render: object => renderCell(object, 'PendingTierReqActionCell', 'id', 'first_name',
-        'last_name', 'tier_step', 'is_approved', 'user_id')
-}, {
-    title: <IntlMessages id="tierTable.title.first_name" />,
-    key: 'first_name',
-    width: 100,
-    render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
-}, {
+const columns = [
+//     {
+//     title: <IntlMessages id="tierTable.title.actions" />,
+//     key: 'actions',
+//     width: 80,
+//     align:"left",
+//     ellipsis:true,
+//     render: object => renderCell(object, 'PendingTierReqActionCell', 'id', 'first_name',
+//         'last_name', 'tier_step', 'is_approved', 'user_id')
+// },
+// {
+//     title:"Unique Key",
+//     key :"unique_key",
+//     align:"left",
+//     ellipsis:true,
+//     dataIndex:"unique_key",
+//     width:100
+// },
+{
+    title:"Name",
+    key :"name",
+    align:"left",
+    ellipsis:true,
+    // dataIndex:"name",
+    width:100,
+    render:(data)=><span>{data["first_name"]+" "+data["last_name"]}</span>
+},
+//  {
+//     title: <IntlMessages id="tierTable.title.first_name" />,
+//     key: 'first_name',
+//     width: 150,
+//     align:"left",
+//     ellipsis:true,
+//     render: object => renderCell(object, 'FullNameTextCell', 'id', 'first_name', 'last_name')
+// },
+ {
     title: <IntlMessages id="tierTable.title.email" />,
     key: 'email',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'email')
-}, {
-    title: <IntlMessages id="tierTable.title.tier_step" />,
-    key: 'tier_step',
-    width: 100,
-    render: object => renderCell(object, 'TextCell', 'tier_step')
-}];
+    width: 200,
+    align:"left",
+    ellipsis:true,
+    dataIndex:"email",
+    render:(value)=><span className="lowercase">{ToolTipsCell(value)}</span>
+}
+]
 
 const tierPendingReqTableInfos = [
     {

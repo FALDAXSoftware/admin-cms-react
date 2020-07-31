@@ -2,9 +2,17 @@
 def label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_').take(63)
 def gitCredentialsId = "github"
 def imageRepo = "100.69.158.196"
-podTemplate(label: label, containers: [
-     containerTemplate(name: 'build-container', image: imageRepo + '/buildtool:deployer', command: 'cat', ttyEnabled: true),
-     containerTemplate(name: 'node', image: 'node:8.15.0-alpine', command: 'cat', ttyEnabled: true),
+podTemplate(label: label, nodeSelector: 'env=jenkins' , containers: [
+    //  containerTemplate(name: 'build-container', image: imageRepo + '/buildtool:deployer', command: 'cat', ttyEnabled: true),
+     containerTemplate(
+        name: 'node', 
+        resourceRequestCpu: '50m',
+        resourceLimitCpu: '3000m',
+        resourceRequestMemory: '100Mi',
+        resourceLimitMemory: '5000Mi',
+        image: 'node:8.15.0-alpine', 
+        command: 'cat', 
+        ttyEnabled: true),
 ], 
 volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
@@ -55,10 +63,7 @@ volumes: [
                         s3Delete(bucket:'mainnet-admin.faldax.com', path:'')
                         s3Upload(file:'build', bucket:'mainnet-admin.faldax.com', path:'')
                 }
-                
                 }
-                
-              
                  }
 
          }
@@ -77,8 +82,7 @@ def getNamespace(branch){
         case 'master' : return "prod";
         case 'development' :  return "dev";
         case 'preprod' :  return "preprod";
-        case 'mainnet' :  return "mainnet";
-        default : return null;
+        default : return "dev";
     }
 }
 def getEnvConfig(branch){

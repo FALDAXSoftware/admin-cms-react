@@ -13,6 +13,8 @@ import { DateTimeCell, TransactionIdHashCell, ConvertSatoshiToAssetCell } from '
 import { ExportToCSVComponent } from '../../../Shared/exportToCsv';
 import { exportHotReceiveWalletDetails } from '../../../../helpers/exportToCsv/headers';
 
+var precision="1e8";
+var isErcToken=false;
 const { Option } = Select;
 const columns = [
     // {
@@ -35,7 +37,7 @@ const columns = [
         key: "baseValue",
         sorter: true,
         width: 75,
-        render: data => ConvertSatoshiToAssetCell(data["coin"], data["baseValue"])
+        render: data => ConvertSatoshiToAssetCell(data["coin"], data["baseValue"],precision)
     },
     {
         title: <IntlMessages id="walletWarmDetailsTable.title.type" />,
@@ -49,14 +51,14 @@ const columns = [
         key: "txid",
         width: 250,
         ellipsis: true,
-        render: data => TransactionIdHashCell(data["coin"], data["txid"])
+        render: data => TransactionIdHashCell(data["coin"], data["txid"],isErcToken?true:false)
     },
     {
         title: <IntlMessages id="walletWarmDetailsTable.title.network_fee" />,
         key: "baseValue",
         sorter: true,
         width: 75,
-        render: data => ConvertSatoshiToAssetCell(data["coin"], data["feeString"])
+        render: data => ConvertSatoshiToAssetCell(data["coin"], data["feeString"],(isErcToken?'1e18':false))
     },
     // {
     //     title:<IntlMessages id="walletWarmDetailsTable.title.normalizedTxHash"/>,
@@ -125,8 +127,10 @@ class WalletWarmDetailsComponent extends Component {
             await this.loader.show()
             const { coin_code, searchData } = this.state;
             let res = await (await (isExportToCsv ? ApiUtils.walletDashboard(this.props.token).getHotReceiveWalletDetails(coin_code, "") : ApiUtils.walletDashboard(this.props.token).getHotReceiveWalletDetails(coin_code, searchData))).json();
-            let [{ status, data, err, tradeCount }, logout] = [res, this.props.logout];
+            let [{ status, data, err, tradeCount,coinData }, logout] = [res, this.props.logout];
             if (status == 200) {
+                precision=coinData["coin_precision"];
+                isErcToken=coinData["iserc"]
                 if (isExportToCsv)
                     this.setState({ csvData: data.transfers })
                 else
