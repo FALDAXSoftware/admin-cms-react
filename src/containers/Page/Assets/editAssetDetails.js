@@ -28,7 +28,20 @@ class EditAssetDetails extends Component {
       selectedToken: false,
       bitGoMinLimit: false,
     };
-    this.validator = new SimpleReactValidator({});
+    this.validator = new SimpleReactValidator({
+      gtzero: {
+        // name the rule
+        message: "Values must br greater than zero",
+        rule: (val, params, validator) => {
+          if (val > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        required: true, // optional
+      },
+    });
     this.DecimalConvertUpTo = this.DecimalConvertUpTo.bind(this);
   }
 
@@ -386,8 +399,9 @@ class EditAssetDetails extends Component {
                 {this.validator.message(
                   "minimum trade limit",
                   //   fields["min_limit"],
+                  // fields["min_trade_limit"],
                   this.state.trade_min_limit,
-                  `required|numeric`,
+                  `required|numeric|gtzero`,
                   "text-danger"
                 )}
               </span>
