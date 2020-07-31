@@ -6,9 +6,9 @@ import authAction from '../../../redux/auth/actions';
 import FaldaxLoader from '../faldaxLoader';
 import { isAllowed } from "../../../helpers/accessControl";
 import { messages } from '../../../helpers/messages';
-const isFloat=(n)=>{
+const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0;
-  }
+}
 const { logout } = authAction;
 const EditableContext = React.createContext();
 const regEx = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
@@ -49,7 +49,7 @@ class EditableCell extends React.Component {
 
                             ],
                             // initialValue: (parseFloat(record[dataIndex]) > 0)?(parseFloat(record[dataIndex])).toPrecision(8):"0",
-                            initialValue: isFloat(record[dataIndex])?parseFloat(record[dataIndex]).toFixed(8):(record[dataIndex]===0?0:(record[dataIndex]?parseFloat(record[dataIndex]):undefined)),
+                            initialValue: isFloat(record[dataIndex]) ? parseFloat(record[dataIndex]).toFixed(8) : (record[dataIndex] === 0 ? 0 : (record[dataIndex] ? parseFloat(record[dataIndex]) : undefined)),
                         })(this.getInput())}
                     </Form.Item>
                 ) : (
@@ -69,56 +69,56 @@ class EditableTable extends React.Component {
         super(props);
         this.columns = [
             {
-                key:"1",
+                key: "1",
                 title: 'Daily Withdraw Crypto',
                 dataIndex: 'daily_withdraw_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
+                render: (data) => <span>{isFloat(data) ? parseFloat(data).toFixed(8) : (data === 0 ? 0 : (data ? parseFloat(data) : ""))}</span>
             },
             {
-                key:"2",
+                key: "2",
                 title: 'Daily Withdraw Fiat',
                 dataIndex: 'daily_withdraw_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
+                render: (data) => <span>{isFloat(data) ? parseFloat(data).toFixed(8) : (data === 0 ? 0 : (data ? parseFloat(data) : ""))}</span>
             },
             {
-                key:"3",
+                key: "3",
                 title: 'Monthly Withdraw Crypto',
                 dataIndex: 'monthly_withdraw_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
+                render: (data) => <span>{isFloat(data) ? parseFloat(data).toFixed(8) : (data === 0 ? 0 : (data ? parseFloat(data) : ""))}</span>
             },
             {
-                key:"4",
+                key: "4",
                 title: 'Monthly Withdraw Fiat',
                 dataIndex: 'monthly_withdraw_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
+                render: (data) => <span>{isFloat(data) ? parseFloat(data).toFixed(8) : (data === 0 ? 0 : (data ? parseFloat(data) : ""))}</span>
             },
             {
-                key:"7",
+                key: "7",
                 title: 'Min Withdrawal Crypto',
                 dataIndex: 'min_withdrawl_crypto',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
+                render: (data) => <span>{isFloat(data) ? parseFloat(data).toFixed(8) : (data === 0 ? 0 : (data ? parseFloat(data) : ""))}</span>
             },
             {
-                key:"5",
+                key: "5",
                 title: 'Min Withdrawal Fiat',
                 dataIndex: 'min_withdrawl_fiat',
                 editable: true,
-                render:(data)=><span>{isFloat(data)?parseFloat(data).toFixed(8):(data===0?0:(data?parseFloat(data):""))}</span>
+                render: (data) => <span>{isFloat(data) ? parseFloat(data).toFixed(8) : (data === 0 ? 0 : (data ? parseFloat(data) : ""))}</span>
             },
             {
-                key:"6",
+                key: "6",
                 title: 'Actions',
                 dataIndex: 'operation',
                 render: (text, record) => {
                     const { editingKey } = this.state;
                     const editable = this.isEditing(record);
                     return editable ? (
-                     <span>
+                        <span>
                             <EditableContext.Consumer>
                                 {form => (
                                     <a
@@ -160,23 +160,23 @@ class EditableTable extends React.Component {
         this.setState({ editingKey: '' });
     };
 
-    validateMinCryptoLimit=(rowData,key)=>{
-        let {allAssetLimit}=this.state;
-        let data=allAssetLimit.find(ele=>ele.id==key)
-        if(rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
+    validateMinCryptoLimit = (rowData, key) => {
+        let { allAssetLimit } = this.state;
+        let data = allAssetLimit.find(ele => ele.id == key)
+        if (rowData.daily_withdraw_crypto && (!rowData.monthly_withdraw_crypto) && (parseFloat(rowData.daily_withdraw_crypto) < parseFloat(data.min_limit))) {
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto + " " + data.min_limit, errType: 'Error' });
             return false;
-        }if(rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))){
+        } if (rowData.daily_withdraw_crypto && rowData.monthly_withdraw_crypto && (parseFloat(rowData.monthly_withdraw_crypto) <= parseFloat(rowData.daily_withdraw_crypto))) {
             this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_monthly_max_daily_withdraw_crypto, errType: 'Error' });
             return false;
-        } if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)){
-            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto+" "+data.min_limit, errType: 'Error' });
+        } if ((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && parseFloat(rowData.monthly_withdraw_crypto) < parseFloat(data.min_limit)) {
+            this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto + " " + data.min_limit, errType: 'Error' });
             return false;
-        }if(rowData.daily_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto)>parseFloat(rowData.daily_withdraw_crypto)){
+        } if (rowData.daily_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto) > parseFloat(rowData.daily_withdraw_crypto)) {
             this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_daily_withdraw_crypto_lte_daily_withdraw_crypto, errType: 'Error' });
             return false;
         }
-        if((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto)>parseFloat(rowData.monthly_withdraw_crypto)){
+        if ((!rowData.daily_withdraw_crypto) && rowData.monthly_withdraw_crypto && rowData.min_withdrawl_crypto && parseFloat(rowData.min_withdrawl_crypto) > parseFloat(rowData.monthly_withdraw_crypto)) {
             this.setState({ errMsg: true, errMessage: messages.notification.limit_Management.min_withdraw_crypto_lte_monthly_withdraw_crypto, errType: 'Error' });
             return false;
         }
@@ -184,65 +184,65 @@ class EditableTable extends React.Component {
     }
 
 
-    save = async(form, key) => {
+    save = async (form, key) => {
         const { token, coin_id } = this.props;
         let _this = this;
         form.validateFields(async (error, row) => {
-            try{
+            try {
 
-            let isValid=this.validateMinCryptoLimit(row,key);
-            if(!isValid){
-                return false;
+                let isValid = this.validateMinCryptoLimit(row, key);
+                if (!isValid) {
+                    return false;
+                }
+                if (error) {
+                    return;
+                }
+                const newData = [...this.state.allAssetLimit];
+                const index = newData.findIndex(item => key === item.id);
+                let formData = {
+                    id: newData[index].id,
+                    coin_id: newData[index].coin_id,
+                    daily_withdraw_crypto: isFloat(row.daily_withdraw_crypto) ? parseFloat(row.daily_withdraw_crypto).toFixed(8) : (row.daily_withdraw_crypto === 0 ? 0 : (row.daily_withdraw_crypto ? parseFloat(row.daily_withdraw_crypto) : NaN)),
+                    daily_withdraw_fiat: isFloat(row.daily_withdraw_fiat) ? parseFloat(row.daily_withdraw_fiat).toFixed(8) : (row.daily_withdraw_fiat === 0 ? 0 : (row.daily_withdraw_fiat ? parseFloat(row.daily_withdraw_fiat) : NaN)),
+                    min_withdrawl_crypto: isFloat(row.min_withdrawl_crypto) ? parseFloat(row.min_withdrawl_crypto).toFixed(8) : (row.min_withdrawl_crypto === 0 ? 0 : (row.min_withdrawl_crypto ? parseFloat(row.min_withdrawl_crypto) : NaN)),
+                    min_withdrawl_fiat: isFloat(row.min_withdrawl_fiat) ? parseFloat(row.min_withdrawl_fiat).toFixed(8) : (row.min_withdrawl_fiat === 0 ? 0 : (row.min_withdrawl_fiat ? parseFloat(row.min_withdrawl_fiat) : NaN)),
+                    monthly_withdraw_crypto: isFloat(row.monthly_withdraw_crypto) ? parseFloat(row.monthly_withdraw_crypto).toFixed(8) : (row.monthly_withdraw_crypto === 0 ? 0 : (row.monthly_withdraw_crypto ? parseFloat(row.monthly_withdraw_crypto) : NaN)),
+                    monthly_withdraw_fiat: isFloat(row.monthly_withdraw_fiat) ? parseFloat(row.monthly_withdraw_fiat).toFixed(8) : (row.monthly_withdraw_fiat === 0 ? 0 : (row.monthly_withdraw_fiat ? parseFloat(row.monthly_withdraw_fiat) : NaN)),
+                }
+                if (index > -1) {
+                    newData.splice(index, 1, {
+                        ...formData,
+                        ...row,
+                    });
+                    this.setState({ allAssetLimit: newData, editingKey: '' });
+                } else {
+                    newData.push(row);
+                    this.setState({ allAssetLimit: newData, editingKey: '' });
+                }
+                this.setState({ loader: true });
+                let res = await (await ApiUtils.updateAssetLimits(token, formData)).json();
+                if (res.status == 200) {
+                    _this.setState({ errMsg: true, errMessage: res.message, editingKey: '', errType: 'Success' }, async () => {
+                        await _this._getAllAssetLimit();
+                    });
+                } else if (res.status == 403) {
+                    _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error', editingKey: '' }, async () => {
+                        _this.props.logout();
+                    });
+                } else {
+                    _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error', editingKey: '' });
+                }
+            } catch (error) {
+                throw error;
+            } finally {
+                this.setState({ loader: false })
             }
-            if (error) {
-                return;
-            }
-            const newData = [...this.state.allAssetLimit];
-            const index = newData.findIndex(item => key === item.id);
-            let formData = {
-                id: newData[index].id,
-                coin_id: newData[index].coin_id,
-                daily_withdraw_crypto: isFloat(row.daily_withdraw_crypto)?parseFloat(row.daily_withdraw_crypto).toFixed(8):(row.daily_withdraw_crypto===0?0:(row.daily_withdraw_crypto?parseFloat(row.daily_withdraw_crypto):NaN)),
-                daily_withdraw_fiat: isFloat(row.daily_withdraw_fiat)?parseFloat(row.daily_withdraw_fiat).toFixed(8):(row.daily_withdraw_fiat===0?0:(row.daily_withdraw_fiat?parseFloat(row.daily_withdraw_fiat):NaN)),
-                min_withdrawl_crypto: isFloat(row.min_withdrawl_crypto)?parseFloat(row.min_withdrawl_crypto).toFixed(8):(row.min_withdrawl_crypto===0?0:(row.min_withdrawl_crypto?parseFloat(row.min_withdrawl_crypto):NaN)),
-                min_withdrawl_fiat:isFloat(row.min_withdrawl_fiat)?parseFloat(row.min_withdrawl_fiat).toFixed(8):(row.min_withdrawl_fiat===0?0:(row.min_withdrawl_fiat?parseFloat(row.min_withdrawl_fiat):NaN)),
-                monthly_withdraw_crypto: isFloat(row.monthly_withdraw_crypto)?parseFloat(row.monthly_withdraw_crypto).toFixed(8):(row.monthly_withdraw_crypto===0?0:(row.monthly_withdraw_crypto?parseFloat(row.monthly_withdraw_crypto):NaN)),
-                monthly_withdraw_fiat: isFloat(row.monthly_withdraw_fiat)?parseFloat(row.monthly_withdraw_fiat).toFixed(8):(row.monthly_withdraw_fiat===0?0:(row.monthly_withdraw_fiat?parseFloat(row.monthly_withdraw_fiat):NaN)),
-            }
-            if (index > -1) {
-                newData.splice(index, 1, {
-                    ...formData,
-                    ...row,
-                });
-                this.setState({ allAssetLimit: newData, editingKey: '' });
-            } else {
-                newData.push(row);
-                this.setState({ allAssetLimit: newData, editingKey: '' });
-            }
-            this.setState({loader:true});
-            let res=await(await ApiUtils.updateAssetLimits(token, formData)).json();
-            if (res.status == 200) {
-                _this.setState({ errMsg: true, errMessage: res.message,editingKey: '', errType: 'Success' }, async() => {
-                    await _this._getAllAssetLimit();
-                });
-            } else if (res.status == 403) {
-                _this.setState({ errMsg: true, errMessage: res.err, errType: 'Error',editingKey: '' }, async() => {
-                    _this.props.logout();
-                });
-            } else {
-                _this.setState({ errMsg: true, errMessage: res.message, errType: 'Error',editingKey: '' });
-            }
-        }catch(error){
-            throw error;
-        }finally{
-            this.setState({loader:false})
-        }
         })
-        .catch(() => {
-            _this.setState({
-                errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error',editingKey: ''
+            .catch(() => {
+                _this.setState({
+                    errMsg: true, errMessage: 'Unable to complete the requested action.', errType: 'Error', editingKey: ''
+                });
             });
-        });
     }
 
     _getAllAssetLimit = () => {
@@ -311,10 +311,10 @@ class EditableTable extends React.Component {
             <div className="isoLayoutContent">
                 {
                     allAssetLimit.length > 0 ?
-                        allAssetLimit.map((asset,index) => {
+                        allAssetLimit.map((asset, index) => {
                             return (
                                 <div>
-                                    <Divider key={"div"+index} orientation="left">Tier {asset.tier_step}</Divider>
+                                    <Divider key={"div" + index} orientation="left">Tier {asset.tier_step}</Divider>
                                     <EditableContext.Provider key={index} value={this.props.form}>
                                         <Table
                                             rowKey="id"

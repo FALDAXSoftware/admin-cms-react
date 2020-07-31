@@ -101,6 +101,7 @@ class AddCoinModal extends Component {
             formData.append('iserc', selectedToken);
             formData.append('deposit_method', ' ');
             formData.append('kraken_coin_name', ' ');
+            formData.append('orders_minimum', fields['orders_minimum']);
             formData.append('coin_icon', this.refs.uploadImg.files[0] ? this.refs.uploadImg.files[0] : fields['image']);
 
             ApiUtils.addCoin(token, formData)
@@ -241,10 +242,18 @@ class AddCoinModal extends Component {
                 </div>
 
                 <div style={{ "marginBottom": "15px" }}>
-                    <span>Minimum Limit:</span>
-                    <Input placeholder="Minimum Limit" onChange={this._handleChange.bind(this, "min_limit")} value={fields["min_limit"]} />
+                    <span>Minimum Withdrawal Limit:</span>
+                    <Input placeholder="Minimum Withdrawal Limit" onChange={this._handleChange.bind(this, "min_limit")} value={fields["min_limit"]} />
                     <span style={{ "color": "red" }}>
                         {this.validator.message('minimum limit', fields["min_limit"], 'required|numeric', 'text-danger')}
+                    </span>
+                </div>
+
+                <div style={{ "marginBottom": "15px" }}>
+                    <span>Minimum Trade Limit:</span>
+                    <Input placeholder="Minimum Trade Limit" onChange={this._handleChange.bind(this, "orders_minimum")} value={fields["orders_minimum"]} />
+                    <span style={{ "color": "red" }}>
+                        {this.validator.message('minimum limit', fields["orders_minimum"], 'required|numeric', 'text-danger')}
                     </span>
                 </div>
 
