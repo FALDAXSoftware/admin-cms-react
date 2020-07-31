@@ -148,8 +148,8 @@ class WalletWarmDashboard extends Component {
         await (isExportToCsv
           ? ApiUtils.walletDashboard(this.props.token).getHotReceiveWallet("")
           : ApiUtils.walletDashboard(this.props.token).getHotReceiveWallet(
-              searchData
-            ))
+            searchData
+          ))
       ).json();
       let [{ status, data, err }, logout] = [res, this.props.logout];
       if (status == 200) {
@@ -174,7 +174,7 @@ class WalletWarmDashboard extends Component {
       );
     } finally {
       this.loader.hide();
-      `  `;
+      // `  `;
     }
   };
   render() {
