@@ -178,7 +178,7 @@ class WalletWarmDashboard extends Component {
     }
   };
   render() {
-    const { loader, data, searchData, openCsvModal, csvData } = this.state;
+    let { loader, data, searchData, openCsvModal, csvData } = this.state;
     return (
       <>
         <ExportToCSVComponent
