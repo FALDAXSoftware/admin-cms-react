@@ -10,6 +10,7 @@ import { isAllowed } from "../../../helpers/accessControl";
 // import { BackButton } from '../../Shared/backBttton.js';
 import { BreadcrumbComponent } from "../../Shared/breadcrumb.js";
 import PendingTradeHistory from "./pendingTradeHistory.js";
+import CancelledTradeHistory from "./cancelledTradeHistory.js";
 
 const TabPane = Tabs.TabPane;
 
@@ -36,11 +37,11 @@ class AllHistory extends Component {
                   <PendingTradeHistory />
                 </TabPane>
               )}
-              {/* {isAllowed("admin_all_orders") && (
+              {isAllowed("admin_all_orders") && (
                 <TabPane tab="Cancelled Orders" key="3">
-                  <PendingTradeHistory />
+                  <CancelledTradeHistory />
                 </TabPane>
-              )} */}
+              )}
             </Tabs>
           </TabPane>
           <TabPane tab="Credit Card" key="2">
