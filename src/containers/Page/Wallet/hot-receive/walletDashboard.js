@@ -174,7 +174,6 @@ class WalletWarmDashboard extends Component {
       );
     } finally {
       this.loader.hide();
-      `  `;
     }
   };
   render() {
