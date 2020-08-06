@@ -2947,23 +2947,50 @@ const TierReqCell = (
   requirements,
   requirements2
 ) => (
-  <div>
-    <ul class="style-circle" type="circle">
-      {Object.keys(requirements).map((req) => (
-        <li>
-          <b>{requirements[req]}</b>
-        </li>
-      ))}
-    </ul>
-    <Divider>OR</Divider>
-    <ul class="style-circle" type="circle">
-      <li>
-        <b>
-          {"Total wallet USD Value : $" + requirements2["Total_Wallet_Balance"]}
-        </b>
-      </li>
-    </ul>
-  </div>
+  <>
+    {tier_step === 0 ? (
+      <div>
+        {requirements != null ? (
+          <ul class="style-circle" type="circle">
+            {Object.keys(requirements).map((req) => (
+              <li>
+                <b>{requirements[req]}</b>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          ""
+        )}
+      </div>
+    ) : (
+      <div>
+        {requirements != null ? (
+          <ul class="style-circle" type="circle">
+            {Object.keys(requirements).map((req) => (
+              <li>
+                <b>{requirements[req]}</b>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          ""
+        )}
+        <Divider>OR</Divider>
+        {requirements2 != null ? (
+          <ul class="style-circle" type="circle">
+            <li>
+              <b>
+                {"Total wallet USD Value : $" +
+                  requirements2["Total_Wallet_Balance"]}
+              </b>
+            </li>
+          </ul>
+        ) : (
+          " "
+        )}
+      </div>
+    )}
+  </>
 );
 const TierThresholdCell = (
   value,
@@ -2971,39 +2998,57 @@ const TierThresholdCell = (
   daily_withdraw_limit,
   monthly_withdraw_limit,
   minimum_activity_thresold,
-  requirements
+  requirements,
+  max_trade_amount,
+  max_allowed_days
 ) => (
   <>
-    <ul class="style-circle" type="circle">
-      <li>
-        <b>
-          {"Account Age : " +
-            minimum_activity_thresold["Account_Age"] +
-            " Days"}
-        </b>
-      </li>
-      <li>
-        <b>
-          {"Minimum Total Transactions : " +
-            minimum_activity_thresold["Minimum_Total_Transactions"] +
-            " Transactions"}
-        </b>
-      </li>
-      <li>
-        <b>
-          {"Minimum Total Value of All Transactions : $" +
-            minimum_activity_thresold[
-              "Minimum_Total_Value_of_All_Transactions"
-            ]}
-        </b>
-      </li>
-      <li>
-        <b>Deposit Cryptocurrencies : Unlimited</b>
-      </li>
-      <li>
-        <b>Trade : Unlimited</b>
-      </li>
-    </ul>
+    {tier_step === 0 ? (
+      <ul class="style-circle" type="circle">
+        <li>
+          <b>{"Maximum Trade Amount : $" + max_trade_amount}</b>
+        </li>
+        <li>
+          <b>
+            {"Maximum Allowed Days (Trade) : " + max_allowed_days + " Days"}
+          </b>
+        </li>
+        <li>
+          <b>Deposit Cryptocurrencies : Unlimited</b>
+        </li>
+      </ul>
+    ) : (
+      <ul class="style-circle" type="circle">
+        <li>
+          <b>
+            {"Account Age : " +
+              minimum_activity_thresold["Account_Age"] +
+              " Days"}
+          </b>
+        </li>
+        <li>
+          <b>
+            {"Minimum Total Transactions : " +
+              minimum_activity_thresold["Minimum_Total_Transactions"] +
+              " Transactions"}
+          </b>
+        </li>
+        <li>
+          <b>
+            {"Minimum Total Value of All Transactions : $" +
+              minimum_activity_thresold[
+                "Minimum_Total_Value_of_All_Transactions"
+              ]}
+          </b>
+        </li>
+        <li>
+          <b>Deposit Cryptocurrencies : Unlimited</b>
+        </li>
+        <li>
+          <b>Trade : Unlimited</b>
+        </li>
+      </ul>
+    )}
   </>
 );
 const TierActionCell = (value) => (
