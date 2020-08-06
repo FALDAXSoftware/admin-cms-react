@@ -1,4 +1,4 @@
-// const API_URL = "http://193f780e58ea.ngrok.io"; // Local (Mansi) URL
+// const API_URL = "http://1d9e1abe96b5.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -4186,20 +4186,21 @@ const ApiUtils = {
         headers: {
           Authorization: "Bearer " + token,
         },
-      })
+      }
+    );
   },
 
-  disableTwoFactorViaCode: function (token ,formDataValue){
-    let url=`${API_URL}/admin/disable-two-factor`
+  disableTwoFactorViaCode: function (token, formDataValue) {
+    let url = `${API_URL}/admin/disable-two-factor`;
     return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify(formDataValue)
-    })
+      body: JSON.stringify(formDataValue),
+    });
   },
   getUserTierValue: function (token, user_id) {
     return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
