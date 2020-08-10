@@ -323,7 +323,7 @@ class EditTier extends Component {
                     ? this.validator.message(
                         "maximum_trade_amount",
                         fields["max_trade_amount"],
-                        "required|numeric",
+                        "required|unlimited",
                         "text-danger"
                       )
                     : delete this.validator.fields["maximum_trade_amount"]}
@@ -367,7 +367,7 @@ class EditTier extends Component {
                     ? this.validator.message(
                         "maximum_allowed_days",
                         fields["max_allowed_days"],
-                        "required",
+                        "required|unlimited",
                         "text-danger"
                       )
                     : delete this.validator.fields["maximum_allowed_days"]}
