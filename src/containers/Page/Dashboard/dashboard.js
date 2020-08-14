@@ -654,7 +654,7 @@ class Dashboard extends Component {
           date.length > 0 ? moment(date[1]).endOf("d").toISOString() : "",
       },
       () => {
-        this._getAllCount();
+        this._getAllCountCountries();
       }
     );
   };
