@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, notification, Card, Divider } from "antd";
+import { Row, Col, notification, Card, Divider, Spin } from "antd";
 // import LayoutWrapper from "../../../components/utility/layoutWrapper.js"
 import basicStyle from "../../../settings/basicStyle";
 import ApiUtils from "../../../helpers/apiUtills";
@@ -27,12 +27,16 @@ const CardWrapper = styled(Card)`
     min-height: 219px;
   }
 `;
+const LoadDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 const ChartWrapper = styled.div`
   height: 219px;
   display: flex;
   flex-direction: column;
   align-items: center;
-
   .isoChartControl {
     display: flex;
     align-items: center;
@@ -129,7 +133,12 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    this._getAllCount();
+    this._getAllCountCountries();
+    this._getAllCountFees();
+    this._getAllCountTransactions();
+    this._getAllCountUsers();
+    this._getAllCountCustomerID();
+    this._getAllCountTier();
   }
 
   calculateTierData(tierData) {
@@ -162,7 +171,6 @@ class Dashboard extends Component {
     }
     this.setState({ tierData: tier });
   }
-
   getFeesTransactionValue(data) {
     let label = [],
       value = [],
@@ -174,13 +182,187 @@ class Dashboard extends Component {
     });
     return [label, value, value2];
   }
-  _getAllCount = () => {
+  // _getAllCount = () => {
+  //   const { token } = this.props;
+  //   const { startDate, endDate } = this.state;
+  //   let _this = this;
+  //   _this.setState({ loader: true });
+  //   ApiUtils.getAllCount(token, startDate, endDate)
+  //     .then((response) => response.json())
+  //     .then(function (res) {
+  //       if (res) {
+  //         if (res.status == 200) {
+  //           let feesLabels = [];
+  //           let faldaxFees = [];
+  //           let residualFees = [];
+  //           let transactionSymbols = [];
+  //           let transactionCount = [];
+  //           let [
+  //             tradeTransactionLabel,
+  //             tradeTransactionValue,
+  //             tradeTransactionValue2,
+  //           ] = _this.getFeesTransactionValue(res.feesTransactionValue);
+  //           _this.calculateTierData(res.TierData);
+  //           res.walletFeesTransactionValue &&
+  //             res.walletFeesTransactionValue.forEach((value) => {
+  //               feesLabels.push(value.coin_code.toUpperCase());
+  //               faldaxFees.push(value.faldax_fee);
+  //               residualFees.push(value.residual_amount);
+  //             });
+  //           res.transactionValue &&
+  //             res.transactionValue.forEach(function (value, key) {
+  //               transactionSymbols.push(value.symbol);
+  //               transactionCount.push(value.count);
+  //             });
+  //           const {
+  //             activeUsers,
+  //             inactiveUsers,
+  //             activeCoins,
+  //             InactiveCoins,
+  //             activePairs,
+  //             InactivePairs,
+  //             legalCountries,
+  //             illegalCountries,
+  //             PartialCountries,
+  //             neutralCountries,
+  //             activeEmployeeCount,
+  //             jobsCount,
+  //             inactiveEmployeeCount,
+  //             withdrawReqCount,
+  //             kyc_disapproved,
+  //             kyc_approved,
+  //             total_kyc,
+  //             kyc_pending,
+  //             withdrawReqCountValue,
+  //             deletedUsers,
+  //             userSignUpCountValue,
+  //             approved2Farequest,
+  //             disapproved2Farequest,
+  //             open2Farequest,
+  //           } = res;
+  //           _this.setState({
+  //             activeUsers,
+  //             inactiveUsers,
+  //             activeCoins,
+  //             InactiveCoins,
+  //             activePairs,
+  //             InactivePairs,
+  //             legalCountries,
+  //             PartialCountries,
+  //             illegalCountries,
+  //             neutralCountries,
+  //             activeEmployeeCount,
+  //             deletedUsers,
+  //             inactiveEmployeeCount,
+  //             jobsCount,
+  //             withdrawReqCount,
+  //             kyc_disapproved,
+  //             kyc_approved,
+  //             total_kyc,
+  //             kyc_pending,
+  //             loader: false,
+  //             withdrawReqCountValue,
+  //             userSignUpCountValue,
+  //             feesLabels,
+  //             faldaxFees,
+  //             residualFees,
+  //             transactionSymbols,
+  //             transactionCount,
+  //             tradeTransactionLabel,
+  //             tradeTransactionValue,
+  //             tradeTransactionValue2,
+  //             approved2Farequest,
+  //             disapproved2Farequest,
+  //             open2Farequest,
+  //           });
+  //         } else if (res.status == 403 || res.status == 401) {
+  //           _this.setState(
+  //             {
+  //               errMsg: true,
+  //               message: res.err,
+  //               loader: false,
+  //             },
+  //             () => _this.props.logout()
+  //           );
+  //         } else {
+  //           _this.setState({
+  //             errMsg: true,
+  //             message: res.message,
+  //             loader: false,
+  //           });
+  //         }
+  //       } else {
+  //         _this.setState({ errMsg: true, message: res.message, loader: false });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       _this.setState({
+  //         errMsg: true,
+  //         message: "Unable to complete the requested action.",
+  //         loader: false,
+  //       });
+  //     });
+  // };
+  _getAllCountCountries = () => {
     const { token } = this.props;
     const { startDate, endDate } = this.state;
     let _this = this;
-
     _this.setState({ loader: true });
-    ApiUtils.getAllCount(token, startDate, endDate)
+    ApiUtils.getDashboardCountryData(token, startDate, endDate)
+      .then((response) => response.json())
+      .then(function (res) {
+        if (res) {
+          if (res.status == 200) {
+            const {
+              legalCountries,
+              illegalCountries,
+              kyc_disapproved,
+              kyc_approved,
+              total_kyc,
+              kyc_pending,
+            } = res;
+            _this.setState({
+              legalCountries,
+              illegalCountries,
+              kyc_disapproved,
+              kyc_approved,
+              total_kyc,
+              kyc_pending,
+              loader: false,
+            });
+          } else if (res.status == 403 || res.status == 401) {
+            _this.setState(
+              {
+                errMsg: true,
+                message: res.err,
+                loader: false,
+              },
+              () => _this.props.logout()
+            );
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false,
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          message: "Unable to complete the requested action.",
+          loader: false,
+        });
+      });
+  };
+  _getAllCountFees = () => {
+    const { token } = this.props;
+    const { startDate, endDate } = this.state;
+    let _this = this;
+    ApiUtils.getDashboardFeesData(token, startDate, endDate)
       .then((response) => response.json())
       .then(function (res) {
         if (res) {
@@ -188,82 +370,225 @@ class Dashboard extends Component {
             let feesLabels = [];
             let faldaxFees = [];
             let residualFees = [];
-            let transactionSymbols = [];
-            let transactionCount = [];
             let [
               tradeTransactionLabel,
               tradeTransactionValue,
               tradeTransactionValue2,
             ] = _this.getFeesTransactionValue(res.feesTransactionValue);
-            _this.calculateTierData(res.TierData);
             res.walletFeesTransactionValue &&
               res.walletFeesTransactionValue.forEach((value) => {
                 feesLabels.push(value.coin_code.toUpperCase());
                 faldaxFees.push(value.faldax_fee);
                 residualFees.push(value.residual_amount);
               });
+            _this.setState({
+              tradeTransactionLabel,
+              tradeTransactionValue,
+              tradeTransactionValue2,
+              feesLabels,
+              faldaxFees,
+              residualFees,
+            });
+          } else if (res.status == 403 || res.status == 401) {
+            _this.setState(
+              {
+                errMsg: true,
+                message: res.err,
+                loader: false,
+              },
+              () => _this.props.logout()
+            );
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false,
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          message: "Unable to complete the requested action.",
+          loader: false,
+        });
+      });
+  };
+  _getAllCountTransactions = () => {
+    const { token } = this.props;
+    const { startDate, endDate } = this.state;
+    let _this = this;
+    ApiUtils.getDashboardTransactionsData(token, startDate, endDate)
+      .then((response) => response.json())
+      .then(function (res) {
+        if (res) {
+          if (res.status == 200) {
+            let transactionSymbols = [];
+            let transactionCount = [];
             res.transactionValue &&
               res.transactionValue.forEach(function (value, key) {
                 transactionSymbols.push(value.symbol);
                 transactionCount.push(value.count);
               });
+            _this.setState({
+              transactionSymbols,
+              transactionCount,
+            });
+          } else if (res.status == 403 || res.status == 401) {
+            _this.setState(
+              {
+                errMsg: true,
+                message: res.err,
+                loader: false,
+              },
+              () => _this.props.logout()
+            );
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false,
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          message: "Unable to complete the requested action.",
+          loader: false,
+        });
+      });
+  };
+  _getAllCountUsers = () => {
+    const { token } = this.props;
+    const { startDate, endDate } = this.state;
+    let _this = this;
+    ApiUtils.getDashboardUsersData(token, startDate, endDate)
+      .then((response) => response.json())
+      .then(function (res) {
+        if (res) {
+          if (res.status == 200) {
             const {
-              activeUsers,
-              inactiveUsers,
               activeCoins,
               InactiveCoins,
-              activePairs,
-              InactivePairs,
-              legalCountries,
-              illegalCountries,
-              PartialCountries,
-              neutralCountries,
               activeEmployeeCount,
               jobsCount,
               inactiveEmployeeCount,
-              withdrawReqCount,
-              kyc_disapproved,
-              kyc_approved,
-              total_kyc,
-              kyc_pending,
-              withdrawReqCountValue,
+              activeUsers,
+              inactiveUsers,
               deletedUsers,
+              inactiveJobCount,
+            } = res;
+            _this.setState({
+              activeCoins,
+              InactiveCoins,
+              activeEmployeeCount,
+              jobsCount,
+              inactiveEmployeeCount,
+              activeUsers,
+              inactiveUsers,
+              deletedUsers,
+              inactiveJobCount,
+            });
+          } else if (res.status == 403 || res.status == 401) {
+            _this.setState(
+              {
+                errMsg: true,
+                message: res.err,
+                loader: false,
+              },
+              () => _this.props.logout()
+            );
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false,
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          message: "Unable to complete the requested action.",
+          loader: false,
+        });
+      });
+  };
+  _getAllCountCustomerID = () => {
+    const { token } = this.props;
+    const { startDate, endDate } = this.state;
+    let _this = this;
+    ApiUtils.getDashboardCustomerIDData(token, startDate, endDate)
+      .then((response) => response.json())
+      .then(function (res) {
+        if (res) {
+          if (res.status == 200) {
+            const {
+              withdrawReqCount,
+              total_kyc,
+              withdrawReqCountValue,
               userSignUpCountValue,
+            } = res;
+            _this.setState({
+              withdrawReqCount,
+              total_kyc,
+              withdrawReqCountValue,
+              userSignUpCountValue,
+            });
+          } else if (res.status == 403 || res.status == 401) {
+            _this.setState(
+              {
+                errMsg: true,
+                message: res.err,
+                loader: false,
+              },
+              () => _this.props.logout()
+            );
+          } else {
+            _this.setState({
+              errMsg: true,
+              message: res.message,
+              loader: false,
+            });
+          }
+        } else {
+          _this.setState({ errMsg: true, message: res.message, loader: false });
+        }
+      })
+      .catch((err) => {
+        _this.setState({
+          errMsg: true,
+          message: "Unable to complete the requested action.",
+          loader: false,
+        });
+      });
+  };
+  _getAllCountTier = () => {
+    const { token } = this.props;
+    const { startDate, endDate } = this.state;
+    let _this = this;
+    ApiUtils.getDashboardTierData(token, startDate, endDate)
+      .then((response) => response.json())
+      .then(function (res) {
+        if (res) {
+          if (res.status == 200) {
+            const {
               approved2Farequest,
               disapproved2Farequest,
               open2Farequest,
             } = res;
+            _this.calculateTierData(res.TierData);
             _this.setState({
-              activeUsers,
-              inactiveUsers,
-              activeCoins,
-              InactiveCoins,
-              activePairs,
-              InactivePairs,
-              legalCountries,
-              PartialCountries,
-              illegalCountries,
-              neutralCountries,
-              activeEmployeeCount,
-              deletedUsers,
-              inactiveEmployeeCount,
-              jobsCount,
-              withdrawReqCount,
-              kyc_disapproved,
-              kyc_approved,
-              total_kyc,
-              kyc_pending,
-              loader: false,
-              withdrawReqCountValue,
-              userSignUpCountValue,
-              feesLabels,
-              faldaxFees,
-              residualFees,
-              transactionSymbols,
-              transactionCount,
-              tradeTransactionLabel,
-              tradeTransactionValue,
-              tradeTransactionValue2,
               approved2Farequest,
               disapproved2Farequest,
               open2Farequest,
@@ -296,7 +621,6 @@ class Dashboard extends Component {
         });
       });
   };
-
   range = (start, end) => {
     const result = [];
     for (let i = start; i < end; i++) {

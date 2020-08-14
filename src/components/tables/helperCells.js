@@ -3006,7 +3006,11 @@ const TierThresholdCell = (
     {tier_step === 0 ? (
       <ul class="style-circle" type="circle">
         <li>
-          <b>{"Maximum Trade Amount : $" + max_trade_amount}</b>
+          {max_trade_amount == "Unlimited" ? (
+            <b>{"Maximum Trade Amount : " + max_trade_amount}</b>
+          ) : (
+            <b>{"Maximum Trade Amount : $" + max_trade_amount}</b>
+          )}
         </li>
         <li>
           <b>
