@@ -535,15 +535,21 @@ class Dashboard extends Component {
           if (res.status == 200) {
             const {
               withdrawReqCount,
-              total_kyc,
+
               withdrawReqCountValue,
               userSignUpCountValue,
+              kyc_approved,
+              kyc_disapproved,
+              kyc_pending,
             } = res;
             _this.setState({
               withdrawReqCount,
-              total_kyc,
+
               withdrawReqCountValue,
               userSignUpCountValue,
+              kyc_approve: kyc_approved,
+              kyc_disapprove: kyc_disapproved,
+              kyc_pend: kyc_pending,
             });
           } else if (res.status == 403 || res.status == 401) {
             _this.setState(
@@ -680,6 +686,9 @@ class Dashboard extends Component {
       kyc_disapproved,
       total_kyc,
       kyc_pending,
+      kyc_approve,
+      kyc_disapprove,
+      kyc_pend,
       rangeDate,
       loader,
       withdrawReqCountValue,
@@ -1016,9 +1025,9 @@ class Dashboard extends Component {
             <Link target="_blank" to="/dashboard/kyc">
               <CountCard
                 data={[
-                  { name: "Approved Customer ID", count: kyc_approved },
-                  { name: "Disapproved Customer ID", count: kyc_disapproved },
-                  { name: "Under Review Customer ID", count: kyc_pending },
+                  { name: "Approved Customer ID", count: kyc_approve },
+                  { name: "Disapproved Customer ID", count: kyc_disapprove },
+                  { name: "Under Review Customer ID", count: kyc_pend },
                 ]}
                 headcolor={"#1f2431"}
                 bgcolor={"#fff"}
