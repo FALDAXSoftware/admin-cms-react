@@ -3957,20 +3957,21 @@ const ApiUtils = {
         headers: {
           Authorization: "Bearer " + token,
         },
-      })
+      }
+    );
   },
 
-  disableTwoFactorViaCode: function (token ,formDataValue){
-    let url=`${API_URL}/admin/disable-two-factor`
+  disableTwoFactorViaCode: function (token, formDataValue) {
+    let url = `${API_URL}/admin/disable-two-factor`;
     return fetch(url, {
       method: "post",
       headers: {
         Authorization: "Bearer " + token,
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify(formDataValue)
-    })
+      body: JSON.stringify(formDataValue),
+    });
   },
   getUserTierValue: function (token, user_id) {
     return fetch(`${API_URL}/admin/get-user-tier-value?user_id=${user_id}`, {
@@ -4005,6 +4006,79 @@ const ApiUtils = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  // Calling dahsboard apis line by line
+  getDashboardCountryData: function (token, startDate, endDate) {
+    let url = "/admin/dashoboard-liune-1-count";
+    if (startDate && endDate) {
+      url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+    }
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getDashboardFeesData: function (token, startDate, endDate) {
+    let url = "/admin/dashoboard-liune-2-count";
+    // if (startDate && endDate) {
+    //   url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+    // }
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getDashboardTransactionsData: function (token, startDate, endDate) {
+    let url = "/admin/dashoboard-liune-3-count";
+    // if (startDate && endDate) {
+    //   url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+    // }
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getDashboardUsersData: function (token, startDate, endDate) {
+    let url = "/admin/dashoboard-liune-4-count";
+    // if (startDate && endDate) {
+    //   url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+    // }
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getDashboardCustomerIDData: function (token, startDate, endDate) {
+    let url = "/admin/dashoboard-liune-5-count";
+    // if (startDate && endDate) {
+    //   url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+    // }
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  },
+  getDashboardTierData: function (token, startDate, endDate) {
+    let url = "/admin/dashoboard-liune-6-count";
+    // if (startDate && endDate) {
+    //   url += "?kyc_start_date=" + startDate + "&kyc_end_date=" + endDate;
+    // }
+    return fetch(API_URL + url, {
+      method: "GET",
+      headers: {
         Authorization: "Bearer " + token,
       },
     });
