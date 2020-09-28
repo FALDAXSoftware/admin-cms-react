@@ -20,11 +20,11 @@ class KycTabs extends Component {
         {/* <BackButton {...this.props} /> */}
         <BreadcrumbComponent {...this.props}></BreadcrumbComponent>
         <Tabs className="full-width">
-          {isAllowed("get_all_kyc_data") && (
+          {/* {isAllowed("get_all_kyc_data") && false && (
             <TabPane tab="Customer ID" key="1">
               <Kyc />
             </TabPane>
-          )}
+          )} */}
           {isAllowed("get_all_kyc_data") && (
             <TabPane tab="Approved Customer ID" key="2">
               <ApprovedKYC />

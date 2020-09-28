@@ -10,7 +10,7 @@ import {
   Button,
   Col,
 } from "antd";
-import { KYCInfos } from "../../Tables/antTables";
+import { ApprovedKYCInfos } from "../../Tables/antTables";
 import ApiUtils from "../../../helpers/apiUtills";
 // import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import TableDemoStyle from "../../Tables/antTables/demo.style";
@@ -121,27 +121,27 @@ class ReviewKYC extends Component {
     _this.setState({ loader: true });
     (isExportToCsv
       ? ApiUtils.getKYCData(
-          token,
-          1,
-          EXPORT_LIMIT_SIZE,
-          "",
-          "",
-          "",
-          "",
-          "",
-          status
-        )
+        token,
+        1,
+        EXPORT_LIMIT_SIZE,
+        "",
+        "",
+        "",
+        "",
+        "",
+        status
+      )
       : ApiUtils.getKYCData(
-          token,
-          page,
-          limit,
-          searchKYC,
-          sorterCol,
-          sortOrder,
-          startDate,
-          endDate,
-          status
-        )
+        token,
+        page,
+        limit,
+        searchKYC,
+        sorterCol,
+        sortOrder,
+        startDate,
+        endDate,
+        status
+      )
     )
       .then((response) => response.json())
       .then(function (res) {
@@ -312,7 +312,7 @@ class ReviewKYC extends Component {
             dataCount={allKYCCount}
             syncCallBack={this._resetFilters}
           />
-          <div key={KYCInfos[0].value}>
+          <div key={ApprovedKYCInfos[0].value}>
             <Form onSubmit={this._searchKYC}>
               <Row type="flex" justify="start" className="table-filter-row">
                 <Col md={8}>
@@ -372,7 +372,7 @@ class ReviewKYC extends Component {
             <TableWrapper
               rowkey="id"
               {...this.state}
-              columns={KYCInfos[0].columns}
+              columns={ApprovedKYCInfos[0].columns}
               pagination={false}
               className="table-tb-margin"
               dataSource={allKYCData}
@@ -392,8 +392,8 @@ class ReviewKYC extends Component {
                 pageSizeOptions={pageSizeOptions}
               />
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
         </div>
       </TableDemoStyle>

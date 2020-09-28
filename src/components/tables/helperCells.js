@@ -14,6 +14,7 @@ import { Jobs } from "../../containers/Page/Jobs/jobs";
 import { JobApplications } from "../../containers/Page/Jobs/jobApplications";
 import { LimitManagement } from "../../containers/Page/LimitManagement/limitManagement";
 import KYC from "../../containers/Page/KYC/kyc";
+import ApprovedKYC from "../../containers/Page/KYC/approvedKYC";
 // import Fees from "../../containers/Page/Fees/feesWithdrawal";
 import News from "../../containers/Page/News/news";
 import AccountClass from "../../containers/Page/AccountClass/accountClass";
@@ -744,6 +745,48 @@ const viewKYC = (
   );
 };
 
+const viewApprovedKYC = (
+  value,
+  mtid,
+  first_name,
+  last_name,
+  email,
+  direct_response,
+  kycDoc_details,
+  webhook_response,
+  address,
+  country,
+  city,
+  zip,
+  dob,
+  id_type,
+  created_at,
+  front_doc,
+  back_doc,
+  ssn_number
+) => {
+  ApprovedKYC.viewKYC(
+    value,
+    mtid,
+    first_name,
+    last_name,
+    email,
+    direct_response,
+    kycDoc_details,
+    webhook_response,
+    address,
+    country,
+    city,
+    zip,
+    dob,
+    id_type,
+    created_at,
+    front_doc,
+    back_doc,
+    ssn_number
+  );
+};
+
 const newsStatus = (
   value,
   cover_image,
@@ -1078,8 +1121,8 @@ const TransactionIdHashCell = (coin_id, transaction_id, isERC20 = false) => {
         {transaction_id}
       </a>
     ) : (
-      <span></span>
-    );
+        <span></span>
+      );
   }
   switch (coin_id.toLowerCase()) {
     // Fot Test Net
@@ -1126,8 +1169,8 @@ const TransactionIdHashCell = (coin_id, transaction_id, isERC20 = false) => {
       {transaction_id}
     </a>
   ) : (
-    <span></span>
-  );
+      <span></span>
+    );
 };
 const DateCell = (data) => (
   <p>
@@ -1158,11 +1201,11 @@ const OfferDateCell = (data) => (
           {moment.utc(data).local().format("DD MMM YYYY")}
         </span>
       ) : (
-        "-"
-      )
+          "-"
+        )
     ) : (
-      "--"
-    )}
+        "--"
+      )}
   </p>
 );
 
@@ -1187,14 +1230,14 @@ const UserDateCell = (
   no_of_referrals,
   created_at
 ) => (
-  <p>
-    {no_of_referrals && no_of_referrals > 0
-      ? moment.utc(created_at).local().format("DD MMM, YYYY HH:mm")
+    <p>
+      {no_of_referrals && no_of_referrals > 0
         ? moment.utc(created_at).local().format("DD MMM, YYYY HH:mm")
-        : ""
-      : ""}
-  </p>
-);
+          ? moment.utc(created_at).local().format("DD MMM, YYYY HH:mm")
+          : ""
+        : ""}
+    </p>
+  );
 const ReferralDateCell = (
   value,
   full_name,
@@ -1205,14 +1248,14 @@ const ReferralDateCell = (
   refered_by,
   no_of_referral
 ) => (
-  <p>
-    {created_at
-      ? moment.utc(created_at).local().format("DD MMM, YYYY HH:mm")
+    <p>
+      {created_at
         ? moment.utc(created_at).local().format("DD MMM, YYYY HH:mm")
-        : ""
-      : ""}
-  </p>
-);
+          ? moment.utc(created_at).local().format("DD MMM, YYYY HH:mm")
+          : ""
+        : ""}
+    </p>
+  );
 const TransactionTypeCell = (data) => (
   <p style={{ color: data == "send" ? "red" : "green" }}>
     {data == "send" ? "Send" : "Receive"}
@@ -1274,10 +1317,10 @@ const ObjectCell = (value, execution_report) => (
         })}
       </ul>
     ) : (
-      <ul>
-        <li style={{ display: "flex", width: "100%" }}>-</li>
-      </ul>
-    )}
+        <ul>
+          <li style={{ display: "flex", width: "100%" }}>-</li>
+        </ul>
+      )}
   </span>
 );
 const DateTimeCell = (data, type) => {
@@ -1393,10 +1436,10 @@ const LegalityCell = (text, name) => (
       text == 1
         ? "Legal"
         : text == 2
-        ? "Illegal"
-        : text == 3
-        ? "Neutral"
-        : "Partial Services Available"
+          ? "Illegal"
+          : text == 3
+            ? "Neutral"
+            : "Partial Services Available"
     }
   </p>
 );
@@ -1413,28 +1456,28 @@ const SwitchCell = (
   coin_icon,
   disabled = false
 ) => (
-  <Switch
-    disabled={disabled}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    onChange={() => {
-      coinstatus(
-        value,
-        coin_name,
-        coin_code,
-        min_limit,
-        max_limit,
-        wallet_address,
-        created_at,
-        is_active,
-        isERC,
-        coin_icon
-      );
-    }}
-  />
-);
+    <Switch
+      disabled={disabled}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      onChange={() => {
+        coinstatus(
+          value,
+          coin_name,
+          coin_code,
+          min_limit,
+          max_limit,
+          wallet_address,
+          created_at,
+          is_active,
+          isERC,
+          coin_icon
+        );
+      }}
+    />
+  );
 const StaticSwitchCell = (
   value,
   coin_name,
@@ -1444,24 +1487,24 @@ const StaticSwitchCell = (
   created_at,
   is_active
 ) => (
-  <Switch
-    checked={is_active}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    onChange={() => {
-      coinstatus(
-        value,
-        coin_name,
-        coin_code,
-        limit,
-        wallet_address,
-        created_at,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      checked={is_active}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      onChange={() => {
+        coinstatus(
+          value,
+          coin_name,
+          coin_code,
+          limit,
+          wallet_address,
+          created_at,
+          is_active
+        );
+      }}
+    />
+  );
 const CountrySwitchCell = (
   value,
   name,
@@ -1470,17 +1513,17 @@ const CountrySwitchCell = (
   is_active,
   disabled = false
 ) => (
-  <Switch
-    disabled={disabled}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    onChange={() => {
-      countryStatus(value, name, legality, color, is_active);
-    }}
-  />
-);
+    <Switch
+      disabled={disabled}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      onChange={() => {
+        countryStatus(value, name, legality, color, is_active);
+      }}
+    />
+  );
 const StateSwitchCell = (
   value,
   name,
@@ -1489,17 +1532,17 @@ const StateSwitchCell = (
   is_active,
   disabled = false
 ) => (
-  <Switch
-    className="switch-cell"
-    checkedChildren="Active"
-    disabled={disabled}
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    onChange={() => {
-      stateStatus(value, name, legality, color, is_active);
-    }}
-  />
-);
+    <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      disabled={disabled}
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      onChange={() => {
+        stateStatus(value, name, legality, color, is_active);
+      }}
+    />
+  );
 const NewsSwitchCell = (
   value,
   cover_image,
@@ -1511,26 +1554,26 @@ const NewsSwitchCell = (
   owner,
   disabled = false
 ) => (
-  <Switch
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    disabled={disabled}
-    checked={is_active}
-    onChange={() => {
-      newsStatus(
-        value,
-        cover_image,
-        title,
-        link,
-        posted_at,
-        description,
-        is_active,
-        owner
-      );
-    }}
-  />
-);
+    <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      disabled={disabled}
+      checked={is_active}
+      onChange={() => {
+        newsStatus(
+          value,
+          cover_image,
+          title,
+          link,
+          posted_at,
+          description,
+          is_active,
+          owner
+        );
+      }}
+    />
+  );
 const NewsDescCell = (value) => (
   <Tooltip title={value}>
     <p>{value.slice(0, 35) + (value.length > 35 ? "..." : "")}</p>
@@ -1559,210 +1602,13 @@ const ActionCell = (
   created_at,
   deleted_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        className="btn-icon"
-        onClick={() =>
-          viewUser(
-            value,
-            profile_pic,
-            first_name,
-            last_name,
-            email,
-            city_town,
-            street_address,
-            street_address_2,
-            phone_number,
-            country,
-            dob,
-            is_active,
-            kyc,
-            date_format,
-            account_tier,
-            account_class,
-            state,
-            no_of_referrals,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {!deleted_at ? (
-      <React.Fragment>
-        <Tooltip title="View">
-          <Icon
-            type="delete"
-            className="btn-icon"
-            onClick={() => deleteUser(value)}
-          />
-        </Tooltip>
-        <Tooltip title="Edit">
-          <Icon
-            type="edit"
-            className="btn-icon"
-            onClick={() =>
-              editUser(
-                value,
-                profile_pic,
-                first_name,
-                last_name,
-                email,
-                city_town,
-                street_address,
-                street_address_2,
-                phone_number,
-                country,
-                dob,
-                is_active,
-                kyc,
-                date_format,
-                account_tier,
-                account_class,
-                state,
-                no_of_referrals,
-                created_at,
-                deleted_at
-              )
-            }
-          />
-        </Tooltip>
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
-const DeletedUserActionCell = (
-  value,
-  profile_pic,
-  first_name,
-  last_name,
-  email,
-  city_town,
-  street_address,
-  street_address_2,
-  phone_number,
-  country,
-  dob,
-  is_active,
-  kyc,
-  date_format,
-  account_tier,
-  account_class,
-  state,
-  no_of_referrals,
-  created_at,
-  deleted_at
-) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        className="btn-icon"
-        onClick={() =>
-          DeletedUsers.view(
-            value,
-            profile_pic,
-            first_name,
-            last_name,
-            email,
-            city_town,
-            street_address,
-            street_address_2,
-            phone_number,
-            country,
-            dob,
-            is_active,
-            kyc,
-            date_format,
-            account_tier,
-            account_class,
-            state,
-            no_of_referrals,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {!deleted_at ? (
-      <React.Fragment>
-        <Tooltip title="View">
-          <Icon
-            type="delete"
-            className="btn-icon"
-            onClick={() => deleteActiveUser(value)}
-          />
-        </Tooltip>
-        <Tooltip title="Edit">
-          <Icon
-            type="edit"
-            className="btn-icon"
-            onClick={() =>
-              editActiveUser(
-                value,
-                profile_pic,
-                first_name,
-                last_name,
-                email,
-                city_town,
-                street_address,
-                street_address_2,
-                phone_number,
-                country,
-                dob,
-                is_active,
-                kyc,
-                date_format,
-                account_tier,
-                account_class,
-                state,
-                no_of_referrals,
-                created_at,
-                deleted_at
-              )
-            }
-          />
-        </Tooltip>
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
-const ActiveUserActionCell = (
-  value,
-  profile_pic,
-  first_name,
-  last_name,
-  email,
-  city_town,
-  street_address,
-  street_address_2,
-  phone_number,
-  country,
-  dob,
-  is_active,
-  kyc,
-  date_format,
-  account_tier,
-  account_class,
-  state,
-  no_of_referrals,
-  created_at,
-  deleted_at
-) => (
-  <div>
-    {(isAllowed("get_users") ||
-      isAllowed("get_inactive_users") ||
-      isAllowed("get_deleted_users")) && (
+    <div>
       <Tooltip title="View">
         <Icon
           type="info-circle"
           className="btn-icon"
           onClick={() =>
-            viewActiveUser(
+            viewUser(
               value,
               profile_pic,
               first_name,
@@ -1786,19 +1632,112 @@ const ActiveUserActionCell = (
           }
         />
       </Tooltip>
-    )}
-    {!deleted_at ? (
-      <React.Fragment>
-        {isAllowed("delete_user") && (
-          <Tooltip title="Deactivate user">
+      {!deleted_at ? (
+        <React.Fragment>
+          <Tooltip title="View">
+            <Icon
+              type="delete"
+              className="btn-icon"
+              onClick={() => deleteUser(value)}
+            />
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Icon
+              type="edit"
+              className="btn-icon"
+              onClick={() =>
+                editUser(
+                  value,
+                  profile_pic,
+                  first_name,
+                  last_name,
+                  email,
+                  city_town,
+                  street_address,
+                  street_address_2,
+                  phone_number,
+                  country,
+                  dob,
+                  is_active,
+                  kyc,
+                  date_format,
+                  account_tier,
+                  account_class,
+                  state,
+                  no_of_referrals,
+                  created_at,
+                  deleted_at
+                )
+              }
+            />
+          </Tooltip>
+        </React.Fragment>
+      ) : (
+          ""
+        )}
+    </div>
+  );
+const DeletedUserActionCell = (
+  value,
+  profile_pic,
+  first_name,
+  last_name,
+  email,
+  city_town,
+  street_address,
+  street_address_2,
+  phone_number,
+  country,
+  dob,
+  is_active,
+  kyc,
+  date_format,
+  account_tier,
+  account_class,
+  state,
+  no_of_referrals,
+  created_at,
+  deleted_at
+) => (
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          className="btn-icon"
+          onClick={() =>
+            DeletedUsers.view(
+              value,
+              profile_pic,
+              first_name,
+              last_name,
+              email,
+              city_town,
+              street_address,
+              street_address_2,
+              phone_number,
+              country,
+              dob,
+              is_active,
+              kyc,
+              date_format,
+              account_tier,
+              account_class,
+              state,
+              no_of_referrals,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+      {!deleted_at ? (
+        <React.Fragment>
+          <Tooltip title="View">
             <Icon
               type="delete"
               className="btn-icon"
               onClick={() => deleteActiveUser(value)}
             />
           </Tooltip>
-        )}
-        {isAllowed("update_user") && (
           <Tooltip title="Edit">
             <Icon
               type="edit"
@@ -1829,13 +1768,117 @@ const ActiveUserActionCell = (
               }
             />
           </Tooltip>
+        </React.Fragment>
+      ) : (
+          ""
         )}
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
+    </div>
+  );
+const ActiveUserActionCell = (
+  value,
+  profile_pic,
+  first_name,
+  last_name,
+  email,
+  city_town,
+  street_address,
+  street_address_2,
+  phone_number,
+  country,
+  dob,
+  is_active,
+  kyc,
+  date_format,
+  account_tier,
+  account_class,
+  state,
+  no_of_referrals,
+  created_at,
+  deleted_at
+) => (
+    <div>
+      {(isAllowed("get_users") ||
+        isAllowed("get_inactive_users") ||
+        isAllowed("get_deleted_users")) && (
+          <Tooltip title="View">
+            <Icon
+              type="info-circle"
+              className="btn-icon"
+              onClick={() =>
+                viewActiveUser(
+                  value,
+                  profile_pic,
+                  first_name,
+                  last_name,
+                  email,
+                  city_town,
+                  street_address,
+                  street_address_2,
+                  phone_number,
+                  country,
+                  dob,
+                  is_active,
+                  kyc,
+                  date_format,
+                  account_tier,
+                  account_class,
+                  state,
+                  no_of_referrals,
+                  created_at
+                )
+              }
+            />
+          </Tooltip>
+        )}
+      {!deleted_at ? (
+        <React.Fragment>
+          {isAllowed("delete_user") && (
+            <Tooltip title="Deactivate user">
+              <Icon
+                type="delete"
+                className="btn-icon"
+                onClick={() => deleteActiveUser(value)}
+              />
+            </Tooltip>
+          )}
+          {isAllowed("update_user") && (
+            <Tooltip title="Edit">
+              <Icon
+                type="edit"
+                className="btn-icon"
+                onClick={() =>
+                  editActiveUser(
+                    value,
+                    profile_pic,
+                    first_name,
+                    last_name,
+                    email,
+                    city_town,
+                    street_address,
+                    street_address_2,
+                    phone_number,
+                    country,
+                    dob,
+                    is_active,
+                    kyc,
+                    date_format,
+                    account_tier,
+                    account_class,
+                    state,
+                    no_of_referrals,
+                    created_at,
+                    deleted_at
+                  )
+                }
+              />
+            </Tooltip>
+          )}
+        </React.Fragment>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const InActiveUserActionCell = (
   value,
   profile_pic,
@@ -1858,58 +1901,16 @@ const InActiveUserActionCell = (
   created_at,
   deleted_at
 ) => (
-  <div>
-    {(isAllowed("get_users") ||
-      isAllowed("get_inactive_users") ||
-      isAllowed("get_deleted_users")) && (
-      <Tooltip title="View">
-        <Icon
-          type="info-circle"
-          className="btn-icon"
-          onClick={() =>
-            viewInActiveUser(
-              value,
-              profile_pic,
-              first_name,
-              last_name,
-              email,
-              city_town,
-              street_address,
-              street_address_2,
-              phone_number,
-              country,
-              dob,
-              is_active,
-              kyc,
-              date_format,
-              account_tier,
-              account_class,
-              state,
-              no_of_referrals,
-              created_at
-            )
-          }
-        />
-      </Tooltip>
-    )}
-    {!deleted_at ? (
-      <React.Fragment>
-        {isAllowed("delete_user") && (
-          <Tooltip title="Deactivate user">
+    <div>
+      {(isAllowed("get_users") ||
+        isAllowed("get_inactive_users") ||
+        isAllowed("get_deleted_users")) && (
+          <Tooltip title="View">
             <Icon
-              type="delete"
-              className="btn-icon"
-              onClick={() => deleteActiveUser(value)}
-            />
-          </Tooltip>
-        )}
-        {isAllowed("update_user") && (
-          <Tooltip title="Edit">
-            <Icon
-              type="edit"
+              type="info-circle"
               className="btn-icon"
               onClick={() =>
-                editInactiveUser(
+                viewInActiveUser(
                   value,
                   profile_pic,
                   first_name,
@@ -1928,19 +1929,61 @@ const InActiveUserActionCell = (
                   account_class,
                   state,
                   no_of_referrals,
-                  created_at,
-                  deleted_at
+                  created_at
                 )
               }
             />
           </Tooltip>
         )}
-      </React.Fragment>
-    ) : (
-      ""
-    )}
-  </div>
-);
+      {!deleted_at ? (
+        <React.Fragment>
+          {isAllowed("delete_user") && (
+            <Tooltip title="Deactivate user">
+              <Icon
+                type="delete"
+                className="btn-icon"
+                onClick={() => deleteActiveUser(value)}
+              />
+            </Tooltip>
+          )}
+          {isAllowed("update_user") && (
+            <Tooltip title="Edit">
+              <Icon
+                type="edit"
+                className="btn-icon"
+                onClick={() =>
+                  editInactiveUser(
+                    value,
+                    profile_pic,
+                    first_name,
+                    last_name,
+                    email,
+                    city_town,
+                    street_address,
+                    street_address_2,
+                    phone_number,
+                    country,
+                    dob,
+                    is_active,
+                    kyc,
+                    date_format,
+                    account_tier,
+                    account_class,
+                    state,
+                    no_of_referrals,
+                    created_at,
+                    deleted_at
+                  )
+                }
+              />
+            </Tooltip>
+          )}
+        </React.Fragment>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const CoinActionCell = (
   value,
   coin_name,
@@ -1957,70 +2000,70 @@ const CoinActionCell = (
   hot_receive_wallet_address,
   custody_wallet_address
 ) => (
-  <div>
-    {isAllowed("delete_coins") && (
-      <Tooltip title="Delete">
-        <Icon
-          type="delete"
-          onClick={() => deleteCoin(value)}
-          style={{ cursor: "pointer" }}
-        />
-      </Tooltip>
-    )}
-    {((isAllowed("update_coins") && isAllowed("get_coin_details")) ||
-      isAllowed("get_all_limits")) && (
-      <Tooltip title="Edit">
-        <Icon
-          type="edit"
-          className="btn-icon"
-          onClick={() =>
-            editCoin(
-              value,
-              coin_name,
-              coin_code,
-              min_limit,
-              max_limit,
-              wallet_address,
-              created_at,
-              is_active,
-              isERC,
-              coin_icon,
-              warm_wallet_address,
-              hot_send_wallet_address,
-              hot_receive_wallet_address,
-              custody_wallet_address
-            )
-          }
-        />
-      </Tooltip>
-    )}
-    {isAllowed("get_coin_details") && (
-      <Tooltip title="View">
-        <Icon
-          type="info-circle"
-          className="btn-icon"
-          onClick={() =>
-            viewCoin(
-              value,
-              coin_name,
-              coin_code,
-              min_limit,
-              max_limit,
-              wallet_address,
-              created_at,
-              is_active,
-              isERC,
-              coin_icon,
-              warm_wallet_address,
-              hot_send_wallet_address,
-              hot_receive_wallet_address,
-              custody_wallet_address
-            )
-          }
-        />
-      </Tooltip>
-    )}
-    {/* {isAllowed("wallet_details") && (
+    <div>
+      {isAllowed("delete_coins") && (
+        <Tooltip title="Delete">
+          <Icon
+            type="delete"
+            onClick={() => deleteCoin(value)}
+            style={{ cursor: "pointer" }}
+          />
+        </Tooltip>
+      )}
+      {((isAllowed("update_coins") && isAllowed("get_coin_details")) ||
+        isAllowed("get_all_limits")) && (
+          <Tooltip title="Edit">
+            <Icon
+              type="edit"
+              className="btn-icon"
+              onClick={() =>
+                editCoin(
+                  value,
+                  coin_name,
+                  coin_code,
+                  min_limit,
+                  max_limit,
+                  wallet_address,
+                  created_at,
+                  is_active,
+                  isERC,
+                  coin_icon,
+                  warm_wallet_address,
+                  hot_send_wallet_address,
+                  hot_receive_wallet_address,
+                  custody_wallet_address
+                )
+              }
+            />
+          </Tooltip>
+        )}
+      {isAllowed("get_coin_details") && (
+        <Tooltip title="View">
+          <Icon
+            type="info-circle"
+            className="btn-icon"
+            onClick={() =>
+              viewCoin(
+                value,
+                coin_name,
+                coin_code,
+                min_limit,
+                max_limit,
+                wallet_address,
+                created_at,
+                is_active,
+                isERC,
+                coin_icon,
+                warm_wallet_address,
+                hot_send_wallet_address,
+                hot_receive_wallet_address,
+                custody_wallet_address
+              )
+            }
+          />
+        </Tooltip>
+      )}
+      {/* {isAllowed("wallet_details") && (
         <Tooltip title="Wallet">
           <Icon
             type="wallet"
@@ -2029,8 +2072,8 @@ const CoinActionCell = (
           />
         </Tooltip>
       )} */}
-  </div>
-);
+    </div>
+  );
 
 const RolesActionCell = (
   value,
@@ -2053,81 +2096,81 @@ const RolesActionCell = (
   add_user,
   is_active
 ) => (
-  <div>
-    {isAllowed("delete_role") && (
-      <Tooltip title="Delete" key="delete_tooltips">
-        <Icon
-          type="delete"
-          onClick={() =>
-            deleteRole(
-              value,
-              name,
-              users,
-              assets,
-              countries,
-              roles,
-              employee,
-              pairs,
-              transaction_history,
-              trade_history,
-              withdraw_requests,
-              jobs,
-              kyc,
-              fees,
-              panic_button,
-              news,
-              is_referral,
-              add_user,
-              is_active
-            )
-          }
-        />
-      </Tooltip>
-    )}
-    {isAllowed("get_role_value") && (
-      <Tooltip title="Permissions" key="permission_key">
-        <Icon
-          type="sliders"
-          className="btn-icon"
-          onClick={() => {
-            openAccessGrant(value);
-          }}
-        />
-      </Tooltip>
-    )}
-    {isAllowed("update_role") && (
-      <Tooltip title="Edit" key="update-tooltips">
-        <Icon
-          type="edit"
-          className="btn-icon"
-          onClick={() => {
-            editRole(
-              value,
-              name,
-              users,
-              assets,
-              countries,
-              roles,
-              employee,
-              pairs,
-              transaction_history,
-              trade_history,
-              withdraw_requests,
-              jobs,
-              kyc,
-              fees,
-              panic_button,
-              news,
-              is_referral,
-              add_user,
-              is_active
-            );
-          }}
-        />
-      </Tooltip>
-    )}
-  </div>
-);
+    <div>
+      {isAllowed("delete_role") && (
+        <Tooltip title="Delete" key="delete_tooltips">
+          <Icon
+            type="delete"
+            onClick={() =>
+              deleteRole(
+                value,
+                name,
+                users,
+                assets,
+                countries,
+                roles,
+                employee,
+                pairs,
+                transaction_history,
+                trade_history,
+                withdraw_requests,
+                jobs,
+                kyc,
+                fees,
+                panic_button,
+                news,
+                is_referral,
+                add_user,
+                is_active
+              )
+            }
+          />
+        </Tooltip>
+      )}
+      {isAllowed("get_role_value") && (
+        <Tooltip title="Permissions" key="permission_key">
+          <Icon
+            type="sliders"
+            className="btn-icon"
+            onClick={() => {
+              openAccessGrant(value);
+            }}
+          />
+        </Tooltip>
+      )}
+      {isAllowed("update_role") && (
+        <Tooltip title="Edit" key="update-tooltips">
+          <Icon
+            type="edit"
+            className="btn-icon"
+            onClick={() => {
+              editRole(
+                value,
+                name,
+                users,
+                assets,
+                countries,
+                roles,
+                employee,
+                pairs,
+                transaction_history,
+                trade_history,
+                withdraw_requests,
+                jobs,
+                kyc,
+                fees,
+                panic_button,
+                news,
+                is_referral,
+                add_user,
+                is_active
+              );
+            }}
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
 const CountryActionCell = (
   value,
   name,
@@ -2136,18 +2179,18 @@ const CountryActionCell = (
   stateCount,
   is_active
 ) => (
-  <div>
-    {isAllowed("update_country") && (
-      <Tooltip title="Edit">
-        <Icon
-          type="edit"
-          className="btn-icon"
-          onClick={() => editCountry(value, name, legality, color, is_active)}
-        />
-      </Tooltip>
-    )}
-  </div>
-);
+    <div>
+      {isAllowed("update_country") && (
+        <Tooltip title="Edit">
+          <Icon
+            type="edit"
+            className="btn-icon"
+            onClick={() => editCountry(value, name, legality, color, is_active)}
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
 const StateActionCell = (value, name, legality, color, is_active) => (
   <div>
     {isAllowed("update_state") && (
@@ -2192,38 +2235,38 @@ const RoleSwitchCell = (
   is_active,
   disabled = false
 ) => (
-  <Switch
-    disabled={disabled}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    key="role_switch"
-    onChange={() => {
-      roleStatus(
-        value,
-        name,
-        users,
-        assets,
-        countries,
-        roles,
-        employee,
-        pairs,
-        transaction_history,
-        trade_history,
-        withdraw_requests,
-        jobs,
-        kyc,
-        fees,
-        panic_button,
-        news,
-        is_referral,
-        add_user,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      disabled={disabled}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      key="role_switch"
+      onChange={() => {
+        roleStatus(
+          value,
+          name,
+          users,
+          assets,
+          countries,
+          roles,
+          employee,
+          pairs,
+          transaction_history,
+          trade_history,
+          withdraw_requests,
+          jobs,
+          kyc,
+          fees,
+          panic_button,
+          news,
+          is_referral,
+          add_user,
+          is_active
+        );
+      }}
+    />
+  );
 const EmployeeSwitchCell = (
   value,
   first_name,
@@ -2235,27 +2278,27 @@ const EmployeeSwitchCell = (
   role_id,
   is_active
 ) => (
-  <Switch
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    disabled={!isAllowed("update_employee")}
-    onChange={() => {
-      employeeStatus(
-        value,
-        first_name,
-        last_name,
-        email,
-        phone_number,
-        address,
-        role,
-        role_id,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      disabled={!isAllowed("update_employee")}
+      onChange={() => {
+        employeeStatus(
+          value,
+          first_name,
+          last_name,
+          email,
+          phone_number,
+          address,
+          role,
+          role_id,
+          is_active
+        );
+      }}
+    />
+  );
 const EmployeeActionCell = (
   value,
   first_name,
@@ -2267,39 +2310,39 @@ const EmployeeActionCell = (
   role_id,
   is_active
 ) => (
-  <div>
-    {isAllowed("delete_employee") && (
-      <Tooltip title="Delete">
-        <Icon
-          type="delete"
-          onClick={() => deleteEmployee(value)}
-          style={{ cursor: "pointer" }}
-        />
-      </Tooltip>
-    )}
-    {isAllowed("get_employee_details") && (
-      <Tooltip title="Edit">
-        <Icon
-          type="edit"
-          className="btn-icon"
-          onClick={() =>
-            editEmployee(
-              value,
-              first_name,
-              last_name,
-              email,
-              phone_number,
-              address,
-              role,
-              role_id,
-              is_active
-            )
-          }
-        />
-      </Tooltip>
-    )}
-  </div>
-);
+    <div>
+      {isAllowed("delete_employee") && (
+        <Tooltip title="Delete">
+          <Icon
+            type="delete"
+            onClick={() => deleteEmployee(value)}
+            style={{ cursor: "pointer" }}
+          />
+        </Tooltip>
+      )}
+      {isAllowed("get_employee_details") && (
+        <Tooltip title="Edit">
+          <Icon
+            type="edit"
+            className="btn-icon"
+            onClick={() =>
+              editEmployee(
+                value,
+                first_name,
+                last_name,
+                email,
+                phone_number,
+                address,
+                role,
+                role_id,
+                is_active
+              )
+            }
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
 const FeeSwitchCell = (
   value,
   name,
@@ -2309,24 +2352,24 @@ const FeeSwitchCell = (
   created_at,
   is_active
 ) => (
-  <Switch
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    onChange={() => {
-      pairStatus(
-        value,
-        name,
-        price_precision,
-        quantity_precision,
-        order_maximum,
-        created_at,
-        is_active
-      );
-    }}
-  />
-);
+    <Switch
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      onChange={() => {
+        pairStatus(
+          value,
+          name,
+          price_precision,
+          quantity_precision,
+          order_maximum,
+          created_at,
+          is_active
+        );
+      }}
+    />
+  );
 const FeeActionCell = (
   value,
   name,
@@ -2336,28 +2379,28 @@ const FeeActionCell = (
   created_at,
   is_active
 ) => (
-  <div>
-    {isAllowed("admin_edit_pair") && (
-      <Tooltip title="Edit">
-        <Icon
-          type="edit"
-          className="btn-icon"
-          onClick={() =>
-            editPair(
-              value,
-              name,
-              price_precision,
-              quantity_precision,
-              order_maximum,
-              created_at,
-              is_active
-            )
-          }
-        />
-      </Tooltip>
-    )}
-  </div>
-);
+    <div>
+      {isAllowed("admin_edit_pair") && (
+        <Tooltip title="Edit">
+          <Icon
+            type="edit"
+            className="btn-icon"
+            onClick={() =>
+              editPair(
+                value,
+                name,
+                price_precision,
+                quantity_precision,
+                order_maximum,
+                created_at,
+                is_active
+              )
+            }
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
 const TradeCoinFeesActionCell = (id, makerfee, takerfee, tradevolume) => (
   <div>
     {isAllowed("admin_edit_trade_fee") && (
@@ -2381,24 +2424,24 @@ const LimitActionCell = (
   min_withdrawl_crypto,
   min_withdrawl_fiat
 ) => (
-  <div>
-    <Tooltip title="Edit">
-      <Icon
-        type="edit"
-        className="btn-icon"
-        onClick={() =>
-          editLimit(
-            value,
-            daily_withdraw_crypto,
-            daily_withdraw_fiat,
-            min_withdrawl_crypto,
-            min_withdrawl_fiat
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="Edit">
+        <Icon
+          type="edit"
+          className="btn-icon"
+          onClick={() =>
+            editLimit(
+              value,
+              daily_withdraw_crypto,
+              daily_withdraw_fiat,
+              min_withdrawl_crypto,
+              min_withdrawl_fiat
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const TagsCell = (value) => (
   <Tooltip title={value}>
     <p>{value.slice(0, 10) + (value.length > 10 ? "..." : "")}</p>
@@ -2414,58 +2457,58 @@ const JobActionCell = (
   is_active,
   category
 ) => (
-  <div>
-    {isAllowed("delete_job") && (
-      <Tooltip title="Delete">
-        <Icon
-          type="delete"
-          onClick={() => deleteJob(value)}
-          style={{ cursor: "pointer" }}
-        />
-      </Tooltip>
-    )}
-    {isAllowed("update_job") && (
-      <Tooltip title="Edit">
-        <Icon
-          type="edit"
-          className="btn-icon"
-          onClick={() =>
-            editJob(
-              value,
-              position,
-              location,
-              short_desc,
-              job_desc,
-              category_id,
-              is_active,
-              category
-            )
-          }
-        />
-      </Tooltip>
-    )}
-    {isAllowed("get_all_jobs") && (
-      <Tooltip title="View">
-        <Icon
-          type="info-circle"
-          className="btn-icon"
-          onClick={() =>
-            viewJob(
-              value,
-              position,
-              location,
-              short_desc,
-              job_desc,
-              category_id,
-              is_active,
-              category
-            )
-          }
-        />
-      </Tooltip>
-    )}
-  </div>
-);
+    <div>
+      {isAllowed("delete_job") && (
+        <Tooltip title="Delete">
+          <Icon
+            type="delete"
+            onClick={() => deleteJob(value)}
+            style={{ cursor: "pointer" }}
+          />
+        </Tooltip>
+      )}
+      {isAllowed("update_job") && (
+        <Tooltip title="Edit">
+          <Icon
+            type="edit"
+            className="btn-icon"
+            onClick={() =>
+              editJob(
+                value,
+                position,
+                location,
+                short_desc,
+                job_desc,
+                category_id,
+                is_active,
+                category
+              )
+            }
+          />
+        </Tooltip>
+      )}
+      {isAllowed("get_all_jobs") && (
+        <Tooltip title="View">
+          <Icon
+            type="info-circle"
+            className="btn-icon"
+            onClick={() =>
+              viewJob(
+                value,
+                position,
+                location,
+                short_desc,
+                job_desc,
+                category_id,
+                is_active,
+                category
+              )
+            }
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
 const JobSwitchCell = (
   value,
   position,
@@ -2477,26 +2520,26 @@ const JobSwitchCell = (
   category,
   disabled = false
 ) => (
-  <Switch
-    disabled={disabled}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    onChange={() => {
-      jobStatus(
-        value,
-        position,
-        location,
-        short_desc,
-        job_desc,
-        category_id,
-        is_active,
-        category
-      );
-    }}
-  />
-);
+    <Switch
+      disabled={disabled}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      onChange={() => {
+        jobStatus(
+          value,
+          position,
+          location,
+          short_desc,
+          job_desc,
+          category_id,
+          is_active,
+          category
+        );
+      }}
+    />
+  );
 const JobButtonCell = (value) => (
   <div>
     <Button
@@ -2521,29 +2564,29 @@ const JobAppActionCell = (
   linkedin_profile,
   website_url
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        className="btn-icon"
-        onClick={() =>
-          viewJobApplication(
-            value,
-            first_name,
-            last_name,
-            email,
-            phone_number,
-            created_at,
-            resume,
-            cover_letter,
-            linkedin_profile,
-            website_url
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          className="btn-icon"
+          onClick={() =>
+            viewJobApplication(
+              value,
+              first_name,
+              last_name,
+              email,
+              phone_number,
+              created_at,
+              resume,
+              cover_letter,
+              linkedin_profile,
+              website_url
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const KYCActionCell = (
   value,
   mtid,
@@ -2561,36 +2604,92 @@ const KYCActionCell = (
   id_type,
   created_at
 ) => (
-  <div>
-    {isAllowed("get_kyc_detail") && (
-      <Tooltip title="View">
-        <Icon
-          type="info-circle"
-          className="btn-icon"
-          onClick={() =>
-            viewKYC(
-              value,
-              mtid,
-              first_name,
-              last_name,
-              email,
-              direct_response,
-              kycDoc_details,
-              webhook_response,
-              address,
-              country,
-              city,
-              zip,
-              dob,
-              id_type,
-              created_at
-            )
-          }
-        />
-      </Tooltip>
-    )}
-  </div>
-);
+    <div>
+      {(isAllowed("get_kyc_detail") || true) && (
+        <Tooltip title="View">
+          <Icon
+            type="info-circle"
+            className="btn-icon"
+            onClick={() =>
+              viewKYC(
+                value,
+                mtid,
+                first_name,
+                last_name,
+                email,
+                direct_response,
+                kycDoc_details,
+                webhook_response,
+                address,
+                country,
+                city,
+                zip,
+                dob,
+                id_type,
+                created_at
+              )
+            }
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
+
+const KYCApprovedActionCell = (
+  value,
+  mtid,
+  first_name,
+  last_name,
+  email,
+  direct_response,
+  kycDoc_details,
+  webhook_response,
+  address,
+  country,
+  city,
+  zip,
+  dob,
+  id_type,
+  created_at,
+  front_doc,
+  back_doc,
+  ssn_number
+) => (
+    <div>
+      {(isAllowed("get_kyc_detail") || true) && (
+        <Tooltip title="View">
+          <Icon
+            type="info-circle"
+            className="btn-icon"
+            onClick={() =>
+
+              viewApprovedKYC(
+                value,
+                mtid,
+                first_name,
+                last_name,
+                email,
+                direct_response,
+                kycDoc_details,
+                webhook_response,
+                address,
+                country,
+                city,
+                zip,
+                dob,
+                id_type,
+                created_at,
+                front_doc,
+                back_doc,
+                ssn_number
+              )
+            }
+          />
+        </Tooltip>
+      )}
+    </div>
+  );
+
 const LogoutDateCell = (value, is_logged_in, created_at, updated_at) => (
   <p>
     {" "}
@@ -2614,12 +2713,12 @@ const PipelineCell = (text) => (
     {text == 1
       ? "NEW"
       : text == 2
-      ? "Waiting on Customer Feedback"
-        ? text == 3
-          ? "Waiting on FALDAX"
-          : "AClosed"
-        : "BClosed"
-      : "CClosed"}
+        ? "Waiting on Customer Feedback"
+          ? text == 3
+            ? "Waiting on FALDAX"
+            : "AClosed"
+          : "BClosed"
+        : "CClosed"}
   </p>
 );
 const AccountClassActionCell = (value, class_name) => (
@@ -2695,17 +2794,17 @@ const NewsSourceSwitchCell = (
   is_active,
   disabled = false
 ) => (
-  <Switch
-    disabled={disabled}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    checked={is_active}
-    onChange={() => {
-      newsSourceStatus(value, source_name, slug, is_active);
-    }}
-  />
-);
+    <Switch
+      disabled={disabled}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      checked={is_active}
+      onChange={() => {
+        newsSourceStatus(value, source_name, slug, is_active);
+      }}
+    />
+  );
 const WithdrawActionCell = (
   value,
   email,
@@ -2723,62 +2822,62 @@ const WithdrawActionCell = (
   reason,
   actual_amount
 ) => (
-  <div>
-    {is_approve == null && isAllowed("approve_disapprove_withdraw_request") ? (
-      <div>
-        <Button
-          shape="circle"
-          icon="check"
-          size="small"
-          className="kyc-round-btn"
-          type="primary"
-          onClick={() =>
-            approveWithdrawReq(
-              value,
-              email,
-              source_address,
-              destination_address,
-              amount,
-              transaction_type,
-              is_approve,
-              user_id,
-              coin_id,
-              is_executed,
-              created_at,
-              network_fee,
-              faldax_fee,
-              reason,
-              actual_amount
-            )
-          }
-        ></Button>
-        <Button
-          icon="close"
-          size="small"
-          className="kyc-round-btn"
-          type="danger"
-          onClick={() =>
-            declineWithdrawReq(
-              value,
-              email,
-              source_address,
-              destination_address,
-              amount,
-              transaction_type,
-              is_approve,
-              user_id,
-              coin_id,
-              is_executed,
-              created_at
-            )
-          }
-        ></Button>
-      </div>
-    ) : (
-      ""
-    )}
-  </div>
-);
+    <div>
+      {is_approve == null && isAllowed("approve_disapprove_withdraw_request") ? (
+        <div>
+          <Button
+            shape="circle"
+            icon="check"
+            size="small"
+            className="kyc-round-btn"
+            type="primary"
+            onClick={() =>
+              approveWithdrawReq(
+                value,
+                email,
+                source_address,
+                destination_address,
+                amount,
+                transaction_type,
+                is_approve,
+                user_id,
+                coin_id,
+                is_executed,
+                created_at,
+                network_fee,
+                faldax_fee,
+                reason,
+                actual_amount
+              )
+            }
+          ></Button>
+          <Button
+            icon="close"
+            size="small"
+            className="kyc-round-btn"
+            type="danger"
+            onClick={() =>
+              declineWithdrawReq(
+                value,
+                email,
+                source_address,
+                destination_address,
+                amount,
+                transaction_type,
+                is_approve,
+                user_id,
+                coin_id,
+                is_executed,
+                created_at
+              )
+            }
+          ></Button>
+        </div>
+      ) : (
+          ""
+        )}
+    </div>
+  );
 const WithdrawStatusCell = (
   value,
   email,
@@ -2792,23 +2891,23 @@ const WithdrawStatusCell = (
   is_executed,
   created_at
 ) => (
-  <p
-    className={
-      "withdrawal-status-" +
-      (is_approve == null
-        ? "pending"
+    <p
+      className={
+        "withdrawal-status-" +
+        (is_approve == null
+          ? "pending"
+          : is_approve == true
+            ? "approved"
+            : "declined")
+      }
+    >
+      {is_approve == null
+        ? "PENDING"
         : is_approve == true
-        ? "approved"
-        : "declined")
-    }
-  >
-    {is_approve == null
-      ? "PENDING"
-      : is_approve == true
-      ? "APPROVED"
-      : "REJECTED"}
-  </p>
-);
+          ? "APPROVED"
+          : "REJECTED"}
+    </p>
+  );
 const JobCatSwitchCell = (value, category, is_active, disabled = false) => (
   <Switch
     disabled={disabled}
@@ -2845,8 +2944,8 @@ const WhiteListActionCell = (value, ip, time, is_permanent) => (
         />
       </Tooltip>
     ) : (
-      "-"
-    )}
+        "-"
+      )}
   </div>
 );
 const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => (
@@ -2860,8 +2959,8 @@ const ProfileWhiteListActionCell = (value, ip, time, is_permanent) => (
         />
       </Tooltip>
     ) : (
-      "-"
-    )}
+        "-"
+      )}
   </div>
 );
 const TwoFAActionCell = (
@@ -2873,71 +2972,71 @@ const TwoFAActionCell = (
   reason,
   created_at
 ) => (
-  <div>
-    <Tooltip title="View">
-      <Icon
-        type="info-circle"
-        className="btn-icon"
-        onClick={() =>
-          viewRequest(
-            value,
-            full_name,
-            email,
-            uploaded_file,
-            status,
-            reason,
-            created_at
-          )
-        }
-      />
-    </Tooltip>
-    {status.trim() !== "open" ? (
-      ""
-    ) : (
-      <React.Fragment>
-        {isAllowed("approve_twofactors_request_status") && (
-          <Tooltip title="Approve">
-            <Icon
-              theme="twoTone"
-              type="check-circle"
-              className="btn-icon"
-              onClick={() =>
-                approve2FA(
-                  value,
-                  full_name,
-                  email,
-                  uploaded_file,
-                  status,
-                  created_at
-                )
-              }
-            />
-          </Tooltip>
+    <div>
+      <Tooltip title="View">
+        <Icon
+          type="info-circle"
+          className="btn-icon"
+          onClick={() =>
+            viewRequest(
+              value,
+              full_name,
+              email,
+              uploaded_file,
+              status,
+              reason,
+              created_at
+            )
+          }
+        />
+      </Tooltip>
+      {status.trim() !== "open" ? (
+        ""
+      ) : (
+          <React.Fragment>
+            {isAllowed("approve_twofactors_request_status") && (
+              <Tooltip title="Approve">
+                <Icon
+                  theme="twoTone"
+                  type="check-circle"
+                  className="btn-icon"
+                  onClick={() =>
+                    approve2FA(
+                      value,
+                      full_name,
+                      email,
+                      uploaded_file,
+                      status,
+                      created_at
+                    )
+                  }
+                />
+              </Tooltip>
+            )}
+            {isAllowed("reject_twofactors_request_status") && (
+              <Tooltip title="Reject">
+                <Icon
+                  theme="twoTone"
+                  twoToneColor="#FF0000"
+                  type="close-circle"
+                  className="btn-icon"
+                  onClick={() =>
+                    reject2FA(
+                      value,
+                      full_name,
+                      email,
+                      uploaded_file,
+                      status,
+                      created_at
+                    )
+                  }
+                />
+              </Tooltip>
+            )}
+          </React.Fragment>
         )}
-        {isAllowed("reject_twofactors_request_status") && (
-          <Tooltip title="Reject">
-            <Icon
-              theme="twoTone"
-              twoToneColor="#FF0000"
-              type="close-circle"
-              className="btn-icon"
-              onClick={() =>
-                reject2FA(
-                  value,
-                  full_name,
-                  email,
-                  uploaded_file,
-                  status,
-                  created_at
-                )
-              }
-            />
-          </Tooltip>
-        )}
-      </React.Fragment>
-    )}
-  </div>
-);
+    </div>
+  );
 const TierReqCell = (
   value,
   tier_step,
@@ -2947,51 +3046,51 @@ const TierReqCell = (
   requirements,
   requirements2
 ) => (
-  <>
-    {tier_step === 0 ? (
-      <div>
-        {requirements != null ? (
-          <ul class="style-circle" type="circle">
-            {Object.keys(requirements).map((req) => (
-              <li>
-                <b>{requirements[req]}</b>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          ""
+    <>
+      {tier_step === 0 ? (
+        <div>
+          {requirements != null ? (
+            <ul class="style-circle" type="circle">
+              {Object.keys(requirements).map((req) => (
+                <li>
+                  <b>{requirements[req]}</b>
+                </li>
+              ))}
+            </ul>
+          ) : (
+              ""
+            )}
+        </div>
+      ) : (
+          <div>
+            {requirements != null ? (
+              <ul class="style-circle" type="circle">
+                {Object.keys(requirements).map((req) => (
+                  <li>
+                    <b>{requirements[req]}</b>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+                ""
+              )}
+            <Divider>OR</Divider>
+            {requirements2 != null ? (
+              <ul class="style-circle" type="circle">
+                <li>
+                  <b>
+                    {"Total wallet USD Value : $" +
+                      requirements2["Total_Wallet_Balance"]}
+                  </b>
+                </li>
+              </ul>
+            ) : (
+                " "
+              )}
+          </div>
         )}
-      </div>
-    ) : (
-      <div>
-        {requirements != null ? (
-          <ul class="style-circle" type="circle">
-            {Object.keys(requirements).map((req) => (
-              <li>
-                <b>{requirements[req]}</b>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          ""
-        )}
-        <Divider>OR</Divider>
-        {requirements2 != null ? (
-          <ul class="style-circle" type="circle">
-            <li>
-              <b>
-                {"Total wallet USD Value : $" +
-                  requirements2["Total_Wallet_Balance"]}
-              </b>
-            </li>
-          </ul>
-        ) : (
-          " "
-        )}
-      </div>
-    )}
-  </>
-);
+    </>
+  );
 const TierThresholdCell = (
   value,
   tier_step,
@@ -3002,59 +3101,59 @@ const TierThresholdCell = (
   max_trade_amount,
   max_allowed_days
 ) => (
-  <>
-    {tier_step === 0 ? (
-      <ul class="style-circle" type="circle">
-        <li>
-          {max_trade_amount == "Unlimited" ? (
-            <b>{"Maximum Trade Amount : " + max_trade_amount}</b>
-          ) : (
-            <b>{"Maximum Trade Amount : $" + max_trade_amount}</b>
-          )}
-        </li>
-        <li>
-          <b>
-            {"Maximum Allowed Days (Trade) : " + max_allowed_days + " Days"}
-          </b>
-        </li>
-        <li>
-          <b>Deposit Cryptocurrencies : Unlimited</b>
-        </li>
-      </ul>
-    ) : (
-      <ul class="style-circle" type="circle">
-        <li>
-          <b>
-            {"Account Age : " +
-              minimum_activity_thresold["Account_Age"] +
-              " Days"}
-          </b>
-        </li>
-        <li>
-          <b>
-            {"Minimum Total Transactions : " +
-              minimum_activity_thresold["Minimum_Total_Transactions"] +
-              " Transactions"}
-          </b>
-        </li>
-        <li>
-          <b>
-            {"Minimum Total Value of All Transactions : $" +
-              minimum_activity_thresold[
-                "Minimum_Total_Value_of_All_Transactions"
-              ]}
-          </b>
-        </li>
-        <li>
-          <b>Deposit Cryptocurrencies : Unlimited</b>
-        </li>
-        <li>
-          <b>Trade : Unlimited</b>
-        </li>
-      </ul>
-    )}
-  </>
-);
+    <>
+      {tier_step === 0 ? (
+        <ul class="style-circle" type="circle">
+          <li>
+            {max_trade_amount == "Unlimited" ? (
+              <b>{"Maximum Trade Amount : " + max_trade_amount}</b>
+            ) : (
+                <b>{"Maximum Trade Amount : $" + max_trade_amount}</b>
+              )}
+          </li>
+          <li>
+            <b>
+              {"Maximum Allowed Days (Trade) : " + max_allowed_days + " Days"}
+            </b>
+          </li>
+          <li>
+            <b>Deposit Cryptocurrencies : Unlimited</b>
+          </li>
+        </ul>
+      ) : (
+          <ul class="style-circle" type="circle">
+            <li>
+              <b>
+                {"Account Age : " +
+                  minimum_activity_thresold["Account_Age"] +
+                  " Days"}
+              </b>
+            </li>
+            <li>
+              <b>
+                {"Minimum Total Transactions : " +
+                  minimum_activity_thresold["Minimum_Total_Transactions"] +
+                  " Transactions"}
+              </b>
+            </li>
+            <li>
+              <b>
+                {"Minimum Total Value of All Transactions : $" +
+                  minimum_activity_thresold[
+                  "Minimum_Total_Value_of_All_Transactions"
+                  ]}
+              </b>
+            </li>
+            <li>
+              <b>Deposit Cryptocurrencies : Unlimited</b>
+            </li>
+            <li>
+              <b>Trade : Unlimited</b>
+            </li>
+          </ul>
+        )}
+    </>
+  );
 const TierActionCell = (value) => (
   <div>
     {isAllowed("get_tier_data") && (
@@ -3083,8 +3182,8 @@ const PendingTierReqActionCell = (
   is_approved,
   request_id
 ) => (
-  <div>
-    {/* <Tooltip title="View">
+    <div>
+      {/* <Tooltip title="View">
         <Icon
           type="info-circle"
           className="btn-icon-view"
@@ -3100,40 +3199,40 @@ const PendingTierReqActionCell = (
           }
         />
       </Tooltip> */}
-    <Tooltip title="Approved">
-      <Icon
-        type="check-circle"
-        className="btn-icon-accept"
-        onClick={() =>
-          approvePendingReq(
-            value,
-            first_name,
-            last_name,
-            tier_step,
-            true,
-            request_id
-          )
-        }
-      />
-    </Tooltip>
-    <Tooltip title="Reject">
-      <Icon
-        type="close-circle"
-        className="btn-icon-reject"
-        onClick={() =>
-          approvePendingReq(
-            value,
-            first_name,
-            last_name,
-            tier_step,
-            false,
-            request_id
-          )
-        }
-      />
-    </Tooltip>
-  </div>
-);
+      <Tooltip title="Approved">
+        <Icon
+          type="check-circle"
+          className="btn-icon-accept"
+          onClick={() =>
+            approvePendingReq(
+              value,
+              first_name,
+              last_name,
+              tier_step,
+              true,
+              request_id
+            )
+          }
+        />
+      </Tooltip>
+      <Tooltip title="Reject">
+        <Icon
+          type="close-circle"
+          className="btn-icon-reject"
+          onClick={() =>
+            approvePendingReq(
+              value,
+              first_name,
+              last_name,
+              tier_step,
+              false,
+              request_id
+            )
+          }
+        />
+      </Tooltip>
+    </div>
+  );
 const SimplexStatusCell = (
   value,
   payment_id,
@@ -3147,14 +3246,14 @@ const SimplexStatusCell = (
   simplex_payment_status,
   created_at
 ) => (
-  <div className={"order-" + simplex_payment_status}>
-    {simplex_payment_status == 1
-      ? "Under Approval"
-      : simplex_payment_status == 2
-      ? "Approved"
-      : "Cancelled"}
-  </div>
-);
+    <div className={"order-" + simplex_payment_status}>
+      {simplex_payment_status == 1
+        ? "Under Approval"
+        : simplex_payment_status == 2
+          ? "Approved"
+          : "Cancelled"}
+    </div>
+  );
 
 const ReferralNameCell = (value, full_name, deleted_at) => (
   <div>
@@ -3167,8 +3266,8 @@ const ReferralNameCell = (value, full_name, deleted_at) => (
         {full_name}
       </Tooltip>
     ) : (
-      full_name
-    )}
+        full_name
+      )}
   </div>
 );
 
@@ -3260,18 +3359,18 @@ const CampaignSwitchCell = (
   campaign_is_active,
   campaign_label
 ) => (
-  <Switch
-    checked={campaign_is_active}
-    className="switch-cell"
-    checkedChildren="Active"
-    unCheckedChildren="Inactive"
-    size="large"
-    disabled={!isAllowed("change_campaign_status")}
-    onChange={() =>
-      offers.changeState(campaign_id, campaign_is_active, campaign_label)
-    }
-  />
-);
+    <Switch
+      checked={campaign_is_active}
+      className="switch-cell"
+      checkedChildren="Active"
+      unCheckedChildren="Inactive"
+      size="large"
+      disabled={!isAllowed("change_campaign_status")}
+      onChange={() =>
+        offers.changeState(campaign_id, campaign_is_active, campaign_label)
+      }
+    />
+  );
 
 const CampaignTypeCell = (value) =>
   value == 1 ? "Single Code Use" : "Multiple Code Use";
@@ -3286,11 +3385,11 @@ const ExpireIpDateCell = (data) => (
           {moment.utc(data).local().format("DD MMM YYYY LTS")}
         </span>
       ) : (
-        "-"
-      )
+          "-"
+        )
     ) : (
-      "Permanent"
-    )}
+        "Permanent"
+      )}
   </p>
 );
 
@@ -3303,10 +3402,10 @@ const PrecisionCell = (data) => {
   return isFloat(data)
     ? parseFloat(data).toFixed(8)
     : data == 0.0
-    ? "-"
-    : data
-    ? parseFloat(data)
-    : "-";
+      ? "-"
+      : data
+        ? parseFloat(data)
+        : "-";
 };
 const Precise = (value, precise_value) => {
   let precise = precise_value.toString();
@@ -3805,6 +3904,7 @@ export {
   JobButtonCell,
   JobAppActionCell,
   KYCActionCell,
+  KYCApprovedActionCell,
   LogoutDateCell,
   FeesActionCell,
   FeesCell,

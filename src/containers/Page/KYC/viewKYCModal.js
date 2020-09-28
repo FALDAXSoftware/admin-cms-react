@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
+import { BUCKET_URL } from "../../../helpers/globals";
 
 class ViewKYCModal extends Component {
     constructor(props) {
         super(props)
+        console.log("this.props.showViewKYCModal", this.props.showViewKYCModal)
         this.state = {
             showViewKYCModal: this.props.showViewKYCModal,
         }
@@ -96,6 +98,69 @@ class ViewKYCModal extends Component {
                             {idType}</p>
                     </div>
                     : ''}
+
+                {kycDetails.front_doc &&
+                    kycDetails.front_doc != null ? (
+                        <div>
+                            <span>
+                                <b>Front Document:</b>{" "}
+                            </span>
+                            <br />
+                            <a
+                                href={BUCKET_URL + kycDetails.front_doc}
+                                target="_blank"
+                            >
+                                <img
+                                    style={{ maxWidth: "50%" }}
+                                    alt=""
+                                    src={BUCKET_URL + kycDetails.front_doc}
+                                />
+                            </a>
+                        </div>
+                    ) : (
+                        ""
+                    )}
+                {kycDetails.back_doc &&
+                    kycDetails.back_doc != null ? (
+                        <div>
+                            <span>
+                                <b>Back Document:</b>{" "}
+                            </span>
+                            <br />
+                            <a
+                                href={BUCKET_URL + kycDetails.back_doc}
+                                target="_blank"
+                            >
+                                <img
+                                    style={{ maxWidth: "50%" }}
+                                    alt=""
+                                    src={BUCKET_URL + kycDetails.back_doc}
+                                />
+                            </a>
+                        </div>
+                    ) : (
+                        ""
+                    )}
+
+                {kycDetails.ssn_number &&
+                    kycDetails.ssn_number != null ? (
+                        <div>
+                            <span>
+                                <b>Goverement Issued ID Number:</b>{" "}
+                            </span>
+                            <br />
+                            <span>
+                                {kycDetails.ssn_number}
+                            </span>
+                        </div>
+                    ) : (
+                        ""
+                    )}
+
+                {/* <span> <b>Date of Birth:</b> </span>
+                <p style={{ "marginBottom": "15px" }}>
+                    {kycDetails.dob ? kycDetails.dob : 'N/A'}
+                </p> */}
             </Modal>
         );
     }
