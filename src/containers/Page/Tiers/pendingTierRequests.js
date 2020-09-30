@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import { notification, Pagination,Icon,Button,Form, Row, Col,Select,Input, Tag, Modal } from 'antd';
+import { notification, Pagination, Icon, Button, Form, Row, Col, Select, Input, Tag, Modal } from 'antd';
 import { tierPendingReqTableInfos } from "../../Tables/antTables";
 import TableWrapper from "../../Tables/antTables/antTable.style";
 import { connect } from 'react-redux';
 import authAction from '../../../redux/auth/actions';
 import ApiUtils from '../../../helpers/apiUtills';
 import FaldaxLoader from "../faldaxLoader";
-import { PAGE_SIZE_OPTIONS,TABLE_SCROLL_HEIGHT, PAGESIZE } from "../../../helpers/globals";
+import { PAGE_SIZE_OPTIONS, TABLE_SCROLL_HEIGHT, PAGESIZE } from "../../../helpers/globals";
 import { ExportToCSVComponent } from '../../Shared/exportToCsv';
 import { PageCounterComponent } from '../../Shared/pageCounter';
 import { exportTier } from '../../../helpers/exportToCsv/headers';
 import { PendingTierReqActionCell, getTierDoc, DateTimeCell } from '../../../components/tables/helperCells';
 import TextArea from 'antd/lib/input/TextArea';
 import ViewNotesModal from '../../Shared/viewNotesModal';
+import ViewDocumentModal from '../../Shared/ViewDocumentModal';
 import SimpleReactValidator from 'simple-react-validator';
 // import { PendingTierReqActionCell, getTierDoc } from '../../../components/tables/helperCells';
 const { logout } = authAction;
 // const {Option}=Select;
-var self,columns;
+var self, columns;
 
 class PendingRequests extends Component {
   constructor(props) {
@@ -34,15 +35,15 @@ class PendingRequests extends Component {
       expandRowLoader: false,
       tierDetailsRequest: [],
       expandedRowKeys: [],
-      showRejectNoteModal:false,
-      rejectRequestData:undefined,
-      privateNote:"",
-      publicNote:"",
-      callbackFunction:PendingRequests.approvePendingReq,
-      callbackParams:{},
-      showNotesModal:false,
-      public_note:undefined,
-      private_note:undefined
+      showRejectNoteModal: false,
+      rejectRequestData: undefined,
+      privateNote: "",
+      publicNote: "",
+      callbackFunction: PendingRequests.approvePendingReq,
+      callbackParams: {},
+      showNotesModal: false,
+      public_note: undefined,
+      private_note: undefined
     };
     self = this;
     this.validator = new SimpleReactValidator();
@@ -50,7 +51,7 @@ class PendingRequests extends Component {
     columns.push({
       title: "Action",
       key: "count",
-      width:450,
+      width: 450,
       align: "left",
       ellipsis: true,
       render: (object) => (
@@ -73,7 +74,7 @@ class PendingRequests extends Component {
             Force Reject
           </Button>
           &nbsp;&nbsp;
-           <Button disabled={!(object['public_note'] || object['private_note'])} onClick={()=>this.setState({showNotesModal:true,public_note:object["public_note"],private_note:object["private_note"]})}>Show Notes</Button>
+           <Button disabled={!(object['public_note'] || object['private_note'])} onClick={() => this.setState({ showNotesModal: true, public_note: object["public_note"], private_note: object["private_note"] })}>Show Notes</Button>
         </span>
       ),
     });
@@ -88,14 +89,13 @@ class PendingRequests extends Component {
 
   async forceApproveRejectTierRequest(status, id) {
     try {
-      let {showRejectNoteModal}=this.state;
-      if(!showRejectNoteModal)
-      {
-        this.setState({showRejectNoteModal:true,callbackFunction:this.forceApproveRejectTierRequest.bind(this),callbackParams:{id,status,isForce:true}});
+      let { showRejectNoteModal } = this.state;
+      if (!showRejectNoteModal) {
+        this.setState({ showRejectNoteModal: true, callbackFunction: this.forceApproveRejectTierRequest.bind(this), callbackParams: { id, status, isForce: true } });
         return false;
       }
       this.setState({ loader: true });
-      let {publicNote,privateNote}=this.state;
+      let { publicNote, privateNote } = this.state;
       let response = await (
         await ApiUtils.forceApproveRejectTierRequest(
           this.props.token,
@@ -112,9 +112,9 @@ class PendingRequests extends Component {
             errMessage: response.message,
             errType: "success",
             loader: false,
-            showRejectNoteModal:false,
-            privateNote:"",
-            publicNote:""
+            showRejectNoteModal: false,
+            privateNote: "",
+            publicNote: ""
           },
           () => this.getAllPendingRequest()
         );
@@ -148,7 +148,7 @@ class PendingRequests extends Component {
     e.preventDefault();
     this.getAllPendingRequest();
   };
-  
+
   getAllPendingRequest = async (isExportToCsv = false) => {
     const { token } = this.props;
     const { sorterCol, sortOrder, limit, page, type, searchData } = this.state;
@@ -158,29 +158,29 @@ class PendingRequests extends Component {
       let res = await (
         await (isExportToCsv
           ? ApiUtils.getAllTierRequests(
-              token,
-              this.props.tier,
-              sorterCol,
-              sortOrder,
-              100000,
-              1,
-              undefined,
-              1,
-              searchData,
-              type
-            )
+            token,
+            this.props.tier,
+            sorterCol,
+            sortOrder,
+            100000,
+            1,
+            undefined,
+            1,
+            searchData,
+            type
+          )
           : ApiUtils.getAllTierRequests(
-              token,
-              this.props.tier,
-              sorterCol,
-              sortOrder,
-              limit,
-              page,
-              undefined,
-              1,
-              searchData,
-              type
-            ))
+            token,
+            this.props.tier,
+            sorterCol,
+            sortOrder,
+            limit,
+            page,
+            undefined,
+            1,
+            searchData,
+            type
+          ))
       ).json();
       if (res.status == 200) {
         if (isExportToCsv) {
@@ -221,16 +221,16 @@ class PendingRequests extends Component {
     }
   };
 
-  onRejectRequestSubmit=()=>{
-    if(this.validator.allValid()){
-      if(!this.state.callbackParams.isForce){
-        let {value,first_name,last_name,tier_step,is_approved,request_id}=this.state.callbackParams;
-        this.state.callbackFunction(value,first_name,last_name,tier_step,is_approved,request_id);
-      }else{
-        let {id,status}=this.state.callbackParams;
-        this.state.callbackFunction(status,id); 
+  onRejectRequestSubmit = () => {
+    if (this.validator.allValid()) {
+      if (!this.state.callbackParams.isForce) {
+        let { value, first_name, last_name, tier_step, is_approved, request_id } = this.state.callbackParams;
+        this.state.callbackFunction(value, first_name, last_name, tier_step, is_approved, request_id);
+      } else {
+        let { id, status } = this.state.callbackParams;
+        this.state.callbackFunction(status, id);
       }
-    }else{
+    } else {
       this.validator.showMessages();
       this.forceUpdate();
     }
@@ -244,12 +244,12 @@ class PendingRequests extends Component {
     is_approved,
     request_id
   ) {
-    if(!is_approved && !self.state.showRejectNoteModal){
-      self.setState({showRejectNoteModal:true,callbackParams:{value,first_name,last_name,tier_step,is_approved,request_id,isForce:false}});
+    if (!is_approved && !self.state.showRejectNoteModal) {
+      self.setState({ showRejectNoteModal: true, callbackParams: { value, first_name, last_name, tier_step, is_approved, request_id, isForce: false } });
       return
     }
     const { token } = self.props;
-    const {publicNote,privateNote}=self.state;
+    const { publicNote, privateNote } = self.state;
     self.setState({ loader: true });
     try {
       let res = await (
@@ -269,16 +269,16 @@ class PendingRequests extends Component {
           errMsg: true,
           errMessage: res.message,
           errType: "Success",
-          showRejectNoteModal:false,
-          privateNote:"",
-          publicNote:""
+          showRejectNoteModal: false,
+          privateNote: "",
+          publicNote: ""
         });
-        let res1=await (await ApiUtils.getTierDetails(self.props.token,request_id, tier_step)).json();
-        if(res1.status==200){
-          let index=res1.data.findIndex((ele)=>ele[0].is_approved==null);
-          if(index!=-1){
+        let res1 = await (await ApiUtils.getTierDetails(self.props.token, request_id, tier_step)).json();
+        if (res1.status == 200) {
+          let index = res1.data.findIndex((ele) => ele[0].is_approved == null);
+          if (index != -1) {
             self.setState({ tierDetailsRequest: [].concat.apply([], res1.data) });
-          }else{
+          } else {
             await self.getAllPendingRequest();
           }
         }
@@ -377,16 +377,15 @@ class PendingRequests extends Component {
       this.setState({ expandRowLoader: false });
     }
   }
-  onCancel=()=>{
+  onCancel = () => {
     this.validator.hideMessages();
-    this.setState({showRejectNoteModal:false,rejectRequestData:undefined,privateNote:"",publicNote:""});
+    this.setState({ showRejectNoteModal: false, rejectRequestData: undefined, privateNote: "", publicNote: "" });
   }
-  onChange=({target})=>{
-    if(target.name=="private_note")
-    {
-      this.setState({"privateNote":target.value});
-    }else{
-      this.setState({"publicNote":target.value});
+  onChange = ({ target }) => {
+    if (target.name == "private_note") {
+      this.setState({ "privateNote": target.value });
+    } else {
+      this.setState({ "publicNote": target.value });
     }
   }
   render() {
@@ -404,12 +403,15 @@ class PendingRequests extends Component {
       type,
       csvData,
       openCsvExportModal,
-      showNotesModal
+      showNotesModal,
+      showDocumentModal,
+      documentTyype
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
     }
     console.log(showNotesModal)
+    console.log("showDocumentModal", showDocumentModal)
 
     return (
       <div className="isoLayoutContent">
@@ -501,101 +503,119 @@ class PendingRequests extends Component {
           expandedRowRender={() => {
             return (
               <>
-                {tierDetailsRequest.length>0 && 
-                <>
-                <tr>
-                  <th className="custom-tr-width">Submitted On</th>
-                  <th className="custom-tr-width">Status</th>
-                  <th className="custom-tr-width">Updated By</th>
-                  <th className="custom-tr-width">Id</th>
-                  <th className="custom-tr-width">Type</th>
-                  <th className="custom-tr-width">Notes</th>
-                </tr>
-                {tierDetailsRequest.map((ele) => {
-                  return (
-                    <>
-                      <tr>
-                        <td className="custom-tr-width">
-                          {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
-                          {DateTimeCell(ele["created_at"], "string")}
-                        </td>
-                        {ele["is_approved"] == null && (
-                          <td className="custom-tr-width">
-                            {PendingTierReqActionCell(
-                              ele["id"],
-                              ele["first_name"],
-                              ele["last_name"],
-                              ele["tier_step"],
-                              ele["is_approved"],
-                              ele["request_id"]
+                {tierDetailsRequest.length > 0 &&
+                  <>
+                    <tr>
+                      <th className="custom-tr-width">Submitted On</th>
+                      <th className="custom-tr-width">Status</th>
+                      <th className="custom-tr-width">Updated By</th>
+                      <th className="custom-tr-width">Id</th>
+                      <th className="custom-tr-width">Type</th>
+                      <th className="custom-tr-width">Notes</th>
+                      <th className="custom-tr-width">Show Document</th>
+                    </tr>
+                    {tierDetailsRequest.map((ele) => {
+                      return (
+                        <>
+                          <tr>
+                            <td className="custom-tr-width">
+                              {/* <b>Submitted On &nbsp;: </b>&nbsp; */}
+                              {DateTimeCell(ele["created_at"], "string")}
+                            </td>
+                            {ele["is_approved"] == null && (
+                              <td className="custom-tr-width">
+                                {PendingTierReqActionCell(
+                                  ele["id"],
+                                  ele["first_name"],
+                                  ele["last_name"],
+                                  ele["tier_step"],
+                                  ele["is_approved"],
+                                  ele["request_id"]
+                                )}
+                              </td>
                             )}
-                          </td>
-                        )}
-                        {ele["is_approved"] == true && (
-                          <td className="custom-tr-width">
-                            <Tag color="#87d068">
-                              <Icon type="check"></Icon>
-                              &nbsp;Approved
+                            {ele["is_approved"] == true && (
+                              <td className="custom-tr-width">
+                                <Tag color="#87d068">
+                                  <Icon type="check"></Icon>
+                                  &nbsp;Approved
                             </Tag>
-                          </td>
-                        )}
-                        {ele["is_approved"] == false && (
-                          <td className="custom-tr-width">
-                            <Tag color="#f50">
-                              <Icon type="close"></Icon>&nbsp;Rejected
+                              </td>
+                            )}
+                            {ele["is_approved"] == false && (
+                              <td className="custom-tr-width">
+                                <Tag color="#f50">
+                                  <Icon type="close"></Icon>&nbsp;Rejected
                             </Tag>
-                          </td>
-                        )}
-                        <td className="custom-tr-width">
-                          {/* <b>{ele["is_approved"]==null?"-":ele["is_approved"]?"Approved By :":"Rejected By :"}</b> */}
-                          {ele["updated_by"] ? ele["updated_by"] : "-"}
-                        </td>
-                        <td className="custom-tr-width">
-                          {/* <b>{ele['ssn'] && <span>Govt.Issued ID Number &nbsp;</span>} </b>&nbsp; */}
-                          {/* <b>{!ele['ssn'] && <span>Unique Id &nbsp;</span>} </b>&nbsp; */}
-                          {ele["unique_key"]
-                            ? ele["unique_key"]
-                            : ele["type"] == "4"
-                            ? "Enabled"
-                            : ele["ssn"] + "(Govt.Issued ID Number)"}
-                        </td>
-                        {/* <td className="custom-tr-width">{ele["ssn"] &&<> <b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</>}</td> */}
-                        <td className="custom-tr-width">
-                          {/* <b>Type &nbsp;: </b>&nbsp; */}
-                          {
-                            <span>
-                              {getTierDoc(this.props.tier, ele["type"])}
-                            </span>
-                          }
-                        </td>
-                        <td className="custom-tr-width">
-                          <Button
-                            disabled={
-                              !(ele["public_note"] || ele["private_note"])
-                            }
-                            onClick={() => {
-                              this.setState({
-                                showNotesModal: true,
-                                public_note: ele["public_note"],
-                                private_note: ele["private_note"],
-                              });
-                            }}
-                          >
-                            Show Notes
+                              </td>
+                            )}
+                            <td className="custom-tr-width">
+                              {/* <b>{ele["is_approved"]==null?"-":ele["is_approved"]?"Approved By :":"Rejected By :"}</b> */}
+                              {ele["updated_by"] ? ele["updated_by"] : "-"}
+                            </td>
+                            <td className="custom-tr-width">
+                              {/* <b>{ele['ssn'] && <span>Govt.Issued ID Number &nbsp;</span>} </b>&nbsp; */}
+                              {/* <b>{!ele['ssn'] && <span>Unique Id &nbsp;</span>} </b>&nbsp; */}
+                              {ele["unique_key"]
+                                ? ele["unique_key"]
+                                : ele["type"] == "4"
+                                  ? "Enabled"
+                                  : ele["ssn"]}
+                            </td>
+                            {/* <td className="custom-tr-width">{ele["ssn"] &&<> <b>SSN &nbsp;: </b>&nbsp;{ele["ssn"]?ele["ssn"]:'N/A'}</>}</td> */}
+                            <td className="custom-tr-width">
+                              {/* <b>Type &nbsp;: </b>&nbsp; */}
+                              {
+                                <span>
+                                  {getTierDoc(this.props.tier, ele["type"])}
+                                </span>
+                              }
+                            </td>
+                            <td className="custom-tr-width">
+                              <Button
+                                disabled={
+                                  !(ele["public_note"] || ele["private_note"])
+                                }
+                                onClick={() => {
+                                  this.setState({
+                                    showNotesModal: true,
+                                    public_note: ele["public_note"],
+                                    private_note: ele["private_note"],
+                                  });
+                                }}
+                              >
+                                Show Notes
                           </Button>
-                        </td>
+                            </td>
 
-                        {/* <td className="custom-tr-width">
+                            <td className="custom-tr-width">
+                              <Button
+                                disabled={
+                                  !(ele["document"])
+                                }
+                                onClick={() => {
+                                  this.setState({
+                                    showDocumentModal: true,
+                                    document: ele["document"],
+                                    documentType: getTierDoc(this.props.tier, ele["type"])
+                                  });
+                                }}
+                              >
+                                Show Document
+                          </Button>
+                            </td>
+
+                            {/* <td className="custom-tr-width">
                       {ele["public_note"]?ele["public_note"]:"-"}</td>
                     <td className="custom-tr-width">
                       {ele["private_note"]?ele["private_note"]:"-"}</td> */}
-                      </tr>
-                    </>
-                  );
-                })}
-                </>
+                          </tr>
+                        </>
+                      );
+                    })}
+                  </>
                 }
-                {tierDetailsRequest.length==0 && <p>No Data Found</p>}
+                {tierDetailsRequest.length == 0 && <p>No Data Found</p>}
               </>
             );
           }}
@@ -672,14 +692,20 @@ class PendingRequests extends Component {
           private_note={this.state.private_note}
           setVisible={(showNotesModal) => this.setState({ showNotesModal })}
         />
+        <ViewDocumentModal
+          visible={showDocumentModal}
+          document={this.state.document}
+          documentType={this.state.documentType}
+          setVisible={(showDocumentModal) => this.setState({ showDocumentModal })}
+        />
       </div>
     );
   }
 }
 
 export default connect(
-    state => ({
-        token: state.Auth.get('token')
-    }), { logout })(PendingRequests);
+  state => ({
+    token: state.Auth.get('token')
+  }), { logout })(PendingRequests);
 
 export { PendingRequests, tierPendingReqTableInfos };
