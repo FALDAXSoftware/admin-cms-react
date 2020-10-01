@@ -30,6 +30,7 @@ import {
   DateTimeCell,
 } from "../../../components/tables/helperCells";
 import RejectNotesModal from "../../Shared/rejectNotesModal";
+import ViewDocumentModal from '../../Shared/ViewDocumentModal';
 import ViewNotesModal from "../../Shared/viewNotesModal";
 
 const { logout } = authAction;
@@ -152,29 +153,29 @@ class ApprovedRequests extends Component {
     _this.setState({ loader: true });
     (isExportToCsv
       ? ApiUtils.getAllTierRequests(
-          token,
-          this.props.tier,
-          sorterCol,
-          sortOrder,
-          100000,
-          1,
-          undefined,
-          2,
-          searchData,
-          type
-        )
+        token,
+        this.props.tier,
+        sorterCol,
+        sortOrder,
+        100000,
+        1,
+        undefined,
+        2,
+        searchData,
+        type
+      )
       : ApiUtils.getAllTierRequests(
-          token,
-          this.props.tier,
-          sorterCol,
-          sortOrder,
-          limit,
-          page,
-          undefined,
-          2,
-          searchData,
-          type
-        )
+        token,
+        this.props.tier,
+        sorterCol,
+        sortOrder,
+        limit,
+        page,
+        undefined,
+        2,
+        searchData,
+        type
+      )
     )
       .then((response) => response.json())
       .then(function (res) {
@@ -289,6 +290,9 @@ class ApprovedRequests extends Component {
       type,
       csvData,
       openCsvExportModal,
+      // showNotesModal,
+      showDocumentModal,
+      documentTyype
     } = this.state;
     if (errMsg) {
       this.openNotificationWithIconError(errType.toLowerCase());
@@ -430,8 +434,8 @@ class ApprovedRequests extends Component {
                             {ele["unique_key"]
                               ? ele["unique_key"]
                               : ele["type"] == "4"
-                              ? "Enabled"
-                              : ele["ssn"] + "(Govt.Issued ID Number)"}
+                                ? "Enabled"
+                                : ele["ssn"]}
                           </td>
                           <td className="custom-tr-width">
                             {/* <b>Type &nbsp;: </b>&nbsp; */}
@@ -457,6 +461,24 @@ class ApprovedRequests extends Component {
                               Show Notes
                             </Button>
                           </td>
+
+                          <td className="custom-tr-width">
+                            <Button
+                              disabled={
+                                !(ele["document"])
+                              }
+                              onClick={() => {
+                                this.setState({
+                                  showDocumentModal: true,
+                                  document: ele["document"],
+                                  documentType: getTierDoc(this.props.tier, ele["type"])
+                                });
+                              }}
+                            >
+                              Show Document
+                          </Button>
+                          </td>
+
                         </tr>
                       );
                     })}
@@ -485,6 +507,12 @@ class ApprovedRequests extends Component {
           public_note={this.state.public_note}
           private_note={this.state.private_note}
           setVisible={(showNotesModal) => this.setState({ showNotesModal })}
+        />
+        <ViewDocumentModal
+          visible={showDocumentModal}
+          document={this.state.document}
+          documentType={this.state.documentType}
+          setVisible={(showDocumentModal) => this.setState({ showDocumentModal })}
         />
         <RejectNotesModal
           setVisible={(showRejectModel) => {
