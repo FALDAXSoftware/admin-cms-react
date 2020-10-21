@@ -1,4 +1,4 @@
-// const API_URL = "http://00481475297f.ngrok.io"; // Local (Mansi) URL
+const API_URL = "http://a36b8936f301.ngrok.io"; // Local (Mansi) URL
 // const API_URL = "http://192.168.0.224:1337"; // Local (Kalpit) URL
 // const API_URL = "http://192.168.1.96:1337"; //Local (Jagdish) URL
 // const API_URL = "https://dev-backend.faldax.com"; //Live Client URL
@@ -6,7 +6,7 @@
 // const API_URL = "https://prod-backend.faldax.com"; //Live Client URL
 // const API_URL = "https://mainnet-backend.faldax.com"; //Mainnet URL
 // const API_URL = process.env.REACT_APP_API_ENDPOINT;
-const API_URL = process.env.REACT_APP_API_ENDPOINT;
+// const API_URL = process.env.REACT_APP_API_ENDPOINT;
 export const SOCKET_HOST = process.env.REACT_APP_SOCKET_ENDPOINT;
 // export const SOCKET_HOST = "http://localhost:3012"
 const ApiUtils = {
@@ -2335,6 +2335,18 @@ const ApiUtils = {
         Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
+    });
+  },
+
+  // Review Action
+  actionReviewData: function (token, form) {
+    return fetch(API_URL + "/admin/update-user-kyc-manual", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
     });
   },
 

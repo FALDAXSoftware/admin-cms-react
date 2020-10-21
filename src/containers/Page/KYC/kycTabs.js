@@ -26,13 +26,13 @@ class KycTabs extends Component {
             </TabPane>
           )} */}
           {isAllowed("get_all_kyc_data") && (
-            <TabPane tab="Approved Customer ID" key="2">
-              <ApprovedKYC />
+            <TabPane tab="Under Review Customer ID" key="2">
+              <ReviewKYC />
             </TabPane>
           )}
           {isAllowed("get_all_kyc_data") && (
-            <TabPane tab="Under Review Customer ID" key="3">
-              <ReviewKYC />
+            <TabPane tab="Approved Customer ID" key="3">
+              <ApprovedKYC />
             </TabPane>
           )}
           {isAllowed("get_all_kyc_data") && (

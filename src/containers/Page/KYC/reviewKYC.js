@@ -29,6 +29,7 @@ import {
 import { PageCounterComponent } from "../../Shared/pageCounter";
 import { ExportToCSVComponent } from "../../Shared/exportToCsv";
 import { exportCustomerIdVerification } from "../../../helpers/exportToCsv/headers";
+import { ReviewKYCInfos } from "../../Tables/antTables/approvedKYCConfig";
 const { logout } = authAction;
 const { RangePicker } = DatePicker;
 var self;
@@ -57,6 +58,7 @@ class ReviewKYC extends Component {
     };
     self = this;
     ReviewKYC.viewKYC = ReviewKYC.viewKYC.bind(this);
+    ReviewKYC.actionKYC = ReviewKYC.actionKYC.bind(this);
   }
 
   static viewKYC(
@@ -95,7 +97,54 @@ class ReviewKYC extends Component {
     };
     self.setState({ kycDetails, showViewKYCModal: true });
   }
+  static actionKYC(value, action) {
+    console.log("Test", value, action);
+    const { token } = self.props;
+    let form = {};
+    form["id"] = value;
+    form["is_approved"] = action;
 
+    self.setState({ loader: true });
+    ApiUtils.actionReviewData(token, form)
+      .then((response) => response.json())
+      .then(function (res) {
+        if (res.status == 200) {
+          self.setState(
+            {
+              errMsg: true,
+              errMessage: res.message,
+              errType: "success",
+              loader: false,
+            },
+            () => {
+              self._getAllKYCData();
+            }
+          );
+        } else if (res.status == 403) {
+          self.setState(
+            { errMsg: true, errMessage: res.err, errType: "error" },
+            () => {
+              self.props.logout();
+            }
+          );
+        } else {
+          self.setState({
+            errMsg: true,
+            errMessage: res.err,
+            errType: "error",
+          });
+        }
+        self.setState({ loader: false });
+      })
+      .catch(() => {
+        self.setState({
+          errMsg: true,
+          errMessage: "Unable to complete the requested action.",
+          errType: "error",
+          loader: false,
+        });
+      });
+  }
   componentDidMount = () => {
     this._getAllKYCData();
   };
@@ -121,27 +170,27 @@ class ReviewKYC extends Component {
     _this.setState({ loader: true });
     (isExportToCsv
       ? ApiUtils.getKYCData(
-        token,
-        1,
-        EXPORT_LIMIT_SIZE,
-        "",
-        "",
-        "",
-        "",
-        "",
-        status
-      )
+          token,
+          1,
+          EXPORT_LIMIT_SIZE,
+          "",
+          "",
+          "",
+          "",
+          "",
+          status
+        )
       : ApiUtils.getKYCData(
-        token,
-        page,
-        limit,
-        searchKYC,
-        sorterCol,
-        sortOrder,
-        startDate,
-        endDate,
-        status
-      )
+          token,
+          page,
+          limit,
+          searchKYC,
+          sorterCol,
+          sortOrder,
+          startDate,
+          endDate,
+          status
+        )
     )
       .then((response) => response.json())
       .then(function (res) {
@@ -312,7 +361,7 @@ class ReviewKYC extends Component {
             dataCount={allKYCCount}
             syncCallBack={this._resetFilters}
           />
-          <div key={ApprovedKYCInfos[0].value}>
+          <div key={ReviewKYCInfos[0].value}>
             <Form onSubmit={this._searchKYC}>
               <Row type="flex" justify="start" className="table-filter-row">
                 <Col md={8}>
@@ -372,7 +421,7 @@ class ReviewKYC extends Component {
             <TableWrapper
               rowkey="id"
               {...this.state}
-              columns={ApprovedKYCInfos[0].columns}
+              columns={ReviewKYCInfos[0].columns1}
               pagination={false}
               className="table-tb-margin"
               dataSource={allKYCData}
@@ -392,8 +441,8 @@ class ReviewKYC extends Component {
                 pageSizeOptions={pageSizeOptions}
               />
             ) : (
-                ""
-              )}
+              ""
+            )}
           </div>
         </div>
       </TableDemoStyle>
